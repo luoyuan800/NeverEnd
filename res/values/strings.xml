@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">myapp</string>
+    <string name="server_version">1</string>
+    <string name="atk_effect">增加攻击上限：</string>
+    <string name="def_effect">增加防御上限：</string>
+    <string name="hp_effect">增加生命上限：</string>
+    <string name="agi_effect">增加敏捷：</string>
+    <string name="str_effect">增加力量：</string>
+</resources>
