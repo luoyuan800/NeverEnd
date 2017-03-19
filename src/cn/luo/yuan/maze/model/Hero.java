@@ -1,17 +1,21 @@
 package cn.luo.yuan.maze.model;
 
+import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.utils.SecureRAMReader;
 import cn.luo.yuan.maze.utils.Version;
 import cn.luo.yuan.maze.utils.annotation.LongValue;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
+
+import static cn.luo.yuan.maze.utils.EffectHandler.*;
 
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class Hero implements Serializable {
+public class Hero implements Serializable, IDModel {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private int index;//存档编号
     private SecureRAMReader ramReader;
@@ -31,56 +35,21 @@ public class Hero implements Serializable {
     @LongValue private byte[] hpGrow;
     @LongValue private byte[] defGrow;
     @LongValue private byte[] atkGrow;
+    private long birthDay;
+    private long reincarnate;
+    private byte[] material;
     private Set<Effect> effects = new HashSet<>(3);
     private Set<Accessory> accessories = new HashSet<>(3);
-
+    private Element element;
+    private String id;
+    public long getMaterial(){
+        return ramReader.decodeLong(material);
+    }
+    public void setMaterial(long material){
+        this.material = ramReader.encodeLong(material);
+    }
     public void removeEffect(Effect effect){
         effects.remove(effect);
-    }
-    public long getEffectAdditionHP(){
-        long hp = 0;
-        for(Effect effect : effects){
-            if(effect instanceof HpEffect) {
-                hp += ((HpEffect) effect).getHp();
-            }
-        }
-        return hp;
-    }
-    public long getEffectAdditionAtk(){
-        long value = 0;
-        for(Effect effect : effects){
-            if(effect instanceof AtkEffect) {
-                value += ((AtkEffect) effect).getAtk();
-            }
-        }
-        return value;
-    }
-    public long getEffectAdditionDef(){
-        long value = 0;
-        for(Effect effect : effects){
-            if(effect instanceof DefEffect) {
-                value += ((DefEffect) effect).getDef();
-            }
-        }
-        return value;
-    }
-    public long getEffectAdditionAgi(){
-        long value = 0;
-        for(Effect effect : effects){
-            if(effect instanceof AgiEffect) {
-                value += ((AgiEffect) effect).getAgi();
-            }
-        }
-        return value;
-    }
-    public long getEffectAdditionStr(){
-        long value = 0;
-        for(Effect effect : effects){
-            if(effect instanceof StrEffect) {
-                value += ((StrEffect) effect).getStr();
-            }
-        }
-        return value;
     }
 
     public long getHpGrow(){
@@ -115,6 +84,9 @@ public class Hero implements Serializable {
     public void setAgi(long agi){
         this.agi = ramReader.encodeLong(agi);
     }
+    public void setAgi(byte[] agi){
+        this.agi = agi;
+    }
 
     public long getStr(){
         return ramReader.decodeLong(str);
@@ -122,6 +94,9 @@ public class Hero implements Serializable {
 
     public void setStr(long str){
         this.str = ramReader.encodeLong(str);
+    }
+    public void setStr(byte[] str){
+        this.str = str;
     }
 
     public SecureRAMReader getRamReader() {
@@ -156,8 +131,12 @@ public class Hero implements Serializable {
         this.maxHp = ramReader.encodeLong(maxHp);
     }
 
-    public long getHp() {
-        return ramReader.decodeLong(hp) + getEffectAdditionHP() + getEffectAdditionStr() * getHpGrow();
+    public long getCurrentHp() {
+        return ramReader.decodeLong(hp) + getEffectAdditionValue(HP, effects) + getEffectAdditionValue(STR, effects) * getHpGrow();
+    }
+
+    public long getHp(){
+        return ramReader.decodeLong(hp);
     }
 
     public void setHp(long hp) {
@@ -185,21 +164,34 @@ public class Hero implements Serializable {
     }
 
     public long getUpperHp(){
-        return getMaxHp() + getEffectAdditionHP() + getEffectAdditionStr() * getHpGrow();
+        return getMaxHp() + getEffectAdditionValue(HP,effects)+ getEffectAdditionValue(STR, effects) * getHpGrow();
     }
 
     public long getUpperAtk(){
-        return getAtk() + getEffectAdditionAtk() + getEffectAdditionStr() * getAtkGrow();
+        return getAtk() + getEffectAdditionValue(ATK, effects) + getEffectAdditionValue(STR, effects) * getAtkGrow();
     }
 
     public long getUpperDef(){
-        return getDef() + getEffectAdditionAtk() + getEffectAdditionAgi() * getDefGrow();
+        return getDef() + getEffectAdditionValue(DEF, effects) + getEffectAdditionValue(AGI, effects) * getDefGrow();
     }
 
     public void mountAccessory(Accessory accessory){
+        Iterator<Accessory> iterator = accessories.iterator();
+        while (iterator.hasNext()){
+            Accessory acc = iterator.next();
+            if(acc.getType().equals(accessory.getType())){
+                iterator.remove();
+                effects.removeAll(acc.getEffects());
+            }
+        }
         if(accessories.add(accessory)){
             effects.addAll(accessory.getEffects());
         }
+    }
+
+    public void unMountAccessory(Accessory accessory){
+        accessories.remove(accessory);
+        effects.removeAll(accessory.getEffects());
     }
 
     public int getIndex() {
@@ -208,5 +200,74 @@ public class Hero implements Serializable {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public long getReincarnate() {
+        return reincarnate;
+    }
+
+    public void setReincarnate(long reincarnate) {
+        this.reincarnate = reincarnate;
+    }
+
+    public long getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(long birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    public Element getElement() {
+        return element;
+    }
+
+    public void setElement(Element element) {
+        this.element = element;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+
+    public void setLevel(byte[] level) {
+        this.level = level;
+    }
+
+    public void setMaxHp(byte[] maxHp) {
+        this.maxHp = maxHp;
+    }
+
+    public void setHp(byte[] hp) {
+        this.hp = hp;
+    }
+
+    public void setAtk(byte[] atk) {
+        this.atk = atk;
+    }
+
+    public void setDef(byte[] def) {
+        this.def = def;
+    }
+
+    public void setHpGrow(byte[] hpGrow) {
+        this.hpGrow = hpGrow;
+    }
+
+    public void setDefGrow(byte[] defGrow) {
+        this.defGrow = defGrow;
+    }
+
+    public void setAtkGrow(byte[] atkGrow) {
+        this.atkGrow = atkGrow;
+    }
+
+    public void setMaterial(byte[] material) {
+        this.material = material;
     }
 }

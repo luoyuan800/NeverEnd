@@ -1,8 +1,12 @@
 package cn.luo.yuan.maze.persistence.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import cn.luo.yuan.maze.utils.SecureRAMReader;
+
+import java.util.HashMap;
 
 
 /**
@@ -57,13 +61,52 @@ public class Sqlite {
     public void onCreate(SQLiteDatabase db) {
         try {
             db.beginTransaction();
-
+            //Create Table
+            createHeroTable(db);
+            createAccessoryTable(db);
             db.setTransactionSuccessful();
             db.endTransaction();
         } catch (Exception e) {
             e.printStackTrace();
 
         }
+    }
+
+    private void createAccessoryTable(SQLiteDatabase db) {
+        String table = "create table accessory (" +
+                "index TEXT NOT NULL," +
+                "name TEXT NOT NULL," +
+                "desc TEXT," +
+                "mounted INTEGER," +
+                "id TEXT NOT NULL PRIMARY KEY" +
+                ")";
+        db.execSQL(table);
+    }
+
+    public void update(String table, ContentValues values, String whereClause, String[] whereArgs){
+        database.update(table, values, whereClause, whereArgs);
+    }
+
+    private void createHeroTable(SQLiteDatabase db) {
+        String table = "create table hero (" +
+                "index TEXT NOT NULL ," +
+                "name TEXT NOT NULL," +
+                "hp BLOB NOT NULL," +
+                "maxHp BLOB NOT NULL," +
+                "atk BLOB NOT NULL," +
+                "def BLOB NOT NULL," +
+                "agi BLOB NOT NULL," +
+                "atr BLOB NOT NULL," +
+                "level BLOB NOT NULL," +
+                "hpGrow BLOB NOT NULL," +
+                "defGrow BLOB NOT NULL," +
+                "atkGrow BLOB NOT NULL," +
+                "reincarnate INTEGER ," +
+                "id TEXT NOT NULL PRIMARY KEY," +
+                "birthday INTEGER ," +
+                "element INTEGER " +
+                ")";
+        db.execSQL(table);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -97,9 +140,6 @@ public class Sqlite {
 
     private SQLiteDatabase openOrCreateInnerDB() {
         database = context.openOrCreateDatabase(DB_NAME, Context.MODE_PRIVATE, null);
-        if (database.getVersion() != 0 && database.getVersion() < 20) {
-            reCreateDB(context);
-        }
         if (database.getVersion() == 0) {
             onCreate(database);
         } else if (database.getVersion() < DB_VERSION) {
@@ -116,4 +156,9 @@ public class Sqlite {
         }
         return db;
     }
+
+    public byte[] getKey(int index){
+        return SecureRAMReader.generateKey();
+    }
+
 }

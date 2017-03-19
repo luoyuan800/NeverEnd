@@ -1,6 +1,6 @@
 package cn.luo.yuan.maze.model;
 
-import android.app.Activity;
+import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.utils.Version;
 
 import java.io.Serializable;
@@ -14,6 +14,8 @@ public class Accessory implements Serializable, IDModel {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private String name;
     private String id;
+    private String type;
+    private boolean mounted;
     private List<Effect> effects = new ArrayList<>(5);
 
     public List<Effect> getEffects(){
@@ -37,7 +39,7 @@ public class Accessory implements Serializable, IDModel {
     }
 
     public int hashCode(){
-        return id.hashCode();
+        return (id + type).hashCode();
     }
 
     public boolean equals(Object other){
@@ -48,5 +50,21 @@ public class Accessory implements Serializable, IDModel {
             return ((Accessory) other).getId().equals(id);
         }
         return false;
+    }
+
+    public String getType(){
+        return type;
+    }
+
+    public void setType(String type){
+        this.type = type;
+    }
+
+    public boolean isMounted() {
+        return mounted;
+    }
+
+    public void setMounted(boolean mounted) {
+        this.mounted = mounted;
     }
 }
