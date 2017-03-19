@@ -11,8 +11,8 @@ import java.util.Collection;
  * 这是一个静态工具类，处理效果相关的代码都放到这里比较好
  */
 public class EffectHandler {
-    public static final String HP = "hp", STR="str", AGI="agi", ATK="atk", DEF="def";
-    public static long getEffectAdditionValue(String property, Collection<Effect> effects){
+    public static final String HP = "hp", STR="str", AGI="agi", ATK="atk", DEF="def", MEET_RATE="meet";
+    public static long getEffectAdditionLongValue(String property, Collection<Effect> effects){
         switch (property){
             case "str":
                 return getEffectAdditionStr(effects);
@@ -28,7 +28,21 @@ public class EffectHandler {
         return 0;
     }
 
-    public static long getEffectAdditionHP(Collection<Effect> effects){
+    public static float getEffectAdditionFloatValue(String property, Collection<Effect> effects){
+        float value = 0.0f;
+        switch (property){
+            case "meet":
+                for(Effect effect : effects){
+                    if(effect instanceof MeetRateEffect){
+                        value += ((MeetRateEffect) effect).getMeetRate();
+                    }
+                }
+                break;
+        }
+        return value;
+    }
+
+    private static long getEffectAdditionHP(Collection<Effect> effects){
         long hp = 0;
         for(Effect effect : effects){
             if(effect instanceof HpEffect) {
@@ -37,7 +51,7 @@ public class EffectHandler {
         }
         return hp;
     }
-    public static long getEffectAdditionAtk(Collection<Effect> effects){
+    private static long getEffectAdditionAtk(Collection<Effect> effects){
         long value = 0;
         for(Effect effect : effects){
             if(effect instanceof AtkEffect) {
@@ -46,7 +60,7 @@ public class EffectHandler {
         }
         return value;
     }
-    public static long getEffectAdditionDef(Collection<Effect> effects){
+    private static long getEffectAdditionDef(Collection<Effect> effects){
         long value = 0;
         for(Effect effect : effects){
             if(effect instanceof DefEffect) {
@@ -55,7 +69,7 @@ public class EffectHandler {
         }
         return value;
     }
-    public static long getEffectAdditionAgi(Collection<Effect> effects){
+    private static long getEffectAdditionAgi(Collection<Effect> effects){
         long value = 0;
         for(Effect effect : effects){
             if(effect instanceof AgiEffect) {
@@ -64,7 +78,7 @@ public class EffectHandler {
         }
         return value;
     }
-    public static long getEffectAdditionStr(Collection<Effect> effects){
+    private static long getEffectAdditionStr(Collection<Effect> effects){
         long value = 0;
         for(Effect effect : effects){
             if(effect instanceof StrEffect) {

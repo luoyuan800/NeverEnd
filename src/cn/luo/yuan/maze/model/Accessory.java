@@ -17,6 +17,7 @@ public class Accessory implements Serializable, IDModel {
     private String type;
     private boolean mounted;
     private List<Effect> effects = new ArrayList<>(5);
+    private String desc;
 
     public List<Effect> getEffects(){
         return effects;
@@ -66,5 +67,13 @@ public class Accessory implements Serializable, IDModel {
 
     public void setMounted(boolean mounted) {
         this.mounted = mounted;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 }

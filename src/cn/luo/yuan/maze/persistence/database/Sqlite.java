@@ -65,6 +65,7 @@ public class Sqlite {
             createHeroTable(db);
             createAccessoryTable(db);
             createKeyTable(db);
+            createMazeTable(db);
             db.setTransactionSuccessful();
             db.endTransaction();
         } catch (Exception e) {
@@ -73,8 +74,15 @@ public class Sqlite {
         }
     }
 
+    private void createMazeTable(SQLiteDatabase db) {
+        db.execSQL("create table maze(" +
+                "id TEXT NOT NULL PRIMARY KEY," +
+                "index INTEGER NOT NULL" +
+                ")");
+    }
+
     private void createKeyTable(SQLiteDatabase db) {
-        db.execSQL("create table key (index INTEGER NOT NULL, key BLOB NOT NULL)");
+        db.execSQL("create table key (index INTEGER NOT NULL PRIMARY KEY, key BLOB NOT NULL)");
     }
 
     private void createAccessoryTable(SQLiteDatabase db) {
@@ -94,6 +102,8 @@ public class Sqlite {
 
     private void createHeroTable(SQLiteDatabase db) {
         String table = "create table hero (" +
+                "last_update INTEGER," +
+                "created INTEGER," +
                 "index TEXT NOT NULL ," +
                 "name TEXT NOT NULL," +
                 "hp BLOB NOT NULL," +
@@ -173,6 +183,10 @@ public class Sqlite {
         }finally {
             cursor.close();
         }
+    }
+
+    public void insert(String table, ContentValues values){
+        database.insert(table, null, values);
     }
 
 }

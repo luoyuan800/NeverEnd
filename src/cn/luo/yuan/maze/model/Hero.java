@@ -21,8 +21,6 @@ public class Hero implements Serializable, IDModel {
     private SecureRAMReader ramReader;
     private String name;
     @LongValue
-    private byte[] level;
-    @LongValue
     private byte[] maxHp;
     @LongValue
     private byte[] hp;
@@ -45,6 +43,9 @@ public class Hero implements Serializable, IDModel {
     public long getMaterial(){
         return ramReader.decodeLong(material);
     }
+    public byte[] getEncodeMaterial(){
+        return material;
+    }
     public void setMaterial(long material){
         this.material = ramReader.encodeLong(material);
     }
@@ -55,6 +56,9 @@ public class Hero implements Serializable, IDModel {
     public long getHpGrow(){
         return ramReader.decodeLong(hpGrow);
     }
+    public byte[] getEncodeHpGrow(){
+        return hpGrow;
+    }
     public void setHpGrow(long grow){
         this.hpGrow = ramReader.encodeLong(grow);
     }
@@ -62,12 +66,19 @@ public class Hero implements Serializable, IDModel {
     public long getDefGrow(){
         return ramReader.decodeLong(defGrow);
     }
+
+    public byte[] getEncodeDefGrow(){
+        return defGrow;
+    }
     public void setDefGrow(long grow){
         this.defGrow = ramReader.encodeLong(grow);
     }
 
     public long getAtkGrow(){
         return ramReader.decodeLong(atkGrow);
+    }
+    public byte[] getEncodeAtkGrow(){
+        return atkGrow;
     }
     public void setAtkGrow(long grow){
         this.atkGrow = ramReader.encodeLong(grow);
@@ -80,6 +91,9 @@ public class Hero implements Serializable, IDModel {
     public long getAgi(){
         return ramReader.decodeLong(agi);
     }
+    public byte[] getEncodeAgi(){
+        return agi;
+    }
 
     public void setAgi(long agi){
         this.agi = ramReader.encodeLong(agi);
@@ -90,6 +104,9 @@ public class Hero implements Serializable, IDModel {
 
     public long getStr(){
         return ramReader.decodeLong(str);
+    }
+    public byte[] getEncodeStr(){
+        return str;
     }
 
     public void setStr(long str){
@@ -115,16 +132,11 @@ public class Hero implements Serializable, IDModel {
         this.name = name;
     }
 
-    public long getLevel() {
-        return ramReader.decodeLong(level);
-    }
-
-    public void setLevel(long level) {
-        this.level = ramReader.encodeLong(level);
-    }
-
     public long getMaxHp() {
         return ramReader.decodeLong(maxHp);
+    }
+    public byte[] getEncodeMaxHp() {
+        return maxHp;
     }
 
     public void setMaxHp(long maxHp) {
@@ -132,11 +144,14 @@ public class Hero implements Serializable, IDModel {
     }
 
     public long getCurrentHp() {
-        return ramReader.decodeLong(hp) + getEffectAdditionValue(HP, effects) + getEffectAdditionValue(STR, effects) * getHpGrow();
+        return ramReader.decodeLong(hp) + getEffectAdditionLongValue(HP, effects) + getEffectAdditionLongValue(STR, effects) * getHpGrow();
     }
 
     public long getHp(){
         return ramReader.decodeLong(hp);
+    }
+    public byte[] getEncodeHp(){
+        return hp;
     }
 
     public void setHp(long hp) {
@@ -146,6 +161,9 @@ public class Hero implements Serializable, IDModel {
     public long getAtk() {
         return ramReader.decodeLong(atk);
     }
+    public byte[] getEncodeAtk() {
+        return atk;
+    }
 
     public void setAtk(long atk) {
         this.atk = ramReader.encodeLong(atk);
@@ -153,6 +171,9 @@ public class Hero implements Serializable, IDModel {
 
     public long getDef() {
         return ramReader.decodeLong(def);
+    }
+    public byte[] getEncodeDef() {
+        return def;
     }
 
     public void setDef(long def) {
@@ -164,15 +185,15 @@ public class Hero implements Serializable, IDModel {
     }
 
     public long getUpperHp(){
-        return getMaxHp() + getEffectAdditionValue(HP,effects)+ getEffectAdditionValue(STR, effects) * getHpGrow();
+        return getMaxHp() + getEffectAdditionLongValue(HP,effects)+ getEffectAdditionLongValue(STR, effects) * getHpGrow();
     }
 
     public long getUpperAtk(){
-        return getAtk() + getEffectAdditionValue(ATK, effects) + getEffectAdditionValue(STR, effects) * getAtkGrow();
+        return getAtk() + getEffectAdditionLongValue(ATK, effects) + getEffectAdditionLongValue(STR, effects) * getAtkGrow();
     }
 
     public long getUpperDef(){
-        return getDef() + getEffectAdditionValue(DEF, effects) + getEffectAdditionValue(AGI, effects) * getDefGrow();
+        return getDef() + getEffectAdditionLongValue(DEF, effects) + getEffectAdditionLongValue(AGI, effects) * getDefGrow();
     }
 
     public void mountAccessory(Accessory accessory){
@@ -236,7 +257,6 @@ public class Hero implements Serializable, IDModel {
 
 
     public void setLevel(byte[] level) {
-        this.level = level;
     }
 
     public void setMaxHp(byte[] maxHp) {

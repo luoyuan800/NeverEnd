@@ -7,4 +7,5 @@
     <string name="hp_effect">增加生命上限：</string>
     <string name="agi_effect">增加敏捷：</string>
     <string name="str_effect">增加力量：</string>
+    <string name="meet_effect">增加遇见怪物几率：</string>
 </resources>
