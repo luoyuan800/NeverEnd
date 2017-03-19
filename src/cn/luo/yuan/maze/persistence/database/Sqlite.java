@@ -64,12 +64,17 @@ public class Sqlite {
             //Create Table
             createHeroTable(db);
             createAccessoryTable(db);
+            createKeyTable(db);
             db.setTransactionSuccessful();
             db.endTransaction();
         } catch (Exception e) {
             e.printStackTrace();
 
         }
+    }
+
+    private void createKeyTable(SQLiteDatabase db) {
+        db.execSQL("create table key (index INTEGER NOT NULL, key BLOB NOT NULL)");
     }
 
     private void createAccessoryTable(SQLiteDatabase db) {
@@ -83,8 +88,8 @@ public class Sqlite {
         db.execSQL(table);
     }
 
-    public void update(String table, ContentValues values, String whereClause, String[] whereArgs){
-        database.update(table, values, whereClause, whereArgs);
+    public void updateById(String table, ContentValues values, String ... ids){
+        database.update(table, values, "id = ?s", ids);
     }
 
     private void createHeroTable(SQLiteDatabase db) {
@@ -158,7 +163,16 @@ public class Sqlite {
     }
 
     public byte[] getKey(int index){
-        return SecureRAMReader.generateKey();
+        Cursor cursor = excuseSOL("slect key from key where index = '" + index + "'");
+        try {
+            if (cursor.isAfterLast()) {
+                return SecureRAMReader.generateKey();
+            } else {
+                return cursor.getBlob(cursor.getColumnIndex("key"));
+            }
+        }finally {
+            cursor.close();
+        }
     }
 
 }
