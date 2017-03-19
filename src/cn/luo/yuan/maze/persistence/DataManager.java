@@ -14,6 +14,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by luoyuan on 2017/3/19.
@@ -41,11 +42,11 @@ public class DataManager {
     }
 
     public Hero loadHero() {
-        String query = "select * from hero where index = '" + index + "'";
+        String query = "select * from hero where hero_index = '" + index + "'";
         Cursor cursor = database.excuseSOL(query);
         try {
             if (!cursor.isAfterLast()) {
-                Hero hero = new Hero();
+                Hero hero = new Hero(database.getKey(index));
                 hero.setAgi(cursor.getBlob(cursor.getColumnIndex("agi")));
                 hero.setAtk(cursor.getBlob(cursor.getColumnIndex("atk")));
                 hero.setDef(cursor.getBlob(cursor.getColumnIndex("def")));
@@ -67,13 +68,25 @@ public class DataManager {
                 hero.setAtkGrow(cursor.getBlob(cursor.getColumnIndex("atkGrow")));
                 hero.setDefGrow(cursor.getBlob(cursor.getColumnIndex("defGrow")));
                 hero.setHpGrow(cursor.getBlob(cursor.getColumnIndex("hpGrow")));
-                hero.setRamReader(new SecureRAMReader(database.getKey(index)));
+                hero.setIndex(index);
                 return hero;
             }
         } finally {
             cursor.close();
         }
-        return null;
+        Hero hero = new Hero(database.getKey(index));
+        hero.setAtkGrow(1);
+        hero.setHpGrow(2);
+        hero.setDefGrow(3);
+        hero.setHp(20);
+        hero.setMaxHp(20);
+        hero.setDef(1);
+        hero.setAtk(5);
+        hero.setIndex(index);
+        hero.setMaterial(0);
+        hero.setStr(0);
+        hero.setAgi(0);
+        return hero;
     }
 
     public Accessory loadAccessory(String id) {
@@ -82,7 +95,7 @@ public class DataManager {
 
     public List<Accessory> loadMountedAccessory(Hero hero) {
         List<Accessory> accessories = new ArrayList<>();
-        Cursor cursor = database.excuseSOL("select * from accessory where index = '" + index + "'");
+        Cursor cursor = database.excuseSOL("select * from accessory where hero_index = '" + index + "'");
         try {
             while (!cursor.isAfterLast()) {
                 if (cursor.getInt(cursor.getColumnIndex("mounted")) == 1) {
@@ -103,13 +116,14 @@ public class DataManager {
     public void saveHero(Hero hero) {
         ContentValues values = new ContentValues();
         values.put("name", hero.getName());
-        values.put("index", hero.getIndex());
+        values.put("hero_index", hero.getIndex());
         values.put("birthDay", hero.getBirthDay());
         values.put("element", hero.getElement().name());
         values.put("hp", hero.getEncodeHp());
         values.put("atk", hero.getEncodeAtk());
         values.put("def", hero.getEncodeDef());
         values.put("agi", hero.getEncodeAtk());
+        values.put("str", hero.getEncodeStr());
         values.put("maxHp", hero.getEncodeMaxHp());
         values.put("material", hero.getEncodeMaterial());
         values.put("reincarnate", hero.getReincarnate());
@@ -120,6 +134,7 @@ public class DataManager {
         if(StringUtils.isNotEmpty(hero.getId())) {
             database.updateById("hero", values, hero.getId());
         }else {
+            hero.setId(UUID.randomUUID().toString());
             values.put("id", hero.getId());
             values.put("created", System.currentTimeMillis());
             database.insert("hero", values);
@@ -132,7 +147,7 @@ public class DataManager {
         values.put("id", accessory.getId());
         values.put("desc", accessory.getDesc());
         values.put("mounted", accessory.isMounted());
-        values.put("index", index);
+        values.put("hero_index", index);
         if(StringUtils.isNotEmpty(accessory.getId())) {
             //Already existed, 我们会进行update操作
             database.updateById("accessory", values, accessory.getId());
@@ -147,7 +162,9 @@ public class DataManager {
 
     public void saveMaze(Maze maze){
         ContentValues values = new ContentValues();
-        values.put("index", index);
+        values.put("hero_index", index);
+        values.put("level", maze.getLevel());
+        values.put("max_level", maze.getMaxLevel());
         if(StringUtils.isNotEmpty(maze.getId())){
             database.updateById("maze", values, maze.getId());
             mazeLoader.update(maze);
@@ -170,4 +187,28 @@ public class DataManager {
         return null;
     }
 
+    /**
+     * 删除当前存档的数据
+     */
+    public void clean() {
+        Cursor cursor = database.excuseSOL("select id from accessory where hero_index = " + index);
+        try {
+            while (!cursor.isAfterLast()) {
+                accessoryLoader.delete(cursor.getString(cursor.getColumnIndex("id")));
+            }
+        }finally {
+            cursor.close();
+        }
+        try {
+            cursor = database.excuseSOL("select id from maze where hero_index = " + index);
+            while (!cursor.isAfterLast()) {
+                mazeLoader.delete(cursor.getString(cursor.getColumnIndex("id")));
+            }
+        }finally {
+            cursor.close();
+        }
+        database.excuseSOL("delete from maze where hero_index = " + index);
+        database.excuseSOL("delete from hero where hero_index = " + index);
+        database.excuseSOL("delete from accessory where hero_index = " + index);
+    }
 }

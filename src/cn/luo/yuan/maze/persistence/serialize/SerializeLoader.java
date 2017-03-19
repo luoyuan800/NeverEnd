@@ -34,4 +34,8 @@ public class SerializeLoader<T extends Serializable> {
         }
         return id;
     }
+
+    public void delete(String id){
+        db.delete(clazz.getSimpleName(), id);
+    }
 }

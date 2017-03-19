@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">myapp</string>
+    <string name="app_name">勇无止尽</string>
     <string name="server_version">1</string>
     <string name="atk_effect">增加攻击上限：</string>
     <string name="def_effect">增加防御上限：</string>
@@ -8,4 +8,17 @@
     <string name="agi_effect">增加敏捷：</string>
     <string name="str_effect">增加力量：</string>
     <string name="meet_effect">增加遇见怪物几率：</string>
+    <string name="selected_hero_index">请选择或者创建一个存档</string>
+    <string name="create_index">创建新存档</string>
+    <string name="adapter">adapter</string>
+    <string name="item">item</string>
+    <string name="position">position</string>
+    <string name="level">层数：</string>
+    <string name="created">创建于：</string>
+    <string name="last_update">最近更新：</string>
+    <string name="delete_index">删除存档：</string>
+    <string name="conform">确认</string>
+    <string name="name_input">输入名字</string>
+    <string name="birth_input">选择你的生日</string>
+    <string name="element_input">选择五行</string>
 </resources>

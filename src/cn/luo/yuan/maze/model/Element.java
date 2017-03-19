@@ -1,5 +1,8 @@
 package cn.luo.yuan.maze.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Copyright 2015 luoyuan.
  * ALL RIGHTS RESERVED
@@ -67,5 +70,26 @@ private String cn;
             default:
                 return FIRE;
         }
+    }
+
+    public static List<String> getAllName(){
+        ArrayList<String> values = new ArrayList<>(6);
+        for(Element element : values()){
+            values.add(element.cn);
+        }
+        return values;
+    }
+
+    public static Element getByName(String name){
+        for(Element element : values()){
+            if(element.cn.equals(name)){
+                return element;
+            }
+        }
+        return NONE;
+    }
+
+    public String toString(){
+        return cn;
     }
 }

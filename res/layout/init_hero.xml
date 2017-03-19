@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <EditText
+            android:id="@+id/hero_name"
+            android:layout_width="match_parent"
+            android:textSize="23dp"
+            android:hint="@string/name_input"
+            android:layout_height="55dp"
+            />
+    <TextView
+            android:text="@string/element_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/select_element"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:text="@string/birth_input"
+            android:layout_height="wrap_content"/>
+
+    <DatePicker
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/birthday"
+            android:layout_weight="21.8"/>
+    <Button
+            android:layout_weight="0.7"
+            android:id="@+id/init_hero"
+            android:text="@string/conform"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+</LinearLayout>

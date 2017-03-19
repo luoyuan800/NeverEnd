@@ -77,17 +77,19 @@ public class Sqlite {
     private void createMazeTable(SQLiteDatabase db) {
         db.execSQL("create table maze(" +
                 "id TEXT NOT NULL PRIMARY KEY," +
-                "index INTEGER NOT NULL" +
+                "level INTEGER," +
+                "max_level INTEGER," +
+                "hero_index INTEGER NOT NULL" +
                 ")");
     }
 
     private void createKeyTable(SQLiteDatabase db) {
-        db.execSQL("create table key (index INTEGER NOT NULL PRIMARY KEY, key BLOB NOT NULL)");
+        db.execSQL("create table key (hero_index INTEGER NOT NULL PRIMARY KEY, key BLOB NOT NULL)");
     }
 
     private void createAccessoryTable(SQLiteDatabase db) {
         String table = "create table accessory (" +
-                "index TEXT NOT NULL," +
+                "hero_index TEXT NOT NULL," +
                 "name TEXT NOT NULL," +
                 "desc TEXT," +
                 "mounted INTEGER," +
@@ -104,18 +106,18 @@ public class Sqlite {
         String table = "create table hero (" +
                 "last_update INTEGER," +
                 "created INTEGER," +
-                "index TEXT NOT NULL ," +
+                "hero_index TEXT NOT NULL ," +
                 "name TEXT NOT NULL," +
                 "hp BLOB NOT NULL," +
                 "maxHp BLOB NOT NULL," +
                 "atk BLOB NOT NULL," +
                 "def BLOB NOT NULL," +
                 "agi BLOB NOT NULL," +
-                "atr BLOB NOT NULL," +
-                "level BLOB NOT NULL," +
+                "str BLOB NOT NULL," +
                 "hpGrow BLOB NOT NULL," +
                 "defGrow BLOB NOT NULL," +
                 "atkGrow BLOB NOT NULL," +
+                "material BLOB NOT NULL," +
                 "reincarnate INTEGER ," +
                 "id TEXT NOT NULL PRIMARY KEY," +
                 "birthday INTEGER ," +
@@ -173,12 +175,17 @@ public class Sqlite {
     }
 
     public byte[] getKey(int index){
-        Cursor cursor = excuseSOL("slect key from key where index = '" + index + "'");
+        Cursor cursor = excuseSOL("select key from key where hero_index = '" + index + "'");
         try {
             if (cursor.isAfterLast()) {
                 return SecureRAMReader.generateKey();
             } else {
-                return cursor.getBlob(cursor.getColumnIndex("key"));
+                byte[] key = cursor.getBlob(cursor.getColumnIndex("key"));
+                ContentValues values = new ContentValues(2);
+                values.put("hero_index", index);
+                values.put("key", key);
+                insert("key",values);
+                return key;
             }
         }finally {
             cursor.close();

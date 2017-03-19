@@ -90,5 +90,9 @@ public class ObjectDB {
 
     }
 
+    public void delete(String clazz, String id){
+        File file = new File(table + "/" + clazz + "@" + id);
+        file.delete();
+    }
 
 }

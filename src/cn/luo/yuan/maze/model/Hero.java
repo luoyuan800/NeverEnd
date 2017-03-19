@@ -40,6 +40,10 @@ public class Hero implements Serializable, IDModel {
     private Set<Accessory> accessories = new HashSet<>(3);
     private Element element;
     private String id;
+
+    public Hero(byte[] key){
+        setRamReader(new SecureRAMReader(key));
+    }
     public long getMaterial(){
         return ramReader.decodeLong(material);
     }
@@ -253,10 +257,6 @@ public class Hero implements Serializable, IDModel {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-
-    public void setLevel(byte[] level) {
     }
 
     public void setMaxHp(byte[] maxHp) {
