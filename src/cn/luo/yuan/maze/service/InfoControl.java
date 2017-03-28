@@ -6,9 +6,6 @@ import java.util.Queue;
 /**
  * Created by luoyuan on 2017/3/28.
  */
-public class InfoControl {
-    public Queue<String> msgQueue = new LinkedList<>();
-    public void addMessage(String msg){
-        msgQueue.add(msg);
-    }
+public interface InfoControl {
+    void addMessage(String msg);
 }

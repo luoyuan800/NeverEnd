@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".activity.SimpleMainActivity"
+    >
+    <item android:title="----操作----" android:enabled="false"/>
+            <item android:id="@+id/pause" android:icon="@android:drawable/ic_media_play"
+                android:title="暂停"/>
+            <item android:id="@+id/save" android:icon="@android:drawable/ic_menu_save"
+                android:title="存档" />
+            <item android:id="@+id/properties" android:icon="@android:drawable/ic_menu_add"
+                android:title="配点"/>
+            <item android:id="@+id/skill" android:icon="@android:drawable/ic_menu_add"
+                android:title="技能"/>
+            <item android:id="@+id/reincarnation" android:icon="@android:drawable/ic_menu_compass"
+                android:title="转生" />
+            <item android:id="@+id/forge" android:icon="@android:drawable/ic_lock_idle_charging"
+                android:title="打造" />
+
+    <item android:title="----背包----" android:enabled="false"/>
+            <item android:id="@+id/warehouse" android:icon="@android:drawable/ic_menu_agenda"
+                android:title="仓库" />
+            <item android:id="@+id/goods" android:icon="@android:drawable/ic_menu_gallery"
+                android:title="物品" />
+            <item android:id="@+id/shop" android:icon="@android:drawable/star_on"
+                android:title="商店" />
+    <item android:title="----互动----" android:enabled="false"/>
+            <item android:id="@+id/palace" android:icon="@android:drawable/ic_menu_myplaces"
+                android:title="殿堂" />
+            <item android:id="@+id/pet_center" android:icon="@android:drawable/ic_menu_send"
+                android:title="宠物中心" />
+            <item android:id="@+id/lottery" android:icon="@android:drawable/ic_menu_upload"
+                android:title="竞彩" />
+            <item android:id="@+id/battle" android:icon="@android:drawable/ic_menu_upload" android:enabled="false"
+                android:title="对抗赛" />
+    <item android:title="----收集----" android:enabled="false"/>
+            <item android:id="@+id/monster" android:icon="@android:drawable/ic_menu_crop"
+                android:title="图鉴" />
+            <item android:id="@+id/achievement" android:icon="@android:drawable/ic_menu_my_calendar"
+                android:title="成就" />
+            <item android:id="@+id/recipe" android:icon="@android:drawable/ic_menu_sort_by_size"
+                android:title="配方" />
+            <item android:id="@+id/person" android:icon="@android:drawable/stat_notify_voicemail"
+                android:title="人物" />
+    <item android:title="----其他----" android:enabled="false"/>
+            <item android:id="@+id/help" android:icon="@android:drawable/ic_menu_help"
+                android:title="帮助" />
+            <item android:id="@+id/update" android:icon="@android:drawable/ic_menu_info_details"
+                android:title="更新" />
+            <item android:id="@+id/pay" android:icon="@android:drawable/ic_menu_view"
+                android:title="点赞" />
+            <item android:id="@+id/share" android:icon="@android:drawable/ic_menu_share"
+                android:title="分享" />
+</menu>

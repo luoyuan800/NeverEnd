@@ -5,13 +5,14 @@ import android.text.Html;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import cn.luo.yuan.maze.service.InfoControl;
 
 import java.util.ArrayDeque;
 
 /**
  * Created by luoyuan on 2017/3/19.
  */
-public class RollTextView extends LinearLayout {
+public class RollTextView extends LinearLayout implements InfoControl {
     private ArrayDeque<TextView> caches = new ArrayDeque<>(50);
     private String info;
     private Runnable addText = new Runnable() {
@@ -45,7 +46,7 @@ public class RollTextView extends LinearLayout {
         super(context, attrs, defStyle);
     }
 
-    public synchronized void add(String info) {
+    public synchronized void addMessage(String info) {
         this.info = info;
         getHandler().post(addText);
     }

@@ -4,15 +4,16 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-  <!--  <ScrollView android:id="@+id/pets"
+    <ScrollView android:id="@+id/pets"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#00000000"
                 android:visibility="visible"
                 android:onClick="onClick"
                 android:layout_alignParentBottom="true"
-                android:layout_toStartOf="@+id/rollTextView"
-                android:layout_below="@+id/hero_info">
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/linearLayout"
+                android:layout_toStartOf="@+id/linearLayout">
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -25,23 +26,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/hero_pic"
             android:id="@+id/rollTextView"
-            android:layout_alignStart="@+id/hero_pic"
-            android:layout_below="@+id/hero_info"/>-->
+            android:layout_toEndOf="@+id/pets"
+            android:layout_below="@+id/linearLayout"/>
 
-
-    <ImageButton
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@android:drawable/ic_dialog_dialer"
-            android:id="@+id/fab"
-            android:elevation="1dp"
-            android:background="@color/active"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:onClick="showButtons"/>
 
     <LinearLayout
             android:orientation="vertical"
@@ -272,7 +260,27 @@
                     android:id="@+id/hero_agi"
                     android:text="100000W"/>
         </LinearLayout>
+        <TextView
+                android:id="@+id/sword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="神马什么衣服+15.34W"
+                android:textColor="#3506da"
+                android:textSize="13sp"
+                android:onClick="onClick"
+                />
 
+        <TextView
+                android:id="@+id/armor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="神马神马贱+12.46W"
+                android:textColor="#0307da"
+                android:textSize="13sp"
+                android:onClick="onClick"
+                />
     </LinearLayout>
 
     <LinearLayout
@@ -332,6 +340,7 @@
 
         <Button
                 android:id="@+id/fourth_skill"
+                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
                 android:alpha="90"
@@ -347,6 +356,7 @@
         <Button
                 android:id="@+id/fifit_skill"
                 android:layout_width="wrap_content"
+                android:layout_weight="1"
                 android:layout_height="32dp"
                 android:alpha="95"
                 android:focusableInTouchMode="false"
@@ -410,5 +420,16 @@
                 android:onClick="onClick"
                 />
     </LinearLayout>
+
+    <ImageButton
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@android:drawable/ic_dialog_dialer"
+            android:id="@+id/fab"
+            android:elevation="1dp"
+            android:background="@color/active"
+            android:onClick="showButtons"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>
