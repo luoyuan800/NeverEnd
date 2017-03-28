@@ -3,7 +3,7 @@ package cn.luo.yuan.maze.display.view;
 import android.content.Context;
 import android.text.Html;
 import android.util.AttributeSet;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayDeque;
@@ -11,7 +11,7 @@ import java.util.ArrayDeque;
 /**
  * Created by luoyuan on 2017/3/19.
  */
-public class RollTextView extends ListView {
+public class RollTextView extends LinearLayout {
     private ArrayDeque<TextView> caches = new ArrayDeque<>(50);
     private String info;
     private Runnable addText = new Runnable() {

@@ -20,6 +20,7 @@ public class Maze implements IDModel, Serializable{
     private SecureRAMReader ramReader;
     private float meetRate = 100f;
     private long streaking;//连胜次数
+    private long step;//连续前进步数
     private Set<Effect> effects= new HashSet<>();
 
     public long getLevel(){
@@ -87,5 +88,17 @@ public class Maze implements IDModel, Serializable{
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setStreaking(long streaking) {
+        this.streaking = streaking;
+    }
+
+    public long getStep() {
+        return step;
+    }
+
+    public void setStep(long step) {
+        this.step = step;
     }
 }

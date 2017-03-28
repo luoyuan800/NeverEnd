@@ -19,28 +19,32 @@ public class Hero implements Serializable, IDModel {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private int index;//存档编号
     private SecureRAMReader ramReader;
-    private String name;
+    private String name;//名字
     @LongValue
-    private byte[] maxHp;
+    private byte[] maxHp;//血上限
     @LongValue
-    private byte[] hp;
+    private byte[] hp;//当前血量
     @LongValue
-    private byte[] atk;
+    private byte[] atk;//基础攻击
     @LongValue
-    private byte[] def;
-    @LongValue private byte[] agi;
-    @LongValue private byte[] str;
-    @LongValue private byte[] hpGrow;
-    @LongValue private byte[] defGrow;
-    @LongValue private byte[] atkGrow;
-    private long birthDay;
-    private long reincarnate;
-    private byte[] material;
-    private Set<Effect> effects = new HashSet<>(3);
-    private Set<Accessory> accessories = new HashSet<>(3);
-    private Element element;
+    private byte[] def;//基础防御
+    @LongValue private byte[] agi;//敏捷
+    @LongValue private byte[] str;//力量
+    @LongValue private byte[] hpGrow;//血量成长（每点力量）
+    @LongValue private byte[] defGrow;//防御成长（每点敏捷）
+    @LongValue private byte[] atkGrow;//攻击成长（每点力量）
+    private long birthDay;//生日
+    private long reincarnate;//转生次数
+    private byte[] material;//锻造点（货币）
+    private Set<Effect> effects = new HashSet<>(3);//附加的效果
+    private Set<Accessory> accessories = new HashSet<>(3);//装备
+    private Element element;//五行元素
     private String id;
+    private byte[] point;
 
+    public Set<Accessory> getAccessories(){
+        return accessories;
+    }
     public Hero(byte[] key){
         setRamReader(new SecureRAMReader(key));
     }
@@ -289,5 +293,25 @@ public class Hero implements Serializable, IDModel {
 
     public void setMaterial(byte[] material) {
         this.material = material;
+    }
+
+    public String getDisplayName() {
+        return "<font color=\"#800080\">" + getName() + "</font>(" + getElement() + ")";
+    }
+
+    public byte[] getEncodePoint() {
+        return point;
+    }
+
+    public void setPoint(byte[] point) {
+        this.point = point;
+    }
+
+    public long getPoint() {
+        return ramReader.decodeLong(point);
+    }
+
+    public void setPoint(long point) {
+        this.point = ramReader.encodeLong(point);
     }
 }

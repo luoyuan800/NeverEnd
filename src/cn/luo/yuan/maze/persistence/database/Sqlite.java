@@ -114,6 +114,7 @@ public class Sqlite {
                 "def BLOB NOT NULL," +
                 "agi BLOB NOT NULL," +
                 "str BLOB NOT NULL," +
+                "point BLOB NOT NULL," +
                 "hpGrow BLOB NOT NULL," +
                 "defGrow BLOB NOT NULL," +
                 "atkGrow BLOB NOT NULL," +

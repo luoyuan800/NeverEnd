@@ -69,6 +69,7 @@ public class DataManager {
                 hero.setDefGrow(cursor.getBlob(cursor.getColumnIndex("defGrow")));
                 hero.setHpGrow(cursor.getBlob(cursor.getColumnIndex("hpGrow")));
                 hero.setIndex(index);
+                hero.setPoint(cursor.getBlob(cursor.getColumnIndex("point")));
                 return hero;
             }
         } finally {
@@ -86,6 +87,7 @@ public class DataManager {
         hero.setMaterial(0);
         hero.setStr(0);
         hero.setAgi(0);
+        hero.setPoint(0);
         return hero;
     }
 
@@ -131,6 +133,7 @@ public class DataManager {
         values.put("defGrow", hero.getEncodeDefGrow());
         values.put("atkGrow", hero.getEncodeAtkGrow());
         values.put("last_update", System.currentTimeMillis());
+        values.put("point", hero.getEncodePoint());
         if(StringUtils.isNotEmpty(hero.getId())) {
             database.updateById("hero", values, hero.getId());
         }else {
@@ -138,6 +141,9 @@ public class DataManager {
             values.put("id", hero.getId());
             values.put("created", System.currentTimeMillis());
             database.insert("hero", values);
+        }
+        for(Accessory accessory : hero.getAccessories()){
+            saveAccessory(accessory);
         }
     }
 
