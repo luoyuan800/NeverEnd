@@ -28,6 +28,11 @@ public class Sqlite {
     public synchronized static Sqlite getSqlite(Context context) {
         if (sqlite == null) {
             sqlite = new Sqlite(context);
+        } else{
+            if(sqlite.context != context){
+                sqlite.close();
+                sqlite = new Sqlite(context);
+            }
         }
         return sqlite;
     }

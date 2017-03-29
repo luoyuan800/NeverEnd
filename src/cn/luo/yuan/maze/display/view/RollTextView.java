@@ -12,7 +12,7 @@ import java.util.ArrayDeque;
 /**
  * Created by luoyuan on 2017/3/19.
  */
-public class RollTextView extends LinearLayout implements InfoControl {
+public class RollTextView extends LinearLayout{
     private ArrayDeque<TextView> caches = new ArrayDeque<>(50);
     private String info;
     private Runnable addText = new Runnable() {
