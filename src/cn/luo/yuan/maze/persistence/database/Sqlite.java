@@ -98,6 +98,7 @@ public class Sqlite {
                 "name TEXT NOT NULL," +
                 "desc TEXT," +
                 "mounted INTEGER," +
+                "level INTEGER," +
                 "id TEXT NOT NULL PRIMARY KEY" +
                 ")";
         db.execSQL(table);
@@ -113,6 +114,7 @@ public class Sqlite {
                 "created INTEGER," +
                 "hero_index TEXT NOT NULL ," +
                 "name TEXT NOT NULL," +
+                "gift TEXT ," +
                 "hp BLOB NOT NULL," +
                 "maxHp BLOB NOT NULL," +
                 "atk BLOB NOT NULL," +
@@ -127,6 +129,7 @@ public class Sqlite {
                 "reincarnate INTEGER ," +
                 "id TEXT NOT NULL PRIMARY KEY," +
                 "birthday INTEGER ," +
+                "click INTEGER ," +
                 "element INTEGER " +
                 ")";
         db.execSQL(table);

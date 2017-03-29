@@ -70,6 +70,8 @@ public class DataManager {
                 hero.setHpGrow(cursor.getBlob(cursor.getColumnIndex("hpGrow")));
                 hero.setIndex(index);
                 hero.setPoint(cursor.getBlob(cursor.getColumnIndex("point")));
+                hero.setGift(cursor.getString(cursor.getColumnIndex("gift")));
+                hero.setClick(cursor.getLong(cursor.getColumnIndex("click")));
                 return hero;
             }
         } finally {
@@ -134,6 +136,8 @@ public class DataManager {
         values.put("atkGrow", hero.getEncodeAtkGrow());
         values.put("last_update", System.currentTimeMillis());
         values.put("point", hero.getEncodePoint());
+        values.put("gift", hero.getGift());
+        values.put("click", hero.getClick());
         if(StringUtils.isNotEmpty(hero.getId())) {
             database.updateById("hero", values, hero.getId());
         }else {
@@ -154,6 +158,7 @@ public class DataManager {
         values.put("desc", accessory.getDesc());
         values.put("mounted", accessory.isMounted());
         values.put("hero_index", index);
+        values.put("level", accessory.getLevel());
         if(StringUtils.isNotEmpty(accessory.getId())) {
             //Already existed, 我们会进行update操作
             database.updateById("accessory", values, accessory.getId());

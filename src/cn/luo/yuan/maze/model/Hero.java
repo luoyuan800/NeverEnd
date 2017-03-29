@@ -41,6 +41,8 @@ public class Hero implements Serializable, IDModel {
     private Element element;//五行元素
     private String id;
     private byte[] point;
+    private String gift;
+    private long click;
 
     public Set<Accessory> getAccessories(){
         return accessories;
@@ -313,5 +315,21 @@ public class Hero implements Serializable, IDModel {
 
     public void setPoint(long point) {
         this.point = ramReader.encodeLong(point);
+    }
+
+    public String getGift() {
+        return gift;
+    }
+
+    public void setGift(String gift) {
+        this.gift = gift;
+    }
+
+    public long getClick() {
+        return click;
+    }
+
+    public void setClick(long click) {
+        this.click = click;
     }
 }

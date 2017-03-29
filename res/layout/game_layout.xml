@@ -109,6 +109,21 @@
                     android:id="@+id/hero_mate"
                     android:text="10000000W"/>
         </LinearLayout>
+        <LinearLayout
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="能力点:"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/hero_point"
+                    android:text="10000000W"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -203,7 +218,20 @@
                     android:id="@+id/hero_hp"
                     android:text="10000000W"/>
         </LinearLayout>
-
+        <LinearLayout
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="/"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/hero_max_hp"
+                android:text="10000000W"/>
+        </LinearLayout>
         <LinearLayout
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"

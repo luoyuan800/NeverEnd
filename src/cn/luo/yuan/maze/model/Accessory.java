@@ -15,6 +15,8 @@ public class Accessory implements Serializable, IDModel {
     private String name;
     private String id;
     private String type;
+    private long level;
+    private String color;
     private boolean mounted;
     private List<Effect> effects = new ArrayList<>(5);
     private String desc;
@@ -23,6 +25,9 @@ public class Accessory implements Serializable, IDModel {
         return effects;
     }
 
+    public String getDisplayName(){
+        return "<font color='" + color + "'>" + name + "</font>" + (level>0?(" + " + level):"");
+    }
     public String getName() {
         return name;
     }
@@ -75,5 +80,21 @@ public class Accessory implements Serializable, IDModel {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public long getLevel() {
+        return level;
+    }
+
+    public void setLevel(long level) {
+        this.level = level;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }
