@@ -1,4 +1,6 @@
-package cn.luo.yuan.maze.model;
+package cn.luo.yuan.maze.model.gift;
+
+import cn.luo.yuan.maze.service.InfoControl;
 
 /**
  * Copyright 2015 luoyuan.
@@ -6,7 +8,7 @@ package cn.luo.yuan.maze.model;
  * Created by luoyuan on 12/25/15.
  */
 public enum Gift {
-    HeroHeart("勇敢的心", "一根筋的热血埋藏在你的心中，这个天赋会提升攻击成长", 0, null),
+    HeroHeart("勇敢的心", "一根筋的热血埋藏在你的心中，这个天赋会提升攻击成长", 0, HeroHeart.class),
     DarkHeard("暗黑之心", "天生的黑暗心灵，连恒河水都洗不干净。这个天赋会提升防御成长", 0, null),
     Warrior("战士", "勇敢向前绝对不会害怕，放弃技能注重身体属性成长！你最多只能使用三个技能，但是hp、攻击、防御成长翻倍（一转后才可以选择）。", 1, null),
     Searcher("守财奴", "就算死，也要守护自己的财产！囤积锻造点数也不会招引强力的怪物（一转后才可以选择）。",0,null),
@@ -27,11 +29,16 @@ public enum Gift {
     private String name;
     private String desc;
     private int recount;
+    private Class<? extends GiftHandler> handlerType;
 
-    private Gift(String name, String desc, int recount, Class clazz) {
+    public String toString(){
+        return name;
+    }
+    private Gift(String name, String desc, int recount, Class<? extends GiftHandler> clazz) {
         this.name = name;
         this.desc = desc;
         this.recount = recount;
+        this.handlerType = clazz;
     }
 
     public String getName() {
@@ -46,6 +53,31 @@ public enum Gift {
         return recount;
     }
 
+    public void handler(InfoControl control){
+        try {
+            GiftHandler handler = handlerType.newInstance();
+            handler.handler(control);
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void unHandler(InfoControl control){
+        try{
+            GiftHandler handler = handlerType.newInstance();
+            handler.unHandler(control);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static Gift getByName(String name){
+        for(Gift gift : values()){
+            if(gift.name.equals(name)){
+                return gift;
+            }
+        }
+        return null;
+    }
 
 }

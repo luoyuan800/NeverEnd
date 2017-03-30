@@ -1,16 +1,14 @@
 package cn.luo.yuan.maze.service;
 
 import android.content.Context;
-import android.view.View;
 import cn.luo.yuan.maze.display.activity.GameActivity;
 import cn.luo.yuan.maze.display.view.RollTextView;
+import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
+import cn.luo.yuan.maze.model.gift.Gift;
 import cn.luo.yuan.maze.persistence.DataManager;
-
-import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * Created by luoyuan on 2017/3/28.
@@ -27,30 +25,49 @@ public class InfoControl {
         this.context = context;
     }
 
-    public void addMessage(String msg){
+    public void addMessage(String msg) {
         textView.addMessage(msg);
     }
 
-    public void startGame(){
-        RunningService runningService = new RunningService(hero,maze,this, dataManager, Data.REFRESH_SPEED);
-
+    public void startGame() {
+        RunningService runningService = new RunningService(hero, maze, this, dataManager, Data.REFRESH_SPEED);
     }
-
 
     public Hero getHero() {
         return hero;
     }
 
-    public void setMaze(Maze maze) {
-        this.maze = maze;
+    public void save() {
+        Gift gift = Gift.getByName(hero.getGift());
+        if(gift!=null){
+            gift.unHandler(this);
+        }
+        dataManager.saveHero(hero);
+        dataManager.saveMaze(maze);
+        for(Accessory accessory : hero.getAccessories()){
+            dataManager.saveAccessory(accessory);
+        }
+        gift.handler(this);
+    }
+
+    void setHero(Hero hero) {
+        this.hero = hero;
+        Gift gift = Gift.getByName(hero.getGift());
+        if(gift!=null){
+            gift.handler(this);
+        }
     }
 
     public Maze getMaze() {
         return maze;
     }
 
-    void setHero(Hero hero) {
-        this.hero = hero;
+    public void setMaze(Maze maze) {
+        this.maze = maze;
+    }
+
+    public DataManager getDataManager() {
+        return dataManager;
     }
 
     public void setDataManager(DataManager dataManager) {
@@ -59,15 +76,11 @@ public class InfoControl {
         setMaze(dataManager.loadMaze());
     }
 
-    public DataManager getDataManager() {
-        return dataManager;
+    public GameActivity.ViewHandler getViewHandler() {
+        return viewHandler;
     }
 
     public void setViewHandler(GameActivity.ViewHandler viewHandler) {
         this.viewHandler = viewHandler;
-    }
-
-    public GameActivity.ViewHandler getViewHandler() {
-        return viewHandler;
     }
 }

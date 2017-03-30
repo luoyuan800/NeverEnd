@@ -67,8 +67,7 @@ public class RunningService implements Runnable {
                     hero.setPoint(hero.getPoint() + point);
                     infoControl.addMessage(msg);
                     if ((System.currentTimeMillis() - startTime)%1000 == 5*60) {//每隔五分钟自动存储一次
-                        dataManager.saveHero(hero);
-                        dataManager.saveMaze(maze);
+                        infoControl.save();
                     }
                 }
             }catch (Exception e){

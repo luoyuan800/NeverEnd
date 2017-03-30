@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model;
 
 import cn.luo.yuan.maze.model.effect.Effect;
+import cn.luo.yuan.maze.service.InfoControl;
 import cn.luo.yuan.maze.utils.SecureRAMReader;
 import cn.luo.yuan.maze.utils.Version;
 import cn.luo.yuan.maze.utils.annotation.LongValue;
@@ -332,4 +333,5 @@ public class Hero implements Serializable, IDModel {
     public void setClick(long click) {
         this.click = click;
     }
+
 }

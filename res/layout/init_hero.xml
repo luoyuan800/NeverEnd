@@ -19,6 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/select_element"/>
+    <TextView
+            android:text="@string/gift_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/select_gift"/>
 
     <TextView
             android:layout_width="match_parent"

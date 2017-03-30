@@ -4,17 +4,17 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.model.Element;
+import cn.luo.yuan.maze.model.gift.Gift;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.HeroIndex;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.persistence.IndexManager;
-import cn.luo.yuan.maze.persistence.serialize.ObjectDB;
+import cn.luo.yuan.maze.service.InfoControl;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -52,6 +52,24 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
                 Spinner element = (Spinner) dialog.findViewById(R.id.select_element);
                 ArrayAdapter<Element> fa = new ArrayAdapter<>(SelectedActivity.this, android.R.layout.simple_spinner_item, Arrays.asList(Element.values()));
                 element.setAdapter(fa);
+                Spinner gift = (Spinner) dialog.findViewById(R.id.select_gift);
+                ArrayAdapter<Gift> gAdapter = new ArrayAdapter<>(SelectedActivity.this, android.R.layout.simple_spinner_item, Arrays.asList(Gift.values()));
+                gift.setAdapter(gAdapter);
+                gift.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Gift g = gAdapter.getItem(position);
+                        AlertDialog giftDetail = new AlertDialog.Builder(SelectedActivity.this).create();
+                        giftDetail.setMessage(g.getDesc());
+                        giftDetail.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.conform), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        giftDetail.show();
+                    }
+                });
                 dialog.findViewById(R.id.init_hero).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -61,6 +79,7 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
                         hero.setBirthDay(calendar.getTimeInMillis());
                         Spinner element = (Spinner) dialog.findViewById(R.id.select_element);
                         hero.setElement((Element) element.getSelectedItem());
+                        hero.setGift(((Gift)gift.getSelectedItem()).getName());
                         if(!StringUtils.isNotEmpty(hero.getName())){
                             dialog.show();
                         }else{
