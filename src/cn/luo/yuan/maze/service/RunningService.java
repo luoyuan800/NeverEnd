@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
+import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Random;
@@ -26,8 +27,9 @@ public class RunningService implements Runnable {
         this.maze = maze;
         running = true;
         this.fps = fps;
-        random = new Random(hero.getBirthDay());
         this.dataManager = dataManager;
+        dataManager.loadMountedAccessory(hero);
+        random = infoControl.getRandom();
     }
     public void close(){
         this.running = false;
@@ -68,6 +70,11 @@ public class RunningService implements Runnable {
                     infoControl.addMessage(msg);
                     if ((System.currentTimeMillis() - startTime)%1000 == 5*60) {//每隔五分钟自动存储一次
                         infoControl.save();
+                    }
+                }else{
+                    Monster monster = dataManager.buildRandomMonster(infoControl);
+                    if(monster!=null){
+                        //TODO battle
                     }
                 }
             }catch (Exception e){

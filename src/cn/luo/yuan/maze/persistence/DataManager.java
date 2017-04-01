@@ -4,11 +4,17 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import cn.luo.yuan.maze.model.Accessory;
+import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Element;
+import cn.luo.yuan.maze.model.FirstName;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
+import cn.luo.yuan.maze.model.Monster;
+import cn.luo.yuan.maze.model.SecondName;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
+import cn.luo.yuan.maze.service.InfoControl;
+import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.SecureRAMReader;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -221,5 +227,64 @@ public class DataManager {
         database.excuseSOL("delete from maze where hero_index = " + index);
         database.excuseSOL("delete from hero where hero_index = " + index);
         database.excuseSOL("delete from accessory where hero_index = " + index);
+    }
+    public Monster buildRandomMonster(InfoControl control){
+        Cursor cursor = database.excuseSOL("select * from monster where min_level < " + control.getMaze().getLevel());
+        try {
+            while (!cursor.isAfterLast()) {
+                float meetRate = cursor.getFloat(cursor.getColumnIndex("meet_rate"));
+                Random random = control.getRandom();
+                if (random.nextInt(100) + random.nextFloat() < meetRate) {
+                    Monster monster = new Monster();
+                    monster.setType(cursor.getString(cursor.getColumnIndex("type")));
+                    monster.setRace(cursor.getInt(cursor.getColumnIndex("race")));
+                    monster.setImageId(cursor.getInt(cursor.getColumnIndex("image")));
+                    monster.setPetRate(cursor.getFloat(cursor.getColumnIndex("pet_rate")));
+                    monster.setHitRate(cursor.getFloat(cursor.getColumnIndex("hit")));
+                    monster.setSilent(cursor.getFloat(cursor.getColumnIndex("silent")));
+                    int sex = cursor.getInt(cursor.getColumnIndex("sex"));
+                    monster.setSex(sex >= 0 ? sex : random.nextInt(2));
+                    monster.setAtk(cursor.getLong(cursor.getColumnIndex("atk")));
+                    monster.setDef(cursor.getLong(cursor.getColumnIndex("def")));
+                    monster.setMaxHP(cursor.getLong(cursor.getColumnIndex("hp")));
+                    FirstName firstName = FirstName.getRandom(control.getMaze().getLevel(), random);
+                    SecondName secondName = SecondName.getRandom(control.getMaze().getLevel(), random);
+                    monster.setFirstName(firstName.getName());
+                    monster.setSecondName(secondName.getName());
+                    monster.setElement(Element.values()[random.nextInt(Element.values().length)]);
+                    monster.setMaxHP(monster.getMaxHP() + firstName.getHPAddition(monster.getMaxHP()));
+                    monster.setMaxHP(monster.getMaxHP() + secondName.getHpAddition(monster.getMaxHP()));
+                    monster.setAtk(monster.getAtk() + firstName.getAtkAddition(monster.getAtk()));
+                    monster.setAtk(monster.getAtk() + secondName.getAtkAddition(monster.getAtk()));
+                    if (control.getMaze().getLevel() < 5000) {
+                        monster.setMaxHP(control.getMaze().getLevel() * (monster.getMaxHP() + Data.MONSTER_HP_RISE_PRE_LEVEL)/2);
+                        monster.setAtk(control.getMaze().getLevel() * (monster.getAtk() + Data.MONSTER_ATK_RISE_PRE_LEVEL)/2);
+                        monster.setDef(control.getMaze().getLevel() * (monster.getDef() + Data.MONSTER_DEF_RISE_PRE_LEVEL)/2);
+                    } else {
+                        monster.setMaxHP(control.getMaze().getLevel() * (monster.getMaxHP() + Data.MONSTER_HP_RISE_PRE_LEVEL));
+                        monster.setAtk(control.getMaze().getLevel() * (monster.getAtk() + Data.MONSTER_ATK_RISE_PRE_LEVEL));
+                        monster.setDef(control.getMaze().getLevel() * (monster.getDef() + Data.MONSTER_DEF_RISE_PRE_LEVEL));
+                    }
+                    long m1 = random.nextLong(monster.getHp() + 1) / 181 + 3;
+                    long m2 = random.nextLong(monster.getAtk() + 1) / 411 + 5;
+                    long material = random.nextLong((m1 + m2) / 1832 + 1) + 10 + random.nextLong(control.getMaze().getLevel() / 100 + 1);
+                    if (control.getMaze().getMaxLevel() < 1000) {
+                        material += 15;
+                    }
+                    if (control.getMaze().getMaxLevel() > 5000 && control.getMaze().getLevel() < control.getMaze().getMaxLevel()) {
+                        material /= 2;
+                    }
+                    if (material > 1000) {
+                        material = 300 + random.nextInt(700);
+                    }
+                    monster.setMaterial(material);
+                    return monster;
+                }
+                cursor.moveToFirst();
+            }
+        }catch (Exception e) {
+            cursor.close();
+        }
+        return null;
     }
 }

@@ -9,6 +9,7 @@ import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.gift.Gift;
 import cn.luo.yuan.maze.persistence.DataManager;
+import cn.luo.yuan.maze.utils.Random;
 
 /**
  * Created by luoyuan on 2017/3/28.
@@ -20,6 +21,7 @@ public class InfoControl {
     private Maze maze;
     private DataManager dataManager;
     private GameActivity.ViewHandler viewHandler;
+    private Random random;
 
     public InfoControl(Context context) {
         this.context = context;
@@ -50,12 +52,21 @@ public class InfoControl {
         gift.handler(this);
     }
 
+    public Random getRandom() {
+        return random;
+    }
+
+    public void setRandom(Random random) {
+        this.random = random;
+    }
+
     void setHero(Hero hero) {
         this.hero = hero;
         Gift gift = Gift.getByName(hero.getGift());
         if(gift!=null){
             gift.handler(this);
         }
+        random = new Random(hero.getBirthDay());
     }
 
     public Maze getMaze() {
