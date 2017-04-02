@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.display.view.RollTextView;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.persistence.DataManager;
@@ -26,6 +27,7 @@ public class GameActivity extends Activity {
         control = new InfoControl(this);
         control.setDataManager(dataManager);
         control.setViewHandler(new ViewHandler(this));
+        control.setTextView((RollTextView) findViewById(R.id.info_view));
     }
 
     public class ViewHandler extends Handler {

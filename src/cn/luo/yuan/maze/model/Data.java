@@ -14,6 +14,12 @@ public class Data {
     public static long MONSTER_ATK_RISE_PRE_LEVEL = 100;//怪物每层的攻击成长
     public static long MONSTER_HP_RISE_PRE_LEVEL = 500;//怪物每层的生命成长
     public static long MONSTER_DEF_RISE_PRE_LEVEL = 50;//怪物每层的防御成长
+    public static float DODGE_AGI_RATE = 0.0001f;//敏捷转换成闪避率加成
+    public static float DODGE_STR_RATE = 0.0001f;//力量转换成闪避率衰减
+    public static float PARRY_STR_RATE = 0.001f;//力量转化格挡率加成
+    public static float PARRY_AGI_RATE = 0.0001f;//敏捷转化格挡率衰减
+    public static float HIT_AGI_RATE = 0.001f;//敏捷转化重击率衰减
+    public static float HIT_STR_RATE = 0.002f;//力量转化重击率加成
 
     /**
      * 计算击败一个怪物可以获得的锻造点

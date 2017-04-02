@@ -1,11 +1,13 @@
 package cn.luo.yuan.maze.service;
 
+import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.maze.utils.StringUtils;
 
 
 /**
@@ -28,7 +30,6 @@ public class RunningService implements Runnable {
         running = true;
         this.fps = fps;
         this.dataManager = dataManager;
-        dataManager.loadMountedAccessory(hero);
         random = infoControl.getRandom();
     }
     public void close(){
@@ -61,10 +62,12 @@ public class RunningService implements Runnable {
                     }
                     String msg;
                     if (point > 0 && (maze.getLevel() > maze.getMaxLevel()|| random.nextBoolean())) {
-                        msg = hero.getDisplayName() + "进入了" + maze.getLevel() + "层迷宫， 获得了<font color=\"#FF8C00\">" + point + "</font>点数奖励";
+                        msg = String.format(infoControl.getContext().getString(R.string.move_to_next_level),
+                                hero.getDisplayName(), StringUtils.formatNumber(maze.getLevel()),StringUtils.formatNumber(point));
                     } else {
                         point = 1;
-                        msg = hero.getDisplayName() + "进入了" + maze.getLevel() + "层迷宫，获得了<font color=\"#FF8C00\">" + point + "</font>点数奖励";
+                        msg = String.format(infoControl.getContext().getString(R.string.move_to_next_level),
+                                hero.getDisplayName(), StringUtils.formatNumber(maze.getLevel()), StringUtils.formatNumber(point));
                     }
                     hero.setPoint(hero.getPoint() + point);
                     infoControl.addMessage(msg);
@@ -74,7 +77,14 @@ public class RunningService implements Runnable {
                 }else{
                     Monster monster = dataManager.buildRandomMonster(infoControl);
                     if(monster!=null){
-                        //TODO battle
+                        BattleService battleService = new BattleService(infoControl, monster);
+                        if(battleService.battle()){
+                            maze.setStreaking(maze.getStreaking() + 1);
+                            hero.setMaterial(hero.getMaterial() + monster.getMaterial());
+                            infoControl.addMessage(String.format(infoControl.getContext().getString(R.string.add_mate), StringUtils.formatNumber(monster.getMaterial())));
+                        }else{
+                            maze.setStreaking(0);
+                        }
                     }
                 }
             }catch (Exception e){

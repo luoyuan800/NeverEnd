@@ -60,11 +60,24 @@ public class InfoControl {
         this.random = random;
     }
 
+    public void setTextView(RollTextView textView) {
+        this.textView = textView;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
     void setHero(Hero hero) {
         this.hero = hero;
+        //Gift handle
         Gift gift = Gift.getByName(hero.getGift());
         if(gift!=null){
             gift.handler(this);
+        }
+        //Accessory handle
+        for(Accessory accessory : dataManager.loadMountedAccessory(hero)){
+            hero.mountAccessory(accessory);
         }
         random = new Random(hero.getBirthDay());
     }

@@ -22,4 +22,13 @@
     <string name="birth_input">选择你的生日</string>
     <string name="element_input">选择五行</string>
     <string name="gift_input">选择天赋</string>
+    <string name="battle_to_long">战斗时间太长了，强制双方生命值减半</string>
+    <string name="hit_happend">%s 使出了暴击，攻击伤害提高了。</string>
+    <string name="atk_harm_color_msg"><![CDATA[%s攻击了%s，造成了<font color=\\\"red\\\"></font>%s点伤害。]]></string>
+    <string name="doge_happend">%s身手敏捷的闪开了%s的攻击</string>
+    <string name="parry_happend">%s成功进行了一次格挡，减少了受到的伤害！</string>
+    <string name="win_msg">%s击败了%s</string>
+    <string name="lost_msg">%s被%s击败了</string>
+    <string name="add_mate">获得了%s点锻造</string>
+    <string name="move_to_next_level"><![CDATA[%s进入了%s层迷宫， 获得了<font color=\\\\\\\"#FF8C00\\\">%s</font>点数奖励]]></string>
 </resources>
