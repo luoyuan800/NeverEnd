@@ -13,6 +13,7 @@ public class SerializeLoader<T extends Serializable> {
     private Class<T> clazz;
     public SerializeLoader(Class<T> type){
         db = new ObjectDB(sdPath + "/" + type.getSimpleName());
+        clazz = type;
     }
 
     public T load(String id){

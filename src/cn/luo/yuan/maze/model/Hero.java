@@ -48,8 +48,7 @@ public class Hero implements Serializable, IDModel {
     public Set<Accessory> getAccessories(){
         return accessories;
     }
-    public Hero(byte[] key){
-        setRamReader(new SecureRAMReader(key));
+    public Hero(){
     }
     public long getMaterial(){
         return ramReader.decodeLong(material);

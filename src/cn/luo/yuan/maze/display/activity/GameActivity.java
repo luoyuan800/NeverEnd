@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.display.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.TextView;
@@ -22,8 +23,10 @@ public class GameActivity extends Activity {
     InfoControl control;
 
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.game_layout);
-        dataManager = new DataManager(savedInstanceState.getInt("index"), this);
+        Intent intent = getIntent();
+        dataManager = new DataManager(intent.getIntExtra("index", -1), this);
         control = new InfoControl(this);
         control.setDataManager(dataManager);
         control.setViewHandler(new ViewHandler(this));

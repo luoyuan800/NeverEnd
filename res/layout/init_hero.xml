@@ -11,18 +11,22 @@
             android:hint="@string/name_input"
             android:layout_height="55dp"
             />
+
     <TextView
             android:text="@string/element_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
     <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/select_element"/>
+
     <TextView
             android:text="@string/gift_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
     <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,11 +37,19 @@
             android:text="@string/birth_input"
             android:layout_height="wrap_content"/>
 
-    <DatePicker
+    <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/birthday"
-            android:layout_weight="21.8"/>
+            android:id="@+id/birthday_scroll"
+            android:layout_weight="21.8">
+
+        <DatePicker
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/select_birthday"
+                />
+    </ScrollView>
+
     <Button
             android:layout_weight="0.7"
             android:id="@+id/init_hero"

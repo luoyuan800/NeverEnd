@@ -28,10 +28,10 @@ public class ObjectDB {
 
     public synchronized String save(Serializable object, String id) {
         try {
-            File file = new File(table + "/" + object.getClass().getName() + "@" + id);
-            file.delete();
-            file.createNewFile();
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+            String path = table + "/" + object.getClass().getName() + "@" + id;
+            File file = new File(path);
+            file.deleteOnExit();
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path));
             oos.writeObject(object);
             oos.flush();
             oos.close();
@@ -91,7 +91,7 @@ public class ObjectDB {
     }
 
     public void delete(String clazz, String id){
-        File file = new File(table + "/" + clazz + "@" + id);
+        File file = new File(table + "/" + clazz + "_" + id);
         file.delete();
     }
 

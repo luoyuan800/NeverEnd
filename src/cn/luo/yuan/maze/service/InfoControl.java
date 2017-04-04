@@ -11,6 +11,11 @@ import cn.luo.yuan.maze.model.gift.Gift;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.utils.Random;
 
+import java.util.Date;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by luoyuan on 2017/3/28.
  */
@@ -22,6 +27,7 @@ public class InfoControl {
     private DataManager dataManager;
     private GameActivity.ViewHandler viewHandler;
     private Random random;
+    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 
     public InfoControl(Context context) {
         this.context = context;
@@ -32,21 +38,43 @@ public class InfoControl {
     }
 
     public void startGame() {
+        viewHandler.refreshProperties(hero);
         RunningService runningService = new RunningService(hero, maze, this, dataManager, Data.REFRESH_SPEED);
+        executor.scheduleAtFixedRate(runningService,0, Data.REFRESH_SPEED, TimeUnit.MICROSECONDS);
+        executor.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                viewHandler.refreshFreqProperties();
+            }
+        }, 0, Data.REFRESH_SPEED, TimeUnit.MICROSECONDS);
     }
 
     public Hero getHero() {
         return hero;
     }
 
+    void setHero(Hero hero) {
+        this.hero = hero;
+        //Gift handle
+        Gift gift = Gift.getByName(hero.getGift());
+        if (gift != null) {
+            gift.handler(this);
+        }
+        //Accessory handle
+        for (Accessory accessory : dataManager.loadMountedAccessory(hero)) {
+            hero.mountAccessory(accessory);
+        }
+        random = new Random(hero.getBirthDay());
+    }
+
     public void save() {
         Gift gift = Gift.getByName(hero.getGift());
-        if(gift!=null){
+        if (gift != null) {
             gift.unHandler(this);
         }
         dataManager.saveHero(hero);
         dataManager.saveMaze(maze);
-        for(Accessory accessory : hero.getAccessories()){
+        for (Accessory accessory : hero.getAccessories()) {
             dataManager.saveAccessory(accessory);
         }
         gift.handler(this);
@@ -66,20 +94,6 @@ public class InfoControl {
 
     public Context getContext() {
         return context;
-    }
-
-    void setHero(Hero hero) {
-        this.hero = hero;
-        //Gift handle
-        Gift gift = Gift.getByName(hero.getGift());
-        if(gift!=null){
-            gift.handler(this);
-        }
-        //Accessory handle
-        for(Accessory accessory : dataManager.loadMountedAccessory(hero)){
-            hero.mountAccessory(accessory);
-        }
-        random = new Random(hero.getBirthDay());
     }
 
     public Maze getMaze() {

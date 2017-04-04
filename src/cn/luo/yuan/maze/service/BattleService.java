@@ -56,7 +56,7 @@ public class BattleService {
         atk = atk * 2 + random.nextLong(atk);
         boolean isHit = random.nextLong(100) + hero.getStr() * Data.HIT_STR_RATE > 97 + random.nextInt(1000) + random.nextLong((long)(hero.getAgi() * Data.HIT_AGI_RATE));
         if(isHit){
-            control.addMessage(String.format(context.getString(R.string.hit_happend), hero.getDisplayName()));
+            control.addMessage(String.format(context.getString(R.string.hit_happen), hero.getDisplayName()));
             atk *= 2;//暴击有效攻击力翻倍
         }
         long harm = atk - monster.getDef();
@@ -72,14 +72,14 @@ public class BattleService {
         boolean isDodge = random.nextLong(100) + hero.getAgi() * Data.DODGE_AGI_RATE > 97 + random.nextInt(1000) + random.nextLong((long)(hero.getStr() * Data.DODGE_STR_RATE));
         boolean isParry = false;
         if (isDodge) {
-            control.addMessage(String.format(context.getString(R.string.doge_happend),hero.getDisplayName(), monster.getDisplayName()));
+            control.addMessage(String.format(context.getString(R.string.doge_happen),hero.getDisplayName(), monster.getDisplayName()));
         } else {
             isParry = random.nextLong(100) + hero.getStr() * Data.PARRY_STR_RATE > 97 + random.nextInt(1000) + random.nextLong((long)(hero.getAgi() * Data.PARRY_AGI_RATE));
             long defend = hero.getUpperDef();
             defend = defend/2;
             defend = defend + random.nextLong(defend);
             if (isParry) {
-                control.addMessage(String.format(context.getString(R.string.parry_happend),hero.getDisplayName()));
+                control.addMessage(String.format(context.getString(R.string.parry_happen),hero.getDisplayName()));
                 //格挡，生效防御力三倍
                 defend *= 3;
             }

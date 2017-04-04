@@ -41,10 +41,10 @@ public class RunningService implements Runnable {
     @Override
     public void run() {
         startTime = System.currentTimeMillis();
-        while (running){
+        if (running){
             try {
-                if (pause) {
-                    continue;
+                if (!pause) {
+                    return;
                 }
                 maze.setStep(maze.getStep() + 1);
                 if (random.nextLong(10000) > 9985 || maze.getStep() > random.nextLong(22) || random.nextLong(maze.getStreaking() + 1) > 50 + maze.getLevel()) {
@@ -89,12 +89,6 @@ public class RunningService implements Runnable {
                 }
             }catch (Exception e){
                 LogHelper.logException(e, false, "Error while running game thread.");
-            }finally {
-                try {
-                    Thread.sleep(fps);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }

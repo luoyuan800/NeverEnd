@@ -3,18 +3,19 @@ package cn.luo.yuan.maze.display.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.model.Element;
+import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.gift.Gift;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.HeroIndex;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.persistence.IndexManager;
-import cn.luo.yuan.maze.service.InfoControl;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -27,13 +28,14 @@ import java.util.List;
  */
 public class SelectedActivity extends Activity implements View.OnClickListener,View.OnLongClickListener{
     private IndexManager indexManager;
+    private StringAdapter<HeroIndex> adapter;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selected_index);
         Resource.init(this);
         indexManager = new IndexManager(this);
         final List<HeroIndex>  indexList = indexManager.getIndex();
-        StringAdapter<HeroIndex> adapter = new StringAdapter<>(indexList);
+        adapter = new StringAdapter<>(indexList);
         adapter.setOnClickListener(this);
         adapter.setOnLongClickListener(this);
         ((ListView)findViewById(R.id.selected_hero_index)).setAdapter(adapter);
@@ -44,6 +46,7 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
                 int index = indexList.size() + indexList.hashCode();
                 final DataManager dataManager = new DataManager(index, SelectedActivity.this);
                 final Hero hero = dataManager.loadHero();
+                final Maze maze = dataManager.loadMaze();
                 final AlertDialog dialog = new AlertDialog.Builder(SelectedActivity.this).create();
                 dialog.setTitle(Resource.getString(R.string.name_input));
                 dialog.show();
@@ -52,12 +55,16 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
                 Spinner element = (Spinner) dialog.findViewById(R.id.select_element);
                 ArrayAdapter<Element> fa = new ArrayAdapter<>(SelectedActivity.this, android.R.layout.simple_spinner_item, Arrays.asList(Element.values()));
                 element.setAdapter(fa);
+                DatePicker birthday = (DatePicker)dialog.findViewById(R.id.select_birthday);
+                GregorianCalendar maxDate = new GregorianCalendar(2010, 1, 1);
+                birthday.setMaxDate(maxDate.getTimeInMillis());
                 Spinner gift = (Spinner) dialog.findViewById(R.id.select_gift);
                 ArrayAdapter<Gift> gAdapter = new ArrayAdapter<>(SelectedActivity.this, android.R.layout.simple_spinner_item, Arrays.asList(Gift.values()));
+
                 gift.setAdapter(gAdapter);
-                gift.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                gift.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         Gift g = gAdapter.getItem(position);
                         AlertDialog giftDetail = new AlertDialog.Builder(SelectedActivity.this).create();
                         giftDetail.setMessage(g.getDesc());
@@ -69,12 +76,17 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
                         });
                         giftDetail.show();
                     }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        //DONothing
+                    }
                 });
                 dialog.findViewById(R.id.init_hero).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         hero.setName(((EditText)dialog.findViewById(R.id.hero_name)).getText().toString());
-                        DatePicker picker = (DatePicker) dialog.findViewById(R.id.birthday);
+                        DatePicker picker = (DatePicker) dialog.findViewById(R.id.select_birthday);
                         GregorianCalendar calendar = new GregorianCalendar(picker.getYear(), picker.getMonth(), picker.getDayOfMonth());
                         hero.setBirthDay(calendar.getTimeInMillis());
                         Spinner element = (Spinner) dialog.findViewById(R.id.select_element);
@@ -84,6 +96,7 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
                             dialog.show();
                         }else{
                             dataManager.saveHero(hero);
+                            dataManager.saveMaze(maze);
                             dialog.dismiss();
                             openGameView(index);
                         }
@@ -102,7 +115,11 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
     }
 
     private void openGameView(int index){
-
+        Intent gameIntent = new Intent(this, GameActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("index", index);
+        gameIntent.putExtras(bundle);
+        startActivity(gameIntent);
     }
 
     @Override
@@ -116,9 +133,16 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
                 public void onClick(DialogInterface dialog, int which) {
                     DataManager dataManager = new DataManager(((HeroIndex) o).getIndex(), SelectedActivity.this);
                     dataManager.clean();
+                    reload();
                 }
             });
+            dialog.show();
         }
         return false;
+    }
+
+    private void reload() {
+        adapter.setData(indexManager.getIndex());
+        adapter.notifyDataSetChanged();
     }
 }

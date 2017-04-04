@@ -147,9 +147,9 @@ public class Sqlite {
                 "agi BLOB NOT NULL," +
                 "str BLOB NOT NULL," +
                 "point BLOB NOT NULL," +
-                "hpGrow BLOB NOT NULL," +
-                "defGrow BLOB NOT NULL," +
-                "atkGrow BLOB NOT NULL," +
+                "hp_grow BLOB NOT NULL," +
+                "def_grow BLOB NOT NULL," +
+                "atk_grow BLOB NOT NULL," +
                 "material BLOB NOT NULL," +
                 "reincarnate INTEGER ," +
                 "id TEXT NOT NULL PRIMARY KEY," +
@@ -212,14 +212,14 @@ public class Sqlite {
         Cursor cursor = excuseSOL("select key from key where hero_index = '" + index + "'");
         try {
             if (cursor.isAfterLast()) {
-                return SecureRAMReader.generateKey();
-            } else {
-                byte[] key = cursor.getBlob(cursor.getColumnIndex("key"));
+                byte[] key = SecureRAMReader.generateKey();
                 ContentValues values = new ContentValues(2);
                 values.put("hero_index", index);
                 values.put("key", key);
                 insert("key",values);
                 return key;
+            } else {
+                return cursor.getBlob(cursor.getColumnIndex("key"));
             }
         }finally {
             cursor.close();

@@ -17,7 +17,7 @@ public class Maze implements IDModel, Serializable{
     private String id;
     private byte[] maxLevel;
     private byte[] level;
-    private SecureRAMReader ramReader;
+    transient private SecureRAMReader ramReader;
     private float meetRate = 100f;
     private long streaking;//连胜次数
     private long step;//连续前进步数
@@ -35,7 +35,7 @@ public class Maze implements IDModel, Serializable{
         this.level = ramReader.encodeLong(level);
     }
     public void setMaxLevel(long maxLevel){
-        this.level = ramReader.encodeLong(maxLevel);
+        this.maxLevel = ramReader.encodeLong(maxLevel);
     }
 
     public byte[] getEncodeMaxLevel() {

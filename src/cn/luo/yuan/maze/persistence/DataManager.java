@@ -40,11 +40,13 @@ public class DataManager {
     private SerializeLoader<Maze> mazeLoader = new SerializeLoader<>(Maze.class);
     private Sqlite database;
     private Context context;
+    private SecureRAMReader ramReader ;
 
     public DataManager(int index, Context context) {
         this.index = index;
         this.database = Sqlite.getSqlite(context);
         this.context = context;
+        ramReader = new SecureRAMReader(database.getKey(index));
     }
 
     public Hero loadHero() {
@@ -52,7 +54,8 @@ public class DataManager {
         Cursor cursor = database.excuseSOL(query);
         try {
             if (!cursor.isAfterLast()) {
-                Hero hero = new Hero(database.getKey(index));
+                Hero hero = new Hero();
+                hero.setRamReader(ramReader);
                 hero.setAgi(cursor.getBlob(cursor.getColumnIndex("agi")));
                 hero.setAtk(cursor.getBlob(cursor.getColumnIndex("atk")));
                 hero.setDef(cursor.getBlob(cursor.getColumnIndex("def")));
@@ -63,17 +66,17 @@ public class DataManager {
                 hero.setReincarnate(cursor.getLong(cursor.getColumnIndex("reincarnate")));
                 hero.setName(cursor.getString(cursor.getColumnIndex("name")));
                 hero.setIndex(index);
-                hero.setBirthDay(cursor.getLong(cursor.getColumnIndex("birthDay")));
+                hero.setBirthDay(cursor.getLong(cursor.getColumnIndex("birthday")));
                 String element = cursor.getString(cursor.getColumnIndex("element"));
                 if (element != null && !element.isEmpty()) {
                     hero.setElement(Element.valueOf(element));
                 } else {
                     hero.setElement(Element.NONE);
                 }
-                hero.setId(cursor.getString(cursor.getColumnIndex("uuid")));
-                hero.setAtkGrow(cursor.getBlob(cursor.getColumnIndex("atkGrow")));
-                hero.setDefGrow(cursor.getBlob(cursor.getColumnIndex("defGrow")));
-                hero.setHpGrow(cursor.getBlob(cursor.getColumnIndex("hpGrow")));
+                hero.setId(cursor.getString(cursor.getColumnIndex("id")));
+                hero.setAtkGrow(cursor.getBlob(cursor.getColumnIndex("atk_grow")));
+                hero.setDefGrow(cursor.getBlob(cursor.getColumnIndex("def_grow")));
+                hero.setHpGrow(cursor.getBlob(cursor.getColumnIndex("hp_grow")));
                 hero.setIndex(index);
                 hero.setPoint(cursor.getBlob(cursor.getColumnIndex("point")));
                 hero.setGift(cursor.getString(cursor.getColumnIndex("gift")));
@@ -83,7 +86,8 @@ public class DataManager {
         } finally {
             cursor.close();
         }
-        Hero hero = new Hero(database.getKey(index));
+        Hero hero = new Hero();
+        hero.setRamReader(ramReader);
         hero.setAtkGrow(1);
         hero.setHpGrow(2);
         hero.setDefGrow(3);
@@ -127,7 +131,7 @@ public class DataManager {
         ContentValues values = new ContentValues();
         values.put("name", hero.getName());
         values.put("hero_index", hero.getIndex());
-        values.put("birthDay", hero.getBirthDay());
+        values.put("birthday", hero.getBirthDay());
         values.put("element", hero.getElement().name());
         values.put("hp", hero.getEncodeHp());
         values.put("atk", hero.getEncodeAtk());
@@ -137,9 +141,9 @@ public class DataManager {
         values.put("maxHp", hero.getEncodeMaxHp());
         values.put("material", hero.getEncodeMaterial());
         values.put("reincarnate", hero.getReincarnate());
-        values.put("hpGrow", hero.getEncodeHpGrow());
-        values.put("defGrow", hero.getEncodeDefGrow());
-        values.put("atkGrow", hero.getEncodeAtkGrow());
+        values.put("hp_grow", hero.getEncodeHpGrow());
+        values.put("def_grow", hero.getEncodeDefGrow());
+        values.put("atk_grow", hero.getEncodeAtkGrow());
         values.put("last_update", System.currentTimeMillis());
         values.put("point", hero.getEncodePoint());
         values.put("gift", hero.getGift());
@@ -193,15 +197,32 @@ public class DataManager {
     }
 
     public Maze loadMaze(){
-        Cursor cursor = database.excuseSOL("select id from maze");
+        Cursor cursor = database.excuseSOL("select id from maze where hero_index = " + index);
         try {
             if (!cursor.isAfterLast()) {
-                return mazeLoader.load(cursor.getString(cursor.getColumnIndex("id")));
+                Maze maze = mazeLoader.load(cursor.getString(cursor.getColumnIndex("id")));
+                if(maze == null){
+                    maze = newMaze();
+                }
+                maze.setRamReader(ramReader);
+                return maze;
+            }else{
+                Maze maze = newMaze();
+                maze.setRamReader(ramReader);
+                return maze;
             }
         }finally {
             cursor.close();
         }
-        return null;
+    }
+
+    private Maze newMaze() {
+        Maze maze = new Maze();
+        maze.setRamReader(ramReader);
+        maze.setMaxLevel(1);
+        maze.setLevel(1);
+        maze.setMeetRate(99.9f);
+        return maze;
     }
 
     /**
@@ -212,6 +233,7 @@ public class DataManager {
         try {
             while (!cursor.isAfterLast()) {
                 accessoryLoader.delete(cursor.getString(cursor.getColumnIndex("id")));
+                cursor.moveToNext();
             }
         }finally {
             cursor.close();
@@ -220,6 +242,7 @@ public class DataManager {
             cursor = database.excuseSOL("select id from maze where hero_index = " + index);
             while (!cursor.isAfterLast()) {
                 mazeLoader.delete(cursor.getString(cursor.getColumnIndex("id")));
+                cursor.moveToNext();
             }
         }finally {
             cursor.close();
