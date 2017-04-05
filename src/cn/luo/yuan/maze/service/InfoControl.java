@@ -27,6 +27,7 @@ public class InfoControl {
     private DataManager dataManager;
     private GameActivity.ViewHandler viewHandler;
     private Random random;
+    RunningService runningService;
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 
     public InfoControl(Context context) {
@@ -37,16 +38,24 @@ public class InfoControl {
         textView.addMessage(msg);
     }
 
+    public boolean pauseGame(){
+        return runningService.pause();
+    }
+
     public void startGame() {
         viewHandler.refreshProperties(hero);
-        RunningService runningService = new RunningService(hero, maze, this, dataManager, Data.REFRESH_SPEED);
+        viewHandler.refreshAccessory(hero);
+        viewHandler.refreshSkill(hero);
+        runningService = new RunningService(hero, maze, this, dataManager, Data.REFRESH_SPEED);
         executor.scheduleAtFixedRate(runningService,0, Data.REFRESH_SPEED, TimeUnit.MICROSECONDS);
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                viewHandler.refreshFreqProperties();
+                if(!runningService.getPause())
+                    viewHandler.refreshFreqProperties();
             }
         }, 0, Data.REFRESH_SPEED, TimeUnit.MICROSECONDS);
+
     }
 
     public Hero getHero() {

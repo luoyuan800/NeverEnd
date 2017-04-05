@@ -1,10 +1,17 @@
 package cn.luo.yuan.maze.display.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.display.view.RollTextView;
 import cn.luo.yuan.maze.model.Accessory;
@@ -21,6 +28,7 @@ import java.lang.ref.WeakReference;
 public class GameActivity extends Activity {
     DataManager dataManager;
     InfoControl control;
+    private PopupMenu popupMenu;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +39,16 @@ public class GameActivity extends Activity {
         control.setDataManager(dataManager);
         control.setViewHandler(new ViewHandler(this));
         control.setTextView((RollTextView) findViewById(R.id.info_view));
+        control.startGame();
+    }
+
+    public void showButtons(View view) {
+        if (popupMenu == null) {
+            popupMenu = new PopupMenu(this, view);
+            popupMenu.getMenuInflater().inflate(R.menu.button_group, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(new MenuItemClickListener(this));
+        }
+        popupMenu.show();
     }
 
     public class ViewHandler extends Handler {
@@ -69,7 +87,7 @@ public class GameActivity extends Activity {
         }
 
         //刷新装备
-        public void refreshAccessory(Hero hero) {
+        public void refreshAccessory(final Hero hero) {
             post(new Runnable() {
                 @Override
                 public void run() {
@@ -96,9 +114,54 @@ public class GameActivity extends Activity {
             });
         }
 
-        public void refreshSkill() {
+        public void refreshSkill(final Hero hero) {
 
         }
 
+    }
+
+    public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener{
+        private Context context;
+        public MenuItemClickListener(Context context){
+            this.context = context;
+        }
+
+        //分享文本
+        public void shareToNet() {
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            //shareIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.share_string));
+            shareIntent.setType("text/*");
+            Intent chooser = Intent.createChooser(shareIntent, "分享到");
+            startActivity(chooser);
+            /*if (System.currentTimeMillis() - heroN.getLastShare() > 24 * 60 * 60 * 1000) {
+                //heroN.setLastShare(System.currentTimeMillis());
+                //heroN.addMaterial(500000);
+            } else {
+                Toast.makeText(context, "每24小时只能获得一次分享奖励。", Toast.LENGTH_LONG).show();
+            }*/
+        }
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.pause:
+                    boolean pause = control.pauseGame();
+                    item.setTitle(pause ? "继续" : "暂停");
+                    break;
+                case R.id.share:
+                    final AlertDialog sharingTip = new AlertDialog.Builder(context).create();
+                    sharingTip.setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            sharingTip.dismiss();
+                            shareToNet();
+                        }
+                    });
+                    sharingTip.setMessage("如果你觉得这个游戏好玩，不妨帮忙分享到你的圈子中，让更多的人参与到我们的游戏建设中来，一起享受放置的快乐。同时你的每次分享可以获得50W锻造点的额外奖励（每天一次）。");
+                    sharingTip.show();
+                    break;
+            }
+            return false;
+        }
     }
 }

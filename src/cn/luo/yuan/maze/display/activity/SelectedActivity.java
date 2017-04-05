@@ -43,7 +43,7 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
             @Override
             public void onClick(View v) {
                 //初始化Hero
-                int index = indexList.size() + indexList.hashCode();
+                final int index = indexList.size() + indexList.hashCode();
                 final DataManager dataManager = new DataManager(index, SelectedActivity.this);
                 final Hero hero = dataManager.loadHero();
                 final Maze maze = dataManager.loadMaze();
@@ -58,8 +58,8 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
                 DatePicker birthday = (DatePicker)dialog.findViewById(R.id.select_birthday);
                 GregorianCalendar maxDate = new GregorianCalendar(2010, 1, 1);
                 birthday.setMaxDate(maxDate.getTimeInMillis());
-                Spinner gift = (Spinner) dialog.findViewById(R.id.select_gift);
-                ArrayAdapter<Gift> gAdapter = new ArrayAdapter<>(SelectedActivity.this, android.R.layout.simple_spinner_item, Arrays.asList(Gift.values()));
+                final Spinner gift = (Spinner) dialog.findViewById(R.id.select_gift);
+                final ArrayAdapter<Gift> gAdapter = new ArrayAdapter<>(SelectedActivity.this, android.R.layout.simple_spinner_item, Arrays.asList(Gift.values()));
 
                 gift.setAdapter(gAdapter);
                 gift.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -124,14 +124,14 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
 
     @Override
     public boolean onLongClick(View v) {
-        Object o = v.getTag(R.string.item);
-        if(o instanceof HeroIndex) {
+        final Object index = v.getTag(R.string.item);
+        if(index instanceof HeroIndex) {
             AlertDialog dialog = new AlertDialog.Builder(this).create();
-            dialog.setMessage(Resource.getString(R.string.delete_index) + ((HeroIndex) o).getName());
+            dialog.setMessage(Resource.getString(R.string.delete_index) + ((HeroIndex) index).getName());
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    DataManager dataManager = new DataManager(((HeroIndex) o).getIndex(), SelectedActivity.this);
+                    DataManager dataManager = new DataManager(((HeroIndex) index).getIndex(), SelectedActivity.this);
                     dataManager.clean();
                     reload();
                 }

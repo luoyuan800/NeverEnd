@@ -35,8 +35,12 @@ public class RunningService implements Runnable {
     public void close(){
         this.running = false;
     }
-    public void pause(){
+    public boolean getPause(){
+        return pause;
+    }
+    public boolean pause(){
         this.pause = !this.pause;
+        return pause();
     }
     @Override
     public void run() {
