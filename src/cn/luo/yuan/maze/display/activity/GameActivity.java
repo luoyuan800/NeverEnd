@@ -2,11 +2,14 @@ package cn.luo.yuan.maze.display.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
@@ -49,6 +52,19 @@ public class GameActivity extends Activity {
             popupMenu.setOnMenuItemClickListener(new MenuItemClickListener(this));
         }
         popupMenu.show();
+    }
+
+    public void runBackground(){
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setContentTitle("Running...");
+        builder.setContentText("Click to open");
+        builder.setWhen(System.currentTimeMillis());
+        builder.setAutoCancel(true);
+        builder.setOngoing(true);
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        int id = (int) SystemClock.uptimeMillis();
+        manager.notify(id,builder.build());
+        this.moveTaskToBack(true);
     }
 
     public class ViewHandler extends Handler {
