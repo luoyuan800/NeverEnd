@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import cn.luo.yuan.maze.utils.SecureRAMReader;
+import cn.luo.yuan.maze.utils.NormalRAMReader;
 
 import java.util.HashMap;
 
@@ -114,7 +114,7 @@ public class Sqlite {
     }
 
     private void createKeyTable(SQLiteDatabase db) {
-        db.execSQL("create table key (hero_index INTEGER NOT NULL PRIMARY KEY, key BLOB NOT NULL)");
+        db.execSQL("create table key (hero_index INTEGER NOT NULL PRIMARY KEY, key INTEGER NOT NULL)");
     }
 
     private void createAccessoryTable(SQLiteDatabase db) {
@@ -140,17 +140,17 @@ public class Sqlite {
                 "hero_index TEXT NOT NULL ," +
                 "name TEXT NOT NULL," +
                 "gift TEXT ," +
-                "hp BLOB NOT NULL," +
-                "maxHp BLOB NOT NULL," +
-                "atk BLOB NOT NULL," +
-                "def BLOB NOT NULL," +
-                "agi BLOB NOT NULL," +
-                "str BLOB NOT NULL," +
-                "point BLOB NOT NULL," +
-                "hp_grow BLOB NOT NULL," +
-                "def_grow BLOB NOT NULL," +
-                "atk_grow BLOB NOT NULL," +
-                "material BLOB NOT NULL," +
+                "hp INTEGER NOT NULL," +
+                "maxHp INTEGER NOT NULL," +
+                "atk INTEGER NOT NULL," +
+                "def INTEGER NOT NULL," +
+                "agi INTEGER NOT NULL," +
+                "str INTEGER NOT NULL," +
+                "point INTEGER NOT NULL," +
+                "hp_grow INTEGER NOT NULL," +
+                "def_grow INTEGER NOT NULL," +
+                "atk_grow INTEGER NOT NULL," +
+                "material INTEGER NOT NULL," +
                 "reincarnate INTEGER ," +
                 "id TEXT NOT NULL PRIMARY KEY," +
                 "birthday INTEGER ," +
@@ -208,18 +208,18 @@ public class Sqlite {
         return db;
     }
 
-    public byte[] getKey(int index){
+    public int getKey(int index){
         Cursor cursor = excuseSOL("select key from key where hero_index = '" + index + "'");
         try {
             if (cursor.isAfterLast()) {
-                byte[] key = SecureRAMReader.generateKey();
+                int key = NormalRAMReader.generateKey();
                 ContentValues values = new ContentValues(2);
                 values.put("hero_index", index);
                 values.put("key", key);
                 insert("key",values);
                 return key;
             } else {
-                return cursor.getBlob(cursor.getColumnIndex("key"));
+                return cursor.getInt(cursor.getColumnIndex("key"));
             }
         }finally {
             cursor.close();

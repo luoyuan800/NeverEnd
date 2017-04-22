@@ -36,8 +36,8 @@ import java.util.UUID;
 public class DataManager {
     //多存档，所以需要一个index来区分当前使用的是哪一个存档
     private int index;
-    private SerializeLoader<Accessory> accessoryLoader = new SerializeLoader<>(Accessory.class);
-    private SerializeLoader<Maze> mazeLoader = new SerializeLoader<>(Maze.class);
+    private SerializeLoader<Accessory> accessoryLoader;
+    private SerializeLoader<Maze> mazeLoader;
     private Sqlite database;
     private Context context;
     private SecureRAMReader ramReader ;
@@ -47,6 +47,9 @@ public class DataManager {
         this.database = Sqlite.getSqlite(context);
         this.context = context;
         ramReader = new SecureRAMReader(database.getKey(index));
+        accessoryLoader = new SerializeLoader<>(Accessory.class, context);
+        mazeLoader = new SerializeLoader<>(Maze.class, context);
+        this.context = context;
     }
 
     public Hero loadHero() {

@@ -10,11 +10,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.text.Html;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.display.view.RollTextView;
 import cn.luo.yuan.maze.model.Accessory;
@@ -45,6 +46,18 @@ public class GameActivity extends Activity {
         control.startGame();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, @SuppressWarnings("NullableProblems") KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                showExitDialog();
+                return true;
+            default:
+                break;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     public void showButtons(View view) {
         if (popupMenu == null) {
             popupMenu = new PopupMenu(this, view);
@@ -54,7 +67,7 @@ public class GameActivity extends Activity {
         popupMenu.show();
     }
 
-    public void runBackground(){
+    public void runBackground() {
         Notification.Builder builder = new Notification.Builder(this);
         builder.setContentTitle("Running...");
         builder.setContentText("Click to open");
@@ -63,7 +76,7 @@ public class GameActivity extends Activity {
         builder.setOngoing(true);
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         int id = (int) SystemClock.uptimeMillis();
-        manager.notify(id,builder.build());
+        manager.notify(id, builder.build());
         this.moveTaskToBack(true);
     }
 
@@ -79,8 +92,12 @@ public class GameActivity extends Activity {
             post(new Runnable() {
                 @Override
                 public void run() {
-                    ((TextView) context.get().findViewById(R.id.hero_name)).setText(control.getHero().getDisplayName());
+                    ((TextView) context.get().findViewById(R.id.hero_name)).setText(Html.fromHtml(control.getHero().getDisplayName()));
                     ((TextView) context.get().findViewById(R.id.hero_gift)).setText(StringUtils.isNotEmpty(control.getHero().getGift()) ? control.getHero().getGift() : "");
+                    ((TextView) context.get().findViewById(R.id.hero_atk)).setText(StringUtils.formatNumber(hero.getUpperAtk()));
+                    ((TextView) context.get().findViewById(R.id.hero_def)).setText(StringUtils.formatNumber(hero.getUpperDef()));
+                    ((TextView) context.get().findViewById(R.id.hero_str)).setText(StringUtils.formatNumber(hero.getStr()));
+                    ((TextView) context.get().findViewById(R.id.hero_agi)).setText(StringUtils.formatNumber(hero.getAgi()));
                 }
             });
         }
@@ -107,24 +124,49 @@ public class GameActivity extends Activity {
             post(new Runnable() {
                 @Override
                 public void run() {
+                    boolean hasHat = false;
+                    boolean hasRing = false;
+                    boolean hasNecklace = false;
+                    boolean hasSword = false;
+                    boolean hasArmor = false;
                     for (Accessory accessory : hero.getAccessories()) {
                         switch (accessory.getType()) {
                             case "hat":
-                                ((TextView) context.get().findViewById(R.id.hat_view)).setText(accessory.getDisplayName());
+                                hasHat = true;
+                                ((TextView) context.get().findViewById(R.id.hat_view)).setText(Html.fromHtml(accessory.getDisplayName()));
                                 break;
                             case "ring":
-                                ((TextView) context.get().findViewById(R.id.ring_view)).setText(accessory.getDisplayName());
+                                hasRing = true;
+                                ((TextView) context.get().findViewById(R.id.ring_view)).setText(Html.fromHtml(accessory.getDisplayName()));
                                 break;
                             case "necklace":
-                                ((TextView) context.get().findViewById(R.id.necklace_view)).setText(accessory.getDisplayName());
+                                hasNecklace = true;
+                                ((TextView) context.get().findViewById(R.id.necklace_view)).setText(Html.fromHtml(accessory.getDisplayName()));
                                 break;
                             case "sword":
-                                ((TextView) context.get().findViewById(R.id.sword)).setText(accessory.getDisplayName());
+                                hasSword = true;
+                                ((TextView) context.get().findViewById(R.id.sword)).setText(Html.fromHtml(accessory.getDisplayName()));
                                 break;
                             case "armor":
-                                ((TextView) context.get().findViewById(R.id.armor)).setText(accessory.getDisplayName());
+                                hasArmor = true;
+                                ((TextView) context.get().findViewById(R.id.armor)).setText(Html.fromHtml(accessory.getDisplayName()));
                                 break;
                         }
+                    }
+                    if(!hasHat){
+                        ((TextView) context.get().findViewById(R.id.hat_view)).setText("");
+                    }
+                    if(!hasRing){
+                        ((TextView) context.get().findViewById(R.id.ring_view)).setText("");
+                    }
+                    if(!hasNecklace){
+                        ((TextView) context.get().findViewById(R.id.necklace_view)).setText("");
+                    }
+                    if(!hasSword){
+                        ((TextView) context.get().findViewById(R.id.sword)).setText("");
+                    }
+                    if(!hasArmor){
+                        ((TextView) context.get().findViewById(R.id.armor)).setText("");
                     }
                 }
             });
@@ -136,9 +178,10 @@ public class GameActivity extends Activity {
 
     }
 
-    public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener{
+    public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
         private Context context;
-        public MenuItemClickListener(Context context){
+
+        public MenuItemClickListener(Context context) {
             this.context = context;
         }
 
@@ -157,6 +200,7 @@ public class GameActivity extends Activity {
                 Toast.makeText(context, "每24小时只能获得一次分享奖励。", Toast.LENGTH_LONG).show();
             }*/
         }
+
         @Override
         public boolean onMenuItemClick(MenuItem item) {
             switch (item.getItemId()) {
@@ -179,5 +223,34 @@ public class GameActivity extends Activity {
             }
             return false;
         }
+    }
+
+    /**
+     * 弹出退出程序提示框
+     */
+    private void showExitDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
+        dialog.setTitle("是否退出游戏");
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        control.save();
+                        finish();
+                        System.exit(0);
+                    }
+
+                });
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+
+                });
+        dialog.show();
     }
 }

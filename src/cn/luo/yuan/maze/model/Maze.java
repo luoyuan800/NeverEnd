@@ -1,7 +1,7 @@
 package cn.luo.yuan.maze.model;
 
 import cn.luo.yuan.maze.model.effect.Effect;
-import cn.luo.yuan.maze.utils.SecureRAMReader;
+import cn.luo.yuan.maze.utils.NormalRAMReader;
 import cn.luo.yuan.maze.utils.Version;
 
 import java.io.Serializable;
@@ -15,9 +15,9 @@ import static cn.luo.yuan.maze.utils.EffectHandler.*;
 public class Maze implements IDModel, Serializable{
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private String id;
-    private byte[] maxLevel;
-    private byte[] level;
-    transient private SecureRAMReader ramReader;
+    private long maxLevel;
+    private long level;
+    transient private NormalRAMReader ramReader;
     private float meetRate = 100f;
     private long streaking;//连胜次数
     private long step;//连续前进步数
@@ -31,34 +31,42 @@ public class Maze implements IDModel, Serializable{
         return ramReader.decodeLong(maxLevel);
     }
 
-    public void setLevel(long level){
-        this.level = ramReader.encodeLong(level);
+    public void setLevel(long level, boolean encode) {
+        if(encode) {
+            this.level = ramReader.encodeLong(level);
+        }else{
+            this.level = level;
+        }
     }
-    public void setMaxLevel(long maxLevel){
-        this.maxLevel = ramReader.encodeLong(maxLevel);
+    public void setMaxLevel(long maxLevel, boolean encode) {
+        if(encode) {
+            this.maxLevel = ramReader.encodeLong(maxLevel);
+        }else{
+            this.maxLevel = maxLevel;
+        }
     }
 
-    public byte[] getEncodeMaxLevel() {
+    public long getEncodeMaxLevel() {
         return maxLevel;
     }
 
-    public void setMaxLevel(byte[] maxLevel) {
+    public void setMaxLevel(long maxLevel) {
         this.maxLevel = maxLevel;
     }
 
-    public byte[] getEncodeLevel() {
+    public long getEncodeLevel() {
         return level;
     }
 
-    public void setLevel(byte[] level) {
+    public void setLevel(long level) {
         this.level = level;
     }
 
-    public SecureRAMReader getRamReader() {
+    public NormalRAMReader getRamReader() {
         return ramReader;
     }
 
-    public void setRamReader(SecureRAMReader ramReader) {
+    public void setRamReader(NormalRAMReader ramReader) {
         this.ramReader = ramReader;
     }
 

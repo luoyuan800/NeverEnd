@@ -40,14 +40,14 @@ public class RunningService implements Runnable {
     }
     public boolean pause(){
         this.pause = !this.pause;
-        return pause();
+        return pause;
     }
     @Override
     public void run() {
         startTime = System.currentTimeMillis();
         if (running){
             try {
-                if (!pause) {
+                if (pause) {
                     return;
                 }
                 maze.setStep(maze.getStep() + 1);

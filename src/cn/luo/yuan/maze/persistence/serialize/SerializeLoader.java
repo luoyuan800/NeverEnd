@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.persistence.serialize;
 
+import android.content.Context;
 import cn.luo.yuan.maze.model.IDModel;
 
 import java.io.Serializable;
@@ -8,16 +9,18 @@ import java.io.Serializable;
  * Created by luoyuan on 2017/3/19.
  */
 public class SerializeLoader<T extends Serializable> {
-    private static String sdPath = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/neverend/data";
-    private ObjectDB db;
+    private ObjectDB<T> db;
     private Class<T> clazz;
-    public SerializeLoader(Class<T> type){
-        db = new ObjectDB(sdPath + "/" + type.getSimpleName());
+    private Context context;
+
+    public SerializeLoader(Class<T> type, Context context){
+        db = new ObjectDB<T>(type, context);
         clazz = type;
+        this.context = context;
     }
 
     public T load(String id){
-        return db.loadObject(clazz, id);
+        return db.loadObject(id);
     }
 
     public void update(T object){
@@ -37,6 +40,6 @@ public class SerializeLoader<T extends Serializable> {
     }
 
     public void delete(String id){
-        db.delete(clazz.getSimpleName(), id);
+        db.delete(id);
     }
 }
