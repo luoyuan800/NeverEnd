@@ -17,8 +17,8 @@ import static cn.luo.yuan.maze.utils.EffectHandler.getEffectAdditionFloatValue;
 public class Maze implements IDModel, Serializable {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private String id;
-    private EncodeLong maxLevel = new EncodeLong();
-    private EncodeLong level = new EncodeLong();
+    private EncodeLong maxLevel = new EncodeLong(1);
+    private EncodeLong level = new EncodeLong(1);
     private float meetRate = 100f;
     private long streaking;//连胜次数
     private long step;//连续前进步数

@@ -41,4 +41,10 @@ public class Random extends java.util.Random {
         }
         return super.nextInt(num);
     }
+
+    public void randomBinary(byte[] binary){
+        for(int i = 0; i< binary.length; i++){
+            binary[i] = (byte)nextInt(2);
+        }
+    }
 }

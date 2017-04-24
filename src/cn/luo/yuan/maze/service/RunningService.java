@@ -53,6 +53,9 @@ public class RunningService implements Runnable {
                 maze.setStep(maze.getStep() + 1);
                 if (random.nextLong(10000) > 9985 || maze.getStep() > random.nextLong(22) || random.nextLong(maze.getStreaking() + 1) > 50 + maze.getLevel()) {
                     maze.setLevel(maze.getLevel()+1);
+                    if(maze.getMaxLevel() < maze.getLevel()){
+                        maze.setMaxLevel(maze.getLevel());
+                    }
                     long point = 1;
                     long add = random.nextLong(maze.getLevel() / 1000);
                     if (add < 10) {

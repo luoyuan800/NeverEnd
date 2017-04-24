@@ -25,33 +25,33 @@ public class Hero implements Serializable, IDModel {
     private int index;//存档编号
     private String name;//名字
     @LongValue
-    private EncodeLong maxHp = new EncodeLong();//血上限
+    private EncodeLong maxHp = new EncodeLong(0);//血上限
     @LongValue
-    private EncodeLong hp = new EncodeLong();//当前血量
+    private EncodeLong hp = new EncodeLong(0);//当前血量
     @LongValue
-    private EncodeLong atk = new EncodeLong();//基础攻击
+    private EncodeLong atk = new EncodeLong(0);//基础攻击
     @LongValue
-    private EncodeLong def = new EncodeLong();//基础防御
+    private EncodeLong def = new EncodeLong(0);//基础防御
     @LongValue
-    private EncodeLong agi = new EncodeLong();//敏捷
+    private EncodeLong agi = new EncodeLong(0);//敏捷
     @LongValue
-    private EncodeLong str = new EncodeLong();//力量
+    private EncodeLong str = new EncodeLong(0);//力量
     @LongValue
-    private EncodeLong hpGrow = new EncodeLong();//血量成长（每点力量）
+    private EncodeLong hpGrow = new EncodeLong(0);//血量成长（每点力量）
     @LongValue
-    private EncodeLong defGrow = new EncodeLong();//防御成长（每点敏捷）
+    private EncodeLong defGrow = new EncodeLong(0);//防御成长（每点敏捷）
     @LongValue
-    private EncodeLong atkGrow = new EncodeLong();//攻击成长（每点力量）
+    private EncodeLong atkGrow = new EncodeLong(0);//攻击成长（每点力量）
     private long birthDay;//生日
-    private EncodeLong reincarnate = new EncodeLong();//转生次数
-    private EncodeLong material = new EncodeLong();//锻造点（货币）
+    private EncodeLong reincarnate = new EncodeLong(0);//转生次数
+    private EncodeLong material = new EncodeLong(0);//锻造点（货币）
     private Set<Effect> effects = new HashSet<>(3);//附加的效果
     private Set<Accessory> accessories = new HashSet<>(3);//装备
     private Element element;//五行元素
     private String id;
-    private EncodeLong point = new EncodeLong();
+    private EncodeLong point = new EncodeLong(0);
     private String gift;
-    private EncodeLong click = new EncodeLong();
+    private EncodeLong click = new EncodeLong(0);
 
     public Hero() {
     }

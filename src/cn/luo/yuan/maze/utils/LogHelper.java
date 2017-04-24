@@ -25,7 +25,7 @@ public class LogHelper {
     }
     public static void logException(final Exception e, boolean upload, String msg) {
         e.printStackTrace();
-        try {
+        /*try {
 
             File path = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/neverend/logs/");
             if (!path.exists()) {
@@ -54,7 +54,7 @@ public class LogHelper {
             }
         } catch (Exception e1) {
             e1.printStackTrace();
-        }
+        }*/
         if (e instanceof InterruptedException) {
             Thread.currentThread().interrupt();
         }

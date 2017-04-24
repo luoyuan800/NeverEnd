@@ -11,10 +11,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.display.view.RollTextView;
@@ -251,6 +254,27 @@ public class GameActivity extends Activity {
                     }
 
                 });
+        dialog.show();
+    }
+
+    private void showPayDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
+        dialog.setTitle("点赞？");
+        ScrollView linearLayout = new ScrollView(this);
+        TextView tv = new TextView(this);
+        tv.setText("请关注我的公众号，每日发送兑换码！");
+        tv.setAutoLinkMask(Linkify.ALL);
+        tv.setMovementMethod(LinkMovementMethod.getInstance());
+        linearLayout.addView(tv);
+        dialog.setView(linearLayout);
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.conform), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+            }
+
+        });
         dialog.show();
     }
 }

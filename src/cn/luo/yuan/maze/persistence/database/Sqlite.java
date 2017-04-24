@@ -140,21 +140,8 @@ public class Sqlite {
                 "hero_index TEXT NOT NULL ," +
                 "name TEXT NOT NULL," +
                 "gift TEXT ," +
-                "hp INTEGER NOT NULL," +
-                "maxHp INTEGER NOT NULL," +
-                "atk INTEGER NOT NULL," +
-                "def INTEGER NOT NULL," +
-                "agi INTEGER NOT NULL," +
-                "str INTEGER NOT NULL," +
-                "point INTEGER NOT NULL," +
-                "hp_grow INTEGER NOT NULL," +
-                "def_grow INTEGER NOT NULL," +
-                "atk_grow INTEGER NOT NULL," +
-                "material INTEGER NOT NULL," +
                 "reincarnate INTEGER ," +
                 "id TEXT NOT NULL PRIMARY KEY," +
-                "birthday INTEGER ," +
-                "click INTEGER ," +
                 "element INTEGER " +
                 ")";
         db.execSQL(table);

@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.display.view;
 
 import android.content.Context;
+import android.os.Handler;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
@@ -49,6 +50,18 @@ public class RollTextView extends LinearLayout{
     public synchronized void addMessage(String info) {
         this.info = info;
         getHandler().post(addText);
+    }
+    private Handler handler;
+    public Handler getHandler(){
+        if(handler!=null){
+            return handler;
+        }
+        if(super.getHandler()==null){
+            handler = new Handler();
+        }else{
+            handler = super.getHandler();
+        }
+        return handler;
     }
 
 }

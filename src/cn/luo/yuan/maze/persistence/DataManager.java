@@ -59,6 +59,7 @@ public class DataManager {
                 String id = cursor.getString(cursor.getColumnIndex("id"));
                 Hero hero = heroLoader.load(id);
                 if(hero!=null){
+                    hero.setId(id);
                     return hero;
                 }
             }
@@ -114,14 +115,13 @@ public class DataManager {
         values.put("last_update", System.currentTimeMillis());
         values.put("gift", hero.getGift());
         if(StringUtils.isNotEmpty(hero.getId())) {
-            database.updateById("hero", values, hero.getId());
             heroLoader.update(hero);
+            database.updateById("hero", values, hero.getId());
         }else {
-            hero.setId(UUID.randomUUID().toString());
+            heroLoader.save(hero);
             values.put("id", hero.getId());
             values.put("created", System.currentTimeMillis());
             database.insert("hero", values);
-            heroLoader.save(hero);
         }
     }
 
@@ -164,9 +164,12 @@ public class DataManager {
         Cursor cursor = database.excuseSOL("select id from maze where hero_index = " + index);
         try {
             if (!cursor.isAfterLast()) {
-                Maze maze = mazeLoader.load(cursor.getString(cursor.getColumnIndex("id")));
+                String id = cursor.getString(cursor.getColumnIndex("id"));
+                Maze maze = mazeLoader.load(id);
                 if(maze == null){
                     maze = newMaze();
+                }else{
+                    maze.setId(id);
                 }
                 return maze;
             }else{
