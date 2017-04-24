@@ -1,8 +1,7 @@
 package cn.luo.yuan.maze.model;
 
 import cn.luo.yuan.maze.model.effect.Effect;
-import cn.luo.yuan.maze.service.InfoControl;
-import cn.luo.yuan.maze.utils.NormalRAMReader;
+import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Version;
 import cn.luo.yuan.maze.utils.annotation.LongValue;
 
@@ -11,7 +10,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import static cn.luo.yuan.maze.utils.EffectHandler.*;
+import static cn.luo.yuan.maze.utils.EffectHandler.AGI;
+import static cn.luo.yuan.maze.utils.EffectHandler.ATK;
+import static cn.luo.yuan.maze.utils.EffectHandler.DEF;
+import static cn.luo.yuan.maze.utils.EffectHandler.HP;
+import static cn.luo.yuan.maze.utils.EffectHandler.STR;
+import static cn.luo.yuan.maze.utils.EffectHandler.getEffectAdditionLongValue;
 
 /**
  * Created by luoyuan on 2017/3/18.
@@ -19,143 +23,97 @@ import static cn.luo.yuan.maze.utils.EffectHandler.*;
 public class Hero implements Serializable, IDModel {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private int index;//存档编号
-    private NormalRAMReader ramReader;
     private String name;//名字
     @LongValue
-    private long maxHp;//血上限
+    private EncodeLong maxHp = new EncodeLong();//血上限
     @LongValue
-    private long hp;//当前血量
+    private EncodeLong hp = new EncodeLong();//当前血量
     @LongValue
-    private long atk;//基础攻击
+    private EncodeLong atk = new EncodeLong();//基础攻击
     @LongValue
-    private long def;//基础防御
-    @LongValue private long agi;//敏捷
-    @LongValue private long str;//力量
-    @LongValue private long hpGrow;//血量成长（每点力量）
-    @LongValue private long defGrow;//防御成长（每点敏捷）
-    @LongValue private long atkGrow;//攻击成长（每点力量）
+    private EncodeLong def = new EncodeLong();//基础防御
+    @LongValue
+    private EncodeLong agi = new EncodeLong();//敏捷
+    @LongValue
+    private EncodeLong str = new EncodeLong();//力量
+    @LongValue
+    private EncodeLong hpGrow = new EncodeLong();//血量成长（每点力量）
+    @LongValue
+    private EncodeLong defGrow = new EncodeLong();//防御成长（每点敏捷）
+    @LongValue
+    private EncodeLong atkGrow = new EncodeLong();//攻击成长（每点力量）
     private long birthDay;//生日
-    private long reincarnate;//转生次数
-    private long material;//锻造点（货币）
+    private EncodeLong reincarnate = new EncodeLong();//转生次数
+    private EncodeLong material = new EncodeLong();//锻造点（货币）
     private Set<Effect> effects = new HashSet<>(3);//附加的效果
     private Set<Accessory> accessories = new HashSet<>(3);//装备
     private Element element;//五行元素
     private String id;
-    private long point;
+    private EncodeLong point = new EncodeLong();
     private String gift;
-    private long click;
+    private EncodeLong click = new EncodeLong();
 
-    public Set<Accessory> getAccessories(){
+    public Hero() {
+    }
+
+    public Set<Accessory> getAccessories() {
         return accessories;
     }
-    public Hero(){
+
+    public long getMaterial() {
+        return material.getValue();
     }
-    public long getMaterial(){
-        return ramReader.decodeLong(material);
+
+    public void setMaterial(long material) {
+        this.material.setValue(material);
     }
-    public long getEncodeMaterial(){
-        return material;
-    }
-    public void setMaterial(long material, boolean encode){
-        if(encode) {
-            this.material = ramReader.encodeLong(material);
-        }else{
-            this.material = material;
-        }
-    }
-    public void removeEffect(Effect effect){
+
+    public void removeEffect(Effect effect) {
         effects.remove(effect);
     }
 
-    public long getHpGrow(){
-        return ramReader.decodeLong(hpGrow);
-    }
-    public long getEncodeHpGrow(){
-        return hpGrow;
-    }
-    public void setHpGrow(long grow, boolean encode){
-        if(encode) {
-            this.hpGrow = ramReader.encodeLong(grow);
-        }else{
-            this.hpGrow = grow;
-        }
+    public long getHpGrow() {
+        return hpGrow.getValue();
     }
 
-    public long getDefGrow(){
-        return ramReader.decodeLong(defGrow);
+    public void setHpGrow(long hpGrow) {
+        this.hpGrow.setValue(hpGrow);
     }
 
-    public long getEncodeDefGrow(){
-        return defGrow;
-    }
-    public void setDefGrow(long grow, boolean encode){
-        if(encode) {
-            this.defGrow = ramReader.encodeLong(grow);
-        }else{
-            this.defGrow = grow;
-        }
+    public long getDefGrow() {
+        return defGrow.getValue();
     }
 
-    public long getAtkGrow(){
-        return ramReader.decodeLong(atkGrow);
-    }
-    public long getEncodeAtkGrow(){
-        return atkGrow;
-    }
-    public void setAtkGrow(long grow, boolean encode){
-        if(encode) {
-            this.atkGrow = ramReader.encodeLong(grow);
-        }else{
-            this.atkGrow = grow;
-        }
+    public void setDefGrow(long defGrow) {
+        this.defGrow.setValue(defGrow);
     }
 
-    public void addEffect(Effect effect){
+    public long getAtkGrow() {
+        return atkGrow.getValue();
+    }
+
+    public void setAtkGrow(long atkGrow) {
+        this.atkGrow.setValue(atkGrow);
+    }
+
+    public void addEffect(Effect effect) {
         effects.add(effect);
     }
 
-    public long getAgi(){
-        return ramReader.decodeLong(agi);
-    }
-    public long getEncodeAgi(){
-        return agi;
+    public long getAgi() {
+        return agi.getValue();
     }
 
-    public void setAgi(long agi, boolean encode){
-        if(encode) {
-            this.agi = ramReader.encodeLong(agi);
-        }else{
-            this.agi = agi;
-        }
-    }
-    public void setAgi(long agi){
-        this.agi = agi;
+    public void setAgi(long agi) {
+        this.agi.setValue(agi);
     }
 
-    public long getStr(){
-        return ramReader.decodeLong(str);
-    }
-    public long getEncodeStr(){
-        return str;
+    public long getStr() {
+        return str.getValue();
     }
 
-    public void setStr(long str, boolean encode){
-        if(encode) {
-            this.str = ramReader.encodeLong(str);
-        }else{
-            this.str = str;
-        }
-    }
-    public void setStr(long str){
-        this.str = str;
-    }
-
-    public NormalRAMReader getRamReader() {
-        return ramReader;
-    }
-
-    public void setRamReader(NormalRAMReader ramReader) {
-        this.ramReader = ramReader;
+    public void setStr(long str) {
+        this.str.setValue(str);
     }
 
     public String getName() {
@@ -167,100 +125,74 @@ public class Hero implements Serializable, IDModel {
     }
 
     public long getMaxHp() {
-        return ramReader.decodeLong(maxHp);
-    }
-    public long getEncodeMaxHp() {
-        return maxHp;
+        return this.maxHp.getValue();
     }
 
-    public void setMaxHp(long maxHp, boolean encode) {
-        if(encode) {
-            this.maxHp = ramReader.encodeLong(maxHp);
-        }else{
-            this.maxHp = maxHp;
-        }
+    public void setMaxHp(long maxHp) {
+        this.maxHp.setValue(maxHp);
     }
+
 
     public long getCurrentHp() {
-        return ramReader.decodeLong(hp) + getEffectAdditionLongValue(HP, effects) + getEffectAdditionLongValue(STR, effects) * getHpGrow();
+        return this.hp.getValue() + getEffectAdditionLongValue(HP, effects) + getEffectAdditionLongValue(STR, effects) * getHpGrow();
     }
 
-    public long getHp(){
-        return ramReader.decodeLong(hp);
-    }
-    public long getEncodeHp(){
-        return hp;
+    public long getHp() {
+        return hp.getValue();
     }
 
-    public void setHp(long hp, boolean encode) {
-        if(encode) {
-            this.hp = ramReader.encodeLong(hp);
-        }else{
-            this.hp = hp;
-        }
+    public void setHp(long hp) {
+        this.hp.setValue(hp);
     }
+
 
     public long getAtk() {
-        return ramReader.decodeLong(atk);
-    }
-    public long getEncodeAtk() {
-        return atk;
+        return this.atk.getValue();
     }
 
-    public void setAtk(long atk, boolean encode) {
-        if(encode) {
-            this.atk = ramReader.encodeLong(atk);
-        }else{
-            this.atk = atk;
-        }
+    public void setAtk(long atk) {
+        this.atk.setValue(atk);
     }
 
     public long getDef() {
-        return ramReader.decodeLong(def);
-    }
-    public long getEncodeDef() {
-        return def;
+        return def.getValue();
     }
 
-    public void setDef(long def, boolean encode) {
-        if(encode) {
-            this.def = ramReader.encodeLong(def);
-        }else{
-            this.def = def;
-        }
+    public void setDef(long def) {
+        this.def.setValue(def);
     }
 
     public Set<Effect> getEffects() {
         return effects;
     }
 
-    public long getUpperHp(){
-        return getMaxHp() + getEffectAdditionLongValue(HP,effects)+ getEffectAdditionLongValue(STR, effects) * getHpGrow();
+    public long getUpperHp() {
+        return getMaxHp() + getEffectAdditionLongValue(HP, effects) + getEffectAdditionLongValue(STR, effects) * getHpGrow();
     }
 
-    public long getUpperAtk(){
+    public long getUpperAtk() {
         return getAtk() + getEffectAdditionLongValue(ATK, effects) + getEffectAdditionLongValue(STR, effects) * getAtkGrow();
     }
 
-    public long getUpperDef(){
+    public long getUpperDef() {
         return getDef() + getEffectAdditionLongValue(DEF, effects) + getEffectAdditionLongValue(AGI, effects) * getDefGrow();
     }
 
-    public void mountAccessory(Accessory accessory){
+    public void mountAccessory(Accessory accessory) {
         Iterator<Accessory> iterator = accessories.iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             Accessory acc = iterator.next();
-            if(acc.getType().equals(accessory.getType())){
+            if (acc.getType().equals(accessory.getType())) {
                 iterator.remove();
                 effects.removeAll(acc.getEffects());
             }
         }
-        if(accessories.add(accessory)){
+        if (accessories.add(accessory)) {
             effects.addAll(accessory.getEffects());
         }
     }
 
-    public void unMountAccessory(Accessory accessory){
+    public void unMountAccessory(Accessory accessory) {
         accessories.remove(accessory);
         effects.removeAll(accessory.getEffects());
     }
@@ -274,11 +206,11 @@ public class Hero implements Serializable, IDModel {
     }
 
     public long getReincarnate() {
-        return reincarnate;
+        return reincarnate.getValue();
     }
 
     public void setReincarnate(long reincarnate) {
-        this.reincarnate = reincarnate;
+        this.reincarnate.setValue(reincarnate);
     }
 
     public long getBirthDay() {
@@ -305,60 +237,16 @@ public class Hero implements Serializable, IDModel {
         this.id = id;
     }
 
-    public void setMaxHp(long maxHp) {
-        this.maxHp = maxHp;
-    }
-
-    public void setHp(long hp) {
-        this.hp = hp;
-    }
-
-    public void setAtk(long atk) {
-        this.atk = atk;
-    }
-
-    public void setDef(long def) {
-        this.def = def;
-    }
-
-    public void setHpGrow(long hpGrow) {
-        this.hpGrow = hpGrow;
-    }
-
-    public void setDefGrow(long defGrow) {
-        this.defGrow = defGrow;
-    }
-
-    public void setAtkGrow(long atkGrow) {
-        this.atkGrow = atkGrow;
-    }
-
-    public void setMaterial(long material) {
-        this.material = material;
-    }
-
     public String getDisplayName() {
         return "<font color=\"#800080\">" + getName() + "</font>(" + getElement() + ")";
     }
 
-    public long getEncodePoint() {
-        return point;
+    public long getPoint() {
+        return point.getValue();
     }
 
     public void setPoint(long point) {
-        this.point = point;
-    }
-
-    public long getPoint() {
-        return ramReader.decodeLong(point);
-    }
-
-    public void setPoint(long point, boolean encode) {
-        if(encode) {
-            this.point = ramReader.encodeLong(point);
-        }else{
-            this.point = point;
-        }
+        this.point.setValue(point);
     }
 
     public String getGift() {
@@ -370,11 +258,11 @@ public class Hero implements Serializable, IDModel {
     }
 
     public long getClick() {
-        return click;
+        return click.getValue();
     }
 
     public void setClick(long click) {
-        this.click = click;
+        this.click.setValue(click);
     }
 
 }

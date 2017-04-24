@@ -1,74 +1,45 @@
 package cn.luo.yuan.maze.model;
 
 import cn.luo.yuan.maze.model.effect.Effect;
-import cn.luo.yuan.maze.utils.NormalRAMReader;
+import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Version;
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import static cn.luo.yuan.maze.utils.EffectHandler.*;
+
+import static cn.luo.yuan.maze.utils.EffectHandler.MEET_RATE;
+import static cn.luo.yuan.maze.utils.EffectHandler.getEffectAdditionFloatValue;
 
 /**
  * Created by luoyuan on 2017/3/19.
  */
-public class Maze implements IDModel, Serializable{
+public class Maze implements IDModel, Serializable {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private String id;
-    private long maxLevel;
-    private long level;
-    transient private NormalRAMReader ramReader;
+    private EncodeLong maxLevel = new EncodeLong();
+    private EncodeLong level = new EncodeLong();
     private float meetRate = 100f;
     private long streaking;//连胜次数
     private long step;//连续前进步数
-    private Set<Effect> effects= new HashSet<>();
+    private Set<Effect> effects = new HashSet<>();
 
-    public long getLevel(){
-        return ramReader.decodeLong(level);
-    }
-
-    public long getMaxLevel(){
-        return ramReader.decodeLong(maxLevel);
-    }
-
-    public void setLevel(long level, boolean encode) {
-        if(encode) {
-            this.level = ramReader.encodeLong(level);
-        }else{
-            this.level = level;
-        }
-    }
-    public void setMaxLevel(long maxLevel, boolean encode) {
-        if(encode) {
-            this.maxLevel = ramReader.encodeLong(maxLevel);
-        }else{
-            this.maxLevel = maxLevel;
-        }
-    }
-
-    public long getEncodeMaxLevel() {
-        return maxLevel;
-    }
-
-    public void setMaxLevel(long maxLevel) {
-        this.maxLevel = maxLevel;
-    }
-
-    public long getEncodeLevel() {
-        return level;
+    public long getLevel() {
+        return level.getValue();
     }
 
     public void setLevel(long level) {
-        this.level = level;
+        this.level.setValue(level);
     }
 
-    public NormalRAMReader getRamReader() {
-        return ramReader;
+    public long getMaxLevel() {
+        return maxLevel.getValue();
     }
 
-    public void setRamReader(NormalRAMReader ramReader) {
-        this.ramReader = ramReader;
+    public void setMaxLevel(long maxLevel) {
+        this.maxLevel.setValue(maxLevel);
     }
+
 
     public float getMeetRate() {
         return meetRate + getEffectAdditionFloatValue(MEET_RATE, effects);
@@ -80,6 +51,10 @@ public class Maze implements IDModel, Serializable{
 
     public long getStreaking() {
         return streaking;
+    }
+
+    public void setStreaking(long streaking) {
+        this.streaking = streaking;
     }
 
     public Set<Effect> getEffects() {
@@ -96,10 +71,6 @@ public class Maze implements IDModel, Serializable{
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public void setStreaking(long streaking) {
-        this.streaking = streaking;
     }
 
     public long getStep() {
