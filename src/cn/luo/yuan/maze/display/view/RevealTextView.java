@@ -40,7 +40,7 @@ public final class RevealTextView extends TextView implements Runnable, ValueAni
 
     public RevealTextView(Context context) {
         super(context);
-        init(null);
+        //init(null);
     }
 
     public RevealTextView(Context context, AttributeSet attrs) {

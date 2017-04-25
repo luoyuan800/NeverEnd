@@ -270,7 +270,7 @@ public class DataManager {
                     monster.setMaterial(material);
                     return monster;
                 }
-                cursor.moveToFirst();
+                cursor.moveToNext();
             }
         }catch (Exception e) {
             cursor.close();

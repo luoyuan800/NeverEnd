@@ -131,7 +131,7 @@ public class Sqlite {
     }
 
     public void updateById(String table, ContentValues values, String ... ids){
-        database.update(table, values, "id = ?s", ids);
+        database.update(table, values, "id = ?", ids);
     }
 
     private void createHeroTable(SQLiteDatabase db) {
@@ -155,7 +155,6 @@ public class Sqlite {
                 "created INTEGER," +
                 "hero_index TEXT NOT NULL ," +
                 "name TEXT NOT NULL," +
-                "element INTEGER ," +
                 "tag TEXT ," +
                 "level INTEGER ," +
                 "sex INTEGER ," +

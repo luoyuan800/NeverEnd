@@ -57,6 +57,11 @@ public class Hero implements Serializable, IDModel {
     }
 
     public Set<Accessory> getAccessories() {
+        synchronized (this) {
+            if (accessories == null) {
+                accessories = new HashSet<>(5);
+            }
+        }
         return accessories;
     }
 
@@ -69,7 +74,7 @@ public class Hero implements Serializable, IDModel {
     }
 
     public void removeEffect(Effect effect) {
-        effects.remove(effect);
+        getEffects().remove(effect);
     }
 
     public long getHpGrow() {
@@ -97,7 +102,7 @@ public class Hero implements Serializable, IDModel {
     }
 
     public void addEffect(Effect effect) {
-        effects.add(effect);
+        getEffects().add(effect);
     }
 
     public long getAgi() {
@@ -134,7 +139,7 @@ public class Hero implements Serializable, IDModel {
 
 
     public long getCurrentHp() {
-        return this.hp.getValue() + getEffectAdditionLongValue(HP, effects) + getEffectAdditionLongValue(STR, effects) * getHpGrow();
+        return this.hp.getValue() + getEffectAdditionLongValue(HP, getEffects()) + getEffectAdditionLongValue(STR, getEffects()) * getHpGrow();
     }
 
     public long getHp() {
@@ -163,19 +168,24 @@ public class Hero implements Serializable, IDModel {
     }
 
     public Set<Effect> getEffects() {
+        synchronized (this) {
+            if (effects == null) {
+                effects = new HashSet<>(3);
+            }
+        }
         return effects;
     }
 
     public long getUpperHp() {
-        return getMaxHp() + getEffectAdditionLongValue(HP, effects) + getEffectAdditionLongValue(STR, effects) * getHpGrow();
+        return getMaxHp() + getEffectAdditionLongValue(HP, getEffects()) + getEffectAdditionLongValue(STR, getEffects()) * getHpGrow();
     }
 
     public long getUpperAtk() {
-        return getAtk() + getEffectAdditionLongValue(ATK, effects) + getEffectAdditionLongValue(STR, effects) * getAtkGrow();
+        return getAtk() + getEffectAdditionLongValue(ATK, getEffects()) + getEffectAdditionLongValue(STR, getEffects()) * getAtkGrow();
     }
 
     public long getUpperDef() {
-        return getDef() + getEffectAdditionLongValue(DEF, effects) + getEffectAdditionLongValue(AGI, effects) * getDefGrow();
+        return getDef() + getEffectAdditionLongValue(DEF, getEffects()) + getEffectAdditionLongValue(AGI, getEffects()) * getDefGrow();
     }
 
     /**
@@ -184,25 +194,25 @@ public class Hero implements Serializable, IDModel {
      */
     public Accessory mountAccessory(Accessory accessory) {
         Accessory uMount = null;
-        Iterator<Accessory> iterator = accessories.iterator();
+        Iterator<Accessory> iterator = getAccessories().iterator();
         while (iterator.hasNext()) {
             uMount = iterator.next();
             if (uMount.getType().equals(accessory.getType())) {
                 iterator.remove();
-                effects.removeAll(uMount.getEffects());
+                getEffects().removeAll(uMount.getEffects());
                 uMount.setMounted(false);
             }
         }
-        if (accessories.add(accessory)) {
-            effects.addAll(accessory.getEffects());
+        if (getAccessories().add(accessory)) {
+            getEffects().addAll(accessory.getEffects());
             accessory.setMounted(true);
         }
         return uMount;
     }
 
     public void unMountAccessory(Accessory accessory) {
-        accessories.remove(accessory);
-        effects.removeAll(accessory.getEffects());
+        getAccessories().remove(accessory);
+        getEffects().removeAll(accessory.getEffects());
     }
 
     public int getIndex() {

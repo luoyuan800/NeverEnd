@@ -220,8 +220,11 @@ public class GameActivity extends Activity {
                             shareToNet();
                         }
                     });
-                    sharingTip.setMessage("如果你觉得这个游戏好玩，不妨帮忙分享到你的圈子中，让更多的人参与到我们的游戏建设中来，一起享受放置的快乐。同时你的每次分享可以获得50W锻造点的额外奖励（每天一次）。");
+                    sharingTip.setMessage("如果你觉得这个游戏好玩，不妨帮忙分享到你的圈子中，让更多的人参与到我们的游戏建设中来，一起享受放置的快乐。");
                     sharingTip.show();
+                    break;
+                case R.id.save:
+                    control.save();
                     break;
             }
             return false;

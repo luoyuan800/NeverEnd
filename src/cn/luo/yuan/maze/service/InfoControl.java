@@ -47,14 +47,14 @@ public class InfoControl {
         viewHandler.refreshAccessory(hero);
         viewHandler.refreshSkill(hero);
         runningService = new RunningService(hero, maze, this, dataManager, Data.REFRESH_SPEED);
-        executor.scheduleAtFixedRate(runningService,0, Data.REFRESH_SPEED, TimeUnit.MICROSECONDS);
+        executor.scheduleAtFixedRate(runningService,0, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 if(!runningService.getPause())
                     viewHandler.refreshFreqProperties();
             }
-        }, 0, Data.REFRESH_SPEED, TimeUnit.MICROSECONDS);
+        }, 0, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
 
     }
 

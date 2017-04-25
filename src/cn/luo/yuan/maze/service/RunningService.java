@@ -83,7 +83,7 @@ public class RunningService implements Runnable {
                         infoControl.save();
                     }
                 }else{
-                    Monster monster = dataManager.buildRandomMonster(infoControl);
+                    /*Monster monster = dataManager.buildRandomMonster(infoControl);
                     if(monster!=null){
                         BattleService battleService = new BattleService(infoControl, monster);
                         if(battleService.battle()){
@@ -93,7 +93,7 @@ public class RunningService implements Runnable {
                         }else{
                             maze.setStreaking(0);
                         }
-                    }
+                    }*/
                 }
             }catch (Exception e){
                 LogHelper.logException(e, false, "Error while running game thread.");
