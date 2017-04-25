@@ -70,8 +70,8 @@ public class InfoControl {
             gift.handler(this);
         }
         //Accessory handle
-        for (Accessory accessory : dataManager.loadMountedAccessory(hero)) {
-            hero.mountAccessory(accessory);
+        for(Accessory accessory : dataManager.loadMountedAccessory(hero)){
+            mountAccessory(accessory);
         }
         random = new Random(hero.getBirthDay());
     }
@@ -86,7 +86,9 @@ public class InfoControl {
         for (Accessory accessory : hero.getAccessories()) {
             dataManager.saveAccessory(accessory);
         }
-        gift.handler(this);
+        if(gift!=null) {
+            gift.handler(this);
+        }
     }
 
     public Random getRandom() {
@@ -129,5 +131,15 @@ public class InfoControl {
 
     public void setViewHandler(GameActivity.ViewHandler viewHandler) {
         this.viewHandler = viewHandler;
+    }
+
+    public void mountAccessory(Accessory accessory){
+        Accessory uMount = hero.mountAccessory(accessory);
+        if(uMount!=null){
+            uMount.setMounted(false);
+            dataManager.saveAccessory(uMount);
+        }
+        accessory.setMounted(true);
+        dataManager.saveAccessory(accessory);
     }
 }

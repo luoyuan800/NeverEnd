@@ -10,6 +10,7 @@ import cn.luo.yuan.maze.model.FirstName;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Monster;
+import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.SecondName;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
@@ -17,6 +18,7 @@ import cn.luo.yuan.maze.service.InfoControl;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -38,6 +40,7 @@ public class DataManager {
     private SerializeLoader<Accessory> accessoryLoader;
     private SerializeLoader<Maze> mazeLoader;
     private SerializeLoader<Hero> heroLoader;
+    private SerializeLoader<Pet> petLoader;
     private Sqlite database;
     private Context context;
 
@@ -48,6 +51,7 @@ public class DataManager {
         accessoryLoader = new SerializeLoader<>(Accessory.class, context);
         mazeLoader = new SerializeLoader<>(Maze.class, context);
         heroLoader = new SerializeLoader<>(Hero.class, context);
+        petLoader = new SerializeLoader<>(Pet.class, context);
         this.context = context;
     }
 
@@ -94,7 +98,6 @@ public class DataManager {
                 if (cursor.getInt(cursor.getColumnIndex("mounted")) == 1) {
                     Accessory accessory = loadAccessory(cursor.getString(cursor.getColumnIndex("id")));
                     if (accessory != null) {
-                        hero.mountAccessory(accessory);
                         accessories.add(accessory);
                     }
                 }
@@ -225,7 +228,7 @@ public class DataManager {
                     Monster monster = new Monster();
                     monster.setType(cursor.getString(cursor.getColumnIndex("type")));
                     monster.setRace(cursor.getInt(cursor.getColumnIndex("race")));
-                    monster.setImageId(cursor.getInt(cursor.getColumnIndex("image")));
+                    monster.setImageId(cursor.getString(cursor.getColumnIndex("image")));
                     monster.setPetRate(cursor.getFloat(cursor.getColumnIndex("pet_rate")));
                     monster.setHitRate(cursor.getFloat(cursor.getColumnIndex("hit")));
                     monster.setSilent(cursor.getFloat(cursor.getColumnIndex("silent")));
@@ -273,5 +276,31 @@ public class DataManager {
             cursor.close();
         }
         return null;
+    }
+
+    public Pet loadPet(String id){
+        return petLoader.load(id);
+    }
+
+    public void savePet(Pet pet){
+        ContentValues values = new ContentValues();
+        values.put("hero_index", index);
+        values.put("sex", pet.getSex());
+        values.put("name", pet.getDisplayName());
+        values.put("element", pet.getElement().ordinal());
+        values.put("last_update", System.currentTimeMillis());
+        values.put("color", pet.getColor());
+        values.put("level", pet.getLevel());
+        values.put("tag", pet.getTag());
+        values.put("mounted", pet.isMounted());
+        if(StringUtils.isNotEmpty(pet.getId())){
+            petLoader.update(pet);
+            database.updateById("pet", values, pet.getId());
+        }else{
+            petLoader.save(pet);
+            values.put("create", System.currentTimeMillis());
+            values.put("id", pet.getId());
+            database.insert("pet", values);
+        }
     }
 }

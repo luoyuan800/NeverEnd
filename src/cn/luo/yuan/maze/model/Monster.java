@@ -18,7 +18,7 @@ public class Monster{
     private float silent;
     private float petRate = 0;
     private int index;
-    private int imageId;
+    private String imageId;
     private int race;
     private long def;
     private String color;
@@ -121,11 +121,11 @@ public class Monster{
         this.index = index;
     }
 
-    public int getImageId() {
+    public String getImageId() {
         return imageId;
     }
 
-    public void setImageId(int imageId) {
+    public void setImageId(String imageId) {
         this.imageId = imageId;
     }
 

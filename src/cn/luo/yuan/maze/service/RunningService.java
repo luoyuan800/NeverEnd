@@ -51,11 +51,9 @@ public class RunningService implements Runnable {
                     return;
                 }
                 maze.setStep(maze.getStep() + 1);
-                if (random.nextLong(10000) > 9985 || maze.getStep() > random.nextLong(22) || random.nextLong(maze.getStreaking() + 1) > 50 + maze.getLevel()) {
+                if (random.nextLong(10000) > 9985 || maze.getStep() > 10 + random.nextLong(22) || random.nextLong(maze.getStreaking() + 1) > 50 + maze.getLevel()) {
                     maze.setLevel(maze.getLevel()+1);
-                    if(maze.getMaxLevel() < maze.getLevel()){
-                        maze.setMaxLevel(maze.getLevel());
-                    }
+
                     long point = 1;
                     long add = random.nextLong(maze.getLevel() / 1000);
                     if (add < 10) {
@@ -75,6 +73,9 @@ public class RunningService implements Runnable {
                         point = 1;
                         msg = String.format(infoControl.getContext().getString(R.string.move_to_next_level),
                                 hero.getDisplayName(), StringUtils.formatNumber(maze.getLevel()), StringUtils.formatNumber(point));
+                    }
+                    if(maze.getMaxLevel() < maze.getLevel()){
+                        maze.setMaxLevel(maze.getLevel());
                     }
                     hero.setPoint(hero.getPoint() + point);
                     infoControl.addMessage(msg);

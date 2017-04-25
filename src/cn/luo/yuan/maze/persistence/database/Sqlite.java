@@ -72,6 +72,7 @@ public class Sqlite {
             createKeyTable(db);
             createMazeTable(db);
             createMonsterTable(db);
+            createPetTable(db);
             db.setTransactionSuccessful();
             db.endTransaction();
         } catch (Exception e) {
@@ -141,6 +142,25 @@ public class Sqlite {
                 "name TEXT NOT NULL," +
                 "gift TEXT ," +
                 "reincarnate INTEGER ," +
+                "id TEXT NOT NULL PRIMARY KEY," +
+                "element INTEGER " +
+                ")";
+        db.execSQL(table);
+    }
+
+
+    private void createPetTable(SQLiteDatabase db) {
+        String table = "create table pet (" +
+                "last_update INTEGER," +
+                "created INTEGER," +
+                "hero_index TEXT NOT NULL ," +
+                "name TEXT NOT NULL," +
+                "element INTEGER ," +
+                "tag TEXT ," +
+                "level INTEGER ," +
+                "sex INTEGER ," +
+                "color TEXT ," +
+                "mounted INTEGER ," +
                 "id TEXT NOT NULL PRIMARY KEY," +
                 "element INTEGER " +
                 ")";

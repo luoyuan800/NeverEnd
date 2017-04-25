@@ -45,8 +45,8 @@ public class Hero implements Serializable, IDModel {
     private long birthDay;//生日
     private EncodeLong reincarnate = new EncodeLong(0);//转生次数
     private EncodeLong material = new EncodeLong(0);//锻造点（货币）
-    private Set<Effect> effects = new HashSet<>(3);//附加的效果
-    private Set<Accessory> accessories = new HashSet<>(3);//装备
+    transient private Set<Effect> effects = new HashSet<>(3);//附加的效果
+    transient private Set<Accessory> accessories = new HashSet<>(3);//装备
     private Element element;//五行元素
     private String id;
     private EncodeLong point = new EncodeLong(0);
@@ -178,18 +178,26 @@ public class Hero implements Serializable, IDModel {
         return getDef() + getEffectAdditionLongValue(DEF, effects) + getEffectAdditionLongValue(AGI, effects) * getDefGrow();
     }
 
-    public void mountAccessory(Accessory accessory) {
+    /**
+     * @param accessory mounted
+     * @return Accessory that un mount
+     */
+    public Accessory mountAccessory(Accessory accessory) {
+        Accessory uMount = null;
         Iterator<Accessory> iterator = accessories.iterator();
         while (iterator.hasNext()) {
-            Accessory acc = iterator.next();
-            if (acc.getType().equals(accessory.getType())) {
+            uMount = iterator.next();
+            if (uMount.getType().equals(accessory.getType())) {
                 iterator.remove();
-                effects.removeAll(acc.getEffects());
+                effects.removeAll(uMount.getEffects());
+                uMount.setMounted(false);
             }
         }
         if (accessories.add(accessory)) {
             effects.addAll(accessory.getEffects());
+            accessory.setMounted(true);
         }
+        return uMount;
     }
 
     public void unMountAccessory(Accessory accessory) {
