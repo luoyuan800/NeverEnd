@@ -6,6 +6,7 @@ import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Monster;
+import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -51,6 +52,7 @@ public class BattleService {
     }
 
     private void heroAtk(Hero hero, Monster monster, Random random) {
+        petActionOnAtk(hero, monster, random);
         long atk = hero.getUpperAtk();
         atk = atk/3;
         atk = atk * 2 + random.nextLong(atk);
@@ -69,6 +71,9 @@ public class BattleService {
     }
 
     private void heroDefend(Hero hero, Monster monster, Random random) {
+        if(petActionOnDef(hero, monster, random)){
+            return;
+        }
         boolean isDodge = random.nextLong(100) + hero.getAgi() * Data.DODGE_AGI_RATE > 97 + random.nextInt(1000) + random.nextLong((long)(hero.getStr() * Data.DODGE_STR_RATE));
         boolean isParry = false;
         if (isDodge) {
@@ -101,5 +106,47 @@ public class BattleService {
             baseHarm *= 0.5;
         }
         return baseHarm;
+    }
+
+    private void petActionOnAtk(Hero hero, Monster monster, Random random){
+        for(Pet pet : hero.getPets()){
+            if(isPetWork(pet, random, true)){
+                if(monster.getIndex() > pet.getIndex() && random.nextInt(5) < 1){
+
+                }else{
+                    long harm = pet.getAtk() - monster.getDef();
+                    if(harm > 0){
+                        monster.setHp(monster.getHp() - harm);
+                        control.addMessage(String.format(context.getResources().getString(R.string.atk_harm_color_msg), pet.getDisplayName(), monster.getDisplayName(), StringUtils.formatNumber(harm)));
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean petActionOnDef(Hero hero, Monster monster, Random random){
+        for(Pet pet : hero.getPets()){
+            if(isPetWork(pet, random, true)){
+                if(monster.getIndex() > pet.getIndex() && random.nextInt(5) < 1){
+
+                }else{
+                    long harm = monster.getAtk() - pet.getDef();
+                    if(harm > 0){
+                        monster.setHp(monster.getHp() - harm);
+                        control.addMessage(String.format(context.getString(R.string.pet_defend), pet.getDisplayName()));
+                        control.addMessage(String.format(context.getResources().getString(R.string.atk_harm_color_msg), monster.getDisplayName(), pet.getDisplayName(), StringUtils.formatNumber(harm)));
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isPetWork(Pet pet, Random random, boolean addition){
+        if(addition){
+            return pet.getHp() > 0 && 10 + random.nextInt(100) < random.nextLong(pet.getIntimacy());
+        }
+        return pet.getHp() > 0 && 100 + random.nextInt(100) < random.nextLong(pet.getIntimacy());
     }
 }

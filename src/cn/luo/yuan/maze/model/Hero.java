@@ -47,6 +47,7 @@ public class Hero implements Serializable, IDModel {
     private EncodeLong material = new EncodeLong(0);//锻造点（货币）
     transient private Set<Effect> effects = new HashSet<>(3);//附加的效果
     transient private Set<Accessory> accessories = new HashSet<>(3);//装备
+    transient private Set<Pet> pets = new HashSet<>(3);
     private Element element;//五行元素
     private String id;
     private EncodeLong point = new EncodeLong(0);
@@ -283,4 +284,17 @@ public class Hero implements Serializable, IDModel {
         this.click.setValue(click);
     }
 
+    public Set<Pet> getPets() {
+        if (pets == null) {
+            synchronized (this) {
+                if (pets == null)
+                    pets = new HashSet<>(3);
+            }
+        }
+        return pets;
+    }
+
+    public void setPets(Set<Pet> pets) {
+        this.pets = pets;
+    }
 }
