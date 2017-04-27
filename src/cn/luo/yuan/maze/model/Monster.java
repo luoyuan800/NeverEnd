@@ -19,10 +19,10 @@ public class Monster implements HarmAble{
     private float petRate = 0;
     private int index;
     private String imageId;
-    private int race;
     private long def;
     private String color;
     private int sex;
+    private Race race;
 
 
     public String getFirstName() {
@@ -129,12 +129,12 @@ public class Monster implements HarmAble{
         this.imageId = imageId;
     }
 
-    public int getRace() {
+    public Race getRace() {
         return race;
     }
 
     public void setRace(int race) {
-        this.race = race;
+        this.race = Race.getByIndex(race);
     }
 
     public long getDef() {
