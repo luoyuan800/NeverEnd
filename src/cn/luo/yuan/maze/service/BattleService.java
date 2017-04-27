@@ -112,7 +112,7 @@ public class BattleService {
         for(Pet pet : hero.getPets()){
             if(isPetWork(pet, random, true)){
                 if(monster.getIndex() > pet.getIndex() && random.nextInt(5) < 1){
-
+                    control.addMessage(String.format(context.getString(R.string.pet_index_suppression), pet.getDisplayName(), monster.getDisplayName()));
                 }else{
                     long harm = pet.getAtk() - monster.getDef();
                     if(harm > 0){
@@ -128,7 +128,7 @@ public class BattleService {
         for(Pet pet : hero.getPets()){
             if(isPetWork(pet, random, true)){
                 if(monster.getIndex() > pet.getIndex() && random.nextInt(5) < 1){
-
+                    control.addMessage(String.format(context.getString(R.string.pet_index_suppression), pet.getDisplayName(), monster.getDisplayName()));
                 }else{
                     long harm = monster.getAtk() - pet.getDef();
                     if(harm > 0){

@@ -32,4 +32,5 @@
     <string name="add_mate">获得了%1$s点锻造</string>
     <string name="move_to_next_level">%1$s进入了%2$s层迷宫， 获得了&lt;font color=\'#FF8C00\'&gt;%3$s&lt;/font&gt;点数奖励></string>
     <string name="pet_defend">%1$s舍身救主，挡下了攻击！</string>
+    <string name="pet_index_suppression">%1$被%2$s的霸气震慑得不敢动弹</string>
 </resources>

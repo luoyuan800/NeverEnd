@@ -6,22 +6,20 @@ import android.database.Cursor;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Element;
-import cn.luo.yuan.maze.model.FirstName;
+import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Pet;
-import cn.luo.yuan.maze.model.SecondName;
+import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
 import cn.luo.yuan.maze.service.InfoControl;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by luoyuan on 2017/3/19.

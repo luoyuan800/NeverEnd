@@ -1,4 +1,4 @@
-package cn.luo.yuan.maze.model;
+package cn.luo.yuan.maze.model.names;
 
 
 import cn.luo.yuan.maze.utils.Random;

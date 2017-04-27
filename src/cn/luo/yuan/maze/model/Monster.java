@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by gluo on 4/1/2017.
  */
-public class Monster{
+public class Monster implements HarmAble{
     private String firstName;
     private String secondName;
     private String type;

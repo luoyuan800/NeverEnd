@@ -1,14 +1,16 @@
 package cn.luo.yuan.maze.model;
 
+import android.util.ArraySet;
 import cn.luo.yuan.maze.model.effect.Effect;
+import cn.luo.yuan.maze.model.skill.EmptySkill;
+import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.utils.EncodeLong;
+import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.Version;
 import cn.luo.yuan.maze.utils.annotation.LongValue;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import static cn.luo.yuan.maze.utils.EffectHandler.AGI;
 import static cn.luo.yuan.maze.utils.EffectHandler.ATK;
@@ -20,7 +22,7 @@ import static cn.luo.yuan.maze.utils.EffectHandler.getEffectAdditionLongValue;
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class Hero implements Serializable, IDModel {
+public class Hero implements Serializable, IDModel, HarmAble {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private int index;//存档编号
     private String name;//名字
@@ -45,9 +47,10 @@ public class Hero implements Serializable, IDModel {
     private long birthDay;//生日
     private EncodeLong reincarnate = new EncodeLong(0);//转生次数
     private EncodeLong material = new EncodeLong(0);//锻造点（货币）
-    transient private Set<Effect> effects = new HashSet<>(3);//附加的效果
-    transient private Set<Accessory> accessories = new HashSet<>(3);//装备
-    transient private Set<Pet> pets = new HashSet<>(3);
+    transient private ArraySet<Effect> effects = new ArraySet<>(3);//附加的效果
+    transient private ArraySet<Accessory> accessories = new ArraySet<>(3);//装备
+    transient private Skill[] skills = {EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL};//装备
+    transient private ArraySet<Pet> pets = new ArraySet<>(3);
     private Element element;//五行元素
     private String id;
     private EncodeLong point = new EncodeLong(0);
@@ -57,10 +60,10 @@ public class Hero implements Serializable, IDModel {
     public Hero() {
     }
 
-    public Set<Accessory> getAccessories() {
+    public ArraySet<Accessory> getAccessories() {
         synchronized (this) {
             if (accessories == null) {
-                accessories = new HashSet<>(5);
+                accessories = new ArraySet<>(5);
             }
         }
         return accessories;
@@ -168,10 +171,10 @@ public class Hero implements Serializable, IDModel {
         this.def.setValue(def);
     }
 
-    public Set<Effect> getEffects() {
+    public ArraySet<Effect> getEffects() {
         synchronized (this) {
             if (effects == null) {
-                effects = new HashSet<>(3);
+                effects = new ArraySet<>(3);
             }
         }
         return effects;
@@ -284,17 +287,28 @@ public class Hero implements Serializable, IDModel {
         this.click.setValue(click);
     }
 
-    public Set<Pet> getPets() {
+    public ArraySet<Pet> getPets() {
         if (pets == null) {
             synchronized (this) {
                 if (pets == null)
-                    pets = new HashSet<>(3);
+                    pets = new ArraySet<>(3);
             }
         }
         return pets;
     }
 
-    public void setPets(Set<Pet> pets) {
+    public void setPets(ArraySet<Pet> pets) {
         this.pets = pets;
     }
+
+
+    public Skill[] getSkills() {
+        return skills;
+    }
+
+    public void setSkills(Skill[] skills) {
+        this.skills = skills;
+    }
+
+
 }
