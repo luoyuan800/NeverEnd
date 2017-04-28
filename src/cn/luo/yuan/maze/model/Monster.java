@@ -1,5 +1,8 @@
 package cn.luo.yuan.maze.model;
 
+import android.graphics.drawable.Drawable;
+import cn.luo.yuan.maze.utils.Resource;
+
 import java.util.List;
 
 /**
@@ -18,11 +21,11 @@ public class Monster implements HarmAble{
     private float silent;
     private float petRate = 0;
     private int index;
-    private String imageId;
     private long def;
     private String color;
     private int sex;
     private Race race;
+    private Drawable imageCache;
 
 
     public String getFirstName() {
@@ -121,13 +124,6 @@ public class Monster implements HarmAble{
         this.index = index;
     }
 
-    public String getImageId() {
-        return imageId;
-    }
-
-    public void setImageId(String imageId) {
-        this.imageId = imageId;
-    }
 
     public Race getRace() {
         return race;
@@ -164,4 +160,12 @@ public class Monster implements HarmAble{
     public void setSex(int sex) {
         this.sex = sex;
     }
+
+    public synchronized Drawable getImageCache() {
+        if(imageCache == null){
+            imageCache = Resource.loadMonsterImage(index);
+        }
+        return imageCache;
+    }
+
 }

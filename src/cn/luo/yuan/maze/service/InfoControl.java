@@ -142,4 +142,8 @@ public class InfoControl {
         accessory.setMounted(true);
         dataManager.saveAccessory(accessory);
     }
+
+    public Object getCurrentBattleTarget(){
+        return runningService.getMonster();
+    }
 }

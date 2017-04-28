@@ -23,6 +23,7 @@ public class RunningService implements Runnable {
     private Random random;
     private long startTime;
     private DataManager dataManager;
+    private Monster monster;
     public RunningService(Hero hero, Maze maze, InfoControl infoControl,DataManager dataManager, long fps){
         this.hero = hero;
         this.infoControl = infoControl;
@@ -83,7 +84,7 @@ public class RunningService implements Runnable {
                         infoControl.save();
                     }
                 }else{
-                    /*Monster monster = dataManager.buildRandomMonster(infoControl);
+                    Monster monster = dataManager.buildRandomMonster(infoControl);
                     if(monster!=null){
                         BattleService battleService = new BattleService(infoControl, monster);
                         if(battleService.battle()){
@@ -93,11 +94,15 @@ public class RunningService implements Runnable {
                         }else{
                             maze.setStreaking(0);
                         }
-                    }*/
+                    }
                 }
             }catch (Exception e){
                 LogHelper.logException(e, false, "Error while running game thread.");
             }
         }
+    }
+
+    public Monster getMonster() {
+        return monster;
     }
 }

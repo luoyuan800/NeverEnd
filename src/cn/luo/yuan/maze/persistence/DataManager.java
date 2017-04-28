@@ -226,7 +226,6 @@ public class DataManager {
                     Monster monster = new Monster();
                     monster.setType(cursor.getString(cursor.getColumnIndex("type")));
                     monster.setRace(cursor.getInt(cursor.getColumnIndex("race")));
-                    monster.setImageId(cursor.getString(cursor.getColumnIndex("image")));
                     monster.setPetRate(cursor.getFloat(cursor.getColumnIndex("pet_rate")));
                     monster.setHitRate(cursor.getFloat(cursor.getColumnIndex("hit")));
                     monster.setSilent(cursor.getFloat(cursor.getColumnIndex("silent")));

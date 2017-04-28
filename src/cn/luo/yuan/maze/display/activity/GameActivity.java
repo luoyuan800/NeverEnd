@@ -25,6 +25,7 @@ import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.service.InfoControl;
+import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.lang.ref.WeakReference;
@@ -39,6 +40,7 @@ public class GameActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Resource.init(this);
         setContentView(R.layout.game_layout);
         Intent intent = getIntent();
         dataManager = new DataManager(intent.getIntExtra("index", -1), this);
