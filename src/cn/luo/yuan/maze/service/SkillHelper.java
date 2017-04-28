@@ -6,9 +6,9 @@ import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.utils.Random;
 
-import static cn.luo.yuan.maze.utils.EffectHandler.ATK;
-import static cn.luo.yuan.maze.utils.EffectHandler.STR;
-import static cn.luo.yuan.maze.utils.EffectHandler.getEffectAdditionLongValue;
+import static cn.luo.yuan.maze.service.EffectHandler.ATK;
+import static cn.luo.yuan.maze.service.EffectHandler.STR;
+import static cn.luo.yuan.maze.service.EffectHandler.getEffectAdditionLongValue;
 
 /**
  * Created by gluo on 4/27/2017.

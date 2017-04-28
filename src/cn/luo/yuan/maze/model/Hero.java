@@ -5,19 +5,18 @@ import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.utils.EncodeLong;
-import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.Version;
 import cn.luo.yuan.maze.utils.annotation.LongValue;
 
 import java.io.Serializable;
 import java.util.Iterator;
 
-import static cn.luo.yuan.maze.utils.EffectHandler.AGI;
-import static cn.luo.yuan.maze.utils.EffectHandler.ATK;
-import static cn.luo.yuan.maze.utils.EffectHandler.DEF;
-import static cn.luo.yuan.maze.utils.EffectHandler.HP;
-import static cn.luo.yuan.maze.utils.EffectHandler.STR;
-import static cn.luo.yuan.maze.utils.EffectHandler.getEffectAdditionLongValue;
+import static cn.luo.yuan.maze.service.EffectHandler.AGI;
+import static cn.luo.yuan.maze.service.EffectHandler.ATK;
+import static cn.luo.yuan.maze.service.EffectHandler.DEF;
+import static cn.luo.yuan.maze.service.EffectHandler.HP;
+import static cn.luo.yuan.maze.service.EffectHandler.STR;
+import static cn.luo.yuan.maze.service.EffectHandler.getEffectAdditionLongValue;
 
 /**
  * Created by luoyuan on 2017/3/18.
@@ -56,6 +55,7 @@ public class Hero implements Serializable, IDModel, HarmAble {
     private EncodeLong point = new EncodeLong(0);
     private String gift;
     private EncodeLong click = new EncodeLong(0);
+    private Race race;
 
     public Hero() {
     }
@@ -311,4 +311,11 @@ public class Hero implements Serializable, IDModel, HarmAble {
     }
 
 
+    public Race getRace() {
+        return race;
+    }
+
+    public void setRace(int race) {
+        this.race = Race.getByIndex(race);
+    }
 }

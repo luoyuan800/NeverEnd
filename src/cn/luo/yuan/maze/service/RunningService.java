@@ -6,7 +6,6 @@ import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.persistence.DataManager;
-import cn.luo.yuan.maze.utils.EffectHandler;
 import cn.luo.yuan.maze.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.Resource;
@@ -94,7 +93,7 @@ public class RunningService implements Runnable {
                             maze.setStreaking(maze.getStreaking() + 1);
                             hero.setMaterial(hero.getMaterial() + monster.getMaterial());
                             infoControl.addMessage(String.format(infoControl.getContext().getString(R.string.add_mate), StringUtils.formatNumber(monster.getMaterial())));
-                            Pet pet = tryCatch(monster);
+                            Pet pet = tryCatch(monster, dataManager.getPetCount());
                             if(pet!=null){
                                 infoControl.addMessage(String.format(Resource.getString(R.string.pet_catch), pet.getDisplayName()));
                                 dataManager.savePet(pet);
@@ -110,11 +109,8 @@ public class RunningService implements Runnable {
         }
     }
 
-    private Pet tryCatch(Monster monster){
-        int petCount = 0;
-        float rate = monster.getPetRate()+ random.nextInt(petCount + 1) / 10f;
-        float current = random.nextInt(100) + random.nextFloat() + EffectHandler.getEffectAdditionFloatValue("pet",hero.getEffects());
-        if(current > rate){
+    private Pet tryCatch(Monster monster, int petCount){
+        if(PetHelper.isCatchAble(monster, hero, random, petCount)){
             return PetHelper.monsterToPet(monster, hero);
         }else{
             return null;

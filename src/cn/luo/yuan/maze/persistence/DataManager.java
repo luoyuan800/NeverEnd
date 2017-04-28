@@ -182,6 +182,17 @@ public class DataManager {
         }
     }
 
+    public int getPetCount() {
+        Cursor cursor = database.excuseSOL("select count(*) from pet");
+        try {
+            return cursor.getInt(1);
+        }finally {
+            if(cursor!=null){
+                cursor.close();
+            }
+        }
+    }
+
     private Maze newMaze() {
         Maze maze = new Maze();
         maze.setMaxLevel(1);

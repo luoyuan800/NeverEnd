@@ -4,9 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import cn.luo.yuan.maze.utils.NormalRAMReader;
-
-import java.util.HashMap;
 
 
 /**
@@ -28,8 +25,8 @@ public class Sqlite {
     public synchronized static Sqlite getSqlite(Context context) {
         if (sqlite == null) {
             sqlite = new Sqlite(context);
-        } else{
-            if(sqlite.context != context){
+        } else {
+            if (sqlite.context != context) {
                 sqlite.close();
                 sqlite = new Sqlite(context);
             }
@@ -81,6 +78,43 @@ public class Sqlite {
         }
     }
 
+    public void updateById(String table, ContentValues values, String... ids) {
+        database.update(table, values, "id = ?", ids);
+    }
+
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (newVersion < oldVersion) {
+            throw new RuntimeException("反向安装了低版本：" + oldVersion + "-->" + newVersion);
+        }
+    }
+
+    public void beginTransaction() {
+        getDB().beginTransaction();
+    }
+
+    public void markTransactionSuccess() {
+        getDB().setTransactionSuccessful();
+    }
+
+    public void endTransaction() {
+        markTransactionSuccess();
+        getDB().endTransaction();
+    }
+
+    public void close() {
+        if (database != null && database.isOpen()) {
+            database.close();
+        }
+    }
+
+    public SQLiteDatabase getDatabase() {
+        return database;
+    }
+
+    public void insert(String table, ContentValues values) {
+        database.insert(table, null, values);
+    }
+
     private void createMazeTable(SQLiteDatabase db) {
         db.execSQL("create table maze(" +
                 "id TEXT NOT NULL PRIMARY KEY," +
@@ -89,6 +123,7 @@ public class Sqlite {
                 "hero_index INTEGER NOT NULL" +
                 ")");
     }
+
     private void createMonsterTable(SQLiteDatabase db) {
         db.execSQL("create table monster(" +
                 "id TEXT NOT NULL PRIMARY KEY," +
@@ -131,10 +166,6 @@ public class Sqlite {
         db.execSQL(table);
     }
 
-    public void updateById(String table, ContentValues values, String ... ids){
-        database.update(table, values, "id = ?", ids);
-    }
-
     private void createHeroTable(SQLiteDatabase db) {
         String table = "create table hero (" +
                 "last_update INTEGER," +
@@ -148,7 +179,6 @@ public class Sqlite {
                 ")";
         db.execSQL(table);
     }
-
 
     private void createPetTable(SQLiteDatabase db) {
         String table = "create table pet (" +
@@ -165,35 +195,6 @@ public class Sqlite {
                 "element INTEGER " +
                 ")";
         db.execSQL(table);
-    }
-
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (newVersion < oldVersion) {
-            throw new RuntimeException("反向安装了低版本：" + oldVersion + "-->" + newVersion);
-        }
-    }
-
-    public void beginTransaction() {
-        getDB().beginTransaction();
-    }
-
-    public void markTransactionSuccess() {
-        getDB().setTransactionSuccessful();
-    }
-
-    public void endTransaction() {
-        markTransactionSuccess();
-        getDB().endTransaction();
-    }
-
-    public void close() {
-        if (database != null && database.isOpen()) {
-            database.close();
-        }
-    }
-
-    public SQLiteDatabase getDatabase() {
-        return database;
     }
 
     private SQLiteDatabase openOrCreateInnerDB() {
@@ -213,28 +214,6 @@ public class Sqlite {
             db = openOrCreateInnerDB();
         }
         return db;
-    }
-
-    public int getKey(int index){
-        Cursor cursor = excuseSOL("select key from key where hero_index = '" + index + "'");
-        try {
-            if (cursor.isAfterLast()) {
-                int key = NormalRAMReader.generateKey();
-                ContentValues values = new ContentValues(2);
-                values.put("hero_index", index);
-                values.put("key", key);
-                insert("key",values);
-                return key;
-            } else {
-                return cursor.getInt(cursor.getColumnIndex("key"));
-            }
-        }finally {
-            cursor.close();
-        }
-    }
-
-    public void insert(String table, ContentValues values){
-        database.insert(table, null, values);
     }
 
 }

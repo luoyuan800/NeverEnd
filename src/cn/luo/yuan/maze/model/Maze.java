@@ -8,8 +8,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import static cn.luo.yuan.maze.utils.EffectHandler.MEET_RATE;
-import static cn.luo.yuan.maze.utils.EffectHandler.getEffectAdditionFloatValue;
+import static cn.luo.yuan.maze.service.EffectHandler.MEET_RATE;
+import static cn.luo.yuan.maze.service.EffectHandler.getEffectAdditionFloatValue;
 
 /**
  * Created by luoyuan on 2017/3/19.
