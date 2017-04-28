@@ -25,7 +25,6 @@ public class Monster implements HarmAble{
     private String color;
     private int sex;
     private Race race;
-    private Drawable imageCache;
 
 
     public String getFirstName() {
@@ -159,13 +158,6 @@ public class Monster implements HarmAble{
 
     public void setSex(int sex) {
         this.sex = sex;
-    }
-
-    public synchronized Drawable getImageCache() {
-        if(imageCache == null){
-            imageCache = Resource.loadMonsterImage(index);
-        }
-        return imageCache;
     }
 
 }

@@ -37,4 +37,5 @@
     <string name="pc_desc">不知道它们怎么产生的，但是它们在迷宫底层绝对是你的噩梦。</string>
     <string name="feie_desc">身躯巨大的飞蛾，喜欢往光亮的地方聚集。喜欢在你的头顶飞来飞去。</string>
     <string name="zz_desc">这种可以吃又可以玩的怪物，骚年不抓一只养养看吗？</string>
+    <string name="pet_catch">成功捕获%1$s</string>
 </resources>

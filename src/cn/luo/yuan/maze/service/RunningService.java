@@ -4,9 +4,11 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Monster;
+import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 
@@ -91,6 +93,11 @@ public class RunningService implements Runnable {
                             maze.setStreaking(maze.getStreaking() + 1);
                             hero.setMaterial(hero.getMaterial() + monster.getMaterial());
                             infoControl.addMessage(String.format(infoControl.getContext().getString(R.string.add_mate), StringUtils.formatNumber(monster.getMaterial())));
+                            Pet pet = tryCatch(monster);
+                            if(pet!=null){
+                                infoControl.addMessage(String.format(Resource.getString(R.string.pet_catch), pet.getDisplayName()));
+                                dataManager.savePet(pet);
+                            }
                         }else{
                             maze.setStreaking(0);
                         }
@@ -99,6 +106,17 @@ public class RunningService implements Runnable {
             }catch (Exception e){
                 LogHelper.logException(e, false, "Error while running game thread.");
             }
+        }
+    }
+
+    private Pet tryCatch(Monster monster){
+        int petCount = 0;
+        float rate = monster.getPetRate()+ random.nextInt(petCount + 1) / 10f;
+        float current = random.nextInt(100) + random.nextFloat() ;
+        if(current > rate){
+            return PetHelper.monsterToPet(monster, hero);
+        }else{
+            return null;
         }
     }
 

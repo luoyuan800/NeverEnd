@@ -1,6 +1,9 @@
-package cn.luo.yuan.maze.model.skill;
+package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.skill.EmptySkill;
+import cn.luo.yuan.maze.model.skill.MountAble;
+import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.utils.Random;
 
 import static cn.luo.yuan.maze.utils.EffectHandler.ATK;

@@ -93,7 +93,6 @@ public class Sqlite {
         db.execSQL("create table monster(" +
                 "id TEXT NOT NULL PRIMARY KEY," +
                 "type TEXT," +
-                "des TEXT," +
                 "min_level INTEGER," +
                 "atk INTEGER," +
                 "def INTEGER," +
@@ -103,7 +102,6 @@ public class Sqlite {
                 "meet_rate FLOAT," +
                 "egg_rate FLOAT," +
                 "pet_rate FLOAT," +
-                "image INTEGER," +
                 "sex INTEGER DEFAULT -1," +
                 "race INTEGER" +
                 ")");

@@ -5,6 +5,8 @@ import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.ArrayMap;
+import android.util.ArraySet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +17,18 @@ import java.io.InputStreamReader;
  */
 public class Resource {
     private static Context context;
+    private static final ArrayMap<Object, Drawable> drawableCache = new ArrayMap<>(10);
+
+    private static void addToCache(Object key, Drawable drawable){
+        if(!drawableCache.containsKey(key)) {
+            synchronized (drawableCache) {
+                if (drawableCache.size() >= 10) {
+                    drawableCache.removeAt(0);
+                }
+            }
+        }
+        drawableCache.put(key, drawable);
+    }
 
     public static void init(Context context) {
         Resource.context = context;
@@ -25,12 +39,16 @@ public class Resource {
     }
 
     public static Drawable loadImageFromAssets(String name) {
-        try {
-            return new BitmapDrawable((Resources) null, BitmapFactory.decodeStream(context.getAssets().open(name)));
-        } catch (IOException e) {
-            //LogHelper.logException(e, false, "False for load image from assets: " + name);
+        Drawable drawable = drawableCache.get(name);
+        if(drawable == null) {
+            try {
+                drawable =  new BitmapDrawable((Resources) null, BitmapFactory.decodeStream(context.getAssets().open(name)));
+                addToCache(name, drawable);
+            } catch (IOException e) {
+                //LogHelper.logException(e, false, "False for load image from assets: " + name);
+            }
         }
-        return null;
+        return drawable;
     }
 
     public static String readStringFromAssets(String name) {

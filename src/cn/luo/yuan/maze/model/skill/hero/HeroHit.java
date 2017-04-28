@@ -4,7 +4,7 @@ import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.skill.AtkSkill;
 import cn.luo.yuan.maze.model.skill.HarmResult;
-import cn.luo.yuan.maze.model.skill.SkillHelper;
+import cn.luo.yuan.maze.service.SkillHelper;
 import cn.luo.yuan.maze.model.skill.SkillParameter;
 import cn.luo.yuan.maze.model.skill.SkillResult;
 import cn.luo.yuan.maze.model.skill.UpgradeAble;

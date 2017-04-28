@@ -16,6 +16,7 @@ import android.text.util.Linkify;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.display.view.RollTextView;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.service.InfoControl;
 import cn.luo.yuan.maze.utils.Resource;
@@ -90,6 +92,15 @@ public class GameActivity extends Activity {
 
         public ViewHandler(GameActivity activity) {
             this.context = new WeakReference<GameActivity>(activity);
+        }
+
+        public void refreshHeadImage(Hero hero, Object target){
+            if(target instanceof Monster) {
+                ((ImageView) findViewById(R.id.monster_pic)).setImageDrawable(Resource.loadMonsterImage(((Monster) target).getIndex()));
+            }else{
+                //?
+            }
+            ImageView heroHead = (ImageView)findViewById(R.id.hero_pic);
         }
 
         //刷新比较固定的属性值
