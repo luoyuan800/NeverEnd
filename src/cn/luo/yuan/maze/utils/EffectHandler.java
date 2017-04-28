@@ -38,6 +38,14 @@ public class EffectHandler {
                     }
                 }
                 break;
+            case "pet":
+                for(Effect effect : effects){
+                    if(effect instanceof PetRateEffect){
+                        value += ((PetRateEffect) effect).getPetRate();
+                    }
+                }
+                break;
+
         }
         return value;
     }

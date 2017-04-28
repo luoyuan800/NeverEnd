@@ -6,6 +6,7 @@ import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.persistence.DataManager;
+import cn.luo.yuan.maze.utils.EffectHandler;
 import cn.luo.yuan.maze.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.Resource;
@@ -112,7 +113,7 @@ public class RunningService implements Runnable {
     private Pet tryCatch(Monster monster){
         int petCount = 0;
         float rate = monster.getPetRate()+ random.nextInt(petCount + 1) / 10f;
-        float current = random.nextInt(100) + random.nextFloat() ;
+        float current = random.nextInt(100) + random.nextFloat() + EffectHandler.getEffectAdditionFloatValue("pet",hero.getEffects());
         if(current > rate){
             return PetHelper.monsterToPet(monster, hero);
         }else{
