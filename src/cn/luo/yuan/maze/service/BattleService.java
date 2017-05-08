@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.service;
 
 import android.content.Context;
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.listener.BattleEndListener;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Hero;
@@ -9,6 +10,8 @@ import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
+
+import static cn.luo.yuan.maze.service.ListenerService.battleEndListeners;
 
 /**
  * Created by luoyuan on 2017/4/2.
@@ -44,9 +47,15 @@ public class BattleService {
         }
         if(monster.getHp() <= 0){
             control.addMessage(String.format(context.getString(R.string.win_msg), hero.getDisplayName(), monster.getDisplayName()));
+            for(BattleEndListener endListener : battleEndListeners.values()){
+                endListener.end(hero, monster);
+            }
             return true;
         }else{
             control.addMessage(String.format(context.getString(R.string.lost_msg), hero.getDisplayName(), monster.getDisplayName()));
+            for(BattleEndListener endListener : battleEndListeners.values()){
+                endListener.end(hero, monster);
+            }
             return false;
         }
     }

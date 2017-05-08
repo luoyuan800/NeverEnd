@@ -1,6 +1,9 @@
 package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.listener.LostListener;
+import cn.luo.yuan.maze.listener.PetCatchListener;
+import cn.luo.yuan.maze.listener.WinListener;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Monster;
@@ -10,6 +13,10 @@ import cn.luo.yuan.maze.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
+
+import static cn.luo.yuan.maze.service.ListenerService.lostListeners;
+import static cn.luo.yuan.maze.service.ListenerService.petCatchListeners;
+import static cn.luo.yuan.maze.service.ListenerService.winListeners;
 
 
 /**
@@ -97,9 +104,18 @@ public class RunningService implements Runnable {
                             if(pet!=null){
                                 infoControl.addMessage(String.format(Resource.getString(R.string.pet_catch), pet.getDisplayName()));
                                 dataManager.savePet(pet);
+                                for(PetCatchListener listener : petCatchListeners.values()){
+                                    listener.catchPet(pet);
+                                }
+                            }
+                            for(WinListener listener : winListeners.values()){
+                                listener.win(hero, monster);
                             }
                         }else{
                             maze.setStreaking(0);
+                            for(LostListener lostListener : lostListeners.values()){
+                                lostListener.lost(hero, monster);
+                            }
                         }
                     }
                 }

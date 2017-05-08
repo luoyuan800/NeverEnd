@@ -6,11 +6,11 @@ import android.database.Cursor;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Element;
-import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
@@ -55,18 +55,15 @@ public class DataManager {
 
     public Hero loadHero() {
         String query = "select * from hero where hero_index = '" + index + "'";
-        Cursor cursor = database.excuseSOL(query);
-        try {
+        try (Cursor cursor = database.excuseSOL(query)) {
             if (!cursor.isAfterLast()) {
                 String id = cursor.getString(cursor.getColumnIndex("id"));
                 Hero hero = heroLoader.load(id);
-                if(hero!=null){
+                if (hero != null) {
                     hero.setId(id);
                     return hero;
                 }
             }
-        } finally {
-            cursor.close();
         }
         Hero hero = new Hero();
         hero.setAtkGrow(1);
@@ -90,8 +87,8 @@ public class DataManager {
 
     public List<Accessory> loadMountedAccessory(Hero hero) {
         List<Accessory> accessories = new ArrayList<>();
-        Cursor cursor = database.excuseSOL("select * from accessory where hero_index = '" + index + "'");
-        try {
+
+        try (Cursor cursor = database.excuseSOL("select * from accessory where hero_index = '" + index + "'")) {
             while (!cursor.isAfterLast()) {
                 if (cursor.getInt(cursor.getColumnIndex("mounted")) == 1) {
                     Accessory accessory = loadAccessory(cursor.getString(cursor.getColumnIndex("id")));
@@ -101,8 +98,6 @@ public class DataManager {
                 }
                 cursor.moveToNext();
             }
-        } finally {
-            cursor.close();
         }
         return accessories;
     }
@@ -115,10 +110,10 @@ public class DataManager {
         values.put("reincarnate", hero.getReincarnate());
         values.put("last_update", System.currentTimeMillis());
         values.put("gift", hero.getGift());
-        if(StringUtils.isNotEmpty(hero.getId())) {
+        if (StringUtils.isNotEmpty(hero.getId())) {
             heroLoader.update(hero);
             database.updateById("hero", values, hero.getId());
-        }else {
+        } else {
             heroLoader.save(hero);
             values.put("id", hero.getId());
             values.put("created", System.currentTimeMillis());
@@ -134,11 +129,11 @@ public class DataManager {
         values.put("mounted", accessory.isMounted());
         values.put("hero_index", index);
         values.put("level", accessory.getLevel());
-        if(StringUtils.isNotEmpty(accessory.getId())) {
+        if (StringUtils.isNotEmpty(accessory.getId())) {
             //Already existed, 我们会进行update操作
             database.updateById("accessory", values, accessory.getId());
             accessoryLoader.update(accessory);
-        }else{
+        } else {
             //先添加一个新的记录
             accessoryLoader.save(accessory);
             values.put("id", accessory.getId());
@@ -146,90 +141,67 @@ public class DataManager {
         }
     }
 
-    public void saveMaze(Maze maze){
+    public void saveMaze(Maze maze) {
         ContentValues values = new ContentValues();
         values.put("hero_index", index);
         values.put("level", maze.getLevel());
         values.put("max_level", maze.getMaxLevel());
-        if(StringUtils.isNotEmpty(maze.getId())){
+        if (StringUtils.isNotEmpty(maze.getId())) {
             database.updateById("maze", values, maze.getId());
             mazeLoader.update(maze);
-        }else{
+        } else {
             mazeLoader.save(maze);
             values.put("id", maze.getId());
             database.insert("maze", values);
         }
     }
 
-    public Maze loadMaze(){
-        Cursor cursor = database.excuseSOL("select id from maze where hero_index = " + index);
-        try {
+    public Maze loadMaze() {
+        try (Cursor cursor = database.excuseSOL("select id from maze where hero_index = " + index)) {
             if (!cursor.isAfterLast()) {
                 String id = cursor.getString(cursor.getColumnIndex("id"));
                 Maze maze = mazeLoader.load(id);
-                if(maze == null){
+                if (maze == null) {
                     maze = newMaze();
-                }else{
+                } else {
                     maze.setId(id);
                 }
                 return maze;
-            }else{
-                Maze maze = newMaze();
-                return maze;
+            } else {
+                return newMaze();
             }
-        }finally {
-            cursor.close();
         }
     }
 
     public int getPetCount() {
-        Cursor cursor = database.excuseSOL("select count(*) from pet");
-        try {
+        try (Cursor cursor = database.excuseSOL("select count(*) from pet")) {
             return cursor.getInt(1);
-        }finally {
-            if(cursor!=null){
-                cursor.close();
-            }
         }
-    }
-
-    private Maze newMaze() {
-        Maze maze = new Maze();
-        maze.setMaxLevel(1);
-        maze.setLevel(1);
-        maze.setMeetRate(99.9f);
-        return maze;
     }
 
     /**
      * 删除当前存档的数据
      */
     public void clean() {
-        Cursor cursor = database.excuseSOL("select id from accessory where hero_index = " + index);
-        try {
+        try (Cursor cursor = database.excuseSOL("select id from accessory where hero_index = " + index)) {
             while (!cursor.isAfterLast()) {
                 accessoryLoader.delete(cursor.getString(cursor.getColumnIndex("id")));
                 cursor.moveToNext();
             }
-        }finally {
-            cursor.close();
         }
-        try {
-            cursor = database.excuseSOL("select id from maze where hero_index = " + index);
+        try (Cursor cursor = database.excuseSOL("select id from maze where hero_index = " + index)) {
             while (!cursor.isAfterLast()) {
                 mazeLoader.delete(cursor.getString(cursor.getColumnIndex("id")));
                 cursor.moveToNext();
             }
-        }finally {
-            cursor.close();
         }
-        database.excuseSOL("delete from maze where hero_index = " + index);
-        database.excuseSOL("delete from hero where hero_index = " + index);
-        database.excuseSOL("delete from accessory where hero_index = " + index);
+        database.excuseSQLWithoutResult("delete from maze where hero_index = " + index);
+        database.excuseSQLWithoutResult("delete from hero where hero_index = " + index);
+        database.excuseSQLWithoutResult("delete from accessory where hero_index = " + index);
     }
-    public Monster buildRandomMonster(InfoControl control){
-        Cursor cursor = database.excuseSOL("select * from monster where min_level < " + control.getMaze().getLevel());
-        try {
+
+    public Monster buildRandomMonster(InfoControl control) {
+        try (Cursor cursor = database.excuseSOL("select * from monster where min_level < " + control.getMaze().getLevel())) {
             while (!cursor.isAfterLast()) {
                 float meetRate = cursor.getFloat(cursor.getColumnIndex("meet_rate"));
                 Random random = control.getRandom();
@@ -255,9 +227,9 @@ public class DataManager {
                     monster.setAtk(monster.getAtk() + firstName.getAtkAddition(monster.getAtk()));
                     monster.setAtk(monster.getAtk() + secondName.getAtkAddition(monster.getAtk()));
                     if (control.getMaze().getLevel() < 5000) {
-                        monster.setMaxHP(control.getMaze().getLevel() * (monster.getMaxHP() + Data.MONSTER_HP_RISE_PRE_LEVEL)/2);
-                        monster.setAtk(control.getMaze().getLevel() * (monster.getAtk() + Data.MONSTER_ATK_RISE_PRE_LEVEL)/2);
-                        monster.setDef(control.getMaze().getLevel() * (monster.getDef() + Data.MONSTER_DEF_RISE_PRE_LEVEL)/2);
+                        monster.setMaxHP(control.getMaze().getLevel() * (monster.getMaxHP() + Data.MONSTER_HP_RISE_PRE_LEVEL) / 2);
+                        monster.setAtk(control.getMaze().getLevel() * (monster.getAtk() + Data.MONSTER_ATK_RISE_PRE_LEVEL) / 2);
+                        monster.setDef(control.getMaze().getLevel() * (monster.getDef() + Data.MONSTER_DEF_RISE_PRE_LEVEL) / 2);
                     } else {
                         monster.setMaxHP(control.getMaze().getLevel() * (monster.getMaxHP() + Data.MONSTER_HP_RISE_PRE_LEVEL));
                         monster.setAtk(control.getMaze().getLevel() * (monster.getAtk() + Data.MONSTER_ATK_RISE_PRE_LEVEL));
@@ -280,17 +252,15 @@ public class DataManager {
                 }
                 cursor.moveToNext();
             }
-        }catch (Exception e) {
-            cursor.close();
         }
         return null;
     }
 
-    public Pet loadPet(String id){
+    public Pet loadPet(String id) {
         return petLoader.load(id);
     }
 
-    public void savePet(Pet pet){
+    public void savePet(Pet pet) {
         ContentValues values = new ContentValues();
         values.put("hero_index", index);
         values.put("sex", pet.getSex());
@@ -301,14 +271,22 @@ public class DataManager {
         values.put("level", pet.getLevel());
         values.put("tag", pet.getTag());
         values.put("mounted", pet.isMounted());
-        if(StringUtils.isNotEmpty(pet.getId())){
+        if (StringUtils.isNotEmpty(pet.getId())) {
             petLoader.update(pet);
             database.updateById("pet", values, pet.getId());
-        }else{
+        } else {
             petLoader.save(pet);
             values.put("create", System.currentTimeMillis());
             values.put("id", pet.getId());
             database.insert("pet", values);
         }
+    }
+
+    private Maze newMaze() {
+        Maze maze = new Maze();
+        maze.setMaxLevel(1);
+        maze.setLevel(1);
+        maze.setMeetRate(99.9f);
+        return maze;
     }
 }
