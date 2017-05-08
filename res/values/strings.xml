@@ -39,4 +39,5 @@
     <string name="zz_desc">这种可以吃又可以玩的怪物，骚年不抓一只养养看吗？</string>
     <string name="pet_catch">成功捕获%1$s</string>
     <string name="pet_rate_effect">增加捕获概率：</string>
+    <string name="lost">%1$s被打败后掉回了第一层</string>
 </resources>

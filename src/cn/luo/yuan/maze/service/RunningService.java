@@ -116,6 +116,14 @@ public class RunningService implements Runnable {
                             for(LostListener lostListener : lostListeners.values()){
                                 lostListener.lost(hero, monster);
                             }
+                            if(hero.getHp() <= 0){
+                                infoControl.addMessage(String.format(infoControl.getContext().getString(R.string.lost), hero.getDisplayName()));
+                                hero.setHp(hero.getMaxHp());
+                                for(Pet pet : hero.getPets()){
+                                    pet.setHp(pet.getMaxHP());
+                                }
+                                maze.setLevel(1);
+                            }
                         }
                     }
                 }

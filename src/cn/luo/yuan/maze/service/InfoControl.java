@@ -8,6 +8,8 @@ import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.gift.Gift;
+import cn.luo.yuan.maze.model.goods.GoodsProperties;
+import cn.luo.yuan.maze.model.goods.GoodsType;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.utils.Random;
 
@@ -123,6 +125,12 @@ public class InfoControl {
         this.dataManager = dataManager;
         setHero(dataManager.loadHero());
         setMaze(dataManager.loadMaze());
+        GoodsProperties goodsProperties = new GoodsProperties(hero);
+        for(GoodsType type : GoodsType.values()){
+            if(type.getNeedLoad()){
+                dataManager.loadGoods(type).load(goodsProperties);
+            }
+        }
     }
 
     public GameActivity.ViewHandler getViewHandler() {

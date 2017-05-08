@@ -1,9 +1,11 @@
 package cn.luo.yuan.maze.model.goods
 
+import java.io.Serializable
+
 /**
  * Created by gluo on 5/5/2017.
  */
-interface Goods {
+interface Goods : Serializable {
     var count:Int;
     var desc : String
     var name : String
@@ -15,4 +17,5 @@ interface Goods {
             return false;
         }
     }
+    fun load(properties: GoodsProperties)
 }

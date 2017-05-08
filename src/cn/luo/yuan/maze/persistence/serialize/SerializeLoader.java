@@ -39,6 +39,10 @@ public class SerializeLoader<T extends Serializable> {
         return id;
     }
 
+    public void save(T object, String id){
+        db.save(object, id);
+    }
+
     public void delete(String id){
         db.delete(id);
     }

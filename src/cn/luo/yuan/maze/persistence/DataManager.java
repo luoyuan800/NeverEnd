@@ -10,6 +10,8 @@ import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.goods.Goods;
+import cn.luo.yuan.maze.model.goods.GoodsType;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
@@ -39,6 +41,7 @@ public class DataManager {
     private SerializeLoader<Maze> mazeLoader;
     private SerializeLoader<Hero> heroLoader;
     private SerializeLoader<Pet> petLoader;
+    private SerializeLoader<Goods> goodsLoader;
     private Sqlite database;
     private Context context;
 
@@ -50,6 +53,7 @@ public class DataManager {
         mazeLoader = new SerializeLoader<>(Maze.class, context);
         heroLoader = new SerializeLoader<>(Hero.class, context);
         petLoader = new SerializeLoader<>(Pet.class, context);
+        goodsLoader = new SerializeLoader<>(Goods.class, context);
         this.context = context;
     }
 
@@ -288,5 +292,13 @@ public class DataManager {
         maze.setLevel(1);
         maze.setMeetRate(99.9f);
         return maze;
+    }
+
+    public Goods loadGoods(GoodsType type){
+        return goodsLoader.load(type.name() + "@" + index);
+    }
+
+    public void saveGoods(Goods goods){
+        goodsLoader.save(goods, goods.getClass().getSimpleName() + "@" + index);
     }
 }
