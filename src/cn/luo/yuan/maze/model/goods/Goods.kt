@@ -9,6 +9,7 @@ interface Goods : Serializable {
     var count:Int;
     var desc : String
     var name : String
+    var price: Long
     fun use(properties: GoodsProperties): Boolean {
         if(count > 0) {
             count--;

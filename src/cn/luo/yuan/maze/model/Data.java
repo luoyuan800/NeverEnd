@@ -7,6 +7,7 @@ import cn.luo.yuan.maze.utils.Random;
  * Created by luoyuan on 2017/3/28.
  */
 public class Data {
+    public static final int MAX_SELL_COUNT = 30;//商店最大的商品数量
     public static float MONSTER_MEET_RATE = 99f;//遇怪的概率
     public static float PORTAL_RATE = 0.1f;//传送门的概率
     public static int LEVEL_BASE_POINT_REDUCE = 1000;//爬楼奖励的点数基数分母（random（level/reduce））

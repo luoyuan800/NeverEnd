@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<accessories>
+    <accessory>
+        <name value = ""/>
+        <description value=""/>
+        <color value=""/>
+        <author value=""/>
+        <properties>
+            <effect name="" min="" max=""/>
+        </properties>
+    </accessory>
+</accessories>
