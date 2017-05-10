@@ -20,6 +20,8 @@ public class Accessory implements Serializable, IDModel {
     private boolean mounted;
     private List<Effect> effects = new ArrayList<>(5);
     private String desc;
+    private String author;
+    private long price;
 
     public List<Effect> getEffects(){
         return effects;
@@ -96,5 +98,21 @@ public class Accessory implements Serializable, IDModel {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setPrice(long price) {
+        this.price = price;
+    }
+
+    public long getPrice() {
+        return price;
     }
 }

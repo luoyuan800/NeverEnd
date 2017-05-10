@@ -6,6 +6,7 @@
         <description value=""/>
         <color value=""/>
         <author value=""/>
+        <price value=""/>
         <properties>
             <effect name="" min="" max=""/>
         </properties>
