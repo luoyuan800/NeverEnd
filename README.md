@@ -2,7 +2,7 @@
 ## Game NeverEnd
 You can clone and modify the code. You should mark you changes in the code and pulic those codes. Every thing are under BSD licens. Unless you got my permission，you shouldn't use any code to earn profit even you modify it.
 
-在以非盈利为目、保留所有copyright声明的基础下，可以对源码进行任意的修改、删除和重新发布。但必须保证在未获得本人授权的情况下，修改后的项目也必须开源并且注明修改的部分。
+在以非盈利为目、保留所有copyright声明的基础下，可以对源码进行任意的修改、删除和重新发布。但必须保证在**未**获得本人授权的情况下，修改后的项目也必须开源并且注明修改的部分，同时禁止添加任何收费的内容。
 
 # Game Struct（项目介绍）
 # 数据模型
