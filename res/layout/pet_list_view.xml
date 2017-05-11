@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <ImageView
+            android:src="@drawable/angle_miao"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/pet_image"
+            android:scaleType="fitCenter"/>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+        <TextView
+                android:text="神奇的天使猫♀"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/pet_name"/>
+
+        <TextView
+                android:text="★★★★★★"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/pet_level"/>
+        <TextView
+                android:text="这是一个神奇的猫"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pet_tag"
+                />
+    </LinearLayout>
+</LinearLayout>

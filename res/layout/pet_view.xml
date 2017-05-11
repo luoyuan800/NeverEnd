@@ -22,6 +22,25 @@
                 android:id="@+id/pet_name"
                 android:text="神奇的宠物猫♀"/>
 
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:orientation="horizontal">
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:id="@+id/pet_level"
+                android:layout_weight="1"
+                android:text="★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★"
+                android:gravity="center_vertical"/>
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:text="@string/upgrade"/>
+        </LinearLayout>
+
         <ImageView
                 android:src="@drawable/angle_miao"
                 android:layout_width="match_parent"
@@ -92,15 +111,87 @@
                     android:layout_weight="1"/>
         </LinearLayout>
 
-        <ScrollView
+        <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
             <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:text="宠物介绍"/>
-        </ScrollView>
+                    android:text="主人"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pet_owner_labe"
+                    android:layout_weight="1"/>
+
+            <TextView
+                    android:text="某鸟"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pet_lowner"
+                    android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:text="母亲"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pet_mother_labe"
+                    android:layout_weight="1"/>
+
+            <TextView
+                    android:text="某鸟"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pet_mother"
+                    android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:text="父亲"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pet_farther_labe"
+                    android:layout_weight="1"/>
+
+            <TextView
+                    android:text="某鸟"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pet_farther"
+                    android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:text="备注"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pet_tag_labe"
+                    android:layout_weight="1"/>
+
+            <TextView
+                    android:text="某鸟"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pet_tag"
+                    android:layout_weight="1"/>
+        </LinearLayout>
+        <Button
+                android:layout_gravity="center_horizontal"
+                android:text="丢弃"
+                android:id="@+id/pet_drop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
     </LinearLayout>
 </LinearLayout>

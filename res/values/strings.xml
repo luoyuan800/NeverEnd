@@ -41,4 +41,5 @@
     <string name="pet_rate_effect">增加捕获概率：</string>
     <string name="lost">%1$s被打败后掉回了第一层</string>
     <string name="medallion">免死金牌</string>
+    <string name="upgrade">升级</string>
 </resources>

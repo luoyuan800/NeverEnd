@@ -161,4 +161,12 @@ public class StringUtils {
         return df.format(value);
 
     }
+
+    public static String formatStar(long level) {
+        StringBuilder builder = new StringBuilder();
+        for(long i = 0; i< level; i++){
+            builder.append("★");
+        }
+        return builder.toString();
+    }
 }
