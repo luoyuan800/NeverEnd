@@ -21,4 +21,14 @@ public class MeetRateEffect implements FloatValueEffect {
     public String toString(){
         return Resource.getString(R.string.meet_effect) + StringUtils.DecimalFormatRound(meetRate,2) + "%";
     }
+
+    @Override
+    public void setValue(float value) {
+        setMeetRate(value);
+    }
+
+    @Override
+    public float getValue() {
+        return getMeetRate();
+    }
 }

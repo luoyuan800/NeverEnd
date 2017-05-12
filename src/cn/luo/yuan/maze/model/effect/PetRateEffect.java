@@ -14,11 +14,21 @@ public class PetRateEffect implements FloatValueEffect {
         return meetRate;
     }
 
-    public void setMeetRate(float meetRate) {
+    public void setPetRate(float meetRate) {
         this.meetRate = meetRate;
     }
 
     public String toString(){
         return Resource.getString(R.string.pet_rate_effect) + StringUtils.DecimalFormatRound(meetRate,2) + "%";
+    }
+
+    @Override
+    public void setValue(float value) {
+        setPetRate(value);
+    }
+
+    @Override
+    public float getValue() {
+        return getPetRate();
     }
 }

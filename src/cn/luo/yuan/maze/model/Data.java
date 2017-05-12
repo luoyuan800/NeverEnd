@@ -24,6 +24,7 @@ public class Data {
     public static int SKILL_ENABLE_COST = 50;//激活技能消耗的能力点
     public static final String BLUE = "";
     public static final String RED = "red";
+    public static final int ACCESSORY_FLUSE_LIMIT = 15;
 
     /**
      * 计算击败一个怪物可以获得的锻造点

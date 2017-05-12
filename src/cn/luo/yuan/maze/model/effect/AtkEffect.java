@@ -22,4 +22,14 @@ public class AtkEffect implements LongValueEffect {
     public String toString(){
         return Resource.getString(R.string.atk_effect) + atk;
     }
+
+    @Override
+    public void setValue(long value) {
+        setAtk(value);
+    }
+
+    @Override
+    public long getValue() {
+        return getAtk();
+    }
 }

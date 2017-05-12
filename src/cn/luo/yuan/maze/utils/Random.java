@@ -47,4 +47,18 @@ public class Random extends java.util.Random {
             binary[i] = (byte)nextInt(2);
         }
     }
+
+
+    public long randomRange(long max, long min) {
+        if(max < min){
+            max = max ^ min;
+            min = max ^ min;
+            max = max ^ min;
+        }
+        return min + nextLong(max - min);
+    }
+
+    public float randomRange(float max, float min) {
+         return randomRange((long)max,(long)min);
+    }
 }

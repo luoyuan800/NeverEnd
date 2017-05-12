@@ -21,4 +21,14 @@ public class HpEffect implements LongValueEffect {
     public String toString(){
         return Resource.getString(R.string.hp_effect) + hp;
     }
+
+    @Override
+    public void setValue(long value) {
+        setHp(value);
+    }
+
+    @Override
+    public long getValue() {
+        return getHp();
+    }
 }

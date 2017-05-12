@@ -22,4 +22,14 @@ public class StrEffect implements LongValueEffect {
     public String toString(){
         return Resource.getString(R.string.str_effect) + str;
     }
+
+    @Override
+    public void setValue(long value) {
+        setStr(value);
+    }
+
+    @Override
+    public long getValue() {
+        return getStr();
+    }
 }

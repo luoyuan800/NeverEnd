@@ -21,4 +21,15 @@ public class AgiEffect implements LongValueEffect {
     public String toString(){
         return Resource.getString(R.string.agi_effect) + agi;
     }
+
+
+    @Override
+    public void setValue(long value) {
+        setAgi(value);
+    }
+
+    @Override
+    public long getValue() {
+        return getAgi();
+    }
 }

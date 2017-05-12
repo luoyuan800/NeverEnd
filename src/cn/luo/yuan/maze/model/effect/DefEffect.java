@@ -22,4 +22,14 @@ public class DefEffect implements LongValueEffect{
     public String toString(){
         return Resource.getString(R.string.def_effect) + def;
     }
+
+    @Override
+    public void setValue(long value) {
+        setDef(value);
+    }
+
+    @Override
+    public long getValue() {
+        return getDef();
+    }
 }
