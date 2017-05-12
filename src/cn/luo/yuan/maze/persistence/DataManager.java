@@ -14,6 +14,7 @@ import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.GoodsType;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
+import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
 import cn.luo.yuan.maze.service.InfoControl;
@@ -42,6 +43,7 @@ public class DataManager {
     private SerializeLoader<Hero> heroLoader;
     private SerializeLoader<Pet> petLoader;
     private SerializeLoader<Goods> goodsLoader;
+    private SerializeLoader<Skill> skillLoader;
     private Sqlite database;
     private Context context;
 
@@ -54,6 +56,7 @@ public class DataManager {
         heroLoader = new SerializeLoader<>(Hero.class, context);
         petLoader = new SerializeLoader<>(Pet.class, context);
         goodsLoader = new SerializeLoader<>(Goods.class, context);
+        skillLoader = new SerializeLoader<>(Skill.class, context);
         this.context = context;
     }
 
@@ -300,5 +303,17 @@ public class DataManager {
 
     public void saveGoods(Goods goods){
         goodsLoader.save(goods, goods.getClass().getSimpleName() + "@" + index);
+    }
+
+    public Skill loadSkill(String name){
+        return skillLoader.load(name + "@" + index);
+    }
+
+    public void saveSkill(Skill skill){
+        skillLoader.save(skill, skill.getClass().getSimpleName() + "@" + index);
+    }
+
+    public List<Skill> loadAllSkill(){
+        return skillLoader.loadAll();
     }
 }

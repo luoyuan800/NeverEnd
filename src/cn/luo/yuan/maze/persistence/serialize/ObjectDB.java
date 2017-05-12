@@ -2,10 +2,13 @@ package cn.luo.yuan.maze.persistence.serialize;
 
 import android.content.Context;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -43,6 +46,19 @@ public class ObjectDB<T> {
         T o = load(name);
         if (o != null) return o;
         return null;
+    }
+
+    public List<T> loadAll(){
+        List<T> list = new ArrayList<>();
+        for(String file : context.fileList()){
+            if(file.startsWith(type.getName() + "@")){
+                T object = load(file);
+                if(object!=null){
+                    list.add(object);
+                }
+            }
+        }
+        return list;
     }
 
     public synchronized void clear() {

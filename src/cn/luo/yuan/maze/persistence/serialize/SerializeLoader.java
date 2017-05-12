@@ -4,6 +4,8 @@ import android.content.Context;
 import cn.luo.yuan.maze.model.IDModel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by luoyuan on 2017/3/19.
@@ -45,5 +47,9 @@ public class SerializeLoader<T extends Serializable> {
 
     public void delete(String id){
         db.delete(id);
+    }
+
+    public List<T> loadAll(){
+        return loadAll();
     }
 }

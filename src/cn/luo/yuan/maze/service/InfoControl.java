@@ -10,6 +10,8 @@ import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.gift.Gift;
 import cn.luo.yuan.maze.model.goods.GoodsProperties;
 import cn.luo.yuan.maze.model.goods.GoodsType;
+import cn.luo.yuan.maze.model.skill.MountAble;
+import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.utils.Random;
 
@@ -66,15 +68,7 @@ public class InfoControl {
 
     void setHero(Hero hero) {
         this.hero = hero;
-        //Gift handle
-        Gift gift = Gift.getByName(hero.getGift());
-        if (gift != null) {
-            gift.handler(this);
-        }
-        //Accessory handle
-        for(Accessory accessory : dataManager.loadMountedAccessory(hero)){
-            mountAccessory(accessory);
-        }
+
         random = new Random(hero.getBirthDay());
     }
 
@@ -125,6 +119,23 @@ public class InfoControl {
         this.dataManager = dataManager;
         setHero(dataManager.loadHero());
         setMaze(dataManager.loadMaze());
+        //Gift handle
+        Gift gift = Gift.getByName(hero.getGift());
+        if (gift != null) {
+            gift.handler(this);
+        }
+        //Accessory handle
+        for(Accessory accessory : dataManager.loadMountedAccessory(hero)){
+            mountAccessory(accessory);
+        }
+
+        //Skill handle
+        for(Skill skill : dataManager.loadAllSkill()){
+            if(skill instanceof MountAble && ((MountAble) skill).isMounted()){
+                SkillHelper.mountSkill(skill, hero);
+            }
+        }
+        //Goods handle
         GoodsProperties goodsProperties = new GoodsProperties(hero);
         for(GoodsType type : GoodsType.values()){
             if(type.getNeedLoad()){
