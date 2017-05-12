@@ -23,24 +23,16 @@ public class EncodeLong implements Serializable {
         for(int i=0; i< chars.length; i++){
             byte b = Byte.parseByte(chars[i] + "");
             this.value[i] = (byte)(b ^ key[i]);
-            if(this.value[i] > 1){
-                LogHelper.logException(new Exception(""),false, "");
-            }
         }
 
     }
 
     public long getValue(){
-        try {
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < value.length; i++) {
                 builder.append(value[i] ^ key[i]);
             }
             return Long.parseLong(builder.toString(), 2);
-        }catch (Exception e){
-            LogHelper.logException(e, false, "");
-        }
-        return 0;
     }
 
     public static void main(String...args){

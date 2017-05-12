@@ -1,6 +1,13 @@
 package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.model.effect.*;
+import cn.luo.yuan.maze.model.effect.original.AgiEffect;
+import cn.luo.yuan.maze.model.effect.original.AtkEffect;
+import cn.luo.yuan.maze.model.effect.original.DefEffect;
+import cn.luo.yuan.maze.model.effect.original.HpEffect;
+import cn.luo.yuan.maze.model.effect.original.MeetRateEffect;
+import cn.luo.yuan.maze.model.effect.original.PetRateEffect;
+import cn.luo.yuan.maze.model.effect.original.StrEffect;
 
 import java.util.Collection;
 

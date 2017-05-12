@@ -1,13 +1,12 @@
-package cn.luo.yuan.maze.model.effect;
+package cn.luo.yuan.maze.model.effect.original;
 
-import cn.luo.yuan.maze.R;
-import cn.luo.yuan.maze.utils.Resource;
+import cn.luo.yuan.maze.model.effect.LongValueEffect;
 import cn.luo.yuan.maze.utils.Version;
 
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class DefEffect extends cn.luo.yuan.maze.model.effect.original.DefEffect {
+public class DefEffect implements LongValueEffect {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private long def;
 
@@ -19,17 +18,13 @@ public class DefEffect extends cn.luo.yuan.maze.model.effect.original.DefEffect 
         this.def = def;
     }
 
-    public String toString(){
-        return Resource.getString(R.string.def_effect) + def;
+    @Override
+    public long getValue() {
+        return getDef();
     }
 
     @Override
     public void setValue(long value) {
         setDef(value);
-    }
-
-    @Override
-    public long getValue() {
-        return getDef();
     }
 }

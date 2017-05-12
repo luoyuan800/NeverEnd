@@ -7,7 +7,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 /**
  * Created by luoyuan on 2017/3/19.
  */
-public class MeetRateEffect implements FloatValueEffect {
+public class MeetRateEffect extends cn.luo.yuan.maze.model.effect.original.MeetRateEffect {
     private float meetRate;
 
     public float getMeetRate() {

@@ -1,14 +1,9 @@
 package cn.luo.yuan.maze.model;
 
-import android.graphics.drawable.Drawable;
-import cn.luo.yuan.maze.utils.Resource;
-
-import java.util.List;
-
 /**
  * Created by gluo on 4/1/2017.
  */
-public class Monster implements HarmAble{
+public class Monster implements HarmAble {
     private String firstName;
     private String secondName;
     private String type;
@@ -140,7 +135,7 @@ public class Monster implements HarmAble{
         this.def = def;
     }
 
-    public String getDisplayName(){
+    public String getDisplayName() {
         return "<font color='" + color + "'>" + firstName + "的" + secondName + type + "(" + element.getCn() + ")" + (sex == 0 ? "♂" : "♀") + "</font>";
     }
 

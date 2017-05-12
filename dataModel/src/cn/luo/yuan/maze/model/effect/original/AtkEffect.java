@@ -1,13 +1,12 @@
-package cn.luo.yuan.maze.model.effect;
+package cn.luo.yuan.maze.model.effect.original;
 
-import cn.luo.yuan.maze.R;
-import cn.luo.yuan.maze.utils.Resource;
+import cn.luo.yuan.maze.model.effect.LongValueEffect;
 import cn.luo.yuan.maze.utils.Version;
 
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class AtkEffect extends cn.luo.yuan.maze.model.effect.original.AtkEffect {
+public class AtkEffect implements LongValueEffect {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private long atk;
 
@@ -19,17 +18,13 @@ public class AtkEffect extends cn.luo.yuan.maze.model.effect.original.AtkEffect 
         this.atk = atk;
     }
 
-    public String toString(){
-        return Resource.getString(R.string.atk_effect) + atk;
+    @Override
+    public long getValue() {
+        return getAtk();
     }
 
     @Override
     public void setValue(long value) {
         setAtk(value);
-    }
-
-    @Override
-    public long getValue() {
-        return getAtk();
     }
 }

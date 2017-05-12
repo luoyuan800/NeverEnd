@@ -6,17 +6,17 @@ import cn.luo.yuan.maze.model.Hero
 import cn.luo.yuan.maze.model.goods.Goods
 import cn.luo.yuan.maze.model.goods.GoodsProperties
 import cn.luo.yuan.maze.service.ListenerService
-import cn.luo.yuan.maze.utils.Version
 
 /**
  * Created by gluo on 5/5/2017.
  */
 class Medallion : Goods {
+
     override fun load(properties: GoodsProperties) {
         ListenerService.registerListener(MedallionListener)
     }
-
-    private val serialVersionUID = Version.SERVER_VERSION!!
+    private val serialVersionUID = 1L
+    override var price = 100000L
     override var desc = ""
     override var count = 0
     set(count) {

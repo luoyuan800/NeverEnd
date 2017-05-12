@@ -7,7 +7,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 /**
  * Created by luoyuan on 2017/3/19.
  */
-public class PetRateEffect implements FloatValueEffect {
+public class PetRateEffect extends cn.luo.yuan.maze.model.effect.original.PetRateEffect {
     private float meetRate;
 
     public float getPetRate() {

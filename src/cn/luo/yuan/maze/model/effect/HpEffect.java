@@ -7,7 +7,7 @@ import cn.luo.yuan.maze.utils.Version;
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class HpEffect implements LongValueEffect {
+public class HpEffect extends cn.luo.yuan.maze.model.effect.original.HpEffect {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private long hp;
 

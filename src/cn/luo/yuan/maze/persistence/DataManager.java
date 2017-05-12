@@ -35,7 +35,7 @@ import java.util.List;
  * 用户选择了对应的存档编号后，使用对应的编号创建DataManager
  * 所以的相关数据在存入数据库的时候需要带上存档编号信息
  */
-public class DataManager {
+public class DataManager implements DataManagerInterface {
     //多存档，所以需要一个index来区分当前使用的是哪一个存档
     private int index;
     private SerializeLoader<Accessory> accessoryLoader;

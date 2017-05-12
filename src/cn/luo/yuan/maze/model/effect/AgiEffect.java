@@ -7,7 +7,7 @@ import cn.luo.yuan.maze.utils.Version;
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class AgiEffect implements LongValueEffect {
+public class AgiEffect extends cn.luo.yuan.maze.model.effect.original.AgiEffect {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private long agi;
 

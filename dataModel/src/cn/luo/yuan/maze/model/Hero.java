@@ -1,22 +1,15 @@
 package cn.luo.yuan.maze.model;
 
-import android.util.ArraySet;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.service.EffectHandler;
 import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Version;
-import cn.luo.yuan.maze.utils.annotation.LongValue;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Iterator;
-
-import static cn.luo.yuan.maze.service.EffectHandler.AGI;
-import static cn.luo.yuan.maze.service.EffectHandler.ATK;
-import static cn.luo.yuan.maze.service.EffectHandler.DEF;
-import static cn.luo.yuan.maze.service.EffectHandler.HP;
-import static cn.luo.yuan.maze.service.EffectHandler.STR;
-import static cn.luo.yuan.maze.service.EffectHandler.getEffectAdditionLongValue;
 
 /**
  * Created by luoyuan on 2017/3/18.
@@ -25,31 +18,22 @@ public class Hero implements Serializable, IDModel, HarmAble {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private int index;//存档编号
     private String name;//名字
-    @LongValue
     private EncodeLong maxHp = new EncodeLong(0);//血上限
-    @LongValue
     private EncodeLong hp = new EncodeLong(0);//当前血量
-    @LongValue
     private EncodeLong atk = new EncodeLong(0);//基础攻击
-    @LongValue
     private EncodeLong def = new EncodeLong(0);//基础防御
-    @LongValue
     private EncodeLong agi = new EncodeLong(0);//敏捷
-    @LongValue
     private EncodeLong str = new EncodeLong(0);//力量
-    @LongValue
     private EncodeLong hpGrow = new EncodeLong(0);//血量成长（每点力量）
-    @LongValue
     private EncodeLong defGrow = new EncodeLong(0);//防御成长（每点敏捷）
-    @LongValue
     private EncodeLong atkGrow = new EncodeLong(0);//攻击成长（每点力量）
     private long birthDay;//生日
     private EncodeLong reincarnate = new EncodeLong(0);//转生次数
     private EncodeLong material = new EncodeLong(0);//锻造点（货币）
-    transient private ArraySet<Effect> effects = new ArraySet<>(3);//附加的效果
-    transient private ArraySet<Accessory> accessories = new ArraySet<>(3);//装备
+    transient private HashSet<Effect> effects = new HashSet<>(3);//附加的效果
+    transient private HashSet<Accessory> accessories = new HashSet<>(3);//装备
     transient private Skill[] skills = {EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL};//装备
-    transient private ArraySet<Pet> pets = new ArraySet<>(3);
+    transient private HashSet<Pet> pets = new HashSet<>(3);
     private Element element;//五行元素
     private String id;
     private EncodeLong point = new EncodeLong(0);
@@ -60,10 +44,10 @@ public class Hero implements Serializable, IDModel, HarmAble {
     public Hero() {
     }
 
-    public ArraySet<Accessory> getAccessories() {
+    public HashSet<Accessory> getAccessories() {
         synchronized (this) {
             if (accessories == null) {
-                accessories = new ArraySet<>(5);
+                accessories = new HashSet<>(5);
             }
         }
         return accessories;
@@ -143,7 +127,7 @@ public class Hero implements Serializable, IDModel, HarmAble {
 
 
     public long getCurrentHp() {
-        return this.hp.getValue() + getEffectAdditionLongValue(HP, getEffects()) + getEffectAdditionLongValue(STR, getEffects()) * getHpGrow();
+        return this.hp.getValue() + EffectHandler.getEffectAdditionLongValue(EffectHandler.HP, getEffects()) + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects()) * getHpGrow();
     }
 
     public long getHp() {
@@ -171,25 +155,25 @@ public class Hero implements Serializable, IDModel, HarmAble {
         this.def.setValue(def);
     }
 
-    public ArraySet<Effect> getEffects() {
+    public HashSet<Effect> getEffects() {
         synchronized (this) {
             if (effects == null) {
-                effects = new ArraySet<>(3);
+                effects = new HashSet<>(3);
             }
         }
         return effects;
     }
 
     public long getUpperHp() {
-        return getMaxHp() + getEffectAdditionLongValue(HP, getEffects()) + getEffectAdditionLongValue(STR, getEffects()) * getHpGrow();
+        return getMaxHp() + EffectHandler.getEffectAdditionLongValue(EffectHandler.HP, getEffects()) + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects()) * getHpGrow();
     }
 
     public long getUpperAtk() {
-        return getAtk() + getEffectAdditionLongValue(ATK, getEffects()) + getEffectAdditionLongValue(STR, getEffects()) * getAtkGrow();
+        return getAtk() + EffectHandler.getEffectAdditionLongValue(EffectHandler.ATK, getEffects()) + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects()) * getAtkGrow();
     }
 
     public long getUpperDef() {
-        return getDef() + getEffectAdditionLongValue(DEF, getEffects()) + getEffectAdditionLongValue(AGI, getEffects()) * getDefGrow();
+        return getDef() + EffectHandler.getEffectAdditionLongValue(EffectHandler.DEF, getEffects()) + EffectHandler.getEffectAdditionLongValue(EffectHandler.AGI, getEffects()) * getDefGrow();
     }
 
     /**
@@ -287,17 +271,17 @@ public class Hero implements Serializable, IDModel, HarmAble {
         this.click.setValue(click);
     }
 
-    public ArraySet<Pet> getPets() {
+    public HashSet<Pet> getPets() {
         if (pets == null) {
             synchronized (this) {
                 if (pets == null)
-                    pets = new ArraySet<>(3);
+                    pets = new HashSet<>(3);
             }
         }
         return pets;
     }
 
-    public void setPets(ArraySet<Pet> pets) {
+    public void setPets(HashSet<Pet> pets) {
         this.pets = pets;
     }
 

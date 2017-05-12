@@ -15,7 +15,6 @@ import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.utils.Random;
 
-import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -23,7 +22,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by luoyuan on 2017/3/28.
  */
-public class InfoControl {
+public class InfoControl implements InfoControlInterface {
+    private RunningService runningService;
     private RollTextView textView;
     private Context context;
     private Hero hero;
@@ -31,7 +31,6 @@ public class InfoControl {
     private DataManager dataManager;
     private GameActivity.ViewHandler viewHandler;
     private Random random;
-    RunningService runningService;
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 
     public InfoControl(Context context) {
@@ -42,7 +41,7 @@ public class InfoControl {
         textView.addMessage(msg);
     }
 
-    public boolean pauseGame(){
+    public boolean pauseGame() {
         return runningService.pause();
     }
 
@@ -51,11 +50,11 @@ public class InfoControl {
         viewHandler.refreshAccessory(hero);
         viewHandler.refreshSkill(hero);
         runningService = new RunningService(hero, maze, this, dataManager, Data.REFRESH_SPEED);
-        executor.scheduleAtFixedRate(runningService,0, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(runningService, 0, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                if(!runningService.getPause())
+                if (!runningService.getPause())
                     viewHandler.refreshFreqProperties();
             }
         }, 0, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
@@ -82,7 +81,7 @@ public class InfoControl {
         for (Accessory accessory : hero.getAccessories()) {
             dataManager.saveAccessory(accessory);
         }
-        if(gift!=null) {
+        if (gift != null) {
             gift.handler(this);
         }
     }
@@ -125,20 +124,20 @@ public class InfoControl {
             gift.handler(this);
         }
         //Accessory handle
-        for(Accessory accessory : dataManager.loadMountedAccessory(hero)){
+        for (Accessory accessory : dataManager.loadMountedAccessory(hero)) {
             mountAccessory(accessory);
         }
 
         //Skill handle
-        for(Skill skill : dataManager.loadAllSkill()){
-            if(skill instanceof MountAble && ((MountAble) skill).isMounted()){
+        for (Skill skill : dataManager.loadAllSkill()) {
+            if (skill instanceof MountAble && ((MountAble) skill).isMounted()) {
                 SkillHelper.mountSkill(skill, hero);
             }
         }
         //Goods handle
         GoodsProperties goodsProperties = new GoodsProperties(hero);
-        for(GoodsType type : GoodsType.values()){
-            if(type.getNeedLoad()){
+        for (GoodsType type : GoodsType.values()) {
+            if (type.getNeedLoad()) {
                 dataManager.loadGoods(type).load(goodsProperties);
             }
         }
@@ -152,9 +151,9 @@ public class InfoControl {
         this.viewHandler = viewHandler;
     }
 
-    public void mountAccessory(Accessory accessory){
+    public void mountAccessory(Accessory accessory) {
         Accessory uMount = hero.mountAccessory(accessory);
-        if(uMount!=null){
+        if (uMount != null) {
             uMount.setMounted(false);
             dataManager.saveAccessory(uMount);
         }
@@ -162,7 +161,7 @@ public class InfoControl {
         dataManager.saveAccessory(accessory);
     }
 
-    public Object getCurrentBattleTarget(){
+    public Object getCurrentBattleTarget() {
         return runningService.getMonster();
     }
 }

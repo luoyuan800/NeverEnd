@@ -1,10 +1,5 @@
 package cn.luo.yuan.maze.utils;
 
-import android.content.Context;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
@@ -13,18 +8,18 @@ import java.text.DecimalFormat;
  * Use for handle string input type
  */
 public class StringUtils {
-    public static String formatNumber(long num){
+    public static String formatNumber(long num) {
         Double value;
-        if(num > 100000000){
-            value = num/100000000d;
+        if (num > 100000000) {
+            value = num / 100000000d;
             return String.format("%.1f", value) + "亿";
         }
-        if(num > 10000000){
-            value = num/10000000d;
+        if (num > 10000000) {
+            value = num / 10000000d;
             return String.format("%.1f", value) + "千万";
         }
-        if(num > 10000){
-            value = num/10000d;
+        if (num > 10000) {
+            value = num / 10000d;
             return String.format("%.1f", value) + "万";
         }
         return num + "";
@@ -64,81 +59,58 @@ public class StringUtils {
     }
 
     public static boolean isNotEmpty(String countStr) {
-        return countStr !=null && !countStr.trim().isEmpty() && !"null".equalsIgnoreCase(countStr);
+        return countStr != null && !countStr.trim().isEmpty() && !"null".equalsIgnoreCase(countStr);
     }
 
-    public static String[] split(String str,String regularExpression){
-        if(isNotEmpty(str)){
+    public static String[] split(String str, String regularExpression) {
+        if (isNotEmpty(str)) {
             return str.split(regularExpression);
-        }else{
+        } else {
             return new String[]{""};
         }
     }
 
-    public static Long toLong(String number){
+    public static Long toLong(String number) {
         try {
-            number = number.replaceFirst("~","-");
+            number = number.replaceFirst("~", "-");
             return Long.parseLong(number);
-        }catch (Exception e){
+        } catch (Exception e) {
             try {
                 return Double.valueOf(number).longValue();
-            }catch (Exception e1){
+            } catch (Exception e1) {
                 return 1l;
             }
         }
     }
 
-    public static Float toFloat(String number){
+    public static Float toFloat(String number) {
         try {
             return Float.parseFloat(number);
-        }catch (Exception e){
+        } catch (Exception e) {
             try {
                 return Double.valueOf(number).floatValue();
-            }catch (Exception e1){
+            } catch (Exception e1) {
                 return 0.1f;
             }
         }
     }
 
-    public static void main(String...args){
+    public static void main(String... args) {
         System.out.print(toStringHex("0x6c81739f"));
     }
 
     public static Integer toInt(String type) {
         try {
             return Integer.parseInt(type);
-        }catch (Exception e){
+        } catch (Exception e) {
             try {
                 return Double.valueOf(type).intValue();
-            }catch (Exception exp){
+            } catch (Exception exp) {
                 return 1;
             }
         }
     }
 
-    public static String readHelp(String name, Context context){
-        StringBuilder controlHelp = new StringBuilder();
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(context.getAssets().open(name)));
-            String line = reader.readLine();
-            while(StringUtils.isNotEmpty(line)){
-                controlHelp.append(line);
-                line = reader.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            if(reader!=null){
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return controlHelp.toString();
-    }
 
     /**
      * 使用DecimalFormat，保留小数点后n位数
@@ -164,7 +136,7 @@ public class StringUtils {
 
     public static String formatStar(long level) {
         StringBuilder builder = new StringBuilder();
-        for(long i = 0; i< level; i++){
+        for (long i = 0; i < level; i++) {
             builder.append("★");
         }
         return builder.toString();

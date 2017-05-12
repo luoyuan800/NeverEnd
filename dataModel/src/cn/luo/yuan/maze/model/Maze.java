@@ -2,7 +2,6 @@ package cn.luo.yuan.maze.model;
 
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.utils.EncodeLong;
-import cn.luo.yuan.maze.utils.Version;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -15,7 +14,7 @@ import static cn.luo.yuan.maze.service.EffectHandler.getEffectAdditionFloatValue
  * Created by luoyuan on 2017/3/19.
  */
 public class Maze implements IDModel, Serializable {
-    private static final long serialVersionUID = Version.SERVER_VERSION;
+    private static final long serialVersionUID = 1L;
     private String id;
     private EncodeLong maxLevel = new EncodeLong(1);
     private EncodeLong level = new EncodeLong(1);

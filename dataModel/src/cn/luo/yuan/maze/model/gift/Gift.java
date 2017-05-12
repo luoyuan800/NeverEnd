@@ -1,6 +1,6 @@
 package cn.luo.yuan.maze.model.gift;
 
-import cn.luo.yuan.maze.service.InfoControl;
+import cn.luo.yuan.maze.service.InfoControlInterface;
 
 /**
  * Copyright 2015 luoyuan.
@@ -11,8 +11,8 @@ public enum Gift {
     HeroHeart("勇敢的心", "一根筋的热血埋藏在你的心中，这个天赋会提升攻击成长", 0, HeroHeart.class),
     DarkHeard("暗黑之心", "天生的黑暗心灵，连恒河水都洗不干净。这个天赋会提升防御成长", 0, null),
     Warrior("战士", "勇敢向前绝对不会害怕，放弃技能注重身体属性成长！你最多只能使用三个技能，但是hp、攻击、防御成长翻倍（一转后才可以选择）。", 1, null),
-    Searcher("守财奴", "就算死，也要守护自己的财产！囤积锻造点数也不会招引强力的怪物（一转后才可以选择）。",0,null),
-    Long("龙裔", "声称自己是龙的传人，但是却因为脸黑没有人相信你。默认激活龙裔技能，并且会变得脸黑。", 0,null),
+    Searcher("守财奴", "就算死，也要守护自己的财产！囤积锻造点数也不会招引强力的怪物（一转后才可以选择）。", 0, null),
+    Long("龙裔", "声称自己是龙的传人，但是却因为脸黑没有人相信你。默认激活龙裔技能，并且会变得脸黑。", 0, null),
     Element("元素之心", "据说从一出生的时候就体内就被植入了奇怪的东西从而可以操纵元素能量。可以在不满足条件的情况下激活元素使职业。", 0, null),
     Pokemon("神奇宝贝", "Pokemon Monster的忠实玩家，以至于产生了这个奇怪的天赋。宠物捕获率提高%5。", 0, null),
     FireBody("火焰身躯", "这不是一个攻击或者防御加成的技能，绝对不会伤害触摸到你身体的人，只能够增加120的宠物的生蛋率（这个不是百分比）。", 0, null),
@@ -31,14 +31,24 @@ public enum Gift {
     private int recount;
     private Class<? extends GiftHandler> handlerType;
 
-    public String toString(){
-        return name;
-    }
     private Gift(String name, String desc, int recount, Class<? extends GiftHandler> clazz) {
         this.name = name;
         this.desc = desc;
         this.recount = recount;
         this.handlerType = clazz;
+    }
+
+    public static Gift getByName(String name) {
+        for (Gift gift : values()) {
+            if (gift.name.equals(name)) {
+                return gift;
+            }
+        }
+        return null;
+    }
+
+    public String toString() {
+        return name;
     }
 
     public String getName() {
@@ -53,7 +63,7 @@ public enum Gift {
         return recount;
     }
 
-    public void handler(InfoControl control){
+    public void handler(InfoControlInterface control) {
         try {
             GiftHandler handler = handlerType.newInstance();
             handler.handler(control);
@@ -62,22 +72,13 @@ public enum Gift {
         }
     }
 
-    public void unHandler(InfoControl control){
-        try{
+    public void unHandler(InfoControlInterface control) {
+        try {
             GiftHandler handler = handlerType.newInstance();
             handler.unHandler(control);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static Gift getByName(String name){
-        for(Gift gift : values()){
-            if(gift.name.equals(name)){
-                return gift;
-            }
-        }
-        return null;
     }
 
 }
