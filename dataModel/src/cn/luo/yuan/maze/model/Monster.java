@@ -14,6 +14,7 @@ public class Monster implements HarmAble {
     private float hitRate = 100.0f;
     private Element element;
     private float silent;
+    private float eggRate = 0;
     private float petRate = 0;
     private int index;
     private long def;
@@ -127,6 +128,10 @@ public class Monster implements HarmAble {
         this.race = Race.getByIndex(race);
     }
 
+    public void setRace(Race race){
+        this.race = race;
+    }
+
     public long getDef() {
         return def;
     }
@@ -155,4 +160,11 @@ public class Monster implements HarmAble {
         this.sex = sex;
     }
 
+    public float getEggRate() {
+        return eggRate;
+    }
+
+    public void setEggRate(float eggRate) {
+        this.eggRate = eggRate;
+    }
 }

@@ -68,7 +68,6 @@ public class Sqlite {
             createAccessoryTable(db);
             createKeyTable(db);
             createMazeTable(db);
-            createMonsterTable(db);
             createPetTable(db);
             db.setTransactionSuccessful();
             db.endTransaction();
@@ -121,32 +120,6 @@ public class Sqlite {
                 "level INTEGER," +
                 "max_level INTEGER," +
                 "hero_index INTEGER NOT NULL" +
-                ")");
-    }
-
-    private void createMonsterTable(SQLiteDatabase db) {
-        db.execSQL("create table monster(" +
-                "id TEXT NOT NULL PRIMARY KEY," +
-                "type TEXT," +
-                "min_level INTEGER," +
-                "atk INTEGER," +
-                "def INTEGER," +
-                "hp INTEGER," +
-                "hit FLOAT," +
-                "silent FLOAT," +
-                "meet_rate FLOAT," +
-                "egg_rate FLOAT," +
-                "pet_rate FLOAT," +
-                "sex INTEGER DEFAULT -1," +
-                "race INTEGER" +
-                ")");
-        MonsterDB.initMonsterDB(db, context);
-        db.execSQL("create table monster_book(" +
-                "id TEXT NOT NULL PRIMARY KEY," +
-                "meet_level INTEGER," +
-                "catch_level INTEGER," +
-                "win INTEGER," +
-                "lost INTEGER" +
                 ")");
     }
 

@@ -54,6 +54,7 @@ public class RunningService implements Runnable {
     }
     @Override
     public void run() {
+        MonsterHelper monsterHelper = new MonsterHelper(infoControl);
         startTime = System.currentTimeMillis();
         if (running){
             try {
@@ -93,7 +94,7 @@ public class RunningService implements Runnable {
                         infoControl.save();
                     }
                 }else{
-                    Monster monster = dataManager.buildRandomMonster(infoControl);
+                    Monster monster = monsterHelper.randomMonster();
                     if(monster!=null){
                         BattleService battleService = new BattleService(infoControl, monster);
                         if(battleService.battle()){

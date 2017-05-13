@@ -71,7 +71,7 @@ public class AccessoryHelper {
 
     public List<Accessory> loadFromAssets() {
         List<Accessory> accessories = new ArrayList<>();
-        try (XmlResourceParser parser = context.getAssets().openXmlResourceParser("accessory")) {
+        try (XmlResourceParser parser = context.getAssets().openXmlResourceParser("./accessory/accessories.xml")) {
             Accessory accessory = null;
             List<Effect> effects = null;
             while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
