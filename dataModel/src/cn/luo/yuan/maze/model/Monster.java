@@ -24,6 +24,7 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
     private String color;
     private int sex;
     private Race race;
+    private Skill skill;
 
 
     public String getFirstName() {
@@ -177,6 +178,6 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
 
     @Override
     public Skill[] getSkills() {
-        return new Skill[0];
+        return new Skill[]{skill};
     }
 }

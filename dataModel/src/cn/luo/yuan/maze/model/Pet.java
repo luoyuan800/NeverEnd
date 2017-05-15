@@ -17,6 +17,9 @@ public class Pet extends Monster implements IDModel, Serializable {
     private EncodeLong intimacy = new EncodeLong(0);
     private String ownerId;
     private String ownerName;
+    private String mother;
+    private String farther;
+
     @Override
     public String getId() {
         return id;
@@ -74,5 +77,21 @@ public class Pet extends Monster implements IDModel, Serializable {
 
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
+    }
+
+    public String getMother() {
+        return mother;
+    }
+
+    public void setMother(String mother) {
+        this.mother = mother;
+    }
+
+    public String getFarther() {
+        return farther;
+    }
+
+    public void setFarther(String farther) {
+        this.farther = farther;
     }
 }

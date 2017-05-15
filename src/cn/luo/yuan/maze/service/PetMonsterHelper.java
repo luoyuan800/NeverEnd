@@ -2,7 +2,9 @@ package cn.luo.yuan.maze.service;
 
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
+import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Monster;
+import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -14,11 +16,25 @@ import java.io.IOException;
 /**
  * Created by luoyuan on 2017/5/13.
  */
-public class MonsterHelper {
+public class PetMonsterHelper {
     private InfoControl control;
 
-    public MonsterHelper(InfoControl control) {
+    public PetMonsterHelper(InfoControl control) {
         this.control = control;
+    }
+
+    public static Drawable loadMonsterImage(int id) {
+        Drawable drawable = Resource.loadImageFromAssets("monster/" + id);
+        if (drawable == null) {
+            drawable = Resource.loadImageFromAssets("monster/" + id + ".jpg");
+        }
+        if (drawable == null) {
+            drawable = Resource.loadImageFromAssets("monster/" + id + ".png");
+        }
+        if (drawable == null) {
+            drawable = Resource.loadImageFromAssets("monster/wenhao.jpg");
+        }
+        return drawable;
     }
 
     public Monster randomMonster() {
@@ -123,24 +139,24 @@ public class MonsterHelper {
         try (XmlResourceParser parser = control.getContext().getAssets().openXmlResourceParser("./monster/monsters.xml")) {
             int monsterIndex = -1;
             String name = null;
-            while (parser.getEventType()!= XmlResourceParser.END_DOCUMENT){
-                if(parser.getEventType()==XmlResourceParser.START_TAG){
-                    switch (parser.getName()){
+            while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
+                if (parser.getEventType() == XmlResourceParser.START_TAG) {
+                    switch (parser.getName()) {
                         case "name":
-                            if(parser.getText().equals(type)){
+                            if (parser.getText().equals(type)) {
                                 name = parser.getText();
                             }
                             break;
                         case "index":
-                            if(Integer.parseInt(parser.getText()) == index){
+                            if (Integer.parseInt(parser.getText()) == index) {
                                 monsterIndex = Integer.parseInt(parser.getText());
                             }
                             break;
                         case "desc":
-                            if(name!=null && name.equals(type)){
+                            if (name != null && name.equals(type)) {
                                 return parser.getText();
                             }
-                            if(monsterIndex > 0 && monsterIndex == index){
+                            if (monsterIndex > 0 && monsterIndex == index) {
                                 return parser.getText();
                             }
                             nextMonsterTag(parser);
@@ -170,17 +186,14 @@ public class MonsterHelper {
 
     }
 
-    public static Drawable loadMonsterImage(int id){
-        Drawable drawable = Resource.loadImageFromAssets("monster/" + id);
-        if(drawable == null){
-            drawable = Resource.loadImageFromAssets("monster/" + id + ".jpg");
+    public boolean upgrade(Pet major, Pet minor){
+        if(control.getRandom().nextLong(major.getLevel()) < Data.PET_UPGRADE_LIMIT + control.getRandom().nextLong(minor.getLevel())){
+            major.setLevel(major.getLevel() + 1);
+            major.setAtk(major.getAtk() + control.getRandom().nextLong(minor.getAtk()/minor.getLevel()));
+            major.setDef(major.getDef() + control.getRandom().nextLong(minor.getDef()/minor.getLevel()));
+            major.setMaxHP(major.getMaxHP() + control.getRandom().nextLong(minor.getMaxHP()/minor.getLevel()));
+            return true;
         }
-        if(drawable == null){
-            drawable = Resource.loadImageFromAssets("monster/" + id + ".png");
-        }
-        if(drawable == null){
-            drawable = Resource.loadImageFromAssets("monster/wenhao.jpg");
-        }
-        return drawable;
+        return false;
     }
 }

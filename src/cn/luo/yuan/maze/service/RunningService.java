@@ -54,7 +54,7 @@ public class RunningService implements Runnable {
     }
     @Override
     public void run() {
-        MonsterHelper monsterHelper = new MonsterHelper(infoControl);
+        PetMonsterHelper monsterHelper = new PetMonsterHelper(infoControl);
         startTime = System.currentTimeMillis();
         if (running){
             try {

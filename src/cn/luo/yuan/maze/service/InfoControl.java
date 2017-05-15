@@ -49,6 +49,7 @@ public class InfoControl implements InfoControlInterface {
         viewHandler.refreshProperties(hero);
         viewHandler.refreshAccessory(hero);
         viewHandler.refreshSkill(hero);
+        viewHandler.refreshPets(hero);
         runningService = new RunningService(hero, maze, this, dataManager, Data.REFRESH_SPEED);
         executor.scheduleAtFixedRate(runningService, 0, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(new Runnable() {

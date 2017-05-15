@@ -17,6 +17,7 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -25,10 +26,11 @@ import cn.luo.yuan.maze.display.view.RollTextView;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Monster;
+import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.service.InfoControl;
 import cn.luo.yuan.maze.service.ListenerService;
-import cn.luo.yuan.maze.service.MonsterHelper;
+import cn.luo.yuan.maze.service.PetMonsterHelper;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -99,7 +101,7 @@ public class GameActivity extends Activity {
 
         public void refreshHeadImage(Hero hero, Object target){
             if(target instanceof Monster) {
-                ((ImageView) findViewById(R.id.monster_pic)).setImageDrawable(MonsterHelper.loadMonsterImage(((Monster) target).getIndex()));
+                ((ImageView) findViewById(R.id.monster_pic)).setImageDrawable(PetMonsterHelper.loadMonsterImage(((Monster) target).getIndex()));
             }else{
                 //?
             }
@@ -192,6 +194,36 @@ public class GameActivity extends Activity {
         }
 
         public void refreshSkill(final Hero hero) {
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    Skill[] heroSkills = hero.getSkills();
+                    if(heroSkills.length > 0) {
+                        ((TextView) findViewById(R.id.first_skill)).setText(Html.fromHtml(heroSkills[0].getDisplayName()));
+                    }
+                    if(heroSkills.length > 1) {
+                        ((TextView) findViewById(R.id.secondary_skill)).setText(Html.fromHtml(heroSkills[1].getDisplayName()));
+                    }
+                    if(heroSkills.length > 2) {
+                        ((TextView) findViewById(R.id.third_skill)).setText(Html.fromHtml(heroSkills[2].getDisplayName()));
+                    }
+                    if(heroSkills.length > 3) {
+                        ((TextView) findViewById(R.id.fourth_skill)).setText(Html.fromHtml(heroSkills[3].getDisplayName()));
+                    }
+                    if(heroSkills.length > 4) {
+                        ((TextView) findViewById(R.id.fifit_skill)).setText(Html.fromHtml(heroSkills[4].getDisplayName()));
+                    }
+                    if(heroSkills.length > 5) {
+                        ((TextView) findViewById(R.id.sixth_skill)).setText(Html.fromHtml(heroSkills[5].getDisplayName()));
+                    }
+
+
+                }
+            });
+        }
+
+        public void refreshPets(final Hero hero){
+            LinearLayout petRoot = (LinearLayout) findViewById(R.id.pet_root);
 
         }
 
@@ -223,6 +255,7 @@ public class GameActivity extends Activity {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
             switch (item.getItemId()) {
+
                 case R.id.pause:
                     boolean pause = control.pauseGame();
                     item.setTitle(pause ? "继续" : "暂停");

@@ -8,21 +8,38 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.display.view.LoadMoreListView;
 import cn.luo.yuan.maze.model.Pet;
-import cn.luo.yuan.maze.service.MonsterHelper;
-import cn.luo.yuan.maze.utils.Resource;
+import cn.luo.yuan.maze.model.Race;
+import cn.luo.yuan.maze.persistence.DataManager;
+import cn.luo.yuan.maze.service.PetMonsterHelper;
 import cn.luo.yuan.maze.utils.StringUtils;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  * Created by luoyuan on 2017/5/11.
  */
-public class PetAdapter extends BaseAdapter {
+public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefreshLoadingMoreListener {
     private List<Pet> pets;
+    private DataManager dataManager;
     private Context context;
-    public PetAdapter(List<Pet> pets){
-        this.pets = pets;
+    private boolean sortOderRevert;
+    private String limitKeyWord;
+    private Race limitRace;
+    public PetAdapter(Context context, DataManager dataManager, String limitKeyWord, Race limitRace){
+        this.context = context;
+        this.dataManager = dataManager;
+        this.limitKeyWord = limitKeyWord;
+        this.limitRace = limitRace;
+        loadPetsData();
+    }
+
+    private  void loadPetsData(){
+        pets = dataManager.loadPets(0,20, limitKeyWord, limitRace);
+        notifyDataSetChanged();
     }
     @Override
     public int getCount() {
@@ -49,11 +66,78 @@ public class PetAdapter extends BaseAdapter {
         if(!convertView.getTag().equals(position)){
             Pet pet = getItem(position);
             ((TextView)convertView.findViewById(R.id.pet_name)).setText(Html.fromHtml(pet.getDisplayName()));
-            ((ImageView)convertView.findViewById(R.id.pet_image)).setImageDrawable(MonsterHelper.loadMonsterImage(pet.getIndex()));
+            ((ImageView)convertView.findViewById(R.id.pet_image)).setImageDrawable(PetMonsterHelper.loadMonsterImage(pet.getIndex()));
             ((TextView)convertView.findViewById(R.id.pet_level)).setText(StringUtils.formatStar(pet.getLevel()));
             ((TextView)convertView.findViewById(R.id.pet_tag)).setText(pet.getTag());
         }
 
         return convertView;
+    }
+
+    @Override
+    public void onLoadMore(LoadMoreListView loadMoreListView) {
+        List<Pet> loadPets = dataManager.loadPets(pets.size(), 20, "", null);
+        if(loadPets.size() == 0){
+            loadMoreListView.onLoadMoreComplete(true);
+        }else {
+            pets.addAll(loadPets);
+            loadMoreListView.onLoadMoreComplete(false);
+        }
+    }
+
+    private final Comparator<Pet> indexCompare = new Comparator<Pet>() {
+        @Override
+        public int compare(Pet lhs, Pet rhs) {
+            if (lhs.getIndex() == rhs.getIndex()) return 0;
+            return sortOderRevert ? (lhs.getIndex() > rhs.getIndex() ? -1 : 1) : (lhs.getIndex() > rhs.getIndex() ? 1 : -1);
+        }
+    };
+    private final Comparator<Pet> nameComparator = new Comparator<Pet>() {
+        @Override
+        public int compare(Pet lhs, Pet rhs) {
+            return sortOderRevert ? lhs.getName().compareTo(rhs.getName()) : rhs.getName().compareTo(lhs.getName());
+        }
+    };
+    private final Comparator<Pet> intimacyComparator = new Comparator<Pet>() {
+        @Override
+        public int compare(Pet lhs, Pet rhs) {
+            if (lhs.getIntimacy() == rhs.getIntimacy())
+                return 0;
+            return sortOderRevert ? (lhs.getIntimacy() > rhs.getIntimacy() ? -1 : 1) : (lhs.getIntimacy() > rhs.getIntimacy() ? 1 : -1);
+        }
+    };
+
+    public void sort(int type, List<Pet> adapterData){
+        switch (type){
+            case 0: //index
+
+                Collections.sort(adapterData, indexCompare);
+                break;
+            case 1: //name
+                Collections.sort(adapterData, nameComparator);
+                break;
+            default://亲密度
+                Collections.sort(adapterData, intimacyComparator);
+        }
+        sortOderRevert = !sortOderRevert;
+        notifyDataSetChanged();
+    }
+
+    public Race getLimitRace() {
+        return limitRace;
+    }
+
+    public void setLimitRace(Race limitRace) {
+        this.limitRace = limitRace;
+        loadPetsData();
+    }
+
+    public String getLimitKeyWord() {
+        return limitKeyWord;
+    }
+
+    public void setLimitKeyWord(String limitKeyWord) {
+        this.limitKeyWord = limitKeyWord;
+        loadPetsData();
     }
 }

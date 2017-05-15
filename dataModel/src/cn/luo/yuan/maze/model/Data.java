@@ -25,6 +25,7 @@ public class Data {
     public static final String BLUE = "";
     public static final String RED = "red";
     public static final int ACCESSORY_FLUSE_LIMIT = 15;
+    public static final int PET_UPGRADE_LIMIT = 5;
 
     /**
      * 计算击败一个怪物可以获得的锻造点

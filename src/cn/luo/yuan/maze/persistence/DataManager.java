@@ -4,21 +4,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import cn.luo.yuan.maze.model.Accessory;
-import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
-import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.GoodsType;
-import cn.luo.yuan.maze.model.names.FirstName;
-import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
-import cn.luo.yuan.maze.service.InfoControl;
-import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -233,6 +227,10 @@ public class DataManager implements DataManagerInterface {
         }
     }
 
+    public void deletePet(Pet pet) {
+        petLoader.delete(pet.getId());
+    }
+
     private Maze newMaze() {
         Maze maze = new Maze();
         maze.setMaxLevel(1);
@@ -243,6 +241,25 @@ public class DataManager implements DataManagerInterface {
 
     public Goods loadGoods(GoodsType type){
         return goodsLoader.load(type.name() + "@" + index);
+    }
+
+    @Override
+    public List<Pet> loadPets(int start, int rows, String keyWord, Race race) {
+        List<Pet> pets = new ArrayList<>();
+        List<Pet> all = petLoader.loadAll();
+        for(; start<all.size() && pets.size() <= rows;start++){
+            boolean match = true;
+            if(StringUtils.isNotEmpty(keyWord) && !all.get(start).getName().contains(keyWord)){
+               match = false;
+            }
+            if(race!=null && all.get(start).getRace()!=race){
+                match = false;
+            }
+            if(match){
+                pets.add(all.get(start));
+            }
+        }
+        return pets;
     }
 
     public void saveGoods(Goods goods){
