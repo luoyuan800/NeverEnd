@@ -75,21 +75,5 @@ public class Resource {
         return string.toString();
     }
 
-    public static String readMonsterDescription(String id){
-        return readStringFromAssets("monster/" + id);
-    }
 
-    public static Drawable loadMonsterImage(int id){
-        Drawable drawable = loadImageFromAssets("monster/" + id);
-        if(drawable == null){
-            drawable = loadImageFromAssets("monster/" + id + ".jpg");
-        }
-        if(drawable == null){
-            drawable = loadImageFromAssets("monster/" + id + ".png");
-        }
-        if(drawable == null){
-            drawable = loadImageFromAssets("monster/wenhao.jpg");
-        }
-        return drawable;
-    }
 }

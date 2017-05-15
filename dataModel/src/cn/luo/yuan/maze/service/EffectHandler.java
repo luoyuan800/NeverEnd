@@ -7,6 +7,7 @@ import cn.luo.yuan.maze.model.effect.original.DefEffect;
 import cn.luo.yuan.maze.model.effect.original.HpEffect;
 import cn.luo.yuan.maze.model.effect.original.MeetRateEffect;
 import cn.luo.yuan.maze.model.effect.original.PetRateEffect;
+import cn.luo.yuan.maze.model.effect.original.SkillRateEffect;
 import cn.luo.yuan.maze.model.effect.original.StrEffect;
 
 import java.util.Collection;
@@ -18,7 +19,7 @@ import java.util.Collection;
  * 这是一个静态工具类，处理效果相关的代码都放到这里比较好
  */
 public class EffectHandler {
-    public static final String HP = "hp", STR="str", AGI="agi", ATK="atk", DEF="def", MEET_RATE="meet", PET_RATE="pet";
+    public static final String HP = "hp", STR="str", AGI="agi", ATK="atk", DEF="def", MEET_RATE="meet", PET_RATE="pet", SKILL_RATE = "skill_rate";
     public static long getEffectAdditionLongValue(String property, Collection<Effect> effects){
         switch (property){
             case "str":
@@ -38,17 +39,24 @@ public class EffectHandler {
     public static float getEffectAdditionFloatValue(String property, Collection<Effect> effects){
         float value = 0.0f;
         switch (property){
-            case "meet":
+            case MEET_RATE:
                 for(Effect effect : effects){
                     if(effect instanceof MeetRateEffect){
                         value += ((MeetRateEffect) effect).getMeetRate();
                     }
                 }
                 break;
-            case "pet":
+            case PET_RATE:
                 for(Effect effect : effects){
                     if(effect instanceof PetRateEffect){
                         value += ((PetRateEffect) effect).getPetRate();
+                    }
+                }
+                break;
+            case SKILL_RATE:
+                for(Effect effect : effects){
+                    if(effect instanceof SkillRateEffect){
+                        value += ((SkillRateEffect) effect).getSkillRate();
                     }
                 }
                 break;

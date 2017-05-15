@@ -1,9 +1,12 @@
 package cn.luo.yuan.maze.model;
 
+import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.model.skill.SkillAbleObject;
+
 /**
  * Created by gluo on 4/1/2017.
  */
-public class Monster implements HarmAble {
+public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbleObject {
     private String firstName;
     private String secondName;
     private String type;
@@ -144,6 +147,10 @@ public class Monster implements HarmAble {
         return "<font color='" + color + "'>" + firstName + "的" + secondName + type + "(" + element.getCn() + ")" + (sex == 0 ? "♂" : "♀") + "</font>";
     }
 
+    public String getName(){
+        return firstName + "的" + secondName + type;
+    }
+
     public String getColor() {
         return color;
     }
@@ -166,5 +173,10 @@ public class Monster implements HarmAble {
 
     public void setEggRate(float eggRate) {
         this.eggRate = eggRate;
+    }
+
+    @Override
+    public Skill[] getSkills() {
+        return new Skill[0];
     }
 }

@@ -1,11 +1,16 @@
 package cn.luo.yuan.maze.model.skill;
 
+import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.service.EffectHandler;
+import cn.luo.yuan.maze.utils.Random;
+
 /**
  * Created by gluo on 4/27/2017.
  */
 public abstract class AtkSkill implements Skill, MountAble {
     private boolean mounted;
     private boolean enable;
+    private float rate;
     public boolean isMounted(){
         return mounted;
     }
@@ -25,4 +30,17 @@ public abstract class AtkSkill implements Skill, MountAble {
         this.enable = enable;
     }
 
+    public boolean invokeAble(SkillParameter parameter){
+        Random random = parameter.get("random");
+        SkillAbleObject hero = parameter.getOwner();
+        return random.nextInt(100) + random.nextFloat() < rate + (hero instanceof Hero ? EffectHandler.getEffectAdditionFloatValue(EffectHandler.SKILL_RATE, ((Hero)hero).getEffects()) : 0f);
+    }
+
+    public float getRate() {
+        return rate;
+    }
+
+    public void setRate(float rate) {
+        this.rate = rate;
+    }
 }

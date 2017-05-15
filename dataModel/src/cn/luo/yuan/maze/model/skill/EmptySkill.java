@@ -29,4 +29,14 @@ public class EmptySkill implements Skill {
     public void disable() {
 
     }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return null;
+    }
 }

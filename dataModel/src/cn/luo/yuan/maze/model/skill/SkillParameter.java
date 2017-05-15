@@ -8,10 +8,10 @@ import java.util.HashMap;
  * Created by gluo on 4/27/2017.
  */
 public class SkillParameter {
-    private Hero owner;
+    private SkillAbleObject owner;
     private HashMap<String, Object> parameter;
 
-    public SkillParameter(Hero owner) {
+    public SkillParameter(SkillAbleObject owner) {
         this.owner = owner;
         parameter = new HashMap<>();
     }
@@ -29,7 +29,7 @@ public class SkillParameter {
         return parameter.put(key, value);
     }
 
-    public Hero getOwner() {
+    public SkillAbleObject getOwner() {
         return owner;
     }
 }

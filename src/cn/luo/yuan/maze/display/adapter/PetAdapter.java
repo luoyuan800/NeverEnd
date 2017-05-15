@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.service.MonsterHelper;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -48,7 +49,7 @@ public class PetAdapter extends BaseAdapter {
         if(!convertView.getTag().equals(position)){
             Pet pet = getItem(position);
             ((TextView)convertView.findViewById(R.id.pet_name)).setText(Html.fromHtml(pet.getDisplayName()));
-            ((ImageView)convertView.findViewById(R.id.pet_image)).setImageDrawable(Resource.loadMonsterImage(pet.getIndex()));
+            ((ImageView)convertView.findViewById(R.id.pet_image)).setImageDrawable(MonsterHelper.loadMonsterImage(pet.getIndex()));
             ((TextView)convertView.findViewById(R.id.pet_level)).setText(StringUtils.formatStar(pet.getLevel()));
             ((TextView)convertView.findViewById(R.id.pet_tag)).setText(pet.getTag());
         }

@@ -42,4 +42,7 @@
     <string name="lost">%1$s被打败后掉回了第一层</string>
     <string name="medallion">免死金牌</string>
     <string name="upgrade">升级</string>
+    <string name="skill_rate_effect">增加技能释放概率：</string>
+    <string name="silent_skill">%1$s想要释放技能%2$s但是被%3$s阻止了</string>
+    <string name="release_skill">%1$s使用了%2$s技能</string>
 </resources>

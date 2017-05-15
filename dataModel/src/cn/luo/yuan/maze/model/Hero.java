@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.model;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.model.skill.SkillAbleObject;
 import cn.luo.yuan.maze.service.EffectHandler;
 import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Version;
@@ -14,7 +15,7 @@ import java.util.Iterator;
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class Hero implements Serializable, IDModel, HarmAble {
+public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, NameObject {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private int index;//存档编号
     private String name;//名字

@@ -8,6 +8,8 @@ import java.text.DecimalFormat;
  * Use for handle string input type
  */
 public class StringUtils {
+    public static final String EMPTY_STRING = "";
+
     public static String formatNumber(long num) {
         Double value;
         if (num > 100000000) {

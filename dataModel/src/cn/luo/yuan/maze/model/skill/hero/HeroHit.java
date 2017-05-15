@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.model.skill.hero;
 
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.HarmAble;
+import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.skill.AtkSkill;
 import cn.luo.yuan.maze.model.skill.HarmResult;
 import cn.luo.yuan.maze.service.SkillHelper;
@@ -38,7 +39,7 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
             }
         }
 
-        harm += SkillHelper.getSkillBaseHarm(parameter.getOwner(),random);
+        harm += parameter.getOwner() instanceof Hero ? SkillHelper.getSkillBaseHarm((Hero)parameter.getOwner(),random) : 0;
         HarmResult result = new HarmResult();
         result.setHarm(harm);
         return result;
@@ -47,17 +48,25 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
     @Override
     public void enable(SkillParameter parameter) {
         setEnable(true);
-        parameter.getOwner().setPoint(parameter.getOwner().getPoint() - Data.SKILL_ENABLE_COST);
+        if(parameter.getOwner() instanceof Hero) {
+            ((Hero) parameter.getOwner()).setPoint(((Hero) parameter.getOwner()).getPoint() - Data.SKILL_ENABLE_COST);
+        }
     }
 
     @Override
     public boolean canEnable(SkillParameter parameter) {
-        return parameter.getOwner().getPoint() > Data.SKILL_ENABLE_COST;
+        if(parameter.getOwner() instanceof Hero) {
+            return ((Hero) parameter.getOwner()).getPoint() > Data.SKILL_ENABLE_COST;
+        }
+        return false;
     }
 
     @Override
     public boolean canUpgrade(SkillParameter parameter) {
-        return minHarm + level > 0 &&  maxHarm*level > 0 && parameter.getOwner().getPoint() > level * Data.SKILL_ENABLE_COST;
+        if(parameter.getOwner() instanceof Hero) {
+            return minHarm + level > 0 && maxHarm * level > 0 && ((Hero) parameter.getOwner()).getPoint() > level * Data.SKILL_ENABLE_COST;
+        }
+        return false;
     }
 
     @Override
@@ -65,11 +74,14 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
         if(minHarm + level < 0 || maxHarm*level < 0){
             return false;
         }
-        parameter.getOwner().setPoint(parameter.getOwner().getPoint() - level * Data.SKILL_ENABLE_COST);
-        level ++;
-        minHarm += level;
-        maxHarm *= level;
-        return true;
+        if(parameter.getOwner() instanceof Hero) {
+            ((Hero) parameter.getOwner()).setPoint(((Hero) parameter.getOwner()).getPoint() - level * Data.SKILL_ENABLE_COST);
+            level++;
+            minHarm += level;
+            maxHarm *= level;
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -77,4 +89,13 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
         return level;
     }
 
+    @Override
+    public String getName() {
+        return getClass().getSimpleName();
+    }
+
+    @Override
+    public String getDisplayName() {
+        return getName();
+    }
 }
