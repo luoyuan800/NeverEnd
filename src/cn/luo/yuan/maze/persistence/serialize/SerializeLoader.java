@@ -50,6 +50,6 @@ public class SerializeLoader<T extends Serializable> {
     }
 
     public List<T> loadAll(){
-        return loadAll();
+        return db.loadAll();
     }
 }

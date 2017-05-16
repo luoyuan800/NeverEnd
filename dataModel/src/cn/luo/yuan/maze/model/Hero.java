@@ -288,6 +288,12 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
 
 
     public Skill[] getSkills() {
+        if (skills == null) {
+            synchronized (this) {
+                if (skills == null)
+                    skills = new Skill[]{EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL};
+            }
+        }
         return skills;
     }
 

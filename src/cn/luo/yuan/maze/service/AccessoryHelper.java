@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.service;
 
 import android.content.Context;
 import android.content.res.XmlResourceParser;
+import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.effect.AgiEffect;
@@ -71,7 +72,7 @@ public class AccessoryHelper {
 
     public List<Accessory> loadFromAssets() {
         List<Accessory> accessories = new ArrayList<>();
-        try (XmlResourceParser parser = context.getAssets().openXmlResourceParser("./accessory/accessories.xml")) {
+        try (XmlResourceParser parser = context.getResources().getXml(R.xml.accessories)) {
             Accessory accessory = null;
             List<Effect> effects = null;
             while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {

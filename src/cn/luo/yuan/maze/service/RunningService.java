@@ -62,7 +62,7 @@ public class RunningService implements Runnable {
                     return;
                 }
                 maze.setStep(maze.getStep() + 1);
-                if (random.nextLong(10000) > 9985 || maze.getStep() > 10 + random.nextLong(22) || random.nextLong(maze.getStreaking() + 1) > 50 + maze.getLevel()) {
+                if (random.nextLong(10000) > 9985 || random.nextLong(maze.getStep()) > 10 + random.nextLong(22) || random.nextLong(maze.getStreaking() + 1) > 50 + maze.getLevel()) {
                     maze.setLevel(maze.getLevel()+1);
 
                     long point = 1;
@@ -93,6 +93,7 @@ public class RunningService implements Runnable {
                     if ((System.currentTimeMillis() - startTime)%1000 == 5*60) {//每隔五分钟自动存储一次
                         infoControl.save();
                     }
+                    maze.setStep(0);
                 }else{
                     Monster monster = monsterHelper.randomMonster();
                     if(monster!=null){
@@ -135,8 +136,8 @@ public class RunningService implements Runnable {
     }
 
     private Pet tryCatch(Monster monster, int petCount){
-        if(PetHelper.isCatchAble(monster, hero, random, petCount)){
-            return PetHelper.monsterToPet(monster, hero);
+        if(PetMonsterHelper.isCatchAble(monster, hero, random, petCount)){
+            return PetMonsterHelper.monsterToPet(monster, hero);
         }else{
             return null;
         }

@@ -26,6 +26,7 @@ import cn.luo.yuan.maze.display.view.RollTextView;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Monster;
+import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.service.InfoControl;
@@ -198,22 +199,22 @@ public class GameActivity extends Activity {
                 @Override
                 public void run() {
                     Skill[] heroSkills = hero.getSkills();
-                    if(heroSkills.length > 0) {
+                    if(heroSkills.length > 0 && heroSkills[0]!=null && !(heroSkills[0] instanceof EmptySkill)) {
                         ((TextView) findViewById(R.id.first_skill)).setText(Html.fromHtml(heroSkills[0].getDisplayName()));
                     }
-                    if(heroSkills.length > 1) {
+                    if(heroSkills.length > 1&& heroSkills[1]!=null && !(heroSkills[1] instanceof EmptySkill)) {
                         ((TextView) findViewById(R.id.secondary_skill)).setText(Html.fromHtml(heroSkills[1].getDisplayName()));
                     }
-                    if(heroSkills.length > 2) {
+                    if(heroSkills.length > 2 && heroSkills[2]!=null && !(heroSkills[2] instanceof EmptySkill)) {
                         ((TextView) findViewById(R.id.third_skill)).setText(Html.fromHtml(heroSkills[2].getDisplayName()));
                     }
-                    if(heroSkills.length > 3) {
+                    if(heroSkills.length > 3 && heroSkills[3]!=null && !(heroSkills[3] instanceof EmptySkill)) {
                         ((TextView) findViewById(R.id.fourth_skill)).setText(Html.fromHtml(heroSkills[3].getDisplayName()));
                     }
-                    if(heroSkills.length > 4) {
+                    if(heroSkills.length > 4 && heroSkills[4]!=null && !(heroSkills[4] instanceof EmptySkill)) {
                         ((TextView) findViewById(R.id.fifit_skill)).setText(Html.fromHtml(heroSkills[4].getDisplayName()));
                     }
-                    if(heroSkills.length > 5) {
+                    if(heroSkills.length > 5 && heroSkills[5]!=null && !(heroSkills[5] instanceof EmptySkill)) {
                         ((TextView) findViewById(R.id.sixth_skill)).setText(Html.fromHtml(heroSkills[5].getDisplayName()));
                     }
 

@@ -58,7 +58,7 @@ public class RollTextView extends ScrollView {
 
     public Handler getHandler() {
 
-        if (super.getHandler() == null) {
+        if (super.getHandler() != null) {
             return super.getHandler();
         } else {
             return handler;

@@ -3,11 +3,7 @@ package cn.luo.yuan.maze.persistence;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import cn.luo.yuan.maze.model.Accessory;
-import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.model.Maze;
-import cn.luo.yuan.maze.model.Pet;
-import cn.luo.yuan.maze.model.Race;
+import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.GoodsType;
 import cn.luo.yuan.maze.model.skill.Skill;
@@ -176,7 +172,10 @@ public class DataManager implements DataManagerInterface {
 
     public int getPetCount() {
         try (Cursor cursor = database.excuseSOL("select count(*) from pet")) {
-            return cursor.getInt(1);
+            if (!cursor.isAfterLast())
+                return cursor.getInt(0);
+            else
+                return 0;
         }
     }
 
@@ -231,15 +230,7 @@ public class DataManager implements DataManagerInterface {
         petLoader.delete(pet.getId());
     }
 
-    private Maze newMaze() {
-        Maze maze = new Maze();
-        maze.setMaxLevel(1);
-        maze.setLevel(1);
-        maze.setMeetRate(99.9f);
-        return maze;
-    }
-
-    public Goods loadGoods(GoodsType type){
+    public Goods loadGoods(GoodsType type) {
         return goodsLoader.load(type.name() + "@" + index);
     }
 
@@ -247,34 +238,42 @@ public class DataManager implements DataManagerInterface {
     public List<Pet> loadPets(int start, int rows, String keyWord, Race race) {
         List<Pet> pets = new ArrayList<>();
         List<Pet> all = petLoader.loadAll();
-        for(; start<all.size() && pets.size() <= rows;start++){
+        for (; start < all.size() && pets.size() <= rows; start++) {
             boolean match = true;
-            if(StringUtils.isNotEmpty(keyWord) && !all.get(start).getName().contains(keyWord)){
-               match = false;
-            }
-            if(race!=null && all.get(start).getRace()!=race){
+            if (StringUtils.isNotEmpty(keyWord) && !all.get(start).getName().contains(keyWord)) {
                 match = false;
             }
-            if(match){
+            if (race != null && all.get(start).getRace() != race) {
+                match = false;
+            }
+            if (match) {
                 pets.add(all.get(start));
             }
         }
         return pets;
     }
 
-    public void saveGoods(Goods goods){
+    public void saveGoods(Goods goods) {
         goodsLoader.save(goods, goods.getClass().getSimpleName() + "@" + index);
     }
 
-    public Skill loadSkill(String name){
+    public Skill loadSkill(String name) {
         return skillLoader.load(name + "@" + index);
     }
 
-    public void saveSkill(Skill skill){
+    public void saveSkill(Skill skill) {
         skillLoader.save(skill, skill.getClass().getSimpleName() + "@" + index);
     }
 
-    public List<Skill> loadAllSkill(){
+    public List<Skill> loadAllSkill() {
         return skillLoader.loadAll();
+    }
+
+    private Maze newMaze() {
+        Maze maze = new Maze();
+        maze.setMaxLevel(1);
+        maze.setLevel(1);
+        maze.setMeetRate(99.9f);
+        return maze;
     }
 }

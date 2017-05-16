@@ -2,16 +2,17 @@ package cn.luo.yuan.maze.service;
 
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
-import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.Monster;
-import cn.luo.yuan.maze.model.Pet;
-import cn.luo.yuan.maze.model.Race;
+import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.model.*;
+import cn.luo.yuan.maze.utils.LogHelper;
+import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 /**
  * Created by luoyuan on 2017/5/13.
@@ -38,25 +39,26 @@ public class PetMonsterHelper {
     }
 
     public Monster randomMonster() {
-        try (XmlResourceParser parser = control.getContext().getAssets().openXmlResourceParser("./monster/monsters.xml")) {
+        try (XmlResourceParser parser = control.getContext().getResources().getXml(R.xml.monsters)) {
             try {
                 Monster monster = null;
-                while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
+                loop: while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
                     switch (parser.getEventType()) {
                         case XmlResourceParser.START_TAG:
                             switch (parser.getName()) {
                                 case "monster":
                                     monster = new Monster();
                                     monster.setSex(control.getRandom().nextInt(2));
+                                    monster.setElement(Element.values()[control.getRandom().nextInt(Element.values().length)]);
                                     break;
                                 case "name":
                                     if (monster != null) {
-                                        monster.setType(parser.getText());
+                                        monster.setType(parser.nextText());
                                     }
                                     break;
                                 case "index":
                                     if (monster != null) {
-                                        monster.setIndex(Integer.parseInt(parser.getText()));
+                                        monster.setIndex(Integer.parseInt(parser.nextText()));
                                     }
                                     break;
                                 case "meet":
@@ -64,7 +66,7 @@ public class PetMonsterHelper {
                                         if (control.getMaze().getLevel() < Long.parseLong(parser.getAttributeValue(null, "min_level")) || control.getRandom().nextInt(100) > Integer.parseInt(parser.getAttributeValue(null, "meet_rate"))) {
                                             monster = null;
                                             nextMonsterTag(parser);
-                                            break;
+                                            continue loop;
                                         }
                                     }
                                     break;
@@ -73,18 +75,19 @@ public class PetMonsterHelper {
                             }
                             break;
                         case XmlPullParser.END_TAG:
-                            if (parser.getName().equalsIgnoreCase("name")) {
+                            if (parser.getName().equalsIgnoreCase("monster")) {
                                 if (monster != null) {
                                     return monster;
                                 }
                             }
                     }
+                    parser.next();
                 }
             } catch (XmlPullParserException e) {
 
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return null;
     }
@@ -93,28 +96,28 @@ public class PetMonsterHelper {
         if (index <= 0 && type == null) {
             return StringUtils.EMPTY_STRING;
         }
-        try (XmlResourceParser parser = control.getContext().getAssets().openXmlResourceParser("./monster/monsters.xml")) {
+        try (XmlResourceParser parser = control.getContext().getResources().getXml(R.xml.monsters)) {
             int monsterIndex = -1;
             String name = null;
             loop : while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
                 if (parser.getEventType() == XmlResourceParser.START_TAG) {
                     switch (parser.getName()) {
                         case "name":
-                            if (parser.getText().equals(type)) {
-                                name = parser.getText();
+                            if (parser.nextText().equals(type)) {
+                                name = parser.nextText();
                             }
                             break;
                         case "index":
-                            if (Integer.parseInt(parser.getText()) == index) {
-                                monsterIndex = Integer.parseInt(parser.getText());
+                            if (Integer.parseInt(parser.nextText()) == index) {
+                                monsterIndex = Integer.parseInt(parser.nextText());
                             }
                             break;
                         case "desc":
                             if (name != null && name.equals(type)) {
-                                return parser.getText();
+                                return parser.nextText();
                             }
                             if (monsterIndex > 0 && monsterIndex == index) {
-                                return parser.getText();
+                                return parser.nextText();
                             }
                             nextMonsterTag(parser);
                             continue loop;
@@ -166,23 +169,23 @@ public class PetMonsterHelper {
 
     public boolean evolution(Pet pet){
         int eveIndex = pet.getIndex();
-        try (XmlResourceParser parser = control.getContext().getAssets().openXmlResourceParser("./monster/monsters.xml")) {
+        try (XmlResourceParser parser = control.getContext().getResources().getXml(R.xml.monsters)) {
             int monsterIndex = -1;
             String name = null;
             loop: while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
                 if (parser.getEventType() == XmlResourceParser.START_TAG) {
                     switch (parser.getName()) {
                         case "name":
-                            if (parser.getText().equals(pet.getType())) {
-                                name = parser.getText();
+                            if (parser.nextText().equals(pet.getType())) {
+                                name = parser.nextText();
                             }else{
                                 nextMonsterTag(parser);
                                 continue loop;
                             }
                             break;
                         case "index":
-                            if (Integer.parseInt(parser.getText()) == pet.getIndex()) {
-                                monsterIndex = Integer.parseInt(parser.getText());
+                            if (Integer.parseInt(parser.nextText()) == pet.getIndex()) {
+                                monsterIndex = Integer.parseInt(parser.nextText());
                             }else{
                                 nextMonsterTag(parser);
                                 continue loop;
@@ -190,10 +193,10 @@ public class PetMonsterHelper {
                             break;
                         case "evolution":
                             if (name != null && name.equals(pet.getType())) {
-                                eveIndex = Integer.parseInt(parser.getText());
+                                eveIndex = Integer.parseInt(parser.nextText());
                             }
                             if (monsterIndex > 0 && monsterIndex == pet.getIndex()) {
-                                eveIndex = Integer.parseInt(parser.getText());
+                                eveIndex = Integer.parseInt(parser.nextText());
                             }
                             break loop;
                     }
@@ -207,7 +210,7 @@ public class PetMonsterHelper {
         }
         if(eveIndex!=pet.getIndex()) {
             Monster eveMonster = null;
-            try (XmlResourceParser parser = control.getContext().getAssets().openXmlResourceParser("./monster/monsters.xml")) {
+            try (XmlResourceParser parser = control.getContext().getResources().getXml(R.xml.monsters)) {
                 loop: while (parser.getEventType()!=XmlPullParser.END_DOCUMENT){
                     switch (parser.getEventType()){
                         case XmlResourceParser.START_TAG:
@@ -217,11 +220,11 @@ public class PetMonsterHelper {
                                     break;
                                 case "name":
                                     if(eveMonster!=null) {
-                                        eveMonster.setType(parser.getText());
+                                        eveMonster.setType(parser.nextText());
                                     }
                                     break;
                                 case "index":
-                                    if(Integer.parseInt(parser.getText()) != eveIndex){
+                                    if(Integer.parseInt(parser.nextText()) != eveIndex){
                                         eveMonster = null;
                                         nextMonsterTag(parser);
                                         continue loop;
@@ -259,52 +262,84 @@ public class PetMonsterHelper {
         return false;
     }
 
-    private void setMonsterBaseProperties(Monster monster, XmlResourceParser parser) {
+    private void setMonsterBaseProperties(Monster monster, XmlResourceParser parser) throws IOException, XmlPullParserException {
         switch (parser.getName()) {
             case "atk":
                 if (monster != null) {
-                    monster.setAtk(Long.parseLong(parser.getText()));
+                    monster.setAtk(Long.parseLong(parser.nextText()));
                 }
             case "def":
                 if (monster != null) {
-                    monster.setDef(Long.parseLong(parser.getText()));
+                    monster.setDef(Long.parseLong(parser.nextText()));
                 }
                 break;
             case "hp":
                 if (monster != null) {
-                    monster.setMaxHP(Long.parseLong(parser.getText()));
+                    monster.setMaxHP(Long.parseLong(parser.nextText()));
                 }
                 break;
             case "hit":
                 if (monster != null) {
-                    monster.setHitRate(Float.parseFloat(parser.getText()));
+                    monster.setHitRate(Float.parseFloat(parser.nextText()));
                 }
                 break;
             case "silent":
                 if (monster != null) {
-                    monster.setSilent(Float.parseFloat(parser.getText()));
+                    monster.setSilent(Float.parseFloat(parser.nextText()));
                 }
                 break;
             case "pet_rate":
                 if (monster != null) {
-                    monster.setPetRate(Float.parseFloat(parser.getText()));
+                    monster.setPetRate(Float.parseFloat(parser.nextText()));
                 }
                 break;
             case "egg_rate":
                 if (monster != null) {
-                    monster.setEggRate(Float.parseFloat(parser.getText()));
+                    monster.setEggRate(Float.parseFloat(parser.nextText()));
                 }
                 break;
             case "sex":
                 if (monster != null) {
-                    monster.setSex(Integer.parseInt(parser.getText()));
+                    monster.setSex(Integer.parseInt(parser.nextText()));
                 }
                 break;
             case "race":
                 if (monster != null) {
-                    monster.setRace(Race.valueOf(parser.getText()));
+                    monster.setRace(Race.valueOf(parser.nextText()));
                 }
                 break;
+        }
+    }
+
+    public static Pet monsterToPet(Monster monster, Hero hero) {
+        Pet pet = new Pet();
+        for (Method method : Monster.class.getMethods()) {
+            if (method.getName().startsWith("get")) {
+                try {
+                    Method set = Pet.class.getMethod(method.getName().replaceFirst("get", "set"), method.getReturnType());
+                    set.invoke(pet, method.invoke(monster));
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    LogHelper.logException(e, false, "Error while transforming monster to pet");
+                }
+            }
+        }
+        pet.setOwnerId(hero.getId());
+        pet.setOwnerName(hero.getName());
+        return pet;
+    }
+
+    public static boolean isCatchAble(Monster monster, Hero hero, Random random, int petCount) {
+        if (monster.getRace().ordinal() != hero.getRace().ordinal() + 1 || monster.getRace().ordinal() != hero.getRace().ordinal() - 5) {
+            float rate = (100 - monster.getPetRate()) + random.nextInt(petCount + 1) / 10f;
+            float current = random.nextInt(100) + random.nextFloat() + EffectHandler.getEffectAdditionFloatValue(EffectHandler.PET_RATE, hero.getEffects());
+            if (current >= 100) {
+                current = 98.9f;
+            }
+            return current > rate;
+        } else {
+            return false;
         }
     }
 }
