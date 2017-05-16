@@ -15,5 +15,6 @@
         <pet_rate></pet_rate>
         <sex></sex>
         <race></race>
+        <evolution></evolution>
     </monster>
 </monsters>

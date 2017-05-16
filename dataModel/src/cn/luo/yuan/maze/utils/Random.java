@@ -61,4 +61,8 @@ public class Random extends java.util.Random {
     public float randomRange(float max, float min) {
          return randomRange((long)max,(long)min);
     }
+
+    public float nextFloat(float max){
+        return nextLong((long)(max * 100))/100f;
+    }
 }
