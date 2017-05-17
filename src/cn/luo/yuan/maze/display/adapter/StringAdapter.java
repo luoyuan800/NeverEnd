@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.model.NameObject;
 
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class StringAdapter <T> extends BaseAdapter {
             }
         }
         T item = getItem(position);
-        ((TextView)convertView).setText(Html.fromHtml(item.toString()));
+        ((TextView)convertView).setText(Html.fromHtml(item instanceof NameObject ? ((NameObject) item).getDisplayName() : item.toString()));
         convertView.setTag(R.string.adapter, this);
         convertView.setTag(R.string.item, item);
         convertView.setTag(R.string.position, position);

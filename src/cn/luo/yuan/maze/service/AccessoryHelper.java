@@ -6,6 +6,7 @@ import android.content.res.XmlResourceParser;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
+import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.effect.AgiEffect;
 import cn.luo.yuan.maze.model.effect.AtkEffect;
 import cn.luo.yuan.maze.model.effect.DefEffect;
@@ -22,6 +23,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -200,4 +202,51 @@ public class AccessoryHelper {
 
     }
 
+    /**
+     * @param accessory mounted
+     * @return Accessory that un mount
+     */
+    public Accessory mountAccessory(Accessory accessory, Hero hero) {
+        Accessory uMount = null;
+        Iterator<Accessory> iterator = hero.getAccessories().iterator();
+        while (iterator.hasNext()) {
+            uMount = iterator.next();
+            if (uMount.getType().equals(accessory.getType())) {
+                iterator.remove();
+                hero.getEffects().removeAll(uMount.getEffects());
+                uMount.setMounted(false);
+                break;
+            }
+        }
+        if (hero.getAccessories().add(accessory)) {
+            hero.getEffects().addAll(accessory.getEffects());
+            accessory.setMounted(true);
+            for(Accessory mounted : hero.getAccessories()){
+                mounted.resetEffectEnable();
+                for(Accessory other : hero.getAccessories()){
+                    if(other!=mounted){
+                        mounted.effectEnable();
+                    }
+                }
+            }
+        }
+        return uMount;
+    }
+
+    public void unMountAccessory(Accessory accessory, Hero hero) {
+        hero.getAccessories().remove(accessory);
+        hero.getEffects().removeAll(accessory.getEffects());
+        judgeEffectEnable(hero);
+    }
+
+    public void judgeEffectEnable(Hero hero){
+        for(Accessory mounted : hero.getAccessories()){
+            mounted.resetEffectEnable();
+            for(Accessory other : hero.getAccessories()){
+                if(other!=mounted){
+                    mounted.effectEnable();
+                }
+            }
+        }
+    }
 }

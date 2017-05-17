@@ -124,4 +124,16 @@ public class Accessory implements Serializable, IDModel, NameObject {
     public void setElement(Element element) {
         this.element = element;
     }
+
+    public void resetEffectEnable(){
+        for(Effect effect : getEffects()){
+            effect.setEnable(false);
+        }
+    }
+
+    public void effectEnable(){
+        for(Effect effect : getEffects()){
+            effect.setEnable(true);
+        }
+    }
 }

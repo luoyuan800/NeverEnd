@@ -9,4 +9,6 @@ import java.io.Serializable;
  */
 public interface Effect extends Serializable {
     boolean isEnable();
+
+    void setEnable(boolean enable);
 }

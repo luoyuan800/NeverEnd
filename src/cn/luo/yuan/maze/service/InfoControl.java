@@ -32,6 +32,7 @@ public class InfoControl implements InfoControlInterface {
     private GameActivity.ViewHandler viewHandler;
     private Random random;
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+    private AccessoryHelper accessoryHelper;
 
     public InfoControl(Context context) {
         this.context = context;
@@ -59,16 +60,19 @@ public class InfoControl implements InfoControlInterface {
                     viewHandler.refreshFreqProperties();
             }
         }, 0, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
-
+        accessoryHelper = new AccessoryHelper(context, getRandom());
     }
 
     public Hero getHero() {
         return hero;
     }
 
+    public AccessoryHelper getAccessoryHelper() {
+        return accessoryHelper;
+    }
+
     void setHero(Hero hero) {
         this.hero = hero;
-
         random = new Random(hero.getBirthDay());
     }
 
@@ -153,12 +157,10 @@ public class InfoControl implements InfoControlInterface {
     }
 
     public void mountAccessory(Accessory accessory) {
-        Accessory uMount = hero.mountAccessory(accessory);
+        Accessory uMount = accessoryHelper.mountAccessory(accessory, hero);
         if (uMount != null) {
-            uMount.setMounted(false);
             dataManager.saveAccessory(uMount);
         }
-        accessory.setMounted(true);
         dataManager.saveAccessory(accessory);
     }
 

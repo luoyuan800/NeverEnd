@@ -31,6 +31,8 @@ public class Data {
     public static final String DARKGOLD_COLOR ="dark";
     public static final float RATE_MAX = 90f;
     public static final int DARKGOLD_RATE_REDUCE = 10;
+    public static String DISABLE_COLOR;
+    public static String ENABLE_COLOR;
 
     /**
      * 计算击败一个怪物可以获得的锻造点

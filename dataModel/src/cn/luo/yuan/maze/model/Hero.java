@@ -177,32 +177,7 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
         return getDef() + EffectHandler.getEffectAdditionLongValue(EffectHandler.DEF, getEffects()) + EffectHandler.getEffectAdditionLongValue(EffectHandler.AGI, getEffects()) * getDefGrow();
     }
 
-    /**
-     * @param accessory mounted
-     * @return Accessory that un mount
-     */
-    public Accessory mountAccessory(Accessory accessory) {
-        Accessory uMount = null;
-        Iterator<Accessory> iterator = getAccessories().iterator();
-        while (iterator.hasNext()) {
-            uMount = iterator.next();
-            if (uMount.getType().equals(accessory.getType())) {
-                iterator.remove();
-                getEffects().removeAll(uMount.getEffects());
-                uMount.setMounted(false);
-            }
-        }
-        if (getAccessories().add(accessory)) {
-            getEffects().addAll(accessory.getEffects());
-            accessory.setMounted(true);
-        }
-        return uMount;
-    }
 
-    public void unMountAccessory(Accessory accessory) {
-        getAccessories().remove(accessory);
-        getEffects().removeAll(accessory.getEffects());
-    }
 
     public int getIndex() {
         return index;
