@@ -22,7 +22,7 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
     private int index;
     private long def;
     private String color;
-    private int sex;
+    private int sex = -1;
     private Race race;
     private Skill skill;
 

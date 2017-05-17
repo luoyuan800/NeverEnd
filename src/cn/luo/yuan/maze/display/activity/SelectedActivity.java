@@ -9,11 +9,8 @@ import android.view.View;
 import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.display.adapter.StringAdapter;
-import cn.luo.yuan.maze.model.Element;
-import cn.luo.yuan.maze.model.Maze;
+import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.gift.Gift;
-import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.model.HeroIndex;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.persistence.IndexManager;
 import cn.luo.yuan.maze.utils.Resource;
@@ -55,6 +52,9 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
                 Spinner element = (Spinner) dialog.findViewById(R.id.select_element);
                 ArrayAdapter<Element> fa = new ArrayAdapter<>(SelectedActivity.this, android.R.layout.simple_spinner_item, Arrays.asList(Element.values()));
                 element.setAdapter(fa);
+                Spinner race = (Spinner) dialog.findViewById(R.id.select_race);
+                ArrayAdapter<Race> ra = new ArrayAdapter<>(SelectedActivity.this, android.R.layout.simple_spinner_item, Arrays.asList(Race.values()));
+                race.setAdapter(ra);
                 DatePicker birthday = (DatePicker)dialog.findViewById(R.id.select_birthday);
                 GregorianCalendar maxDate = new GregorianCalendar(2010, 1, 1);
                 birthday.setMaxDate(maxDate.getTimeInMillis());
@@ -91,6 +91,8 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
                         hero.setBirthDay(calendar.getTimeInMillis());
                         Spinner element = (Spinner) dialog.findViewById(R.id.select_element);
                         hero.setElement((Element) element.getSelectedItem());
+                        Spinner race = (Spinner) dialog.findViewById(R.id.select_race);
+                        hero.setRace(((Race) race.getSelectedItem()).ordinal());
                         hero.setGift(((Gift)gift.getSelectedItem()).getName());
                         if(!StringUtils.isNotEmpty(hero.getName())){
                             dialog.show();
