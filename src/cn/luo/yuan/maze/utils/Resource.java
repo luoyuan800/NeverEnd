@@ -35,7 +35,11 @@ public class Resource {
     }
 
     public static String getString(int id) {
-        return context.getResources().getString(id);
+        if(context!=null) {
+            return context.getString(id);
+        }else{
+            return String.valueOf(id);
+        }
     }
 
     public static Drawable loadImageFromAssets(String name) {

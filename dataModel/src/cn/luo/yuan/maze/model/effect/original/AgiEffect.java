@@ -9,6 +9,7 @@ import cn.luo.yuan.maze.utils.Version;
 public class AgiEffect implements LongValueEffect {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private long agi;
+    private boolean enable = true;
 
     public long getAgi() {
         return agi;
@@ -26,5 +27,14 @@ public class AgiEffect implements LongValueEffect {
     @Override
     public void setValue(long value) {
         setAgi(value);
+    }
+
+    @Override
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 }

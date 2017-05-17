@@ -49,7 +49,7 @@ public class Random extends java.util.Random {
     }
 
 
-    public long randomRange(long max, long min) {
+    public long randomRange(long min, long max) {
         if(max < min){
             max = max ^ min;
             min = max ^ min;
@@ -58,7 +58,7 @@ public class Random extends java.util.Random {
         return min + nextLong(max - min);
     }
 
-    public float randomRange(float max, float min) {
+    public float randomRange(float min, float max) {
         if(max < min){
             return 0;
         }

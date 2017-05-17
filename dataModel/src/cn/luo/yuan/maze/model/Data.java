@@ -22,10 +22,15 @@ public class Data {
     public static float HIT_AGI_RATE = 0.001f;//敏捷转化重击率衰减
     public static float HIT_STR_RATE = 0.002f;//力量转化重击率加成
     public static int SKILL_ENABLE_COST = 50;//激活技能消耗的能力点
-    public static final String BLUE = "";
-    public static final String RED = "red";
+    public static final String BLUE_COLOR = "";
+    public static final String RED_COLOR = "red";
+    public static final String  DEFAULT_QUALITY_COLOR = "#556B2F";
     public static final int ACCESSORY_FLUSE_LIMIT = 15;
     public static final int PET_UPGRADE_LIMIT = 5;
+    public static final String ORANGE_COLOR = "orange";
+    public static final String DARKGOLD_COLOR ="dark";
+    public static final float RATE_MAX = 90f;
+    public static final int DARKGOLD_RATE_REDUCE = 10;
 
     /**
      * 计算击败一个怪物可以获得的锻造点
@@ -42,5 +47,24 @@ public class Data {
             material = 300 + random.nextInt(700);
         }
         return material;
+    }
+
+    public static float getColorReduce(String color){
+        float colorReduce = 0.3f;
+        switch (color){
+            case Data.BLUE_COLOR:
+                colorReduce = 0.5f;
+                break;
+            case Data.RED_COLOR:
+                colorReduce = 0.6f;
+                break;
+            case Data.ORANGE_COLOR:
+                colorReduce = 0.7f;
+                break;
+            case Data.DARKGOLD_COLOR:
+                colorReduce = 0.9f;
+                break;
+        }
+        return colorReduce;
     }
 }

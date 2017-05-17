@@ -9,6 +9,7 @@ import cn.luo.yuan.maze.utils.Version;
 public class StrEffect implements LongValueEffect {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private long str;
+    private boolean enable = true;
 
     public long getStr() {
         return str;
@@ -26,5 +27,14 @@ public class StrEffect implements LongValueEffect {
     @Override
     public void setValue(long value) {
         setStr(value);
+    }
+
+    @Override
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 }

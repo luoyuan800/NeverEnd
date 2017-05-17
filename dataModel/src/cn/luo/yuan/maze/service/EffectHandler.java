@@ -68,7 +68,7 @@ public class EffectHandler {
     private static long getEffectAdditionHP(Collection<Effect> effects){
         long hp = 0;
         for(Effect effect : effects){
-            if(effect instanceof HpEffect) {
+            if(effect.isEnable() && effect instanceof HpEffect) {
                 hp += ((HpEffect) effect).getHp();
             }
         }
@@ -77,7 +77,7 @@ public class EffectHandler {
     private static long getEffectAdditionAtk(Collection<Effect> effects){
         long value = 0;
         for(Effect effect : effects){
-            if(effect instanceof AtkEffect) {
+            if(effect.isEnable() && effect instanceof AtkEffect) {
                 value += ((AtkEffect) effect).getAtk();
             }
         }
@@ -86,7 +86,7 @@ public class EffectHandler {
     private static long getEffectAdditionDef(Collection<Effect> effects){
         long value = 0;
         for(Effect effect : effects){
-            if(effect instanceof DefEffect) {
+            if(effect.isEnable() && effect instanceof DefEffect) {
                 value += ((DefEffect) effect).getDef();
             }
         }
@@ -95,7 +95,7 @@ public class EffectHandler {
     private static long getEffectAdditionAgi(Collection<Effect> effects){
         long value = 0;
         for(Effect effect : effects){
-            if(effect instanceof AgiEffect) {
+            if(effect.isEnable() && effect instanceof AgiEffect) {
                 value += ((AgiEffect) effect).getAgi();
             }
         }
@@ -104,7 +104,7 @@ public class EffectHandler {
     private static long getEffectAdditionStr(Collection<Effect> effects){
         long value = 0;
         for(Effect effect : effects){
-            if(effect instanceof StrEffect) {
+            if(effect.isEnable() && effect instanceof StrEffect) {
                 value += ((StrEffect) effect).getStr();
             }
         }

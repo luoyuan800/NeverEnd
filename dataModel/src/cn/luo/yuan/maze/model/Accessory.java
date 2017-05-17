@@ -10,18 +10,19 @@ import java.util.List;
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class Accessory implements Serializable, IDModel {
+public class Accessory implements Serializable, IDModel, NameObject {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private String name;
     private String id;
     private String type;
     private long level;
-    private String color;
+    private String color = Data.DEFAULT_QUALITY_COLOR;
     private boolean mounted;
     private List<Effect> effects = new ArrayList<>(5);
     private String desc;
     private String author;
     private long price;
+    private Element element;
 
     public List<Effect> getEffects(){
         return effects;
@@ -114,5 +115,13 @@ public class Accessory implements Serializable, IDModel {
 
     public long getPrice() {
         return price;
+    }
+
+    public Element getElement() {
+        return element;
+    }
+
+    public void setElement(Element element) {
+        this.element = element;
     }
 }

@@ -31,13 +31,21 @@ public class AccessoryHelper {
     private Context context;
     private Random random;
 
-    public AccessoryHelper(Context context) {
+    public AccessoryHelper(Context context, Random random) {
         this.context = context;
+        this.random = random;
+    }
+
+    /**
+     * For test
+     */
+    AccessoryHelper() {
         random = new Random(System.currentTimeMillis());
     }
 
     public boolean fuse(Accessory major, Accessory minor) {
         if (major.getName().equalsIgnoreCase(minor.getName()) && major.getType().equalsIgnoreCase(minor.getType())) {
+            float colorReduce = Data.getColorReduce(major.getColor());
             if (random.nextLong(major.getLevel()) < Data.ACCESSORY_FLUSE_LIMIT) {
                 List<Effect> majorEffect = major.getEffects();
                 for (Effect effect : minor.getEffects()) {
@@ -46,19 +54,41 @@ public class AccessoryHelper {
                         if (me.getClass().getName().equalsIgnoreCase(effect.getClass().getName())) {
                             append = false;
                             if (me instanceof LongValueEffect) {
-                                ((LongValueEffect) me).setValue(((LongValueEffect) me).getValue() + random.nextLong(((LongValueEffect) effect).getValue()/2));
-                            }else if(me instanceof FloatValueEffect){
-                                ((FloatValueEffect) me).setValue(((FloatValueEffect) me).getValue() + random.nextLong((long)((FloatValueEffect) effect).getValue() * 100/2)/100f);
+                                long value = ((LongValueEffect) me).getValue();
+                                long v = (long) random.nextFloat(((LongValueEffect) effect).getValue() * colorReduce);
+                                if(v + value >= 0){
+                                    ((LongValueEffect) me).setValue(value + v);
+                                }
+                            } else if (me instanceof FloatValueEffect) {
+                                float v = random.nextFloat(((FloatValueEffect) effect).getValue() * colorReduce);
+                                float value = ((FloatValueEffect) me).getValue();
+                                //We need to check whether the rate larger too larger.
+                                if(value + v < Data.RATE_MAX && random.nextFloat(value) < random.nextFloat(Data.RATE_MAX/2f)){
+                                    ((FloatValueEffect) me).setValue(value + v);
+                                }
                             }
                             break;
                         }
                     }
-                    if(append){
+                    if (append) {
                         if (effect instanceof LongValueEffect) {
-                            ((LongValueEffect) effect).setValue(random.randomRange(((LongValueEffect) effect).getValue()/3,((LongValueEffect) effect).getValue()));
-                        }else if(effect instanceof FloatValueEffect){
-                            ((FloatValueEffect) effect).setValue(random.randomRange(((FloatValueEffect) effect).getValue()/3f,((FloatValueEffect) effect).getValue()));
+                            ((LongValueEffect) effect).setValue((long) random.randomRange(((LongValueEffect) effect).getValue() * colorReduce, ((LongValueEffect) effect).getValue()));
+                        } else if (effect instanceof FloatValueEffect) {
+                            ((FloatValueEffect) effect).setValue(random.randomRange(((FloatValueEffect) effect).getValue() * colorReduce, ((FloatValueEffect) effect).getValue()));
                         }
+                        major.getEffects().add(effect);
+                    }
+                }
+                major.setLevel(major.getLevel() + 1);
+                if(!major.getColor().equals(Data.DARKGOLD_COLOR) && random.nextInt(100) < random.nextLong(major.getLevel())){
+                    if(major.getColor().equals(Data.DEFAULT_QUALITY_COLOR)){
+                        major.setColor(Data.BLUE_COLOR);
+                    }else if(major.getColor().equals(Data.BLUE_COLOR)){
+                        major.setColor(Data.RED_COLOR);
+                    }else if(major.getColor().equals(Data.RED_COLOR)){
+                        major.setColor(Data.ORANGE_COLOR);
+                    } else if(major.getColor().equals(Data.ORANGE_COLOR) && random.nextInt(100) < random.nextLong(major.getLevel()/Data.DARKGOLD_RATE_REDUCE)){
+                        major.setColor(Data.DARKGOLD_COLOR);
                     }
                 }
                 return true;
@@ -100,31 +130,31 @@ public class AccessoryHelper {
                                     long max = Long.parseLong(parser.getAttributeValue(null, "max"));
                                     long min = Long.parseLong(parser.getAttributeValue(null, "min"));
                                     int rate = Integer.parseInt(parser.getAttributeValue(null, "rate"));
-                                    if(random.nextLong(100) < rate) {
+                                    if (random.nextLong(100) < rate) {
                                         switch (name) {
                                             case "AgiEffect":
                                                 AgiEffect agiEffect = new AgiEffect();
-                                                agiEffect.setAgi(random.randomRange(max, min));
+                                                agiEffect.setAgi(random.randomRange(min, max));
                                                 effects.add(agiEffect);
                                                 break;
                                             case "AtkEffect":
                                                 AtkEffect atkEffect = new AtkEffect();
-                                                atkEffect.setAtk(random.randomRange(max, min));
+                                                atkEffect.setAtk(random.randomRange(min, max));
                                                 effects.add(atkEffect);
                                                 break;
                                             case "DefEffect":
                                                 DefEffect defEffect = new DefEffect();
-                                                defEffect.setDef(random.randomRange(max, min));
+                                                defEffect.setDef(random.randomRange(min, max));
                                                 effects.add(defEffect);
                                                 break;
                                             case "HpEffect":
                                                 HpEffect hpEffect = new HpEffect();
-                                                hpEffect.setHp(random.randomRange(max, min));
+                                                hpEffect.setHp(random.randomRange(min, max));
                                                 effects.add(hpEffect);
                                                 break;
                                             case "StrEffect":
                                                 StrEffect strEffect = new StrEffect();
-                                                strEffect.setStr(random.randomRange(max, min));
+                                                strEffect.setStr(random.randomRange(min, max));
                                                 effects.add(strEffect);
                                                 break;
                                             case "MeetRateEffect":
@@ -148,7 +178,7 @@ public class AccessoryHelper {
                             break;
                         case XmlPullParser.END_TAG:
                             if (parser.getName().equals("accessory")) {
-                                if(effects!=null) {
+                                if (effects != null) {
                                     accessory.getEffects().addAll(effects);
                                 }
                                 accessories.add(accessory);

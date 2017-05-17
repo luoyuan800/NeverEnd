@@ -8,7 +8,7 @@
         <author value=""/>
         <price value=""/>
         <properties>
-            <effect name="" min="" max="" rate=""/>
+            <effect name="" min="" max="" rate="" enable="true"/>
         </properties>
     </accessory>
 </accessories>

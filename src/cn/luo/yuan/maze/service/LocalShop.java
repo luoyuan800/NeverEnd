@@ -30,14 +30,14 @@ public class LocalShop {
 
     public List<Item> randomAccessory() {
         List<Item> acces = new ArrayList<>();
-        AccessoryHelper accessoryHelper = new AccessoryHelper(context);
+        AccessoryHelper accessoryHelper = new AccessoryHelper(context, random);
         for (Accessory accessory : accessoryHelper.loadFromAssets()) {
             int rate = 50;
             switch (accessory.getColor()) {
-                case Data.BLUE:
+                case Data.BLUE_COLOR:
                     rate -= 10;
                     break;
-                case Data.RED:
+                case Data.RED_COLOR:
                     rate -= 20;
                     break;
             }

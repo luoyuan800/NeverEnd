@@ -6,9 +6,9 @@ import cn.luo.yuan.maze.utils.StringUtils;
 /**
  * Created by gluo on 5/16/2017.
  */
-public class PetMonsterHelperTest {
+public class TestPetMonsterHelper {
     public static void main(String... args) {
-        new PetMonsterHelperTest().testUpgrade();
+        new TestPetMonsterHelper().testUpgrade();
     }
 
     public void testUpgrade() {

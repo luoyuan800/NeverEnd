@@ -9,6 +9,7 @@ import cn.luo.yuan.maze.utils.Version;
 public class AtkEffect implements LongValueEffect {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private long atk;
+    private boolean enable = true;
 
     public long getAtk() {
         return atk;
@@ -26,5 +27,14 @@ public class AtkEffect implements LongValueEffect {
     @Override
     public void setValue(long value) {
         setAtk(value);
+    }
+
+    @Override
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 }

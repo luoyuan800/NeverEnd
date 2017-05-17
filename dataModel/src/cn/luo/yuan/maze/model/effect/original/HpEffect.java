@@ -9,6 +9,7 @@ import cn.luo.yuan.maze.utils.Version;
 public class HpEffect implements LongValueEffect {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private long hp;
+    private boolean enable = true;
 
     public long getHp() {
         return hp;
@@ -26,5 +27,14 @@ public class HpEffect implements LongValueEffect {
     @Override
     public void setValue(long value) {
         setHp(value);
+    }
+
+    @Override
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 }

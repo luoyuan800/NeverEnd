@@ -7,6 +7,10 @@ import cn.luo.yuan.maze.model.effect.FloatValueEffect;
  */
 public class MeetRateEffect implements FloatValueEffect {
     private float meetRate;
+    private boolean enable = true;
+
+    public MeetRateEffect() {
+    }
 
     public float getMeetRate() {
         return meetRate;
@@ -24,5 +28,14 @@ public class MeetRateEffect implements FloatValueEffect {
     @Override
     public void setValue(float value) {
         setMeetRate(value);
+    }
+
+    @Override
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 }

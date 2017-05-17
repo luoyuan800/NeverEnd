@@ -9,6 +9,7 @@ import cn.luo.yuan.maze.utils.Version;
 public class DefEffect implements LongValueEffect {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private long def;
+    private boolean enable = true;
 
     public long getDef() {
         return def;
@@ -26,5 +27,14 @@ public class DefEffect implements LongValueEffect {
     @Override
     public void setValue(long value) {
         setDef(value);
+    }
+
+    @Override
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 }

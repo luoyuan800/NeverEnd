@@ -293,6 +293,7 @@ public class PetMonsterHelper {
                                 key.min_level = Long.parseLong(parser.getAttributeValue(null, "min_level"));
                             case "monster":
                                 monster = new Monster();
+                                key = new MonsterKey();
                                 break;
                             case "name":
                                 if (monster != null) {
@@ -314,7 +315,7 @@ public class PetMonsterHelper {
                     case XmlPullParser.END_TAG:
                         if (parser.getName().equals("monster")) {
                             if (monster != null) {
-                                monsterCache.put(key, new WeakReference<Monster>(monster));
+                                monsterCache.put(key, new WeakReference<>(monster));
                                 break loop;
                             }
                         }
