@@ -83,7 +83,7 @@ public class PetDialog implements View.OnClickListener {
                 control.getDataManager().deletePet(currentPet);
                 break;
             case R.id.pet_upgrade:
-                PetMonsterHelper helper = new PetMonsterHelper(control);
+                PetMonsterHelper helper = PetMonsterHelper.getOrCreate(control);
 
                 break;
         }

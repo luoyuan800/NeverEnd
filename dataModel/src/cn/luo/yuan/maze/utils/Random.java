@@ -59,10 +59,22 @@ public class Random extends java.util.Random {
     }
 
     public float randomRange(float max, float min) {
-         return randomRange((long)max,(long)min);
+        if(max < min){
+            return 0;
+        }
+        return min + nextFloat(max - min);
     }
 
     public float nextFloat(float max){
-        return nextLong((long)(max * 100))/100f;
+        String value = String.valueOf(max);
+        int dotIndex = value.indexOf(".");
+        int multiple = 1;
+        if(dotIndex >= 0){
+            int length  = value.length() - dotIndex - 1;
+            while (length-- > 0){
+                multiple *= 10;
+            }
+        }
+        return nextLong((long)(max * multiple))/multiple;
     }
 }

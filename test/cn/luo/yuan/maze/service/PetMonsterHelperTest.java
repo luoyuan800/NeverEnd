@@ -27,7 +27,7 @@ public class PetMonsterHelperTest {
         long originAtk = major.getAtk();
         long originDef = major.getDef();
         long originHp = major.getMaxHP();
-        PetMonsterHelper helper = new PetMonsterHelper(control);
+        PetMonsterHelper helper = PetMonsterHelper.getOrCreate(control);
         float percent = 0;
         int count = 100000;
         for (int i = 0; i < count; i++) {

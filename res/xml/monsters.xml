@@ -2,9 +2,9 @@
 <?import cn.luo.yuan.maze.model.Monster?>
 <monsters>
     <monster>
+        <index>1</index>
         <meet meet_rate="90" min_level="1"/>
         <name>蟑螂</name>
-        <index>1</index>
         <desc>只要有人的地方就有蟑螂，不管你爬得多高，你都可以遇见它们。它们是这个世界上最古老的怪物之一，并且也是繁殖力最高（没有之一）的。适应力非常强，据说不同时间可以进化出不同种类的蟑螂……
         </desc>
         <atk>10</atk>

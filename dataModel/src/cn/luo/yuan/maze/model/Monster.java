@@ -6,7 +6,7 @@ import cn.luo.yuan.maze.model.skill.SkillAbleObject;
 /**
  * Created by gluo on 4/1/2017.
  */
-public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbleObject {
+public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbleObject,Cloneable {
     private String firstName;
     private String secondName;
     private String type;
@@ -179,5 +179,14 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
     @Override
     public Skill[] getSkills() {
         return new Skill[]{skill};
+    }
+
+    public Monster clone() {
+        try {
+            return (Monster) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
