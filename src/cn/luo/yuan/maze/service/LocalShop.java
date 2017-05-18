@@ -31,17 +31,7 @@ public class LocalShop {
     public List<Item> randomAccessory() {
         List<Item> acces = new ArrayList<>();
         AccessoryHelper accessoryHelper = new AccessoryHelper(context, random);
-        for (Accessory accessory : accessoryHelper.loadFromAssets()) {
-            int rate = 50;
-            switch (accessory.getColor()) {
-                case Data.BLUE_COLOR:
-                    rate -= 10;
-                    break;
-                case Data.RED_COLOR:
-                    rate -= 20;
-                    break;
-            }
-            if (random.nextInt(100) < rate) {
+        for (Accessory accessory : accessoryHelper.getRandomAccessories(random.nextInt(5))) {
                 Item item = new Item();
                 item.name = accessory.getName();
                 item.color = accessory.getColor();
@@ -51,7 +41,6 @@ public class LocalShop {
                 item.effects = accessory.getEffects();
                 item.price = accessory.getPrice();
                 acces.add(item);
-            }
         }
         return acces;
     }

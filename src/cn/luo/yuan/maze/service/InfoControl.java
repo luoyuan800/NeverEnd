@@ -33,6 +33,7 @@ public class InfoControl implements InfoControlInterface {
     private Random random;
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
     private AccessoryHelper accessoryHelper;
+    private PetMonsterHelper petMonsterHelper;
 
     public InfoControl(Context context) {
         this.context = context;
@@ -60,7 +61,8 @@ public class InfoControl implements InfoControlInterface {
                     viewHandler.refreshFreqProperties();
             }
         }, 0, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
-        accessoryHelper = new AccessoryHelper(context, getRandom());
+        accessoryHelper = AccessoryHelper.getOrCreate(this);
+        petMonsterHelper = PetMonsterHelper.getOrCreate(this);
     }
 
     public Hero getHero() {
@@ -69,6 +71,10 @@ public class InfoControl implements InfoControlInterface {
 
     public AccessoryHelper getAccessoryHelper() {
         return accessoryHelper;
+    }
+
+    public PetMonsterHelper getPetMonsterHelper() {
+        return petMonsterHelper;
     }
 
     void setHero(Hero hero) {

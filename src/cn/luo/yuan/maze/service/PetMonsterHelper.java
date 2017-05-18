@@ -26,6 +26,7 @@ public class PetMonsterHelper {
 
     private PetMonsterHelper(InfoControl control) {
         this.control = control;
+        init();
     }
 
     public static PetMonsterHelper getOrCreate(InfoControl control) {
@@ -87,40 +88,7 @@ public class PetMonsterHelper {
 
     public Monster randomMonster() {
         if (monsterCache.size() == 0) {
-            try (XmlResourceParser parser = control.getContext().getResources().getXml(R.xml.monsters)) {
-                try {
-                    int currentIndex = -1;
-                    loop:
-                    while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
-                        switch (parser.getEventType()) {
-                            case XmlResourceParser.START_TAG:
-                                switch (parser.getName()) {
-                                    case "index":
-                                        currentIndex = Integer.parseInt(parser.nextText());
-                                        break;
-                                    case "meet":
-                                        if (currentIndex > 0) {
-                                            MonsterKey key = new MonsterKey();
-                                            key.meet_rate = Float.parseFloat(parser.getAttributeValue(null, "meet_rate"));
-                                            key.min_level = Long.parseLong(parser.getAttributeValue(null, "min_level"));
-                                            key.index = currentIndex;
-                                            monsterCache.put(key, new WeakReference<>((Monster) null));
-                                            currentIndex = -1;
-                                            nextMonsterTag(parser);
-                                            continue loop;
-                                        }
-                                        break;
-                                }
-                                break;
-                        }
-                        parser.next();
-                    }
-                } catch (XmlPullParserException e) {
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            init();
         }
         for (ArrayMap.Entry<MonsterKey, WeakReference<Monster>> entry : monsterCache.entrySet()) {
             MonsterKey key = entry.getKey();
@@ -145,6 +113,43 @@ public class PetMonsterHelper {
             }
         }
         return null;
+    }
+
+    private void init() {
+        try (XmlResourceParser parser = control.getContext().getResources().getXml(R.xml.monsters)) {
+            try {
+                int currentIndex = -1;
+                loop:
+                while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
+                    switch (parser.getEventType()) {
+                        case XmlResourceParser.START_TAG:
+                            switch (parser.getName()) {
+                                case "index":
+                                    currentIndex = Integer.parseInt(parser.nextText());
+                                    break;
+                                case "meet":
+                                    if (currentIndex > 0) {
+                                        MonsterKey key = new MonsterKey();
+                                        key.meet_rate = Float.parseFloat(parser.getAttributeValue(null, "meet_rate"));
+                                        key.min_level = Long.parseLong(parser.getAttributeValue(null, "min_level"));
+                                        key.index = currentIndex;
+                                        monsterCache.put(key, new WeakReference<>((Monster) null));
+                                        currentIndex = -1;
+                                        nextMonsterTag(parser);
+                                        continue loop;
+                                    }
+                                    break;
+                            }
+                            break;
+                    }
+                    parser.next();
+                }
+            } catch (XmlPullParserException e) {
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public String getDescription(int index, String type) {
