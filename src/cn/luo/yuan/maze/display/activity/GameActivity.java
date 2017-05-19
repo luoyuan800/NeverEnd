@@ -31,7 +31,7 @@ import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.service.InfoControl;
 import cn.luo.yuan.maze.service.ListenerService;
-import cn.luo.yuan.maze.service.PetMonsterHelper;
+import cn.luo.yuan.maze.service.PetMonsterLoder;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -102,7 +102,7 @@ public class GameActivity extends Activity {
 
         public void refreshHeadImage(Hero hero, Object target){
             if(target instanceof Monster) {
-                ((ImageView) findViewById(R.id.monster_pic)).setImageDrawable(PetMonsterHelper.loadMonsterImage(((Monster) target).getIndex()));
+                ((ImageView) findViewById(R.id.monster_pic)).setImageDrawable(PetMonsterLoder.loadMonsterImage(((Monster) target).getIndex()));
             }else{
                 //?
             }

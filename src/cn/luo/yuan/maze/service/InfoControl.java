@@ -62,7 +62,9 @@ public class InfoControl implements InfoControlInterface {
             }
         }, 0, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
         accessoryHelper = AccessoryHelper.getOrCreate(this);
-        petMonsterHelper = PetMonsterHelper.getOrCreate(this);
+        petMonsterHelper = PetMonsterHelper.instance;
+        petMonsterHelper.setRandom(random);
+        petMonsterHelper.setMonsterLoader(PetMonsterLoder.getOrCreate(this));
     }
 
     public Hero getHero() {

@@ -10,6 +10,7 @@ import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.PetOwner;
 import cn.luo.yuan.maze.model.SilentAbleObject;
 import cn.luo.yuan.maze.model.skill.AtkSkill;
 import cn.luo.yuan.maze.model.skill.DefSkill;
@@ -24,83 +25,129 @@ import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import static cn.luo.yuan.maze.service.ListenerService.battleEndListeners;
+import static java.awt.SystemColor.control;
 
 /**
  * Created by luoyuan on 2017/4/2.
  */
 public class BattleService {
-    private InfoControl control;
-    private Monster monster;
-    private Context context;
+    private HarmAble monster;
+    private HarmAble hero;
+    private Random random;
+    private BattleMessage battleMessage;
 
-    public BattleService(InfoControl control, Monster monster) {
-        this.control = control;
+    public BattleService(HarmAble hero, HarmAble monster, Random random) {
         this.monster = monster;
-        this.context = control.getContext();
+        this.random = random;
+        this.hero = hero;
     }
 
     public boolean battle() {
-        Hero hero = control.getHero();
-        Random random = control.getRandom();
         long round = 1;
         boolean heroAtk = random.nextBoolean();
         while (hero.getHp() > 0 && monster.getHp() > 0) {
             if (round > 60 && round % 61 == 0) {
-                control.addMessage(context.getResources().getString(R.string.battle_to_long));
+                battleMessage.battleTooLong();
                 hero.setHp(hero.getHp() / 2);
                 monster.setHp(monster.getHp() / 2);
             }
             if (heroAtk) {
-                heroAtk(hero, monster, random);
+                atk();
             } else {
-                heroDefend(hero, monster, random);
+                heroDefend();
             }
             round++;
         }
         if (monster.getHp() <= 0) {
-            control.addMessage(String.format(context.getString(R.string.win_msg), hero.getDisplayName(), monster.getDisplayName()));
-            for (BattleEndListener endListener : battleEndListeners.values()) {
-                endListener.end(hero, monster);
+            if(hero instanceof NameObject && monster instanceof NameObject){
+                battleMessage.win((NameObject)hero, (NameObject)monster);
+            }
+            if(hero instanceof Hero) {
+                for (BattleEndListener endListener : battleEndListeners.values()) {
+                    endListener.end((Hero) hero, monster);
+                }
             }
             return true;
         } else {
-            control.addMessage(String.format(context.getString(R.string.lost_msg), hero.getDisplayName(), monster.getDisplayName()));
-            for (BattleEndListener endListener : battleEndListeners.values()) {
-                endListener.end(hero, monster);
+            if(hero instanceof NameObject && monster instanceof NameObject){
+                battleMessage.lost((NameObject)hero, (NameObject)monster);
+            }
+            if(hero instanceof Hero) {
+                for (BattleEndListener endListener : battleEndListeners.values()) {
+                    endListener.end((Hero) hero, monster);
+                }
             }
             return false;
         }
     }
 
-    private void heroAtk(Hero hero, Monster monster, Random random) {
-        petActionOnAtk(hero, monster, random);
-        if(releaseSkill(hero,monster, random)){
-            return;
+    private void atk(HarmAble hero, HarmAble monster) {
+        if(hero instanceof PetOwner) {
+            petActionOnAtk((PetOwner) hero, monster);
         }
-        long atk = hero.getUpperAtk();
-        atk = atk / 3;
-        atk = atk * 2 + random.nextLong(atk);
-        boolean isHit = random.nextLong(100) + hero.getStr() * Data.HIT_STR_RATE > 97 + random.nextInt(1000) + random.nextLong((long) (hero.getAgi() * Data.HIT_AGI_RATE));
-        if (isHit) {
-            control.addMessage(String.format(context.getString(R.string.hit_happen), hero.getDisplayName()));
-            atk *= 2;//暴击有效攻击力翻倍
+        if(monster instanceof PetOwner) {
+            if (petActionOnDef((PetOwner) monster, hero)) {
+                return;
+            }
         }
-        long harm = atk - monster.getDef();
-        if (harm <= 0) {
-            harm = random.nextLong(control.getMaze().getLevel());
+        if(hero instanceof SkillAbleObject) {
+            if (releaseSkill((SkillAbleObject)hero, monster, random)) {
+                return;
+            }
         }
-        harm = elementAffectHarm(hero.getElement(), monster.getElement(), harm);
-        monster.setHp(monster.getHp() - harm);
-        control.addMessage(String.format(context.getResources().getString(R.string.atk_harm_color_msg), hero.getDisplayName(), monster.getDisplayName(), StringUtils.formatNumber(harm)));
+        if(monster instanceof SkillAbleObject){
+            if(releaseSkill((SkillAbleObject) monster, hero, random)){
+                return;
+            }
+        }
+
+        boolean isDodge = false;
+        if(monster instanceof Hero) {
+            isDodge = random.nextLong(100) + ((Hero)monster).getAgi() * Data.DODGE_AGI_RATE > 97 + random.nextInt(1000) + random.nextLong((long) (((Hero)monster).getStr() * Data.DODGE_STR_RATE));
+        }
+        if(!isDodge) {
+            long atk = hero instanceof Hero ? ((Hero) hero).getUpperAtk() : hero.getAtk();
+            atk = atk / 3;
+            atk = atk * 2 + random.nextLong(atk);
+            boolean isHit = random.nextLong(100) + (hero instanceof Hero ? ((Hero) hero).getStr() : 0) * Data.HIT_STR_RATE > 97
+                    + random.nextInt(1000) +
+                    random.nextLong((long) ((hero instanceof Hero ? ((Hero) hero).getAgi() : 0) * Data.HIT_AGI_RATE));
+            if (isHit) {
+                if (hero instanceof NameObject)
+                    battleMessage.hit((NameObject) hero);
+                atk *= 2;//暴击有效攻击力翻倍
+            }
+            boolean isParry = false;
+            if(monster instanceof Hero) {
+                isParry = random.nextLong(100) + ((Hero)monster).getStr() * Data.PARRY_STR_RATE > 97 + random.nextInt(1000) + random.nextLong((long) (((Hero)monster).getAgi() * Data.PARRY_AGI_RATE));
+            }
+            long defend = monster instanceof Hero ? ((Hero) monster).getUpperAtk() : monster.getAtk();
+            defend = defend / 2;
+            defend = defend + random.nextLong(defend);
+            if (isParry) {
+                //格挡，生效防御力三倍
+                defend *= 3;
+            }
+            long harm = atk - defend;
+            if (harm <= 0) {
+                harm = 1;
+            }
+            harm = elementAffectHarm(hero.getElement(), monster.getElement(), harm);
+            monster.setHp(monster.getHp() - harm);
+            if (hero instanceof NameObject && monster instanceof NameObject)
+                battleMessage.harm((NameObject) hero, (NameObject) monster, harm);
+        }else{
+            if(hero instanceof NameObject) {
+                battleMessage.dodge((NameObject) hero, (NameObject) monster);
+            }
+        }
     }
 
-    private void heroDefend(Hero hero, Monster monster, Random random) {
-        if (petActionOnDef(hero, monster, random)) {
+    private void heroDefend() {
+        if (petActionOnDef()) {
             return;
         }
-        if(releaseSkill(monster,hero, random)){
-            return;
-        }
+
         boolean isDodge = random.nextLong(100) + hero.getAgi() * Data.DODGE_AGI_RATE > 97 + random.nextInt(1000) + random.nextLong((long) (hero.getStr() * Data.DODGE_STR_RATE));
         boolean isParry = false;
         if (isDodge) {
@@ -135,33 +182,37 @@ public class BattleService {
         return baseHarm;
     }
 
-    private void petActionOnAtk(Hero hero, Monster monster, Random random) {
+    private void petActionOnAtk(PetOwner hero, HarmAble monster) {
         for (Pet pet : hero.getPets()) {
             if (isPetWork(pet, random, true)) {
-                if (monster.getIndex() > pet.getIndex() && random.nextInt(5) < 1) {
-                    control.addMessage(String.format(context.getString(R.string.pet_index_suppression), pet.getDisplayName(), monster.getDisplayName()));
+                if (monster instanceof Monster && ((Monster)monster).getIndex() > pet.getIndex() && random.nextInt(5) < 1) {
+                   battleMessage.petSuppress(pet, (NameObject) monster);
                 } else {
                     long harm = pet.getAtk() - monster.getDef();
                     if (harm > 0) {
                         monster.setHp(monster.getHp() - harm);
-                        control.addMessage(String.format(context.getResources().getString(R.string.atk_harm_color_msg), pet.getDisplayName(), monster.getDisplayName(), StringUtils.formatNumber(harm)));
+                        if(hero instanceof NameObject && monster instanceof NameObject){
+                            battleMessage.harm((NameObject)hero, (NameObject)monster, harm);
+                        }
                     }
                 }
             }
         }
     }
 
-    private boolean petActionOnDef(Hero hero, Monster monster, Random random) {
+    private boolean petActionOnDef(PetOwner hero, HarmAble monster) {
         for (Pet pet : hero.getPets()) {
             if (isPetWork(pet, random, true)) {
-                if (monster.getIndex() > pet.getIndex() && random.nextInt(5) < 1) {
-                    control.addMessage(String.format(context.getString(R.string.pet_index_suppression), pet.getDisplayName(), monster.getDisplayName()));
+                if (monster instanceof Monster && ((Monster)monster).getIndex() > pet.getIndex() && random.nextInt(5) < 1) {
+                    battleMessage.petSuppress(pet, (NameObject) monster);
                 } else {
                     long harm = monster.getAtk() - pet.getDef();
                     if (harm > 0) {
                         monster.setHp(monster.getHp() - harm);
-                        control.addMessage(String.format(context.getString(R.string.pet_defend), pet.getDisplayName()));
-                        control.addMessage(String.format(context.getResources().getString(R.string.atk_harm_color_msg), monster.getDisplayName(), pet.getDisplayName(), StringUtils.formatNumber(harm)));
+                        battleMessage.petDefend(pet);
+                        if(monster instanceof NameObject) {
+                            battleMessage.harm(pet, (NameObject) monster, harm);
+                        }
                     }
                     return true;
                 }

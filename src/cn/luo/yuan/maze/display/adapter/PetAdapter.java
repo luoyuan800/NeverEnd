@@ -12,7 +12,7 @@ import cn.luo.yuan.maze.display.view.LoadMoreListView;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.persistence.DataManager;
-import cn.luo.yuan.maze.service.PetMonsterHelper;
+import cn.luo.yuan.maze.service.PetMonsterLoder;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.Collections;
@@ -66,7 +66,7 @@ public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefres
         if(!convertView.getTag().equals(position)){
             Pet pet = getItem(position);
             ((TextView)convertView.findViewById(R.id.pet_name)).setText(Html.fromHtml(pet.getDisplayName()));
-            ((ImageView)convertView.findViewById(R.id.pet_image)).setImageDrawable(PetMonsterHelper.loadMonsterImage(pet.getIndex()));
+            ((ImageView)convertView.findViewById(R.id.pet_image)).setImageDrawable(PetMonsterLoder.loadMonsterImage(pet.getIndex()));
             ((TextView)convertView.findViewById(R.id.pet_level)).setText(StringUtils.formatStar(pet.getLevel()));
             ((TextView)convertView.findViewById(R.id.pet_tag)).setText(pet.getTag());
         }

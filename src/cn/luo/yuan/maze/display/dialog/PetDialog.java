@@ -1,7 +1,6 @@
 package cn.luo.yuan.maze.display.dialog;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.os.Handler;
 import android.text.Html;
 import android.view.View;
@@ -13,7 +12,7 @@ import cn.luo.yuan.maze.display.view.LoadMoreListView;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.service.InfoControl;
-import cn.luo.yuan.maze.service.PetMonsterHelper;
+import cn.luo.yuan.maze.service.PetMonsterLoder;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -83,7 +82,7 @@ public class PetDialog implements View.OnClickListener {
                 control.getDataManager().deletePet(currentPet);
                 break;
             case R.id.pet_upgrade:
-                PetMonsterHelper helper = PetMonsterHelper.getOrCreate(control);
+                PetMonsterLoder helper = PetMonsterLoder.getOrCreate(control);
 
                 break;
         }

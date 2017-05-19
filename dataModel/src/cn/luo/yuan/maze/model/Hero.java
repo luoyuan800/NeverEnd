@@ -15,7 +15,7 @@ import java.util.Iterator;
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, NameObject {
+public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, NameObject, PetOwner {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private int index;//存档编号
     private String name;//名字

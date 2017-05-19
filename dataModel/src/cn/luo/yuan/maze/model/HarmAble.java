@@ -7,4 +7,10 @@ public interface HarmAble {
     long getAtk();
     long getDef();
     long getHp();
+    void setHp(long hp);
+    default void setMaxHp(long hp){
+
+    }
+
+    Element getElement();
 }
