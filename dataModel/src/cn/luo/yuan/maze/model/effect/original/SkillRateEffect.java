@@ -7,7 +7,7 @@ import cn.luo.yuan.maze.model.effect.FloatValueEffect;
 /**
  * Created by gluo on 5/15/2017.
  */
-public class SkillRateEffect implements FloatValueEffect, NameObject {
+public class SkillRateEffect implements FloatValueEffect{
     private float skillRate;
     private boolean enable = false;
     @Override
@@ -36,13 +36,5 @@ public class SkillRateEffect implements FloatValueEffect, NameObject {
     public void setEnable(boolean enable) {
         this.enable = enable;
     }
-    @Override
-    public String getName() {
-        return getClass().getSimpleName();
-    }
 
-    @Override
-    public String getDisplayName() {
-        return "<font color='" + (isEnable()? Data.ENABLE_COLOR : Data.DISABLE_COLOR) + "'>" + toString() + "</font>";
-    }
 }

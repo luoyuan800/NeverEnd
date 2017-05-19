@@ -8,7 +8,7 @@ import cn.luo.yuan.maze.utils.Version;
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class AtkEffect implements LongValueEffect, NameObject {
+public class AtkEffect implements LongValueEffect {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private long atk;
     private boolean enable = false;
@@ -40,13 +40,4 @@ public class AtkEffect implements LongValueEffect, NameObject {
         this.enable = enable;
     }
 
-    @Override
-    public String getName() {
-        return getClass().getSimpleName();
-    }
-
-    @Override
-    public String getDisplayName() {
-        return "<font color='" + (isEnable()? Data.ENABLE_COLOR : Data.DISABLE_COLOR) + "'>" + toString() + "</font>";
-    }
 }

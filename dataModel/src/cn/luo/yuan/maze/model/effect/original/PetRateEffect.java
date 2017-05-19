@@ -7,7 +7,7 @@ import cn.luo.yuan.maze.model.effect.FloatValueEffect;
 /**
  * Created by luoyuan on 2017/3/19.
  */
-public class PetRateEffect implements FloatValueEffect, NameObject {
+public class PetRateEffect implements FloatValueEffect {
     private float meetRate;
     private boolean enable = false;
 
@@ -37,13 +37,5 @@ public class PetRateEffect implements FloatValueEffect, NameObject {
     public void setEnable(boolean enable) {
         this.enable = enable;
     }
-    @Override
-    public String getName() {
-        return getClass().getSimpleName();
-    }
 
-    @Override
-    public String getDisplayName() {
-        return "<font color='" + (isEnable()? Data.ENABLE_COLOR : Data.DISABLE_COLOR) + "'>" + toString() + "</font>";
-    }
 }
