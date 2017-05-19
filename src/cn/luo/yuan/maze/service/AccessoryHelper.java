@@ -333,6 +333,12 @@ public class AccessoryHelper {
                     case Data.RED_COLOR:
                         rate -= 20;
                         break;
+                    case Data.ORANGE_COLOR:
+                        rate -= 30;
+                        break;
+                    case Data.DARKGOLD_COLOR:
+                        rate -= 40;
+                        break;
                 }
                 if (random.nextInt(100) < rate) {
                     Accessory accessory = loadAccessoryByName(key.name);

@@ -105,6 +105,7 @@ public class PetMonsterHelper {
                             clone.setSex(control.getRandom().nextInt(1));
                         }
                         clone.setElement(Element.values()[control.getRandom().nextInt(Element.values().length)]);
+                        clone.setMaterial(Data.getMonsterMaterial(monster.getMaxHP(),monster.getAtk(), control.getMaze().getLevel(), control.getRandom()));
                     }
                     return clone;
                 }

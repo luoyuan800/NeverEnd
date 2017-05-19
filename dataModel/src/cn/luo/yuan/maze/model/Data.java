@@ -22,17 +22,17 @@ public class Data {
     public static float HIT_AGI_RATE = 0.001f;//敏捷转化重击率衰减
     public static float HIT_STR_RATE = 0.002f;//力量转化重击率加成
     public static int SKILL_ENABLE_COST = 50;//激活技能消耗的能力点
-    public static final String BLUE_COLOR = "";
-    public static final String RED_COLOR = "red";
+    public static final String BLUE_COLOR = "#0000FF";
+    public static final String RED_COLOR = "#FF0000";
     public static final String  DEFAULT_QUALITY_COLOR = "#556B2F";
     public static final int ACCESSORY_FLUSE_LIMIT = 15;
     public static final int PET_UPGRADE_LIMIT = 5;
-    public static final String ORANGE_COLOR = "orange";
-    public static final String DARKGOLD_COLOR ="dark";
+    public static final String ORANGE_COLOR = "#FFA500";
+    public static final String DARKGOLD_COLOR ="#B8860B";
     public static final float RATE_MAX = 90f;
     public static final int DARKGOLD_RATE_REDUCE = 10;
-    public static String DISABLE_COLOR;
-    public static String ENABLE_COLOR;
+    public static final String DISABLE_COLOR = "#C0C0C0";
+    public static final String ENABLE_COLOR = "#800080";
 
     /**
      * 计算击败一个怪物可以获得的锻造点
