@@ -10,7 +10,6 @@ import cn.luo.yuan.maze.utils.Version;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Iterator;
 
 /**
  * Created by luoyuan on 2017/3/18.

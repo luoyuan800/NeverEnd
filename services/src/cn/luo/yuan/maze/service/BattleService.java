@@ -84,51 +84,51 @@ public class BattleService {
         this.battleMessage = battleMessage;
     }
 
-    private void atk(HarmAble hero, HarmAble monster) {
-        if(hero instanceof PetOwner) {
-            petActionOnAtk((PetOwner) hero, monster);
+    private void atk(HarmAble atker, HarmAble defender) {
+        if(atker instanceof PetOwner) {
+            petActionOnAtk((PetOwner) atker, defender);
         }
-        if(monster instanceof PetOwner) {
-            if (petActionOnDef((PetOwner) monster, hero)) {
+        if(defender instanceof PetOwner) {
+            if (petActionOnDef((PetOwner) defender, atker)) {
                 return;
             }
         }
-        if(hero instanceof SkillAbleObject) {
-            if (releaseSkill((SkillAbleObject)hero, monster, random)) {
+        if(atker instanceof SkillAbleObject) {
+            if (releaseSkill((SkillAbleObject)atker, defender, random)) {
                 return;
             }
         }
-        if(monster instanceof SkillAbleObject){
-            if(releaseSkill((SkillAbleObject) monster, hero, random)){
+        if(defender instanceof SkillAbleObject){
+            if(releaseSkill((SkillAbleObject) defender, atker, random)){
                 return;
             }
         }
 
         boolean isDodge = false;
-        if(monster instanceof Hero) {
-            isDodge = random.nextLong(100) + ((Hero)monster).getAgi() * Data.DODGE_AGI_RATE > 97 + random.nextInt(1000) + random.nextLong((long) (((Hero)monster).getStr() * Data.DODGE_STR_RATE));
+        if(defender instanceof Hero) {
+            isDodge = random.nextLong(100) + ((Hero)defender).getAgi() * Data.DODGE_AGI_RATE > 97 + random.nextInt(1000) + random.nextLong((long) (((Hero)defender).getStr() * Data.DODGE_STR_RATE));
         }
         if(!isDodge) {
-            long atk = hero instanceof Hero ? ((Hero) hero).getUpperAtk() : hero.getAtk();
+            long atk = atker instanceof Hero ? ((Hero) atker).getUpperAtk() : atker.getAtk();
             atk = atk / 3;
             atk = atk * 2 + random.nextLong(atk);
-            boolean isHit = random.nextLong(100) + (hero instanceof Hero ? ((Hero) hero).getStr() : 0) * Data.HIT_STR_RATE > 97
+            boolean isHit = random.nextLong(100) + (atker instanceof Hero ? ((Hero) atker).getStr() : 0) * Data.HIT_STR_RATE > 97
                     + random.nextInt(1000) +
-                    random.nextLong((long) ((hero instanceof Hero ? ((Hero) hero).getAgi() : 0) * Data.HIT_AGI_RATE));
+                    random.nextLong((long) ((atker instanceof Hero ? ((Hero) atker).getAgi() : 0) * Data.HIT_AGI_RATE));
             if (isHit) {
-                if (hero instanceof NameObject)
-                    battleMessage.hit((NameObject) hero);
+                if (atker instanceof NameObject)
+                    battleMessage.hit((NameObject) atker);
                 atk *= 2;//暴击有效攻击力翻倍
             }
             boolean isParry = false;
-            if(monster instanceof Hero) {
-                isParry = random.nextLong(100) + ((Hero)monster).getStr() * Data.PARRY_STR_RATE > 97 + random.nextInt(1000) + random.nextLong((long) (((Hero)monster).getAgi() * Data.PARRY_AGI_RATE));
+            if(defender instanceof Hero) {
+                isParry = random.nextLong(100) + ((Hero)defender).getStr() * Data.PARRY_STR_RATE > 97 + random.nextInt(1000) + random.nextLong((long) (((Hero)defender).getAgi() * Data.PARRY_AGI_RATE));
             }
-            long defend = monster instanceof Hero ? ((Hero) monster).getUpperAtk() : monster.getAtk();
+            long defend = defender instanceof Hero ? ((Hero) defender).getUpperDef() : defender.getDef();
             defend = defend / 2;
             defend = defend + random.nextLong(defend);
             if (isParry) {
-                battleMessage.parry((NameObject)monster);
+                battleMessage.parry((NameObject)defender);
                 //格挡，生效防御力三倍
                 defend *= 3;
             }
@@ -136,21 +136,21 @@ public class BattleService {
             if (harm <= 0) {
                 harm = 1;
             }
-            harm = elementAffectHarm(hero.getElement(), monster.getElement(), harm);
-            monster.setHp(monster.getHp() - harm);
-            if (hero instanceof NameObject && monster instanceof NameObject)
-                battleMessage.harm((NameObject) hero, (NameObject) monster, harm);
+            harm = elementAffectHarm(atker.getElement(), defender.getElement(), harm);
+            defender.setHp(defender.getHp() - harm);
+            if (atker instanceof NameObject && defender instanceof NameObject)
+                battleMessage.harm((NameObject) atker, (NameObject) defender, harm);
         }else{
-            if(hero instanceof NameObject) {
-                battleMessage.dodge((NameObject) hero, (NameObject) monster);
+            if(atker instanceof NameObject) {
+                battleMessage.dodge((NameObject) atker, (NameObject) defender);
             }
         }
     }
 
     private long elementAffectHarm(Element atker, Element defer, long baseHarm) {
-        if (atker.restriction(defer)) {
+        if (atker.restriction(defer) || (defer == Element.NONE && atker != Element.NONE)) {
             baseHarm *= 1.5;
-        } else if (defer.restriction(atker)) {
+        } else if (defer.restriction(atker) || (atker == Element.NONE && defer != Element.NONE)) {
             baseHarm *= 0.5;
         }
         return baseHarm;

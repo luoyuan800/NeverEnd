@@ -1,9 +1,6 @@
 package cn.luo.yuan.maze.display.activity;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
+import android.app.*;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -56,7 +53,16 @@ public class GameActivity extends Activity {
         control.setDataManager(dataManager);
         control.setViewHandler(new ViewHandler(this));
         control.setTextView((RollTextView) findViewById(R.id.info_view));
-        control.startGame();
+        ProgressDialog progressDialog = new ProgressDialog(GameActivity.this);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.show();
+        new Thread(new Runnable(){
+            public void run() {
+
+                control.startGame();
+                progressDialog.dismiss();
+            }
+        }).start();
     }
 
     @Override
