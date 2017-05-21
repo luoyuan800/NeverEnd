@@ -29,7 +29,7 @@ import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.persistence.DataManager;
-import cn.luo.yuan.maze.service.InfoControl;
+import cn.luo.yuan.maze.service.GameContext;
 import cn.luo.yuan.maze.service.ListenerService;
 import cn.luo.yuan.maze.service.PetMonsterLoder;
 import cn.luo.yuan.maze.utils.Resource;
@@ -42,7 +42,7 @@ import java.lang.ref.WeakReference;
  */
 public class GameActivity extends Activity {
     DataManager dataManager;
-    InfoControl control;
+    GameContext control;
     private PopupMenu popupMenu;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class GameActivity extends Activity {
         Intent intent = getIntent();
         ListenerService.init();
         dataManager = new DataManager(intent.getIntExtra("index", -1), this);
-        control = new InfoControl(this);
+        control = new GameContext(this);
         control.setDataManager(dataManager);
         control.setViewHandler(new ViewHandler(this));
         control.setTextView((RollTextView) findViewById(R.id.info_view));

@@ -11,7 +11,7 @@ import cn.luo.yuan.maze.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.display.view.LoadMoreListView;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.skill.Skill;
-import cn.luo.yuan.maze.service.InfoControl;
+import cn.luo.yuan.maze.service.GameContext;
 import cn.luo.yuan.maze.service.PetMonsterLoder;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -21,13 +21,13 @@ import cn.luo.yuan.maze.utils.StringUtils;
  */
 public class PetDialog implements View.OnClickListener {
     Handler handler = new Handler();
-    private InfoControl control;
+    private GameContext control;
     private AlertDialog.Builder builder;
     private PetAdapter adapter;
     private Pet currentPet;
     private LoadMoreListView loadMoreListView;
 
-    public PetDialog(InfoControl control) {
+    public PetDialog(GameContext control) {
         this.control = control;
         builder = new AlertDialog.Builder(control.getContext()).setTitle(Resource.getString(R.string.pet_dialog_title)).setView(R.layout.pet_view);
     }
@@ -59,7 +59,7 @@ public class PetDialog implements View.OnClickListener {
                         ((TextView) dialog.findViewById(R.id.pet_level)).setText(StringUtils.formatStar(currentPet.getLevel()));
                         ((TextView) dialog.findViewById(R.id.pet_atk)).setText(StringUtils.formatNumber(currentPet.getAtk()));
                         ((TextView) dialog.findViewById(R.id.pet_def)).setText(StringUtils.formatNumber(currentPet.getDef()));
-                        ((TextView) dialog.findViewById(R.id.pet_hp)).setText(StringUtils.formatNumber(currentPet.getHp()) + "/" + StringUtils.formatNumber(currentPet.getMaxHP()));
+                        ((TextView) dialog.findViewById(R.id.pet_hp)).setText(StringUtils.formatNumber(currentPet.getHp()) + "/" + StringUtils.formatNumber(currentPet.getMaxHp()));
                         Skill skill = currentPet.getSkills()[0];
                         ((TextView) dialog.findViewById(R.id.pet_skill)).setText(skill != null ? skill.getName() : StringUtils.EMPTY_STRING);
                         ((TextView) dialog.findViewById(R.id.pet_owner)).setText(currentPet.getOwnerName());

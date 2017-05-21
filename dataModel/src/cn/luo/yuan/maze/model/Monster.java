@@ -1,5 +1,7 @@
 package cn.luo.yuan.maze.model;
 
+import cn.luo.yuan.maze.model.names.FirstName;
+import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillAbleObject;
 
@@ -7,8 +9,8 @@ import cn.luo.yuan.maze.model.skill.SkillAbleObject;
  * Created by gluo on 4/1/2017.
  */
 public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbleObject,Cloneable {
-    private String firstName;
-    private String secondName;
+    private FirstName firstName;
+    private SecondName secondName;
     private String type;
     private long atk;
     private long hp;
@@ -27,20 +29,49 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
     private Skill skill;
 
 
-    public String getFirstName() {
+    public FirstName getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName(FirstName firstName) {
+        if(this.firstName!=null){
+            atk -= firstName.getAtkAddition(atk);
+            maxHP -= firstName.getHPAddition(maxHP);
+            hp = maxHP;
+            silent -= firstName.getSilent();
+            eggRate -= firstName.getEggRate();
+
+        }
         this.firstName = firstName;
+        if(this.firstName != null){
+            atk += firstName.getAtkAddition(atk);
+            maxHP += firstName.getHPAddition(maxHP);
+            hp = maxHP;
+            silent += firstName.getSilent();
+            eggRate += firstName.getEggRate();
+        }
     }
 
-    public String getSecondName() {
+    public SecondName getSecondName() {
         return secondName;
     }
 
-    public void setSecondName(String secondName) {
+    public void setSecondName(SecondName secondName) {
+        if(this.secondName!=null){
+            atk -= secondName.getAtkAddition(atk);
+            maxHP -= secondName.getHpAddition(maxHP);
+            hp = maxHP;
+            silent -= secondName.getSilent();
+            petRate -= secondName.getPetRate();
+        }
         this.secondName = secondName;
+        if(this.secondName!=null){
+            atk += secondName.getAtkAddition(atk);
+            maxHP += secondName.getHpAddition(maxHP);
+            hp = maxHP;
+            silent += secondName.getSilent();
+            petRate += secondName.getPetRate();
+        }
     }
 
     public String getType() {
@@ -75,11 +106,11 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
         this.material = material;
     }
 
-    public long getMaxHP() {
+    public long getMaxHp() {
         return maxHP;
     }
 
-    public void setMaxHP(long maxHP) {
+    public void setMaxHp(long maxHP) {
         this.maxHP = maxHP;
     }
 
@@ -145,11 +176,11 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
     }
 
     public String getDisplayName() {
-        return "<font color='" + color + "'>" + firstName + "的" + secondName + type + "(" + element.getCn() + ")" + (sex == 0 ? "♂" : "♀") + "</font>";
+        return "<font color='" + color + "'>" + firstName.getName() + "的" + secondName.getName() + type + "(" + element.getCn() + ")" + (sex == 0 ? "♂" : "♀") + "</font>";
     }
 
     public String getName(){
-        return firstName + "的" + secondName + type;
+        return firstName.getName() + "的" + secondName.getName() + type;
     }
 
     public String getColor() {
@@ -188,5 +219,9 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void setSkill(Skill skill) {
+        this.skill = skill;
     }
 }

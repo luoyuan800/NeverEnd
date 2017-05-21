@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by luoyuan on 2017/3/28.
  */
-public class InfoControl implements InfoControlInterface {
+public class GameContext implements InfoControlInterface {
     private RunningService runningService;
     private RollTextView textView;
     private Context context;
@@ -35,7 +35,7 @@ public class InfoControl implements InfoControlInterface {
     private AccessoryHelper accessoryHelper;
     private PetMonsterHelper petMonsterHelper;
 
-    public InfoControl(Context context) {
+    public GameContext(Context context) {
         this.context = context;
     }
 
@@ -52,6 +52,10 @@ public class InfoControl implements InfoControlInterface {
         viewHandler.refreshAccessory(hero);
         viewHandler.refreshSkill(hero);
         viewHandler.refreshPets(hero);
+        accessoryHelper = AccessoryHelper.getOrCreate(this);
+        petMonsterHelper = PetMonsterHelper.instance;
+        petMonsterHelper.setRandom(random);
+        petMonsterHelper.setMonsterLoader(PetMonsterLoder.getOrCreate(this));
         runningService = new RunningService(hero, maze, this, dataManager, Data.REFRESH_SPEED);
         executor.scheduleAtFixedRate(runningService, 0, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(new Runnable() {
@@ -61,10 +65,7 @@ public class InfoControl implements InfoControlInterface {
                     viewHandler.refreshFreqProperties();
             }
         }, 0, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
-        accessoryHelper = AccessoryHelper.getOrCreate(this);
-        petMonsterHelper = PetMonsterHelper.instance;
-        petMonsterHelper.setRandom(random);
-        petMonsterHelper.setMonsterLoader(PetMonsterLoder.getOrCreate(this));
+
     }
 
     public Hero getHero() {

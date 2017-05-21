@@ -25,7 +25,7 @@ import static cn.luo.yuan.maze.service.ListenerService.winListeners;
  */
 public class RunningService implements Runnable {
     private Hero hero;
-    private InfoControl infoControl;
+    private GameContext gameContext;
     private Maze maze;
     private boolean running;
     private boolean pause;
@@ -35,14 +35,14 @@ public class RunningService implements Runnable {
     private DataManager dataManager;
     private Monster monster;
 
-    public RunningService(Hero hero, Maze maze, InfoControl infoControl, DataManager dataManager, long fps) {
+    public RunningService(Hero hero, Maze maze, GameContext gameContext, DataManager dataManager, long fps) {
         this.hero = hero;
-        this.infoControl = infoControl;
+        this.gameContext = gameContext;
         this.maze = maze;
         running = true;
         this.fps = fps;
         this.dataManager = dataManager;
-        random = infoControl.getRandom();
+        random = gameContext.getRandom();
     }
 
     public void close() {
@@ -60,7 +60,7 @@ public class RunningService implements Runnable {
 
     @Override
     public void run() {
-        PetMonsterHelper monsterHelper = infoControl.getPetMonsterHelper();
+        PetMonsterHelper monsterHelper = gameContext.getPetMonsterHelper();
         startTime = System.currentTimeMillis();
         if (running) {
             try {
@@ -84,33 +84,35 @@ public class RunningService implements Runnable {
                     }
                     String msg;
                     if (point > 0 && (maze.getLevel() > maze.getMaxLevel() || random.nextBoolean())) {
-                        msg = String.format(infoControl.getContext().getString(R.string.move_to_next_level),
+                        msg = String.format(gameContext.getContext().getString(R.string.move_to_next_level),
                                 hero.getDisplayName(), StringUtils.formatNumber(maze.getLevel()), StringUtils.formatNumber(point));
                     } else {
                         point = 1;
-                        msg = String.format(infoControl.getContext().getString(R.string.move_to_next_level),
+                        msg = String.format(gameContext.getContext().getString(R.string.move_to_next_level),
                                 hero.getDisplayName(), StringUtils.formatNumber(maze.getLevel()), StringUtils.formatNumber(point));
                     }
                     if (maze.getMaxLevel() < maze.getLevel()) {
                         maze.setMaxLevel(maze.getLevel());
                     }
                     hero.setPoint(hero.getPoint() + point);
-                    infoControl.addMessage(msg);
+                    gameContext.addMessage(msg);
                     if ((System.currentTimeMillis() - startTime) % 1000 == 5 * 60) {//每隔五分钟自动存储一次
-                        infoControl.save();
+                        gameContext.save();
                     }
                     maze.setStep(0);
                 } else {
                     Monster monster = monsterHelper.randomMonster();
                     if (monster != null) {
-                        BattleService battleService = new BattleService(infoControl, monster);
+                        BattleService battleService = new BattleService(hero,monster, gameContext.getRandom());
+                        BattleMessage battleMessage = new BattleMessageImp(gameContext);
+                        battleService.setBattleMessage(battleMessage);
                         if (battleService.battle()) {
                             maze.setStreaking(maze.getStreaking() + 1);
                             hero.setMaterial(hero.getMaterial() + monster.getMaterial());
-                            infoControl.addMessage(String.format(infoControl.getContext().getString(R.string.add_mate), StringUtils.formatNumber(monster.getMaterial())));
+                            gameContext.addMessage(String.format(gameContext.getContext().getString(R.string.add_mate), StringUtils.formatNumber(monster.getMaterial())));
                             Pet pet = tryCatch(monster, dataManager.getPetCount());
                             if (pet != null) {
-                                infoControl.addMessage(String.format(Resource.getString(R.string.pet_catch), pet.getDisplayName()));
+                                gameContext.addMessage(String.format(Resource.getString(R.string.pet_catch), pet.getDisplayName()));
                                 dataManager.savePet(pet);
                                 for (PetCatchListener listener : petCatchListeners.values()) {
                                     listener.catchPet(pet);
@@ -125,10 +127,10 @@ public class RunningService implements Runnable {
                                 lostListener.lost(hero, monster);
                             }
                             if (hero.getHp() <= 0) {
-                                infoControl.addMessage(String.format(infoControl.getContext().getString(R.string.lost), hero.getDisplayName()));
+                                gameContext.addMessage(String.format(gameContext.getContext().getString(R.string.lost), hero.getDisplayName()));
                                 hero.setHp(hero.getMaxHp());
                                 for (Pet pet : hero.getPets()) {
-                                    pet.setHp(pet.getMaxHP());
+                                    pet.setHp(pet.getMaxHp());
                                 }
                                 maze.setLevel(1);
                             }
@@ -147,8 +149,8 @@ public class RunningService implements Runnable {
 
     private Pet tryCatch(Monster monster, int petCount) {
         try {
-            if (infoControl.getPetMonsterHelper().isCatchAble(monster, hero, random, petCount)) {
-                return infoControl.getPetMonsterHelper().monsterToPet(monster, hero);
+            if (gameContext.getPetMonsterHelper().isCatchAble(monster, hero, random, petCount)) {
+                return gameContext.getPetMonsterHelper().monsterToPet(monster, hero);
             } else {
                 return null;
             }

@@ -8,6 +8,8 @@ import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Race;
+import cn.luo.yuan.maze.model.names.FirstName;
+import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.xmlpull.v1.XmlPullParser;
@@ -21,15 +23,15 @@ import java.lang.ref.WeakReference;
  */
 public class PetMonsterLoder implements MonsterLoader {
     private static PetMonsterLoder instance;
-    private InfoControl control;
+    private GameContext control;
     private ArrayMap<PetMonsterHelper.MonsterKey, WeakReference<Monster>> monsterCache = new ArrayMap<>();
 
-    private PetMonsterLoder(InfoControl control) {
+    private PetMonsterLoder(GameContext control) {
         this.control = control;
         init();
     }
 
-    public static PetMonsterLoder getOrCreate(InfoControl control) {
+    public static PetMonsterLoder getOrCreate(GameContext control) {
         if (instance == null) {
             synchronized (PetMonsterLoder.class) {
                 if (instance == null) {
@@ -73,7 +75,9 @@ public class PetMonsterLoder implements MonsterLoader {
                             clone.setSex(control.getRandom().nextInt(1));
                         }
                         clone.setElement(Element.values()[control.getRandom().nextInt(Element.values().length)]);
-                        clone.setMaterial(Data.getMonsterMaterial(monster.getMaxHP(), monster.getAtk(), control.getMaze().getLevel(), control.getRandom()));
+                        clone.setMaterial(Data.getMonsterMaterial(monster.getMaxHp(), monster.getAtk(), control.getMaze().getLevel(), control.getRandom()));
+                        clone.setFirstName(FirstName.getRandom(control.getMaze().getLevel(),control.getRandom()));
+                        clone.setSecondName(SecondName.getRandom(control.getMaze().getLevel(), control.getRandom()));
                     }
                     return clone;
                 }
@@ -285,7 +289,8 @@ public class PetMonsterLoder implements MonsterLoader {
                 break;
             case "hp":
                 if (monster != null) {
-                    monster.setMaxHP(Long.parseLong(parser.nextText()));
+                    monster.setMaxHp(Long.parseLong(parser.nextText()));
+                    monster.setHp(monster.getMaxHp());
                 }
                 break;
             case "hit":

@@ -30,7 +30,7 @@ class Medallion : Goods {
         if(super.use(properties)){
             properties.hero.hp = properties.hero.maxHp
             for(pet in properties.hero.pets){
-                pet.hp = pet.maxHP
+                pet.hp = pet.maxHp
             }
             return true
         }else {

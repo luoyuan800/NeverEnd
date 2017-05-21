@@ -11,6 +11,7 @@ public interface HarmAble {
     default void setMaxHp(long hp){
 
     }
+    long getMaxHp();
 
     Element getElement();
 }

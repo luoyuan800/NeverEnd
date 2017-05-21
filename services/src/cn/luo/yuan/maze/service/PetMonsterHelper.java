@@ -2,21 +2,12 @@ package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.exception.MonsterToPetException;
 import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Pet;
-import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.utils.Random;
-import cn.luo.yuan.maze.utils.StringUtils;
 
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-
-import static java.awt.SystemColor.control;
 
 /**
  * Created by luoyuan on 2017/5/13.
@@ -84,9 +75,9 @@ public class PetMonsterHelper {
             if (def > 0) {
                 major.setDef(def);
             }
-            long maxHP = major.getMaxHP() + random.nextLong(minor.getMaxHP() * (minor.getLevel() + 1) / 2);
+            long maxHP = major.getMaxHp() + random.nextLong(minor.getMaxHp() * (minor.getLevel() + 1) / 2);
             if (maxHP > 0) {
-                major.setMaxHP(maxHP);
+                major.setMaxHp(maxHP);
             }
             return true;
         }
@@ -103,7 +94,7 @@ public class PetMonsterHelper {
                 pet.setType(eveMonster.getType());
                 pet.setAtk(pet.getAtk() + random.nextLong(eveMonster.getAtk() / 3));
                 pet.setDef(pet.getDef() + random.nextLong(eveMonster.getDef() / 3));
-                pet.setMaxHP(pet.getMaxHP() + random.nextLong(eveMonster.getMaxHP() / 3));
+                pet.setMaxHp(pet.getMaxHp() + random.nextLong(eveMonster.getMaxHp() / 3));
                 pet.setHitRate((pet.getHitRate() + eveMonster.getHitRate()) / 2);
                 pet.setEggRate((pet.getEggRate() + eveMonster.getEggRate()) / 2);
                 return true;

@@ -1,7 +1,5 @@
 package cn.luo.yuan.maze.service;
 
-import android.content.Context;
-import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.listener.BattleEndListener;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Element;
@@ -21,8 +19,9 @@ import cn.luo.yuan.maze.model.skill.SkillAbleObject;
 import cn.luo.yuan.maze.model.skill.SkillParameter;
 import cn.luo.yuan.maze.model.skill.SkillResult;
 import cn.luo.yuan.maze.utils.Random;
-import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
+
+import javax.print.attribute.standard.MediaSize;
 
 import static cn.luo.yuan.maze.service.ListenerService.battleEndListeners;
 import static java.awt.SystemColor.control;
@@ -52,9 +51,9 @@ public class BattleService {
                 monster.setHp(monster.getHp() / 2);
             }
             if (heroAtk) {
-                atk();
+                atk(hero, monster);
             } else {
-                heroDefend();
+                atk(monster, hero);
             }
             round++;
         }
@@ -79,6 +78,10 @@ public class BattleService {
             }
             return false;
         }
+    }
+
+    public void setBattleMessage(BattleMessage battleMessage) {
+        this.battleMessage = battleMessage;
     }
 
     private void atk(HarmAble hero, HarmAble monster) {
@@ -125,6 +128,7 @@ public class BattleService {
             defend = defend / 2;
             defend = defend + random.nextLong(defend);
             if (isParry) {
+                battleMessage.parry((NameObject)monster);
                 //格挡，生效防御力三倍
                 defend *= 3;
             }
@@ -140,36 +144,6 @@ public class BattleService {
             if(hero instanceof NameObject) {
                 battleMessage.dodge((NameObject) hero, (NameObject) monster);
             }
-        }
-    }
-
-    private void heroDefend() {
-        if (petActionOnDef()) {
-            return;
-        }
-
-        boolean isDodge = random.nextLong(100) + hero.getAgi() * Data.DODGE_AGI_RATE > 97 + random.nextInt(1000) + random.nextLong((long) (hero.getStr() * Data.DODGE_STR_RATE));
-        boolean isParry = false;
-        if (isDodge) {
-            control.addMessage(String.format(context.getString(R.string.doge_happen), hero.getDisplayName(), monster.getDisplayName()));
-        } else {
-            isParry = random.nextLong(100) + hero.getStr() * Data.PARRY_STR_RATE > 97 + random.nextInt(1000) + random.nextLong((long) (hero.getAgi() * Data.PARRY_AGI_RATE));
-            long defend = hero.getUpperDef();
-            defend = defend / 2;
-            defend = defend + random.nextLong(defend);
-            if (isParry) {
-                control.addMessage(String.format(context.getString(R.string.parry_happen), hero.getDisplayName()));
-                //格挡，生效防御力三倍
-                defend *= 3;
-            }
-            long harm = monster.getAtk() - defend;
-            if (harm <= 0) {
-                harm = random.nextLong(control.getMaze().getLevel());
-            }
-            harm = elementAffectHarm(monster.getElement(), hero.getElement(), harm);
-            hero.setHp(hero.getHpGrow() - harm);
-            control.addMessage(String.format(context.getResources().getString(R.string.atk_harm_color_msg),
-                    monster.getDisplayName(), hero.getDisplayName(), StringUtils.formatNumber(harm)));
         }
     }
 
@@ -243,10 +217,7 @@ public class BattleService {
             if (target instanceof SilentAbleObject) {
                 boolean silent = random.nextInt(100) + random.nextFloat() < ((SilentAbleObject) target).getSilent();
                 if (silent) {
-                    control.addMessage(String.format(Resource.getString(R.string.silent_skill),
-                            (atker instanceof NameObject ? ((NameObject) atker).getDisplayName() : ""),
-                            atkSkill.getName(),
-                            (target instanceof NameObject ? ((NameObject) target).getDisplayName() : "")));
+                    battleMessage.silent(atker,target, atkSkill);
                     return true;
                 }
             }
@@ -263,20 +234,18 @@ public class BattleService {
                 }
                 if(defSkill!=null){
                     SkillResult result = defSkill.invoke(defPara);
-                    control.addMessage(String.format(Resource.getString(R.string.release_skill), target instanceof NameObject ? ((NameObject) target).getDisplayName() : "", defSkill.getDisplayName()));
+                    battleMessage.releaseSkill(target,defSkill );
                 }
             }
             SkillResult result = atkSkill.invoke(atkPara);
-            control.addMessage(String.format(Resource.getString(R.string.release_skill), atker instanceof NameObject ? ((NameObject) atker).getDisplayName() : "", atkSkill.getDisplayName()));
+            battleMessage.releaseSkill((HarmAble)atker, atkSkill);
             if(result instanceof EndBattleResult){
                 return true;
             }
             if(result instanceof HarmResult){
-                control.addMessage(String.format(Resource.getString(R.string.atk_harm_color_msg),
-                        (atker instanceof NameObject ? ((NameObject) atker).getDisplayName() : ""),
-                        (target instanceof NameObject ? ((NameObject) target).getDisplayName() : ""),
-                        StringUtils.formatNumber(((HarmResult) result).getHarm())
-                        ));
+                if(atker instanceof NameObject && target instanceof NameObject) {
+                    battleMessage.harm((NameObject) atker, (NameObject) target, ((HarmResult) result).getHarm());
+                }
             }
             return true;
         }

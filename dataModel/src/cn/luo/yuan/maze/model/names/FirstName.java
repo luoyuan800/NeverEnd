@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model.names;
 
 
+import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.utils.Random;
 
 /**
@@ -72,4 +73,5 @@ public enum FirstName {
         }
         return null;
     }
+
 }

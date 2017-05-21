@@ -1,8 +1,11 @@
 package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.model.skill.SkillAbleObject;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -10,8 +13,8 @@ import cn.luo.yuan.maze.utils.StringUtils;
  * Created by gluo on 5/19/2017.
  */
 public class BattleMessageImp implements BattleMessage {
-    private InfoControl control;
-    public BattleMessageImp(InfoControl control){
+    private GameContext control;
+    public BattleMessageImp(GameContext control){
         this.control = control;
     }
     public void battleTooLong(){
@@ -58,5 +61,18 @@ public class BattleMessageImp implements BattleMessage {
     public void parry(NameObject hero){
         control.addMessage(String.format(Resource.getString(R.string.parry_happen), hero.getDisplayName()));
 
+    }
+
+    @Override
+    public void silent(SkillAbleObject atker, HarmAble target, Skill skill) {
+        control.addMessage(String.format(Resource.getString(R.string.silent_skill),
+                (atker instanceof NameObject ? ((NameObject) atker).getDisplayName() : ""),
+                skill.getName(),
+                (target instanceof NameObject ? ((NameObject) target).getDisplayName() : "")));
+    }
+
+    @Override
+    public void releaseSkill(HarmAble target, Skill skill) {
+        control.addMessage(String.format(Resource.getString(R.string.release_skill), target instanceof NameObject ? ((NameObject) target).getDisplayName() : "", skill.getDisplayName()));
     }
 }

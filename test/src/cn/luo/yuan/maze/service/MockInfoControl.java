@@ -6,7 +6,7 @@ import cn.luo.yuan.maze.utils.Random;
 /**
  * Created by gluo on 5/16/2017.
  */
-public class MockInfoControl extends InfoControl {
+public class MockInfoControl extends GameContext {
     private Random random = new Random(System.currentTimeMillis());
 
     public MockInfoControl(Context context) {

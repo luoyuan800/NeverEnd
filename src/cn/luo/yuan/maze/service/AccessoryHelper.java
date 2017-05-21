@@ -36,7 +36,7 @@ public class AccessoryHelper {
     private Context context;
     private Random random;
     private ArrayMap<AccessoryKey, WeakReference<Accessory>> accessoryCache = new ArrayMap<>();
-    private InfoControl control;
+    private GameContext control;
 
     public AccessoryHelper(Context context, Random random) {
         this.context = context;
@@ -50,7 +50,7 @@ public class AccessoryHelper {
         random = new Random(System.currentTimeMillis());
     }
 
-    public static AccessoryHelper getOrCreate(InfoControl control) {
+    public static AccessoryHelper getOrCreate(GameContext control) {
         if (instance == null) {
             synchronized (AccessoryHelper.class) {
                 if (instance == null) {

@@ -8,6 +8,10 @@ import android.view.MotionEvent;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import cn.luo.yuan.maze.utils.StringUtils;
+
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Created by luoyuan on 2017/3/19.
@@ -15,23 +19,29 @@ import android.widget.TextView;
 public class RollTextView extends ScrollView {
     private final Handler handler = new Handler();
     private LinearLayout layout;
-    private String info;
+    private Queue<String> messages = new ConcurrentLinkedQueue<>();
     private boolean scroll = true;
     private Runnable addText = new Runnable() {
         @Override
         public void run() {
-            TextView tv;
-            if (layout.getChildCount() < 50) {
-                tv = new TextView(getContext());
-                tv.setWidth(getWidth() - 5);
-            } else {
-                tv = (TextView) layout.getChildAt(0);
-                layout.removeView(tv);
+            if(messages.isEmpty()){
+                return;
             }
+            String info = messages.poll();
+            if(StringUtils.isNotEmpty(info)) {
+                TextView tv;
+                if (layout.getChildCount() < 50) {
+                    tv = new TextView(getContext());
+                    tv.setWidth(getWidth() - 5);
+                } else {
+                    tv = (TextView) layout.getChildAt(0);
+                    layout.removeView(tv);
+                }
 
-            tv.setText(Html.fromHtml(info));
-            layout.addView(tv);
-            scrollToButton();
+                tv.setText(Html.fromHtml(info));
+                layout.addView(tv);
+                scrollToButton();
+            }
         }
     };
 
@@ -52,7 +62,7 @@ public class RollTextView extends ScrollView {
     }
 
     public synchronized void addMessage(String info) {
-        this.info = info;
+        this.messages.add(info);
         getHandler().post(addText);
     }
 
