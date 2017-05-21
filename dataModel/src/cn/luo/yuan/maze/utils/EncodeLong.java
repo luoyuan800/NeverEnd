@@ -15,7 +15,7 @@ public class EncodeLong implements Serializable {
         setValue(def);
     }
 
-    public void setValue(long value){
+    public synchronized void setValue(long value){
         char[] chars = Long.toBinaryString(value).toCharArray();
         key = new byte[chars.length];
         random.randomBinary(key);
