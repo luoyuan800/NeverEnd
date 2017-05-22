@@ -32,6 +32,7 @@ public class IndexManager {
                 index.setLevel(cursor.getLong(cursor.getColumnIndex("level")));
                 index.setMaxLevel(cursor.getLong(cursor.getColumnIndex("max_level")));
                 index.setIndex(cursor.getInt(cursor.getColumnIndex("hero_index")));
+                index.setId(cursor.getString(cursor.getColumnIndex("id")));
                 index.setElement(Element.valueOf(cursor.getString(cursor.getColumnIndex("element"))));
                 indexs.add(index);
                 cursor.moveToNext();

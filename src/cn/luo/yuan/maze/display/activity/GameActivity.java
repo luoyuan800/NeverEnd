@@ -61,6 +61,7 @@ public class GameActivity extends Activity {
 
                 control.startGame();
                 progressDialog.dismiss();
+
             }
         }).start();
     }
@@ -138,7 +139,7 @@ public class GameActivity extends Activity {
                     ((TextView) context.get().findViewById(R.id.hero_level)).setText(StringUtils.formatNumber(control.getMaze().getLevel()));
                     ((TextView) context.get().findViewById(R.id.hero_level_max)).setText(StringUtils.formatNumber(control.getMaze().getMaxLevel()));
                     ((TextView) context.get().findViewById(R.id.hero_mate)).setText(StringUtils.formatNumber(control.getHero().getMaterial()));
-                    ((TextView) context.get().findViewById(R.id.hero_point)).setText(StringUtils.formatNumber(control.getHero().getMaterial()));
+                    ((TextView) context.get().findViewById(R.id.hero_point)).setText(StringUtils.formatNumber(control.getHero().getPoint()));
                     ((TextView) context.get().findViewById(R.id.hero_click)).setText(StringUtils.formatNumber(control.getHero().getClick()));
                     ((TextView) context.get().findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(control.getHero().getCurrentHp()));
                     ((TextView) context.get().findViewById(R.id.hero_max_hp)).setText(StringUtils.formatNumber(control.getHero().getMaxHp()));
