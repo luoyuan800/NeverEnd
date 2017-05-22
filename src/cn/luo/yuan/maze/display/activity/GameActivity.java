@@ -47,7 +47,7 @@ public class GameActivity extends Activity {
         Resource.init(this);
         setContentView(R.layout.game_layout);
         Intent intent = getIntent();
-        ListenerService.init();
+//        ListenerService.init();
         dataManager = new DataManager(intent.getIntExtra("index", -1), this);
         control = new GameContext(this);
         control.setDataManager(dataManager);

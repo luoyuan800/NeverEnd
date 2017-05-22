@@ -8,15 +8,14 @@ import cn.luo.yuan.maze.model.effect.LongValueEffect;
 import cn.luo.yuan.maze.model.effect.original.AtkEffect;
 import cn.luo.yuan.maze.model.effect.original.MeetRateEffect;
 import cn.luo.yuan.maze.utils.annotation.LongValue;
+import org.testng.annotations.Test;
 
 /**
  * Created by gluo on 5/17/2017.
  */
 public class TestAccessoryHelper {
-    public static void main(String...args){
-        new TestAccessoryHelper().testFuse();
-    }
-    private void testFuse(){
+    @Test
+    public void testFuse(){
         AccessoryHelper helper = new AccessoryHelper();
         Accessory major = new Accessory();
         AgiEffect agiEffect = new AgiEffect();
@@ -47,7 +46,7 @@ public class TestAccessoryHelper {
                     }
                 }
             }
-            /*minor = new Accessory();
+            minor = new Accessory();
             meetRateEffect = new MeetRateEffect();
             meetRateEffect.setMeetRate(10.0f);
             minor.getEffects().add(meetRateEffect);
@@ -55,7 +54,7 @@ public class TestAccessoryHelper {
             agiEffect.setAgi(10);
             minor.getEffects().add(agiEffect);
             minor.setType("ring");
-            minor.setName("test1");*/
+            minor.setName("test1");
         }
         System.out.println("Rate: " + major.getLevel()* 100 / count + "%");
     }

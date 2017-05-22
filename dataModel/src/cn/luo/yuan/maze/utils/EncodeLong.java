@@ -30,6 +30,8 @@ public class EncodeLong implements Serializable {
         if (value < 0) {
             negative = true;
             value = -value;
+        }else{
+            negative = false;
         }
         char[] chars = Long.toBinaryString(value).toCharArray();
         key = new byte[chars.length];

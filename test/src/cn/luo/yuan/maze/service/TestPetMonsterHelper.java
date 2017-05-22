@@ -1,18 +1,17 @@
 package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
+import org.testng.annotations.Test;
 
 /**
  * Created by gluo on 5/16/2017.
  */
 public class TestPetMonsterHelper {
-    public static void main(String... args) {
-        new TestPetMonsterHelper().testUpgrade();
-    }
 
+    @Test
     public void testUpgrade() {
-        GameContext control = new MockInfoControl();
         Pet major = new Pet();
         major.setLevel(0);
         major.setAtk(100);
@@ -28,6 +27,7 @@ public class TestPetMonsterHelper {
         long originDef = major.getDef();
         long originHp = major.getMaxHp();
         PetMonsterHelper helper = PetMonsterHelper.instance;
+        helper.setRandom(new Random(System.currentTimeMillis()));
         float percent = 0;
         int count = 100000;
         for (int i = 0; i < count; i++) {

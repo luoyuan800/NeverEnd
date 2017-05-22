@@ -55,6 +55,7 @@ public class BattleService {
             } else {
                 atk(monster, hero);
             }
+            heroAtk = !heroAtk;
             round++;
         }
         if (monster.getHp() <= 0) {

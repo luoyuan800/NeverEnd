@@ -12,17 +12,10 @@ import java.util.HashMap;
  * Created by gluo on 5/8/2017.
  */
 public class ListenerService {
-    public static HashMap<String, BattleEndListener> battleEndListeners;
-    public static HashMap<String, PetCatchListener> petCatchListeners;
-    public static HashMap<String, LostListener> lostListeners;
-    public static HashMap<String, WinListener> winListeners;
-    public static void init(){
-        battleEndListeners = new HashMap<>(2);
-        petCatchListeners = new HashMap<>(2);
-        lostListeners = new HashMap<>(2);
-        winListeners = new HashMap<>(2);
-
-    }
+    public static HashMap<String, BattleEndListener> battleEndListeners = new HashMap<>(2);
+    public static HashMap<String, PetCatchListener> petCatchListeners = new HashMap<>(2);
+    public static HashMap<String, LostListener> lostListeners = new HashMap<>(2);
+    public static HashMap<String, WinListener> winListeners = new HashMap<>(2);
 
     public static void registerListener(Listener listener){
         if(listener instanceof BattleEndListener){

@@ -35,12 +35,13 @@ public class AccessoryHelper {
     private static AccessoryHelper instance;
     private Context context;
     private Random random;
-    private ArrayMap<AccessoryKey, WeakReference<Accessory>> accessoryCache = new ArrayMap<>();
+    private ArrayMap<AccessoryKey, WeakReference<Accessory>> accessoryCache;
     private GameContext control;
 
     public AccessoryHelper(Context context, Random random) {
         this.context = context;
         this.random = random;
+        accessoryCache = new ArrayMap<>();
     }
 
     /**
