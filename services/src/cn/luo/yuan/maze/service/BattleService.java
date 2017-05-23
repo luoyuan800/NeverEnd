@@ -107,14 +107,14 @@ public class BattleService {
 
         boolean isDodge = false;
         if(defender instanceof Hero) {
-            isDodge = random.nextLong(100) + ((Hero)defender).getAgi() * Data.DODGE_AGI_RATE > 97 + random.nextInt(1000) + random.nextLong((long) (((Hero)defender).getStr() * Data.DODGE_STR_RATE));
+            isDodge = random.nextLong(100) + ((Hero)defender).getAgi() * Data.DODGE_AGI_RATE > 97 + random.nextInt(100) + random.nextLong((long) (((Hero)defender).getStr() * Data.DODGE_STR_RATE));
         }
         if(!isDodge) {
             long atk = atker instanceof Hero ? ((Hero) atker).getUpperAtk() : atker.getAtk();
             atk = atk / 3;
             atk = atk * 2 + random.nextLong(atk);
             boolean isHit = random.nextLong(100) + (atker instanceof Hero ? ((Hero) atker).getStr() : 0) * Data.HIT_STR_RATE > 97
-                    + random.nextInt(1000) +
+                    + random.nextInt(100) +
                     random.nextLong((long) ((atker instanceof Hero ? ((Hero) atker).getAgi() : 0) * Data.HIT_AGI_RATE));
             if (isHit) {
                 if (atker instanceof NameObject)
@@ -123,7 +123,7 @@ public class BattleService {
             }
             boolean isParry = false;
             if(defender instanceof Hero) {
-                isParry = random.nextLong(100) + ((Hero)defender).getStr() * Data.PARRY_STR_RATE > 97 + random.nextInt(1000) + random.nextLong((long) (((Hero)defender).getAgi() * Data.PARRY_AGI_RATE));
+                isParry = random.nextLong(100) + ((Hero)defender).getStr() * Data.PARRY_STR_RATE > 97 + random.nextInt(100) + random.nextLong((long) (((Hero)defender).getAgi() * Data.PARRY_AGI_RATE));
             }
             long defend = defender instanceof Hero ? ((Hero) defender).getUpperDef() : defender.getDef();
             defend = defend / 2;

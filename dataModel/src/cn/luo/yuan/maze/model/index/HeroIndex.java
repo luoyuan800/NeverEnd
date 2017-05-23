@@ -1,6 +1,8 @@
 package cn.luo.yuan.maze.model.index;
 
 import cn.luo.yuan.maze.model.Element;
+import cn.luo.yuan.maze.model.Race;
+import cn.luo.yuan.maze.utils.Random;
 
 /**
  * Created by luoyuan on 2017/3/19.
@@ -14,6 +16,7 @@ public class HeroIndex {
     private String name;
     private Element element;
     private String id;
+    private Race race;
 
     public Integer getIndex() {
         return index;
@@ -72,7 +75,7 @@ public class HeroIndex {
     }
 
     public int hashCode(){
-        return (index + name + id).hashCode();
+        return id.hashCode();
     }
 
     public String getId() {
@@ -81,5 +84,13 @@ public class HeroIndex {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Race getRace() {
+        return race;
+    }
+
+    public void setRace(Race race) {
+        this.race = race;
     }
 }

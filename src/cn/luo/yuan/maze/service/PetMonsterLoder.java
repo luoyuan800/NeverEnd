@@ -4,12 +4,9 @@ import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.util.ArrayMap;
 import cn.luo.yuan.maze.R;
-import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Race;
-import cn.luo.yuan.maze.model.names.FirstName;
-import cn.luo.yuan.maze.model.names.SecondName;
+import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.xmlpull.v1.XmlPullParser;
@@ -17,6 +14,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.Map;
 
 /**
  * Created by luoyuan on 2017/5/13.
@@ -54,38 +52,6 @@ public class PetMonsterLoder implements MonsterLoader {
             drawable = Resource.loadImageFromAssets("monster/wenhao.jpg");
         }
         return drawable;
-    }
-
-    public Monster randomMonster() {
-        if (monsterCache.size() == 0) {
-            init();
-        }
-        for (ArrayMap.Entry<PetMonsterHelper.MonsterKey, WeakReference<Monster>> entry : monsterCache.entrySet()) {
-            PetMonsterHelper.MonsterKey key = entry.getKey();
-            Monster monster = entry.getValue().get();
-            if (key.min_level < control.getMaze().getLevel() && control.getRandom().nextInt(100 + key.count) < key.meet_rate) {
-                key.count++;
-                if (monster == null) {
-                    monster = loadMonsterByIndex(key.index);
-                }
-                if (monster != null) {
-                    Monster clone = monster.clone();
-                    if (clone != null) {
-                        if (clone.getSex() < 0) {
-                            clone.setSex(control.getRandom().nextInt(1));
-                        }
-                        clone.setElement(Element.values()[control.getRandom().nextInt(Element.values().length)]);
-                        clone.setMaterial(Data.getMonsterMaterial(monster.getMaxHp(), monster.getAtk(), control.getMaze().getLevel(), control.getRandom()));
-                        clone.setFirstName(FirstName.getRandom(control.getMaze().getLevel(),control.getRandom()));
-                        clone.setSecondName(SecondName.getRandom(control.getMaze().getLevel(), control.getRandom()));
-                    }
-                    return clone;
-                }
-            } else {
-                key.count--;
-            }
-        }
-        return null;
     }
 
     public String getDescription(int index, String type) {
@@ -224,7 +190,7 @@ public class PetMonsterLoder implements MonsterLoader {
         return monster;
     }
 
-    private void init() {
+    public void init() {
         try (XmlResourceParser parser = control.getContext().getResources().getXml(R.xml.monsters)) {
             try {
                 int currentIndex = -1;
@@ -259,6 +225,15 @@ public class PetMonsterLoder implements MonsterLoader {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public Random getRandom() {
+        return control.getRandom();
+    }
+
+    public Map<PetMonsterHelper.MonsterKey, WeakReference<Monster>> getMonsterCache() {
+        return monsterCache;
     }
 
     private void nextMonsterTag(XmlResourceParser parser) {

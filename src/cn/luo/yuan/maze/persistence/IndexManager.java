@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.HeroIndex;
+import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class IndexManager {
                 index.setIndex(cursor.getInt(cursor.getColumnIndex("hero_index")));
                 index.setId(cursor.getString(cursor.getColumnIndex("id")));
                 index.setElement(Element.valueOf(cursor.getString(cursor.getColumnIndex("element"))));
+                index.setRace(Race.valueOf(cursor.getString(cursor.getColumnIndex("race"))));
                 indexs.add(index);
                 cursor.moveToNext();
             }

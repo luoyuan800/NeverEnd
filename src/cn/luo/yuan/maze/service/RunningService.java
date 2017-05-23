@@ -101,7 +101,7 @@ public class RunningService implements Runnable {
                     }
                     maze.setStep(0);
                 } else {
-                    Monster monster = monsterHelper.randomMonster();
+                    Monster monster = monsterHelper.randomMonster(maze.getLevel());
                     if (monster != null) {
                         BattleService battleService = new BattleService(hero,monster, gameContext.getRandom());
                         BattleMessage battleMessage = new BattleMessageImp(gameContext);

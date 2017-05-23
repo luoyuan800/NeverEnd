@@ -48,8 +48,8 @@ public class PetMonsterHelper {
         }
     }
 
-    public Monster randomMonster() {
-        return monsterLoader.randomMonster();
+    public Monster randomMonster(long level) {
+        return monsterLoader.randomMonster(level);
     }
 
     public MonsterLoader getMonsterLoader() {
@@ -112,20 +112,6 @@ public class PetMonsterHelper {
         this.random = random;
     }
 
-    static class MonsterKey {
-        int count;
-        float meet_rate;
-        float min_level;
-        int index;
-
-        public int hashCode() {
-            return index;
-        }
-
-        public boolean equals(Object o) {
-            return o instanceof MonsterKey && ((MonsterKey) o).index == index;
-        }
-    }
 
     private Monster loadMonsterByIndex(int index) {
        return monsterLoader.loadMonsterByIndex(index);
