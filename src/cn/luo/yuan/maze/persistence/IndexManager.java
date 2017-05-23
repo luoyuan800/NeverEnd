@@ -24,7 +24,7 @@ public class IndexManager {
 
     public List<HeroIndex> getIndex(){
         List<HeroIndex> indexs = new ArrayList<>();
-        try (Cursor cursor = database.excuseSOL("select h.element, h.hero_index,h.name,h.last_update, h.created, m.level,m.max_level from hero h left join maze m on h.hero_index = m.hero_index order by h.last_update DESC")) {
+        try (Cursor cursor = database.excuseSOL("select h.id, h.race, h.element, h.hero_index,h.name,h.last_update, h.created, m.level,m.max_level from hero h left join maze m on h.hero_index = m.hero_index order by h.last_update DESC")) {
             while (!cursor.isAfterLast()) {
                 HeroIndex index = new HeroIndex();
                 index.setCreated(cursor.getLong(cursor.getColumnIndex("created")));

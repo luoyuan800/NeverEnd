@@ -107,6 +107,7 @@ public class DataManager implements DataManagerInterface {
         values.put("reincarnate", hero.getReincarnate());
         values.put("last_update", System.currentTimeMillis());
         values.put("gift", hero.getGift());
+        values.put("race", hero.getRace().name());
         if (StringUtils.isNotEmpty(hero.getId())) {
             heroLoader.update(hero);
             database.updateById("hero", values, hero.getId());

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">勇无止尽</string>
+    <string name="app_name">勇者闯迷宫</string>
     <string name="server_version">1</string>
     <string name="atk_effect">增加攻击上限：</string>
     <string name="def_effect">增加防御上限：</string>
@@ -47,5 +47,5 @@
     <string name="release_skill">%1$s使用了%2$s技能</string>
     <string name="pet_dialog_title">宠物列表</string>
     <string name="race_input">选择种族</string>
-    <string name="loading">正在加载数据...</string>
+    <string name="loading">正在加载数据…</string>
 </resources>

@@ -145,6 +145,7 @@ public class Sqlite {
                 "created INTEGER," +
                 "hero_index TEXT NOT NULL ," +
                 "name TEXT NOT NULL," +
+                "race TEXT ," +
                 "gift TEXT ," +
                 "reincarnate INTEGER ," +
                 "id TEXT NOT NULL PRIMARY KEY," +

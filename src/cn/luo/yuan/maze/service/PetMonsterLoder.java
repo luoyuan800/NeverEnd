@@ -22,7 +22,7 @@ import java.util.Map;
 public class PetMonsterLoder implements MonsterLoader {
     private static PetMonsterLoder instance;
     private GameContext control;
-    private ArrayMap<PetMonsterHelper.MonsterKey, WeakReference<Monster>> monsterCache = new ArrayMap<>();
+    private ArrayMap<MonsterKey, WeakReference<Monster>> monsterCache = new ArrayMap<>();
 
     private PetMonsterLoder(GameContext control) {
         this.control = control;
@@ -135,7 +135,7 @@ public class PetMonsterLoder implements MonsterLoader {
 
     public Monster loadMonsterByIndex(int index) {
         Monster monster = null;
-        PetMonsterHelper.MonsterKey key = null;
+        MonsterKey key = null;
         try (XmlResourceParser parser = control.getContext().getResources().getXml(R.xml.monsters)) {
             loop:
             while (parser.getEventType() != XmlPullParser.END_DOCUMENT) {
@@ -150,7 +150,7 @@ public class PetMonsterLoder implements MonsterLoader {
                                 break;
                             case "monster":
                                 monster = new Monster();
-                                key = new PetMonsterHelper.MonsterKey();
+                                key = new MonsterKey();
                                 break;
                             case "name":
                                 if (monster != null) {
@@ -204,7 +204,7 @@ public class PetMonsterLoder implements MonsterLoader {
                                     break;
                                 case "meet":
                                     if (currentIndex > 0) {
-                                        PetMonsterHelper.MonsterKey key = new PetMonsterHelper.MonsterKey();
+                                        MonsterKey key = new MonsterKey();
                                         key.meet_rate = Float.parseFloat(parser.getAttributeValue(null, "meet_rate"));
                                         key.min_level = Long.parseLong(parser.getAttributeValue(null, "min_level"));
                                         key.index = currentIndex;
@@ -232,7 +232,7 @@ public class PetMonsterLoder implements MonsterLoader {
         return control.getRandom();
     }
 
-    public Map<PetMonsterHelper.MonsterKey, WeakReference<Monster>> getMonsterCache() {
+    public Map<MonsterKey, WeakReference<Monster>> getMonsterCache() {
         return monsterCache;
     }
 

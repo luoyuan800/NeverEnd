@@ -53,14 +53,13 @@ public class GameActivity extends Activity {
         control.setDataManager(dataManager);
         control.setViewHandler(new ViewHandler(this));
         control.setTextView((RollTextView) findViewById(R.id.info_view));
-        ProgressDialog progressDialog = new ProgressDialog(GameActivity.this);
+        /*ProgressDialog progressDialog = new ProgressDialog(GameActivity.this);
         progressDialog.setMessage(getString(R.string.loading));
-        progressDialog.show();
+        progressDialog.show();*/
         new Thread(new Runnable(){
             public void run() {
-
                 control.startGame();
-                progressDialog.dismiss();
+                //progressDialog.dismiss();
 
             }
         }).start();

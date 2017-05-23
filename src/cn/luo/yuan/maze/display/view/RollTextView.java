@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.display.view;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Message;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -17,7 +18,18 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Created by luoyuan on 2017/3/19.
  */
 public class RollTextView extends ScrollView {
-    private final Handler handler = new Handler();
+    private final Handler handler = new Handler(){
+        public void handleMessage(Message msg){
+            switch (msg.what){
+                case 0:
+                    messages.add(msg.obj.toString());
+                    break;
+                case 1:
+                    addText.run();
+                    break;
+            }
+        }
+    };
     private LinearLayout layout;
     private Queue<String> messages = new ConcurrentLinkedQueue<>();
     private boolean scroll = true;
@@ -62,17 +74,15 @@ public class RollTextView extends ScrollView {
     }
 
     public synchronized void addMessage(String info) {
-        this.messages.add(info);
-        getHandler().post(addText);
+        Message message = new Message();
+        message.obj = info;
+        message.what = 0;
+        getHandler().sendMessage(message);
+        getHandler().sendEmptyMessage(1);
     }
 
     public Handler getHandler() {
-
-        if (super.getHandler() != null) {
-            return super.getHandler();
-        } else {
-            return handler;
-        }
+        return handler;
     }
 
     public boolean onTouchEvent(MotionEvent event) {
