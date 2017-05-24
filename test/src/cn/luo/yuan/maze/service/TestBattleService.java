@@ -5,7 +5,6 @@ import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Monster;
-import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.skill.hero.HeroHit;
 import cn.luo.yuan.maze.utils.Random;
 import org.testng.annotations.Test;
@@ -40,7 +39,7 @@ public class TestBattleService {
         BattleMessage battleMessage = mock(BattleMessage.class);
         BattleService battleService = new BattleService(hero,monster,random);
         battleService.setBattleMessage(battleMessage);
-        battleService.battle();
+        battleService.battle(1);
         verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
         assertTrue(hero.getHp() <= 0 || monster.getHp() <= 0, "End battle!");
     }
@@ -63,7 +62,7 @@ public class TestBattleService {
         BattleMessage battleMessage = mock(BattleMessage.class);
         BattleService battleService = new BattleService(hero,monster,random);
         battleService.setBattleMessage(battleMessage);
-        battleService.battle();
+        battleService.battle(1);
         verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
         assertTrue(hero.getHp() <= 0, "End battle!");
     }
@@ -91,7 +90,7 @@ public class TestBattleService {
         BattleMessage battleMessage = mock(BattleMessage.class);
         BattleService battleService = new BattleService(hero,monster,random);
         battleService.setBattleMessage(battleMessage);
-        battleService.battle();
+        battleService.battle(1);
         //verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
         verify(battleMessage, atLeastOnce()).releaseSkill(any(), any());
     }
@@ -114,7 +113,7 @@ public class TestBattleService {
         BattleMessage battleMessage = mock(BattleMessage.class);
         BattleService battleService = new BattleService(hero,monster,random);
         battleService.setBattleMessage(battleMessage);
-        battleService.battle();
+        battleService.battle(1);
         verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
         assertTrue(monster.getHp() <= 0, "End battle!");
     }
@@ -149,7 +148,7 @@ public class TestBattleService {
         BattleMessage battleMessage = mock(BattleMessage.class);
         BattleService battleService = new BattleService(hero,monster,random);
         battleService.setBattleMessage(battleMessage);
-        battleService.battle();
+        battleService.battle(1);
         verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
         assertTrue(monster.getHp() <= 0, "End battle!");
     }

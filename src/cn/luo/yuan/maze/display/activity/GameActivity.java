@@ -121,7 +121,7 @@ public class GameActivity extends Activity {
                 @Override
                 public void run() {
                     ((TextView) context.get().findViewById(R.id.hero_name)).setText(Html.fromHtml(control.getHero().getDisplayName()));
-                    ((TextView) context.get().findViewById(R.id.hero_gift)).setText(StringUtils.isNotEmpty(control.getHero().getGift()) ? control.getHero().getGift() : "");
+                    ((TextView) context.get().findViewById(R.id.hero_gift)).setText(StringUtils.isNotEmpty(control.getHero().getGift().getName()) ? control.getHero().getGift().getName() : "");
                     ((TextView) context.get().findViewById(R.id.hero_atk)).setText(StringUtils.formatNumber(hero.getUpperAtk()));
                     ((TextView) context.get().findViewById(R.id.hero_def)).setText(StringUtils.formatNumber(hero.getUpperDef()));
                     ((TextView) context.get().findViewById(R.id.hero_str)).setText(StringUtils.formatNumber(hero.getStr()));

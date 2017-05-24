@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model;
 
 import cn.luo.yuan.maze.model.effect.Effect;
+import cn.luo.yuan.maze.model.gift.Gift;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillAbleObject;
@@ -37,7 +38,7 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     private Element element;//五行元素
     private String id;
     private EncodeLong point = new EncodeLong(0);
-    private String gift;
+    private Gift gift;
     private EncodeLong click = new EncodeLong(0);
     private Race race;
 
@@ -230,11 +231,11 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
         this.point.setValue(point);
     }
 
-    public String getGift() {
+    public Gift getGift() {
         return gift;
     }
 
-    public void setGift(String gift) {
+    public void setGift(Gift gift) {
         this.gift = gift;
     }
 

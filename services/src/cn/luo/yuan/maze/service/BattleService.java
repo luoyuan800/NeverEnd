@@ -19,12 +19,8 @@ import cn.luo.yuan.maze.model.skill.SkillAbleObject;
 import cn.luo.yuan.maze.model.skill.SkillParameter;
 import cn.luo.yuan.maze.model.skill.SkillResult;
 import cn.luo.yuan.maze.utils.Random;
-import cn.luo.yuan.maze.utils.StringUtils;
-
-import javax.print.attribute.standard.MediaSize;
 
 import static cn.luo.yuan.maze.service.ListenerService.battleEndListeners;
-import static java.awt.SystemColor.control;
 
 /**
  * Created by luoyuan on 2017/4/2.
@@ -41,7 +37,7 @@ public class BattleService {
         this.hero = hero;
     }
 
-    public boolean battle() {
+    public boolean battle(long level) {
         long round = 1;
         boolean heroAtk = random.nextBoolean();
         while (hero.getHp() > 0 && monster.getHp() > 0) {
@@ -51,9 +47,9 @@ public class BattleService {
                 monster.setHp(monster.getHp() / 2);
             }
             if (heroAtk) {
-                atk(hero, monster);
+                atk(hero, monster, level);
             } else {
-                atk(monster, hero);
+                atk(monster, hero, level);
             }
             heroAtk = !heroAtk;
             round++;
@@ -85,7 +81,7 @@ public class BattleService {
         this.battleMessage = battleMessage;
     }
 
-    private void atk(HarmAble atker, HarmAble defender) {
+    private void atk(HarmAble atker, HarmAble defender, long minHarm) {
         if(atker instanceof PetOwner) {
             petActionOnAtk((PetOwner) atker, defender);
         }
@@ -135,7 +131,7 @@ public class BattleService {
             }
             long harm = atk - defend;
             if (harm <= 0) {
-                harm = 1;
+                harm = random.nextLong(minHarm);
             }
             harm = elementAffectHarm(atker.getElement(), defender.getElement(), harm);
             defender.setHp(defender.getHp() - harm);

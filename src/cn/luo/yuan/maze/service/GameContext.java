@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.service;
 
 import android.content.Context;
+import android.util.Log;
 import cn.luo.yuan.maze.display.activity.GameActivity;
 import cn.luo.yuan.maze.display.view.RollTextView;
 import cn.luo.yuan.maze.model.Accessory;
@@ -48,6 +49,7 @@ public class GameContext implements InfoControlInterface {
     }
 
     public void startGame() {
+        Log.i("maze", "Starting game");
         viewHandler.refreshProperties(hero);
         viewHandler.refreshAccessory(hero);
         viewHandler.refreshSkill(hero);
@@ -57,7 +59,7 @@ public class GameContext implements InfoControlInterface {
         petMonsterHelper.setRandom(random);
         petMonsterHelper.setMonsterLoader(PetMonsterLoder.getOrCreate(this));
         runningService = new RunningService(hero, maze, this, dataManager, Data.REFRESH_SPEED);
-        executor.scheduleAtFixedRate(runningService, 0, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(runningService, 1, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -65,7 +67,7 @@ public class GameContext implements InfoControlInterface {
                     viewHandler.refreshFreqProperties();
             }
         }, 0, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
-
+        Log.i("maze", "Game started");
     }
 
     public Hero getHero() {
@@ -86,7 +88,7 @@ public class GameContext implements InfoControlInterface {
     }
 
     public void save() {
-        Gift gift = Gift.getByName(hero.getGift());
+        Gift gift = hero.getGift();
         if (gift != null) {
             gift.unHandler(this);
         }
@@ -133,7 +135,7 @@ public class GameContext implements InfoControlInterface {
         setHero(dataManager.loadHero());
         setMaze(dataManager.loadMaze());
         //Gift handle
-        Gift gift = Gift.getByName(hero.getGift());
+        Gift gift =hero.getGift();
         if (gift != null) {
             gift.handler(this);
         }
