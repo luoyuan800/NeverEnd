@@ -35,101 +35,6 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:id="@+id/linearLayout3">
-
-        <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/monster_pic"
-                android:src="@drawable/zl"
-                android:onClick="onClick"
-                android:layout_gravity="center"
-                />
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/monster_name"
-                android:layout_gravity="center"
-                android:text="很长的怪物名字"
-                android:layout_marginBottom="20dp"/>
-        <LinearLayout
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="层数:"/>
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:id="@+id/hero_level"
-                    android:text="100000"/>
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="/"/>
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/hero_level_max"
-                    android:text="10000000W"/>
-        </LinearLayout>
-        <LinearLayout
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="点击:"/>
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/hero_click"
-                    android:text="10000000W"/>
-        </LinearLayout>
-        <LinearLayout
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="锻造:"/>
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/hero_mate"
-                    android:text="10000000W"/>
-        </LinearLayout>
-        <LinearLayout
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="能力点:"/>
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/hero_point"
-                    android:text="10000000W"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/linearLayout2"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true">
@@ -170,6 +75,12 @@
             android:layout_alignParentStart="true"
             android:layout_toStartOf="@+id/linearLayout2">
 
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/hero_gift"
+                    android:text="宠物大师"/>
         <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
@@ -186,22 +97,6 @@
                 android:id="@+id/hero_name"
                 android:text="名字"/>
 
-
-        <LinearLayout
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="天赋:"/>
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/hero_gift"
-                    android:text="宠物大师"/>
-        </LinearLayout>
 
         <LinearLayout
                 android:layout_gravity="center"
@@ -288,27 +183,7 @@
                     android:id="@+id/hero_agi"
                     android:text="100000W"/>
         </LinearLayout>
-        <TextView
-                android:id="@+id/sword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="神马什么衣服+15.34W"
-                android:textColor="#3506da"
-                android:textSize="13sp"
-                android:onClick="onClick"
-                />
 
-        <TextView
-                android:id="@+id/armor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="神马神马贱+12.46W"
-                android:textColor="#0307da"
-                android:textSize="13sp"
-                android:onClick="onClick"
-                />
     </LinearLayout>
 
     <LinearLayout
@@ -417,36 +292,6 @@
             android:layout_toStartOf="@+id/linearLayout2">
 
 
-        <TextView
-                android:id="@+id/hat_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="13sp"
-                android:text="名字很长的帽子"
-                android:layout_weight="1"
-                android:maxWidth="100dp"
-                android:onClick="onClick"
-                />
-
-        <TextView
-                android:id="@+id/ring_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="13sp"
-                android:text="名字很长的戒指" android:layout_weight="1"
-                android:onClick="onClick"
-                />
-        <TextView
-                android:id="@+id/necklace_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="13sp"
-                android:text="名字很长的项链" android:layout_weight="1"
-                android:onClick="onClick"
-                />
     </LinearLayout>
 
     <ImageButton
@@ -459,5 +304,149 @@
             android:onClick="showButtons"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"/>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout3"
+            android:layout_above="@+id/linearLayout4"
+            android:layout_toEndOf="@+id/linearLayout2"
+            android:layout_marginStart="12dp">
+
+        <LinearLayout
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="层数:"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/hero_level"
+                    android:text="100000"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="/"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/hero_level_max"
+                    android:text="10000000W"/>
+        </LinearLayout>
+        <LinearLayout
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="点击:"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/hero_click"
+                    android:text="10000000W"/>
+        </LinearLayout>
+        <LinearLayout
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="锻造:"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/hero_mate"
+                    android:text="10000000W"/>
+        </LinearLayout>
+        <LinearLayout
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="能力点:"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/hero_point"
+                    android:text="10000000W"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/sword"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="神马什么衣服+15.34W"
+            android:textColor="#3506da"
+            android:textSize="13sp"
+            android:onClick="onClick"
+            android:layout_below="@+id/ring_view"
+            android:layout_alignStart="@+id/armor"/>
+
+    <TextView
+            android:id="@+id/armor"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="神马神马贱+12.46W"
+            android:textColor="#0307da"
+            android:textSize="13sp"
+            android:onClick="onClick"
+            android:layout_below="@+id/sword"
+            android:layout_alignStart="@+id/linearLayout3"/>
+
+    <TextView
+            android:id="@+id/hat_view"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="13sp"
+            android:text="名字很长的帽子"
+            android:layout_weight="1"
+            android:maxWidth="100dp"
+            android:onClick="onClick"
+            android:layout_alignParentTop="true"
+            android:layout_alignEnd="@+id/sword"/>
+
+    <TextView
+            android:id="@+id/necklace_view"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="13sp"
+            android:text="名字很长的项链"
+            android:onClick="onClick"
+            android:layout_below="@+id/hat_view"
+            android:layout_alignStart="@+id/hat_view"/>
+
+    <TextView
+            android:id="@+id/ring_view"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="13sp"
+            android:text="名字很长的戒指"
+            android:onClick="onClick"
+            android:layout_below="@+id/necklace_view"
+            android:layout_alignStart="@+id/necklace_view"/>
 
 </RelativeLayout>

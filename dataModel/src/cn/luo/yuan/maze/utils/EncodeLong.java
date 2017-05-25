@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.utils;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Created by gluo on 4/24/2017.
@@ -18,6 +19,14 @@ public class EncodeLong implements Serializable {
     }
 
     public long getValue() {
+        byte[] value;
+        byte[] key;
+        boolean negative;
+        synchronized (this){
+            value = Arrays.copyOf(this.value, this.value.length);
+            key = Arrays.copyOf(this.key, this.key.length);
+            negative = this.negative;
+        }
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < value.length; i++) {
             builder.append(value[i] ^ key[i]);

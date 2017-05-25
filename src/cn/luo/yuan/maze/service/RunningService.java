@@ -104,7 +104,7 @@ public class RunningService implements Runnable {
                     maze.setStep(0);
                 } else {
                     Log.i("maze", "Try to find monster battle");
-                    Monster monster = monsterHelper.randomMonster(maze.getLevel());
+                    monster = monsterHelper.randomMonster(maze.getLevel());
                     if (monster != null) {
                         Log.i("maze", "battle with " + monster.getDisplayName());
                         BattleService battleService = new BattleService(hero,monster, gameContext.getRandom());
@@ -142,6 +142,7 @@ public class RunningService implements Runnable {
                             }
                             Log.i("maze", "Battle failed restore");
                         }
+                        monster = null;
                     }else{
                         Log.i("maze", "not monster");
                         randomEventService.random();

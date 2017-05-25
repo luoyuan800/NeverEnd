@@ -44,6 +44,11 @@ public class GameContext implements InfoControlInterface {
         textView.addMessage(msg);
     }
 
+    @Override
+    public void stopGame() {
+        executor.shutdown();
+    }
+
     public boolean pauseGame() {
         return runningService.pause();
     }

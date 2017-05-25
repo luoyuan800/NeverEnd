@@ -16,4 +16,6 @@ public interface InfoControlInterface {
     Maze getMaze();
 
     void addMessage(String msg);
+
+    void stopGame();
 }

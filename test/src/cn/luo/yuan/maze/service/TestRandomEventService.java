@@ -50,6 +50,11 @@ public class TestRandomEventService {
             public void addMessage(String msg) {
                 System.out.println(msg);
             }
+
+            @Override
+            public void stopGame() {
+
+            }
         };
         RandomEventService service = spy(new RandomEventService(gameContext));
         int i = 100;
