@@ -37,12 +37,10 @@ public class RollTextView extends ScrollView {
     private Runnable addText = new Runnable() {
         @Override
         public void run() {
-            Log.i("maze", "Start to display message");
             if(messages.isEmpty()){
                 return;
             }
             String info = messages.poll();
-            Log.i("maze", "Start to display message " + info);
             if(StringUtils.isNotEmpty(info)) {
                 TextView tv;
                 if (layout.getChildCount() < 50) {
@@ -56,7 +54,6 @@ public class RollTextView extends ScrollView {
                 tv.setText(Html.fromHtml(info));
                 layout.addView(tv);
                 scrollToButton();
-                Log.i("maze", "Message display finished.");
             }
         }
     };
@@ -78,7 +75,6 @@ public class RollTextView extends ScrollView {
     }
 
     public synchronized void addMessage(String info) {
-        Log.i("maze", "A new message in " + info);
         Message message = new Message();
         message.obj = info;
         message.what = 0;
