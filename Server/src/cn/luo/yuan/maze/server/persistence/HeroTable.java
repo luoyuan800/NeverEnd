@@ -4,7 +4,6 @@ import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.index.HeroIndex;
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectDB;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class HeroTable {
             HeroIndex index = new HeroIndex();
             index.setId(hero.getId());
             index.setElement(hero.getElement());
-            Maze maze = loadMaze(hero.getId());
+            Maze maze = getMaze(hero.getId());
             index.setLevel(maze.getLevel());
             index.setMaxLevel(maze.getMaxLevel());
             index.setRace(hero.getRace());
@@ -120,8 +119,19 @@ public class HeroTable {
         return heroDb.loadObject(id);
     }
 
-    private Maze loadMaze(String id) {
+    public Maze getMaze(String id) {
         return mazeDb.loadObject(id);
+    }
+
+    public void saveHero(Hero hero){
+        heroDb.save(hero, hero.getId());
+    }
+
+    public void saveMaze(Maze maze, String id){
+        mazeDb.save(maze, id);
+        if(maze.getLevel() > maxLevel){
+            maxLevel = maze.getLevel();
+        }
     }
 
 }

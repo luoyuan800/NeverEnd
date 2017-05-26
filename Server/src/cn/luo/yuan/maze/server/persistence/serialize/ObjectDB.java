@@ -1,5 +1,7 @@
 package cn.luo.yuan.maze.server.persistence.serialize;
 
+import cn.luo.yuan.maze.model.IDModel;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -19,6 +21,9 @@ public class ObjectDB<T> {
 
     public ObjectDB(Class<T> type) {
         File root = new File(type.getName());
+        if(!root.exists()){
+            root.mkdirs();
+        }
         this.type = type;
     }
 
@@ -26,7 +31,6 @@ public class ObjectDB<T> {
         if (object.getClass().getName().equals(type.getName())) {
             try {
                 String path = getName(id);
-                new File(path).deleteOnExit();
                 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path));
                 oos.writeObject(object);
                 oos.flush();
@@ -34,6 +38,9 @@ public class ObjectDB<T> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+        if(object instanceof IDModel){
+            ((IDModel) object).setId(id);
         }
         return id;
     }
@@ -62,13 +69,16 @@ public class ObjectDB<T> {
 
     public synchronized void clear() {
         for (String id : new File(type.getName()).list()) {
-            new File(getName(id)).deleteOnExit();
+            new File(getName(id)).delete();
         }
 
     }
 
     public void delete(String id) {
-        new File(getName(id)).deleteOnExit();
+        File file = new File(getName(id));
+        if(file.exists()) {
+            file.delete();
+        }
     }
 
     private String getName(String id) {
