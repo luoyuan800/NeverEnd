@@ -270,6 +270,10 @@ public class DataManager implements DataManagerInterface {
         return skillLoader.loadAll();
     }
 
+    public List<Accessory> loadAccessories(int start, int row, String key) {
+        return null;
+    }
+
     private Maze newMaze() {
         Maze maze = new Maze();
         maze.setMaxLevel(1);

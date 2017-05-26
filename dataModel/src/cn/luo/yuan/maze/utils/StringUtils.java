@@ -1,7 +1,10 @@
 package cn.luo.yuan.maze.utils;
 
+import cn.luo.yuan.maze.model.effect.Effect;
+
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.List;
 
 /**
  * Created by gluo on 9/8/2015.
@@ -142,5 +145,9 @@ public class StringUtils {
             builder.append("★");
         }
         return builder.toString();
+    }
+
+    public static String formatEffects(List<Effect> effects){
+        return "";
     }
 }

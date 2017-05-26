@@ -17,16 +17,12 @@
             android:weightSum="1">
 
         <TextView
-                android:text="装备名字"
                 android:textStyle="bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/accessory_name"/>
 
         <TextView
-                android:text="效果效果效果
-效果效果次奥得分多第三方的sd
-"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/accessory_effects"
@@ -40,7 +36,6 @@
                 style="@android:style/Widget.Button.Inset"/>
 
         <TextView
-                android:text="打电话第三方的时候的事发生大幅度释放蔬菜"
                 android:layout_marginTop="50dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -48,18 +43,6 @@
                 android:id="@+id/accessory_name_2"/>
 
         <TextView
-                android:text="笑嘻嘻笑嘻嘻系惺惺惜惺惺
-xxxxx嘻嘻嘻
-休息休息
-小学生的
-地地道道的
-淡淡的丰富
-点点滴滴
-等等等等等等
-点点滴滴
-点点滴滴
-点点滴滴
-淡淡的"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/accessory_effects_2"
