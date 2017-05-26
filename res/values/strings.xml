@@ -48,4 +48,8 @@
     <string name="pet_dialog_title">宠物列表</string>
     <string name="race_input">选择种族</string>
     <string name="loading">正在加载数据…</string>
+    <string name="not_mount">未装备</string>
+    <string name="point_label">能力点:</string>
+    <string name="mate_label">锻造:</string>
+    <string name="level_label">层数:</string>
 </resources>

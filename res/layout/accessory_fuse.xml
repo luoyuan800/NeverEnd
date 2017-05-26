@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_alignParentStart="true"
+              android:layout_alignParentEnd="true"
+              android:layout_alignParentTop="true"
+              android:baselineAligned="false">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:weightSum="1">
+
+        <TextView
+                android:text="装备名字"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/accessory_name"/>
+
+        <TextView
+                android:text="效果效果效果
+效果效果次奥得分多第三方的sd
+"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/accessory_effects"
+                android:layout_weight="0.37"/>
+
+        <Button
+                android:text="装备"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/accessory_mount"
+                style="@android:style/Widget.Button.Inset"/>
+
+        <TextView
+                android:text="打电话第三方的时候的事发生大幅度释放蔬菜"
+                android:layout_marginTop="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:id="@+id/accessory_name_2"/>
+
+        <TextView
+                android:text="笑嘻嘻笑嘻嘻系惺惺惜惺惺
+xxxxx嘻嘻嘻
+休息休息
+小学生的
+地地道道的
+淡淡的丰富
+点点滴滴
+等等等等等等
+点点滴滴
+点点滴滴
+点点滴滴
+淡淡的"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/accessory_effects_2"
+                android:layout_weight="0.27"/>
+<LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+                android:text="升级装备"
+                android:layout_gravity="bottom"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/accessory_fuse"
+                style="@android:style/Widget.Button.Inset"/>
+    <Button
+            android:text="关闭"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/close"
+            style="@android:style/Widget.Button.Inset"/>
+</LinearLayout>
+    </LinearLayout>
+
+    <cn.luo.yuan.maze.display.view.LoadMoreListView
+            android:id="@+id/accessories_list"
+            android:layout_weight="1"
+            android:layout_height="400dp"
+            android:layout_width="0dp"/>
+</LinearLayout>

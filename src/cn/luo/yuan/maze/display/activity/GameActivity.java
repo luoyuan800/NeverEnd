@@ -22,6 +22,7 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.display.view.RollTextView;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.HeroIndex;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
@@ -76,7 +77,9 @@ public class GameActivity extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
+    public void onClick(View v) {
 
+    }
     public void showButtons(View view) {
         if (popupMenu == null) {
             popupMenu = new PopupMenu(this, view);
@@ -179,19 +182,19 @@ public class GameActivity extends Activity {
                         }
                     }
                     if(!hasHat){
-                        ((TextView) context.findViewById(R.id.hat_view)).setText("");
+                        ((TextView) context.findViewById(R.id.hat_view)).setText(context.getString(R.string.not_mount));
                     }
                     if(!hasRing){
-                        ((TextView) context.findViewById(R.id.ring_view)).setText("");
+                        ((TextView) context.findViewById(R.id.ring_view)).setText(context.getString(R.string.not_mount));
                     }
                     if(!hasNecklace){
-                        ((TextView) context.findViewById(R.id.necklace_view)).setText("");
+                        ((TextView) context.findViewById(R.id.necklace_view)).setText(context.getString(R.string.not_mount));
                     }
                     if(!hasSword){
-                        ((TextView) context.findViewById(R.id.sword)).setText("");
+                        ((TextView) context.findViewById(R.id.sword)).setText(context.getString(R.string.not_mount));
                     }
                     if(!hasArmor){
-                        ((TextView) context.findViewById(R.id.armor)).setText("");
+                        ((TextView) context.findViewById(R.id.armor)).setText(context.getString(R.string.not_mount));
                     }
                 }
             });
