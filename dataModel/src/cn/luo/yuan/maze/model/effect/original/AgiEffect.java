@@ -1,7 +1,5 @@
 package cn.luo.yuan.maze.model.effect.original;
 
-import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.effect.LongValueEffect;
 import cn.luo.yuan.maze.utils.Version;
 
@@ -22,7 +20,7 @@ public class AgiEffect implements LongValueEffect{
     }
 
     @Override
-    public long getValue() {
+    public Long getValue() {
         return getAgi();
     }
 

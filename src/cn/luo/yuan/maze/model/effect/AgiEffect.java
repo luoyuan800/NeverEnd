@@ -29,7 +29,7 @@ public class AgiEffect extends cn.luo.yuan.maze.model.effect.original.AgiEffect 
     }
 
     @Override
-    public long getValue() {
+    public Long getValue() {
         return getAgi();
     }
 }

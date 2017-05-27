@@ -19,6 +19,9 @@ import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.display.adapter.PetAdapter;
+import cn.luo.yuan.maze.display.dialog.AccessoriesDialog;
+import cn.luo.yuan.maze.display.dialog.PetDialog;
 import cn.luo.yuan.maze.display.view.RollTextView;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
@@ -78,8 +81,21 @@ public class GameActivity extends Activity {
         return super.onKeyDown(keyCode, event);
     }
     public void onClick(View v) {
-
+        switch (v.getId()){
+            case R.id.hat_view:
+            case R.id.ring_view:
+            case R.id.armor:
+            case R.id.necklace_view:
+            case R.id.sword:
+                new AccessoriesDialog(control).show();
+                break;
+            case R.id.pet_root:
+                PetAdapter adapter = new PetAdapter(this,control.getDataManager(), "", null);
+                new PetDialog(control, adapter).show();
+                break;
+        }
     }
+
     public void showButtons(View view) {
         if (popupMenu == null) {
             popupMenu = new PopupMenu(this, view);

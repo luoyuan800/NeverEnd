@@ -29,7 +29,7 @@ public class DefEffect extends cn.luo.yuan.maze.model.effect.original.DefEffect 
     }
 
     @Override
-    public long getValue() {
+    public Long getValue() {
         return getDef();
     }
 }

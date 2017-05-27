@@ -5,6 +5,7 @@ import cn.luo.yuan.maze.model.effect.Effect;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by gluo on 9/8/2015.
@@ -17,25 +18,35 @@ public class StringUtils {
         Double value;
         if (num > 100000000) {
             value = num / 100000000d;
-            return String.format("%.1f", value) + "亿";
+            return String.format(Locale.CHINA,"%.1f", value) + "亿";
         }
         if (num > 10000000) {
             value = num / 10000000d;
-            return String.format("%.1f", value) + "千万";
+            return String.format(Locale.CHINA,"%.1f", value) + "千万";
         }
         if (num > 10000) {
             value = num / 10000d;
-            return String.format("%.1f", value) + "万";
+            return String.format(Locale.CHINA,"%.1f", value) + "万";
         }
         return num + "";
     }
 
+    public static String formatNumber(Number number){
+        if(number instanceof Long){
+            return formatNumber(number.longValue());
+        }
+        if(number instanceof Float){
+            return DecimalFormatRound(number.floatValue(), 2);
+        }
+        return number.toString();
+    }
+
     public static String toHexString(String s) {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         for (int i = 0; i < s.length(); i++) {
             int ch = (int) s.charAt(i);
             String s4 = Integer.toHexString(ch);
-            str = str + s4;
+            str.append(s4);
         }
         return "0x" + str;//0x表示十六进制
     }
@@ -83,7 +94,7 @@ public class StringUtils {
             try {
                 return Double.valueOf(number).longValue();
             } catch (Exception e1) {
-                return 1l;
+                return 1L;
             }
         }
     }
@@ -147,7 +158,13 @@ public class StringUtils {
         return builder.toString();
     }
 
-    public static String formatEffects(List<Effect> effects){
-        return "";
+    public static String formatEffectsAsHtml(List<Effect> effects){
+        StringBuilder builder = new StringBuilder();
+        builder.append("属性: ").append("<br>");
+        for (Effect effect : effects) {
+            builder.append("<br>").append("<font color=\"").append(effect.isEnable() ? "#B8860B" : "#D3D3D3").append("\">").append(effect.getName()).append(":").append(StringUtils.formatNumber(effect.getValue()));
+        }
+
+        return builder.toString();
     }
 }

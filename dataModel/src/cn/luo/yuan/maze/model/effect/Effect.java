@@ -23,4 +23,5 @@ public interface Effect extends Serializable, NameObject {
     default String getName() {
         return getClass().getSimpleName();
     }
+    Number getValue();
 }

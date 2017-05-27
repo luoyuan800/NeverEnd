@@ -1,7 +1,5 @@
 package cn.luo.yuan.maze.model.effect.original;
 
-import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.effect.FloatValueEffect;
 
 /**
@@ -16,7 +14,7 @@ public class SkillRateEffect implements FloatValueEffect{
     }
 
     @Override
-    public float getValue() {
+    public Float getValue() {
         return getSkillRate();
     }
 

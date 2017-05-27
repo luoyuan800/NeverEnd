@@ -271,7 +271,27 @@ public class DataManager implements DataManagerInterface {
     }
 
     public List<Accessory> loadAccessories(int start, int row, String key) {
-        return null;
+        List<Accessory> all = accessoryLoader.loadAll();
+        List<Accessory> result = new ArrayList<>(row);
+        int lastIndex = start;
+        int lastMatch = 0;
+        for (int i = 0; i < all.size(); i++) {
+            Accessory accessory = all.get(i);
+            if (accessory.getName().contains(key)) {
+                lastMatch++;
+            }
+            if (lastMatch == start + 1) {
+                lastIndex = i + 1;
+                break;
+            }
+        }
+        for (int i = lastIndex; i < all.size() && result.size() < row; i++) {
+            Accessory accessory = all.get(i);
+            if (accessory.getName().contains(key)) {
+                result.add(accessory);
+            }
+        }
+        return result;
     }
 
     private Maze newMaze() {

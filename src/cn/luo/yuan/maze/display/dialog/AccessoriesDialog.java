@@ -41,6 +41,42 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
         dialog.show();
         LoadMoreListView list = (LoadMoreListView) dialog.findViewById(R.id.accessories_list);
         list.setOnLoadListener(this);
+        dialog.findViewById(R.id.accessory_mount).setOnClickListener((view)->{
+            if(main!=null){
+                if(main.isMounted()){
+                    context.getAccessoryHelper().unMountAccessory(main, context.getHero());
+                }else{
+                    context.getAccessoryHelper().mountAccessory(main, context.getHero());
+                }
+            }
+        });
+        dialog.findViewById(R.id.accessory_fuse).setOnClickListener((view)->{
+            if(main!=null && fuse!=null){
+                if(fuse.isMounted()){
+                    context.getAccessoryHelper().unMountAccessory(fuse, context.getHero());
+                }
+                if(context.getAccessoryHelper().fuse(main,fuse)){
+                    new AlertDialog.Builder(context.getContext()).setTitle("升级成功").
+                            setMessage(Html.fromHtml(main.getDisplayName())).
+                            setPositiveButton(R.string.conform,(dialog, which)->{
+                                ((TextView) AccessoriesDialog.this.dialog.findViewById(R.id.accessory_name)).setText(Html.fromHtml(main.getDisplayName()));
+                                ((TextView) AccessoriesDialog.this.dialog.findViewById(R.id.accessory_effects)).setText(Html.fromHtml(StringUtils.formatEffectsAsHtml(main.getEffects())));
+                            }).
+                            create().show();
+                }else{
+                    new AlertDialog.Builder(context.getContext()).setTitle("升级失败").
+                            setMessage(Html.fromHtml(main.getDisplayName())).
+                            setPositiveButton(R.string.conform,(dialog, which)->{
+                                ((TextView) AccessoriesDialog.this.dialog.findViewById(R.id.accessory_name)).setText(Html.fromHtml(main.getDisplayName()));
+                                ((TextView) AccessoriesDialog.this.dialog.findViewById(R.id.accessory_effects)).setText(Html.fromHtml(StringUtils.formatEffectsAsHtml(main.getEffects())));
+                            }).
+                            create().show();
+                }
+            }
+        });
+        dialog.findViewById(R.id.accessories_close).setOnClickListener((view)->{
+            dismiss();
+        });
     }
 
     public void dismiss() {
@@ -72,7 +108,7 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
         if(v.getTag() instanceof Accessory){
              main = (Accessory) v.getTag();
             ((TextView)dialog.findViewById(R.id.accessory_name)).setText(Html.fromHtml(main.getDisplayName()));
-            ((TextView)dialog.findViewById(R.id.accessory_effects)).setText(Html.fromHtml(StringUtils.formatEffects(main.getEffects())));
+            ((TextView)dialog.findViewById(R.id.accessory_effects)).setText(Html.fromHtml(StringUtils.formatEffectsAsHtml(main.getEffects())));
             if(main.isMounted()){
                 ((Button)dialog.findViewById(R.id.accessory_mount)).setText("装上");
             }else{
@@ -87,7 +123,7 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
         if(v.getTag() instanceof Accessory){
             fuse = (Accessory) v.getTag();
             ((TextView)dialog.findViewById(R.id.accessory_name_2)).setText(Html.fromHtml(fuse.getDisplayName()));
-            ((TextView)dialog.findViewById(R.id.accessory_effects_2)).setText(Html.fromHtml(StringUtils.formatEffects(fuse.getEffects())));
+            ((TextView)dialog.findViewById(R.id.accessory_effects_2)).setText(Html.fromHtml(StringUtils.formatEffectsAsHtml(fuse.getEffects())));
             detectFuseAble();
             return true;
         }

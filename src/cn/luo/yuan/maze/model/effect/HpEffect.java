@@ -28,7 +28,7 @@ public class HpEffect extends cn.luo.yuan.maze.model.effect.original.HpEffect {
     }
 
     @Override
-    public long getValue() {
+    public Long getValue() {
         return getHp();
     }
 }

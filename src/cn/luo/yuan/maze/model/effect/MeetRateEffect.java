@@ -28,7 +28,7 @@ public class MeetRateEffect extends cn.luo.yuan.maze.model.effect.original.MeetR
     }
 
     @Override
-    public float getValue() {
+    public Float getValue() {
         return getMeetRate();
     }
 }

@@ -29,7 +29,7 @@ public class AtkEffect extends cn.luo.yuan.maze.model.effect.original.AtkEffect 
     }
 
     @Override
-    public long getValue() {
+    public Long getValue() {
         return getAtk();
     }
 }

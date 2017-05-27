@@ -29,7 +29,7 @@ public class StrEffect extends cn.luo.yuan.maze.model.effect.original.StrEffect 
     }
 
     @Override
-    public long getValue() {
+    public Long getValue() {
         return getStr();
     }
 }

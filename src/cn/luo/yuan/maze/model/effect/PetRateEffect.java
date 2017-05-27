@@ -28,7 +28,7 @@ public class PetRateEffect extends cn.luo.yuan.maze.model.effect.original.PetRat
     }
 
     @Override
-    public float getValue() {
+    public Float getValue() {
         return getPetRate();
     }
 }

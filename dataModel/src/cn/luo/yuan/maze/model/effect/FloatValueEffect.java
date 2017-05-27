@@ -5,5 +5,5 @@ package cn.luo.yuan.maze.model.effect;
  */
 public interface FloatValueEffect extends Effect  {
     void setValue(float value);
-    float getValue();
+    Float getValue();
 }

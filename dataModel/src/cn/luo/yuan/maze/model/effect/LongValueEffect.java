@@ -5,5 +5,5 @@ package cn.luo.yuan.maze.model.effect;
  */
 public interface LongValueEffect extends Effect {
     void setValue(long value);
-    long getValue();
+    Long getValue();
 }

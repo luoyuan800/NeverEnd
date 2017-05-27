@@ -27,7 +27,8 @@ public class PetDialog implements View.OnClickListener {
     private Pet currentPet;
     private LoadMoreListView loadMoreListView;
 
-    public PetDialog(GameContext control) {
+    public PetDialog(GameContext control, PetAdapter adapter) {
+        setAdapter(adapter);
         this.control = control;
         builder = new AlertDialog.Builder(control.getContext()).setTitle(Resource.getString(R.string.pet_dialog_title)).setView(R.layout.pet_view);
     }
