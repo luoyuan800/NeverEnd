@@ -9,12 +9,8 @@ public class ClickSkillFactory {
             return null;
         } else if ("宠爆".equalsIgnoreCase(name)) {
             return new BaoZha();
-        } else if ("虚无".equalsIgnoreCase(name)) {
-            return new XvWu();
         } else if ("一击".equalsIgnoreCase(name)) {
             return new YiJi();
-        } else if ("月蚀".equalsIgnoreCase(name)) {
-            return new YueShi();
         } else {
             return null;
         }

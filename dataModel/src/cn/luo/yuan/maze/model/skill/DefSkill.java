@@ -41,4 +41,8 @@ public abstract class DefSkill implements Skill, MountAble {
     public void setRate(float rate) {
         this.rate = rate;
     }
+    public float getRate() {
+        return rate;
+    }
+
 }

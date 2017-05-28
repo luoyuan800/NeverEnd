@@ -60,4 +60,6 @@
     <string name="need_un_mount">卸下</string>
     <string name="empty"/>
     <string name="enable">激活</string>
+    <string name="evil_talent">魔王天赋</string>
+    <string name="evil_skill">魔王</string>
 </resources>

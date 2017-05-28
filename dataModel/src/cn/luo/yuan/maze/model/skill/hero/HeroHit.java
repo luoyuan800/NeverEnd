@@ -3,13 +3,11 @@ package cn.luo.yuan.maze.model.skill.hero;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.model.skill.AtkSkill;
-import cn.luo.yuan.maze.model.skill.HarmResult;
+import cn.luo.yuan.maze.model.skill.*;
+import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.service.SkillHelper;
-import cn.luo.yuan.maze.model.skill.SkillParameter;
-import cn.luo.yuan.maze.model.skill.SkillResult;
-import cn.luo.yuan.maze.model.skill.UpgradeAble;
 import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.maze.utils.StringUtils;
 
 
 /**
@@ -21,7 +19,13 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
     private long level = 0;
     @Override
     public boolean canMount(SkillParameter parameter) {
-        return true;
+        InfoControlInterface context = parameter.get("context");
+        Skill skill = SkillFactory.geSkillByName("EvilTalent",context.getDataManager());
+        if(skill!=null && skill.isEnable()){
+            return false;
+        }else {
+            return isEnable();
+        }
     }
 
     @Override
@@ -33,7 +37,7 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
         long harm = minHarm + random.nextLong(maxHarm - minHarm);
         HarmAble target = parameter.get("target");
         if(target!=null){
-            harm -= target.getAtk();
+            harm -= target.getDef();
             if(harm <= 0){
                 harm = minHarm;
             }
@@ -51,19 +55,9 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
     }
 
     @Override
-    public boolean canEnable(SkillParameter parameter) {
-        if(parameter.getOwner() instanceof Hero) {
-            return ((Hero) parameter.getOwner()).getPoint() > Data.SKILL_ENABLE_COST;
-        }
-        return false;
-    }
-
-    @Override
     public boolean canUpgrade(SkillParameter parameter) {
-        if(parameter.getOwner() instanceof Hero) {
-            return minHarm + level > 0 && maxHarm * level > 0 && ((Hero) parameter.getOwner()).getPoint() > level * Data.SKILL_ENABLE_COST;
-        }
-        return false;
+        return parameter.getOwner() instanceof Hero && minHarm + level > 0
+                && maxHarm * level > 0 && ((Hero) parameter.getOwner()).getPoint() > level * Data.SKILL_ENABLE_COST;
     }
 
     @Override
@@ -88,11 +82,15 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
 
     @Override
     public String getName() {
-        return getClass().getSimpleName();
+        return "勇者之击 X " + getLevel();
     }
 
     @Override
     public String getDisplayName() {
-        return getName();
+        return "勇者的基本技能，学会了才能踏上征途。<br>" +
+                StringUtils.DecimalFormatRound(getRate(), 2) + "%概率释放<br>" +
+                "造成额外的" + StringUtils.formatNumber(minHarm) + " - " +
+                StringUtils.formatNumber(maxHarm) + "伤害" + "<br>" +
+                "不可与魔王、元素使技能同时激活";
     }
 }

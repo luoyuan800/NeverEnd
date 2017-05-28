@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
+import cn.luo.yuan.maze.persistence.DataManagerInterface;
 import cn.luo.yuan.maze.utils.Random;
 
 
@@ -18,4 +19,6 @@ public interface InfoControlInterface {
     void addMessage(String msg);
 
     void stopGame();
+
+    DataManagerInterface getDataManager();
 }

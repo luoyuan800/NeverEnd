@@ -35,16 +35,10 @@ public class ClickSkillDialog implements View.OnClickListener {
     public void show(int index, boolean help){
         dialog.show();
         view.findViewById(R.id.set_baoza_button).setOnClickListener(this);
-        view.findViewById(R.id.set_mate_eat_button).setOnClickListener(this);
         view.findViewById(R.id.set_yiji_button).setOnClickListener(this);
-        view.findViewById(R.id.set_yueshi_button).setOnClickListener(this);
-        view.findViewById(R.id.set_csm_button).setOnClickListener(this);
         if(help){
             view.findViewById(R.id.set_baoza_button).setVisibility(View.GONE);
-            view.findViewById(R.id.set_mate_eat_button).setVisibility(View.GONE);
             view.findViewById(R.id.set_yiji_button).setVisibility(View.GONE);
-            view.findViewById(R.id.set_yueshi_button).setVisibility(View.GONE);
-            view.findViewById(R.id.set_csm_button).setVisibility(View.GONE);
         }else{
             this.index = index;
             Hero hero = context.getHero();
@@ -61,14 +55,8 @@ public class ClickSkillDialog implements View.OnClickListener {
                 }
                 if(names.contains("宠爆"))
                     view.findViewById(R.id.set_baoza_button).setVisibility(View.GONE);
-                if(names.contains("虚无"))
-                    view.findViewById(R.id.set_mate_eat_button).setVisibility(View.GONE);
                 if(names.contains("一击"))
                     view.findViewById(R.id.set_yiji_button).setVisibility(View.GONE);
-                if(names.contains("月蚀"))
-                    view.findViewById(R.id.set_yueshi_button).setVisibility(View.GONE);
-                if(names.contains("V传送门"))
-                    view.findViewById(R.id.set_csm_button).setVisibility(View.GONE);
             }
         }
     }
@@ -80,21 +68,9 @@ public class ClickSkillDialog implements View.OnClickListener {
                 BaoZha baoZha = new BaoZha();
                 setClickSkill(baoZha);
                 break;
-            case R.id.set_mate_eat_button:
-                XvWu xvwu = new XvWu();
-                setClickSkill(xvwu);
-                break;
-            case R.id.set_yueshi_button:
-                YueShi yueShi = new YueShi();
-                setClickSkill(yueShi);
-                break;
             case R.id.set_yiji_button:
                 YiJi yiJi = new YiJi();
                 setClickSkill(yiJi);
-                break;
-            case R.id.set_csm_button:
-                VChange vChange = new VChange();
-                setClickSkill(vChange);
                 break;
         }
     }

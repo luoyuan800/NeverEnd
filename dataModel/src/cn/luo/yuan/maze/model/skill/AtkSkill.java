@@ -10,7 +10,7 @@ import cn.luo.yuan.maze.utils.Random;
 public abstract class AtkSkill implements Skill, MountAble {
     private boolean mounted;
     private boolean enable;
-    private float rate = 15;
+    private float rate = 5f;
     public boolean isMounted(){
         return mounted;
     }

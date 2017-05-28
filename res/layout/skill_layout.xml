@@ -4,6 +4,14 @@
                 android:layout_height="match_parent"
                 >
 
+    <Button
+            android:text="@string/close"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/skill_close"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"/>
+
     <TabHost
             android:id="@+id/skill_tabs"
             android:layout_width="match_parent"
@@ -35,18 +43,25 @@
 
                     <Button
                             android:text="@string/hero_hit"
+                            android:tag="HeroHit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/hero_hit"
-                            style="@android:style/Widget.Material.Light.Button.Inset"/>
+                            style="@android:style/Widget.Button.Inset"/>
                 </LinearLayout>
 
                 <LinearLayout
-                        android:id="@+id/tab2"
+                        android:id="@+id/evil_skill"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
-
+                    <Button
+                            android:text="@string/evil_talent"
+                            android:tag="EvilTalent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/evil_talent"
+                            style="@android:style/Widget.Button.Inset"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -59,12 +74,4 @@
             </FrameLayout>
         </LinearLayout>
     </TabHost>
-
-    <Button
-            android:text="@string/close"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/button"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"/>
 </RelativeLayout>

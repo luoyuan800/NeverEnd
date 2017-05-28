@@ -222,67 +222,14 @@
 
         <Button
                 android:id="@+id/third_skill"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:layout_weight="1"
-                android:alpha="95"
-                android:focusableInTouchMode="false"
-                android:gravity="center"
-                android:textSize="8sp"
-                android:onClick="onClick"
-                android:background="@color/toumin" />
-    </LinearLayout>
-
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/linearLayout"
-
-            android:layout_below="@+id/linearLayout4"
-            android:layout_alignParentEnd="true"
-            android:layout_alignStart="@+id/linearLayout4">
-
-        <Button
-                android:id="@+id/fourth_skill"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:alpha="90"
-                android:focusableInTouchMode="false"
-                android:gravity="center"
-                android:text="二转开启"
-                android:textSize="8sp"
-                android:enabled="false"
-                android:onClick="onClick"
-                android:background="@color/toumin"
-                android:layout_marginBottom="5dp"/>
-
-        <Button
-                android:id="@+id/fifit_skill"
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="72dp"
                 android:layout_height="32dp"
                 android:alpha="95"
                 android:focusableInTouchMode="false"
                 android:gravity="center"
-                android:text="四转开启"
                 android:textSize="8sp"
                 android:onClick="onClick"
                 android:background="@color/toumin" />
-
-        <Button
-                android:id="@+id/sixth_skill"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:layout_weight="1"
-                android:alpha="90"
-                android:gravity="center"
-                android:text="六转开启"
-                android:textSize="8sp"
-                android:onClick="onClick"
-                android:background="@color/toumin" />
-
     </LinearLayout>
 
     <ImageButton
@@ -439,6 +386,57 @@
                 android:text="@string/not_mount"
                 android:onClick="onClick"
                 />
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout"
+
+            android:layout_below="@+id/linearLayout4"
+            android:layout_alignParentEnd="true">
+
+        <Button
+                android:id="@+id/fourth_skill"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:alpha="90"
+                android:focusableInTouchMode="false"
+                android:gravity="center"
+                android:text="二转开启"
+                android:textSize="8sp"
+                android:enabled="false"
+                android:onClick="onClick"
+                android:background="@color/toumin"
+                android:layout_marginBottom="5dp"/>
+
+        <Button
+                android:id="@+id/fifit_skill"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="32dp"
+                android:alpha="95"
+                android:focusableInTouchMode="false"
+                android:gravity="center"
+                android:text="四转开启"
+                android:textSize="8sp"
+                android:onClick="onClick"
+                android:background="@color/toumin" />
+
+        <Button
+                android:id="@+id/sixth_skill"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:alpha="90"
+                android:gravity="center"
+                android:text="六转开启"
+                android:textSize="8sp"
+                android:onClick="onClick"
+                android:background="@color/toumin" />
 
     </LinearLayout>
 

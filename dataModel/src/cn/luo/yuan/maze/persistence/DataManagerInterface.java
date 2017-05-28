@@ -4,6 +4,7 @@ import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.GoodsType;
+import cn.luo.yuan.maze.model.skill.Skill;
 
 import java.util.List;
 
@@ -14,4 +15,8 @@ public interface DataManagerInterface {
     Goods loadGoods(GoodsType type);
 
     List<Pet> loadPets(int start, int rows, String keyWord, Race race);
+
+    void saveSkill(Skill skill);
+
+    Skill loadSkill(String name);
 }
