@@ -1,7 +1,5 @@
 package cn.luo.yuan.maze.server;
 
-import spark.Spark;
-
 /**
  * Created by gluo on 5/22/2017.
  */

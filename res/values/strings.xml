@@ -52,4 +52,12 @@
     <string name="point_label">能力点:</string>
     <string name="mate_label">锻造:</string>
     <string name="level_label">层数:</string>
+    <string name="skill_title">技能列表</string>
+    <string name="close">关闭</string>
+    <string name="hero_skill">勇者</string>
+    <string name="hero_hit">勇者之击</string>
+    <string name="need_mount">装上</string>
+    <string name="need_un_mount">卸下</string>
+    <string name="empty"/>
+    <string name="enable">激活</string>
 </resources>

@@ -7,6 +7,7 @@ import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.GoodsType;
 import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -34,6 +35,7 @@ public class DataManager implements DataManagerInterface {
     private SerializeLoader<Pet> petLoader;
     private SerializeLoader<Goods> goodsLoader;
     private SerializeLoader<Skill> skillLoader;
+    private SerializeLoader<ClickSkill> clickSkillLoader;
     private Sqlite database;
     private Context context;
 
@@ -47,6 +49,7 @@ public class DataManager implements DataManagerInterface {
         petLoader = new SerializeLoader<>(Pet.class, context);
         goodsLoader = new SerializeLoader<>(Goods.class, context);
         skillLoader = new SerializeLoader<>(Skill.class, context);
+        clickSkillLoader = new SerializeLoader<>(ClickSkill.class, context);
         this.context = context;
     }
 
@@ -292,6 +295,22 @@ public class DataManager implements DataManagerInterface {
             }
         }
         return result;
+    }
+
+    public List<ClickSkill> loadClickSkill(){
+        return clickSkillLoader.loadAll();
+    }
+
+    public void saveClickSkill(ClickSkill clickSkill){
+        clickSkillLoader.save(clickSkill, clickSkill.getName() + "@" + index);
+    }
+
+    public void deleteClickSkill(ClickSkill clickSkill){
+        clickSkillLoader.delete(clickSkill.getName() + "@" + index);
+    }
+
+    public SerializeLoader<ClickSkill> getClickSkillLoader() {
+        return clickSkillLoader;
     }
 
     private Maze newMaze() {

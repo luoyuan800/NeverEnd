@@ -1,9 +1,11 @@
 package cn.luo.yuan.maze.service;
 
+import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.model.skill.SkillParameter;
 import cn.luo.yuan.maze.utils.Random;
 
 import static cn.luo.yuan.maze.service.EffectHandler.ATK;
@@ -38,7 +40,7 @@ public class SkillHelper {
         Skill mountedSkill = hero.getSkills()[index];
         if(!(mountedSkill instanceof EmptySkill)){
             if(mountedSkill instanceof MountAble){
-                unMountSkill((MountAble) mountedSkill);
+                unMountSkill((MountAble) mountedSkill, hero);
             }
         }
         hero.getSkills()[index] = skill;
@@ -46,11 +48,24 @@ public class SkillHelper {
         return true;
     }
 
-    public static void unMountSkill(MountAble skill){
+    public static void unMountSkill(MountAble skill, Hero hero){
         skill.unMount();
+        for(int i = 0; i< hero.getSkills().length; i++){
+            if(hero.getSkills()[i] == skill){
+                hero.getSkills()[i] = EmptySkill.EMPTY_SKILL;
+            }
+        }
     }
 
     public static long getSkillBaseHarm(Hero hero, Random random){
             return random.nextLong(getEffectAdditionLongValue(ATK, hero.getEffects()) + getEffectAdditionLongValue(STR, hero.getEffects()) * hero.getAtkGrow()) + hero.getAtk();
+    }
+
+    public static void enableSkill(Skill skill, Hero hero, SkillParameter parameter) {
+        if(parameter == null){
+            parameter = new SkillParameter(hero);
+        }
+        skill.enable(parameter);
+            hero.setPoint(hero.getPoint() - Data.SKILL_ENABLE_COST);
     }
 }

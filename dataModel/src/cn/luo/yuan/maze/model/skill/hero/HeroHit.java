@@ -48,9 +48,6 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
     @Override
     public void enable(SkillParameter parameter) {
         setEnable(true);
-        if(parameter.getOwner() instanceof Hero) {
-            ((Hero) parameter.getOwner()).setPoint(((Hero) parameter.getOwner()).getPoint() - Data.SKILL_ENABLE_COST);
-        }
     }
 
     @Override

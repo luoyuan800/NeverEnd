@@ -155,6 +155,8 @@ public class GameContext implements InfoControlInterface {
                 SkillHelper.mountSkill(skill, hero);
             }
         }
+        hero.getClickSkills().addAll(dataManager.loadClickSkill());
+
         //Goods handle
         GoodsProperties goodsProperties = new GoodsProperties(hero);
         for (GoodsType type : GoodsType.values()) {

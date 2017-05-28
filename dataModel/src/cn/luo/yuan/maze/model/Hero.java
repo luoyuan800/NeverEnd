@@ -5,6 +5,7 @@ import cn.luo.yuan.maze.model.gift.Gift;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillAbleObject;
+import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.service.EffectHandler;
 import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Version;
@@ -35,6 +36,7 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     transient private HashSet<Accessory> accessories = new HashSet<>(3);//装备
     transient private Skill[] skills = {EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL};//装备
     transient private HashSet<Pet> pets = new HashSet<>(3);
+    transient private HashSet<ClickSkill> clickSkills = new HashSet<>(3);
     private Element element;//五行元素
     private String id;
     private EncodeLong point = new EncodeLong(0);
@@ -283,5 +285,19 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
 
     public void setRace(int race) {
         this.race = Race.getByIndex(race);
+    }
+
+    public HashSet<ClickSkill> getClickSkills() {
+        if (clickSkills == null) {
+            synchronized (this) {
+                if (clickSkills == null)
+                    clickSkills = new HashSet<ClickSkill>(3);
+            }
+        }
+        return clickSkills;
+    }
+
+    public void setClickSkills(HashSet<ClickSkill> clickSkills) {
+        this.clickSkills = clickSkills;
     }
 }
