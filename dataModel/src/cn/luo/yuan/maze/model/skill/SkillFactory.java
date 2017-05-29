@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.model.skill;
 
+import cn.luo.yuan.maze.model.skill.evil.EvilTalent;
 import cn.luo.yuan.maze.model.skill.hero.HeroHit;
 import cn.luo.yuan.maze.persistence.DataManagerInterface;
 
@@ -13,6 +14,9 @@ public class SkillFactory {
             switch (name){
                 case "HeroHit":
                     skill = new HeroHit();
+                    break;
+                case "EvilTalent":
+                    skill = new EvilTalent();
                     break;
             }
         }

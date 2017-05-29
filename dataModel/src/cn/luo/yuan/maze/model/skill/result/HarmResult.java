@@ -1,9 +1,9 @@
-package cn.luo.yuan.maze.model.skill;
+package cn.luo.yuan.maze.model.skill.result;
 
 /**
  * Created by gluo on 4/27/2017.
  */
-public class HarmResult implements SkillResult {
+public class HarmResult extends HasMessageResult {
     private long harm;
 
     public long getHarm() {

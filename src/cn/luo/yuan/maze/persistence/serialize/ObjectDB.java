@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.persistence.serialize;
 
 import android.content.Context;
 import android.util.ArrayMap;
+import cn.luo.yuan.maze.model.IDModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +31,6 @@ public class ObjectDB<T extends Serializable> {
     public synchronized String save(T object, String id) {
         String path = object.getClass().getName() + "@" + id;
         try {
-            context.deleteFile(path);
             ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput(path, Context.MODE_PRIVATE));
             oos.writeObject(object);
             oos.flush();
@@ -84,6 +84,16 @@ public class ObjectDB<T extends Serializable> {
     public void delete(String id) {
         context.deleteFile(getName(id));
         cache.remove(id);
+    }
+
+    public void fuse() {
+        for(SoftReference<T> ref : cache.values()){
+            if(ref!=null && ref.get()!=null){
+                if(ref.get() instanceof IDModel){
+                    save(ref.get(),((IDModel) ref.get()).getId());
+                }
+            }
+        }
     }
 
     private String getName(String id) {

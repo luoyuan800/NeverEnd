@@ -1,13 +1,19 @@
 package cn.luo.yuan.maze.model.skill.evil;
 
+import cn.luo.yuan.maze.model.HarmAble;
+import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.skill.*;
+import cn.luo.yuan.maze.model.skill.result.SkillResult;
+import cn.luo.yuan.maze.model.skill.result.SkipThisTurn;
 import cn.luo.yuan.maze.service.InfoControlInterface;
+import cn.luo.yuan.maze.utils.StringUtils;
 
 /**
  * Created by luoyuan on 2017/5/28.
  */
 public class EvilTalent extends DefSkill implements UpgradeAble {
-    private long level;
+    private long level = 1;
+
     @Override
     public String getName() {
         return "魔王天赋 X " + getLevel();
@@ -24,35 +30,66 @@ public class EvilTalent extends DefSkill implements UpgradeAble {
     @Override
     public boolean canMount(SkillParameter parameter) {
         InfoControlInterface context = parameter.get("context");
-        Skill skill = SkillFactory.geSkillByName("HeroHit",context.getDataManager());
+        Skill skill = SkillFactory.geSkillByName("HeroHit", context.getDataManager());
+        if (skill != null && skill.isEnable()) {
+            return false;
+        } else {
+            return isEnable();
+        }
+    }
+
+    public boolean canEnable(SkillParameter parameter){
+        InfoControlInterface context = parameter.get("context");
+        Skill skill = SkillFactory.geSkillByName("HeroHit", context.getDataManager());
         if(skill!=null && skill.isEnable()){
             return false;
         }else {
-            return isEnable();
+            return super.canEnable(parameter);
         }
     }
 
     @Override
     public boolean upgrade(SkillParameter parameter) {
+        if (getRate() < 15) {
+            setRate(getRate() + 1.8f);
+            level++;
+            return true;
+        }
         return false;
     }
 
     @Override
     public long getLevel() {
-        return 0;
-    }
-
-    @Override
-    public SkillResult invoke(SkillParameter parameter) {
-        return null;
-    }
-
-    @Override
-    public void enable(SkillParameter parameter) {
-
+        return level;
     }
 
     public void setLevel(long level) {
         this.level = level;
+    }
+
+    @Override
+    public SkillResult invoke(SkillParameter parameter) {
+        SkipThisTurn result = new SkipThisTurn();
+        HarmAble monster = parameter.get("target");
+        HarmAble hero = (HarmAble) parameter.getOwner();
+        long harm = monster.getAtk() - hero.getDef();
+        if (harm < 0) {
+            harm = 1;
+        }
+        hero.setHp(hero.getHp() + harm);
+        result.addMessage((monster instanceof NameObject ? ((NameObject) monster).getDisplayName() : "") + "攻击了" + (hero instanceof NameObject ? ((NameObject) hero).getDisplayName() : ""));
+        result.addMessage((hero instanceof NameObject ? ((NameObject) hero).getDisplayName() : "") + "使用了技能" + getName() + "将" + StringUtils.formatNumber(harm) + "点伤害转化为生命");
+        result.setSkip(true);
+        return result;
+    }
+
+    @Override
+    public void enable(SkillParameter parameter) {
+        setEnable(true);
+    }
+
+    public boolean
+    canUpgrade(SkillParameter parameter) {
+        return isEnable() && getRate() < 15f && isPointEnough(parameter);
     }
 }

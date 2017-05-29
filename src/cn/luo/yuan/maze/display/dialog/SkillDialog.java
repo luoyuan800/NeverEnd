@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TabHost;
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.skill.*;
 import cn.luo.yuan.maze.service.GameContext;
 import cn.luo.yuan.maze.service.SkillHelper;
@@ -53,6 +54,8 @@ public class SkillDialog implements View.OnClickListener {
         Skill skill = SkillFactory.geSkillByName(view.getTag().toString(), context.getDataManager());
         if (skill != null) {
             SkillParameter parameter = new SkillParameter(context.getHero());
+            parameter.set("context", context);
+            parameter.set("random", context.getRandom());
             AlertDialog detail = new AlertDialog.Builder(context.getContext())
                     .setTitle(skill.getName())
                     .setMessage(Html.fromHtml(skill.getDisplayName()))
@@ -78,6 +81,7 @@ public class SkillDialog implements View.OnClickListener {
                                     SkillHelper.mountSkill(skill, context.getHero());
                                 }
                             }
+                            context.getViewHandler().refreshSkill(context.getHero());
                         }
                     }
                 })
@@ -87,9 +91,14 @@ public class SkillDialog implements View.OnClickListener {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (skill.canEnable(parameter)) {
-                                    SkillHelper.enableSkill(skill, context, parameter);
-                                }
+                                showWarning("激活", "需要消耗" + Data.SKILL_ENABLE_COST + "能力点来激活" + skill.getName(), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (skill.canEnable(parameter)) {
+                                            SkillHelper.enableSkill(skill, context, parameter);
+                                        }
+                                    }
+                                });
                             }
                         });
             }
@@ -98,9 +107,14 @@ public class SkillDialog implements View.OnClickListener {
                 detail.setButton(DialogInterface.BUTTON_NEUTRAL, Resource.getString(R.string.upgrade), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(((UpgradeAble) skill).canUpgrade(parameter)){
-                            ((UpgradeAble) skill).upgrade(parameter);
-                        }
+                        showWarning("升级", "需要消耗" + ((UpgradeAble) skill).getLevel() * Data.SKILL_ENABLE_COST + "能力点来升级" + ((UpgradeAble) skill).getLevel(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(((UpgradeAble) skill).canUpgrade(parameter)){
+                                    ((UpgradeAble) skill).upgrade(parameter);
+                                }
+                            }
+                        });
                     }
                 });
 
@@ -126,5 +140,14 @@ public class SkillDialog implements View.OnClickListener {
             }
 
         }
+    }
+
+    private void showWarning(String title, String message,Dialog.OnClickListener conform){
+        new AlertDialog.Builder(context.getContext()).setPositiveButton(Resource.getString(R.string.conform),conform).setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).setTitle(title).setMessage(Html.fromHtml(message)).show();
     }
 }

@@ -1,5 +1,7 @@
 package cn.luo.yuan.maze.model.skill;
 
+import cn.luo.yuan.maze.model.skill.result.SkillResult;
+
 /**
  * Created by gluo on 4/27/2017.
  */

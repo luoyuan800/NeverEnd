@@ -75,4 +75,9 @@ public class BattleMessageImp implements BattleMessage {
     public void releaseSkill(HarmAble target, Skill skill) {
         control.addMessage(String.format(Resource.getString(R.string.release_skill), target instanceof NameObject ? ((NameObject) target).getDisplayName() : "", skill.getDisplayName()));
     }
+
+    @Override
+    public void rowMessage(String msg) {
+        control.addMessage(msg);
+    }
 }

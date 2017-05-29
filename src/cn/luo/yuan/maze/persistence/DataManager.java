@@ -302,6 +302,7 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void saveClickSkill(ClickSkill clickSkill){
+        clickSkill.setId(clickSkill.getName() + "@" + index);
         clickSkillLoader.save(clickSkill, clickSkill.getName() + "@" + index);
     }
 
@@ -311,6 +312,13 @@ public class DataManager implements DataManagerInterface {
 
     public SerializeLoader<ClickSkill> getClickSkillLoader() {
         return clickSkillLoader;
+    }
+
+    public void fluseCache() {
+        accessoryLoader.fluse();
+        petLoader.fluse();
+        skillLoader.fluse();
+        clickSkillLoader.fluse();
     }
 
     private Maze newMaze() {

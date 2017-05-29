@@ -99,6 +99,7 @@ public class GameContext implements InfoControlInterface {
         }
         dataManager.saveHero(hero);
         dataManager.saveMaze(maze);
+        dataManager.fluseCache();
         for (Accessory accessory : hero.getAccessories()) {
             dataManager.saveAccessory(accessory);
         }

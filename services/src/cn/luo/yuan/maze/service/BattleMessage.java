@@ -25,4 +25,6 @@ public interface BattleMessage {
     void silent(SkillAbleObject atker, HarmAble target, Skill skill);
 
     void releaseSkill(HarmAble target, Skill skill);
+
+    void rowMessage(String msg);
 }

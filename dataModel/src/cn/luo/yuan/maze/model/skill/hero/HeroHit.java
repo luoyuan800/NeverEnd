@@ -4,6 +4,9 @@ import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.skill.*;
+import cn.luo.yuan.maze.model.skill.result.HarmResult;
+import cn.luo.yuan.maze.model.skill.result.SkillResult;
+import cn.luo.yuan.maze.model.skill.result.SkipThisTurn;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.service.SkillHelper;
 import cn.luo.yuan.maze.utils.Random;
@@ -16,7 +19,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 public class HeroHit extends AtkSkill implements UpgradeAble {
     private long minHarm = 50;
     private long maxHarm = 300;
-    private long level = 0;
+    private long level = 1;
     @Override
     public boolean canMount(SkillParameter parameter) {
         InfoControlInterface context = parameter.get("context");
@@ -25,6 +28,16 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
             return false;
         }else {
             return isEnable();
+        }
+    }
+
+    public boolean canEnable(SkillParameter parameter){
+        InfoControlInterface context = parameter.get("context");
+        Skill skill = SkillFactory.geSkillByName("EvilTalent",context.getDataManager());
+        if(skill!=null && skill.isEnable()){
+            return false;
+        }else {
+            return super.canEnable(parameter);
         }
     }
 
@@ -56,9 +69,11 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
 
     @Override
     public boolean canUpgrade(SkillParameter parameter) {
-        return parameter.getOwner() instanceof Hero && minHarm + level > 0
-                && maxHarm * level > 0 && ((Hero) parameter.getOwner()).getPoint() > level * Data.SKILL_ENABLE_COST;
+        return isEnable() && parameter.getOwner() instanceof Hero && minHarm + level > 0
+                && maxHarm * level > 0 && isPointEnough(parameter);
     }
+
+
 
     @Override
     public boolean upgrade(SkillParameter parameter) {
@@ -70,6 +85,9 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
             level++;
             minHarm += level;
             maxHarm *= level;
+            if(getRate() < 25) {
+                setRate(getRate() + 3.1f);
+            }
             return true;
         }
         return false;

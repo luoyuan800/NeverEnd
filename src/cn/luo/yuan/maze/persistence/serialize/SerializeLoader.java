@@ -52,4 +52,8 @@ public class SerializeLoader<T extends Serializable> {
     public List<T> loadAll(){
         return db.loadAll();
     }
+
+    public void fluse() {
+        db.fuse();
+    }
 }

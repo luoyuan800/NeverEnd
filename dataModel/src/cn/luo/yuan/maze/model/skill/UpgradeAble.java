@@ -8,8 +8,13 @@ import cn.luo.yuan.maze.model.Hero;
  */
 public interface UpgradeAble {
     default boolean canUpgrade(SkillParameter parameter){
-        return ((Hero) parameter.getOwner()).getPoint() > getLevel() * Data.SKILL_ENABLE_COST;
+        return isPointEnough(parameter);
     }
     boolean upgrade(SkillParameter parameter);
+
+    default boolean isPointEnough(SkillParameter parameter) {
+        return ((Hero) parameter.getOwner()).getPoint() > getLevel() * Data.SKILL_ENABLE_COST;
+    }
+
     long getLevel();
 }

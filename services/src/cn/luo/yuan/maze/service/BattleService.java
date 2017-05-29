@@ -12,12 +12,10 @@ import cn.luo.yuan.maze.model.PetOwner;
 import cn.luo.yuan.maze.model.SilentAbleObject;
 import cn.luo.yuan.maze.model.skill.AtkSkill;
 import cn.luo.yuan.maze.model.skill.DefSkill;
-import cn.luo.yuan.maze.model.skill.EndBattleResult;
-import cn.luo.yuan.maze.model.skill.HarmResult;
+import cn.luo.yuan.maze.model.skill.result.*;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillAbleObject;
 import cn.luo.yuan.maze.model.skill.SkillParameter;
-import cn.luo.yuan.maze.model.skill.SkillResult;
 import cn.luo.yuan.maze.utils.Random;
 
 import static cn.luo.yuan.maze.service.ListenerService.battleEndListeners;
@@ -232,11 +230,24 @@ public class BattleService {
                 if(defSkill!=null){
                     SkillResult result = defSkill.invoke(defPara);
                     battleMessage.releaseSkill(target,defSkill );
+                    if(result instanceof HasMessageResult){
+                        for(String msg : result.getMessages()){
+                            battleMessage.rowMessage(msg);
+                        }
+                    }
                 }
             }
             SkillResult result = atkSkill.invoke(atkPara);
             battleMessage.releaseSkill((HarmAble)atker, atkSkill);
+            if(result instanceof HasMessageResult){
+                for(String msg : result.getMessages()){
+                    battleMessage.rowMessage(msg);
+                }
+            }
             if(result instanceof EndBattleResult){
+                return true;
+            }
+            if(result instanceof SkipThisTurn){
                 return true;
             }
             if(result instanceof HarmResult){

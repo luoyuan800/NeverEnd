@@ -67,6 +67,11 @@ public class Message implements BattleMessage {
 
     }
 
+    @Override
+    public void rowMessage(String msg) {
+
+    }
+
     public void createGroup(@NotNull NameObject hero, @NotNull NameObject other) {
         System.out.println(hero.getName() + " and " + other.getName() + " create group ");
     }

@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.model.skill;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.NameObject;
+import cn.luo.yuan.maze.model.skill.result.SkillResult;
 import cn.luo.yuan.maze.utils.Version;
 
 import java.io.Serializable;
