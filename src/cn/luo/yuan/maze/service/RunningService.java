@@ -106,7 +106,7 @@ public class RunningService implements Runnable {
                     Log.i("maze", "Try to find monster battle");
                     monster = monsterHelper.randomMonster(maze.getLevel());
                     if (monster != null) {
-                        Log.i("maze", "battle with " + monster.getDisplayName());
+                        gameContext.addMessage("遇见了 " + monster.getDisplayName());
                         BattleService battleService = new BattleService(hero,monster, gameContext.getRandom());
                         BattleMessage battleMessage = new BattleMessageImp(gameContext);
                         battleService.setBattleMessage(battleMessage);

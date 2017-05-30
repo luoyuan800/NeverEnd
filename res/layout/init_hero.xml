@@ -35,10 +35,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-    <Spinner
+    <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/select_gift"/>
+            android:text="点击选择天赋"
+            android:id="@+id/select_gift"
+            style="@android:style/Widget.Button.Inset"/>
 
     <TextView
             android:layout_width="match_parent"

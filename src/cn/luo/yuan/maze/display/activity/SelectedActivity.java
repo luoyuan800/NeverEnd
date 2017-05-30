@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.display.adapter.StringAdapter;
+import cn.luo.yuan.maze.display.dialog.GiftDialog;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.gift.Gift;
 import cn.luo.yuan.maze.persistence.DataManager;
@@ -58,28 +59,16 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
                 DatePicker birthday = (DatePicker)dialog.findViewById(R.id.select_birthday);
                 GregorianCalendar maxDate = new GregorianCalendar(2010, 1, 1);
                 birthday.setMaxDate(maxDate.getTimeInMillis());
-                final Spinner gift = (Spinner) dialog.findViewById(R.id.select_gift);
-                final ArrayAdapter<Gift> gAdapter = new ArrayAdapter<>(SelectedActivity.this, android.R.layout.simple_spinner_item, Arrays.asList(Gift.values()));
-
-                gift.setAdapter(gAdapter);
-                gift.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                final Button gift = (Button) dialog.findViewById(R.id.select_gift);
+                gift.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        Gift g = gAdapter.getItem(position);
-                        AlertDialog giftDetail = new AlertDialog.Builder(SelectedActivity.this).create();
-                        giftDetail.setMessage(g.getDesc());
-                        giftDetail.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.conform), new DialogInterface.OnClickListener() {
+                    public void onClick(View view) {
+                        new GiftDialog(SelectedActivity.this, hero, new DialogInterface.OnDismissListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
+                            public void onDismiss(DialogInterface dialog) {
+                                gift.setText(hero.getGift().getName());
                             }
-                        });
-                        giftDetail.show();
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                        //DONothing
+                        }).show();
                     }
                 });
                 dialog.findViewById(R.id.init_hero).setOnClickListener(new View.OnClickListener() {
@@ -93,7 +82,6 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
                         hero.setElement((Element) element.getSelectedItem());
                         Spinner race = (Spinner) dialog.findViewById(R.id.select_race);
                         hero.setRace(((Race) race.getSelectedItem()).ordinal());
-                        hero.setGift(((Gift)gift.getSelectedItem()));
                         if(!StringUtils.isNotEmpty(hero.getName())){
                             dialog.show();
                         }else{
@@ -122,6 +110,7 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
         bundle.putInt("index", index);
         gameIntent.putExtras(bundle);
         startActivity(gameIntent);
+        finish();
     }
 
     @Override

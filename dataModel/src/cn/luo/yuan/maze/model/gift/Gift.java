@@ -2,6 +2,9 @@ package cn.luo.yuan.maze.model.gift;
 
 import cn.luo.yuan.maze.service.InfoControlInterface;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Copyright 2015 luoyuan.
  * ALL RIGHTS RESERVED
@@ -79,6 +82,16 @@ public enum Gift {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static List<Gift> values(int recount){
+        List<Gift> gifts = new ArrayList<>();
+        for(Gift gift : values()){
+            if(gift.recount <= recount){
+                gifts.add(gift);
+            }
+        }
+        return gifts;
     }
 
 }
