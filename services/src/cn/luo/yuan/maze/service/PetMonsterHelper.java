@@ -25,7 +25,7 @@ public class PetMonsterHelper {
                     Method set = Pet.class.getMethod(method.getName().replaceFirst("get", "set"), method.getReturnType());
                     set.invoke(pet, method.invoke(monster));
                 }catch (Exception e){
-                    throw  new MonsterToPetException(e);
+                    //Ignore
                 }
 
             }

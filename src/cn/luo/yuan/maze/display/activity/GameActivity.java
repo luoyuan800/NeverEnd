@@ -85,7 +85,7 @@ public class GameActivity extends Activity {
                 new AccessoriesDialog(control).show();
                 break;
             case R.id.pet_root:
-                PetAdapter adapter = new PetAdapter(this, control.getDataManager(), "", null);
+                PetAdapter adapter = new PetAdapter(this, control.getDataManager(), "");
                 new PetDialog(control, adapter).show();
                 break;
             case R.id.first_skill:

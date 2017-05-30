@@ -219,6 +219,7 @@ public class DataManager implements DataManagerInterface {
         values.put("level", pet.getLevel());
         values.put("tag", pet.getTag());
         values.put("mounted", pet.isMounted());
+        values.put("race", pet.getRace().ordinal());
         if (StringUtils.isNotEmpty(pet.getId())) {
             petLoader.update(pet);
             database.updateById("pet", values, pet.getId());
@@ -239,19 +240,15 @@ public class DataManager implements DataManagerInterface {
     }
 
     @Override
-    public List<Pet> loadPets(int start, int rows, String keyWord, Race race) {
+    public List<Pet> loadPets(int start, int rows, String keyWord) {
         List<Pet> pets = new ArrayList<>();
-        List<Pet> all = petLoader.loadAll();
-        for (; start < all.size() && pets.size() <= rows; start++) {
-            boolean match = true;
-            if (StringUtils.isNotEmpty(keyWord) && !all.get(start).getName().contains(keyWord)) {
-                match = false;
-            }
-            if (race != null && all.get(start).getRace() != race) {
-                match = false;
-            }
-            if (match) {
-                pets.add(all.get(start));
+        try(Cursor cursor = database.excuseSOL("select id from pet where index = '" + index + "' and ")) {
+            while (!cursor.isAfterLast()){
+                Pet pet = petLoader.load(cursor.getString(cursor.getColumnIndex("id")));
+                if(pet!=null){
+                    pets.add(pet);
+                }
+                cursor.moveToNext();
             }
         }
         return pets;
@@ -271,35 +268,37 @@ public class DataManager implements DataManagerInterface {
     }
 
     public List<Skill> loadAllSkill() {
-        return skillLoader.loadAll();
+        List<Skill> skills = new ArrayList<>();
+        for(Skill skill : skillLoader.loadAll()){
+            if(skill.getId().endsWith("@" + index)){
+                skills.add(skill);
+            }
+        }
+        return skills;
     }
 
     public List<Accessory> loadAccessories(int start, int row, String key) {
-        List<Accessory> all = accessoryLoader.loadAll();
-        List<Accessory> result = new ArrayList<>(row);
-        int lastIndex = start;
-        int lastMatch = 0;
-        for (int i = 0; i < all.size(); i++) {
-            Accessory accessory = all.get(i);
-            if (accessory.getName().contains(key)) {
-                lastMatch++;
-            }
-            if (lastMatch == start + 1) {
-                lastIndex = i + 1;
-                break;
+        List<Accessory> all = new ArrayList<>(row);
+        try(Cursor cursor = database.excuseSOL("select id from accessory where index = '" + index + "' and name like '%" + key + "%' limit " + row + " offset " + start)) {
+            while (!cursor.isAfterLast()) {
+                Accessory accessory = accessoryLoader.load(cursor.getString(cursor.getColumnIndex("id")));
+                if (accessory != null) {
+                    all.add(accessory);
+                }
+                cursor.moveToNext();
             }
         }
-        for (int i = lastIndex; i < all.size() && result.size() < row; i++) {
-            Accessory accessory = all.get(i);
-            if (accessory.getName().contains(key)) {
-                result.add(accessory);
-            }
-        }
-        return result;
+        return all;
     }
 
     public List<ClickSkill> loadClickSkill(){
-        return clickSkillLoader.loadAll();
+        List<ClickSkill> clickSkills = clickSkillLoader.loadAll();
+        for(ClickSkill skill : new ArrayList<>(clickSkills)){
+            if(!skill.getId().endsWith("@" + index)){
+                clickSkills.remove(skill);
+            }
+        }
+        return clickSkills;
     }
 
     public void saveClickSkill(ClickSkill clickSkill){

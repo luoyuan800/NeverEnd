@@ -43,8 +43,8 @@
     <string name="medallion">免死金牌</string>
     <string name="upgrade">升级</string>
     <string name="skill_rate_effect">增加技能释放概率：</string>
-    <string name="silent_skill">%1$s想要释放技能%2$s但是被%3$s阻止了</string>
-    <string name="release_skill">%1$s使用了%2$s技能</string>
+    <string name="silent_skill">%1$s想要释放技能 &lt;font color=\'red\'&gt;%2$s&lt;/font&gt; 但是被%3$s阻止了</string>
+    <string name="release_skill">%1$s使用了技能 &lt;font color=\'red\'&gt;%2$s&lt;/font&gt;</string>
     <string name="pet_dialog_title">宠物列表</string>
     <string name="race_input">选择种族</string>
     <string name="loading">正在加载数据…</string>
@@ -65,4 +65,6 @@
     <string name="sixth_skill_enable">八转开启</string>
     <string name="fifth_skill_enable">四转开启</string>
     <string name="fourth_skill_enable">二转开启</string>
+    <string name="str_label">力量:</string>
+    <string name="agi_label">敏捷:</string>
 </resources>

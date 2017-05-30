@@ -164,7 +164,7 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="力量:"/>
+                    android:text="@string/str_label"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="敏捷:"/>
+                    android:text="@string/agi_label"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -319,7 +319,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/hero_point"
-                    android:text="10000000W"/>
+                    android:text="10000000W"
+                    />
+
+            <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:src="@drawable/jiahao_zi"
+                    android:scaleType="fitCenter"
+                    android:id="@+id/range_point"
+                    style="@android:style/Widget.ImageButton"/>
         </LinearLayout>
     </LinearLayout>
 

@@ -14,7 +14,7 @@ import java.util.List;
 public interface DataManagerInterface {
     Goods loadGoods(GoodsType type);
 
-    List<Pet> loadPets(int start, int rows, String keyWord, Race race);
+    List<Pet> loadPets(int start, int rows, String keyWord);
 
     void saveSkill(Skill skill);
 

@@ -39,7 +39,7 @@ public interface MonsterLoader {
                        clone.setMaterial(Data.getMonsterMaterial(monster.getMaxHp(), monster.getAtk(), level, getRandom()));
                        clone.setFirstName(FirstName.getRandom(level, getRandom()));
                        clone.setSecondName(SecondName.getRandom(level, getRandom()));
-                       monster.setColor(Data.DEFAULT_QUALITY_COLOR);
+                       clone.setColor(Data.DEFAULT_QUALITY_COLOR);
                    }
                    return clone;
                }

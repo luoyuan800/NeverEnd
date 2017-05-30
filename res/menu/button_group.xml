@@ -7,10 +7,8 @@
                 android:title="暂停"/>
             <item android:id="@+id/save" android:icon="@android:drawable/ic_menu_save"
                 android:title="存档" />
-            <item android:id="@+id/properties" android:icon="@android:drawable/ic_menu_add"
-                android:title="配点"/>
-            <item android:id="@+id/reincarnation" android:icon="@android:drawable/ic_menu_compass"
-                android:title="转生" />
+    <item android:id="@+id/reincarnation" android:icon="@android:drawable/ic_menu_compass"
+          android:title="转生" />
 
     <item android:title="----背包----" android:enabled="false"/>
             <item android:id="@+id/warehouse" android:icon="@android:drawable/ic_menu_agenda"

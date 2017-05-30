@@ -28,17 +28,15 @@ public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefres
     private Context context;
     private boolean sortOderRevert;
     private String limitKeyWord;
-    private Race limitRace;
-    public PetAdapter(Context context, DataManager dataManager, String limitKeyWord, Race limitRace){
+    public PetAdapter(Context context, DataManager dataManager, String limitKeyWord){
         this.context = context;
         this.dataManager = dataManager;
         this.limitKeyWord = limitKeyWord;
-        this.limitRace = limitRace;
         loadPetsData();
     }
 
     private  void loadPetsData(){
-        pets = dataManager.loadPets(0,20, limitKeyWord, limitRace);
+        pets = dataManager.loadPets(0,20, limitKeyWord);
         notifyDataSetChanged();
     }
     @Override
@@ -76,7 +74,7 @@ public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefres
 
     @Override
     public void onLoadMore(LoadMoreListView loadMoreListView) {
-        List<Pet> loadPets = dataManager.loadPets(pets.size(), 20, "", null);
+        List<Pet> loadPets = dataManager.loadPets(pets.size(), 20, "");
         if(loadPets.size() == 0){
             loadMoreListView.onLoadMoreComplete(true);
         }else {
@@ -121,15 +119,6 @@ public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefres
         }
         sortOderRevert = !sortOderRevert;
         notifyDataSetChanged();
-    }
-
-    public Race getLimitRace() {
-        return limitRace;
-    }
-
-    public void setLimitRace(Race limitRace) {
-        this.limitRace = limitRace;
-        loadPetsData();
     }
 
     public String getLimitKeyWord() {

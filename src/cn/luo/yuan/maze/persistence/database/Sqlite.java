@@ -165,6 +165,7 @@ public class Sqlite {
                 "sex INTEGER ," +
                 "color TEXT ," +
                 "mounted INTEGER ," +
+                "race INTEGER ," +
                 "id TEXT NOT NULL PRIMARY KEY," +
                 "element INTEGER " +
                 ")";

@@ -122,6 +122,9 @@ public class RunningService implements Runnable {
                                 for (PetCatchListener listener : petCatchListeners.values()) {
                                     listener.catchPet(pet);
                                 }
+                                if(hero.getPets().size() < 1){
+                                    hero.getPets().add(pet);
+                                }
                             }
                             for (WinListener listener : winListeners.values()) {
                                 listener.win(hero, monster);
