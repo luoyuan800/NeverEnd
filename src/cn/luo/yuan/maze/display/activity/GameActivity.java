@@ -233,22 +233,52 @@ public class GameActivity extends Activity {
                 public void run() {
                     Skill[] heroSkills = hero.getSkills();
                     if (heroSkills.length > 0 && heroSkills[0] != null && !(heroSkills[0] instanceof EmptySkill)) {
-                        ((TextView) context.findViewById(R.id.first_skill)).setText(Html.fromHtml(heroSkills[0].getDisplayName()));
+                        ((TextView) context.findViewById(R.id.first_skill)).setText(Html.fromHtml(heroSkills[0].getName()));
+                    }else {
+                        ((TextView) context.findViewById(R.id.first_skill)).setText(Resource.getString(R.string.not_mount));
                     }
                     if (heroSkills.length > 1 && heroSkills[1] != null && !(heroSkills[1] instanceof EmptySkill)) {
-                        ((TextView) context.findViewById(R.id.secondary_skill)).setText(Html.fromHtml(heroSkills[1].getDisplayName()));
+                        ((TextView) context.findViewById(R.id.secondary_skill)).setText(Html.fromHtml(heroSkills[1].getName()));
+                    }else {
+                        ((TextView) context.findViewById(R.id.secondary_skill)).setText(R.string.not_mount);
                     }
                     if (heroSkills.length > 2 && heroSkills[2] != null && !(heroSkills[2] instanceof EmptySkill)) {
-                        ((TextView) context.findViewById(R.id.third_skill)).setText(Html.fromHtml(heroSkills[2].getDisplayName()));
+                        ((TextView) context.findViewById(R.id.third_skill)).setText(Html.fromHtml(heroSkills[2].getName()));
+                    }else {
+                        ((TextView) context.findViewById(R.id.third_skill)).setText(Resource.getString(R.string.not_mount));
                     }
                     if (heroSkills.length > 3 && heroSkills[3] != null && !(heroSkills[3] instanceof EmptySkill)) {
-                        ((TextView) context.findViewById(R.id.fourth_skill)).setText(Html.fromHtml(heroSkills[3].getDisplayName()));
+                        ((TextView) context.findViewById(R.id.fourth_skill)).setText(Html.fromHtml(heroSkills[3].getName()));
+                    }else{
+                        if(hero.getReincarnate() >= 2){
+                            ((TextView) context.findViewById(R.id.fourth_skill)).setText(R.string.not_mount);
+                            context.findViewById(R.id.fourth_skill).setEnabled(true);
+                        }else{
+                            ((TextView) context.findViewById(R.id.fourth_skill)).setText(R.string.fourth_skill_enable);
+                            context.findViewById(R.id.fourth_skill).setEnabled(false);
+                        }
                     }
                     if (heroSkills.length > 4 && heroSkills[4] != null && !(heroSkills[4] instanceof EmptySkill)) {
-                        ((TextView) context.findViewById(R.id.fifit_skill)).setText(Html.fromHtml(heroSkills[4].getDisplayName()));
+                        ((TextView) context.findViewById(R.id.fifit_skill)).setText(Html.fromHtml(heroSkills[4].getName()));
+                    }else{
+                        if(hero.getReincarnate() >= 4){
+                            ((TextView) context.findViewById(R.id.fifit_skill)).setText(R.string.not_mount);
+                            context.findViewById(R.id.fifit_skill).setEnabled(true);
+                        }else{
+                            ((TextView) context.findViewById(R.id.fifit_skill)).setText(R.string.fifth_skill_enable);
+                            context.findViewById(R.id.fifit_skill).setEnabled(false);
+                        }
                     }
                     if (heroSkills.length > 5 && heroSkills[5] != null && !(heroSkills[5] instanceof EmptySkill)) {
-                        ((TextView) context.findViewById(R.id.sixth_skill)).setText(Html.fromHtml(heroSkills[5].getDisplayName()));
+                        ((TextView) context.findViewById(R.id.sixth_skill)).setText(Html.fromHtml(heroSkills[5].getName()));
+                    }else{
+                        if(hero.getReincarnate() >= 8){
+                            ((TextView) context.findViewById(R.id.sixth_skill)).setText(R.string.not_mount);
+                            context.findViewById(R.id.sixth_skill).setEnabled(true);
+                        }else{
+                            ((TextView) context.findViewById(R.id.sixth_skill)).setText(R.string.sixth_skill_enable);
+                            context.findViewById(R.id.sixth_skill).setEnabled(false);
+                        }
                     }
 
 

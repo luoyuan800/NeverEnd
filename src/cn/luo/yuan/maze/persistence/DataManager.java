@@ -266,6 +266,7 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void saveSkill(Skill skill) {
+        skill.setId(skill.getClass().getSimpleName() + "@" + index);
         skillLoader.save(skill, skill.getClass().getSimpleName() + "@" + index);
     }
 

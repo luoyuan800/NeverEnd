@@ -6,7 +6,6 @@ import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.skill.*;
 import cn.luo.yuan.maze.model.skill.result.HarmResult;
 import cn.luo.yuan.maze.model.skill.result.SkillResult;
-import cn.luo.yuan.maze.model.skill.result.SkipThisTurn;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.service.SkillHelper;
 import cn.luo.yuan.maze.utils.Random;
@@ -37,7 +36,7 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
         if(skill!=null && skill.isEnable()){
             return false;
         }else {
-            return super.canEnable(parameter);
+            return isEnablePointEnough(parameter);
         }
     }
 
@@ -70,7 +69,7 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
     @Override
     public boolean canUpgrade(SkillParameter parameter) {
         return isEnable() && parameter.getOwner() instanceof Hero && minHarm + level > 0
-                && maxHarm * level > 0 && isPointEnough(parameter);
+                && maxHarm * level > 0 && isUpgradePointEnough(parameter);
     }
 
 

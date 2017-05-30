@@ -41,4 +41,14 @@ public class EmptySkill implements Skill {
     public String getDisplayName() {
         return null;
     }
+
+    @Override
+    public String getId() {
+        return "";
+    }
+
+    @Override
+    public void setId(String id) {
+
+    }
 }

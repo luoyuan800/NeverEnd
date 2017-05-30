@@ -194,9 +194,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/linearLayout2"
             android:layout_alignParentEnd="true"
-            android:layout_alignStart="@+id/linearLayout2"
-            android:id="@+id/linearLayout4">
-
+            android:id="@+id/linearLayout4"
+            android:layout_alignStart="@+id/linearLayout">
         <Button
                 android:id="@+id/first_skill"
                 android:layout_width="wrap_content"
@@ -205,9 +204,10 @@
                 android:alpha="90"
                 android:focusableInTouchMode="false"
                 android:gravity="center"
-                android:textSize="8sp"
+                android:textSize="12sp"
                 android:onClick="onClick"
-                android:background="@color/toumin" />
+                android:background="@color/toumin"
+               />
 
         <Button
                 android:id="@+id/secondary_skill"
@@ -216,7 +216,7 @@
                 android:layout_weight="1"
                 android:alpha="90"
                 android:gravity="center"
-                android:textSize="8sp"
+                android:textSize="12sp"
                 android:onClick="onClick"
                 android:background="@color/toumin" />
 
@@ -227,7 +227,7 @@
                 android:alpha="95"
                 android:focusableInTouchMode="false"
                 android:gravity="center"
-                android:textSize="8sp"
+                android:textSize="12sp"
                 android:onClick="onClick"
                 android:background="@color/toumin" />
     </LinearLayout>
@@ -406,8 +406,8 @@
                 android:alpha="90"
                 android:focusableInTouchMode="false"
                 android:gravity="center"
-                android:text="二转开启"
-                android:textSize="8sp"
+                android:text="@string/fourth_skill_enable"
+                android:textSize="12sp"
                 android:enabled="false"
                 android:onClick="onClick"
                 android:background="@color/toumin"
@@ -421,8 +421,8 @@
                 android:alpha="95"
                 android:focusableInTouchMode="false"
                 android:gravity="center"
-                android:text="四转开启"
-                android:textSize="8sp"
+                android:text="@string/fifth_skill_enable"
+                android:textSize="12sp"
                 android:onClick="onClick"
                 android:background="@color/toumin" />
 
@@ -433,11 +433,13 @@
                 android:layout_weight="1"
                 android:alpha="90"
                 android:gravity="center"
-                android:text="六转开启"
-                android:textSize="8sp"
+                android:text="@string/sixth_skill_enable"
+                android:textSize="12sp"
                 android:onClick="onClick"
                 android:background="@color/toumin" />
 
     </LinearLayout>
+
+
 
 </RelativeLayout>

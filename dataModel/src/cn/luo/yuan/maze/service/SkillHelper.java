@@ -2,10 +2,7 @@ package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.model.skill.EmptySkill;
-import cn.luo.yuan.maze.model.skill.MountAble;
-import cn.luo.yuan.maze.model.skill.Skill;
-import cn.luo.yuan.maze.model.skill.SkillParameter;
+import cn.luo.yuan.maze.model.skill.*;
 import cn.luo.yuan.maze.utils.Random;
 
 import static cn.luo.yuan.maze.service.EffectHandler.*;
@@ -66,5 +63,16 @@ public class SkillHelper {
         skill.enable(parameter);
         context.getHero().setPoint(context.getHero().getPoint() - Data.SKILL_ENABLE_COST);
         context.getDataManager().saveSkill(skill);
+    }
+
+    public static boolean upgradeSkill(UpgradeAble skill, SkillParameter parameter, InfoControlInterface context) {
+        if(skill.upgrade(parameter)){
+            if(parameter.getOwner() instanceof Hero){
+                ((Hero) parameter.getOwner()).setPoint(((Hero) parameter.getOwner()).getPoint() - skill.getLevel() * Data.SKILL_ENABLE_COST);
+            }
+            return true;
+        }else{
+            return false;
+        }
     }
 }

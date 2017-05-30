@@ -29,7 +29,7 @@ public class ObjectDB<T extends Serializable> {
     }
 
     public synchronized String save(T object, String id) {
-        String path = object.getClass().getName() + "@" + id;
+        String path = type.getName() + "@" + id;
         try {
             ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput(path, Context.MODE_PRIVATE));
             oos.writeObject(object);

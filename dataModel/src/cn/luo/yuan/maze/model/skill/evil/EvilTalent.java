@@ -44,7 +44,7 @@ public class EvilTalent extends DefSkill implements UpgradeAble {
         if(skill!=null && skill.isEnable()){
             return false;
         }else {
-            return super.canEnable(parameter);
+            return isEnablePointEnough(parameter);
         }
     }
 
@@ -90,6 +90,6 @@ public class EvilTalent extends DefSkill implements UpgradeAble {
 
     public boolean
     canUpgrade(SkillParameter parameter) {
-        return isEnable() && getRate() < 15f && isPointEnough(parameter);
+        return isEnable() && getRate() < 15f && isUpgradePointEnough(parameter);
     }
 }

@@ -221,7 +221,7 @@ public class BattleService {
                 SkillParameter defPara = new SkillParameter(atker);
                 defPara.set("random", random);
                 defPara.set("target", atker);
-                for (Skill skill : atker.getSkills()) {
+                for (Skill skill : ((SkillAbleObject) target).getSkills()) {
                     if (skill instanceof DefSkill && ((DefSkill) skill).invokeAble(defPara)) {
                         defSkill = (DefSkill) skill;
                         break;
@@ -252,6 +252,7 @@ public class BattleService {
             }
             if(result instanceof HarmResult){
                 if(atker instanceof NameObject && target instanceof NameObject) {
+                    target.setHp(target.getHp() - ((HarmResult) result).getHarm());
                     battleMessage.harm((NameObject) atker, (NameObject) target, ((HarmResult) result).getHarm());
                 }
             }

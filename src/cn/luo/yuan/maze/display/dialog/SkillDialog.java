@@ -111,7 +111,7 @@ public class SkillDialog implements View.OnClickListener {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if(((UpgradeAble) skill).canUpgrade(parameter)){
-                                    ((UpgradeAble) skill).upgrade(parameter);
+                                        SkillHelper.upgradeSkill((UpgradeAble) skill, parameter, context);
                                 }
                             }
                         });

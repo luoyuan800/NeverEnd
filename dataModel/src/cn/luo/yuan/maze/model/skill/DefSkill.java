@@ -10,7 +10,8 @@ import cn.luo.yuan.maze.utils.Random;
 public abstract class DefSkill implements Skill, MountAble {
     private boolean mounted;
     private boolean enable;
-    private float rate;
+    private float rate = 5;
+    private String id;
 
     public boolean isMounted(){
         return mounted;
@@ -45,4 +46,13 @@ public abstract class DefSkill implements Skill, MountAble {
         return rate;
     }
 
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
 }

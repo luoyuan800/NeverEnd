@@ -62,4 +62,7 @@
     <string name="enable">激活</string>
     <string name="evil_talent">魔王天赋</string>
     <string name="evil_skill">魔王</string>
+    <string name="sixth_skill_enable">八转开启</string>
+    <string name="fifth_skill_enable">四转开启</string>
+    <string name="fourth_skill_enable">二转开启</string>
 </resources>

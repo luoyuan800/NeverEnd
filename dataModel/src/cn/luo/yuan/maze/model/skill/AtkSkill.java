@@ -8,6 +8,7 @@ import cn.luo.yuan.maze.utils.Random;
  * Created by gluo on 4/27/2017.
  */
 public abstract class AtkSkill implements Skill, MountAble {
+    private String id;
     private boolean mounted;
     private boolean enable;
     private float rate = 5f;
@@ -42,5 +43,15 @@ public abstract class AtkSkill implements Skill, MountAble {
 
     public void setRate(float rate) {
         this.rate = rate;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
     }
 }
