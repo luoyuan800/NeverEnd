@@ -18,6 +18,8 @@ public class RangePointDialog implements View.OnClickListener, SeekBar.OnSeekBar
     private int maxPoint;
     private SeekBar strAddValue;
     private SeekBar agiAddValue;
+    private TextView strAddShow;
+    private TextView agiAddShow;
 
     public RangePointDialog(GameContext context) {
         this.context = context;
@@ -40,6 +42,10 @@ public class RangePointDialog implements View.OnClickListener, SeekBar.OnSeekBar
         agiAddValue = (SeekBar) dialog.findViewById(R.id.agi_add_value);
         agiAddValue.setMax(maxPoint);
         agiAddValue.setOnSeekBarChangeListener(this);
+        ((TextView)dialog.findViewById(R.id.agi_value)).setText(StringUtils.formatNumber(context.getHero().getAgi()));
+        ((TextView)dialog.findViewById(R.id.str_value)).setText(StringUtils.formatNumber(context.getHero().getStr()));
+        strAddShow = (TextView) dialog.findViewById(R.id.str_add_show);
+        agiAddShow = (TextView) dialog.findViewById(R.id.agi_add_show);
     }
 
     @Override
@@ -51,10 +57,22 @@ public class RangePointDialog implements View.OnClickListener, SeekBar.OnSeekBar
             case R.id.range_conform:
                 int strPoint = strAddValue.getProgress();
                 int agiPoint = agiAddValue.getProgress();
-                if (agiPoint != 0)
-                    context.getHero().setAgi(context.getHero().getAgi() + agiPoint);
-                if (strPoint != 0)
-                    context.getHero().setStr(context.getHero().getStr() + strPoint);
+                if(agiPoint + strPoint <= context.getHero().getPoint()) {
+                    if (agiPoint != 0) {
+                        context.getHero().setAgi(context.getHero().getAgi() + agiPoint);
+                        context.getHero().setDef(context.getHero().getDef() + context.getHero().getDefGrow() * agiPoint);
+                    }
+                    if (strPoint != 0) {
+                        context.getHero().setStr(context.getHero().getStr() + strPoint);
+                        long hpG = context.getHero().getHpGrow() * strPoint;
+                        context.getHero().setMaxHp(context.getHero().getMaxHp() + hpG);
+                        context.getHero().setHp(context.getHero().getHp() + hpG);
+                        context.getHero().setAtk(context.getHero().getAtk() + context.getHero().getAtkGrow() * strPoint);
+                    }
+                    context.getHero().setPoint(context.getHero().getPoint() - strPoint - agiPoint);
+                    context.getViewHandler().refreshProperties(context.getHero());
+                }
+                dialog.dismiss();
                 break;
         }
     }
@@ -65,8 +83,10 @@ public class RangePointDialog implements View.OnClickListener, SeekBar.OnSeekBar
             switch (seekBar.getId()) {
                 case R.id.str_add_value:
                     reRangeMax(progress, agiAddValue);
+                    strAddShow.setText(StringUtils.formatNumber(progress));
                     break;
                 case R.id.agi_add_value:
+                    agiAddShow.setText(StringUtils.formatNumber(progress));
                     reRangeMax(progress, strAddValue);
                     break;
             }

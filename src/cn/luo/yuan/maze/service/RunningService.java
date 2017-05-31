@@ -123,6 +123,7 @@ public class RunningService implements Runnable {
                                 }
                                 if(hero.getPets().size() < 1){
                                     hero.getPets().add(pet);
+                                    gameContext.getViewHandler().refreshPets(hero);
                                 }
                             }
                             for (WinListener listener : winListeners.values()) {

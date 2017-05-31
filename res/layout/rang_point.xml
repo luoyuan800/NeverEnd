@@ -5,6 +5,7 @@
               android:layout_height="match_parent">
 
     <LinearLayout
+            android:layout_marginTop="20dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -25,16 +26,23 @@
 
         <ImageView
                 android:src="@drawable/jiahao_zi"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
                 android:id="@+id/add_label"
-                android:layout_weight="1"/>
+                android:layout_weight="0.24"/>
 
         <SeekBar
-                android:layout_width="168dp"
-                android:layout_height="wrap_content"
+                android:layout_width="170dp"
+                android:layout_height="match_parent"
                 android:id="@+id/str_add_value"
-                />
+                android:layout_weight="0.46"/>
+
+        <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/str_add_show"
+                android:layout_weight="1"/>
     </LinearLayout>
     <LinearLayout
             android:orientation="horizontal"
@@ -57,20 +65,27 @@
 
         <ImageView
                 android:src="@drawable/jiahao_zi"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:layout_weight="1"/>
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_weight="0.23"/>
 
         <SeekBar
-                android:layout_width="168dp"
-                android:layout_height="wrap_content"
+                android:layout_width="170dp"
+                android:layout_height="match_parent"
                 android:id="@+id/agi_add_value"
-                />
+                android:layout_weight="0.39"/>
+
+        <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/agi_add_show"
+                android:layout_weight="1"/>
     </LinearLayout>
 
     <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
         <TextView

@@ -53,6 +53,7 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
                                                 } else {
                                                     context.getAccessoryHelper().mountAccessory(main, context.getHero());
                                                 }
+                                                context.getViewHandler().refreshAccessory(context.getHero());
                                             }
                                         }
                                     }

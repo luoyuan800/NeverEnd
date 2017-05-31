@@ -36,7 +36,7 @@ public class RandomEventService {
             }
             gameControl.addMessage(gameControl.getHero().getDisplayName() + "休息了一会，恢复了<font color=\"#556B2F\">" + hel + "</font>点HP");
             gameControl.getHero().setHp(gameControl.getHero().getHp() + hel);
-        } else if (gameControl.getRandom().nextLong(gameControl.getHero().getAgi()) + gameControl.getRandom().nextInt(2000)> 1989 + gameControl.getRandom().nextLong(gameControl.getHero().getStr())) {
+        } else if (gameControl.getRandom().nextLong(gameControl.getHero().getAgi()) + gameControl.getRandom().nextInt(5000)> 4999 + gameControl.getRandom().nextLong(gameControl.getHero().getStr())) {
             gameControl.getMaze().setStep(0);
             long levJ = gameControl.getRandom().nextLong(gameControl.getMaze().getMaxLevel() + 100 + gameControl.getHero().getReincarnate()) + 1;
             gameControl.addMessage( gameControl.getHero().getDisplayName() + "踩到了传送门，被传送到了迷宫第" + levJ + "层");

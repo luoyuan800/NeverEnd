@@ -26,6 +26,7 @@ import cn.luo.yuan.maze.display.dialog.SkillDialog;
 import cn.luo.yuan.maze.display.view.RollTextView;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.persistence.DataManager;
@@ -56,14 +57,14 @@ public class GameActivity extends Activity {
         control.setTextView((RollTextView) findViewById(R.id.info_view));
         /*ProgressDialog progressDialog = new ProgressDialog(GameActivity.this);
         progressDialog.setMessage(getString(R.string.loading));
-        progressDialog.show();
+        progressDialog.show();*/
         new Thread(new Runnable() {
             public void run() {
                 control.startGame();
                 //progressDialog.dismiss();
 
             }
-        }).start();*/
+        }).start();
     }
 
     @Override
@@ -295,8 +296,12 @@ public class GameActivity extends Activity {
         }
 
         public void refreshPets(final Hero hero) {
-            LinearLayout petRoot = (LinearLayout) context.findViewById(R.id.pet_root);
-
+            TextView petRoot = (TextView) context.findViewById(R.id.pet_root);
+            StringBuilder petBuilder = new StringBuilder();
+            for(Pet pet : hero.getPets()){
+                petBuilder.append(pet.getDisplayName()).append("<br>");
+            }
+            petRoot.setText(Html.fromHtml(petBuilder.toString()));
         }
 
     }

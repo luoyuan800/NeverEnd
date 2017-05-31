@@ -7,13 +7,13 @@
         <name>蟑螂</name>
         <desc>只要有人的地方就有蟑螂，不管你爬得多高，你都可以遇见它们。它们是这个世界上最古老的怪物之一，并且也是繁殖力最高（没有之一）的。适应力非常强，据说不同时间可以进化出不同种类的蟑螂……
         </desc>
-        <atk>10</atk>
-        <def>120</def>
+        <atk>8</atk>
+        <def>10</def>
         <hp>80</hp>
         <hit>1</hit>
         <silent>0</silent>
         <egg_rate>89</egg_rate>
-        <pet_rate>95</pet_rate>
+        <pet_rate>55</pet_rate>
         <sex>-1</sex>
         <race>Nonsr</race>
         <evolution></evolution>

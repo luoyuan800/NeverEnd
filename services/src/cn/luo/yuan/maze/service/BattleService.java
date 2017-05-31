@@ -51,6 +51,11 @@ public class BattleService {
             }
             heroAtk = !heroAtk;
             round++;
+            try {
+                Thread.sleep(Data.REFRESH_SPEED);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
         if (monster.getHp() <= 0) {
             if(hero instanceof NameObject && monster instanceof NameObject){

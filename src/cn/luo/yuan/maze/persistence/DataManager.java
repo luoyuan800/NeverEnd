@@ -212,7 +212,7 @@ public class DataManager implements DataManagerInterface {
         ContentValues values = new ContentValues();
         values.put("hero_index", index);
         values.put("sex", pet.getSex());
-        values.put("name", pet.getDisplayName());
+        values.put("name", pet.getName());
         values.put("element", pet.getElement().ordinal());
         values.put("last_update", System.currentTimeMillis());
         values.put("color", pet.getColor());
@@ -225,7 +225,7 @@ public class DataManager implements DataManagerInterface {
             database.updateById("pet", values, pet.getId());
         } else {
             petLoader.save(pet);
-            values.put("create", System.currentTimeMillis());
+            values.put("created", System.currentTimeMillis());
             values.put("id", pet.getId());
             database.insert("pet", values);
         }
