@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.ArrayMap;
-import android.util.ArraySet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -49,7 +48,7 @@ public class Resource {
                 drawable =  new BitmapDrawable((Resources) null, BitmapFactory.decodeStream(context.getAssets().open(name)));
                 addToCache(name, drawable);
             } catch (IOException e) {
-                //LogHelper.logException(e, false, "False for load image from assets: " + name);
+                LogHelper.logException(e, "False to load image from assets: " + name);
             }
         }
         return drawable;
@@ -66,13 +65,13 @@ public class Resource {
                 line = reader.readLine();
             }
         } catch (IOException e) {
-            LogHelper.logException(e, false, "False for load string from assets: ." + name);
+            LogHelper.logException(e, "False for load string from assets: ." + name);
         } finally {
             if (reader != null) {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LogHelper.logException(e, "Resource->readStringFromAssets{" + name + "}");
                 }
             }
         }

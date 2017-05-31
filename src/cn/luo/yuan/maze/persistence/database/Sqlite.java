@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import cn.luo.yuan.maze.utils.LogHelper;
 
 
 /**
@@ -51,7 +52,7 @@ public class Sqlite {
         try {
             getDB().execSQL(sql);
         } catch (Exception e) {
-            e.printStackTrace();
+            LogHelper.logException(e,"Sqlite->excuseSqlWithoutResult");
         }
     }
 
@@ -72,7 +73,7 @@ public class Sqlite {
             db.setTransactionSuccessful();
             db.endTransaction();
         } catch (Exception e) {
-            e.printStackTrace();
+            LogHelper.logException(e,"Sqlite->onCreate");
 
         }
     }

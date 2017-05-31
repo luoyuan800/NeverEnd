@@ -6,6 +6,7 @@ import android.util.ArrayMap;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Race;
+import cn.luo.yuan.maze.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -90,10 +91,8 @@ public class PetMonsterLoder implements MonsterLoader {
                 }
                 parser.next();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
+        } catch (IOException | XmlPullParserException e) {
+            LogHelper.logException(e, "PetMonsterLoder->getDescription{" + index + ", " + type + "}");
         }
         return StringUtils.EMPTY_STRING;
     }
@@ -125,10 +124,8 @@ public class PetMonsterLoder implements MonsterLoader {
                 }
                 parser.next();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
+        } catch (IOException | XmlPullParserException e) {
+            LogHelper.logException(e, "PetMonsterLoder->getEvolutionIndex{" + index + "}");
         }
         return evolutionIndex;
     }
@@ -182,10 +179,8 @@ public class PetMonsterLoder implements MonsterLoader {
                 }
                 parser.next();
             }
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (XmlPullParserException | IOException e) {
+            LogHelper.logException(e, "PetMonsterLoder->loadMonsterByIndex{" + index + "}");
         }
         return monster;
     }
@@ -219,10 +214,8 @@ public class PetMonsterLoder implements MonsterLoader {
                     }
                     parser.next();
                 }
-            } catch (XmlPullParserException e) {
-
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (XmlPullParserException | IOException e) {
+                LogHelper.logException(e, "PetMonsterLoder->init");
             }
         }
     }
@@ -242,10 +235,8 @@ public class PetMonsterLoder implements MonsterLoader {
             while (parser.getEventType() != XmlResourceParser.START_TAG && !parser.getName().equalsIgnoreCase("monster")) {
                 parser.next();
             }
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (XmlPullParserException | IOException e) {
+            LogHelper.logException(e, "PetMonsterLoder->nextMonsterTag");
         }
 
     }

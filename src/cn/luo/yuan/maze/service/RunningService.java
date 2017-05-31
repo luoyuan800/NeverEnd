@@ -10,7 +10,6 @@ import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Pet;
-import cn.luo.yuan.maze.model.gift.Gift;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Random;
@@ -153,7 +152,7 @@ public class RunningService implements Runnable {
                 }
                 mazeLevelCalculate();
             } catch (Exception e) {
-                LogHelper.logException(e, false, "Error while running game thread.");
+                LogHelper.logException(e, "Error while running game thread.");
             }
         }
     }
@@ -176,7 +175,7 @@ public class RunningService implements Runnable {
                 return null;
             }
         } catch (MonsterToPetException e) {
-
+            LogHelper.logException(e,"RunningService->tryCatch{" + monster + "}");
         }
         return null;
     }

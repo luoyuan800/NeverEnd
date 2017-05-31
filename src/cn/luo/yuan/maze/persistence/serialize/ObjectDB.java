@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.persistence.serialize;
 import android.content.Context;
 import android.util.ArrayMap;
 import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.maze.utils.LogHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class ObjectDB<T extends Serializable> {
             oos.flush();
             oos.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            LogHelper.logException(e,"ObjectDb->save{" + object + ", " + id + "}");
         }
         cache.put(id, new SoftReference<T>(object));
         return id;
@@ -106,7 +107,7 @@ public class ObjectDB<T extends Serializable> {
             ois.close();
             return type.cast(o);
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            LogHelper.logException(e,"Sqlite->load{" + name + "}");
         }
         return null;
     }

@@ -14,6 +14,7 @@ import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.gift.Gift;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.persistence.IndexManager;
+import cn.luo.yuan.maze.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -31,6 +32,7 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selected_index);
         Resource.init(this);
+        LogHelper.initLogSystem(this);
         indexManager = new IndexManager(this);
         final List<HeroIndex>  indexList = indexManager.getIndex();
         adapter = new StringAdapter<>(indexList);

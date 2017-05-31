@@ -18,6 +18,7 @@ import cn.luo.yuan.maze.model.effect.LongValueEffect;
 import cn.luo.yuan.maze.model.effect.MeetRateEffect;
 import cn.luo.yuan.maze.model.effect.PetRateEffect;
 import cn.luo.yuan.maze.model.effect.StrEffect;
+import cn.luo.yuan.maze.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Random;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -151,14 +152,12 @@ public class AccessoryHelper {
                             break;
                     }
                 } catch (Exception e) {
-
+                    LogHelper.logException(e,"Accessory->initAccessories {" + (key!=null ? key.name : "") + "}");
                 }
                 parser.next();
             }
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (XmlPullParserException | IOException e) {
+            LogHelper.logException(e,"Accessory->initAccessories");
         }
     }
 
@@ -299,17 +298,15 @@ public class AccessoryHelper {
                                             }
                                         }
                                     } catch (Exception e) {
-                                        e.printStackTrace();
+                                        LogHelper.logException(e, "AccessoryHelper->loadAccessoryByName->effects parse {" + accessory.getName() + "}");
                                     }
                                 }
                         }
                     }
                     parser.next();
                 }
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (XmlPullParserException | IOException e) {
+                LogHelper.logException(e, "AccessoryHelper->loadAccessoryByName{" + name + "}");
             }
         }
         return accessory;

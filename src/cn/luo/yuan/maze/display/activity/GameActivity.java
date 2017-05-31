@@ -30,6 +30,7 @@ import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.service.GameContext;
+import cn.luo.yuan.maze.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -44,6 +45,7 @@ public class GameActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Resource.init(this);
+        LogHelper.initLogSystem(this);
         setContentView(R.layout.game_layout);
         Intent intent = getIntent();
 //        ListenerService.init();
@@ -54,14 +56,14 @@ public class GameActivity extends Activity {
         control.setTextView((RollTextView) findViewById(R.id.info_view));
         /*ProgressDialog progressDialog = new ProgressDialog(GameActivity.this);
         progressDialog.setMessage(getString(R.string.loading));
-        progressDialog.show();*/
+        progressDialog.show();
         new Thread(new Runnable() {
             public void run() {
                 control.startGame();
                 //progressDialog.dismiss();
 
             }
-        }).start();
+        }).start();*/
     }
 
     @Override
