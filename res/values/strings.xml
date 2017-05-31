@@ -67,4 +67,5 @@
     <string name="fourth_skill_enable">二转开启</string>
     <string name="str_label">力量:</string>
     <string name="agi_label">敏捷:</string>
+    <string name="rang_point_title">分配能力点</string>
 </resources>

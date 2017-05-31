@@ -6,6 +6,7 @@
 
     <Button
             android:text="@string/close"
+            style="@android:style/Widget.Button.Inset"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/skill_close"

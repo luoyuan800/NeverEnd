@@ -21,6 +21,7 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.display.dialog.AccessoriesDialog;
 import cn.luo.yuan.maze.display.dialog.PetDialog;
+import cn.luo.yuan.maze.display.dialog.RangePointDialog;
 import cn.luo.yuan.maze.display.dialog.SkillDialog;
 import cn.luo.yuan.maze.display.view.RollTextView;
 import cn.luo.yuan.maze.model.Accessory;
@@ -102,6 +103,11 @@ public class GameActivity extends Activity {
             case R.id.second_click_skill:
                 break;
             case R.id.third_click_skill:
+                break;
+            case R.id.range_point:
+                if(control.getHero().getPoint() > 0){
+                    new RangePointDialog(control).show();
+                }
                 break;
 
         }

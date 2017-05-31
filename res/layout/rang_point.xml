@@ -13,27 +13,27 @@
                 android:text="@string/str_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView"
+                android:id="@+id/str_label"
                 android:layout_weight="1"/>
 
         <TextView
                 android:text="11111"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView2"
+                android:id="@+id/str_value"
                 android:layout_weight="1"/>
 
         <ImageView
                 android:src="@drawable/jiahao_zi"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
-                android:id="@+id/imageView"
+                android:id="@+id/add_label"
                 android:layout_weight="1"/>
 
         <SeekBar
                 android:layout_width="168dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/seekBar"
+                android:id="@+id/str_add_value"
                 />
     </LinearLayout>
     <LinearLayout
@@ -45,39 +45,38 @@
                 android:text="@string/agi_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView"
+                android:id="@+id/agi_label"
                 android:layout_weight="1"/>
 
         <TextView
                 android:text="11111"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView2"
+                android:id="@+id/agi_value"
                 android:layout_weight="1"/>
 
         <ImageView
                 android:src="@drawable/jiahao_zi"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
-                android:id="@+id/imageView"
                 android:layout_weight="1"/>
 
         <SeekBar
                 android:layout_width="168dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/seekBar"
+                android:id="@+id/agi_add_value"
                 />
     </LinearLayout>
 
     <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView7"
+                android:id="@+id/point_label"
                 android:layout_weight="1"
                 android:text="@string/point_label"/>
 
@@ -85,8 +84,11 @@
                 android:text="111223"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView6"
+                android:id="@+id/point_value"
                 android:layout_weight="1"/>
     </LinearLayout>
-
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/conform" android:id="@+id/range_conform" android:layout_weight="1" style="@android:style/Widget.Button.Inset"/>
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/close" android:id="@+id/range_close" android:layout_weight="1" style="@android:style/Widget.Button.Inset"/>
+</LinearLayout>
 </LinearLayout>

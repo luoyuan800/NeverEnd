@@ -328,6 +328,7 @@
                     android:src="@drawable/jiahao_zi"
                     android:scaleType="fitCenter"
                     android:id="@+id/range_point"
+                    android:onClick="onClick"
                     style="@android:style/Widget.ImageButton"/>
         </LinearLayout>
     </LinearLayout>
