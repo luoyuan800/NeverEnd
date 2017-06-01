@@ -129,4 +129,8 @@ public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefres
         this.limitKeyWord = limitKeyWord;
         loadPetsData();
     }
+
+    public void removePet(Pet pet){
+        pets.remove(pet);
+    }
 }

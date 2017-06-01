@@ -181,10 +181,11 @@
                     android:id="@+id/pet_tag_labe"
                     android:layout_weight="1"/>
 
-            <TextView
+            <EditText
                     android:text="某鸟"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="12sp"
                     android:id="@+id/pet_tag"
                     android:layout_weight="1"/>
         </LinearLayout>

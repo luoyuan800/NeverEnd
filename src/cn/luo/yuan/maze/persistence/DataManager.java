@@ -242,7 +242,9 @@ public class DataManager implements DataManagerInterface {
     @Override
     public List<Pet> loadPets(int start, int rows, String keyWord) {
         List<Pet> pets = new ArrayList<>();
-        try(Cursor cursor = database.excuseSOL("select id from pet where index = '" + index + "' and ")) {
+        try(Cursor cursor = database.excuseSOL("select id from pet where hero_index = '" + index + "' " +
+                "and (name like '%" + keyWord + "%'or tag like '%" + keyWord + "%') " +
+                "limit " + rows + " offset " + start)) {
             while (!cursor.isAfterLast()){
                 Pet pet = petLoader.load(cursor.getString(cursor.getColumnIndex("id")));
                 if(pet!=null){
@@ -279,7 +281,7 @@ public class DataManager implements DataManagerInterface {
 
     public List<Accessory> loadAccessories(int start, int row, String key) {
         List<Accessory> all = new ArrayList<>(row);
-        try(Cursor cursor = database.excuseSOL("select id from accessory where index = '" + index + "' and name like '%" + key + "%' limit " + row + " offset " + start)) {
+        try(Cursor cursor = database.excuseSOL("select id from accessory where hero_index = '" + index + "' and name like '%" + key + "%' limit " + row + " offset " + start)) {
             while (!cursor.isAfterLast()) {
                 Accessory accessory = accessoryLoader.load(cursor.getString(cursor.getColumnIndex("id")));
                 if (accessory != null) {
