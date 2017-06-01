@@ -3,8 +3,10 @@ package cn.luo.yuan.maze.server.persistence;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.index.HeroIndex;
-import cn.luo.yuan.maze.server.persistence.serialize.ObjectDB;
+import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,14 +19,16 @@ import java.util.Set;
  * Created by gluo on 5/22/2017.
  */
 public class HeroTable {
-    private ObjectDB<Hero> heroDb;
-    private ObjectDB<Maze> mazeDb;
+    private ObjectTable<Hero> heroDb;
+    private ObjectTable<Maze> mazeDb;
     private HashMap<HeroIndex, SoftReference<Hero>> cache;
     private long maxLevel = 1;
+    private File root;
 
-    public HeroTable() {
-        heroDb = new ObjectDB<>(Hero.class);
-        mazeDb = new ObjectDB<>(Maze.class);
+    public HeroTable(File root) {
+        this.root = root;
+        heroDb = new ObjectTable<>(Hero.class, root);
+        mazeDb = new ObjectTable<>(Maze.class, root);
         List<Hero> heros = heroDb.loadAll();
         cache = new HashMap<>(heros.size());
         for (Hero hero : heros) {
@@ -66,20 +70,23 @@ public class HeroTable {
     }
 
     public void insertHero(Hero hero, Maze maze) {
-        heroDb.save(hero, hero.getId());
-        mazeDb.save(maze, hero.getId());
-        HeroIndex index = new HeroIndex();
-        index.setMaxLevel(maze.getMaxLevel());
+        try {
+            heroDb.save(hero, hero.getId());
+            mazeDb.save(maze, hero.getId());
+            HeroIndex index = new HeroIndex();
+            index.setMaxLevel(maze.getMaxLevel());
 
-        index.setName(hero.getName());
-        index.setLevel(maze.getLevel());
-        index.setElement(hero.getElement());
-        if (index.getLevel() > maxLevel) {
-            maxLevel = index.getLevel();
+            index.setName(hero.getName());
+            index.setLevel(maze.getLevel());
+            index.setElement(hero.getElement());
+            if (index.getLevel() > maxLevel) {
+                maxLevel = index.getLevel();
+            }
+            index.setRace(hero.getRace());
+            index.setId(hero.getId());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        index.setRace(hero.getRace());
-        index.setId(hero.getId());
-        cache.put(index, new SoftReference<Hero>(hero));
     }
 
     public Set<String> getAllHeroIds(long level) {
@@ -124,13 +131,21 @@ public class HeroTable {
     }
 
     public void saveHero(Hero hero){
-        heroDb.save(hero, hero.getId());
+        try {
+            heroDb.save(hero, hero.getId());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void saveMaze(Maze maze, String id){
-        mazeDb.save(maze, id);
-        if(maze.getLevel() > maxLevel){
-            maxLevel = maze.getLevel();
+        try {
+            mazeDb.save(maze, id);
+            if (maze.getLevel() > maxLevel) {
+                maxLevel = maze.getLevel();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

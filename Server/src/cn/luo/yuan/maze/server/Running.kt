@@ -2,26 +2,23 @@ package cn.luo.yuan.maze.server
 
 import cn.luo.yuan.maze.model.Hero
 import cn.luo.yuan.maze.model.Maze
+import cn.luo.yuan.maze.server.model.Group
+import cn.luo.yuan.maze.server.persistence.GroupTable
 import cn.luo.yuan.maze.server.persistence.HeroTable
-import cn.luo.yuan.maze.server.persistence.serialize.ObjectDB
 import cn.luo.yuan.maze.service.BattleService
 import cn.luo.yuan.maze.utils.Random
-import java.io.Serializable
-import java.util.*
 import kotlin.system.measureNanoTime
 
 /**
  * Created by gluo on 5/23/2017.
  */
 
-var msg = Message();
-var heroTable = HeroTable()
-var groupTable = GroupTable()
-var random = Random(measureNanoTime { })
-var monsterLoader = cn.luo.yuan.maze.server.MonsterLoader()
-var running = true;
-fun main(args: Array<String>) {
 
+fun run(heroTable: HeroTable, groupTable: GroupTable) {
+    var msg = Message();
+    var random = Random(measureNanoTime { })
+    var monsterLoader = cn.luo.yuan.maze.server.MonsterLoader()
+    var running = true;
     while (running) {
         val maxLevel = heroTable.maxLevel
         (1..maxLevel).forEach { level ->
@@ -96,11 +93,11 @@ private fun groupAction(groupTable: GroupTable, groups: MutableList<Group>, hero
 private fun groupNextLevel(group: Group, heroTable: HeroTable) {
     //Goto next level
     group.level++
-    for(id in group.heroIds){
+    for (id in group.heroIds) {
         val maze = heroTable.getMaze(id);
-        if(maze!=null){
+        if (maze != null) {
             maze.level = group.level;
-            if(maze.level > maze.maxLevel){
+            if (maze.level > maze.maxLevel) {
                 maze.maxLevel = maze.level
             }
         }
@@ -130,7 +127,7 @@ private fun nonGroupAction(groupTable: GroupTable, heroTable: HeroTable, level: 
                 }
             } else if (random.nextInt(10) < random.nextInt(nonGroupHeroIds.size)) {
                 var other: Hero = hero;
-                for(otherId in nonGroupHeroIds.toList()){
+                for (otherId in nonGroupHeroIds.toList()) {
                     val h = heroTable.getHero(otherId);
                     if (random.nextInt(h.name.hashCode()) < random.nextInt(hero.name.hashCode()) && random.nextLong(h.birthDay) <= random.nextLong(hero.birthDay)) {//New Group
                         val group = Group()
@@ -184,42 +181,5 @@ private fun failed(hero: Hero, heroTable: HeroTable, maze: Maze) {
     heroTable.saveMaze(maze, hero.id)
 }
 
-class Group : Serializable {
 
-    var id = UUID.randomUUID().toString()
-    val heroIds = mutableSetOf<String>()
-    var level = 1L
-}
 
-class GroupTable {
-    val groupDb = ObjectDB<Group>(Group::class.java)
-    val cache = mutableListOf<Group>()
-    fun getGroupHeroIds(level: Long): Set<String> {
-        val ids = mutableSetOf<String>()
-        for (group in cache) {
-            if (group.level == level) {
-                ids.addAll(group.heroIds);
-            }
-        }
-        return ids
-    }
-
-    fun getGroups(level: Long): MutableList<Group> {
-        return cache.filter {
-            it.level == level
-        }.toMutableList()
-    }
-
-    fun newGroup(group: Group) {
-        cache.add(group);
-        groupDb.save(group, group.id)
-    }
-
-    fun remove(group: Group) {
-        groupDb.delete(group.id)
-    }
-
-    fun save(group: Group) {
-        groupDb.save(group, group.id)
-    }
-}

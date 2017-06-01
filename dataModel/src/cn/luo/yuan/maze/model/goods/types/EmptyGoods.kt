@@ -7,6 +7,14 @@ import cn.luo.yuan.maze.model.goods.GoodsProperties
  * Created by gluo on 5/9/2017.
  */
 class EmptyGoods : Goods {
+    override fun getId(): String {
+        return ""
+    }
+
+    override fun setId(id: String?) {
+        //Donothing
+    }
+
     override var price: Long
         get() = throw UnsupportedOperationException()
         set(value) {

@@ -2,8 +2,11 @@ package cn.luo.yuan.maze.server;
 
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.server.persistence.serialize.ObjectDB;
+import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
 import org.testng.annotations.Test;
+
+import java.io.File;
+import java.io.IOException;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -13,10 +16,10 @@ import static org.testng.Assert.assertNull;
  * Created by gluo on 5/26/2017.
  */
 public class TestObjectDB {
-    private ObjectDB<Hero> heroObjectDB = new ObjectDB<>(Hero.class);
+    private ObjectTable<Hero> heroObjectDB = new ObjectTable<>(Hero.class, new File("data"));
 
     @Test
-    public void testSave(){
+    public void testSave() throws IOException {
         Hero hero = new Hero();
         hero.setMaxHp(2000);
         hero.setHp(1000);
@@ -31,7 +34,7 @@ public class TestObjectDB {
     }
 
     @Test
-    public void testLoadAll(){
+    public void testLoadAll() throws IOException {
         Hero hero = new Hero();
         hero.setMaxHp(2000);
         hero.setHp(1000);
@@ -47,7 +50,7 @@ public class TestObjectDB {
         assertEquals(heroObjectDB.loadAll().size(), 3);
     }
     @Test
-    public void testDelete(){
+    public void testDelete() throws IOException {
         Hero hero = new Hero();
         hero.setMaxHp(2000);
         hero.setHp(1000);

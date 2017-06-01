@@ -1,12 +1,13 @@
 package cn.luo.yuan.maze.model.goods
 
+import cn.luo.yuan.maze.model.IDModel
 import java.io.Serializable
 
 /**
  * Created by gluo on 5/5/2017.
  */
-interface Goods : Serializable {
-    var count:Int;
+interface Goods : Serializable, IDModel {
+    var count:Int
     var desc : String
     var name : String
     var price: Long
