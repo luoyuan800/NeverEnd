@@ -48,7 +48,7 @@ public class Resource {
                 drawable =  new BitmapDrawable((Resources) null, BitmapFactory.decodeStream(context.getAssets().open(name)));
                 addToCache(name, drawable);
             } catch (IOException e) {
-                LogHelper.logException(e, "False to load image from assets: " + name);
+                //LogHelper.logException(e, "False to load image from assets: " + name);
             }
         }
         return drawable;

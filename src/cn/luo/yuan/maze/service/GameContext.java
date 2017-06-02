@@ -4,10 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import cn.luo.yuan.maze.display.activity.GameActivity;
 import cn.luo.yuan.maze.display.view.RollTextView;
-import cn.luo.yuan.maze.model.Accessory;
-import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.model.Maze;
+import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.gift.Gift;
 import cn.luo.yuan.maze.model.goods.GoodsProperties;
 import cn.luo.yuan.maze.model.goods.GoodsType;
@@ -160,6 +157,13 @@ public class GameContext implements InfoControlInterface {
         for (GoodsType type : GoodsType.values()) {
             if (type.getNeedLoad()) {
                 dataManager.loadGoods(type).load(goodsProperties);
+            }
+        }
+
+        //Pet Handler
+        for(Pet pet : dataManager.loadMountPets()){
+            if(pet.isMounted()){
+                hero.getPets().add(pet);
             }
         }
     }

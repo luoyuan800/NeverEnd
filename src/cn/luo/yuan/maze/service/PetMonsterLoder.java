@@ -163,6 +163,9 @@ public class PetMonsterLoder implements MonsterLoader {
                                 } else {
                                     if (key != null)
                                         key.index = currentIndex;
+                                    if(monster!=null){
+                                        monster.setIndex(currentIndex);
+                                    }
                                 }
                                 break;
                             default:

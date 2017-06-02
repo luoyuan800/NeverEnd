@@ -63,7 +63,7 @@ public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefres
         }
         if(!convertView.getTag().equals(position)){
             Pet pet = getItem(position);
-            ((TextView)convertView.findViewById(R.id.pet_name)).setText(Html.fromHtml(pet.getDisplayName()));
+            ((TextView)convertView.findViewById(R.id.pet_name)).setText(Html.fromHtml(pet.getDisplayName() + (pet.isMounted()? "√":"")));
             ((ImageView)convertView.findViewById(R.id.pet_image)).setImageDrawable(PetMonsterLoder.loadMonsterImage(pet.getIndex()));
             ((TextView)convertView.findViewById(R.id.pet_level)).setText(StringUtils.formatStar(pet.getLevel()));
             ((TextView)convertView.findViewById(R.id.pet_tag)).setText(pet.getTag());

@@ -296,12 +296,18 @@ public class GameActivity extends Activity {
         }
 
         public void refreshPets(final Hero hero) {
-            TextView petRoot = (TextView) context.findViewById(R.id.pet_root);
-            StringBuilder petBuilder = new StringBuilder();
-            for(Pet pet : hero.getPets()){
-                petBuilder.append(pet.getDisplayName()).append("<br>");
-            }
-            petRoot.setText(Html.fromHtml(petBuilder.toString()));
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    TextView petRoot = (TextView) context.findViewById(R.id.pet_root);
+                    StringBuilder petBuilder = new StringBuilder();
+                    for(Pet pet : hero.getPets()){
+                        petBuilder.append(pet.getDisplayName()).append("<br>");
+                    }
+                    petRoot.setText(Html.fromHtml(petBuilder.toString()));
+                }
+            });
+
         }
 
     }

@@ -37,10 +37,13 @@ public class PetMonsterHelper {
 
     public  boolean isCatchAble(Monster monster, Hero hero, Random random, int petCount) {
         if (monster.getRace().ordinal() != hero.getRace().ordinal() + 1 || monster.getRace().ordinal() != hero.getRace().ordinal() - 5) {
-            float rate = (100 - monster.getPetRate()) + random.nextInt(petCount + 1) / 10f;
+            float rate = (100 - monster.getPetRate()) + petCount;
+            if(rate > 100 && monster.getPetRate() > 0){
+                rate = 100 - monster.getPetRate() + random.nextFloat(petCount + 10);
+            }
             float current = random.nextInt(100) + random.nextFloat() + EffectHandler.getEffectAdditionFloatValue(EffectHandler.PET_RATE, hero.getEffects());
             if (current >= 100) {
-                current = 98.9f;
+                current = 99.5f;
             }
             return current > rate;
         } else {

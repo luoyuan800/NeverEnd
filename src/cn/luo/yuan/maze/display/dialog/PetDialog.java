@@ -8,9 +8,7 @@ import android.text.Html;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.display.view.LoadMoreListView;
@@ -25,7 +23,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 /**
  * Created by gluo on 5/15/2017.
  */
-public class PetDialog implements View.OnClickListener{
+public class PetDialog implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
     Handler handler = new Handler();
     private GameContext control;
     private AlertDialog.Builder builder;
@@ -53,7 +51,9 @@ public class PetDialog implements View.OnClickListener{
     public void show() {
         dialog = builder.create();
         dialog.show();
-        EditText tag = (EditText) dialog.findViewById(R.id.pet_tag);
+        final View detailView = dialog.findViewById(R.id.pet_detail_view);
+        detailView.setVisibility(View.INVISIBLE);
+        EditText tag = (EditText) detailView.findViewById(R.id.pet_tag);
         loadMoreListView = (LoadMoreListView) dialog.findViewById(R.id.pet_simple_list);
         loadMoreListView.setAdapter(adapter);
         loadMoreListView.setOnLoadListener(adapter);
@@ -64,19 +64,8 @@ public class PetDialog implements View.OnClickListener{
                     @Override
                     public void run() {
                         currentPet = adapter.getItem(position);
-                        ((TextView) dialog.findViewById(R.id.pet_name)).setText(Html.fromHtml(currentPet.getDisplayName()));
-                        ((TextView) dialog.findViewById(R.id.pet_level)).setText(StringUtils.formatStar(currentPet.getLevel()));
-                        ((TextView) dialog.findViewById(R.id.pet_atk)).setText(StringUtils.formatNumber(currentPet.getAtk()));
-                        ((TextView) dialog.findViewById(R.id.pet_def)).setText(StringUtils.formatNumber(currentPet.getDef()));
-                        ((TextView) dialog.findViewById(R.id.pet_hp)).setText(StringUtils.formatNumber(currentPet.getHp()) + "/" + StringUtils.formatNumber(currentPet.getMaxHp()));
-                        Skill skill = currentPet.getSkills()[0];
-                        ((TextView) dialog.findViewById(R.id.pet_skill)).setText(skill != null ? skill.getName() : StringUtils.EMPTY_STRING);
-                        ((TextView) dialog.findViewById(R.id.pet_owner)).setText(currentPet.getOwnerName());
-                        ((TextView) dialog.findViewById(R.id.pet_mother)).setText(Html.fromHtml(currentPet.getMother()));
-                        ((TextView) dialog.findViewById(R.id.pet_farther)).setText(Html.fromHtml(currentPet.getFarther()));
-                        tag.setText(Html.fromHtml(currentPet.getTag()));
-                        dialog.findViewById(R.id.pet_drop).setOnClickListener(PetDialog.this);
-                        dialog.findViewById(R.id.pet_upgrade).setOnClickListener(PetDialog.this);
+                        refreshDetailView(detailView);
+
                     }
                 });
             }
@@ -98,6 +87,28 @@ public class PetDialog implements View.OnClickListener{
                 control.getDataManager().savePet(currentPet);
             }
         });
+    }
+
+    public void refreshDetailView(View detailView) {
+        EditText tag = (EditText) detailView.findViewById(R.id.pet_tag);
+        ((TextView) detailView.findViewById(R.id.pet_name)).setText(Html.fromHtml(currentPet.getDisplayName()));
+        CheckBox isMounted = (CheckBox) dialog.findViewById(R.id.pet_mounted);
+        isMounted.setOnCheckedChangeListener(null);
+        isMounted.setChecked(currentPet.isMounted());
+        isMounted.setOnCheckedChangeListener(PetDialog.this);
+        ((TextView) detailView.findViewById(R.id.pet_level)).setText(StringUtils.formatStar(currentPet.getLevel()));
+        ((TextView) detailView.findViewById(R.id.pet_atk)).setText(StringUtils.formatNumber(currentPet.getAtk()));
+        ((TextView) detailView.findViewById(R.id.pet_def)).setText(StringUtils.formatNumber(currentPet.getDef()));
+        ((TextView) detailView.findViewById(R.id.pet_hp)).setText(StringUtils.formatNumber(currentPet.getHp()) + "/" + StringUtils.formatNumber(currentPet.getMaxHp()));
+        Skill skill = currentPet.getSkills()[0];
+        ((TextView) detailView.findViewById(R.id.pet_skill)).setText(skill != null ? skill.getName() : StringUtils.EMPTY_STRING);
+        ((TextView) detailView.findViewById(R.id.pet_owner)).setText(currentPet.getOwnerName());
+        ((TextView) detailView.findViewById(R.id.pet_mother)).setText(Html.fromHtml(currentPet.getMother()));
+        ((TextView) detailView.findViewById(R.id.pet_farther)).setText(Html.fromHtml(currentPet.getFarther()));
+        tag.setText(Html.fromHtml(currentPet.getTag()));
+        detailView.findViewById(R.id.pet_drop).setOnClickListener(PetDialog.this);
+        detailView.findViewById(R.id.pet_upgrade).setOnClickListener(PetDialog.this);
+        detailView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -135,13 +146,19 @@ public class PetDialog implements View.OnClickListener{
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Pet minor = petAdapter.getItem(position);
                         if(minor!=currentPet){
+                            control.getDataManager().deletePet(minor);
                             if(helper.upgrade(currentPet, minor)){
                                 new AlertDialog.Builder(control.getContext()).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                        control.getDataManager().deletePet(minor);
+                                    public void onClick(DialogInterface dd, int which) {
+                                        dd.dismiss();
                                         control.getDataManager().savePet(currentPet);
+                                        handler.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                refreshDetailView(dialog.findViewById(R.id.pet_detail_view));
+                                            }
+                                        });
                                     }
                                 }).setMessage(Html.fromHtml(String.format(Resource.getString(R.string.upgrade_success), currentPet.getDisplayName()))).show();
                             }else{
@@ -149,7 +166,6 @@ public class PetDialog implements View.OnClickListener{
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
-                                        control.getDataManager().deletePet(minor);
                                     }
                                 }).setMessage(Html.fromHtml(String.format(Resource.getString(R.string.upgrade_failed), currentPet.getDisplayName()))).show();
                             }
@@ -167,4 +183,14 @@ public class PetDialog implements View.OnClickListener{
         }
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(isChecked && !currentPet.isMounted()){
+            currentPet.setMounted(true);
+            control.getHero().getPets().add(currentPet);
+        }else if(!isChecked && currentPet.isMounted()){
+            control.getHero().getPets().remove(currentPet);
+            currentPet.setMounted(false);
+        }
+    }
 }

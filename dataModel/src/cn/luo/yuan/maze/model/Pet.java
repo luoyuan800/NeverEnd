@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model;
 
 import cn.luo.yuan.maze.utils.EncodeLong;
+import cn.luo.yuan.maze.utils.StringUtils;
 import cn.luo.yuan.maze.utils.Version;
 
 import java.io.Serializable;
@@ -8,17 +9,17 @@ import java.io.Serializable;
 /**
  * Created by gluo on 4/25/2017.
  */
-public class Pet extends Monster implements IDModel, Serializable {
+public class Pet extends Monster implements IDModel {
     private static final long serialVersionUID = Version.SERVER_VERSION;
     private EncodeLong level = new EncodeLong(0);
-    private String id;
-    private String tag;
+    private String id = StringUtils.EMPTY_STRING;
+    private String tag = StringUtils.EMPTY_STRING;
     private boolean mounted;
     private EncodeLong intimacy = new EncodeLong(0);
-    private String ownerId;
-    private String ownerName;
-    private String mother;
-    private String farther;
+    private String ownerId = StringUtils.EMPTY_STRING;
+    private String ownerName = StringUtils.EMPTY_STRING;
+    private String mother = StringUtils.EMPTY_STRING;
+    private String farther = StringUtils.EMPTY_STRING;
 
     @Override
     public String getId() {

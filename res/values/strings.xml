@@ -73,4 +73,5 @@
     <string name="select_pet">选择一个宠物</string>
     <string name="upgrade_success">%1$s 升级成功</string>
     <string name="upgrade_failed">%1$s 升级失败</string>
+    <string name="no_pet">未设置宠物出战</string>
 </resources>

@@ -199,9 +199,22 @@ public class DataManager implements DataManagerInterface {
                 cursor.moveToNext();
             }
         }
+        try(Cursor cursor = database.excuseSOL("select id from hero where hero_index = " + index)){
+            while (!cursor.isAfterLast()){
+                heroLoader.delete(cursor.getString(cursor.getColumnIndex("id")));
+                cursor.moveToNext();
+            }
+        }
+        try(Cursor cursor = database.excuseSOL("select id from pet where hero_index = " + index)){
+            while (!cursor.isAfterLast()){
+                petLoader.delete(cursor.getString(cursor.getColumnIndex("id")));
+                cursor.moveToNext();
+            }
+        }
         database.excuseSQLWithoutResult("delete from maze where hero_index = " + index);
         database.excuseSQLWithoutResult("delete from hero where hero_index = " + index);
         database.excuseSQLWithoutResult("delete from accessory where hero_index = " + index);
+        database.excuseSQLWithoutResult("delete from pet where hero_index = " + index);
     }
 
     public Pet loadPet(String id) {
@@ -321,6 +334,20 @@ public class DataManager implements DataManagerInterface {
         petLoader.fluse();
         skillLoader.fluse();
         clickSkillLoader.fluse();
+    }
+
+    public List<Pet> loadMountPets() {
+        List<Pet> pets = new ArrayList<>();
+        try(Cursor cursor = database.excuseSOL("select id, mounted from pet where hero_index = " + index + " and mounted = 1" )){
+            while (cursor.isAfterLast()) {
+                Pet pet = petLoader.load(cursor.getString(cursor.getColumnIndex("id")));
+                if (pet != null) {
+                    pets.add(pet);
+                }
+                cursor.moveToNext();
+            }
+        }
+        return pets;
     }
 
     private Maze newMaze() {

@@ -1,6 +1,12 @@
 package cn.luo.yuan.maze.service;
 
+import cn.luo.yuan.maze.exception.MonsterToPetException;
+import cn.luo.yuan.maze.model.Data;
+import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.names.FirstName;
+import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.testng.annotations.Test;
@@ -48,6 +54,28 @@ public class TestPetMonsterHelper {
             }
         }
         System.out.println("Percent: " + StringUtils.DecimalFormatRound(percent * 100 /count,2) + "%");
+    }
+
+
+    @Test
+    public void testMonsterToPet() throws MonsterToPetException {
+        Monster monster = new Monster();
+        monster.setHp(100);
+        monster.setMaxHp(100);
+        monster.setColor(Data.DARKGOLD_COLOR);
+        monster.setAtk(100);
+        monster.setDef(100);
+        monster.setFirstName(FirstName.angry);
+        monster.setSecondName(SecondName.blue);
+        monster.setType("测试");
+        monster.setIndex(1);
+        PetMonsterHelper helper = PetMonsterHelper.instance;
+        Hero hero = new Hero();
+        hero.setName("test");
+        hero.setId("11111");
+        Pet p = helper.monsterToPet(monster, hero);
+        assertEquals(p.getType(), monster.getType());
+        assertEquals(p.getFirstName(), monster.getFirstName());
     }
 
     public void assertLarger(Object o1, Object o2) {

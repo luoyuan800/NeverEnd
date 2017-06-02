@@ -5,10 +5,12 @@ import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillAbleObject;
 
+import java.io.Serializable;
+
 /**
  * Created by gluo on 4/1/2017.
  */
-public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbleObject,Cloneable {
+public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbleObject,Cloneable, Serializable {
     private FirstName firstName;
     private SecondName secondName;
     private String type;
