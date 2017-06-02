@@ -27,6 +27,9 @@ public class ObjectTable<T extends Serializable> {
 
     public ObjectTable(Class<T> table, File root) {
         this.root = new File(root, table.getName());
+        if(!this.root.exists()){
+            this.root.mkdirs();
+        }
         this.table = table;
         cache = new HashMap<>();
     }
@@ -47,6 +50,7 @@ public class ObjectTable<T extends Serializable> {
             file.delete();
         }
         saveObject(object, file);
+        cache.put(id, new SoftReference<T>(object));
         return id;
     }
 
@@ -95,8 +99,8 @@ public class ObjectTable<T extends Serializable> {
     }
 
     public synchronized void clear() {
-        if (root.isDirectory()) {
-            for (File file : root.listFiles()) {
+        if(root.isDirectory()){
+            for(File file : root.listFiles()){
                 file.delete();
             }
         }
@@ -111,19 +115,19 @@ public class ObjectTable<T extends Serializable> {
 
     public void fuse() throws IOException {
         for (SoftReference<T> ref : cache.values()) {
-            if (ref != null) {
+            if(ref!=null) {
                 T t = ref.get();
                 if (t != null) {
                     if (t instanceof IDModel) {
-                        save(t, ((IDModel) t).getId());
+                        update(t, ((IDModel) t).getId());
                     }
                 }
             }
         }
     }
 
-    public int size() {
-        return root.isDirectory() ? root.list().length : 0;
+    public void close(){
+        cache.clear();
     }
 
     private void saveObject(T object, File entry) {
@@ -133,12 +137,13 @@ public class ObjectTable<T extends Serializable> {
             oos.flush();
             oos.close();
         } catch (IOException e) {
+            e.printStackTrace();
             //LogHelper.logException(e,"ObjectDb->save{" + object + ", " + id + "}");
         }
     }
 
     private String getName(String id) {
-        return table.getName() + "@" + id;
+        return id;
     }
 
     private T load(String id) {
@@ -159,5 +164,9 @@ public class ObjectTable<T extends Serializable> {
 
     private File buildFile(String id) {
         return new File(root, id);
+    }
+
+    public int size(){
+        return root.isDirectory() ? root.list().length : 0;
     }
 }

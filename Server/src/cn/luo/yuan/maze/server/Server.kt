@@ -65,12 +65,22 @@ fun main(args: Array<String>) {
     })
 
     post("query_my_exchange", { request, response ->
-        val exs = exchangeTable.loadAll(request.headers("id"))
+        val exs = exchangeTable.loadAll(request.headers("owner_id"))
         val oos = ObjectOutputStream(response.outputStream)
         oos.writeObject(exs)
         oos.flush()
         oos.close()
         response.status(1)
+        response
+    })
+
+    post("acknowledge_my_exchange", {request, response ->
+        val exchangeMy = exchangeTable.loadObject(request.headers("ex_id"))
+        exchangeMy.acknowledge = true;
+        if(exchangeMy.changed!=null && exchangeMy.acknowledge){
+            exchangeTable.exchangeDb.delete(exchangeMy.id)
+            exchangeTable.exchangeDb.delete(exchangeMy.changed!!.id)
+        }
         response
     })
 
