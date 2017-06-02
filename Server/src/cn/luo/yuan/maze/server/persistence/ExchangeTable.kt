@@ -55,4 +55,39 @@ class ExchangeTable(root: File) {
         }
         return result
     }
+
+    fun loadAll(id:String):List<ExchangeObject>{
+        val result = mutableListOf<ExchangeObject>()
+        if (cache.size == exchangeDb.size()) {
+            for ((key, value) in cache.entries) {
+                if (value.get() != null && value.get()?.ownerId == id && value.get()?.acknowledge!=true) {
+                    result.add(value.get()!!)
+                } else {
+                    val eo = exchangeDb.loadObject(key)
+                    if (eo != null) {
+                        if (eo.ownerId == id && !eo.acknowledge) {
+                            result.add(eo);
+                        }
+                        cache.put(key, SoftReference(eo))
+                    }
+                }
+            }
+        } else {
+            for (eid in exchangeDb.loadAllId()) {
+                if (!cache.containsKey(eid) || cache[eid]?.get() == null) {
+                    val eo = exchangeDb.loadObject(eid);
+                    if (eo != null) {
+                        cache.put(eo.id, SoftReference(eo))
+                        if (eo.ownerId == id && !eo.acknowledge) {
+                            result.add(eo)
+                        }
+                    }
+                } else {
+                    if (cache[eid]?.get()?.ownerId == id && cache[eid]?.get()?.acknowledge!=true)
+                        result.add(cache[eid]!!.get()!!)
+                }
+            }
+        }
+        return result
+    }
 }

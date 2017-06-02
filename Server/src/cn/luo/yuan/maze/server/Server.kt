@@ -65,7 +65,16 @@ fun main(args: Array<String>) {
     })
 
     post("query_my_exchange", { request, response ->
-
+        val exs = exchangeTable.loadAll(request.headers("id"))
+        val oos = ObjectOutputStream(response.outputStream)
+        oos.writeObject(exs)
+        oos.flush()
+        oos.close()
+        response.status(1)
+        response
     })
+
+
+
     run(heroTable, groupTable)
 }

@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.model
 
+import cn.luo.yuan.maze.exception.AlreadyAcknowledge
 import java.io.Serializable
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
@@ -15,6 +16,19 @@ class ExchangeObject(val exchange: IDModel, val ownerId:String) : Serializable, 
     var type = 0;
     var changed : ExchangeObject? =null
     var lock: ReentrantLock = ReentrantLock()
+    var acknowledge = false
+    set(value){
+        lock.tryLock()
+        try {
+            if (acknowledge != value) {
+                acknowledge = value
+            } else {
+                throw AlreadyAcknowledge(exchange.toString() + " has been acknowledged!")
+            }
+        }finally {
+            lock.unlock()
+        }
+    }
 
     override fun getId(): String {
         return exchange.id
