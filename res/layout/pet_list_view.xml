@@ -6,8 +6,8 @@
 
     <ImageView
             android:src="@drawable/angle_miao"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:id="@+id/pet_image"
             android:scaleType="fitCenter"/>
 

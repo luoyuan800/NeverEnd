@@ -185,6 +185,6 @@ public class GameContext implements InfoControlInterface {
     }
 
     public Object getCurrentBattleTarget() {
-        return runningService.getMonster();
+        return runningService.getTarget();
     }
 }

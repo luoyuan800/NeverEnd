@@ -33,6 +33,7 @@ public class Data {
     public static final int DARKGOLD_RATE_REDUCE = 10;//橙色阶位的二次限制
     public static final String DISABLE_COLOR = "#C0C0C0";
     public static final String ENABLE_COLOR = "#800080";
+    public static final int MAX_PET_COUNT = 100;//最多宠物个数
 
     /**
      * 计算击败一个怪物可以获得的锻造点

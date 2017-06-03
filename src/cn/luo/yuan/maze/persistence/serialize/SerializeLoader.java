@@ -53,6 +53,16 @@ public class SerializeLoader<T extends Serializable> {
         return db.loadAll();
     }
 
+    public List<T> loadLimit(int strat, int row, String key){
+        int realStart = strat;
+        List<T> objects = loadAll();
+        List<T> ts = new ArrayList<T>(row);
+        for(int i = strat; i<strat+row && i < objects.size()&& ts.size() < row; i++){
+            ts.add(objects.get(i));
+        }
+        return ts;
+    }
+
     public void fluse() {
         db.fuse();
     }

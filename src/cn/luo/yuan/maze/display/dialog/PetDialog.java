@@ -108,6 +108,7 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
         tag.setText(Html.fromHtml(currentPet.getTag()));
         detailView.findViewById(R.id.pet_drop).setOnClickListener(PetDialog.this);
         detailView.findViewById(R.id.pet_upgrade).setOnClickListener(PetDialog.this);
+        ((ImageView)detailView.findViewById(R.id.pet_image)).setImageDrawable(PetMonsterLoder.loadMonsterImage(currentPet.getIndex()));
         detailView.setVisibility(View.VISIBLE);
     }
 
@@ -127,6 +128,8 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             control.getDataManager().deletePet(currentPet);
+                            adapter.removePet(currentPet);
+                            adapter.notifyDataSetChanged();
                         }
                     }).setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
                         @Override
@@ -169,6 +172,8 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                                     }
                                 }).setMessage(Html.fromHtml(String.format(Resource.getString(R.string.upgrade_failed), currentPet.getDisplayName()))).show();
                             }
+                            adapter.removePet(minor);
+                            adapter.notifyDataSetChanged();
                         }
                     }
                 });
@@ -192,5 +197,6 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
             control.getHero().getPets().remove(currentPet);
             currentPet.setMounted(false);
         }
+        control.getViewHandler().refreshPets(control.getHero());
     }
 }

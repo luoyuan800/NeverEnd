@@ -222,25 +222,10 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void savePet(Pet pet) {
-        ContentValues values = new ContentValues();
-        values.put("hero_index", index);
-        values.put("sex", pet.getSex());
-        values.put("name", pet.getName());
-        values.put("element", pet.getElement().ordinal());
-        values.put("last_update", System.currentTimeMillis());
-        values.put("color", pet.getColor());
-        values.put("level", pet.getLevel());
-        values.put("tag", pet.getTag());
-        values.put("mounted", pet.isMounted());
-        values.put("race", pet.getRace().ordinal());
         if (StringUtils.isNotEmpty(pet.getId())) {
             petLoader.update(pet);
-            database.updateById("pet", values, pet.getId());
         } else {
             petLoader.save(pet);
-            values.put("created", System.currentTimeMillis());
-            values.put("id", pet.getId());
-            database.insert("pet", values);
         }
     }
 
@@ -254,19 +239,7 @@ public class DataManager implements DataManagerInterface {
 
     @Override
     public List<Pet> loadPets(int start, int rows, String keyWord) {
-        List<Pet> pets = new ArrayList<>();
-        try(Cursor cursor = database.excuseSOL("select id from pet where hero_index = '" + index + "' " +
-                "and (name like '%" + keyWord + "%'or tag like '%" + keyWord + "%') " +
-                "limit " + rows + " offset " + start)) {
-            while (!cursor.isAfterLast()){
-                Pet pet = petLoader.load(cursor.getString(cursor.getColumnIndex("id")));
-                if(pet!=null){
-                    pets.add(pet);
-                }
-                cursor.moveToNext();
-            }
-        }
-        return pets;
+        return petLoader.loadLimit(start, rows, keyWord);
     }
 
     public void saveGoods(Goods goods) {
@@ -338,13 +311,9 @@ public class DataManager implements DataManagerInterface {
 
     public List<Pet> loadMountPets() {
         List<Pet> pets = new ArrayList<>();
-        try(Cursor cursor = database.excuseSOL("select id, mounted from pet where hero_index = " + index + " and mounted = 1" )){
-            while (!cursor.isAfterLast()) {
-                Pet pet = petLoader.load(cursor.getString(cursor.getColumnIndex("id")));
-                if (pet != null) {
-                    pets.add(pet);
-                }
-                cursor.moveToNext();
+        for(Pet pet : petLoader.loadAll()){
+            if(pet.isMounted()){
+                pets.add(pet);
             }
         }
         return pets;

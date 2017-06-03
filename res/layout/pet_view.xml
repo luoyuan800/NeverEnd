@@ -54,7 +54,8 @@
                 android:src="@drawable/angle_miao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/pet_image"/>
+                android:id="@+id/pet_image"
+                android:scaleType="fitCenter"/>
 
         <TextView
                 android:text="技能"

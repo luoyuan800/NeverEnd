@@ -140,6 +140,9 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     }
 
     public void setHp(long hp) {
+        if(hp > maxHp.getValue()){
+            hp = maxHp.getValue();
+        }
         this.hp.setValue(hp);
     }
 
