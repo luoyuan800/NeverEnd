@@ -85,6 +85,7 @@ public class DataManager implements DataManagerInterface {
         return accessoryLoader.load(id);
     }
 
+    //TODO Refactor this method to not use database query
     public List<Accessory> loadMountedAccessory(Hero hero) {
         List<Accessory> accessories = new ArrayList<>();
 
@@ -265,6 +266,7 @@ public class DataManager implements DataManagerInterface {
         return skills;
     }
 
+    //TODO Refactor this method to not use database query
     public List<Accessory> loadAccessories(int start, int row, String key) {
         List<Accessory> all = new ArrayList<>(row);
         try(Cursor cursor = database.excuseSOL("select id from accessory where hero_index = '" + index + "' and name like '%" + key + "%' limit " + row + " offset " + start)) {

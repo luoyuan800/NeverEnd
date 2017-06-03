@@ -54,6 +54,8 @@ public class SerializeLoader<T extends Serializable> {
     }
 
     public List<T> loadLimit(int strat, int row, String key){
+        //TODO Add and Index to help condition query
+        //Inplement an Class call Index, which will have method match to help query.
         int realStart = strat;
         List<T> objects = loadAll();
         List<T> ts = new ArrayList<T>(row);

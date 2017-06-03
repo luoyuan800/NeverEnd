@@ -128,6 +128,7 @@ public class Sqlite {
         db.execSQL("create table key (hero_index INTEGER NOT NULL PRIMARY KEY, key INTEGER NOT NULL)");
     }
 
+    //TODO Remove
     private void createAccessoryTable(SQLiteDatabase db) {
         String table = "create table accessory (" +
                 "hero_index TEXT NOT NULL," +
@@ -155,6 +156,7 @@ public class Sqlite {
         db.execSQL(table);
     }
 
+    //TODO Remove
     private void createPetTable(SQLiteDatabase db) {
         String table = "create table pet (" +
                 "last_update INTEGER," +

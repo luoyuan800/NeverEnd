@@ -31,7 +31,7 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
     public AccessoriesDialog(GameContext context) {
         this.context = context;
         AlertDialog.Builder builder = new AlertDialog.Builder(context.getContext());
-        builder.setView(R.layout.accessory_fuse);
+        builder.setView(R.layout.accessory);
         dialog = builder.create();
         accessories = context.getDataManager().loadAccessories(0, 10, key);
         accessoryAdapter = new StringAdapter<>(accessories);
