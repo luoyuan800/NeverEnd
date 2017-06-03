@@ -37,7 +37,7 @@ public class TestBattleService {
         monster.setElement(Element.FIRE);
         Random random = new Random(System.currentTimeMillis());
         BattleMessage battleMessage = mock(BattleMessage.class);
-        BattleService battleService = new BattleService(hero,monster,random);
+        BattleService battleService = new BattleService(hero,monster,random, null);
         battleService.setBattleMessage(battleMessage);
         battleService.battle(1);
         verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
@@ -60,7 +60,7 @@ public class TestBattleService {
         monster.setElement(Element.FIRE);
         Random random = new Random(System.currentTimeMillis());
         BattleMessage battleMessage = mock(BattleMessage.class);
-        BattleService battleService = new BattleService(hero,monster,random);
+        BattleService battleService = new BattleService(hero,monster,random, null);
         battleService.setBattleMessage(battleMessage);
         battleService.battle(1);
         verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
@@ -88,7 +88,7 @@ public class TestBattleService {
         monster.setElement(Element.FIRE);
         Random random = new Random(System.currentTimeMillis());
         BattleMessage battleMessage = mock(BattleMessage.class);
-        BattleService battleService = new BattleService(hero,monster,random);
+        BattleService battleService = new BattleService(hero,monster,random, null);
         battleService.setBattleMessage(battleMessage);
         battleService.battle(1);
         //verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
@@ -111,7 +111,7 @@ public class TestBattleService {
         monster.setElement(Element.FIRE);
         Random random = new Random(System.currentTimeMillis());
         BattleMessage battleMessage = mock(BattleMessage.class);
-        BattleService battleService = new BattleService(hero,monster,random);
+        BattleService battleService = new BattleService(hero,monster,random, null);
         battleService.setBattleMessage(battleMessage);
         battleService.battle(1);
         verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
@@ -146,7 +146,7 @@ public class TestBattleService {
         monster.setElement(Element.FIRE);
         Random random = new Random(System.currentTimeMillis());
         BattleMessage battleMessage = mock(BattleMessage.class);
-        BattleService battleService = new BattleService(hero,monster,random);
+        BattleService battleService = new BattleService(hero,monster,random, null);
         battleService.setBattleMessage(battleMessage);
         battleService.battle(1);
         verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());

@@ -28,17 +28,22 @@ public class BattleService {
     private HarmAble hero;
     private Random random;
     private BattleMessage battleMessage;
+    private RunningServiceInterface runninfService;
 
-    public BattleService(HarmAble hero, HarmAble monster, Random random) {
+    public BattleService(HarmAble hero, HarmAble monster, Random random, RunningServiceInterface runningService) {
         this.monster = monster;
         this.random = random;
         this.hero = hero;
+        this.runninfService = runningService;
     }
 
     public boolean battle(long level) {
         long round = 1;
         boolean heroAtk = random.nextBoolean();
         while (hero.getHp() > 0 && monster.getHp() > 0) {
+            if(runninfService!=null && runninfService.isPause()){
+                continue;
+            }
             if (round > 60 && round % 61 == 0) {
                 battleMessage.battleTooLong();
                 hero.setHp(hero.getHp() / 2);
@@ -56,6 +61,7 @@ public class BattleService {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
+
         }
         if (monster.getHp() <= 0) {
             if(hero instanceof NameObject && monster instanceof NameObject){

@@ -339,7 +339,7 @@ public class DataManager implements DataManagerInterface {
     public List<Pet> loadMountPets() {
         List<Pet> pets = new ArrayList<>();
         try(Cursor cursor = database.excuseSOL("select id, mounted from pet where hero_index = " + index + " and mounted = 1" )){
-            while (cursor.isAfterLast()) {
+            while (!cursor.isAfterLast()) {
                 Pet pet = petLoader.load(cursor.getString(cursor.getColumnIndex("id")));
                 if (pet != null) {
                     pets.add(pet);

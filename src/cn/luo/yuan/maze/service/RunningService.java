@@ -24,7 +24,7 @@ import static cn.luo.yuan.maze.service.ListenerService.winListeners;
 /**
  * Created by luoyuan on 2017/3/28.
  */
-public class RunningService implements Runnable {
+public class RunningService implements RunningServiceInterface {
     private Hero hero;
     private GameContext gameContext;
     private Maze maze;
@@ -106,7 +106,7 @@ public class RunningService implements Runnable {
                     monster = monsterHelper.randomMonster(maze.getLevel());
                     if (monster != null) {
                         gameContext.addMessage("遇见了 " + monster.getDisplayName());
-                        BattleService battleService = new BattleService(hero,monster, gameContext.getRandom());
+                        BattleService battleService = new BattleService(hero,monster, gameContext.getRandom(), null);
                         BattleMessage battleMessage = new BattleMessageImp(gameContext);
                         battleService.setBattleMessage(battleMessage);
                         if (battleService.battle(gameContext.getMaze().getLevel())) {
@@ -156,6 +156,11 @@ public class RunningService implements Runnable {
                 LogHelper.logException(e, "Error while running game thread.");
             }
         }
+    }
+
+    @Override
+    public boolean isPause() {
+        return pause;
     }
 
     private void mazeLevelCalculate() {

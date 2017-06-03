@@ -84,7 +84,7 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
                         hero.setElement((Element) element.getSelectedItem());
                         Spinner race = (Spinner) dialog.findViewById(R.id.select_race);
                         hero.setRace(((Race) race.getSelectedItem()).ordinal());
-                        if(!StringUtils.isNotEmpty(hero.getName())){
+                        if(!StringUtils.isNotEmpty(hero.getName()) || hero.getGift() == null){
                             dialog.show();
                         }else{
                             dataManager.saveHero(hero);

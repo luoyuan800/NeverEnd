@@ -115,7 +115,7 @@ private fun nonGroupAction(groupTable: GroupTable, heroTable: HeroTable, level: 
             val maze = heroTable.getMaze(hero.id)
             if (random.nextInt(100) < 40 + random.nextInt(nonGroupHeroIds.size)) {
                 val monster = monsterLoader.randomMonster(level)
-                val bs = BattleService(hero, monster, random);
+                val bs = BattleService(hero, monster, random, null);
                 bs.setBattleMessage(msg);
                 if (bs.battle(level)) {
                     maze.streaking++
@@ -146,7 +146,7 @@ private fun nonGroupAction(groupTable: GroupTable, heroTable: HeroTable, level: 
                 }
                 if (other != hero) {
                     //Battle
-                    val bs = BattleService(hero, other, random)
+                    val bs = BattleService(hero, other, random, null)
                     bs.setBattleMessage(msg);
                     if (bs.battle(level)) {
                         maze.streaking++
