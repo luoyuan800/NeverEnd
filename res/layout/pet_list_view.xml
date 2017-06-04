@@ -24,11 +24,6 @@
                 android:id="@+id/pet_name"/>
 
         <TextView
-                android:text="★★★★★★"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/pet_level"/>
-        <TextView
                 android:text="这是一个神奇的猫"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

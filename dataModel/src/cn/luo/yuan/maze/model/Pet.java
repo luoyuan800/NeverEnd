@@ -95,4 +95,9 @@ public class Pet extends Monster implements IDModel {
     public void setFarther(String farther) {
         this.farther = farther;
     }
+
+    public String getDisplayNameWithLevel() {
+        return getDisplayName() + " X" + getLevel();
+    }
+
 }

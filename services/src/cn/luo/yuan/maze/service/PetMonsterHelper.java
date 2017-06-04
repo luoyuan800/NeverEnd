@@ -82,8 +82,10 @@ public class PetMonsterHelper {
             if (maxHP > 0) {
                 major.setMaxHp(maxHP);
             }
+            major.setIntimacy(major.getIntimacy() + 3);
             return true;
         }
+        major.setIntimacy(major.getIntimacy() + 5);
         return false;
     }
 

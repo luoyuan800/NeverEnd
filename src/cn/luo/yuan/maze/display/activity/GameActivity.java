@@ -23,6 +23,7 @@ import cn.luo.yuan.maze.display.dialog.AccessoriesDialog;
 import cn.luo.yuan.maze.display.dialog.PetDialog;
 import cn.luo.yuan.maze.display.dialog.RangePointDialog;
 import cn.luo.yuan.maze.display.dialog.SkillDialog;
+import cn.luo.yuan.maze.display.view.PetTextView;
 import cn.luo.yuan.maze.display.view.RollTextView;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
@@ -34,6 +35,9 @@ import cn.luo.yuan.maze.service.GameContext;
 import cn.luo.yuan.maze.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by luoyuan on 2017/3/29.
@@ -88,7 +92,8 @@ public class GameActivity extends Activity {
             case R.id.sword:
                 new AccessoriesDialog(control).show();
                 break;
-            case R.id.pet_root:
+            case R.id.pets:
+            case R.id.pets_root:
                 PetAdapter adapter = new PetAdapter(this, control.getDataManager(), "");
                 new PetDialog(control, adapter).show();
                 break;
@@ -299,12 +304,19 @@ public class GameActivity extends Activity {
             post(new Runnable() {
                 @Override
                 public void run() {
-                    TextView petRoot = (TextView) context.findViewById(R.id.pet_root);
-                    StringBuilder petBuilder = new StringBuilder();
-                    for(Pet pet : hero.getPets()){
-                        petBuilder.append(pet.getDisplayName()).append("<br>");
+                    LinearLayout petRoot = (LinearLayout) context.findViewById(R.id.pets_root);
+                    petRoot.removeAllViews();
+                    ArrayList<Pet> pets = new ArrayList<>(hero.getPets());
+                    for(int i = 0; i< pets.size(); i++){
+                        Pet pet = pets.get(i);
+                        View view = petRoot.getChildAt(i);
+                        if(view == null || !(view instanceof PetTextView)){
+                            view = new PetTextView(context, pet);
+                            petRoot.addView(view);
+                        }else{
+                            ((PetTextView) view).changePet(pet);
+                        }
                     }
-                    petRoot.setText(Html.fromHtml(petBuilder.toString()));
                 }
             });
 
@@ -338,7 +350,9 @@ public class GameActivity extends Activity {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
             switch (item.getItemId()) {
-
+                case R.id.pets:
+                    new PetDialog(control, new PetAdapter(context,control.getDataManager(),"")).show();
+                    break;
                 case R.id.pause:
                     boolean pause = control.pauseGame();
                     item.setTitle(pause ? "继续" : "暂停");

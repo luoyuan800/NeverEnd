@@ -1,5 +1,7 @@
 package cn.luo.yuan.maze.service;
 
+import cn.luo.yuan.maze.model.Pet;
+
 /**
  * Created by gluo on 5/25/2017.
  */
@@ -71,12 +73,12 @@ public class RandomEventService {
                     break;
                 case 3:
                     if (gameControl.getHero().getPets().size() > 0) {
-                                        /*addMessage(context, gameControl.getHero().getFormatName() + "和宠物们玩耍了一下会。");
-                                        for (Pet pet : gameControl.getHero().getPets()) {
-                                            if (gameControl.getRandom().nextBoolean()) {
-                                                pet.click(5);
-                                            }
-                                        }*/
+                        gameControl.addMessage(gameControl.getHero().getDisplayName() + "和宠物们玩耍了一下会。");
+                        for (Pet pet : gameControl.getHero().getPets()) {
+                            if (gameControl.getRandom().nextBoolean()) {
+                                pet.setIntimacy(pet.getIntimacy() + 1);
+                            }
+                        }
                     } else {
                         gameControl.addMessage(gameControl.getHero().getDisplayName() + "想要养宠物");
                     }

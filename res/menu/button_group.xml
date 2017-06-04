@@ -15,6 +15,8 @@
                 android:title="仓库" />
             <item android:id="@+id/goods" android:icon="@android:drawable/ic_menu_gallery"
                 android:title="物品" />
+            <item android:id="@+id/pets" android:icon="@android:drawable/ic_menu_gallery"
+                android:title="宠物" />
     <item android:id="@+id/monster" android:icon="@android:drawable/ic_menu_crop"
           android:title="图鉴" />
     <item android:id="@+id/achievement" android:icon="@android:drawable/ic_menu_my_calendar"

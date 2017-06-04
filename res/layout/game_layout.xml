@@ -17,14 +17,12 @@
                 android:layout_below="@+id/linearLayout"
                 android:layout_toStartOf="@+id/linearLayout"
                 android:layout_alignEnd="@+id/hero_info">
-        <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:id="@+id/pet_root"
-                android:text="@string/no_pet"
-                android:background="#00000000"
-                android:onClick="onClick"/>
+       <LinearLayout
+               android:id="@+id/pets_root"
+               android:layout_width="wrap_content"
+               android:onClick="onClick"
+               android:minHeight="50dp"
+               android:layout_height="wrap_content" android:orientation="vertical"/>
     </ScrollView>
     <cn.luo.yuan.maze.display.view.RollTextView
             android:layout_width="match_parent"

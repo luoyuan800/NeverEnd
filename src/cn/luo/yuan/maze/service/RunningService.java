@@ -114,7 +114,7 @@ public class RunningService implements RunningServiceInterface {
                     this.target = monster;
                     if (monster != null) {
                         gameContext.addMessage("遇见了 " + monster.getDisplayName());
-                        BattleService battleService = new BattleService(hero, monster, gameContext.getRandom(), null);
+                        BattleService battleService = new BattleService(hero, monster, gameContext.getRandom(), this);
                         BattleMessage battleMessage = new BattleMessageImp(gameContext);
                         battleService.setBattleMessage(battleMessage);
                         if (battleService.battle(gameContext.getMaze().getLevel())) {

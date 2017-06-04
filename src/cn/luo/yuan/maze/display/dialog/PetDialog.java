@@ -90,26 +90,29 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
     }
 
     public void refreshDetailView(View detailView) {
-        EditText tag = (EditText) detailView.findViewById(R.id.pet_tag);
-        ((TextView) detailView.findViewById(R.id.pet_name)).setText(Html.fromHtml(currentPet.getDisplayName()));
-        CheckBox isMounted = (CheckBox) dialog.findViewById(R.id.pet_mounted);
-        isMounted.setOnCheckedChangeListener(null);
-        isMounted.setChecked(currentPet.isMounted());
-        isMounted.setOnCheckedChangeListener(PetDialog.this);
-        ((TextView) detailView.findViewById(R.id.pet_level)).setText(StringUtils.formatStar(currentPet.getLevel()));
-        ((TextView) detailView.findViewById(R.id.pet_atk)).setText(StringUtils.formatNumber(currentPet.getAtk()));
-        ((TextView) detailView.findViewById(R.id.pet_def)).setText(StringUtils.formatNumber(currentPet.getDef()));
-        ((TextView) detailView.findViewById(R.id.pet_hp)).setText(StringUtils.formatNumber(currentPet.getHp()) + "/" + StringUtils.formatNumber(currentPet.getMaxHp()));
-        Skill skill = currentPet.getSkills()[0];
-        ((TextView) detailView.findViewById(R.id.pet_skill)).setText(skill != null ? skill.getName() : StringUtils.EMPTY_STRING);
-        ((TextView) detailView.findViewById(R.id.pet_owner)).setText(currentPet.getOwnerName());
-        ((TextView) detailView.findViewById(R.id.pet_mother)).setText(Html.fromHtml(currentPet.getMother()));
-        ((TextView) detailView.findViewById(R.id.pet_farther)).setText(Html.fromHtml(currentPet.getFarther()));
-        tag.setText(Html.fromHtml(currentPet.getTag()));
-        detailView.findViewById(R.id.pet_drop).setOnClickListener(PetDialog.this);
-        detailView.findViewById(R.id.pet_upgrade).setOnClickListener(PetDialog.this);
-        ((ImageView)detailView.findViewById(R.id.pet_image)).setImageDrawable(PetMonsterLoder.loadMonsterImage(currentPet.getIndex()));
-        detailView.setVisibility(View.VISIBLE);
+        if(currentPet != null) {
+            EditText tag = (EditText) detailView.findViewById(R.id.pet_tag);
+            ((TextView) detailView.findViewById(R.id.pet_name)).setText(Html.fromHtml(currentPet.getDisplayNameWithLevel()));
+            CheckBox isMounted = (CheckBox) dialog.findViewById(R.id.pet_mounted);
+            isMounted.setOnCheckedChangeListener(null);
+            isMounted.setChecked(currentPet.isMounted());
+            isMounted.setOnCheckedChangeListener(PetDialog.this);
+            ((TextView) detailView.findViewById(R.id.pet_atk)).setText(StringUtils.formatNumber(currentPet.getAtk()));
+            ((TextView) detailView.findViewById(R.id.pet_def)).setText(StringUtils.formatNumber(currentPet.getDef()));
+            ((TextView) detailView.findViewById(R.id.pet_hp)).setText(StringUtils.formatNumber(currentPet.getHp()) + "/" + StringUtils.formatNumber(currentPet.getMaxHp()));
+            Skill skill = currentPet.getSkills()[0];
+            ((TextView) detailView.findViewById(R.id.pet_skill)).setText(skill != null ? skill.getName() : StringUtils.EMPTY_STRING);
+            ((TextView) detailView.findViewById(R.id.pet_owner)).setText(currentPet.getOwnerName());
+            ((TextView) detailView.findViewById(R.id.pet_mother)).setText(Html.fromHtml(currentPet.getMother()));
+            ((TextView) detailView.findViewById(R.id.pet_farther)).setText(Html.fromHtml(currentPet.getFarther()));
+            tag.setText(Html.fromHtml(currentPet.getTag()));
+            detailView.findViewById(R.id.pet_drop).setOnClickListener(PetDialog.this);
+            detailView.findViewById(R.id.pet_upgrade).setOnClickListener(PetDialog.this);
+            ((ImageView) detailView.findViewById(R.id.pet_image)).setImageDrawable(PetMonsterLoder.loadMonsterImage(currentPet.getIndex()));
+            detailView.setVisibility(View.VISIBLE);
+        }else{
+            detailView.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -130,6 +133,7 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                             control.getDataManager().deletePet(currentPet);
                             adapter.removePet(currentPet);
                             adapter.notifyDataSetChanged();
+                            refreshDetailView(PetDialog.this.dialog.findViewById(R.id.pet_detail_view));
                         }
                     }).setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
                         @Override
@@ -144,11 +148,21 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                 PetMonsterHelper helper = control.getPetMonsterHelper();
                 PetAdapter petAdapter = new PetAdapter(control.getContext(),control.getDataManager(),"");
                 LoadMoreListView listView = new LoadMoreListView(control.getContext());
+                listView.setAdapter(petAdapter);
+
+                listView.setOnLoadListener(petAdapter);
+                AlertDialog select = new AlertDialog.Builder(control.getContext()).setTitle(R.string.select_pet).setView(listView).setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Pet minor = petAdapter.getItem(position);
-                        if(minor!=currentPet){
+                        if(minor!=null && !minor.isMounted() && minor.getId()!=currentPet.getId()){
+                            select.dismiss();
                             control.getDataManager().deletePet(minor);
                             if(helper.upgrade(currentPet, minor)){
                                 new AlertDialog.Builder(control.getContext()).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
@@ -174,16 +188,10 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                             }
                             adapter.removePet(minor);
                             adapter.notifyDataSetChanged();
+                            control.getViewHandler().refreshPets(control.getHero());
                         }
                     }
                 });
-                listView.setOnLoadListener(petAdapter);
-                new AlertDialog.Builder(control.getContext()).setTitle(R.string.select_pet).setView(listView).setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).show();
                 break;
         }
     }
@@ -197,6 +205,7 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
             control.getHero().getPets().remove(currentPet);
             currentPet.setMounted(false);
         }
+        control.getDataManager().savePet(currentPet);
         control.getViewHandler().refreshPets(control.getHero());
     }
 }
