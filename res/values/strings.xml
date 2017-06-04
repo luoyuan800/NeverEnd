@@ -78,4 +78,12 @@
     <string name="evolution">进化</string>
     <string name="evolution_failed">某些宠物在满足特殊条件的情况下可以进化。</string>
     <string name="evolution_successed">成功进化成%1$s</string>
+    <string name="sort_type_up">类↑</string>
+    <string name="sort_type_down">类↓</string>
+    <string name="sort_name_up">名↑</string>
+    <string name="sort_name_down">名↓</string>
+    <string name="sort_color_up">颜↑</string>
+    <string name="sort_color_down">颜↓</string>
+    <string name="sort_intimacy_up">亲↑</string>
+    <string name="sort_intimacy_down">亲↓</string>
 </resources>

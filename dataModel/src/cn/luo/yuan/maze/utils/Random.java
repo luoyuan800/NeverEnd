@@ -77,4 +77,16 @@ public class Random extends java.util.Random {
         }
         return nextLong((long)(max * multiple))/multiple;
     }
+
+    public long reduceToSpecialDigit(Long number, int digit){
+        long maxValue = (long)Math.pow(10, digit);
+        while(number >= maxValue){
+            String numStr = String.valueOf(number);
+            number = 0L;
+            for(int i=0 ; i< numStr.length(); i++){
+                number += nextLong(Integer.parseInt(numStr.charAt(i) + ""));
+            }
+        }
+        return number;
+    }
 }

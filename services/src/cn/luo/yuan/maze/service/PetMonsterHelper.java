@@ -30,6 +30,10 @@ public class PetMonsterHelper {
 
             }
         }
+        pet.setAtk(random.reduceToSpecialDigit(pet.getAtk(), 2));
+        pet.setDef(random.reduceToSpecialDigit(pet.getDef(), 2));
+        pet.setMaxHp(random.reduceToSpecialDigit(pet.getMaxHp(), 2));
+        pet.setHp(pet.getMaxHp());
         pet.setOwnerId(hero.getId());
         pet.setOwnerName(hero.getName());
         return pet;

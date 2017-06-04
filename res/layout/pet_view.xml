@@ -5,7 +5,7 @@
               android:layout_height="match_parent">
     <LinearLayout
             android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
             >
@@ -16,14 +16,14 @@
                 android:layout_height="match_parent">
 
             <Button
-                    android:text="亲↑"
+                    android:text="@string/sort_intimacy_up"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/sort_intimacy"
                     android:textSize="10sp"
                     android:layout_weight="1"/>
             <Button
-                    android:text="类↑"
+                    android:text="@string/sort_type_up"
                     android:textSize="10sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
                     android:layout_weight="1"/>
 
             <Button
-                    android:text="名↑"
+                    android:text="@string/sort_name_up"
                     android:textSize="10sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
                     android:layout_weight="1"/>
 
             <Button
-                    android:text="颜↑"
+                    android:text="@string/sort_color_up"
                     android:textSize="10sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -49,7 +49,8 @@
 
         <cn.luo.yuan.maze.display.view.LoadMoreListView
             android:layout_height="300dp"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
             android:id="@+id/pet_simple_list"/>
         <Button
                 android:layout_width="match_parent"

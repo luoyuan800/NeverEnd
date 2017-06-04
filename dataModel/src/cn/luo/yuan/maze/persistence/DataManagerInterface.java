@@ -1,11 +1,11 @@
 package cn.luo.yuan.maze.persistence;
 
 import cn.luo.yuan.maze.model.Pet;
-import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.GoodsType;
 import cn.luo.yuan.maze.model.skill.Skill;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -14,7 +14,7 @@ import java.util.List;
 public interface DataManagerInterface {
     Goods loadGoods(GoodsType type);
 
-    List<Pet> loadPets(int start, int rows, String keyWord);
+    List<Pet> loadPets(int start, int rows, String keyWord, Comparator<Pet> comparator);
 
     void saveSkill(Skill skill);
 

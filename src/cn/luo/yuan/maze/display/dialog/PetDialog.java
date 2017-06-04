@@ -87,6 +87,12 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                 control.getDataManager().savePet(currentPet);
             }
         });
+        dialog.findViewById(R.id.sort_intimacy).setOnClickListener(this);
+        dialog.findViewById(R.id.sort_name).setOnClickListener(this);
+        dialog.findViewById(R.id.sort_type).setOnClickListener(this);
+        dialog.findViewById(R.id.sort_color).setOnClickListener(this);
+        dialog.findViewById(R.id.close).setOnClickListener(this);
+        dialog.findViewById(R.id.pet_evolution).setOnClickListener(this);
     }
 
     public void refreshDetailView(View detailView) {
@@ -115,9 +121,36 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
         }
     }
 
+    private void refreshSortButton(){
+        ((Button)dialog.findViewById(R.id.sort_color)).setText(adapter.getSortOrderRevert()? R.string.sort_color_up : R.string.sort_color_down);
+        ((Button)dialog.findViewById(R.id.sort_name)).setText(adapter.getSortOrderRevert()? R.string.sort_name_up : R.string.sort_name_down);
+        ((Button)dialog.findViewById(R.id.sort_type)).setText(adapter.getSortOrderRevert()? R.string.sort_type_up : R.string.sort_type_down);
+        ((Button)dialog.findViewById(R.id.sort_intimacy)).setText(adapter.getSortOrderRevert()? R.string.sort_intimacy_up : R.string.sort_intimacy_down);
+    }
+
     @Override
     public void onClick(View v) {
         PetMonsterHelper helper = control.getPetMonsterHelper();switch (v.getId()) {
+            case R.id.sort_intimacy:
+                adapter.setSortType(PetAdapter.SORT_INTIMACY);
+                adapter.notifyDataSetChanged();
+                refreshSortButton();
+                break;
+            case R.id.sort_type:
+                adapter.setSortType(PetAdapter.SORT_INDEX);
+                adapter.notifyDataSetChanged();
+                refreshSortButton();
+                break;
+            case R.id.sort_name:
+                adapter.setSortType(PetAdapter.SORT_NAME);
+                adapter.notifyDataSetChanged();
+                refreshSortButton();
+                break;
+            case R.id.sort_color:
+                adapter.setSortType(PetAdapter.SORT_COLOR);
+                adapter.notifyDataSetChanged();
+                refreshSortButton();
+                break;
             case R.id.pet_evolution:
                 if(currentPet!=null) {
                     if (helper.evolution(currentPet)) {

@@ -13,6 +13,7 @@ import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -206,16 +207,12 @@ public class DataManager implements DataManagerInterface {
                 cursor.moveToNext();
             }
         }
-        try(Cursor cursor = database.excuseSOL("select id from pet where hero_index = " + index)){
-            while (!cursor.isAfterLast()){
-                petLoader.delete(cursor.getString(cursor.getColumnIndex("id")));
-                cursor.moveToNext();
-            }
+        for(Pet pet : new ArrayList<>(petLoader.loadAll())){
+            petLoader.delete(pet.getId());
         }
         database.excuseSQLWithoutResult("delete from maze where hero_index = " + index);
         database.excuseSQLWithoutResult("delete from hero where hero_index = " + index);
         database.excuseSQLWithoutResult("delete from accessory where hero_index = " + index);
-        database.excuseSQLWithoutResult("delete from pet where hero_index = " + index);
     }
 
     public Pet loadPet(String id) {
@@ -239,8 +236,8 @@ public class DataManager implements DataManagerInterface {
     }
 
     @Override
-    public List<Pet> loadPets(int start, int rows, String keyWord) {
-        return petLoader.loadLimit(start, rows, keyWord);
+    public List<Pet> loadPets(int start, int rows, String keyWord, Comparator<Pet> comparator) {
+        return petLoader.loadLimit(start, rows, keyWord, comparator);
     }
 
     public void saveGoods(Goods goods) {
