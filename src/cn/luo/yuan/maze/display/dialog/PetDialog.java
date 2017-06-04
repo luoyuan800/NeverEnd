@@ -117,7 +117,33 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+        PetMonsterHelper helper = control.getPetMonsterHelper();switch (v.getId()) {
+            case R.id.pet_evolution:
+                if(currentPet!=null) {
+                    if (helper.evolution(currentPet)) {
+                        control.getDataManager().savePet(currentPet);
+                        refreshDetailView(dialog.findViewById(R.id.pet_detail_view));
+                        adapter.notifyDataSetChanged();
+                        control.getViewHandler().refreshPets(control.getHero());
+                        new AlertDialog.Builder(control.getContext()).setMessage(Html.fromHtml(String.format(Resource.getString(R.string.evolution_successed),currentPet.getDisplayName()))).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                    } else {
+                        new AlertDialog.Builder(control.getContext()).setMessage(R.string.evolution_failed).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                    }
+                }
+                break;
+            case R.id.close:
+                dialog.dismiss();
+                break;
             case R.id.pet_drop:
                 if(currentPet.isMounted()){
                    new AlertDialog.Builder(control.getContext()).setMessage(R.string.mount_not_drop).setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
@@ -145,7 +171,6 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                 }
                 break;
             case R.id.pet_upgrade:
-                PetMonsterHelper helper = control.getPetMonsterHelper();
                 PetAdapter petAdapter = new PetAdapter(control.getContext(),control.getDataManager(),"");
                 LoadMoreListView listView = new LoadMoreListView(control.getContext());
                 listView.setAdapter(petAdapter);

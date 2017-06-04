@@ -75,4 +75,7 @@
     <string name="upgrade_failed">%1$s 升级失败</string>
     <string name="no_pet">未设置宠物出战</string>
     <string name="restore_hp">%1$s恢复了%2$s的生命值</string>
+    <string name="evolution">进化</string>
+    <string name="evolution_failed">某些宠物在满足特殊条件的情况下可以进化。</string>
+    <string name="evolution_successed">成功进化成%1$s</string>
 </resources>
