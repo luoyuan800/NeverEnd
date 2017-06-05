@@ -66,10 +66,8 @@ public class Sqlite {
             db.beginTransaction();
             //Create Table
             createHeroTable(db);
-            createAccessoryTable(db);
             createKeyTable(db);
             createMazeTable(db);
-            createPetTable(db);
             db.setTransactionSuccessful();
             db.endTransaction();
         } catch (Exception e) {
@@ -128,19 +126,6 @@ public class Sqlite {
         db.execSQL("create table key (hero_index INTEGER NOT NULL PRIMARY KEY, key INTEGER NOT NULL)");
     }
 
-    //TODO Remove
-    private void createAccessoryTable(SQLiteDatabase db) {
-        String table = "create table accessory (" +
-                "hero_index TEXT NOT NULL," +
-                "name TEXT NOT NULL," +
-                "desc TEXT," +
-                "mounted INTEGER," +
-                "level INTEGER," +
-                "id TEXT NOT NULL PRIMARY KEY" +
-                ")";
-        db.execSQL(table);
-    }
-
     private void createHeroTable(SQLiteDatabase db) {
         String table = "create table hero (" +
                 "last_update INTEGER," +
@@ -150,25 +135,6 @@ public class Sqlite {
                 "race TEXT ," +
                 "gift TEXT ," +
                 "reincarnate INTEGER ," +
-                "id TEXT NOT NULL PRIMARY KEY," +
-                "element INTEGER " +
-                ")";
-        db.execSQL(table);
-    }
-
-    //TODO Remove
-    private void createPetTable(SQLiteDatabase db) {
-        String table = "create table pet (" +
-                "last_update INTEGER," +
-                "created INTEGER," +
-                "hero_index TEXT NOT NULL ," +
-                "name TEXT NOT NULL," +
-                "tag TEXT ," +
-                "level INTEGER ," +
-                "sex INTEGER ," +
-                "color TEXT ," +
-                "mounted INTEGER ," +
-                "race INTEGER ," +
                 "id TEXT NOT NULL PRIMARY KEY," +
                 "element INTEGER " +
                 ")";

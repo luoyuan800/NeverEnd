@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.persistence.serialize;
 
 import android.content.Context;
 import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.maze.model.Index;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -56,16 +57,23 @@ public class SerializeLoader<T extends Serializable> {
         return db.loadAll();
     }
 
-    public List<T> loadLimit(int strat, int row, String key, Comparator<T> comparator) {
-        //TODO Add and Index to help condition query
-        //Inplement an Class call Index, which will have method match to help query.
+    public List<T> loadLimit(int strat, int row, Index<T> index, Comparator<T> comparator) {
         int realStart = strat;
         List<T> objects = loadAll();
         if(comparator!=null){
             Collections.sort(objects, comparator);
         }
+        if(index!=null) {
+            int match = 0;
+            for (int i = 0; i < objects.size() && match < strat; i++) {
+                if (index.match(objects.get(i))) {
+                    match++;
+                    realStart = i;
+                }
+            }
+        }
         List<T> ts = new ArrayList<T>(row);
-        for (int i = strat; i < strat + row && i < objects.size() && ts.size() < row; i++) {
+        for (int i = realStart; i < objects.size() && ts.size() < row; i++) {
             ts.add(objects.get(i));
         }
         return ts;

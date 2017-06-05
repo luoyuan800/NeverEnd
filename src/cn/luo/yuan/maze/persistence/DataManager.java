@@ -86,19 +86,11 @@ public class DataManager implements DataManagerInterface {
         return accessoryLoader.load(id);
     }
 
-    //TODO Refactor this method to not use database query
     public List<Accessory> loadMountedAccessory(Hero hero) {
         List<Accessory> accessories = new ArrayList<>();
-
-        try (Cursor cursor = database.excuseSOL("select * from accessory where hero_index = '" + index + "'")) {
-            while (!cursor.isAfterLast()) {
-                if (cursor.getInt(cursor.getColumnIndex("mounted")) == 1) {
-                    Accessory accessory = loadAccessory(cursor.getString(cursor.getColumnIndex("id")));
-                    if (accessory != null) {
-                        accessories.add(accessory);
-                    }
-                }
-                cursor.moveToNext();
+        for(Accessory accessory : accessoryLoader.loadAll()){
+            if(accessory.isMounted()){
+                accessories.add(accessory);
             }
         }
         return accessories;
@@ -125,22 +117,13 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void saveAccessory(Accessory accessory) {
-        ContentValues values = new ContentValues();
-        values.put("name", accessory.getName());
-        values.put("id", accessory.getId());
-        values.put("desc", accessory.getDesc());
-        values.put("mounted", accessory.isMounted());
-        values.put("hero_index", index);
-        values.put("level", accessory.getLevel());
+
         if (StringUtils.isNotEmpty(accessory.getId())) {
             //Already existed, 我们会进行update操作
-            database.updateById("accessory", values, accessory.getId());
             accessoryLoader.update(accessory);
         } else {
             //先添加一个新的记录
             accessoryLoader.save(accessory);
-            values.put("id", accessory.getId());
-            database.insert("accessory", values);
         }
     }
 
@@ -189,12 +172,7 @@ public class DataManager implements DataManagerInterface {
      * 删除当前存档的数据
      */
     public void clean() {
-        try (Cursor cursor = database.excuseSOL("select id from accessory where hero_index = " + index)) {
-            while (!cursor.isAfterLast()) {
-                accessoryLoader.delete(cursor.getString(cursor.getColumnIndex("id")));
-                cursor.moveToNext();
-            }
-        }
+
         try (Cursor cursor = database.excuseSOL("select id from maze where hero_index = " + index)) {
             while (!cursor.isAfterLast()) {
                 mazeLoader.delete(cursor.getString(cursor.getColumnIndex("id")));
@@ -210,9 +188,11 @@ public class DataManager implements DataManagerInterface {
         for(Pet pet : new ArrayList<>(petLoader.loadAll())){
             petLoader.delete(pet.getId());
         }
+        for(Accessory accessory : new ArrayList<>(accessoryLoader.loadAll())){
+            accessoryLoader.delete(accessory.getId());
+        }
         database.excuseSQLWithoutResult("delete from maze where hero_index = " + index);
         database.excuseSQLWithoutResult("delete from hero where hero_index = " + index);
-        database.excuseSQLWithoutResult("delete from accessory where hero_index = " + index);
     }
 
     public Pet loadPet(String id) {
@@ -237,7 +217,12 @@ public class DataManager implements DataManagerInterface {
 
     @Override
     public List<Pet> loadPets(int start, int rows, String keyWord, Comparator<Pet> comparator) {
-        return petLoader.loadLimit(start, rows, keyWord, comparator);
+        return petLoader.loadLimit(start, rows, new Index<Pet>() {
+            @Override
+            public boolean match(Pet pet) {
+                return pet.getName().contains(keyWord) || pet.getTag().contains(keyWord);
+            }
+        }, comparator);
     }
 
     public void saveGoods(Goods goods) {
@@ -263,19 +248,13 @@ public class DataManager implements DataManagerInterface {
         return skills;
     }
 
-    //TODO Refactor this method to not use database query
     public List<Accessory> loadAccessories(int start, int row, String key) {
-        List<Accessory> all = new ArrayList<>(row);
-        try(Cursor cursor = database.excuseSOL("select id from accessory where hero_index = '" + index + "' and name like '%" + key + "%' limit " + row + " offset " + start)) {
-            while (!cursor.isAfterLast()) {
-                Accessory accessory = accessoryLoader.load(cursor.getString(cursor.getColumnIndex("id")));
-                if (accessory != null) {
-                    all.add(accessory);
-                }
-                cursor.moveToNext();
+        return accessoryLoader.loadLimit(start, row, new Index<Accessory>() {
+            @Override
+            public boolean match(Accessory accessory) {
+                return accessory.getName().contains(key);
             }
-        }
-        return all;
+        }, null);
     }
 
     public List<ClickSkill> loadClickSkill(){

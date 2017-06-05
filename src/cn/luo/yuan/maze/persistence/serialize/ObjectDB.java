@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.ArrayMap;
 import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.utils.LogHelper;
+import cn.luo.yuan.maze.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +14,9 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -30,7 +34,7 @@ public class ObjectDB<T extends Serializable> {
     }
 
     public synchronized String save(T object, String id) {
-        String path = type.getName() + "@" + id;
+        String path = getName(id);
         try {
             ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput(path, Context.MODE_PRIVATE));
             oos.writeObject(object);
@@ -63,14 +67,43 @@ public class ObjectDB<T extends Serializable> {
     public List<T> loadAll(){
         List<T> list = new ArrayList<>();
         for(String file : context.fileList()){
-            if(file.startsWith(type.getName() + "@")){
-                T object = load(file);
-                if(object!=null){
-                    list.add(object);
+            if(file.startsWith(prefix())){
+                String id = retrieveId(file);
+                if(StringUtils.isNotEmpty(id)){
+                    SoftReference<T> ref = cache.get(id);
+                    if(ref!=null){
+                        T o = ref.get();
+                        if(o!=null) {
+                            list.add(o);
+                            continue;
+                        }
+                    }
+                    T o = load(file);
+                    cache.put(id, new SoftReference<T>(o));
+                    list.add(o);
                 }
             }
         }
         return list;
+    }
+
+    private String retrieveId(String fileName){
+        return fileName.replaceFirst(prefix(), "");
+    }
+
+    @NotNull
+    private String prefix() {
+        return type.getName() + "@";
+    }
+
+    public int size(){
+        int size = 0;
+        for(String file : context.fileList()){
+            if(file.startsWith(prefix())){
+                size ++;
+            }
+        }
+        return size;
     }
 
     public synchronized void clear() {
@@ -98,7 +131,7 @@ public class ObjectDB<T extends Serializable> {
     }
 
     private String getName(String id) {
-        return type.getName() + "@" + id;
+        return prefix() + id;
     }
 
     private T load(String name) {
