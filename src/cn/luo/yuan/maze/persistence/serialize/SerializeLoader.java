@@ -57,24 +57,27 @@ public class SerializeLoader<T extends Serializable> {
         return db.loadAll();
     }
 
-    public List<T> loadLimit(int strat, int row, Index<T> index, Comparator<T> comparator) {
-        int realStart = strat;
+    public List<T> loadLimit(int start, int row, Index<T> index, Comparator<T> comparator) {
+        int realStart = start;
         List<T> objects = loadAll();
         if(comparator!=null){
             Collections.sort(objects, comparator);
         }
         if(index!=null) {
             int match = 0;
-            for (int i = 0; i < objects.size() && match < strat; i++) {
+            for (int i = 0; i < objects.size() && match < start; i++) {
                 if (index.match(objects.get(i))) {
                     match++;
-                    realStart = i;
+                    realStart = i + 1;
                 }
             }
         }
         List<T> ts = new ArrayList<T>(row);
         for (int i = realStart; i < objects.size() && ts.size() < row; i++) {
-            ts.add(objects.get(i));
+            T t = objects.get(i);
+            if(index == null || index.match(t)) {
+                ts.add(t);
+            }
         }
         return ts;
     }

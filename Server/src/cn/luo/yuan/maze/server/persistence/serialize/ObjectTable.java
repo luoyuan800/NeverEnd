@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.server.persistence.serialize;
 
 
 import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.maze.model.Index;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +14,7 @@ import java.io.Serializable;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +22,7 @@ import java.util.UUID;
 /**
  * Created by gluo on 11/28/2016.
  */
-public class ObjectTable<T extends Serializable> {
+public class ObjectTable<T extends Serializable>{
     private File root;
     private Class<T> table;
     private HashMap<String, SoftReference<T>> cache;
@@ -44,7 +46,7 @@ public class ObjectTable<T extends Serializable> {
         return id;
     }
 
-    public synchronized String update(T object, String id) {
+    public synchronized String update(T object, String id) throws IOException {
         File file = buildFile(id);
         if (file.exists()) {
             file.delete();
@@ -65,7 +67,7 @@ public class ObjectTable<T extends Serializable> {
         }
     }
 
-    public synchronized T loadObject(String id) {
+    public synchronized T loadObject(String id) throws IOException, ClassNotFoundException {
         T object = null;
         SoftReference<T> ref = cache.get(id);
         if (ref != null) {
@@ -78,7 +80,7 @@ public class ObjectTable<T extends Serializable> {
         return object;
     }
 
-    public List<T> loadAll() {
+    public List<T> loadAll() throws IOException, ClassNotFoundException {
         List<T> list = new ArrayList<>();
         if (root.isDirectory()) {
             for (File file : root.listFiles()) {
@@ -86,14 +88,6 @@ public class ObjectTable<T extends Serializable> {
                 if (entry != null)
                     list.add(entry);
             }
-        }
-        return list;
-    }
-
-    public List<String> loadAllId(){
-        List<String> list = new ArrayList<>();
-        if (root.isDirectory()) {
-            Collections.addAll(list, root.list());
         }
         return list;
     }
@@ -130,15 +124,11 @@ public class ObjectTable<T extends Serializable> {
         cache.clear();
     }
 
-    private void saveObject(T object, File entry) {
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(entry));
+    private void saveObject(T object, File entry) throws IOException {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(entry))){
             oos.writeObject(object);
             oos.flush();
             oos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            //LogHelper.logException(e,"ObjectDb->save{" + object + ", " + id + "}");
         }
     }
 
@@ -146,20 +136,17 @@ public class ObjectTable<T extends Serializable> {
         return id;
     }
 
-    private T load(String id) {
+    private T load(String id) throws IOException, ClassNotFoundException {
         File entry = buildFile(id);
         return loadEntry(entry);
     }
 
-    private T loadEntry(File entry) {
+    private T loadEntry(File entry) throws IOException, ClassNotFoundException {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(entry))) {
             Object o = ois.readObject();
             ois.close();
             return table.cast(o);
-        } catch (IOException | ClassNotFoundException e) {
-            //LogHelper.logException(e,"Sqlite->load{" + name + "}");
         }
-        return null;
     }
 
     private File buildFile(String id) {
@@ -168,5 +155,30 @@ public class ObjectTable<T extends Serializable> {
 
     public int size(){
         return root.isDirectory() ? root.list().length : 0;
+    }
+
+    public List<T> loadLimit(int start, int row, Index<T> index, Comparator<T> comparator) throws IOException, ClassNotFoundException {
+        int realStart = start;
+        List<T> objects = loadAll();
+        if(comparator!=null){
+            Collections.sort(objects, comparator);
+        }
+        if(index!=null) {
+            int match = 0;
+            for (int i = 0; i < objects.size() && match < start; i++) {
+                if (index.match(objects.get(i))) {
+                    match++;
+                    realStart = i + 1;
+                }
+            }
+        }
+        List<T> ts = new ArrayList<T>(row);
+        for (int i = realStart; i < objects.size() && ts.size() < row; i++) {
+            T t = objects.get(i);
+            if(index == null || index.match(t)) {
+                ts.add(t);
+            }
+        }
+        return ts;
     }
 }
