@@ -67,7 +67,7 @@ public class ObjectTable<T extends Serializable>{
         }
     }
 
-    public synchronized T loadObject(String id) throws IOException, ClassNotFoundException {
+    public synchronized T loadObject(String id) {
         T object = null;
         SoftReference<T> ref = cache.get(id);
         if (ref != null) {
@@ -80,7 +80,7 @@ public class ObjectTable<T extends Serializable>{
         return object;
     }
 
-    public List<T> loadAll() throws IOException, ClassNotFoundException {
+    public List<T> loadAll() {
         List<T> list = new ArrayList<>();
         if (root.isDirectory()) {
             for (File file : root.listFiles()) {
@@ -136,16 +136,19 @@ public class ObjectTable<T extends Serializable>{
         return id;
     }
 
-    private T load(String id) throws IOException, ClassNotFoundException {
+    private T load(String id){
         File entry = buildFile(id);
         return loadEntry(entry);
     }
 
-    private T loadEntry(File entry) throws IOException, ClassNotFoundException {
+    private T loadEntry(File entry){
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(entry))) {
             Object o = ois.readObject();
             ois.close();
             return table.cast(o);
+        } catch (Exception e) {
+            //ignore e.printStackTrace();
+            return null;
         }
     }
 
@@ -180,5 +183,11 @@ public class ObjectTable<T extends Serializable>{
             }
         }
         return ts;
+    }
+
+    public List<String> loadIds(){
+        List<String> ids = new ArrayList<>();
+        Collections.addAll(ids, root.list());
+        return ids;
     }
 }

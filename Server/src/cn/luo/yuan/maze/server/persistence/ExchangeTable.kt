@@ -43,7 +43,7 @@ class ExchangeTable(root: File) {
                 }
             }
         } else {
-            for (id in exchangeDb.loadAllId()) {
+            for (id in exchangeDb.loadIds()) {
                     val eo = exchangeDb.loadObject(id);
                     if (eo != null) {
                         cache.put(key(eo.id,eo.type,eo.expectedType), SoftReference(eo))
@@ -74,7 +74,7 @@ class ExchangeTable(root: File) {
                 }
             }
         } else {
-            for (id in exchangeDb.loadAllId()) {
+            for (id in exchangeDb.loadIds()) {
                 val eo = exchangeDb.loadObject(id);
                 if (eo != null) {
                     cache.put(key(eo.id,eo.type,eo.expectedType), SoftReference(eo))

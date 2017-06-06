@@ -13,12 +13,17 @@ import java.util.*
  * Created by gluo on 5/5/2017.
  */
 class Medallion() : Goods {
+    companion object {
+        private const val serialVersionUID: Long = 1L
+    }
+
+    var medId:String = "";
     override fun getId(): String {
-        return id
+        return medId
     }
 
     override fun setId(id: String?) {
-        this.id = id!!;
+        this.medId = id!!;
     }
 
     override fun load(properties: GoodsProperties) {

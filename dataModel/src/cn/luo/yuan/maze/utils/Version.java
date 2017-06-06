@@ -5,4 +5,5 @@ package cn.luo.yuan.maze.utils;
  */
 public class Version {
     public static Long SERVER_VERSION = 1L;
+
 }

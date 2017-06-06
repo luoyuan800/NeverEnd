@@ -19,7 +19,7 @@ public class TestObjectDB {
     private ObjectTable<Hero> heroObjectDB = new ObjectTable<>(Hero.class, new File("data"));
 
     @Test
-    public void testSave() throws IOException {
+    public void testSave() throws IOException, ClassNotFoundException {
         Hero hero = new Hero();
         hero.setMaxHp(2000);
         hero.setHp(1000);
@@ -34,7 +34,7 @@ public class TestObjectDB {
     }
 
     @Test
-    public void testLoadAll() throws IOException {
+    public void testLoadAll() throws IOException, ClassNotFoundException {
         Hero hero = new Hero();
         hero.setMaxHp(2000);
         hero.setHp(1000);
@@ -50,7 +50,7 @@ public class TestObjectDB {
         assertEquals(heroObjectDB.loadAll().size(), 3);
     }
     @Test
-    public void testDelete() throws IOException {
+    public void testDelete() throws IOException, ClassNotFoundException {
         Hero hero = new Hero();
         hero.setMaxHp(2000);
         hero.setHp(1000);

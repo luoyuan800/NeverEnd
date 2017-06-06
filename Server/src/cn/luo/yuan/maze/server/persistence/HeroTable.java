@@ -25,7 +25,7 @@ public class HeroTable {
     private long maxLevel = 1;
     private File root;
 
-    public HeroTable(File root) {
+    public HeroTable(File root) throws IOException, ClassNotFoundException {
         this.root = root;
         heroDb = new ObjectTable<>(Hero.class, root);
         mazeDb = new ObjectTable<>(Maze.class, root);
@@ -46,7 +46,7 @@ public class HeroTable {
         }
     }
 
-    public List<Hero> queryHero(HeroIndex index) {
+    public List<Hero> queryHero(HeroIndex index) throws IOException, ClassNotFoundException {
         List<Hero> heros = new ArrayList<>();
         for (HashMap.Entry<HeroIndex, SoftReference<Hero>> entry : cache.entrySet()) {
             HeroIndex key = entry.getKey();
@@ -98,7 +98,7 @@ public class HeroTable {
         return ids;
     }
 
-    public Hero getHero(String id) {
+    public Hero getHero(String id) throws IOException, ClassNotFoundException {
         for (HashMap.Entry<HeroIndex, SoftReference<Hero>> entry : cache.entrySet()) {
             HeroIndex index = entry.getKey();
             SoftReference<Hero> ref = entry.getValue();
@@ -122,11 +122,11 @@ public class HeroTable {
         this.maxLevel = maxLevel;
     }
 
-    private Hero loadHero(String id) {
+    private Hero loadHero(String id) throws IOException, ClassNotFoundException {
         return heroDb.loadObject(id);
     }
 
-    public Maze getMaze(String id) {
+    public Maze getMaze(String id) throws IOException, ClassNotFoundException {
         return mazeDb.loadObject(id);
     }
 

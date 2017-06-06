@@ -7,6 +7,7 @@ import java.io.Serializable
  * Created by gluo on 5/5/2017.
  */
 interface Goods : Serializable, IDModel {
+
     var count:Int
     var desc : String
     var name : String

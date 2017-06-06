@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model
 
 import cn.luo.yuan.maze.exception.AlreadyAcknowledge
+import cn.luo.yuan.maze.utils.Version
 import java.io.Serializable
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
@@ -10,6 +11,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock
  * Created by gluo on 6/1/2017.
  */
 class ExchangeObject(val exchange: IDModel, val ownerId:String) : Serializable, IDModel {
+    companion object {
+        private const val serialVersionUID: Long = 1L
+    }
+
     var expectedType: Int = 0
     var submitTime = 0L;
     var changedTime = 0L;
