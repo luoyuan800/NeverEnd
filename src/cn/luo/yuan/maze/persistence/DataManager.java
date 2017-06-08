@@ -12,6 +12,7 @@ import cn.luo.yuan.maze.persistence.database.Sqlite;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
 import cn.luo.yuan.maze.utils.StringUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -295,6 +296,10 @@ public class DataManager implements DataManagerInterface {
             }
         }
         return pets;
+    }
+
+    public void delete(Serializable object) {
+
     }
 
     private Maze newMaze() {

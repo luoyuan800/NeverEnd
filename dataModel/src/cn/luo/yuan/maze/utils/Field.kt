@@ -19,6 +19,7 @@ class Field {
         const val RESPONSE_OBJECT_TYPE = "object"
         const val RESPONSE_STRING_TYPE = "string"
         const val RESPONSE_NONE_TYPE = "none"
+        const val SERVER_URL = "http://localhost:4567"
 
 
     }
