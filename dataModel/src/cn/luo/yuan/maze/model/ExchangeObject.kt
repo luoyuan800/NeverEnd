@@ -1,7 +1,7 @@
 package cn.luo.yuan.maze.model
 
 import cn.luo.yuan.maze.exception.AlreadyAcknowledge
-import cn.luo.yuan.maze.utils.Version.Companion.SERVER_VERSION
+import cn.luo.yuan.maze.utils.Field.Companion.SERVER_VERSION
 import java.io.Serializable
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock

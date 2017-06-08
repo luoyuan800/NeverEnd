@@ -8,6 +8,7 @@ import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
 import cn.luo.yuan.maze.server.persistence.GroupTable;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
+import cn.luo.yuan.maze.utils.Field;
 import org.jetbrains.annotations.NotNull;
 import spark.Request;
 import spark.Spark;
@@ -19,13 +20,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
+import static cn.luo.yuan.maze.utils.Field.*;
 import static spark.Spark.post;
 
 public class Server {
+
+
     /**
      * Created by gluo on 6/1/2017.
      */
-    public static final Integer STATE_SUCCESS = 1, STATE_FAILED = 21;
 
     public static void main(String... args) throws IOException, ClassNotFoundException {
 
@@ -37,7 +40,7 @@ public class Server {
             Object ex = readObject(request);
             Object exchange = null;
             if (!(ex instanceof ExchangeObject) && ex instanceof IDModel) {
-                exchange = new ExchangeObject((IDModel) ex, request.headers("owner_id"));
+                exchange = new ExchangeObject((IDModel) ex, request.headers(Field.OWNER_ID_FIELD));
             } else {
                 exchange = ex;
             }
@@ -52,55 +55,55 @@ public class Server {
                 }
                 ((ExchangeObject) exchange).setSubmitTime(System.currentTimeMillis());
                 if (exchangeTable.addExchange((ExchangeObject) exchange)) {
-                    response.header("type", "none");
-                    response.header("code", STATE_SUCCESS.toString());
-                    return "success!";
+                    response.header(Field.RESPONSE_TYPE, RESPONSE_NONE_TYPE);
+                    response.header(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
+                    return Field.RESPONSE_RESULT_SUCCESS;
                 } else {
-                    response.header("type", "string");
-                    response.header("code", STATE_FAILED.toString());
+                    response.header(RESPONSE_TYPE, RESPONSE_STRING_TYPE);
+                    response.header(RESPONSE_CODE, Field.STATE_FAILED.toString());
                     return "Could not add exchange, maybe there already an exchange object has the same id existed!";
                 }
             } else {
-                response.header("type", "string");
-                response.header("code", STATE_FAILED.toString());
+                response.header(Field.RESPONSE_TYPE, RESPONSE_STRING_TYPE);
+                response.header(Field.RESPONSE_CODE, Field.STATE_FAILED);
                 return "Could not add exchange, Wrong type!";
             }
         });
 
         post("exchange_pet_list", (request, response) -> {
             List<ExchangeObject> pets = exchangeTable.loadAll(1);
-            response.header("code", STATE_SUCCESS.toString());
-            response.header("type", "object");
+            response.header(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
+            response.header(Field.RESPONSE_TYPE, RESPONSE_OBJECT_TYPE);
             ObjectOutputStream oos = new ObjectOutputStream(response.getOutputStream());
             oos.writeObject(pets);
             oos.flush();
             oos.close();
 
-            return "OK";
+            return Field.RESPONSE_RESULT_OK;
         });
 
         post("exchange_accessory_list", (request, response) -> {
             List<ExchangeObject> pets = exchangeTable.loadAll(2);
-            response.header("code", STATE_SUCCESS.toString());
-            response.header("type", "object");
+            response.header(RESPONSE_CODE, Field.STATE_SUCCESS);
+            response.header(RESPONSE_TYPE, RESPONSE_OBJECT_TYPE);
             ObjectOutputStream oos = new ObjectOutputStream(response.getOutputStream());
             oos.writeObject(pets);
             oos.flush();
             oos.close();
 
-            return "OK";
+            return Field.RESPONSE_RESULT_OK;
         });
 
         post("exchange_goods_list", (request, response) -> {
             List<ExchangeObject> pets = exchangeTable.loadAll(3);
-            response.header("code", STATE_SUCCESS.toString());
-            response.header("type", "object");
+            response.header(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
+            response.header(Field.RESPONSE_TYPE, RESPONSE_OBJECT_TYPE);
             ObjectOutputStream oos = new ObjectOutputStream(response.getOutputStream());
             oos.writeObject(pets);
             oos.flush();
             oos.close();
 
-            return "OK";
+            return Field.RESPONSE_RESULT_OK;
         });
 
         post("query_my_exchange", (request, response) -> {
@@ -108,25 +111,25 @@ public class Server {
 
             ObjectOutputStream oos = new ObjectOutputStream(response.getOutputStream());
             oos.writeObject(exs);
-            response.header("code", STATE_SUCCESS.toString());
-            response.header("type", "object");
+            response.header(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
+            response.header(Field.RESPONSE_TYPE, RESPONSE_OBJECT_TYPE);
             oos.flush();
             oos.close();
 
-            return "OK";
+            return Field.RESPONSE_RESULT_OK;
         });
 
         post("acknowledge_my_exchange", (request, response) -> {
-            ExchangeObject exchangeMy = exchangeTable.loadObject(request.headers("ex_id"));
+            ExchangeObject exchangeMy = exchangeTable.loadObject(request.headers(EXCHANGE_ID_FIELD));
             if (exchangeMy != null) {
                 exchangeMy.setAcknowledge(true);
                 if (exchangeMy.getChanged() != null && exchangeMy.getAcknowledge()) {
                     exchangeTable.getExchangeDb().delete(exchangeMy.getId());
                     exchangeTable.getExchangeDb().delete(exchangeMy.getExchange().getId());
                 }
-                response.header("type", "none");
-                response.header("code", STATE_SUCCESS.toString());
-                return "OK";
+                response.header(RESPONSE_TYPE, RESPONSE_NONE_TYPE);
+                response.header(RESPONSE_CODE, STATE_SUCCESS);
+                return Field.RESPONSE_RESULT_OK;
             } else {
                 return "Error object could not found!";
             }
@@ -135,23 +138,23 @@ public class Server {
 
         post("request_exchange", ((request, response) -> {
             Object objMy = readObject(request);
-            ExchangeObject exServer = exchangeTable.loadObject(request.headers("exchange_id"));
+            ExchangeObject exServer = exchangeTable.loadObject(request.headers(EXCHANGE_ID_FIELD));
             if (objMy == null) {
-                response.header("code", STATE_FAILED.toString());
+                response.header(Field.RESPONSE_CODE, Field.STATE_FAILED);
                 return "Exchange Object submit error!";
             }
             if (exServer == null) {
-                response.header("code", STATE_FAILED.toString());
+                response.header(RESPONSE_CODE, Field.STATE_FAILED);
                 return "Could not find Object your request!";
             }
-            ExchangeObject exMy = createExchangeObject(request.headers("owner_id"), objMy);
+            ExchangeObject exMy = createExchangeObject(request.headers(OWNER_ID_FIELD), objMy);
             if (exServer.change(exMy)) {
                 exMy.setChanged(exServer);
                 exMy.setChangedTime(System.currentTimeMillis());
                 exMy.setAcknowledge(true);
                 exchangeTable.addExchange(exMy);
-                response.header("code", STATE_SUCCESS.toString());
-                return "OK";
+                response.header(RESPONSE_CODE, STATE_SUCCESS);
+                return Field.RESPONSE_RESULT_OK;
             }
             return "Could not do exchange because the target has been changed by other!";
         }));

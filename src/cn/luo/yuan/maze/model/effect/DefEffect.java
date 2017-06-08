@@ -2,13 +2,13 @@ package cn.luo.yuan.maze.model.effect;
 
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.utils.Resource;
-import cn.luo.yuan.maze.utils.Version;
+import cn.luo.yuan.maze.utils.Field;
 
 /**
  * Created by luoyuan on 2017/3/18.
  */
 public class DefEffect extends cn.luo.yuan.maze.model.effect.original.DefEffect {
-    private static final long serialVersionUID = Version.SERVER_VERSION;
+    private static final long serialVersionUID = Field.SERVER_VERSION;
     private long def;
 
     public long getDef() {

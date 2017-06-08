@@ -2,15 +2,13 @@ package cn.luo.yuan.maze.model;
 
 import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.StringUtils;
-import cn.luo.yuan.maze.utils.Version;
-
-import java.io.Serializable;
+import cn.luo.yuan.maze.utils.Field;
 
 /**
  * Created by gluo on 4/25/2017.
  */
 public class Pet extends Monster implements IDModel {
-    private static final long serialVersionUID = Version.SERVER_VERSION;
+    private static final long serialVersionUID = Field.SERVER_VERSION;
     private EncodeLong level = new EncodeLong(0);
     private String id = StringUtils.EMPTY_STRING;
     private String tag = StringUtils.EMPTY_STRING;

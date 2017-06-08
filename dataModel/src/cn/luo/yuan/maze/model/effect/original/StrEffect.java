@@ -1,13 +1,13 @@
 package cn.luo.yuan.maze.model.effect.original;
 
 import cn.luo.yuan.maze.model.effect.LongValueEffect;
-import cn.luo.yuan.maze.utils.Version;
+import cn.luo.yuan.maze.utils.Field;
 
 /**
  * Created by luoyuan on 2017/3/18.
  */
 public class StrEffect implements LongValueEffect{
-    private static final long serialVersionUID = Version.SERVER_VERSION;
+    private static final long serialVersionUID = Field.SERVER_VERSION;
     private long str;
     private boolean enable = false;
 

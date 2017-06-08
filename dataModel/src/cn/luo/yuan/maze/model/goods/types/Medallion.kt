@@ -6,7 +6,7 @@ import cn.luo.yuan.maze.model.Hero
 import cn.luo.yuan.maze.model.goods.Goods
 import cn.luo.yuan.maze.model.goods.GoodsProperties
 import cn.luo.yuan.maze.service.ListenerService
-import cn.luo.yuan.maze.utils.Version.Companion.SERVER_VERSION
+import cn.luo.yuan.maze.utils.Field.Companion.SERVER_VERSION
 
 /**
  * Created by gluo on 5/5/2017.

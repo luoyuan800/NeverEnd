@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.service;
 
-import cn.luo.yuan.maze.utils.Version;
+import android.os.Environment;
+import cn.luo.yuan.maze.utils.Field;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -25,9 +26,9 @@ public class RestConnection {
     private String server;
     private String version;
 
-    public RestConnection(String serverUrl) {
+    public RestConnection(String serverUrl, String version) {
         this.server = serverUrl;
-        version = Version.SERVER_VERSION + "";
+        this.version = version;
     }
 
     public Object connect(Serializable serializable, HttpURLConnection connection) throws IOException {
@@ -42,7 +43,7 @@ public class RestConnection {
     }
 
     public Object getResult(HttpURLConnection connection) throws IOException{
-        if("object".equals(connection.getHeaderField("type"))){
+        if(Field.RESPONSE_OBJECT_TYPE.equals(connection.getHeaderField(Field.RESPONSE_TYPE))){
             return getRestObjectResult(connection);
         }else{
             return getRestStringResult(connection);
@@ -64,7 +65,7 @@ public class RestConnection {
         connection.setRequestMethod(method);
         connection.setDoOutput(true);
         //connection.addRequestProperty("signe", MazeContents.getSingInfo(MainGameActivity.context));
-        connection.addRequestProperty("version", version);
+        connection.addRequestProperty(Field.VERSION_FIELD, version);
         return connection;
     }
 

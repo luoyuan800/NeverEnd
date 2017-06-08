@@ -27,7 +27,7 @@ import static org.testng.Assert.assertTrue;
  * Created by gluo on 6/6/2017.
  */
 public class TestServer {
-    private RestConnection connection = new RestConnection("http://localhost:4567");
+    private RestConnection connection = new RestConnection("http://localhost:4567", "");
     @BeforeTest
     public void start() {
         new Thread(() -> {
@@ -146,7 +146,7 @@ public class TestServer {
 
         urlConnection = connection.getHttpURLConnection("/request_exchange", RestConnection.POST);
         urlConnection.addRequestProperty("owner_id", "exchanger");
-        urlConnection.addRequestProperty("exchange_id", eo.getId());
+        urlConnection.addRequestProperty("ex_id", eo.getId());
 
         System.out.println(connection.connect(accessory,urlConnection));
 

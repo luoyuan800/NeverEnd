@@ -4,7 +4,7 @@ import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.service.InfoControlInterface;
-import cn.luo.yuan.maze.utils.Version;
+import cn.luo.yuan.maze.utils.Field;
 
 import java.io.Serializable;
 
@@ -12,7 +12,7 @@ import java.io.Serializable;
  * Created by luoyuan on 2016/7/3.
  */
 public abstract class ClickSkill implements Serializable, IDModel {
-    private static final long serialVersionUID = Version.SERVER_VERSION;
+    private static final long serialVersionUID = Field.SERVER_VERSION;
     private String id;
     private long click;
     private long lastUseTime;

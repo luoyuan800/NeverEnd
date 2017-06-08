@@ -2,7 +2,6 @@ package cn.luo.yuan.maze.model.effect;
 
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.NameObject;
-import cn.luo.yuan.maze.utils.Version;
 
 import java.io.Serializable;
 

@@ -8,7 +8,7 @@ import cn.luo.yuan.maze.model.skill.SkillAbleObject;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.service.EffectHandler;
 import cn.luo.yuan.maze.utils.EncodeLong;
-import cn.luo.yuan.maze.utils.Version;
+import cn.luo.yuan.maze.utils.Field;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  * Created by luoyuan on 2017/3/18.
  */
 public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, NameObject, PetOwner {
-    private static final long serialVersionUID = Version.SERVER_VERSION;
+    private static final long serialVersionUID = Field.SERVER_VERSION;
     private int index;//存档编号
     private String name;//名字
     private EncodeLong maxHp = new EncodeLong(0);//血上限

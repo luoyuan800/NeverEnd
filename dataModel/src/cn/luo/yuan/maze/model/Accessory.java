@@ -1,7 +1,7 @@
 package cn.luo.yuan.maze.model;
 
 import cn.luo.yuan.maze.model.effect.Effect;
-import cn.luo.yuan.maze.utils.Version;
+import cn.luo.yuan.maze.utils.Field;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.List;
  * Created by luoyuan on 2017/3/18.
  */
 public class Accessory implements Serializable, IDModel, NameObject {
-    private static final long serialVersionUID = Version.SERVER_VERSION;
+    private static final long serialVersionUID = Field.SERVER_VERSION;
     private String name;
     private String id;
     private String type;
