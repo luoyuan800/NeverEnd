@@ -16,6 +16,7 @@
         <pet_rate>55</pet_rate>
         <sex>-1</sex>
         <race>Nonsr</race>
+        <rank>1</rank>
         <evolution></evolution>
     </monster>
 </monsters>

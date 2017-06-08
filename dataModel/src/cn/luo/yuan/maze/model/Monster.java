@@ -29,6 +29,7 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
     private int sex = -1;
     private Race race;
     private Skill skill;
+    private int rank;
 
 
     public FirstName getFirstName() {
@@ -225,5 +226,13 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
 
     public void setSkill(Skill skill) {
         this.skill = skill;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
     }
 }

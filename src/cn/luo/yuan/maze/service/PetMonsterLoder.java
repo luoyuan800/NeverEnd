@@ -139,6 +139,7 @@ public class PetMonsterLoder implements MonsterLoader {
                 switch (parser.getEventType()) {
                     case XmlResourceParser.START_TAG:
                         switch (parser.getName()) {
+
                             case "meet":
                                 if (key != null) {
                                     key.meet_rate = Float.parseFloat(parser.getAttributeValue(null, "meet_rate"));
@@ -246,6 +247,11 @@ public class PetMonsterLoder implements MonsterLoader {
 
     private void setMonsterBaseProperties(Monster monster, XmlResourceParser parser) throws IOException, XmlPullParserException {
         switch (parser.getName()) {
+            case "rank":
+                if(monster!=null){
+                    monster.setRank(Integer.parseInt(parser.nextText()));
+                }
+                break;
             case "atk":
                 if (monster != null) {
                     monster.setAtk(Long.parseLong(parser.nextText()));

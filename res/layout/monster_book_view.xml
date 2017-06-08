@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+
+        <TextView
+                android:text="蟑螂"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/monster_name"
+                android:layout_weight="1"
+                tools:textStyle="bold"
+                android:textSize="18sp"/>
+
+        <TextView
+                android:layout_marginStart="15dp"
+                android:text="♂♀"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/monster_sex"
+                android:layout_weight="1"
+                android:textSize="18sp"/>
+
+        <TextView
+                android:layout_marginStart="15dp"
+                android:text="★1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/monster_rank"
+                android:layout_weight="1"
+                android:textSize="18sp"/>
+
+        <TextView
+                android:layout_marginStart="15dp"
+                android:text="无"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/monster_race"
+                android:layout_weight="1"
+                android:textStyle="bold|italic"
+                android:textColor="@color/active"
+                android:textSize="18sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+        <TextView
+                android:text="攻击："
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="15dp"/>
+
+        <TextView
+                android:text="25"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/monster_atk_value"
+                android:layout_weight="1"/>
+
+        <TextView
+                android:text="\"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"/>
+
+        <TextView
+                android:text="防御："
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                />
+
+        <TextView
+                android:text="25"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/monster_def_value"
+                android:layout_weight="1"/>
+
+        <TextView
+                android:text="\"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"/>
+
+        <TextView
+                android:text="生命："
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                />
+
+        <TextView
+                android:text="120"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/monster_hp_value"
+                android:layout_weight="1"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:text="生蛋："
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="15dp"/>
+
+        <TextView
+                android:text="15%"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/monster_egg_rate"
+                android:layout_weight="1"/>
+
+        <TextView
+                android:text="\"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"/>
+
+        <TextView
+                android:text="捕获："
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/monster_pet_rate"
+                android:layout_weight="1"
+                android:text="3%"/>
+    </LinearLayout>
+
+    <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+    <TextView
+            android:text="只要有人的地方就有蟑螂，不管你爬得多高，你都可以遇见它们。它们是这个世界上最古老的怪物之一，并且也是繁殖力最高（没有之一）的。适应力非常强，据说不同时间可以进化出不同种类的蟑螂……"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/monster_desc"
+            android:maxHeight="200dp"
+            android:layout_marginTop="15dp"/>
+    </ScrollView>
+
+    <ImageView
+            android:layout_gravity="center"
+            android:src="@drawable/zl"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/monster_image"
+            android:scaleType="fitCenter"/>
+</LinearLayout>

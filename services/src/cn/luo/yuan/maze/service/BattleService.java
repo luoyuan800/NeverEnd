@@ -165,7 +165,7 @@ public class BattleService {
     private void petActionOnAtk(PetOwner hero, HarmAble monster) {
         for (Pet pet : hero.getPets()) {
             if (isPetWork(pet, random, true)) {
-                if (monster instanceof Monster && ((Monster)monster).getIndex() > pet.getIndex() && random.nextInt(5) < 1) {
+                if (monster instanceof Monster && ((Monster)monster).getRank() > pet.getRank() && random.nextInt(5) < 1) {
                    battleMessage.petSuppress(pet, (NameObject) monster);
                 } else {
                     long harm = pet.getAtk() - monster.getDef();
@@ -183,7 +183,7 @@ public class BattleService {
     private boolean petActionOnDef(PetOwner hero, HarmAble monster) {
         for (Pet pet : hero.getPets()) {
             if (isPetWork(pet, random, true)) {
-                if (monster instanceof Monster && ((Monster)monster).getIndex() > pet.getIndex() && random.nextInt(5) < 1) {
+                if (monster instanceof Monster && ((Monster)monster).getRank() > pet.getRank() && random.nextInt(5) < 1) {
                     battleMessage.petSuppress(pet, (NameObject) monster);
                 } else {
                     long harm = monster.getAtk() - pet.getDef();
