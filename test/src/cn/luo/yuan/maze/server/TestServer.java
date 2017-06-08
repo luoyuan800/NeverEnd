@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.server;
 
 import cn.luo.yuan.maze.model.Accessory;
+import cn.luo.yuan.maze.model.ExchangeObject;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.types.Medallion;
@@ -17,7 +18,9 @@ import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.UUID;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -60,7 +63,8 @@ public class TestServer {
     }
 
     @AfterTest
-    public void stop() {
+    public void stop() throws IOException, ClassNotFoundException {
+        Server.clear();
         Server.stop();
     }
 
@@ -109,4 +113,72 @@ public class TestServer {
         assertFalse(((List)o).isEmpty());
 
     }
+
+    @Test
+    public void testExchange() throws IOException {
+        Pet pet = new Pet();
+        pet.setType("testExchange");
+        pet.setFirstName(FirstName.angry);
+        pet.setSecondName(SecondName.blue);
+        pet.setHp(100);
+        pet.setMaxHp(100);
+        pet.setAtk(100);
+        pet.setDef(100);
+        pet.setIndex(100);
+        pet.setId("exchange_pet_test");
+        pet.setOwnerName("exchanger");
+        pet.setOwnerId("exchanger");
+        HttpURLConnection urlConnection = connection.getHttpURLConnection("/submit_exchange", RestConnection.POST);
+        urlConnection.addRequestProperty("owner_id", pet.getOwnerId());
+        System.out.println(connection.connect(pet, urlConnection));
+
+
+        urlConnection = connection.getHttpURLConnection("/exchange_pet_list", RestConnection.POST);
+        List<ExchangeObject>  o = (List<ExchangeObject>) connection.connect(urlConnection);
+        System.out.println(o);
+
+        Accessory accessory = new Accessory();
+        accessory.setName("testExchange");
+        accessory.setId("exchange_accessory_test");
+        accessory.setColor("#12345");
+
+        ExchangeObject eo = o.get(0);
+
+        urlConnection = connection.getHttpURLConnection("/request_exchange", RestConnection.POST);
+        urlConnection.addRequestProperty("owner_id", "exchanger");
+        urlConnection.addRequestProperty("exchange_id", eo.getId());
+
+        System.out.println(connection.connect(accessory,urlConnection));
+
+        urlConnection = connection.getHttpURLConnection("/exchange_pet_list", RestConnection.POST);
+        List<ExchangeObject>  oo = (List<ExchangeObject>) connection.connect(urlConnection);
+        assertNotEquals(oo.size(), o.size());
+
+        //Acknowledge
+        urlConnection = connection.getHttpURLConnection("/query_my_exchange", RestConnection.POST);
+        urlConnection.addRequestProperty("owner_id", "exchanger");
+        List<ExchangeObject>  mo = (List<ExchangeObject>) connection.connect(urlConnection);
+        assertTrue(mo.size() > 0);
+        for(ExchangeObject meo : mo){
+            if(meo.getChanged()!=null){
+                if(meo.getExchange() instanceof Accessory) {
+                    assertEquals(meo.getChanged().getId(), pet.getId(), "Exchange should be change to success!");
+                }
+                if(meo.getExchange() instanceof Pet){
+                    assertEquals(meo.getChanged().getId(), accessory.getId(), "Exchange should be change to success!");
+                }
+                if(!meo.getAcknowledge()) {
+                    urlConnection = connection.getHttpURLConnection("/acknowledge_my_exchange", RestConnection.POST);
+                    urlConnection.addRequestProperty("ex_id", meo.getId());
+                    System.out.println(connection.connect(urlConnection));
+                }
+            }
+        }
+
+        urlConnection = connection.getHttpURLConnection("/query_my_exchange", RestConnection.POST);
+        urlConnection.addRequestProperty("owner_id", "exchanger");
+        List<ExchangeObject>  moa = (List<ExchangeObject>) connection.connect(urlConnection);
+        assertNotEquals(moa.size(), mo.size());
+    }
+
 }

@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -51,7 +52,7 @@ public class ObjectDB<T extends Serializable> {
         return save(object, UUID.randomUUID().toString());
     }
 
-    public synchronized T loadObject(String id) {
+    public synchronized T loadObject(String id) throws InvalidClassException {
         T object = null;
         SoftReference<T> ref = cache.get(id);
         if(ref!=null){
@@ -64,7 +65,7 @@ public class ObjectDB<T extends Serializable> {
         return object;
     }
 
-    public List<T> loadAll(){
+    public List<T> loadAll() throws InvalidClassException {
         List<T> list = new ArrayList<>();
         for(String file : context.fileList()){
             if(file.startsWith(prefix())){
@@ -134,12 +135,14 @@ public class ObjectDB<T extends Serializable> {
         return prefix() + id;
     }
 
-    private T load(String name) {
+    private T load(String name) throws InvalidClassException {
         try (ObjectInputStream ois = new ObjectInputStream(context.openFileInput(name))){
             Object o = ois.readObject();
             ois.close();
             return type.cast(o);
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (InvalidClassException ice){
+            throw ice;
+        }catch (IOException | ClassNotFoundException e) {
             LogHelper.logException(e,"Sqlite->load{" + name + "}");
         }
         return null;

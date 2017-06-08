@@ -27,8 +27,7 @@ public class RestConnection {
 
     public RestConnection(String serverUrl) {
         this.server = serverUrl;
-
-        version = Version.SERVER_VERSION.toString();
+        version = Version.SERVER_VERSION + "";
     }
 
     public Object connect(Serializable serializable, HttpURLConnection connection) throws IOException {

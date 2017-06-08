@@ -11,7 +11,9 @@ import java.lang.ref.SoftReference
  */
 class ExchangeTable(root: File) {
     class key(val id:String,val type: Int,val requestType: Int){
-
+        override fun hashCode():Int{
+            return id.hashCode()
+        }
     }
     val exchangeDb = ObjectTable(ExchangeObject::class.java, root)
     val cache = mutableMapOf<key, SoftReference<ExchangeObject>>()
@@ -61,12 +63,12 @@ class ExchangeTable(root: File) {
         val result = mutableListOf<ExchangeObject>()
         if (cache.size == exchangeDb.size()) {
             for ((key, value) in cache.entries) {
-                if (value.get() != null && value.get()?.ownerId == id && value.get()?.changed==null) {
+                if (value.get() != null && value.get()?.ownerId == id) {
                     result.add(value.get()!!)
                 } else {
                     val eo = exchangeDb.loadObject(key.id)
                     if (eo != null) {
-                        if (eo.ownerId == id && eo.changed==null) {
+                        if (eo.ownerId == id ) {
                             result.add(eo);
                         }
                         cache.put(key, SoftReference(eo))
@@ -74,11 +76,11 @@ class ExchangeTable(root: File) {
                 }
             }
         } else {
-            for (id in exchangeDb.loadIds()) {
-                val eo = exchangeDb.loadObject(id);
+            for (exchangeId in exchangeDb.loadIds()) {
+                val eo = exchangeDb.loadObject(exchangeId);
                 if (eo != null) {
                     cache.put(key(eo.id,eo.type,eo.expectedType), SoftReference(eo))
-                    if (eo.ownerId == id && eo.changed==null) {
+                    if (eo.ownerId == id ) {
                         result.add(eo)
                     }
                 }
@@ -88,7 +90,7 @@ class ExchangeTable(root: File) {
 
     }
 
-    fun loadObject(id: String): ExchangeObject {
+    fun loadObject(id: String): ExchangeObject? {
         return exchangeDb.loadObject(id);
     }
 }

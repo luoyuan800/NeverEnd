@@ -3,7 +3,9 @@ package cn.luo.yuan.maze.persistence.serialize;
 import android.content.Context;
 import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.model.Index;
+import cn.luo.yuan.maze.utils.LogHelper;
 
+import java.io.InvalidClassException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +28,12 @@ public class SerializeLoader<T extends Serializable> {
     }
 
     public T load(String id) {
-        return db.loadObject(id);
+        try {
+            return db.loadObject(id);
+        } catch (InvalidClassException e) {
+            db.delete(id);
+            return null;
+        }
     }
 
     public void update(T object) {
@@ -54,7 +61,12 @@ public class SerializeLoader<T extends Serializable> {
     }
 
     public List<T> loadAll() {
-        return db.loadAll();
+        try {
+            return db.loadAll();
+        } catch (InvalidClassException e) {
+            db.clear();
+            return Collections.emptyList();
+        }
     }
 
     public List<T> loadLimit(int start, int row, Index<T> index, Comparator<T> comparator) {

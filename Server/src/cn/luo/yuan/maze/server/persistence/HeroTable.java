@@ -122,6 +122,11 @@ public class HeroTable {
         this.maxLevel = maxLevel;
     }
 
+    public void clear() {
+        heroDb.clear();
+        mazeDb.clear();
+    }
+
     private Hero loadHero(String id) throws IOException, ClassNotFoundException {
         return heroDb.loadObject(id);
     }
