@@ -9,17 +9,23 @@ class Field {
         const val SERVER_VERSION: Long = 1L
         const val STATE_SUCCESS = "1"
         const val STATE_FAILED = "21"
+        const val STATE_ACKNOWLEDGE = "11"
         const val OWNER_ID_FIELD = "owner_id"
         const val VERSION_FIELD = "version"
         const val RESPONSE_TYPE = "type"
         const val RESPONSE_CODE = "code"
         const val RESPONSE_RESULT_SUCCESS = "success"
+        const val RESPONSE_RESULT_FAILED = "failed"
         const val RESPONSE_RESULT_OK= "OK"
         const val EXCHANGE_ID_FIELD = "ex_id"
         const val RESPONSE_OBJECT_TYPE = "object"
         const val RESPONSE_STRING_TYPE = "string"
         const val RESPONSE_NONE_TYPE = "none"
         const val SERVER_URL = "http://localhost:4567"
+        const val PET_TYPE = 1;
+        const val ACCESSORY_TYPE = 2;
+        const val GOODS_TYPE = 3;
+
 
 
     }

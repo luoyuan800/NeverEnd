@@ -93,4 +93,8 @@ class ExchangeTable(root: File) {
     fun loadObject(id: String): ExchangeObject? {
         return exchangeDb.loadObject(id);
     }
+    fun removeObject(eo:ExchangeObject){
+        cache.remove(key(eo.id,eo.type,eo.expectedType));
+        exchangeDb.delete(eo.id);
+    }
 }

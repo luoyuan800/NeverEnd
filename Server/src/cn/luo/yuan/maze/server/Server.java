@@ -11,6 +11,7 @@ import cn.luo.yuan.maze.server.persistence.HeroTable;
 import cn.luo.yuan.maze.utils.Field;
 import org.jetbrains.annotations.NotNull;
 import spark.Request;
+import spark.Response;
 import spark.Spark;
 
 import java.io.ByteArrayInputStream;
@@ -18,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.List;
 
 import static cn.luo.yuan.maze.utils.Field.*;
@@ -108,14 +110,8 @@ public class Server {
 
         post("query_my_exchange", (request, response) -> {
             List<ExchangeObject> exs = exchangeTable.loadAll(request.headers("owner_id"));
-
-            ObjectOutputStream oos = new ObjectOutputStream(response.getOutputStream());
-            oos.writeObject(exs);
             response.header(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
-            response.header(Field.RESPONSE_TYPE, RESPONSE_OBJECT_TYPE);
-            oos.flush();
-            oos.close();
-
+            writeObject(response, exs);
             return Field.RESPONSE_RESULT_OK;
         });
 
@@ -124,8 +120,7 @@ public class Server {
             if (exchangeMy != null) {
                 exchangeMy.setAcknowledge(true);
                 if (exchangeMy.getChanged() != null && exchangeMy.getAcknowledge()) {
-                    exchangeTable.getExchangeDb().delete(exchangeMy.getId());
-                    exchangeTable.getExchangeDb().delete(exchangeMy.getExchange().getId());
+                    exchangeTable.removeObject(exchangeMy);
                 }
                 response.header(RESPONSE_TYPE, RESPONSE_NONE_TYPE);
                 response.header(RESPONSE_CODE, STATE_SUCCESS);
@@ -135,6 +130,26 @@ public class Server {
             }
         });
 
+
+        post("get_back_exchange", ((request, response) -> {
+            ExchangeObject exchangeMy = exchangeTable.loadObject(request.headers(EXCHANGE_ID_FIELD));
+            if(exchangeMy==null){
+                response.header(RESPONSE_CODE, STATE_FAILED);
+                return "Could not found special exchange!";
+            }
+            try {
+                exchangeMy.getLock().tryLock();
+                if (exchangeMy.getChanged() != null) {
+                    response.header(RESPONSE_CODE, STATE_ACKNOWLEDGE);
+                    writeObject(response, exchangeMy);
+                    return "Exchange has been change, you need to acknowledge it!";
+                }
+                exchangeTable.removeObject(exchangeMy);
+                return RESPONSE_RESULT_SUCCESS;
+            }finally {
+                exchangeMy.getLock().unlock();
+            }
+        }));
 
         post("request_exchange", ((request, response) -> {
             Object objMy = readObject(request);
@@ -159,6 +174,14 @@ public class Server {
             return "Could not do exchange because the target has been changed by other!";
         }));
         //run(heroTable, groupTable)
+    }
+
+    private static void writeObject(Response response, Object exs) throws IOException {
+        ObjectOutputStream oos = new ObjectOutputStream(response.getOutputStream());
+        oos.writeObject(exs);
+        response.header(Field.RESPONSE_TYPE, RESPONSE_OBJECT_TYPE);
+        oos.flush();
+        oos.close();
     }
 
     @NotNull
