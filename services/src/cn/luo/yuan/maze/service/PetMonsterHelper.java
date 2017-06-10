@@ -56,7 +56,11 @@ public class PetMonsterHelper {
     }
 
     public Monster randomMonster(long level) {
-        return monsterLoader.randomMonster(level);
+        return monsterLoader.randomMonster(level, true);
+    }
+
+    public Monster randomMonster() {
+        return monsterLoader.randomMonster(999, false);
     }
 
     public MonsterLoader getMonsterLoader() {

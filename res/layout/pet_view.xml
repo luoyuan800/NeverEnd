@@ -87,7 +87,7 @@
         </LinearLayout>
 
         <ImageView
-                android:src="@drawable/angle_miao"
+                android:src="@drawable/evo_an"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/pet_image"

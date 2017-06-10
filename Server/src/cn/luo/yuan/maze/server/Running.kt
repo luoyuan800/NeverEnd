@@ -74,7 +74,7 @@ private fun groupAction(groupTable: GroupTable, groups: MutableList<Group>, hero
                 }
             }
         } else {
-            val monster = monsterLoader.randomMonster(level);
+            val monster = monsterLoader.randomMonster(level, true);
             if (monster != null) {
                 battled = true;
             } else {
@@ -114,7 +114,7 @@ private fun nonGroupAction(groupTable: GroupTable, heroTable: HeroTable, level: 
             val hero = heroTable.getHero(id);
             val maze = heroTable.getMaze(hero.id)
             if (random.nextInt(100) < 40 + random.nextInt(nonGroupHeroIds.size)) {
-                val monster = monsterLoader.randomMonster(level)
+                val monster = monsterLoader.randomMonster(level, true)
                 val bs = BattleService(hero, monster, random, null);
                 bs.setBattleMessage(msg);
                 if (bs.battle(level)) {

@@ -16,6 +16,8 @@ import android.text.util.Linkify;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AlphaAnimation;
 import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.display.adapter.PetAdapter;
@@ -27,11 +29,13 @@ import cn.luo.yuan.maze.display.view.PetTextView;
 import cn.luo.yuan.maze.display.view.RollTextView;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.service.GameContext;
+import cn.luo.yuan.maze.service.PetMonsterLoder;
 import cn.luo.yuan.maze.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -83,8 +87,77 @@ public class GameActivity extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
+    private void randomMonsterBook(){
+        Monster monster = control.getPetMonsterHelper().randomMonster();
+        View view = findViewById(R.id.monster_view);
+        AlphaAnimation aAnima = new AlphaAnimation(1.0f, 0.0f);//从全不透明变为全透明
+        AlphaAnimation bAnima = new AlphaAnimation(0.0f, 1.0f);//从全不透明变为全透明
+        aAnima.setDuration(2000);
+        bAnima.setDuration(2000);
+        aAnima.setInterpolator(new AccelerateDecelerateInterpolator());
+        view.startAnimation(aAnima);
+        ((TextView)view.findViewById(R.id.monster_name)).setText(monster.getType());
+        ((TextView)view.findViewById(R.id.monster_sex)).setText(monster.getSex() < 0 ? "♂♀" : (monster.getSex() == 0 ? "♂" : "♀"));
+        ((TextView)view.findViewById(R.id.monster_rank)).setText(StringUtils.formatStar(monster.getRank()));
+        ((TextView)view.findViewById(R.id.monster_race)).setText(monster.getRace().getName());
+        ((TextView)view.findViewById(R.id.monster_atk_value)).setText(StringUtils.formatNumber(monster.getAtk()));
+        ((TextView)view.findViewById(R.id.monster_def_value)).setText(StringUtils.formatNumber(monster.getDef()));
+        ((TextView)view.findViewById(R.id.monster_hp_value)).setText(StringUtils.formatNumber(monster.getMaxHp()));
+        ((TextView)view.findViewById(R.id.monster_egg_rate)).setText(StringUtils.formatPercentage(monster.getEggRate()));
+        ((TextView)view.findViewById(R.id.monster_pet_rate)).setText(StringUtils.formatPercentage(monster.getPetRate()));
+        ((TextView)view.findViewById(R.id.monster_desc)).setText(control.getPetMonsterHelper().getDescription(monster.getIndex(), monster.getType()));
+        ((ImageView)view.findViewById(R.id.monster_image)).setImageDrawable(PetMonsterLoder.loadMonsterImage(monster.getIndex()));
+        view.startAnimation(bAnima);
+    }
+
+    private Thread updateMonsterThread;
+
+
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.switch_msg_view:
+                if(findViewById(R.id.info_view).getVisibility() == View.VISIBLE){
+                    control.getViewHandler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            findViewById(R.id.info_view).setVisibility(View.GONE);
+                            findViewById(R.id.monster_view).setVisibility(View.VISIBLE);
+                            randomMonsterBook();
+                            updateMonsterThread = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Runnable update = new Runnable() {
+                                        @Override
+                                        public void run() {
+                                           randomMonsterBook();
+                                        }
+                                    };
+                                    while (findViewById(R.id.monster_view).getVisibility() == View.VISIBLE) {
+                                        control.getViewHandler().post(update);
+                                        try {
+                                            Thread.sleep(60000);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            });
+                            updateMonsterThread.start();
+                        }
+                    });
+                }else{
+                    control.getViewHandler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(updateMonsterThread!=null){
+                                updateMonsterThread = null;
+                            }
+                            findViewById(R.id.info_view).setVisibility(View.VISIBLE);
+                            findViewById(R.id.monster_view).setVisibility(View.GONE);
+                        }
+                    });
+                }
+                break;
             case R.id.hat_view:
             case R.id.ring_view:
             case R.id.armor:

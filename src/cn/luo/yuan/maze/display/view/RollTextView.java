@@ -7,6 +7,7 @@ import android.text.Html;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -75,11 +76,13 @@ public class RollTextView extends ScrollView {
     }
 
     public synchronized void addMessage(String info) {
-        Message message = new Message();
-        message.obj = info;
-        message.what = 0;
-        getHandler().sendMessage(message);
-        getHandler().sendEmptyMessage(1);
+        if(getVisibility() == View.VISIBLE) {
+            Message message = new Message();
+            message.obj = info;
+            message.what = 0;
+            getHandler().sendMessage(message);
+            getHandler().sendEmptyMessage(1);
+        }
     }
 
     public Handler getHandler() {

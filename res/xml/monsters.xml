@@ -19,4 +19,22 @@
         <rank>1</rank>
         <evolution></evolution>
     </monster>
+    <monster>
+        <index>101</index>
+        <meet meet_rate="50" min_level="10"/>
+        <name>伊布</name>
+        <desc>伊布的基因十分不稳定，其已知的进化形态已经超过30种了。环境差异甚至和主人的亲密度不同都会影响进化的结果。据说持有某些物品可以让它随时进化。
+        </desc>
+        <atk>28</atk>
+        <def>70</def>
+        <hp>140</hp>
+        <hit>1</hit>
+        <silent>9</silent>
+        <egg_rate>50</egg_rate>
+        <pet_rate>20</pet_rate>
+        <sex>-1</sex>
+        <race>Nonsr</race>
+        <rank>1</rank>
+        <evolution></evolution>
+    </monster>
 </monsters>

@@ -14,6 +14,10 @@ import java.util.Locale;
 public class StringUtils {
     public static final String EMPTY_STRING = "";
 
+    public static String formatPercentage(float value){
+        return DecimalFormatRound(value,2) + "%";
+    }
+
     public static String formatNumber(long num) {
         Double value;
         if (num > 100000000) {
@@ -151,11 +155,7 @@ public class StringUtils {
     }
 
     public static String formatStar(long level) {
-        StringBuilder builder = new StringBuilder();
-        for (long i = 0; i < level; i++) {
-            builder.append("★");
-        }
-        return builder.toString();
+        return "★" + level;
     }
 
     public static String formatEffectsAsHtml(List<Effect> effects){

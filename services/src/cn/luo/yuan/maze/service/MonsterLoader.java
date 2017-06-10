@@ -15,40 +15,50 @@ import java.util.Map;
  */
 public interface MonsterLoader {
     Map<MonsterKey, WeakReference<Monster>> getMonsterCache();
+
     void init();
+
     Random getRandom();
-   default Monster randomMonster(long level){
-       if (getMonsterCache().size() == 0) {
-           init();
-       }
-       for (Map.Entry<MonsterKey, WeakReference<Monster>> entry : getMonsterCache().entrySet()) {
-           MonsterKey key = entry.getKey();
-           Monster monster = entry.getValue().get();
-           if (key.min_level < level && getRandom().nextInt(100 + key.count) < key.meet_rate) {
-               key.count++;
-               if (monster == null) {
-                   monster = loadMonsterByIndex(key.index);
-               }
-               if (monster != null) {
-                   Monster clone = monster.clone();
-                   if (clone != null) {
-                       if (clone.getSex() < 0) {
-                           clone.setSex(getRandom().nextInt(1));
-                       }
-                       clone.setElement(Element.values()[getRandom().nextInt(Element.values().length)]);
-                       clone.setMaterial(Data.getMonsterMaterial(monster.getMaxHp(), monster.getAtk(), level, getRandom()));
-                       clone.setFirstName(FirstName.getRandom(level, getRandom()));
-                       clone.setSecondName(SecondName.getRandom(level, getRandom()));
-                       clone.setColor(Data.DEFAULT_QUALITY_COLOR);
-                   }
-                   return clone;
-               }
-           } else {
-               key.count--;
-           }
-       }
-       return null;
-   }
+
+    default Monster randomMonster(long level, boolean addKey) {
+        if (getMonsterCache().size() == 0) {
+            init();
+        }
+        for (Map.Entry<MonsterKey, WeakReference<Monster>> entry : getMonsterCache().entrySet()) {
+            MonsterKey key = entry.getKey();
+            Monster monster = entry.getValue().get();
+            if (key.min_level < level && getRandom().nextInt(100 + key.count) < key.meet_rate) {
+                if (addKey) {
+                    key.count++;
+                }
+                if (monster == null) {
+                    monster = loadMonsterByIndex(key.index);
+                }
+                if (monster != null) {
+                    Monster clone = monster.clone();
+                    if (clone != null) {
+                        if (addKey) {
+                            if (clone.getSex() < 0) {
+                                clone.setSex(getRandom().nextInt(1));
+                            }
+                            clone.setElement(Element.values()[getRandom().nextInt(Element.values().length)]);
+                            clone.setMaterial(Data.getMonsterMaterial(monster.getMaxHp(), monster.getAtk(), level, getRandom()));
+                            clone.setFirstName(FirstName.getRandom(level, getRandom()));
+                            clone.setSecondName(SecondName.getRandom(level, getRandom()));
+                            clone.setColor(Data.DEFAULT_QUALITY_COLOR);
+                        }
+
+                    }
+                    return clone;
+                }
+            } else {
+                if (addKey) {
+                    key.count--;
+                }
+            }
+        }
+        return null;
+    }
 
     String getDescription(int index, String type);
 
