@@ -36,7 +36,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/monster_rank"
                 android:layout_weight="1"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                android:textColor="@android:color/holo_orange_light"/>
 
         <TextView
                 android:layout_marginStart="15dp"
@@ -57,11 +58,11 @@
             android:layout_marginTop="10dp">
 
         <TextView
-                android:text="攻击："
+                android:text="攻："
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="15dp"/>
+                android:layout_marginStart="2dp"/>
 
         <TextView
                 android:text="25"
@@ -79,7 +80,7 @@
                 android:layout_marginEnd="5dp"/>
 
         <TextView
-                android:text="防御："
+                android:text="防："
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -101,7 +102,7 @@
                 android:layout_marginStart="5dp"/>
 
         <TextView
-                android:text="生命："
+                android:text="命："
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -121,11 +122,11 @@
             android:layout_height="wrap_content">
 
         <TextView
-                android:text="生蛋："
+                android:text="蛋："
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="15dp"/>
+                android:layout_marginStart="2dp"/>
 
         <TextView
                 android:text="15%"
@@ -143,7 +144,7 @@
                 android:layout_marginStart="5dp"/>
 
         <TextView
-                android:text="捕获："
+                android:text="获："
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
@@ -164,15 +165,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/monster_desc"
-            android:maxHeight="200dp"
+            android:maxHeight="50dp"
             android:layout_marginTop="15dp"/>
     </ScrollView>
 
     <ImageView
             android:layout_gravity="center"
-            android:src="@drawable/zl"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:src="@drawable/chouniu"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:id="@+id/monster_image"
             android:scaleType="fitCenter"/>
 </LinearLayout>

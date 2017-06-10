@@ -31,7 +31,19 @@
             android:id="@+id/info_view"
             android:layout_toEndOf="@+id/pets"
             android:layout_marginLeft="30dp"
-            android:layout_below="@+id/linearLayout"/>
+            android:layout_below="@+id/switch_msg_view"
+            android:visibility="visible"/>
+
+    <include
+            layout="@layout/monster_book_view"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/monster_view"
+            android:layout_toEndOf="@+id/pets"
+            android:layout_marginLeft="30dp"
+            android:layout_below="@+id/switch_msg_view"/>
 
 
     <LinearLayout
@@ -88,7 +100,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:id="@+id/hero_pic"
-                android:src="@drawable/zl"
+                android:src="@drawable/chenglong"
                 android:onClick="onClick"
                 android:layout_gravity="center"
                 />
@@ -450,6 +462,18 @@
                     android:background="@color/toumin"/>
         </LinearLayout>
     </LinearLayout>
+
+    <ImageButton
+            android:src="@android:drawable/ic_menu_revert"
+            android:layout_width="15sp"
+            android:layout_height="15sp"
+            android:id="@+id/switch_msg_view"
+            android:layout_alignParentEnd="true"
+            android:layout_alignStart="@+id/fab"
+            android:layout_below="@+id/linearLayout"
+            android:background="@color/toumin"
+            android:onClick="onClick"
+            />
 
 
 </RelativeLayout>
