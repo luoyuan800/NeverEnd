@@ -41,6 +41,10 @@ public interface MonsterLoader {
                             if (clone.getSex() < 0) {
                                 clone.setSex(getRandom().nextInt(1));
                             }
+                            monster.setAtk(monster.getAtk() + level * Data.MONSTER_ATK_RISE_PRE_LEVEL);
+                            monster.setDef(monster.getDef() + level * Data.MONSTER_DEF_RISE_PRE_LEVEL);
+                            monster.setMaxHp(monster.getMaxHp() + level * Data.MONSTER_HP_RISE_PRE_LEVEL);
+                            monster.setHp(monster.getMaxHp());
                             clone.setElement(Element.values()[getRandom().nextInt(Element.values().length)]);
                             clone.setMaterial(Data.getMonsterMaterial(monster.getMaxHp(), monster.getAtk(), level, getRandom()));
                             clone.setFirstName(FirstName.getRandom(level, getRandom()));

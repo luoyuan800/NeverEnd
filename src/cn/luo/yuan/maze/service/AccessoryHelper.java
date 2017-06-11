@@ -237,18 +237,26 @@ public class AccessoryHelper {
                                     key = null;
                                 }
                                 break;
+                            case "type":
+                                if (accessory != null)
+                                    accessory.setType(parser.getAttributeValue(null, "value"));
+                                break;
                             case "description":
                                 if (accessory != null)
                                     accessory.setDesc(parser.getAttributeValue(null, "value"));
+                                break;
                             case "color":
                                 if (accessory != null)
                                     accessory.setColor(parser.getAttributeValue(null, "value"));
+                                break;
                             case "author":
                                 if (accessory != null)
                                     accessory.setAuthor(parser.getAttributeValue(null, "value"));
+                                break;
                             case "price":
                                 if (accessory != null)
                                     accessory.setPrice(Long.parseLong(parser.getAttributeValue(null, "value")));
+                                break;
                             case "effect":
                                 if (accessory != null) {
                                     try {
@@ -301,6 +309,7 @@ public class AccessoryHelper {
                                         LogHelper.logException(e, "AccessoryHelper->loadAccessoryByName->effects parse {" + accessory.getName() + "}");
                                     }
                                 }
+                                break;
                         }
                     }
                     parser.next();

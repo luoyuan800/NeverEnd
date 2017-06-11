@@ -2,13 +2,16 @@
 
 <accessories>
     <accessory local="true">
-        <name value = ""/>
+        <name value = "乌金戒"/>
         <description value=""/>
-        <color value=""/>
+        <color value="#556B2F"/>
         <author value=""/>
-        <price value=""/>
+        <price value="10000"/>
+        <type value="ring"/>
         <properties>
-            <effect name="" min="" max="" rate="" enable="true"/>
+            <effect name="AtkEffect" min="120" max="400" rate="100"/>
+            <effect name="HpEffect" min="300" max="600" rate="100"/>
+            <effect name="DefEffect" min="100" max="300" rate="50"/>
         </properties>
     </accessory>
 </accessories>

@@ -20,6 +20,24 @@
         <evolution></evolution>
     </monster>
     <monster>
+        <index>3</index>
+        <meet meet_rate="90" min_level="1"/>
+        <name>异壳虫</name>
+        <desc>不知道它们怎么产生的，但是它们在迷宫底层绝对是你的噩梦。
+        </desc>
+        <atk>15</atk>
+        <def>100</def>
+        <hp>80</hp>
+        <hit>1</hit>
+        <silent>0</silent>
+        <egg_rate>80</egg_rate>
+        <pet_rate>50</pet_rate>
+        <sex>-1</sex>
+        <race>Nonsr</race>
+        <rank>1</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
         <index>101</index>
         <meet meet_rate="50" min_level="10"/>
         <name>伊布</name>

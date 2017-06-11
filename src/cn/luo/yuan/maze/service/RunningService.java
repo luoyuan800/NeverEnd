@@ -72,7 +72,7 @@ public class RunningService implements RunningServiceInterface {
                     maze.setLevel(maze.getLevel() + 1);
                     Log.i("maze", "End to next level");
                     long point = 1;
-                    long add = random.nextLong(maze.getLevel() / 1000);
+                    long add = random.nextLong(maze.getLevel() / Data.LEVEL_BASE_POINT_REDUCE);
                     if (add < 10) {
                         point += add;
                     }
@@ -106,59 +106,63 @@ public class RunningService implements RunningServiceInterface {
                     }
                     maze.setStep(0);
                 } else {
-                    if(maze.getStep() > 10 && random.nextInt(100) < 35){
-                        //Defender
-                    }
-                    Log.i("maze", "Try to find target battle");
-                    Monster monster = monsterHelper.randomMonster(maze.getLevel());
-                    this.target = monster;
-                    if (monster != null) {
-                        gameContext.addMessage("遇见了 " + monster.getDisplayName());
-                        BattleService battleService = new BattleService(hero, monster, gameContext.getRandom(), this);
-                        BattleMessage battleMessage = new BattleMessageImp(gameContext);
-                        battleService.setBattleMessage(battleMessage);
-                        if (battleService.battle(gameContext.getMaze().getLevel())) {
-                            Log.i("maze", "Battle win " + monster.getDisplayName());
-                            maze.setStreaking(maze.getStreaking() + 1);
-                            hero.setMaterial(hero.getMaterial() + monster.getMaterial());
-                            gameContext.addMessage(String.format(gameContext.getContext().getString(R.string.add_mate), StringUtils.formatNumber(monster.getMaterial())));
-                            Pet pet = tryCatch(monster, dataManager.getPetCount());
-                            if (pet != null) {
-                                gameContext.addMessage(String.format(Resource.getString(R.string.pet_catch), pet.getDisplayName()));
-                                dataManager.savePet(pet);
-                                for (PetCatchListener listener : petCatchListeners.values()) {
-                                    listener.catchPet(pet);
-                                }
-                                if(hero.getPets().size() < 1){
-                                    hero.getPets().add(pet);
-                                    pet.setMounted(true);
-                                    gameContext.getViewHandler().refreshPets(hero);
-                                }
-                            }
-                            for (WinListener listener : winListeners.values()) {
-                                listener.win(hero, monster);
-                            }
-                        } else {
-                            Log.i("maze", "Battle failed with " + monster.getDisplayName());
-                            maze.setStreaking(0);
-                            for (LostListener lostListener : lostListeners.values()) {
-                                lostListener.lost(hero, monster);
-                            }
-                            if (hero.getHp() <= 0) {
-                                gameContext.addMessage(String.format(gameContext.getContext().getString(R.string.lost), hero.getDisplayName()));
-                                hero.setHp(hero.getMaxHp());
-                                for (Pet pet : hero.getPets()) {
-                                    pet.setHp(pet.getMaxHp());
-                                }
-                                maze.setLevel(1);
-                            }
-                            Log.i("maze", "Battle failed restore");
+                    boolean meet = false;
+                    if (random.nextFloat(100f) < Data.MONSTER_MEET_RATE) {
+                        if (maze.getStep() > 10 && random.nextInt(100) < 35) {
+                            //Defender
                         }
-                    }else{
-                        Log.i("maze", "not target");
+                        Log.i("maze", "Try to find target battle");
+                        Monster monster = monsterHelper.randomMonster(maze.getLevel());
+                        this.target = monster;
+                        if (monster != null) {
+                            meet = true;
+                            gameContext.addMessage("遇见了 " + monster.getDisplayName());
+                            BattleService battleService = new BattleService(hero, monster, gameContext.getRandom(), this);
+                            BattleMessage battleMessage = new BattleMessageImp(gameContext);
+                            battleService.setBattleMessage(battleMessage);
+                            if (battleService.battle(gameContext.getMaze().getLevel())) {
+                                Log.i("maze", "Battle win " + monster.getDisplayName());
+                                maze.setStreaking(maze.getStreaking() + 1);
+                                hero.setMaterial(hero.getMaterial() + monster.getMaterial());
+                                gameContext.addMessage(String.format(gameContext.getContext().getString(R.string.add_mate), StringUtils.formatNumber(monster.getMaterial())));
+                                Pet pet = tryCatch(monster, dataManager.getPetCount());
+                                if (pet != null) {
+                                    gameContext.addMessage(String.format(Resource.getString(R.string.pet_catch), pet.getDisplayName()));
+                                    dataManager.savePet(pet);
+                                    for (PetCatchListener listener : petCatchListeners.values()) {
+                                        listener.catchPet(pet);
+                                    }
+                                    if (hero.getPets().size() < 1) {
+                                        hero.getPets().add(pet);
+                                        pet.setMounted(true);
+                                        gameContext.getViewHandler().refreshPets(hero);
+                                    }
+                                }
+                                for (WinListener listener : winListeners.values()) {
+                                    listener.win(hero, monster);
+                                }
+                            } else {
+                                Log.i("maze", "Battle failed with " + monster.getDisplayName());
+                                maze.setStreaking(0);
+                                for (LostListener lostListener : lostListeners.values()) {
+                                    lostListener.lost(hero, monster);
+                                }
+                                if (hero.getHp() <= 0) {
+                                    gameContext.addMessage(String.format(gameContext.getContext().getString(R.string.lost), hero.getDisplayName()));
+                                    hero.setHp(hero.getMaxHp());
+                                    for (Pet pet : hero.getPets()) {
+                                        pet.setHp(pet.getMaxHp());
+                                    }
+                                    maze.setLevel(1);
+                                }
+                                Log.i("maze", "Battle failed restore");
+                            }
+                        }
+                        target = null;
+                    }
+                    if(!meet) {
                         randomEventService.random();
                     }
-                    target = null;
                 }
                 mazeLevelCalculate();
             } catch (Exception e) {

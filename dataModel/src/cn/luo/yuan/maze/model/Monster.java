@@ -4,6 +4,7 @@ import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillAbleObject;
+import cn.luo.yuan.maze.utils.EncodeLong;
 
 import java.io.Serializable;
 
@@ -14,17 +15,17 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
     private FirstName firstName;
     private SecondName secondName;
     private String type;
-    private long atk;
-    private long hp;
-    private long material;
-    private long maxHP;
+    private EncodeLong atk = new EncodeLong(0);
+    private EncodeLong hp= new EncodeLong(0);
+    private EncodeLong material= new EncodeLong(0);
+    private EncodeLong maxHP= new EncodeLong(0);
     private float hitRate = 100.0f;
     private Element element;
     private float silent;
     private float eggRate = 0;
     private float petRate = 0;
     private int index;
-    private long def;
+    private EncodeLong def= new EncodeLong(0);
     private String color;
     private int sex = -1;
     private Race race;
@@ -38,18 +39,18 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
 
     public void setFirstName(FirstName firstName) {
         if(this.firstName!=null){
-            atk -= firstName.getAtkAddition(atk);
-            maxHP -= firstName.getHPAddition(maxHP);
-            hp = maxHP;
+            setAtk(getAtk() - firstName.getAtkAddition(getAtk()));
+            setMaxHp(getMaxHp() - firstName.getHPAddition(getMaxHp()));
+            setHp(getMaxHp());
             silent -= firstName.getSilent();
             eggRate -= firstName.getEggRate();
 
         }
         this.firstName = firstName;
         if(this.firstName != null){
-            atk += firstName.getAtkAddition(atk);
-            maxHP += firstName.getHPAddition(maxHP);
-            hp = maxHP;
+            setAtk(getAtk() + firstName.getAtkAddition(getAtk()));
+           setMaxHp(getMaxHp() + firstName.getHPAddition(getMaxHp()));
+            setHp(getMaxHp());
             silent += firstName.getSilent();
             eggRate += firstName.getEggRate();
         }
@@ -61,17 +62,17 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
 
     public void setSecondName(SecondName secondName) {
         if(this.secondName!=null){
-            atk -= secondName.getAtkAddition(atk);
-            maxHP -= secondName.getHpAddition(maxHP);
-            hp = maxHP;
+            setAtk(getAtk() - secondName.getAtkAddition(getAtk()));
+            setMaxHp(getMaxHp() - secondName.getHpAddition(getMaxHp()));
+            setHp(getMaxHp());
             silent -= secondName.getSilent();
             petRate -= secondName.getPetRate();
         }
         this.secondName = secondName;
         if(this.secondName!=null){
-            atk += secondName.getAtkAddition(atk);
-            maxHP += secondName.getHpAddition(maxHP);
-            hp = maxHP;
+            setAtk(getAtk() + secondName.getAtkAddition(getAtk()));
+            setMaxHp( getMaxHp() + secondName.getHpAddition(getMaxHp()));
+            setHp(getMaxHp());
             silent += secondName.getSilent();
             petRate += secondName.getPetRate();
         }
@@ -86,35 +87,35 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
     }
 
     public long getAtk() {
-        return atk;
+        return atk.getValue();
     }
 
     public void setAtk(long atk) {
-        this.atk = atk;
+        this.atk.setValue(atk);
     }
 
     public long getHp() {
-        return hp;
+        return hp.getValue();
     }
 
     public void setHp(long hp) {
-        this.hp = hp;
+        this.hp.setValue(hp);
     }
 
     public long getMaterial() {
-        return material;
+        return material.getValue();
     }
 
     public void setMaterial(long material) {
-        this.material = material;
+        this.material.setValue(material);
     }
 
     public long getMaxHp() {
-        return maxHP;
+        return maxHP.getValue();
     }
 
     public void setMaxHp(long maxHP) {
-        this.maxHP = maxHP;
+        this.maxHP.setValue(maxHP);
     }
 
     public float getHitRate() {
@@ -171,11 +172,11 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
     }
 
     public long getDef() {
-        return def;
+        return def.getValue();
     }
 
     public void setDef(long def) {
-        this.def = def;
+        this.def.setValue(def);
     }
 
     public String getDisplayName() {
