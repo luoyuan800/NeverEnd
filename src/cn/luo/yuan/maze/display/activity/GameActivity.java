@@ -89,25 +89,27 @@ public class GameActivity extends Activity {
 
     private void randomMonsterBook(){
         Monster monster = control.getPetMonsterHelper().randomMonster();
-        View view = findViewById(R.id.monster_view);
-        AlphaAnimation aAnima = new AlphaAnimation(1.0f, 0.0f);//从全不透明变为全透明
-        AlphaAnimation bAnima = new AlphaAnimation(0.0f, 1.0f);//从全不透明变为全透明
-        aAnima.setDuration(2000);
-        bAnima.setDuration(2000);
-        aAnima.setInterpolator(new AccelerateDecelerateInterpolator());
-        view.startAnimation(aAnima);
-        ((TextView)view.findViewById(R.id.monster_name)).setText(monster.getType());
-        ((TextView)view.findViewById(R.id.monster_sex)).setText(monster.getSex() < 0 ? "♂♀" : (monster.getSex() == 0 ? "♂" : "♀"));
-        ((TextView)view.findViewById(R.id.monster_rank)).setText(StringUtils.formatStar(monster.getRank()));
-        ((TextView)view.findViewById(R.id.monster_race)).setText(monster.getRace().getName());
-        ((TextView)view.findViewById(R.id.monster_atk_value)).setText(StringUtils.formatNumber(monster.getAtk()));
-        ((TextView)view.findViewById(R.id.monster_def_value)).setText(StringUtils.formatNumber(monster.getDef()));
-        ((TextView)view.findViewById(R.id.monster_hp_value)).setText(StringUtils.formatNumber(monster.getMaxHp()));
-        ((TextView)view.findViewById(R.id.monster_egg_rate)).setText(StringUtils.formatPercentage(monster.getEggRate()));
-        ((TextView)view.findViewById(R.id.monster_pet_rate)).setText(StringUtils.formatPercentage(monster.getPetRate()));
-        ((TextView)view.findViewById(R.id.monster_desc)).setText(control.getPetMonsterHelper().getDescription(monster.getIndex(), monster.getType()));
-        ((ImageView)view.findViewById(R.id.monster_image)).setImageDrawable(PetMonsterLoder.loadMonsterImage(monster.getIndex()));
-        view.startAnimation(bAnima);
+        if(monster != null) {
+            View view = findViewById(R.id.monster_view);
+            AlphaAnimation aAnima = new AlphaAnimation(1.0f, 0.0f);//从全不透明变为全透明
+            AlphaAnimation bAnima = new AlphaAnimation(0.0f, 1.0f);//从全不透明变为全透明
+            aAnima.setDuration(2000);
+            bAnima.setDuration(2000);
+            aAnima.setInterpolator(new AccelerateDecelerateInterpolator());
+            view.startAnimation(aAnima);
+            ((TextView) view.findViewById(R.id.monster_name)).setText(monster.getType());
+            ((TextView) view.findViewById(R.id.monster_sex)).setText(monster.getSex() < 0 ? "♂♀" : (monster.getSex() == 0 ? "♂" : "♀"));
+            ((TextView) view.findViewById(R.id.monster_rank)).setText(StringUtils.formatStar(monster.getRank()));
+            ((TextView) view.findViewById(R.id.monster_race)).setText(monster.getRace().getName());
+            ((TextView) view.findViewById(R.id.monster_atk_value)).setText(StringUtils.formatNumber(monster.getAtk()));
+            ((TextView) view.findViewById(R.id.monster_def_value)).setText(StringUtils.formatNumber(monster.getDef()));
+            ((TextView) view.findViewById(R.id.monster_hp_value)).setText(StringUtils.formatNumber(monster.getMaxHp()));
+            ((TextView) view.findViewById(R.id.monster_egg_rate)).setText(StringUtils.formatPercentage(monster.getEggRate()));
+            ((TextView) view.findViewById(R.id.monster_pet_rate)).setText(StringUtils.formatPercentage(monster.getPetRate()));
+            ((TextView) view.findViewById(R.id.monster_desc)).setText(control.getPetMonsterHelper().getDescription(monster.getIndex(), monster.getType()));
+            ((ImageView) view.findViewById(R.id.monster_image)).setImageDrawable(PetMonsterLoder.loadMonsterImage(monster.getIndex()));
+            view.startAnimation(bAnima);
+        }
     }
 
     private Thread updateMonsterThread;
@@ -135,7 +137,7 @@ public class GameActivity extends Activity {
                                     while (findViewById(R.id.monster_view).getVisibility() == View.VISIBLE) {
                                         control.getViewHandler().post(update);
                                         try {
-                                            Thread.sleep(60000);
+                                            Thread.sleep(10000);
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }
