@@ -29,7 +29,6 @@ class Medallion() : Goods {
         ListenerService.registerListener(MedallionListener)
     }
 
-    private val serialVersionUID = 1L
     override var price = 100000L
     override var desc = ""
     override var count = 0

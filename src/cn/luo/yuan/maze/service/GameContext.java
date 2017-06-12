@@ -130,6 +130,11 @@ public class GameContext implements InfoControlInterface {
         return dataManager;
     }
 
+    @Override
+    public TaskManager getTaskManager() {
+        return null;
+    }
+
     public void setDataManager(DataManager dataManager) {
         this.dataManager = dataManager;
         setHero(dataManager.loadHero());

@@ -61,6 +61,11 @@ public class TestRandomEventService {
             public DataManagerInterface getDataManager() {
                 return null;
             }
+
+            @Override
+            public TaskManager getTaskManager() {
+                return null;
+            }
         };
         RandomEventService service = spy(new RandomEventService(gameContext));
         int i = 100;

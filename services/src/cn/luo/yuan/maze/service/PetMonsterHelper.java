@@ -100,6 +100,10 @@ public class PetMonsterHelper {
     public boolean evolution(Pet pet) {
         int eveIndex = monsterLoader.getEvolutionIndex(pet.getIndex());
 
+        return evolution(pet, eveIndex);
+    }
+
+    public boolean evolution(Pet pet, int eveIndex) {
         if (eveIndex != pet.getIndex()) {
             Monster eveMonster = loadMonsterByIndex(eveIndex);
             if (eveMonster != null) {
