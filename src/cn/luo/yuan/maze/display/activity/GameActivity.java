@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.display.adapter.PetAdapter;
@@ -91,24 +93,37 @@ public class GameActivity extends Activity {
         Monster monster = control.getPetMonsterHelper().randomMonster();
         if(monster != null) {
             View view = findViewById(R.id.monster_view);
-            AlphaAnimation aAnima = new AlphaAnimation(1.0f, 0.0f);//从全不透明变为全透明
-            AlphaAnimation bAnima = new AlphaAnimation(0.0f, 1.0f);//从全不透明变为全透明
-            aAnima.setDuration(2000);
-            bAnima.setDuration(2000);
-            aAnima.setInterpolator(new AccelerateDecelerateInterpolator());
-            view.startAnimation(aAnima);
-            ((TextView) view.findViewById(R.id.monster_name)).setText(monster.getType());
-            ((TextView) view.findViewById(R.id.monster_sex)).setText(monster.getSex() < 0 ? "♂♀" : (monster.getSex() == 0 ? "♂" : "♀"));
-            ((TextView) view.findViewById(R.id.monster_rank)).setText(StringUtils.formatStar(monster.getRank()));
-            ((TextView) view.findViewById(R.id.monster_race)).setText(monster.getRace().getName());
-            ((TextView) view.findViewById(R.id.monster_atk_value)).setText(StringUtils.formatNumber(monster.getAtk()));
-            ((TextView) view.findViewById(R.id.monster_def_value)).setText(StringUtils.formatNumber(monster.getDef()));
-            ((TextView) view.findViewById(R.id.monster_hp_value)).setText(StringUtils.formatNumber(monster.getMaxHp()));
-            ((TextView) view.findViewById(R.id.monster_egg_rate)).setText(StringUtils.formatPercentage(monster.getEggRate()));
-            ((TextView) view.findViewById(R.id.monster_pet_rate)).setText(StringUtils.formatPercentage(monster.getPetRate()));
-            ((TextView) view.findViewById(R.id.monster_desc)).setText(control.getPetMonsterHelper().getDescription(monster.getIndex(), monster.getType()));
-            ((ImageView) view.findViewById(R.id.monster_image)).setImageDrawable(PetMonsterLoder.loadMonsterImage(monster.getIndex()));
-            view.startAnimation(bAnima);
+            Animation animation= AnimationUtils.loadAnimation(this, R.anim.revert);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation arg0) {
+                    control.getViewHandler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((TextView) view.findViewById(R.id.monster_name)).setText(monster.getType());
+                            ((TextView) view.findViewById(R.id.monster_sex)).setText(monster.getSex() < 0 ? "♂♀" : (monster.getSex() == 0 ? "♂" : "♀"));
+                            ((TextView) view.findViewById(R.id.monster_rank)).setText(StringUtils.formatStar(monster.getRank()));
+                            ((TextView) view.findViewById(R.id.monster_race)).setText(monster.getRace().getName());
+                            ((TextView) view.findViewById(R.id.monster_atk_value)).setText(StringUtils.formatNumber(monster.getAtk()));
+                            ((TextView) view.findViewById(R.id.monster_def_value)).setText(StringUtils.formatNumber(monster.getDef()));
+                            ((TextView) view.findViewById(R.id.monster_hp_value)).setText(StringUtils.formatNumber(monster.getMaxHp()));
+                            ((TextView) view.findViewById(R.id.monster_egg_rate)).setText(StringUtils.formatPercentage(monster.getEggRate()));
+                            ((TextView) view.findViewById(R.id.monster_pet_rate)).setText(StringUtils.formatPercentage(monster.getPetRate()));
+                            ((TextView) view.findViewById(R.id.monster_desc)).setText(control.getPetMonsterHelper().getDescription(monster.getIndex(), monster.getType()));
+                            ((ImageView) view.findViewById(R.id.monster_image)).setImageDrawable(PetMonsterLoder.loadMonsterImage(monster.getIndex()));
+                        }
+                    }, 1000);
+                }   //在动画开始时使用
+
+                @Override
+                public void onAnimationRepeat(Animation arg0) {}  //在动画重复时使用
+
+                @Override
+                public void onAnimationEnd(Animation arg0) {
+
+                }
+            });
+            view.startAnimation(animation);
         }
     }
 
@@ -124,7 +139,6 @@ public class GameActivity extends Activity {
                         public void run() {
                             findViewById(R.id.info_view).setVisibility(View.GONE);
                             findViewById(R.id.monster_view).setVisibility(View.VISIBLE);
-                            randomMonsterBook();
                             updateMonsterThread = new Thread(new Runnable() {
                                 @Override
                                 public void run() {
