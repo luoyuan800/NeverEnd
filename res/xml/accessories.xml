@@ -14,4 +14,17 @@
             <effect name="DefEffect" min="100" max="300" rate="50"/>
         </properties>
     </accessory>
+    <accessory local="true">
+        <name value = "桑晶链"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="10000"/>
+        <type value="necklace"/>
+        <properties>
+            <effect name="StrEffect" min="20" max="50" rate="100"/>
+            <effect name="AtkEffect" min="150" max="200" rate="100"/>
+            <effect name="HpEffect" min="1000" max="1600" rate="50"/>
+        </properties>
+    </accessory>
 </accessories>

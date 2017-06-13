@@ -166,9 +166,13 @@ public class PetMonsterLoder implements MonsterLoader {
                             }
                             break;
                         case "evolution":
-                            int currentEveIndex = Integer.parseInt(parser.nextText());
-                            if (monsterIndex > 0 && monsterIndex == index) {
-                                evolutionIndex = currentEveIndex;
+                            try {
+                                int currentEveIndex = Integer.parseInt(parser.nextText());
+                                if (monsterIndex > 0 && monsterIndex == index) {
+                                    evolutionIndex = currentEveIndex;
+                                }
+                            }catch (Exception e){
+                                //LogHelper.logException(e,"Not need care");
                             }
                             break loop;
                     }

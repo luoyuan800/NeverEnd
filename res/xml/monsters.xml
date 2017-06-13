@@ -17,11 +17,65 @@
         <sex>-1</sex>
         <race>Nonsr</race>
         <rank>1</rank>
+        <evolution>48</evolution>
+    </monster>
+    <monster>
+        <index>48</index>
+        <meet meet_rate="50" min_level="100"/>
+        <name>蟑螂</name>
+        <desc>不要以为蟑螂就是个弱逼，这种奇葩的蟑螂肯定可以推倒你。
+        </desc>
+        <atk>240</atk>
+        <def>15</def>
+        <hp>188</hp>
+        <hit>1</hit>
+        <silent>0</silent>
+        <egg_rate>50</egg_rate>
+        <pet_rate>5</pet_rate>
+        <sex>-1</sex>
+        <race>Nonsr</race>
+        <rank>2</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>47</index>
+        <meet meet_rate="50" min_level="50"/>
+        <name>石头人</name>
+        <desc>全身都是石头的家伙，身上还有细小的树苗，据说当树苗长大的时候就会吸收石头人的能量知道最后长成树精，然后石头人就会因为没有能量而散架。
+        </desc>
+        <atk>24</atk>
+        <def>200</def>
+        <hp>189</hp>
+        <hit>2</hit>
+        <silent>14</silent>
+        <egg_rate>15</egg_rate>
+        <pet_rate>25</pet_rate>
+        <sex>1</sex>
+        <race>Orger</race>
+        <rank>2</rank>
+        <evolution>55</evolution>
+    </monster>
+    <monster>
+        <index>55</index>
+        <meet meet_rate="50" min_level="80"/>
+        <name>树精</name>
+        <desc>爱好是维护和平，但是他们爱护的对象只有迷宫中的非人生物，所以遇见他们还是小心为是。你看它这么多条腿，速度肯定不会比你慢。
+        </desc>
+        <atk>150</atk>
+        <def>211</def>
+        <hp>81</hp>
+        <hit>2</hit>
+        <silent>4</silent>
+        <egg_rate>1</egg_rate>
+        <pet_rate>5</pet_rate>
+        <sex>1</sex>
+        <race>Wizardsr</race>
+        <rank>3</rank>
         <evolution></evolution>
     </monster>
     <monster>
         <index>3</index>
-        <meet meet_rate="90" min_level="1"/>
+        <meet meet_rate="90" min_level="2"/>
         <name>异壳虫</name>
         <desc>不知道它们怎么产生的，但是它们在迷宫底层绝对是你的噩梦。
         </desc>
@@ -34,6 +88,23 @@
         <pet_rate>50</pet_rate>
         <sex>-1</sex>
         <race>Nonsr</race>
+        <rank>1</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>4</index>
+        <meet meet_rate="90" min_level="1"/>
+        <name>巨型飞蛾</name>
+        <desc>身躯巨大的飞蛾，喜欢往光亮的地方聚集。喜欢在你的头顶飞来飞去。        </desc>
+        <atk>35</atk>
+        <def>16</def>
+        <hp>25</hp>
+        <hit>1</hit>
+        <silent>0</silent>
+        <egg_rate>40</egg_rate>
+        <pet_rate>55</pet_rate>
+        <sex>-1</sex>
+        <race>Wizardsr</race>
         <rank>1</rank>
         <evolution></evolution>
     </monster>
@@ -53,6 +124,60 @@
         <sex>-1</sex>
         <race>Nonsr</race>
         <rank>1</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>132</index>
+        <meet meet_rate="50" min_level="100"/>
+        <name>青丘</name>
+        <desc>纵有青丘吟夜月，无因重照旧云鬟。舍弃爱情与缘分，好似风中尘土扬。
+        </desc>
+        <atk>200</atk>
+        <def>99</def>
+        <hp>230</hp>
+        <hit>5</hit>
+        <silent>50</silent>
+        <egg_rate>2</egg_rate>
+        <pet_rate>1</pet_rate>
+        <sex>-1</sex>
+        <race>Eviler</race>
+        <rank>5</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>58</index>
+        <meet meet_rate="45" min_level="50"/>
+        <name>白虎</name>
+        <desc>白虎，在中国传统文化中是道教西方七宿星君四象之一，根据五行学说，它是代表西方的灵兽，因西方属金，色白，故称白虎，代表的季节是秋季。
+        </desc>
+        <atk>166</atk>
+        <def>112</def>
+        <hp>119</hp>
+        <hit>15</hit>
+        <silent>20</silent>
+        <egg_rate>2</egg_rate>
+        <pet_rate>5</pet_rate>
+        <sex>-1</sex>
+        <race>Eviler</race>
+        <rank>5</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>141</index>
+        <meet meet_rate="5" min_level="500"/>
+        <name>寅虎</name>
+        <desc>一声长啸山谷震，万树生风闪电行。限定无法捕获，并且只有生肖相同的玩家才能通过进化获取。画师：Youhuxiaolan
+        </desc>
+        <atk>290</atk>
+        <def>119</def>
+        <hp>90</hp>
+        <hit>15</hit>
+        <silent>60</silent>
+        <egg_rate>1</egg_rate>
+        <pet_rate>0</pet_rate>
+        <sex>1</sex>
+        <race>Wizardsr</race>
+        <rank>6</rank>
         <evolution></evolution>
     </monster>
 </monsters>
