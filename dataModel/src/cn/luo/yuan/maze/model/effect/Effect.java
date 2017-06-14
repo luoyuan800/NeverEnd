@@ -23,4 +23,8 @@ public interface Effect extends Serializable, NameObject {
         return getClass().getSimpleName();
     }
     Number getValue();
+
+    default Effect covertToOriginal(){
+        return null;
+    }
 }

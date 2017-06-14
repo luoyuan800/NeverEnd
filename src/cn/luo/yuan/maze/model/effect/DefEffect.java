@@ -32,4 +32,10 @@ public class DefEffect extends cn.luo.yuan.maze.model.effect.original.DefEffect 
     public Long getValue() {
         return getDef();
     }
+
+    public cn.luo.yuan.maze.model.effect.original.DefEffect covertToOriginal(){
+        cn.luo.yuan.maze.model.effect.original.DefEffect effect = new cn.luo.yuan.maze.model.effect.original.DefEffect();
+        effect.setDef(getDef());
+        return effect;
+    }
 }

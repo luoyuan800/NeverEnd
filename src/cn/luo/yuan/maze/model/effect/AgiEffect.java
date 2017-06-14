@@ -32,4 +32,10 @@ public class AgiEffect extends cn.luo.yuan.maze.model.effect.original.AgiEffect 
     public Long getValue() {
         return getAgi();
     }
+
+    public cn.luo.yuan.maze.model.effect.original.AgiEffect covertToOriginal(){
+        cn.luo.yuan.maze.model.effect.original.AgiEffect agiEffect = new cn.luo.yuan.maze.model.effect.original.AgiEffect();
+        agiEffect.setAgi(getAgi());
+        return agiEffect;
+    }
 }

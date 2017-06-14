@@ -63,7 +63,7 @@ public class TestRandomEventService {
             }
 
             @Override
-            public TaskManager getTaskManager() {
+            public TaskManagerImp getTaskManager() {
                 return null;
             }
         };

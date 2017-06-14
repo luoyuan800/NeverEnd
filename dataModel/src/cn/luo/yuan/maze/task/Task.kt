@@ -65,5 +65,33 @@ class Task(var name: String, var desc: String) : IDModel, Serializable {
         }
         return true;
     }
+
+    fun start(){
+        start = true
+        startTime = System.currentTimeMillis()
+    }
+
+    fun finished(context:InfoControlInterface){
+        finished = true
+        finishedTime = System.currentTimeMillis()
+        if(point>0){
+            context.hero.point = context.hero.point + point
+        }
+        if(material > 0){
+            context.hero.material += material
+        }
+        if(goods.isNotEmpty()){
+            for((K, V) in goods){
+                val loadGoods = context.dataManager.loadGoods(K)
+                loadGoods?.count = loadGoods?.count?.plus(V)!!
+            }
+        }
+        for(accessory in accessories){
+            context.dataManager.saveAccessory(accessory)
+        }
+        for(pet in pets){
+            context.dataManager.savePet(pet)
+        }
+    }
 }
 

@@ -17,6 +17,7 @@ import cn.luo.yuan.maze.model.effect.HpEffect;
 import cn.luo.yuan.maze.model.effect.LongValueEffect;
 import cn.luo.yuan.maze.model.effect.MeetRateEffect;
 import cn.luo.yuan.maze.model.effect.PetRateEffect;
+import cn.luo.yuan.maze.model.effect.SkillRateEffect;
 import cn.luo.yuan.maze.model.effect.StrEffect;
 import cn.luo.yuan.maze.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Random;
@@ -266,6 +267,10 @@ public class AccessoryHelper {
                                         int rate = Integer.parseInt(parser.getAttributeValue(null, "rate"));
                                         if (random.nextLong(100) < rate) {
                                             switch (effectName) {
+                                                case "SkillRateEffect":
+                                                    SkillRateEffect skillRateEffect = new SkillRateEffect();
+                                                    skillRateEffect.setSkillRate(random.randomRange(min, max));
+                                                    accessory.getEffects().add(skillRateEffect);
                                                 case "AgiEffect":
                                                     AgiEffect agiEffect = new AgiEffect();
                                                     agiEffect.setAgi(random.randomRange(min, max));

@@ -10,7 +10,9 @@ import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
+import cn.luo.yuan.maze.task.Task;
 import cn.luo.yuan.maze.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -38,6 +40,8 @@ public class DataManager implements DataManagerInterface {
     private SerializeLoader<Goods> goodsLoader;
     private SerializeLoader<Skill> skillLoader;
     private SerializeLoader<ClickSkill> clickSkillLoader;
+    private SerializeLoader<Task> taskLoader;
+
     private Sqlite database;
     private Context context;
 
@@ -52,6 +56,7 @@ public class DataManager implements DataManagerInterface {
         goodsLoader = new SerializeLoader<>(Goods.class, context);
         skillLoader = new SerializeLoader<>(Skill.class, context);
         clickSkillLoader = new SerializeLoader<>(ClickSkill.class, context);
+        taskLoader = new SerializeLoader<Task>(Task.class, context);
         this.context = context;
     }
 
@@ -234,6 +239,31 @@ public class DataManager implements DataManagerInterface {
         return skillLoader.load(name + "@" + index);
     }
 
+    @Override
+    public Accessory findAccessoryByName(@NotNull String name) {
+        List<Accessory> accessories = accessoryLoader.loadLimit(0, 1, new Index<Accessory>() {
+            @Override
+            public boolean match(Accessory accessory) {
+                return accessory.getName().equals(name);
+            }
+        }, null);
+        if(!accessories.isEmpty()){
+            return accessories.get(0);
+        }
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public List<Pet> findPetByType(@NotNull String type) {
+        return petLoader.loadLimit(0, 1, new Index<Pet>() {
+            @Override
+            public boolean match(Pet pet) {
+                return pet.getType().equals(type);
+            }
+        }, null);
+    }
+
     public void saveSkill(Skill skill) {
         skill.setId(skill.getClass().getSimpleName() + "@" + index);
         skillLoader.save(skill, skill.getClass().getSimpleName() + "@" + index);
@@ -281,11 +311,12 @@ public class DataManager implements DataManagerInterface {
         return clickSkillLoader;
     }
 
-    public void fluseCache() {
-        accessoryLoader.fluse();
-        petLoader.fluse();
-        skillLoader.fluse();
-        clickSkillLoader.fluse();
+    public void fuseCache() {
+        accessoryLoader.fuse();
+        petLoader.fuse();
+        skillLoader.fuse();
+        clickSkillLoader.fuse();
+        taskLoader.fuse();
     }
 
     public List<Pet> loadMountPets() {
@@ -299,7 +330,32 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void delete(Serializable object) {
+        if(object instanceof Pet){
+            deletePet((Pet)object);
+        } else if(object instanceof Accessory){
+            accessoryLoader.delete(((Accessory)object).getId());
+        } else if( object instanceof Goods){
+            ((Goods) object).setCount(((Goods) object).getCount()  - 1);
+        } else{
+            //TODO
+        }
 
+    }
+
+    public Task loadTask(String taskId) {
+        return taskLoader.load(taskId);
+    }
+
+    public List<Task> loadTask(int start, int row, Index<Task> filter, Comparator<Task> order) {
+        return taskLoader.loadLimit(start, row, filter, order);
+    }
+
+    public int taskCount() {
+        return taskLoader.size();
+    }
+
+    public void addTask(Task task) {
+        taskLoader.save(task,task.getId());
     }
 
     private Maze newMaze() {

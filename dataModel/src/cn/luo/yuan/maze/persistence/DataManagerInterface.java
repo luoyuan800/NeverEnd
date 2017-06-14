@@ -26,4 +26,8 @@ public interface DataManagerInterface {
 
     @NotNull
     List<Pet> findPetByType(@NotNull String type);
+
+    void saveAccessory(Accessory accessory);
+
+    void savePet(@NotNull Pet pet);
 }

@@ -18,8 +18,13 @@ public class MeetRateEffect extends cn.luo.yuan.maze.model.effect.original.MeetR
         this.meetRate = meetRate;
     }
 
-    public String toString(){
-        return Resource.getString(R.string.meet_effect) + StringUtils.DecimalFormatRound(meetRate,2) + "%";
+    public String toString() {
+        return Resource.getString(R.string.meet_effect) + StringUtils.DecimalFormatRound(meetRate, 2) + "%";
+    }
+
+    @Override
+    public Float getValue() {
+        return getMeetRate();
     }
 
     @Override
@@ -27,8 +32,9 @@ public class MeetRateEffect extends cn.luo.yuan.maze.model.effect.original.MeetR
         setMeetRate(value);
     }
 
-    @Override
-    public Float getValue() {
-        return getMeetRate();
+    public cn.luo.yuan.maze.model.effect.original.MeetRateEffect covertToOriginal() {
+        cn.luo.yuan.maze.model.effect.original.MeetRateEffect effect = new cn.luo.yuan.maze.model.effect.original.MeetRateEffect();
+        effect.setMeetRate(getMeetRate());
+        return effect;
     }
 }

@@ -32,4 +32,9 @@ public class AtkEffect extends cn.luo.yuan.maze.model.effect.original.AtkEffect 
     public Long getValue() {
         return getAtk();
     }
+    public cn.luo.yuan.maze.model.effect.original.AtkEffect covertToOriginal(){
+        cn.luo.yuan.maze.model.effect.original.AtkEffect atkEffect = new cn.luo.yuan.maze.model.effect.original.AtkEffect();
+        atkEffect.setAtk(getAtk());
+        return atkEffect;
+    }
 }

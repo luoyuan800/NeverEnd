@@ -1,14 +1,27 @@
 package cn.luo.yuan.maze.server;
 
 import cn.luo.yuan.maze.model.Accessory;
+import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.ExchangeObject;
 import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.effect.Effect;
+import cn.luo.yuan.maze.model.effect.original.AgiEffect;
+import cn.luo.yuan.maze.model.effect.original.AtkEffect;
+import cn.luo.yuan.maze.model.effect.original.DefEffect;
+import cn.luo.yuan.maze.model.effect.original.HpEffect;
+import cn.luo.yuan.maze.model.effect.original.MeetRateEffect;
+import cn.luo.yuan.maze.model.effect.original.PetRateEffect;
+import cn.luo.yuan.maze.model.effect.original.SkillRateEffect;
+import cn.luo.yuan.maze.model.effect.original.StrEffect;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
 import cn.luo.yuan.maze.server.persistence.GroupTable;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
+import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
+import cn.luo.yuan.maze.task.Task;
 import cn.luo.yuan.maze.utils.Field;
+import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import spark.Request;
 import spark.Response;
@@ -20,6 +33,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.List;
 
 import static cn.luo.yuan.maze.utils.Field.*;
@@ -38,6 +52,7 @@ public class Server {
         GroupTable groupTable = new GroupTable(root);
         HeroTable heroTable = new HeroTable(root);
         ExchangeTable exchangeTable = new ExchangeTable(root);
+        ObjectTable<Task> taskTable = new ObjectTable<>(Task.class, root);
         post("submit_exchange", (request, response) -> {
             Object ex = readObject(request);
             Object exchange = null;
@@ -173,7 +188,78 @@ public class Server {
             }
             return "Could not do exchange because the target has been changed by other!";
         }));
+
+        post("task_version", ((request, response) -> taskTable.size()));
+
+        post("retrieve_new_task", ((request, response) -> {
+            int clientVersion = Integer.parseInt(request.headers(Field.LOCAL_TASK_VERSION));
+            response.header(RESPONSE_CODE, STATE_SUCCESS);
+            if(clientVersion < taskTable.size()){
+                writeObject(response,taskTable.loadLimit(clientVersion, taskTable.size() - clientVersion, null, (o1, o2) -> o1.getId().compareTo(o2.getId())));
+            }
+            return RESPONSE_RESULT_SUCCESS;
+        }));
+
+        post("add_task", ((request, response) -> {
+            Task task = new Task(request.queryParams("name"), request.queryParams("desc"));
+            task.setId(task.getName());
+            if(StringUtils.isNotEmpty(request.queryParams("accessory_name"))){
+                Accessory accessory = new Accessory();
+                accessory.setName(request.queryParams("accessory_name"));
+                accessory.setColor(request.queryParams("accessory_color"));
+                for(String effect : request.queryParams("accessory_effects").split(";")){
+                    String[] ev = effect.split(":");
+                    if(ev.length > 1){
+                        accessory.getEffects().add(buildEffect(ev[0], ev[1]));
+                    }
+                }
+                accessory.setLevel(Long.parseLong(request.queryParams("accessory_level")));
+                accessory.setElement(Element.getByName(request.queryParams("accessory_element")));
+                accessory.setType(request.queryParams("accessory_type"));
+            }
+            //TODO
+            taskTable.save(task, task.getId());
+            return RESPONSE_RESULT_SUCCESS;
+        }));
         //run(heroTable, groupTable)
+    }
+
+    private static Effect buildEffect(String effectName, String value){
+        switch (effectName) {
+            case "SkillRateEffect":
+                SkillRateEffect skillRateEffect = new SkillRateEffect();
+                skillRateEffect.setSkillRate(Float.parseFloat(value));
+                return skillRateEffect;
+            case "AgiEffect":
+                AgiEffect agiEffect = new AgiEffect();
+                agiEffect.setAgi(Long.parseLong(value));
+                return agiEffect;
+            case "AtkEffect":
+                AtkEffect atkEffect = new AtkEffect();
+                atkEffect.setAtk(Long.parseLong(value));
+                return atkEffect;
+            case "DefEffect":
+                DefEffect defEffect = new DefEffect();
+                defEffect.setDef(Long.parseLong(value));
+                return defEffect;
+            case "HpEffect":
+                HpEffect hpEffect = new HpEffect();
+                hpEffect.setHp(Long.parseLong(value));
+                return hpEffect;
+            case "StrEffect":
+                StrEffect strEffect = new StrEffect();
+                strEffect.setStr(Long.parseLong(value));
+                return strEffect;
+            case "MeetRateEffect":
+                MeetRateEffect meetRateEffect = new MeetRateEffect();
+                meetRateEffect.setMeetRate(Float.parseFloat(value));
+                return meetRateEffect;
+            case "PetRateEffect":
+                PetRateEffect petRateEffect = new PetRateEffect();
+                petRateEffect.setPetRate(Float.parseFloat(value));
+                return petRateEffect;
+        }
+        return null;
     }
 
     private static void writeObject(Response response, Object exs) throws IOException {

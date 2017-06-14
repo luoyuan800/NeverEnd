@@ -14,6 +14,7 @@ class Field {
         const val VERSION_FIELD = "version"
         const val RESPONSE_TYPE = "type"
         const val RESPONSE_CODE = "code"
+        const val LOCAL_TASK_VERSION = "local_task_version"
         const val RESPONSE_RESULT_SUCCESS = "success"
         const val RESPONSE_RESULT_FAILED = "failed"
         const val RESPONSE_RESULT_OK= "OK"

@@ -1,7 +1,17 @@
 package cn.luo.yuan.maze.service;
 
+import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.ExchangeObject;
 import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.maze.model.effect.AgiEffect;
+import cn.luo.yuan.maze.model.effect.AtkEffect;
+import cn.luo.yuan.maze.model.effect.DefEffect;
+import cn.luo.yuan.maze.model.effect.Effect;
+import cn.luo.yuan.maze.model.effect.HpEffect;
+import cn.luo.yuan.maze.model.effect.MeetRateEffect;
+import cn.luo.yuan.maze.model.effect.PetRateEffect;
+import cn.luo.yuan.maze.model.effect.SkillRateEffect;
+import cn.luo.yuan.maze.model.effect.StrEffect;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.LogHelper;
 
@@ -20,21 +30,70 @@ public class ExchangeManager {
 
     public ExchangeManager(GameContext context) {
         this.context = context;
-        server = new RestConnection(Field.SERVER_URL, getVersion());
+        server = new RestConnection(Field.SERVER_URL, context.getVersion());
     }
 
-    public String getVersion() {
-        try {
-            String pkName = context.getContext().getPackageName();
-            int versionCode = context.getContext().getPackageManager()
-                    .getPackageInfo(pkName, 0).versionCode;
-            return versionCode + "";
-        } catch (Exception e) {
-            return "0";
+    private Accessory covertAccessoryToLocal(Accessory a){
+        List<Effect> effects = new ArrayList<>(a.getEffects());
+        a.getEffects().clear();
+        for(Effect effect : effects){
+            a.getEffects().add(buildEffect(effect.getName(), effect.getValue().toString()));
         }
+        return a;
+    }
+
+    private static Effect buildEffect(String effectName, String value){
+        switch (effectName) {
+            case "SkillRateEffect":
+                SkillRateEffect skillRateEffect = new SkillRateEffect();
+                skillRateEffect.setSkillRate(Float.parseFloat(value));
+                return skillRateEffect;
+            case "AgiEffect":
+                AgiEffect agiEffect = new AgiEffect();
+                agiEffect.setAgi(Long.parseLong(value));
+                return agiEffect;
+            case "AtkEffect":
+                AtkEffect atkEffect = new AtkEffect();
+                atkEffect.setAtk(Long.parseLong(value));
+                return atkEffect;
+            case "DefEffect":
+                DefEffect defEffect = new DefEffect();
+                defEffect.setDef(Long.parseLong(value));
+                return defEffect;
+            case "HpEffect":
+                HpEffect hpEffect = new HpEffect();
+                hpEffect.setHp(Long.parseLong(value));
+                return hpEffect;
+            case "StrEffect":
+                StrEffect strEffect = new StrEffect();
+                strEffect.setStr(Long.parseLong(value));
+                return strEffect;
+            case "MeetRateEffect":
+                MeetRateEffect meetRateEffect = new MeetRateEffect();
+                meetRateEffect.setMeetRate(Float.parseFloat(value));
+                return meetRateEffect;
+            case "PetRateEffect":
+                PetRateEffect petRateEffect = new PetRateEffect();
+                petRateEffect.setPetRate(Float.parseFloat(value));
+                return petRateEffect;
+        }
+        return null;
     }
 
     public boolean submitExchange(Serializable object) {
+        if(object instanceof Accessory){
+            Accessory accessory = new Accessory();
+            accessory.setName(((Accessory) object).getName());
+            accessory.setId(((Accessory) object).getId());
+            accessory.setColor(((Accessory) object).getColor());
+            accessory.setElement(((Accessory) object).getElement());
+            accessory.setLevel(((Accessory) object).getLevel());
+            accessory.setType(((Accessory) object).getType());
+            for(Effect effect : ((Accessory) object).getEffects()){
+                accessory.getEffects().add(effect.covertToOriginal());
+            }
+            object = accessory;
+        }
         try {
             HttpURLConnection connection = server.getHttpURLConnection("/submit_exchange", RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
@@ -60,11 +119,23 @@ public class ExchangeManager {
         return null;
     }
 
+    public <T> T unBox(ExchangeObject eo){
+        IDModel model = eo.getExchange();
+        if(model instanceof Accessory){
+            covertAccessoryToLocal((Accessory) model);
+        }
+        return (T)model;
+    }
+
     public <T> T getBackMyExchange(String id) {
         try {
             HttpURLConnection connection = server.getHttpURLConnection("/get_back_exchange", RestConnection.POST);
             connection.addRequestProperty(Field.EXCHANGE_ID_FIELD, id);
-            return (T) server.connect(connection);
+            Object object = server.connect(connection);
+            if(object instanceof Accessory){
+                object = covertAccessoryToLocal((Accessory) object);
+            }
+            return (T) object;
         } catch (Exception e) {
             LogHelper.logException(e, "");
         }

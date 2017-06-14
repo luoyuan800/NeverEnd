@@ -31,4 +31,10 @@ public class PetRateEffect extends cn.luo.yuan.maze.model.effect.original.PetRat
     public Float getValue() {
         return getPetRate();
     }
+
+    public cn.luo.yuan.maze.model.effect.original.PetRateEffect covertToOriginal() {
+        cn.luo.yuan.maze.model.effect.original.PetRateEffect effect = new cn.luo.yuan.maze.model.effect.original.PetRateEffect();
+        effect.setPetRate(getPetRate());
+        return effect;
+    }
 }

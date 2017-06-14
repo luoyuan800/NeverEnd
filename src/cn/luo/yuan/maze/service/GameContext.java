@@ -32,6 +32,7 @@ public class GameContext implements InfoControlInterface {
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
     private AccessoryHelper accessoryHelper;
     private PetMonsterHelper petMonsterHelper;
+    private TaskManagerImp taskManager;
 
     public GameContext(Context context) {
         this.context = context;
@@ -60,6 +61,7 @@ public class GameContext implements InfoControlInterface {
         petMonsterHelper = PetMonsterHelper.instance;
         petMonsterHelper.setRandom(random);
         petMonsterHelper.setMonsterLoader(PetMonsterLoder.getOrCreate(this));
+        taskManager= new TaskManagerImp(this);
         runningService = new RunningService(hero, maze, this, dataManager, Data.REFRESH_SPEED);
         executor.scheduleAtFixedRate(runningService, 1, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(new Runnable() {
@@ -74,6 +76,17 @@ public class GameContext implements InfoControlInterface {
 
     public Hero getHero() {
         return hero;
+    }
+
+    public String getVersion() {
+        try {
+            String pkName = getContext().getPackageName();
+            int versionCode = context.getPackageManager()
+                    .getPackageInfo(pkName, 0).versionCode;
+            return versionCode + "";
+        } catch (Exception e) {
+            return "0";
+        }
     }
 
     public AccessoryHelper getAccessoryHelper() {
@@ -96,7 +109,7 @@ public class GameContext implements InfoControlInterface {
         }
         dataManager.saveHero(hero);
         dataManager.saveMaze(maze);
-        dataManager.fluseCache();
+        dataManager.fuseCache();
         if (gift != null) {
             gift.handler(this);
         }
@@ -131,8 +144,8 @@ public class GameContext implements InfoControlInterface {
     }
 
     @Override
-    public TaskManager getTaskManager() {
-        return null;
+    public TaskManagerImp getTaskManager() {
+        return taskManager;
     }
 
     public void setDataManager(DataManager dataManager) {

@@ -70,6 +70,9 @@ public class SerializeLoader<T extends Serializable> {
     }
 
     public List<T> loadLimit(int start, int row, Index<T> index, Comparator<T> comparator) {
+        if(row < 0){
+            row = db.size();
+        }
         int realStart = start;
         List<T> objects = loadAll();
         if(comparator!=null){
@@ -94,8 +97,11 @@ public class SerializeLoader<T extends Serializable> {
         return ts;
     }
 
-    public void fluse() {
+    public void fuse() {
         db.fuse();
     }
 
+    public int size() {
+        return db.size();
+    }
 }
