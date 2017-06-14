@@ -8,19 +8,10 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.model.effect.AgiEffect;
-import cn.luo.yuan.maze.model.effect.AtkEffect;
-import cn.luo.yuan.maze.model.effect.DefEffect;
-import cn.luo.yuan.maze.model.effect.Effect;
-import cn.luo.yuan.maze.model.effect.FloatValueEffect;
-import cn.luo.yuan.maze.model.effect.HpEffect;
-import cn.luo.yuan.maze.model.effect.LongValueEffect;
-import cn.luo.yuan.maze.model.effect.MeetRateEffect;
-import cn.luo.yuan.maze.model.effect.PetRateEffect;
-import cn.luo.yuan.maze.model.effect.SkillRateEffect;
-import cn.luo.yuan.maze.model.effect.StrEffect;
+import cn.luo.yuan.maze.model.effect.*;
 import cn.luo.yuan.maze.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.maze.utils.StringUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -40,7 +31,7 @@ public class AccessoryHelper {
     private ArrayMap<AccessoryKey, WeakReference<Accessory>> accessoryCache;
     private GameContext control;
 
-    public AccessoryHelper(Context context, Random random) {
+    private AccessoryHelper(Context context, Random random) {
         this.context = context;
         this.random = random;
         accessoryCache = new ArrayMap<>();
@@ -120,45 +111,6 @@ public class AccessoryHelper {
             }
         } else {
             return false;
-        }
-    }
-
-    private void initAccessories() {
-        try (XmlResourceParser parser = context.getResources().getXml(R.xml.accessories)) {
-            AccessoryKey key = null;
-            while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
-                try {
-                    switch (parser.getEventType()) {
-                        case XmlResourceParser.START_TAG:
-                            if (parser.getName().equals("accessory")) {
-                                key = new AccessoryKey();
-                                key.local = parser.getAttributeBooleanValue(null, "local", true);
-                                break;
-                            } else if (parser.getName().equals("name")) {
-                                if (key != null)
-                                    key.name = parser.getAttributeValue(null, "value");
-                            } else if (parser.getName().equals("color")){
-                                if(key!=null){
-                                    key.color = parser.getAttributeValue(null,"value");
-                                }
-                            }
-                            break;
-                        case XmlPullParser.END_TAG:
-                            if (parser.getName().equals("accessory")) {
-                                if (key != null) {
-                                    accessoryCache.put(key, new WeakReference<Accessory>(null));
-                                    key = null;
-                                }
-                            }
-                            break;
-                    }
-                } catch (Exception e) {
-                    LogHelper.logException(e,"Accessory->initAccessories {" + (key!=null ? key.name : "") + "}");
-                }
-                parser.next();
-            }
-        } catch (XmlPullParserException | IOException e) {
-            LogHelper.logException(e,"Accessory->initAccessories");
         }
     }
 
@@ -247,8 +199,12 @@ public class AccessoryHelper {
                                     accessory.setDesc(parser.getAttributeValue(null, "value"));
                                 break;
                             case "color":
-                                if (accessory != null)
+                                if (accessory != null) {
+                                    if(key!=null){
+                                        key.color = parser.getAttributeValue(null, "value");
+                                    }
                                     accessory.setColor(parser.getAttributeValue(null, "value"));
+                                }
                                 break;
                             case "author":
                                 if (accessory != null)
@@ -326,17 +282,11 @@ public class AccessoryHelper {
         return accessory;
     }
 
-    private static class AccessoryKey {
-        String name;
-        boolean local;
-        public String color;
-    }
-
-    public List<Accessory> getRandomAccessories(int num){
+    public List<Accessory> getRandomAccessories(int num) {
         List<Accessory> accessories = new ArrayList<>(num);
-        for(ArrayMap.Entry<AccessoryKey, WeakReference<Accessory>> entry: accessoryCache.entrySet()){
+        for (ArrayMap.Entry<AccessoryKey, WeakReference<Accessory>> entry : accessoryCache.entrySet()) {
             AccessoryKey key = entry.getKey();
-            if(key.local) {
+            if (key.local) {
                 int rate = 50;
                 switch (key.color) {
                     case Data.BLUE_COLOR:
@@ -361,5 +311,67 @@ public class AccessoryHelper {
             }
         }
         return accessories;
+    }
+
+    private static class AccessoryKey {
+        public String color;
+        String name;
+        boolean local;
+
+        public int hashCode() {
+            return name.hashCode();
+        }
+
+        public boolean equals(Object other){
+            if(other == this){
+                return true;
+            }
+            if(other instanceof AccessoryKey && ((AccessoryKey) other).name!=null){
+                return ((AccessoryKey) other).name.equals(name);
+            }
+            return false;
+        }
+
+    }
+
+    private void initAccessories() {
+        try (XmlResourceParser parser = context.getResources().getXml(R.xml.accessories)) {
+            AccessoryKey key = null;
+            while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
+                try {
+                    switch (parser.getEventType()) {
+                        case XmlResourceParser.START_TAG:
+                            if (parser.getName().equals("accessory")) {
+                                key = new AccessoryKey();
+                                key.local = parser.getAttributeBooleanValue(null, "local", true);
+                                break;
+                            } else if (parser.getName().equals("name")) {
+                                if (key != null)
+                                    key.name = parser.getAttributeValue(null, "value");
+                            } else if (parser.getName().equals("color")) {
+                                if (key != null) {
+                                    key.color = parser.getAttributeValue(null, "value");
+                                }
+                            }
+                            if(key!=null && key.name!=null && key.color!=null){
+                                accessoryCache.put(key, new WeakReference<Accessory>(null));
+                            }
+                            break;
+                        case XmlPullParser.END_TAG:
+                            if (parser.getName().equals("accessory")) {
+                                if (key != null) {
+                                    key = null;
+                                }
+                            }
+                            break;
+                    }
+                } catch (Exception e) {
+                    LogHelper.logException(e, "Accessory->initAccessories {" + (key != null ? key.name : "") + "}");
+                }
+                parser.next();
+            }
+        } catch (XmlPullParserException | IOException e) {
+            LogHelper.logException(e, "Accessory->initAccessories");
+        }
     }
 }

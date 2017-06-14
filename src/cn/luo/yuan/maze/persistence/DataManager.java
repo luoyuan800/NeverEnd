@@ -76,8 +76,8 @@ public class DataManager implements DataManagerInterface {
         hero.setAtkGrow(1);
         hero.setHpGrow(2);
         hero.setDefGrow(3);
-        hero.setHp(20);
         hero.setMaxHp(20);
+        hero.setHp(20);
         hero.setDef(1);
         hero.setAtk(5);
         hero.setIndex(index);

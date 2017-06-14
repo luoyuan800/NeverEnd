@@ -2,7 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".activity.SimpleMainActivity"
     >
-    <item android:title="----操作----" android:enabled="false"/>
             <item android:id="@+id/pause" android:icon="@android:drawable/ic_media_play"
                 android:title="暂停"/>
             <item android:id="@+id/save" android:icon="@android:drawable/ic_menu_save"
@@ -10,7 +9,7 @@
     <item android:id="@+id/reincarnation" android:icon="@android:drawable/ic_menu_compass"
           android:title="转生" />
 
-    <item android:title="----背包----" android:enabled="false"/>
+    <item android:title="商店" android:enabled="true" android:id="@+id/local_shop"/>
             <item android:id="@+id/warehouse" android:icon="@android:drawable/ic_menu_agenda"
                 android:title="仓库" />
             <item android:id="@+id/goods" android:icon="@android:drawable/ic_menu_gallery"
@@ -22,7 +21,6 @@
     <item android:id="@+id/achievement" android:icon="@android:drawable/ic_menu_my_calendar"
           android:title="成就" />
 
-    <item android:title="----互动----" android:enabled="false"/>
             <item android:id="@+id/palace" android:icon="@android:drawable/ic_menu_myplaces"
                 android:title="联网" />
           <item android:id="@+id/help" android:icon="@android:drawable/ic_menu_help"

@@ -64,21 +64,23 @@ public class PetMonsterLoder implements MonsterLoader {
         if (getMonsterCache().size() == 0) {
             init();
         }
+        Monster clone = null;
         ArrayList<MonsterKey> keys = getAvaiableMonsterKey(level, addKey);
         int keyIndex = getRandom().nextInt(addKey ? (keys.size() + 1) : keys.size());
         if (keyIndex < keys.size()) {
             MonsterKey key = keys.get(keyIndex);
             Monster monster = getMonsterCache().get(key).get();
             if (key.min_level < level && getRandom().nextInt(100 + key.count) < key.meet_rate) {
-                if (addKey) {
-                    key.count++;
-                }
+
                 if (monster == null) {
                     monster = loadMonsterByIndex(key.index);
                 }
                 if (monster != null) {
-                    Monster clone = monster.clone();
+                    clone = monster.clone();
                     if (clone != null) {
+                        if (addKey) {
+                            key.count++;
+                        }
                         if (addKey) {
                             if (clone.getSex() < 0) {
                                 clone.setSex(getRandom().nextInt(1));
@@ -93,9 +95,7 @@ public class PetMonsterLoder implements MonsterLoader {
                             clone.setSecondName(SecondName.getRandom(level, getRandom()));
                             clone.setColor(Data.DEFAULT_QUALITY_COLOR);
                         }
-
                     }
-                    return clone;
                 }
             } else {
                 if (addKey) {
@@ -103,7 +103,7 @@ public class PetMonsterLoder implements MonsterLoader {
                 }
             }
         }
-        return null;
+        return clone;
     }
 
     public String getDescription(int index, String type) {

@@ -43,6 +43,7 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
         dialog.show();
         LoadMoreListView list = (LoadMoreListView) dialog.findViewById(R.id.accessories_list);
         list.setOnLoadListener(this);
+        list.setAdapter(accessoryAdapter);
         dialog.findViewById(R.id.accessory_mount)
                 .setOnClickListener(new View.OnClickListener() {
                                         @Override

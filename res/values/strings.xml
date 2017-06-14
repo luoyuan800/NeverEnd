@@ -86,4 +86,5 @@
     <string name="sort_color_down">颜↓</string>
     <string name="sort_intimacy_up">亲↑</string>
     <string name="sort_intimacy_down">亲↓</string>
+    <string name="buy_label">购买</string>
 </resources>

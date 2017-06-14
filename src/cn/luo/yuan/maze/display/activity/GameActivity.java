@@ -37,6 +37,7 @@ import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.service.GameContext;
+import cn.luo.yuan.maze.service.LocalShop;
 import cn.luo.yuan.maze.service.PetMonsterLoder;
 import cn.luo.yuan.maze.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Resource;
@@ -439,6 +440,9 @@ public class GameActivity extends Activity {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
             switch (item.getItemId()) {
+                case R.id.local_shop:
+                    new LocalShop(control).show();
+                    break;
                 case R.id.pets:
                     new PetDialog(control, new PetAdapter(context,control.getDataManager(),"")).show();
                     break;
