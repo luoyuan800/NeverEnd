@@ -12,6 +12,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.ref.SoftReference;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -189,5 +191,25 @@ public class ObjectTable<T extends Serializable>{
         List<String> ids = new ArrayList<>();
         Collections.addAll(ids, root.list());
         return ids;
+    }
+
+    public List<T> removeExpire(long deathTime){
+        List<T> deleted = new ArrayList<T>();
+        try {
+            for (File file : root.listFiles()) {
+                BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+                if(System.currentTimeMillis() - attr.creationTime().toMillis() > deathTime){
+                    T e = loadEntry(file);
+                    deleted.add(e);
+                    if(e instanceof IDModel){
+                        cache.remove(((IDModel) e).getId());
+                    }
+                    file.delete();
+                }
+            }
+        }catch (Exception e){
+           e.printStackTrace();
+        }
+        return deleted;
     }
 }

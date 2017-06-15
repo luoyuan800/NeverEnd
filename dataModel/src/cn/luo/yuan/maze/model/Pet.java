@@ -7,7 +7,7 @@ import cn.luo.yuan.maze.utils.Field;
 /**
  * Created by gluo on 4/25/2017.
  */
-public class Pet extends Monster implements IDModel {
+public class Pet extends Monster implements IDModel, OwnedAble {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private EncodeLong level = new EncodeLong(0);
     private String id = StringUtils.EMPTY_STRING;
@@ -16,6 +16,8 @@ public class Pet extends Monster implements IDModel {
     private EncodeLong intimacy = new EncodeLong(0);
     private String ownerId = StringUtils.EMPTY_STRING;
     private String ownerName = StringUtils.EMPTY_STRING;
+    private String keeperId = StringUtils.EMPTY_STRING;
+    private String keeperName = StringUtils.EMPTY_STRING;
     private String mother = StringUtils.EMPTY_STRING;
     private String farther = StringUtils.EMPTY_STRING;
 
@@ -98,4 +100,20 @@ public class Pet extends Monster implements IDModel {
         return getDisplayName() + " X" + getLevel();
     }
 
+    @Override
+    public String getKeeperId() {
+        return keeperId;
+    }
+
+    public void setKeeperId(String keeperId) {
+        this.keeperId = keeperId;
+    }
+
+    public String getKeeperName() {
+        return keeperName;
+    }
+
+    public void setKeeperName(String keeperName) {
+        this.keeperName = keeperName;
+    }
 }

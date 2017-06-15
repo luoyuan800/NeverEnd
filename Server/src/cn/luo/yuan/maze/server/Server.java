@@ -4,6 +4,7 @@ import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.ExchangeObject;
 import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.maze.model.OwnedAble;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.original.AgiEffect;
@@ -18,6 +19,7 @@ import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
 import cn.luo.yuan.maze.server.persistence.GroupTable;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
+import cn.luo.yuan.maze.server.persistence.WarehouseTable;
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
 import cn.luo.yuan.maze.task.Task;
 import cn.luo.yuan.maze.utils.Field;
@@ -35,6 +37,9 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static cn.luo.yuan.maze.utils.Field.*;
 import static spark.Spark.post;
@@ -47,10 +52,12 @@ public class Server {
      */
 
     public static void main(String... args) throws IOException, ClassNotFoundException {
-
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
         File root = new File("data");
         GroupTable groupTable = new GroupTable(root);
         HeroTable heroTable = new HeroTable(root);
+        WarehouseTable warehouseTable = new WarehouseTable(root);
+        executor.scheduleAtFixedRate(warehouseTable,0, 1, TimeUnit.DAYS);
         ExchangeTable exchangeTable = new ExchangeTable(root);
         ObjectTable<Task> taskTable = new ObjectTable<>(Task.class, root);
         post("submit_exchange", (request, response) -> {
@@ -203,6 +210,8 @@ public class Server {
         post("add_task", ((request, response) -> {
             Task task = new Task(request.queryParams("name"), request.queryParams("desc"));
             task.setId(task.getName());
+            task.setMaterial(Integer.parseInt(request.queryParams("material")));
+            task.setPoint(Integer.parseInt(request.queryParams("point")));
             if(StringUtils.isNotEmpty(request.queryParams("accessory_name"))){
                 Accessory accessory = new Accessory();
                 accessory.setName(request.queryParams("accessory_name"));
@@ -217,8 +226,29 @@ public class Server {
                 accessory.setElement(Element.getByName(request.queryParams("accessory_element")));
                 accessory.setType(request.queryParams("accessory_type"));
             }
-            //TODO
+            //TODO Pet
             taskTable.save(task, task.getId());
+            return RESPONSE_RESULT_SUCCESS;
+        }));
+
+        post("store_warehouse", ((request, response) -> {
+            Object o = readObject(request);
+            if(o!=null){
+                warehouseTable.store(o);
+            }
+            return RESPONSE_RESULT_SUCCESS;
+        }));
+
+        post("retrieve_warehouse", ((request, response) -> {
+            Object o = warehouseTable.retrieve(request.headers(WAREHOUSE_ID_FIELD), Integer.parseInt(request.headers(WAREHOUSE_TYPE_FIELD)));
+            if(o instanceof OwnedAble){
+                if(((OwnedAble) o).getKeeperId().equals(request.headers(OWNER_ID_FIELD))){
+                    writeObject(response, o);
+                }else{
+                    response.header(RESPONSE_CODE, NOT_YOUR_ITEM);
+                    return RESPONSE_RESULT_FAILED;
+                }
+            }
             return RESPONSE_RESULT_SUCCESS;
         }));
         //run(heroTable, groupTable)

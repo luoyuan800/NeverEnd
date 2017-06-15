@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.model;
 
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.utils.Field;
+import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class Accessory implements Serializable, IDModel, NameObject {
+public class Accessory implements Serializable, IDModel, NameObject, OwnedAble {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private String name;
     private String id;
@@ -23,6 +24,10 @@ public class Accessory implements Serializable, IDModel, NameObject {
     private String author;
     private long price;
     private Element element;
+    private String ownerId = StringUtils.EMPTY_STRING;
+    private String ownerName = StringUtils.EMPTY_STRING;
+    private String keeperId = StringUtils.EMPTY_STRING;
+    private String keeperName = StringUtils.EMPTY_STRING;
 
     public List<Effect> getEffects(){
         return effects;
@@ -135,5 +140,37 @@ public class Accessory implements Serializable, IDModel, NameObject {
         for(Effect effect : getEffects()){
             effect.setEnable(true);
         }
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getKeeperId() {
+        return keeperId;
+    }
+
+    public void setKeeperId(String keeperId) {
+        this.keeperId = keeperId;
+    }
+
+    public String getKeeperName() {
+        return keeperName;
+    }
+
+    public void setKeeperName(String keeperName) {
+        this.keeperName = keeperName;
     }
 }

@@ -26,6 +26,10 @@ class Field {
         const val PET_TYPE = 1;
         const val ACCESSORY_TYPE = 2;
         const val GOODS_TYPE = 3;
+        const val WAREHOUSE_EXPIRE_TIME = 7*24*60*60*1000L
+        const val WAREHOUSE_ID_FIELD = "warehouse_id"
+        const val WAREHOUSE_TYPE_FIELD = "warehouse_type"
+        const val NOT_YOUR_ITEM = "22"
 
 
 

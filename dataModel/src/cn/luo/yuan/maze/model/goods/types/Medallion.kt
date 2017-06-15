@@ -7,11 +7,21 @@ import cn.luo.yuan.maze.model.goods.Goods
 import cn.luo.yuan.maze.model.goods.GoodsProperties
 import cn.luo.yuan.maze.service.ListenerService
 import cn.luo.yuan.maze.utils.Field.Companion.SERVER_VERSION
+import cn.luo.yuan.maze.utils.StringUtils
 
 /**
  * Created by gluo on 5/5/2017.
  */
 class Medallion() : Goods {
+    var keeper = StringUtils.EMPTY_STRING;
+    override fun getOwnerId(): String {
+        return keeper
+    }
+
+    override fun getKeeperId(): String {
+        return keeper
+    }
+
     companion object {
         private const val serialVersionUID: Long = SERVER_VERSION
     }

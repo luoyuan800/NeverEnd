@@ -99,7 +99,10 @@ public class LocalShop {
 
         public String toString() {
             if (effects == null) return name + " * " + count + (special ? " 特价":" 价格") + " : " + StringUtils.formatNumber(price) + "<br>" + desc;
-            return "<font color='" + color + "'>" + name + "</font>(" + type + ")" + " * " + count + (special ? " 特价":" 价格") + " : " + StringUtils.formatNumber(price) + "<br>" + author + "<br>" + desc;
+            return "<font color='" + color + "'>" + name + "</font>(" + type + ")" + " * "
+                    + count + (special ? " 特价":" 价格") + " : " + StringUtils.formatNumber(price) + "<br>" + author
+                    + "<br>" + desc
+                    + "<br>" + StringUtils.formatEffectsAsHtml(effects);
         }
     }
 }
