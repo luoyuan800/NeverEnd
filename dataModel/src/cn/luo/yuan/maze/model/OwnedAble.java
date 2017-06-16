@@ -6,4 +6,9 @@ package cn.luo.yuan.maze.model;
 public interface OwnedAble {
     String getOwnerId();
     String getKeeperId();
+    void setKeeperId(String id);
+    void setOwnerId(String id);
+
+    void setOwnerName(String name);
+    void setKeeperName(String name);
 }

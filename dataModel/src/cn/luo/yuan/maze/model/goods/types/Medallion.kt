@@ -13,6 +13,22 @@ import cn.luo.yuan.maze.utils.StringUtils
  * Created by gluo on 5/5/2017.
  */
 class Medallion() : Goods {
+    override fun setKeeperName(name: String?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun setOwnerName(name: String?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun setKeeperId(id: String) {
+       keeper = id
+    }
+
+    override fun setOwnerId(id: String) {
+        keeper = id
+    }
+
     var keeper = StringUtils.EMPTY_STRING;
     override fun getOwnerId(): String {
         return keeper

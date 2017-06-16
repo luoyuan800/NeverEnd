@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.service;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.ExchangeObject;
 import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.maze.model.OwnedAble;
 import cn.luo.yuan.maze.model.effect.AgiEffect;
 import cn.luo.yuan.maze.model.effect.AtkEffect;
 import cn.luo.yuan.maze.model.effect.DefEffect;
@@ -14,6 +15,8 @@ import cn.luo.yuan.maze.model.effect.SkillRateEffect;
 import cn.luo.yuan.maze.model.effect.StrEffect;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.LogHelper;
+import cn.luo.yuan.maze.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -33,66 +36,15 @@ public class ExchangeManager {
         server = new RestConnection(Field.SERVER_URL, context.getVersion());
     }
 
-    private Accessory covertAccessoryToLocal(Accessory a){
-        List<Effect> effects = new ArrayList<>(a.getEffects());
-        a.getEffects().clear();
-        for(Effect effect : effects){
-            a.getEffects().add(buildEffect(effect.getName(), effect.getValue().toString()));
-        }
-        return a;
-    }
-
-    private static Effect buildEffect(String effectName, String value){
-        switch (effectName) {
-            case "SkillRateEffect":
-                SkillRateEffect skillRateEffect = new SkillRateEffect();
-                skillRateEffect.setSkillRate(Float.parseFloat(value));
-                return skillRateEffect;
-            case "AgiEffect":
-                AgiEffect agiEffect = new AgiEffect();
-                agiEffect.setAgi(Long.parseLong(value));
-                return agiEffect;
-            case "AtkEffect":
-                AtkEffect atkEffect = new AtkEffect();
-                atkEffect.setAtk(Long.parseLong(value));
-                return atkEffect;
-            case "DefEffect":
-                DefEffect defEffect = new DefEffect();
-                defEffect.setDef(Long.parseLong(value));
-                return defEffect;
-            case "HpEffect":
-                HpEffect hpEffect = new HpEffect();
-                hpEffect.setHp(Long.parseLong(value));
-                return hpEffect;
-            case "StrEffect":
-                StrEffect strEffect = new StrEffect();
-                strEffect.setStr(Long.parseLong(value));
-                return strEffect;
-            case "MeetRateEffect":
-                MeetRateEffect meetRateEffect = new MeetRateEffect();
-                meetRateEffect.setMeetRate(Float.parseFloat(value));
-                return meetRateEffect;
-            case "PetRateEffect":
-                PetRateEffect petRateEffect = new PetRateEffect();
-                petRateEffect.setPetRate(Float.parseFloat(value));
-                return petRateEffect;
-        }
-        return null;
-    }
-
     public boolean submitExchange(Serializable object) {
         if(object instanceof Accessory){
-            Accessory accessory = new Accessory();
-            accessory.setName(((Accessory) object).getName());
-            accessory.setId(((Accessory) object).getId());
-            accessory.setColor(((Accessory) object).getColor());
-            accessory.setElement(((Accessory) object).getElement());
-            accessory.setLevel(((Accessory) object).getLevel());
-            accessory.setType(((Accessory) object).getType());
-            for(Effect effect : ((Accessory) object).getEffects()){
-                accessory.getEffects().add(effect.covertToOriginal());
+            object = context.convertToServerObject(object);
+        }
+        if(object instanceof OwnedAble){
+            if(StringUtils.isEmpty(((OwnedAble)object).getOwnerId())){
+                ((OwnedAble)object).setOwnerId(context.getHero().getId());
+                ((OwnedAble)object).setOwnerName(context.getHero().getName());
             }
-            object = accessory;
         }
         try {
             HttpURLConnection connection = server.getHttpURLConnection("/submit_exchange", RestConnection.POST);
@@ -122,7 +74,11 @@ public class ExchangeManager {
     public <T> T unBox(ExchangeObject eo){
         IDModel model = eo.getExchange();
         if(model instanceof Accessory){
-            covertAccessoryToLocal((Accessory) model);
+            context.covertAccessoryToLocal((Accessory) model);
+        }
+        if(model instanceof OwnedAble){
+            ((OwnedAble)model).setKeeperId(context.getHero().getId());
+            ((OwnedAble)model).setKeeperName(context.getHero().getName());
         }
         return (T)model;
     }
@@ -133,7 +89,10 @@ public class ExchangeManager {
             connection.addRequestProperty(Field.EXCHANGE_ID_FIELD, id);
             Object object = server.connect(connection);
             if(object instanceof Accessory){
-                object = covertAccessoryToLocal((Accessory) object);
+                object = context.covertAccessoryToLocal((Accessory) object);
+            }
+            if(object instanceof OwnedAble){
+                ((OwnedAble)object).setKeeperId(context.getHero().getId());
             }
             return (T) object;
         } catch (Exception e) {

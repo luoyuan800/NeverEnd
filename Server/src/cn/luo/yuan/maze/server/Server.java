@@ -239,7 +239,7 @@ public class Server {
             return RESPONSE_RESULT_SUCCESS;
         }));
 
-        post("retrieve_warehouse", ((request, response) -> {
+        post("retrieve_back_warehouse", ((request, response) -> {
             Object o = warehouseTable.retrieve(request.headers(WAREHOUSE_ID_FIELD), Integer.parseInt(request.headers(WAREHOUSE_TYPE_FIELD)));
             if(o instanceof OwnedAble){
                 if(((OwnedAble) o).getKeeperId().equals(request.headers(OWNER_ID_FIELD))){
@@ -249,6 +249,11 @@ public class Server {
                     return RESPONSE_RESULT_FAILED;
                 }
             }
+            return RESPONSE_RESULT_SUCCESS;
+        }));
+
+        post("retrieve_warehouse",((request, response) -> {
+            writeObject(response, warehouseTable.retrieveAll(request.headers(OWNER_ID_FIELD)));
             return RESPONSE_RESULT_SUCCESS;
         }));
         //run(heroTable, groupTable)

@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.server.persistence
 
 import cn.luo.yuan.maze.model.Accessory
+import cn.luo.yuan.maze.model.OwnedAble
 import cn.luo.yuan.maze.model.Pet
 import cn.luo.yuan.maze.model.goods.Goods
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable
@@ -37,6 +38,25 @@ class WarehouseTable(root:File):Runnable{
             Field.GOODS_TYPE -> goodsWH.loadObject(id)
         }
         return null
+    }
+
+    fun retrieveAll(keeperId:String):List<OwnedAble>{
+        val res = mutableListOf<OwnedAble>();
+        for(obj in petWH.loadAll()){
+            filter(keeperId, obj, res)
+        }
+        res.addAll(accessoryWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId})
+        res.addAll(goodsWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId})
+
+        return res;
+    }
+
+    private fun filter(keeperId: String, obj: Pet, res: MutableList<OwnedAble>) {
+        if (obj is OwnedAble) {
+            if (obj.keeperId == keeperId) {
+                res.add(obj);
+            }
+        }
     }
 
 

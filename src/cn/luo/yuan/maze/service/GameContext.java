@@ -5,6 +5,7 @@ import android.util.Log;
 import cn.luo.yuan.maze.display.activity.GameActivity;
 import cn.luo.yuan.maze.display.view.RollTextView;
 import cn.luo.yuan.maze.model.*;
+import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.gift.Gift;
 import cn.luo.yuan.maze.model.goods.GoodsProperties;
 import cn.luo.yuan.maze.model.goods.GoodsType;
@@ -12,7 +13,11 @@ import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.utils.Random;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -204,5 +209,31 @@ public class GameContext implements InfoControlInterface {
 
     public Object getCurrentBattleTarget() {
         return runningService.getTarget();
+    }
+
+    public Accessory covertAccessoryToLocal(Accessory a){
+        List<Effect> effects = new ArrayList<>(a.getEffects());
+        a.getEffects().clear();
+        for(Effect effect : effects){
+            a.getEffects().add(ClientEffectHandler.buildEffect(effect.getName(), effect.getValue().toString()));
+        }
+        return a;
+    }
+
+    public Serializable convertToServerObject(Serializable object) {
+        if(object instanceof Accessory) {
+            Accessory accessory = new Accessory();
+            accessory.setName(((Accessory) object).getName());
+            accessory.setId(((Accessory) object).getId());
+            accessory.setColor(((Accessory) object).getColor());
+            accessory.setElement(((Accessory) object).getElement());
+            accessory.setLevel(((Accessory) object).getLevel());
+            accessory.setType(((Accessory) object).getType());
+            for (Effect effect : ((Accessory) object).getEffects()) {
+                accessory.getEffects().add(effect.covertToOriginal());
+            }
+            object = accessory;
+        }
+        return object;
     }
 }

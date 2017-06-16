@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.utils;
 
+import cn.luo.yuan.maze.model.OwnedAble;
 import cn.luo.yuan.maze.model.effect.Effect;
 
 import java.math.RoundingMode;
@@ -166,5 +167,9 @@ public class StringUtils {
         }
 
         return builder.toString();
+    }
+
+    public static boolean isEmpty(String object) {
+        return !isNotEmpty(object);
     }
 }
