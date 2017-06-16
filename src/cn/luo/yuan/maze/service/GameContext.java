@@ -41,6 +41,11 @@ public class GameContext implements InfoControlInterface {
 
     public GameContext(Context context) {
         this.context = context;
+        accessoryHelper = AccessoryHelper.getOrCreate(this);
+        petMonsterHelper = PetMonsterHelper.instance;
+        petMonsterHelper.setRandom(random);
+        petMonsterHelper.setMonsterLoader(PetMonsterLoder.getOrCreate(this));
+        taskManager= new TaskManagerImp(this);
     }
 
     public void addMessage(String msg) {
@@ -62,11 +67,6 @@ public class GameContext implements InfoControlInterface {
         viewHandler.refreshAccessory(hero);
         viewHandler.refreshSkill(hero);
         viewHandler.refreshPets(hero);
-        accessoryHelper = AccessoryHelper.getOrCreate(this);
-        petMonsterHelper = PetMonsterHelper.instance;
-        petMonsterHelper.setRandom(random);
-        petMonsterHelper.setMonsterLoader(PetMonsterLoder.getOrCreate(this));
-        taskManager= new TaskManagerImp(this);
         runningService = new RunningService(hero, maze, this, dataManager, Data.REFRESH_SPEED);
         executor.scheduleAtFixedRate(runningService, 1, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(new Runnable() {

@@ -161,9 +161,8 @@ public class StringUtils {
 
     public static String formatEffectsAsHtml(List<Effect> effects){
         StringBuilder builder = new StringBuilder();
-        builder.append("属性: ").append("<br>");
         for (Effect effect : effects) {
-            builder.append("<br>").append("<font color=\"").append(effect.isEnable() ? "#B8860B" : "#D3D3D3").append("\">").append(effect.getName()).append(":").append(StringUtils.formatNumber(effect.getValue()));
+            builder.append("<br>").append("<font color=\"").append(effect.isEnable() ? "#B8860B" : "#D3D3D3").append("\">").append(effect.toString());
         }
 
         return builder.toString();
@@ -172,4 +171,6 @@ public class StringUtils {
     public static boolean isEmpty(String object) {
         return !isNotEmpty(object);
     }
+
+
 }

@@ -40,13 +40,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:id="@+id/accessory_name_2"/>
+                android:id="@+id/accessory_name_2"
+                android:text="长按右边装备列表"/>
 
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/accessory_effects_2"
-                android:layout_weight="0.27"/>
+                android:layout_weight="0.27"
+                android:text="选择用于升级消耗的副装备"/>
 <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -74,7 +76,6 @@
 
     <cn.luo.yuan.maze.display.view.LoadMoreListView
             android:id="@+id/accessories_list"
-            android:layout_weight="1"
             android:layout_height="400dp"
-            android:layout_width="0dp"/>
+            android:layout_width="150dp"/>
 </LinearLayout>

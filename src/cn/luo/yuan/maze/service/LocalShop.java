@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import cn.luo.yuan.maze.display.adapter.ItemAdapter;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
@@ -37,10 +38,12 @@ public class LocalShop {
                 dialogInterface.dismiss();
             }
         });
+        ScrollView scrollView = new ScrollView(context.getContext());
         ListView list = new ListView(context.getContext());
         ItemAdapter adapter = new ItemAdapter(context, randomAccessory());
         list.setAdapter(adapter);
-        shopDialog.setView(list);
+        scrollView.addView(list);
+        shopDialog.setView(scrollView);
         shopDialog.show();
     }
 
@@ -100,8 +103,9 @@ public class LocalShop {
         public String toString() {
             if (effects == null) return name + " * " + count + (special ? " 特价":" 价格") + " : " + StringUtils.formatNumber(price) + "<br>" + desc;
             return "<font color='" + color + "'>" + name + "</font>(" + type + ")" + " * "
-                    + count + (special ? " 特价":" 价格") + " : " + StringUtils.formatNumber(price) + "<br>" + author
-                    + "<br>" + desc
+                    + count + (special ? " 特价":" 价格") + " : " + StringUtils.formatNumber(price)
+                    + (StringUtils.isNotEmpty(author)? "<br>" + author : "")
+                    + (StringUtils.isNotEmpty(desc) ? "<br>"+desc : "")
                     + "<br>" + StringUtils.formatEffectsAsHtml(effects);
         }
     }

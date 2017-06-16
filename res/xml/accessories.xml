@@ -7,7 +7,7 @@
         <color value="#556B2F"/>
         <author value=""/>
         <price value="10000"/>
-        <type value="ring"/>
+        <type value="戒指"/>
         <properties>
             <effect name="AtkEffect" min="120" max="400" rate="100"/>
             <effect name="HpEffect" min="300" max="600" rate="100"/>
@@ -20,7 +20,7 @@
         <color value="#556B2F"/>
         <author value=""/>
         <price value="10000"/>
-        <type value="necklace"/>
+        <type value="项链"/>
         <properties>
             <effect name="StrEffect" min="20" max="50" rate="100"/>
             <effect name="AtkEffect" min="150" max="200" rate="100"/>

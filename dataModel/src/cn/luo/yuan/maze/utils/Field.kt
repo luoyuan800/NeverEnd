@@ -30,6 +30,11 @@ class Field {
         const val WAREHOUSE_ID_FIELD = "warehouse_id"
         const val WAREHOUSE_TYPE_FIELD = "warehouse_type"
         const val NOT_YOUR_ITEM = "22"
+        const val NECKLACE_TYPE = "项链"
+        const val RING_TYPE = "戒指"
+        const val HAT_TYPE = "帽子"
+        const val SWORD_TYPE = "武器"
+        const val ARMOR_TYPR = "防具"
 
 
 

@@ -34,7 +34,7 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble {
     }
 
     public String getDisplayName(){
-        return "<font color='" + color + "'>" + name + "</font>" + (level>0?(" + " + level):"");
+        return "<font color='" + color + "'>" + name + "</font>" + "(" + type + ") " + (level>0?(" + " + level):"") + (isMounted() ? "√" : "");
     }
     public String getName() {
         return name;

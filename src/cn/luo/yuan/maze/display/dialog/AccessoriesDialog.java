@@ -55,6 +55,7 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
                                                     context.getAccessoryHelper().mountAccessory(main, context.getHero());
                                                 }
                                                 context.getViewHandler().refreshAccessory(context.getHero());
+                                                refreshMainAccessoryView();
                                             }
                                         }
                                     }
@@ -66,14 +67,18 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
                     if (fuse.isMounted()) {
                         context.getAccessoryHelper().unMountAccessory(fuse, context.getHero());
                     }
+                    context.getDataManager().delete(fuse);
+                    accessoryAdapter.getData().remove(fuse);
                     if (context.getAccessoryHelper().fuse(main, fuse)) {
                         new AlertDialog.Builder(context.getContext()).setTitle("升级成功").
-                                setMessage(Html.fromHtml(main.getDisplayName())).
+                                setMessage(Html.fromHtml(main.getDisplayName())).setCancelable(false).
                                 setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        ((TextView) AccessoriesDialog.this.dialog.findViewById(R.id.accessory_name)).setText(Html.fromHtml(main.getDisplayName()));
-                                        ((TextView) AccessoriesDialog.this.dialog.findViewById(R.id.accessory_effects)).setText(Html.fromHtml(StringUtils.formatEffectsAsHtml(main.getEffects())));
+                                        refreshMainAccessoryView();
+                                        fuse = null;
+                                        refreshFuseAccessoryView();
+                                        accessoryAdapter.notifyDataSetChanged();
                                     }
                                 }).
                                 create().show();
@@ -83,12 +88,15 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
                                 setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        ((TextView) AccessoriesDialog.this.dialog.findViewById(R.id.accessory_name)).setText(Html.fromHtml(main.getDisplayName()));
-                                        ((TextView) AccessoriesDialog.this.dialog.findViewById(R.id.accessory_effects)).setText(Html.fromHtml(StringUtils.formatEffectsAsHtml(main.getEffects())));
+                                        refreshMainAccessoryView();
+                                        fuse = null;
+                                        refreshFuseAccessoryView();
+                                        accessoryAdapter.notifyDataSetChanged();
                                     }
-                                }).
+                                }).setCancelable(false).
                                 create().show();
                     }
+
                 }
             }
         });
@@ -127,29 +135,37 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
 
     @Override
     public void onClick(View v) {
-        if (v.getTag() instanceof Accessory) {
-            main = (Accessory) v.getTag();
-            ((TextView) dialog.findViewById(R.id.accessory_name)).setText(Html.fromHtml(main.getDisplayName()));
-            ((TextView) dialog.findViewById(R.id.accessory_effects)).setText(Html.fromHtml(StringUtils.formatEffectsAsHtml(main.getEffects())));
-            if (main.isMounted()) {
-                ((Button) dialog.findViewById(R.id.accessory_mount)).setText(Resource.getString(R.string.need_mount));
-            } else {
-                ((Button) dialog.findViewById(R.id.accessory_mount)).setText(Resource.getString(R.string.need_un_mount));
-            }
-            detectFuseAble();
+        if (v.getTag(R.string.item) instanceof Accessory) {
+            main = (Accessory) v.getTag(R.string.item);
+            refreshMainAccessoryView();
         }
+    }
+
+    private void refreshMainAccessoryView() {
+        ((TextView) dialog.findViewById(R.id.accessory_name)).setText(Html.fromHtml(main.getDisplayName()));
+        ((TextView) dialog.findViewById(R.id.accessory_effects)).setText(Html.fromHtml(StringUtils.formatEffectsAsHtml(main.getEffects())));
+        if (main.isMounted()) {
+            ((Button) dialog.findViewById(R.id.accessory_mount)).setText(Resource.getString(R.string.need_un_mount));
+        } else {
+            ((Button) dialog.findViewById(R.id.accessory_mount)).setText(Resource.getString(R.string.need_mount));
+        }
+        detectFuseAble();
     }
 
     @Override
     public boolean onLongClick(View v) {
-        if (v.getTag() instanceof Accessory) {
-            fuse = (Accessory) v.getTag();
-            ((TextView) dialog.findViewById(R.id.accessory_name_2)).setText(Html.fromHtml(fuse.getDisplayName()));
-            ((TextView) dialog.findViewById(R.id.accessory_effects_2)).setText(Html.fromHtml(StringUtils.formatEffectsAsHtml(fuse.getEffects())));
-            detectFuseAble();
+        if (v.getTag(R.string.item) instanceof Accessory && v.getTag(R.string.item)!=main) {
+            fuse = (Accessory) v.getTag(R.string.item);
+            refreshFuseAccessoryView();
             return true;
         }
         return false;
+    }
+
+    public void refreshFuseAccessoryView() {
+        ((TextView) dialog.findViewById(R.id.accessory_name_2)).setText(Html.fromHtml(fuse.getDisplayName()));
+        ((TextView) dialog.findViewById(R.id.accessory_effects_2)).setText(Html.fromHtml(StringUtils.formatEffectsAsHtml(fuse.getEffects())));
+        detectFuseAble();
     }
 
     private void detectFuseAble() {

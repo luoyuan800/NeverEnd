@@ -39,6 +39,7 @@ import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.service.GameContext;
 import cn.luo.yuan.maze.service.LocalShop;
 import cn.luo.yuan.maze.service.PetMonsterLoder;
+import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -290,23 +291,23 @@ public class GameActivity extends Activity {
                     boolean hasArmor = false;
                     for (Accessory accessory : hero.getAccessories()) {
                         switch (accessory.getType()) {
-                            case "hat":
+                            case Field.HAT_TYPE:
                                 hasHat = true;
                                 ((TextView) context.findViewById(R.id.hat_view)).setText(Html.fromHtml(accessory.getDisplayName()));
                                 break;
-                            case "ring":
+                            case Field.RING_TYPE:
                                 hasRing = true;
                                 ((TextView) context.findViewById(R.id.ring_view)).setText(Html.fromHtml(accessory.getDisplayName()));
                                 break;
-                            case "necklace":
+                            case Field.NECKLACE_TYPE:
                                 hasNecklace = true;
                                 ((TextView) context.findViewById(R.id.necklace_view)).setText(Html.fromHtml(accessory.getDisplayName()));
                                 break;
-                            case "sword":
+                            case Field.SWORD_TYPE:
                                 hasSword = true;
                                 ((TextView) context.findViewById(R.id.sword)).setText(Html.fromHtml(accessory.getDisplayName()));
                                 break;
-                            case "armor":
+                            case Field.ARMOR_TYPR:
                                 hasArmor = true;
                                 ((TextView) context.findViewById(R.id.armor)).setText(Html.fromHtml(accessory.getDisplayName()));
                                 break;

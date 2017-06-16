@@ -7,6 +7,22 @@ import cn.luo.yuan.maze.model.goods.GoodsProperties
  * Created by gluo on 5/9/2017.
  */
 class EmptyGoods : Goods {
+    override fun setKeeperId(id: String?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun setOwnerId(id: String?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun setOwnerName(name: String?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun setKeeperName(name: String?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun getOwnerId(): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
