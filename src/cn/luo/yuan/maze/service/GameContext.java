@@ -39,8 +39,9 @@ public class GameContext implements InfoControlInterface {
     private PetMonsterHelper petMonsterHelper;
     private TaskManagerImp taskManager;
 
-    public GameContext(Context context) {
+    public GameContext(Context context, DataManager dataManager) {
         this.context = context;
+        this.setDataManager(dataManager);
         accessoryHelper = AccessoryHelper.getOrCreate(this);
         petMonsterHelper = PetMonsterHelper.instance;
         petMonsterHelper.setRandom(random);

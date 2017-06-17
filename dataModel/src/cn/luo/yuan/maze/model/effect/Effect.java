@@ -8,8 +8,10 @@ import java.io.Serializable;
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public interface Effect extends Serializable, NameObject {
+public interface Effect extends Serializable, NameObject,Cloneable {
     boolean isEnable();
+
+    Effect clone();
 
     void setEnable(boolean enable);
 

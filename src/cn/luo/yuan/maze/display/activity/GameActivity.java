@@ -63,8 +63,7 @@ public class GameActivity extends Activity {
         Intent intent = getIntent();
 //        ListenerService.init();
         dataManager = new DataManager(intent.getIntExtra("index", -1), this);
-        control = new GameContext(this);
-        control.setDataManager(dataManager);
+        control = new GameContext(this, dataManager);
         control.setViewHandler(new ViewHandler(this));
         control.setTextView((RollTextView) findViewById(R.id.info_view));
         /*ProgressDialog progressDialog = new ProgressDialog(GameActivity.this);

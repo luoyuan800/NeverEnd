@@ -38,4 +38,7 @@ public class HpEffect extends cn.luo.yuan.maze.model.effect.original.HpEffect {
         effect.setHp(getHp());
         return effect;
     }
+    public Effect clone(){
+        return (Effect) super.clone();
+    }
 }

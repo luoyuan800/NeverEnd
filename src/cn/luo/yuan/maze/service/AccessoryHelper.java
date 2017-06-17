@@ -7,11 +7,11 @@ import android.util.ArrayMap;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
+import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.effect.*;
 import cn.luo.yuan.maze.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Random;
-import cn.luo.yuan.maze.utils.StringUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -136,7 +136,7 @@ public class AccessoryHelper {
             for (Accessory mounted : hero.getAccessories()) {
                 mounted.resetEffectEnable();
                 for (Accessory other : hero.getAccessories()) {
-                    if (other != mounted) {
+                    if (other != mounted && other.getElement().isReinforce(mounted.getElement())) {
                         mounted.effectEnable();
                     }
                 }
@@ -149,6 +149,7 @@ public class AccessoryHelper {
         hero.getAccessories().remove(accessory);
         hero.getEffects().removeAll(accessory.getEffects());
         judgeEffectEnable(hero);
+        accessory.setMounted(false);
     }
 
     public void judgeEffectEnable(Hero hero) {
@@ -200,7 +201,7 @@ public class AccessoryHelper {
                                 break;
                             case "color":
                                 if (accessory != null) {
-                                    if(key!=null){
+                                    if (key != null) {
                                         key.color = parser.getAttributeValue(null, "value");
                                     }
                                     accessory.setColor(parser.getAttributeValue(null, "value"));
@@ -279,6 +280,10 @@ public class AccessoryHelper {
                 LogHelper.logException(e, "AccessoryHelper->loadAccessoryByName{" + name + "}");
             }
         }
+        accessory = accessory != null ? accessory.clone() : null;
+        if (accessory != null && accessory.getElement() == null) {
+            accessory.setElement(random.randomItem(Element.values()));
+        }
         return accessory;
     }
 
@@ -322,11 +327,11 @@ public class AccessoryHelper {
             return name.hashCode();
         }
 
-        public boolean equals(Object other){
-            if(other == this){
+        public boolean equals(Object other) {
+            if (other == this) {
                 return true;
             }
-            if(other instanceof AccessoryKey && ((AccessoryKey) other).name!=null){
+            if (other instanceof AccessoryKey && ((AccessoryKey) other).name != null) {
                 return ((AccessoryKey) other).name.equals(name);
             }
             return false;
@@ -353,7 +358,7 @@ public class AccessoryHelper {
                                     key.color = parser.getAttributeValue(null, "value");
                                 }
                             }
-                            if(key!=null && key.name!=null && key.color!=null){
+                            if (key != null && key.name != null && key.color != null) {
                                 accessoryCache.put(key, new WeakReference<Accessory>(null));
                             }
                             break;

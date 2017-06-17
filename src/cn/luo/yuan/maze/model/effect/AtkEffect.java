@@ -37,4 +37,7 @@ public class AtkEffect extends cn.luo.yuan.maze.model.effect.original.AtkEffect 
         atkEffect.setAtk(getAtk());
         return atkEffect;
     }
+    public Effect clone(){
+        return (Effect) super.clone();
+    }
 }

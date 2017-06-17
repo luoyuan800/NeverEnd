@@ -37,4 +37,7 @@ public class MeetRateEffect extends cn.luo.yuan.maze.model.effect.original.MeetR
         effect.setMeetRate(getMeetRate());
         return effect;
     }
+    public Effect clone(){
+        return (Effect) super.clone();
+    }
 }

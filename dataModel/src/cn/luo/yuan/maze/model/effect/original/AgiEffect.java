@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.model.effect.original;
 
+import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.LongValueEffect;
 import cn.luo.yuan.maze.utils.Field;
 
@@ -38,7 +39,13 @@ public class AgiEffect implements LongValueEffect{
         this.enable = enable;
     }
 
-
+    public Effect clone(){
+        try {
+            return (Effect) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return this;
+        }
+    }
 
 
 }

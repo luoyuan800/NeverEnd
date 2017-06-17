@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class Accessory implements Serializable, IDModel, NameObject, OwnedAble {
+public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, Cloneable {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private String name;
     private String id;
@@ -34,7 +34,7 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble {
     }
 
     public String getDisplayName(){
-        return "<font color='" + color + "'>" + name + "</font>" + "(" + type + ") " + (level>0?(" + " + level):"") + (isMounted() ? "√" : "");
+        return "<font color='" + color + "'>" + name + "</font>" + "(" + type + ") "  + element.getCn() + (level>0?(" + " + level):"") + (isMounted() ? "√" : "");
     }
     public String getName() {
         return name;
@@ -172,5 +172,20 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble {
 
     public void setKeeperName(String keeperName) {
         this.keeperName = keeperName;
+    }
+
+    public Accessory clone(){
+        try {
+            Accessory a = (Accessory) super.clone();
+            List<Effect> effects = new ArrayList<>(a.getEffects());
+            a.getEffects().clear();
+            for(Effect e : effects){
+                a.getEffects().add(e.clone());
+            }
+            return a;
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return this;
+        }
     }
 }

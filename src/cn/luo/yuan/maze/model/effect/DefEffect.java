@@ -38,4 +38,7 @@ public class DefEffect extends cn.luo.yuan.maze.model.effect.original.DefEffect 
         effect.setDef(getDef());
         return effect;
     }
+    public Effect clone(){
+        return (Effect) super.clone();
+    }
 }

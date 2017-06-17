@@ -38,4 +38,8 @@ public class AgiEffect extends cn.luo.yuan.maze.model.effect.original.AgiEffect 
         agiEffect.setAgi(getAgi());
         return agiEffect;
     }
+
+    public Effect clone(){
+        return (Effect) super.clone();
+    }
 }

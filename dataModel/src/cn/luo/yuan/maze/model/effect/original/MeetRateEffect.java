@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.model.effect.original;
 
+import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.FloatValueEffect;
 
 /**
@@ -38,5 +39,11 @@ public class MeetRateEffect implements FloatValueEffect{
     public void setEnable(boolean enable) {
         this.enable = enable;
     }
-
+    public Effect clone(){
+        try {
+            return (Effect) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return this;
+        }
+    }
 }

@@ -38,4 +38,5 @@ public class StrEffect extends cn.luo.yuan.maze.model.effect.original.StrEffect 
         effect.setStr(getStr());
         return effect;
     }
+
 }
