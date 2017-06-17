@@ -31,7 +31,7 @@ import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 
 public final class RevealTextView extends TextView implements Runnable, ValueAnimator.AnimatorUpdateListener {
-    private int animationDuration = 300;
+    private int animationDuration = 1500;
     private CharSequence text;
     private int red;
     private int green;

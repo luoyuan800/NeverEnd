@@ -54,11 +54,11 @@ public class Resource {
         return drawable;
     }
 
-    public static String readStringFromAssets(String name) {
+    public static String readStringFromAssets(String path, String name) {
         StringBuilder string = new StringBuilder();
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new InputStreamReader(context.getAssets().open(name)));
+            reader = new BufferedReader(new InputStreamReader(context.getAssets().open((StringUtils.isNotEmpty(path) ? path + "/" : "") + name)));
             String line = reader.readLine();
             while (StringUtils.isNotEmpty(line)) {
                 string.append(line);
@@ -76,6 +76,14 @@ public class Resource {
             }
         }
         return string.toString();
+    }
+
+    public static String[] getFilesInAssets(String folder){
+        try {
+            return context.getAssets().list(folder);
+        } catch (IOException e) {
+            return new String[0];
+        }
     }
 
 

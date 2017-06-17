@@ -41,12 +41,13 @@ public class GameContext implements InfoControlInterface {
 
     public GameContext(Context context, DataManager dataManager) {
         this.context = context;
+        petMonsterHelper = PetMonsterHelper.instance;
         this.setDataManager(dataManager);
         accessoryHelper = AccessoryHelper.getOrCreate(this);
-        petMonsterHelper = PetMonsterHelper.instance;
         petMonsterHelper.setRandom(random);
         petMonsterHelper.setMonsterLoader(PetMonsterLoder.getOrCreate(this));
         taskManager= new TaskManagerImp(this);
+        handlerData(dataManager);
     }
 
     public void addMessage(String msg) {
@@ -158,11 +159,15 @@ public class GameContext implements InfoControlInterface {
         this.dataManager = dataManager;
         setHero(dataManager.loadHero());
         setMaze(dataManager.loadMaze());
+    }
+
+    public void handlerData(DataManager dataManager) {
         //Gift handle
         Gift gift =hero.getGift();
         if (gift != null) {
             gift.handler(this);
         }
+
         //Accessory handle
         for (Accessory accessory : dataManager.loadMountedAccessory(hero)) {
             mountAccessory(accessory);

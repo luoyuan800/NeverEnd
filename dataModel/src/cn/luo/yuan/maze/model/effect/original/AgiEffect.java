@@ -12,6 +12,16 @@ public class AgiEffect implements LongValueEffect{
     private long agi;
     private boolean enable = false;
 
+    private boolean elementControl;
+    @Override
+    public boolean isElementControl() {
+        return elementControl;
+    }
+
+    @Override
+    public void setElementControl(boolean elementControl) {
+        this.elementControl = elementControl;
+    }
     public long getAgi() {
         return agi;
     }

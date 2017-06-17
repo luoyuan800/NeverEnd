@@ -267,10 +267,9 @@
         <TextView
                 android:id="@+id/sword"
                 android:gravity="center_horizontal"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:maxWidth="200dp"
                 android:text="@string/not_mount"
                 android:textColor="#3506da"
                 android:textSize="13sp"
@@ -279,34 +278,31 @@
         <TextView
                 android:id="@+id/armor"
                 android:gravity="center_horizontal"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/not_mount"
                 android:textColor="#0307da"
-                android:maxWidth="200dp"
                 android:textSize="13sp"
                 android:onClick="onClick"/>
 
         <TextView
                 android:id="@+id/hat_view"
                 android:gravity="center_horizontal"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="20sp"
                 android:layout_gravity="center"
                 android:textSize="13sp"
-                android:text="@string/not_mount"
-                android:maxWidth="200dp"
+                android:text="单金莲（木） + 1"
                 android:onClick="onClick"
                 />
 
         <TextView
                 android:id="@+id/necklace_view"
                 android:gravity="center_horizontal"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:maxWidth="200dp"
                 android:textSize="13sp"
                 android:text="@string/not_mount"
                 android:onClick="onClick"
@@ -315,9 +311,8 @@
         <TextView
                 android:id="@+id/ring_view"
                 android:gravity="center_horizontal"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:maxWidth="200dp"
                 android:layout_gravity="center"
                 android:textSize="13sp"
                 android:text="@string/not_mount"

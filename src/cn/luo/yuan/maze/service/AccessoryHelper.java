@@ -134,10 +134,10 @@ public class AccessoryHelper {
             hero.getEffects().addAll(accessory.getEffects());
             accessory.setMounted(true);
             for (Accessory mounted : hero.getAccessories()) {
-                mounted.resetEffectEnable();
+                mounted.resetElementEffectEnable();
                 for (Accessory other : hero.getAccessories()) {
                     if (other != mounted && other.getElement().isReinforce(mounted.getElement())) {
-                        mounted.effectEnable();
+                        mounted.elementEffectEnable();
                     }
                 }
             }
@@ -150,16 +150,26 @@ public class AccessoryHelper {
         hero.getEffects().removeAll(accessory.getEffects());
         judgeEffectEnable(hero);
         accessory.setMounted(false);
+        accessory.resetElementEffectEnable();
     }
 
     public void judgeEffectEnable(Hero hero) {
         for (Accessory mounted : hero.getAccessories()) {
-            mounted.resetEffectEnable();
+            mounted.resetElementEffectEnable();
             for (Accessory other : hero.getAccessories()) {
                 if (other != mounted) {
-                    mounted.effectEnable();
+                    mounted.elementEffectEnable();
                 }
             }
+        }
+    }
+
+    private void initEffect(Effect effect, boolean elementControl){
+        effect.setElementControl(elementControl);
+        if(elementControl){
+            effect.setEnable(false);
+        }else{
+            effect.setEnable(true);
         }
     }
 
@@ -222,47 +232,55 @@ public class AccessoryHelper {
                                         long max = Long.parseLong(parser.getAttributeValue(null, "max"));
                                         long min = Long.parseLong(parser.getAttributeValue(null, "min"));
                                         int rate = Integer.parseInt(parser.getAttributeValue(null, "rate"));
+                                        boolean elementControl = Boolean.parseBoolean(parser.getAttributeValue(null,"element"));
                                         if (random.nextLong(100) < rate) {
                                             switch (effectName) {
                                                 case "SkillRateEffect":
                                                     SkillRateEffect skillRateEffect = new SkillRateEffect();
                                                     skillRateEffect.setSkillRate(random.randomRange(min, max));
+                                                    initEffect(skillRateEffect, elementControl);
                                                     accessory.getEffects().add(skillRateEffect);
                                                 case "AgiEffect":
                                                     AgiEffect agiEffect = new AgiEffect();
                                                     agiEffect.setAgi(random.randomRange(min, max));
                                                     accessory.getEffects().add(agiEffect);
-                                                    break;
+                                                    initEffect(agiEffect, elementControl);
                                                 case "AtkEffect":
                                                     AtkEffect atkEffect = new AtkEffect();
                                                     atkEffect.setAtk(random.randomRange(min, max));
                                                     accessory.getEffects().add(atkEffect);
+                                                    initEffect(atkEffect, elementControl);
                                                     break;
                                                 case "DefEffect":
                                                     DefEffect defEffect = new DefEffect();
                                                     defEffect.setDef(random.randomRange(min, max));
                                                     accessory.getEffects().add(defEffect);
+                                                    initEffect(defEffect, elementControl);
                                                     break;
                                                 case "HpEffect":
                                                     HpEffect hpEffect = new HpEffect();
                                                     hpEffect.setHp(random.randomRange(min, max));
                                                     accessory.getEffects().add(hpEffect);
+                                                    initEffect(hpEffect, elementControl);
                                                     break;
                                                 case "StrEffect":
                                                     StrEffect strEffect = new StrEffect();
                                                     strEffect.setStr(random.randomRange(min, max));
                                                     accessory.getEffects().add(strEffect);
+                                                    initEffect(strEffect, elementControl);
                                                     break;
                                                 case "MeetRateEffect":
                                                     MeetRateEffect meetRateEffect = new MeetRateEffect();
                                                     float meetRate = random.randomRange(Float.parseFloat(parser.getAttributeValue(null, "max")) * 100, Float.parseFloat(parser.getAttributeValue(null, "min")) * 100) / 100f;
                                                     meetRateEffect.setMeetRate(meetRate);
-                                                    accessory.getEffects().add(meetRateEffect);
+                                                    meetRateEffect.setElementControl(elementControl);
+                                                    initEffect(meetRateEffect, elementControl);
                                                     break;
                                                 case "PetRateEffect":
                                                     PetRateEffect petRateEffect = new PetRateEffect();
                                                     float petRate = random.randomRange(Float.parseFloat(parser.getAttributeValue(null, "max")) * 100, Float.parseFloat(parser.getAttributeValue(null, "min")) * 100) / 100f;
                                                     petRateEffect.setPetRate(petRate);
+                                                    initEffect(petRateEffect, elementControl);
                                                     accessory.getEffects().add(petRateEffect);
                                                     break;
                                             }

@@ -279,13 +279,13 @@ public class DataManager implements DataManagerInterface {
         return skills;
     }
 
-    public List<Accessory> loadAccessories(int start, int row, String key) {
+    public List<Accessory> loadAccessories(int start, int row, String key, Comparator<Accessory> order) {
         return accessoryLoader.loadLimit(start, row, new Index<Accessory>() {
             @Override
             public boolean match(Accessory accessory) {
                 return accessory.getName().contains(key);
             }
-        }, null);
+        }, order);
     }
 
     public List<ClickSkill> loadClickSkill(){

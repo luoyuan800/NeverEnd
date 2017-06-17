@@ -9,7 +9,7 @@ import cn.luo.yuan.maze.utils.Random;
 public class Data {
     public static final int MAX_SELL_COUNT = 30;//商店最大的商品数量
     public static float MONSTER_MEET_RATE = 99f;//遇怪的概率
-    public static float PORTAL_RATE = 0.1f;//传送门的概率
+    public static float PORTAL_RATE = 0.05f;//传送门的概率
     public static int LEVEL_BASE_POINT_REDUCE = 1000;//爬楼奖励的点数基数分母（random（level/reduce））
     public static long REFRESH_SPEED = 500;//刷新间隔
     public static long MONSTER_ATK_RISE_PRE_LEVEL = 100;//怪物每层的攻击成长
@@ -33,7 +33,8 @@ public class Data {
     public static final int DARKGOLD_RATE_REDUCE = 10;//橙色阶位的二次限制
     public static final String DISABLE_COLOR = "#C0C0C0";
     public static final String ENABLE_COLOR = "#800080";
-    public static final int MAX_PET_COUNT = 100;//最多宠物个数
+    public static final int MAX_PET_COUNT = 100;//最多背包宠物个数
+    public static final long FUSE_COST = 2000; //装备升级消耗的锻造
 
     /**
      * 计算击败一个怪物可以获得的锻造点

@@ -10,6 +10,16 @@ public class PetRateEffect implements FloatValueEffect {
     private float meetRate;
     private boolean enable = false;
 
+    private boolean elementControl;
+    @Override
+    public boolean isElementControl() {
+        return elementControl;
+    }
+
+    @Override
+    public void setElementControl(boolean elementControl) {
+        this.elementControl = elementControl;
+    }
     public float getPetRate() {
         return meetRate;
     }

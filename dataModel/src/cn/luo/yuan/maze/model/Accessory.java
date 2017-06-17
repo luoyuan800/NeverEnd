@@ -36,6 +36,10 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, 
     public String getDisplayName(){
         return "<font color='" + color + "'>" + name + "</font>" + "(" + type + ") "  + element.getCn() + (level>0?(" + " + level):"") + (isMounted() ? "√" : "");
     }
+
+    public String toString(){
+        return "<font color='" + color + "'>" + name + "</font>("  + element.getCn() + (level>0?(") + " + level):")");
+    }
     public String getName() {
         return name;
     }
@@ -130,15 +134,19 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, 
         this.element = element;
     }
 
-    public void resetEffectEnable(){
+    public void resetElementEffectEnable(){
         for(Effect effect : getEffects()){
-            effect.setEnable(false);
+            if(effect.isElementControl()) {
+                effect.setEnable(false);
+            }
         }
     }
 
-    public void effectEnable(){
+    public void elementEffectEnable(){
         for(Effect effect : getEffects()){
-            effect.setEnable(true);
+            if(effect.isElementControl()) {
+                effect.setEnable(true);
+            }
         }
     }
 

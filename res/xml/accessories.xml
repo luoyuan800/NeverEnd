@@ -9,9 +9,9 @@
         <price value="10000"/>
         <type value="戒指"/>
         <properties>
-            <effect name="AtkEffect" min="120" max="400" rate="100"/>
-            <effect name="HpEffect" min="300" max="600" rate="100"/>
-            <effect name="DefEffect" min="100" max="300" rate="50"/>
+            <effect name="AtkEffect" min="120" max="400" rate="100" element="true"/>
+            <effect name="HpEffect" min="300" max="600" rate="100" element="false"/>
+            <effect name="DefEffect" min="100" max="300" rate="50" element="false"/>
         </properties>
     </accessory>
     <accessory local="true">
@@ -22,9 +22,9 @@
         <price value="10000"/>
         <type value="项链"/>
         <properties>
-            <effect name="StrEffect" min="20" max="50" rate="100"/>
-            <effect name="AtkEffect" min="150" max="200" rate="100"/>
-            <effect name="HpEffect" min="1000" max="1600" rate="50"/>
+            <effect name="StrEffect" min="20" max="50" rate="100" element="false"/>
+            <effect name="AtkEffect" min="150" max="200" rate="100" element="false"/>
+            <effect name="HpEffect" min="1000" max="1600" rate="50" element="true"/>
         </properties>
     </accessory>
 </accessories>

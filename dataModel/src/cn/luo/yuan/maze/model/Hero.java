@@ -101,6 +101,9 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     public long getAgi() {
         return agi.getValue();
     }
+    public long getMaxAgi() {
+        return agi.getValue() + EffectHandler.getEffectAdditionLongValue(EffectHandler.AGI, getEffects());
+    }
 
     public void setAgi(long agi) {
         this.agi.setValue(agi);
@@ -108,6 +111,9 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
 
     public long getStr() {
         return str.getValue();
+    }
+    public long getMaxStr() {
+        return str.getValue() + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects());
     }
 
     public void setStr(long str) {
@@ -130,6 +136,10 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
         this.maxHp.setValue(maxHp);
     }
 
+
+    public long getCurrentMaxHp() {
+        return this.maxHp.getValue() + EffectHandler.getEffectAdditionLongValue(EffectHandler.HP, getEffects()) + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects()) * getHpGrow();
+    }
 
     public long getCurrentHp() {
         return this.hp.getValue() + EffectHandler.getEffectAdditionLongValue(EffectHandler.HP, getEffects()) + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects()) * getHpGrow();

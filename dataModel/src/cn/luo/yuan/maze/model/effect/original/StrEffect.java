@@ -11,7 +11,16 @@ public class StrEffect implements LongValueEffect{
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private long str;
     private boolean enable = false;
+    private boolean elementControl;
+    @Override
+    public boolean isElementControl() {
+        return elementControl;
+    }
 
+    @Override
+    public void setElementControl(boolean elementControl) {
+        this.elementControl = elementControl;
+    }
     public long getStr() {
         return str;
     }

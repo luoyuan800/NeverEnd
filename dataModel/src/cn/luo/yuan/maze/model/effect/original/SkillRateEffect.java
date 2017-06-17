@@ -9,6 +9,17 @@ import cn.luo.yuan.maze.model.effect.FloatValueEffect;
 public class SkillRateEffect implements FloatValueEffect{
     private float skillRate;
     private boolean enable = false;
+
+    private boolean elementControl;
+    @Override
+    public boolean isElementControl() {
+        return elementControl;
+    }
+
+    @Override
+    public void setElementControl(boolean elementControl) {
+        this.elementControl = elementControl;
+    }
     @Override
     public void setValue(float value) {
         setSkillRate(value);

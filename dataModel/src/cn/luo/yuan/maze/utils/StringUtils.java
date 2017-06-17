@@ -162,9 +162,15 @@ public class StringUtils {
     public static String formatEffectsAsHtml(List<Effect> effects){
         StringBuilder builder = new StringBuilder();
         for (Effect effect : effects) {
-            builder.append("<br>").append("<font color=\"").
-                    append(effect.isEnable() ? "#B8860B" : "#D3D3D3").append("\">").
-                    append(effect.isEnable() ? "":"<strike>").append(effect.toString()).append(effect.isEnable() ? "":"</strike>");
+            builder.append("<br>");
+            if(effect.isElementControl()){
+                builder.append("<font color=\"").
+                        append(effect.isEnable() ? "#B8860B": "#A19EA0").append("\">").
+                        append(effect.toString()).append("</font>");
+            }else{
+                builder.append("<font color=\"#00F1ED\">").
+                        append(effect.toString()).append("</font>");
+            }
         }
 
         return builder.toString();

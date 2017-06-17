@@ -12,6 +12,16 @@ public class DefEffect implements LongValueEffect{
     private long def;
     private boolean enable = false;
 
+    private boolean elementControl;
+    @Override
+    public boolean isElementControl() {
+        return elementControl;
+    }
+
+    @Override
+    public void setElementControl(boolean elementControl) {
+        this.elementControl = elementControl;
+    }
     public long getDef() {
         return def;
     }

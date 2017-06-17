@@ -16,8 +16,6 @@ import android.text.util.Linkify;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
@@ -28,6 +26,7 @@ import cn.luo.yuan.maze.display.dialog.PetDialog;
 import cn.luo.yuan.maze.display.dialog.RangePointDialog;
 import cn.luo.yuan.maze.display.dialog.SkillDialog;
 import cn.luo.yuan.maze.display.view.PetTextView;
+import cn.luo.yuan.maze.display.view.RevealTextView;
 import cn.luo.yuan.maze.display.view.RollTextView;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
@@ -45,7 +44,6 @@ import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by luoyuan on 2017/3/29.
@@ -271,7 +269,7 @@ public class GameActivity extends Activity {
                     ((TextView) context.findViewById(R.id.hero_point)).setText(StringUtils.formatNumber(context.control.getHero().getPoint()));
                     ((TextView) context.findViewById(R.id.hero_click)).setText(StringUtils.formatNumber(context.control.getHero().getClick()));
                     ((TextView) context.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(context.control.getHero().getCurrentHp()));
-                    ((TextView) context.findViewById(R.id.hero_max_hp)).setText(StringUtils.formatNumber(context.control.getHero().getMaxHp()));
+                    ((TextView) context.findViewById(R.id.hero_max_hp)).setText(StringUtils.formatNumber(context.control.getHero().getCurrentMaxHp()));
 
                 }
             });
@@ -292,23 +290,23 @@ public class GameActivity extends Activity {
                         switch (accessory.getType()) {
                             case Field.HAT_TYPE:
                                 hasHat = true;
-                                ((TextView) context.findViewById(R.id.hat_view)).setText(Html.fromHtml(accessory.getDisplayName()));
+                                ((TextView) context.findViewById(R.id.hat_view)).setText(Html.fromHtml(accessory.toString()));
                                 break;
                             case Field.RING_TYPE:
                                 hasRing = true;
-                                ((TextView) context.findViewById(R.id.ring_view)).setText(Html.fromHtml(accessory.getDisplayName()));
+                                ((TextView) context.findViewById(R.id.ring_view)).setText(Html.fromHtml(accessory.toString()));
                                 break;
                             case Field.NECKLACE_TYPE:
                                 hasNecklace = true;
-                                ((TextView) context.findViewById(R.id.necklace_view)).setText(Html.fromHtml(accessory.getDisplayName()));
+                                ((TextView) context.findViewById(R.id.necklace_view)).setText(Html.fromHtml(accessory.toString()));
                                 break;
                             case Field.SWORD_TYPE:
                                 hasSword = true;
-                                ((TextView) context.findViewById(R.id.sword)).setText(Html.fromHtml(accessory.getDisplayName()));
+                                ((TextView) context.findViewById(R.id.sword)).setText(Html.fromHtml(accessory.toString()));
                                 break;
                             case Field.ARMOR_TYPR:
                                 hasArmor = true;
-                                ((TextView) context.findViewById(R.id.armor)).setText(Html.fromHtml(accessory.getDisplayName()));
+                                ((TextView) context.findViewById(R.id.armor)).setText(Html.fromHtml(accessory.toString()));
                                 break;
                         }
                     }
@@ -395,17 +393,43 @@ public class GameActivity extends Activity {
                 @Override
                 public void run() {
                     LinearLayout petRoot = (LinearLayout) context.findViewById(R.id.pets_root);
-                    petRoot.removeAllViews();
                     ArrayList<Pet> pets = new ArrayList<>(hero.getPets());
-                    for(int i = 0; i< pets.size(); i++){
-                        Pet pet = pets.get(i);
-                        View view = petRoot.getChildAt(i);
-                        if(view == null || !(view instanceof PetTextView)){
-                            view = new PetTextView(context, pet);
-                            petRoot.addView(view);
-                        }else{
-                            ((PetTextView) view).changePet(pet);
+                    if(pets.size() > 0) {
+                        for (int i = 0; i < pets.size(); i++) {
+                            Pet pet = pets.get(i);
+                            View view = petRoot.getChildAt(i);
+                            if (view == null || !(view instanceof PetTextView)) {
+                                if(view!=null){
+                                    petRoot.removeView(view);
+                                }
+                                view = new PetTextView(context, pet);
+                                petRoot.addView(view);
+                            } else {
+                                ((PetTextView) view).changePet(pet);
+                            }
                         }
+                        if(pets.size() < petRoot.getChildCount()){
+                            for (int i = pets.size(); i < petRoot.getChildCount(); i++){
+                                petRoot.removeViewAt(i);
+                            }
+                        }
+                    }else{
+                        String[] helps = Resource.getFilesInAssets("help");
+
+                        View tv = petRoot.getChildAt(0);
+                        if(tv == null || !(tv instanceof RevealTextView)){
+                            if(tv!=null){
+                                petRoot.removeView(tv);
+                            }
+                            tv = new RevealTextView(context);
+                            petRoot.addView(tv);
+                        }else{
+                            if(tv.getTag() instanceof Number && System.currentTimeMillis() - ((Number)tv.getTag()).longValue() < 30000){
+                                return;
+                            }
+                        }
+                        ((RevealTextView)tv).setAnimatedText(Html.fromHtml(Resource.readStringFromAssets("help", context.control.getRandom().randomItem(helps))));
+                        tv.setTag(System.currentTimeMillis());
                     }
                 }
             });

@@ -1,34 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".activity.SimpleMainActivity"
-    >
-            <item android:id="@+id/pause" android:icon="@android:drawable/ic_media_play"
-                android:title="暂停"/>
-            <item android:id="@+id/save" android:icon="@android:drawable/ic_menu_save"
-                android:title="存档" />
-    <item android:id="@+id/reincarnation" android:icon="@android:drawable/ic_menu_compass"
-          android:title="转生" />
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".activity.SimpleMainActivity"
+        >
+    <item
+            android:id="@+id/pause"
+            android:icon="@android:drawable/ic_media_play"
+            android:title="暂停"/>
+    <item
+            android:id="@+id/save"
+            android:icon="@android:drawable/ic_menu_save"
+            android:title="存档"/>
+    <item
+            android:id="@+id/reincarnation"
+            android:icon="@android:drawable/ic_menu_compass"
+            android:title="转生"/>
+    <item
+            android:id="@+id/goods"
+            android:icon="@android:drawable/ic_menu_gallery"
+            android:title="物品"/>
+    <item
+            android:id="@+id/pets"
+            android:icon="@android:drawable/ic_menu_gallery"
+            android:title="宠物"/>
+    <item
+            android:title="本地商店"
+            android:enabled="true"
+            android:id="@+id/local_shop"/>
+    <item
+            android:enabled="false"
+            android:title="---联网功能---"/>
+    <item
+            android:id="@+id/net_shop"
+            android:icon="@android:drawable/ic_menu_agenda"
+            android:title="在线商店"/>
+    <item
+            android:id="@+id/warehouse"
+            android:icon="@android:drawable/ic_menu_agenda"
+            android:title="仓库"/>
+    <item
+            android:id="@+id/online_battle"
+            android:icon="@android:drawable/ic_menu_agenda"
+            android:title="战斗塔"/>
 
-    <item android:title="商店" android:enabled="true" android:id="@+id/local_shop"/>
-            <item android:id="@+id/warehouse" android:icon="@android:drawable/ic_menu_agenda"
-                android:title="仓库" />
-            <item android:id="@+id/goods" android:icon="@android:drawable/ic_menu_gallery"
-                android:title="物品" />
-            <item android:id="@+id/pets" android:icon="@android:drawable/ic_menu_gallery"
-                android:title="宠物" />
-    <item android:id="@+id/monster" android:icon="@android:drawable/ic_menu_crop"
-          android:title="图鉴" />
-    <item android:id="@+id/achievement" android:icon="@android:drawable/ic_menu_my_calendar"
-          android:title="成就" />
+    <item
+            android:enabled="false"
+            android:title="---其他---"/>
 
-            <item android:id="@+id/palace" android:icon="@android:drawable/ic_menu_myplaces"
-                android:title="联网" />
-          <item android:id="@+id/help" android:icon="@android:drawable/ic_menu_help"
-                android:title="帮助" />
-            <item android:id="@+id/update" android:icon="@android:drawable/ic_menu_info_details"
-                android:title="更新" />
-            <item android:id="@+id/pay" android:icon="@android:drawable/ic_menu_view"
-                android:title="点赞" />
-            <item android:id="@+id/share" android:icon="@android:drawable/ic_menu_share"
-                android:title="分享" />
+    <item
+            android:id="@+id/help"
+            android:icon="@android:drawable/ic_menu_help"
+            android:title="帮助"/>
+    <item
+            android:id="@+id/update"
+            android:icon="@android:drawable/ic_menu_info_details"
+            android:title="更新"/>
+    <item
+            android:id="@+id/pay"
+            android:icon="@android:drawable/ic_menu_view"
+            android:title="点赞"/>
+    <item
+            android:id="@+id/share"
+            android:icon="@android:drawable/ic_menu_share"
+            android:title="分享"/>
 </menu>

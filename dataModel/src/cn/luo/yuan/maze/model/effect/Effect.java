@@ -29,4 +29,7 @@ public interface Effect extends Serializable, NameObject,Cloneable {
     default Effect covertToOriginal(){
         return null;
     }
+
+    void setElementControl(boolean control);
+    boolean isElementControl();
 }

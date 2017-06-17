@@ -130,14 +130,13 @@ public class PetMonsterLoder implements MonsterLoader {
                             }
                             break;
                         case "desc":
-                            if (name != null && name.equals(type)) {
-                                return parser.nextText();
+                            String desc = parser.nextText();
+                            if((index > 0 && monsterIndex!=index) || (type!=null && !type.equals(name))) {
+                                nextMonsterTag(parser);
+                                continue loop;
+                            }else{
+                                return desc;
                             }
-                            if (monsterIndex > 0 && monsterIndex == index) {
-                                return parser.nextText();
-                            }
-                            nextMonsterTag(parser);
-                            continue loop;
                     }
                 }
                 parser.next();

@@ -49,7 +49,12 @@ public class ObjectDB<T extends Serializable> {
     }
 
     public String save(T object) {
-        return save(object, UUID.randomUUID().toString());
+        if(object instanceof IDModel){
+            if(StringUtils.isEmpty(((IDModel) object).getId())){
+                ((IDModel) object).setId(UUID.randomUUID().toString());
+            }
+        }
+        return save(object, object instanceof IDModel? ((IDModel) object).getId() : UUID.randomUUID().toString());
     }
 
     public synchronized T loadObject(String id) throws InvalidClassException {

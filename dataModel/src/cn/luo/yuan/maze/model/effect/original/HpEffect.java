@@ -11,7 +11,16 @@ public class HpEffect implements LongValueEffect{
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private long hp;
     private boolean enable = false;
+    private boolean elementControl;
+    @Override
+    public boolean isElementControl() {
+        return elementControl;
+    }
 
+    @Override
+    public void setElementControl(boolean elementControl) {
+        this.elementControl = elementControl;
+    }
     public long getHp() {
         return hp;
     }
@@ -45,4 +54,6 @@ public class HpEffect implements LongValueEffect{
             return this;
         }
     }
+
+
 }

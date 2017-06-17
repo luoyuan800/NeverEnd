@@ -41,7 +41,7 @@ public class RandomEventService {
             gameControl.getHero().setHp(gameControl.getHero().getHp() + hel);
         } else if (Data.PORTAL_RATE + gameControl.getRandom().nextLong(gameControl.getHero().getAgi()) >  gameControl.getRandom().nextFloat(100f)+ gameControl.getRandom().nextLong(gameControl.getHero().getStr())) {
             gameControl.getMaze().setStep(0);
-            long levJ = gameControl.getRandom().nextLong(gameControl.getMaze().getMaxLevel() + 100 + gameControl.getHero().getReincarnate()) + 1;
+            long levJ = gameControl.getRandom().nextLong(gameControl.getMaze().getMaxLevel() + 10 + gameControl.getHero().getReincarnate()) + 1;
             gameControl.addMessage( gameControl.getHero().getDisplayName() + "踩到了传送门，被传送到了迷宫第" + levJ + "层");
             gameControl.getMaze().setLevel(levJ);
         } else {

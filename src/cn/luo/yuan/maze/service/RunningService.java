@@ -157,6 +157,7 @@ public class RunningService implements RunningServiceInterface {
                                 }
                                 Log.i("maze", "Battle failed restore");
                             }
+                            gameContext.getViewHandler().refreshPets(hero);
                         }
                         target = null;
                     }
