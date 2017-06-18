@@ -27,4 +27,95 @@
             <effect name="HpEffect" min="1000" max="1600" rate="50" element="true"/>
         </properties>
     </accessory>
+    <accessory local="true">
+        <name value = "水纹戒"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <element value="水"/>
+        <price value="10000"/>
+        <type value="戒指"/>
+        <properties>
+            <effect name="DefEffect" min="140" max="150" rate="100" element="false"/>
+            <effect name="AtkEffect" min="150" max="250" rate="80" element="true"/>
+        </properties>
+    </accessory>
+    <accessory local="true">
+        <name value = "青铜戒"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="10000"/>
+        <type value="戒指"/>
+        <properties>
+            <effect name="DefEffect" min="200" max="250" rate="100" element="false"/>
+            <effect name="HpEffect" min="500" max="600" rate="80" element="true"/>
+        </properties>
+    </accessory>
+    <accessory local="true">
+        <name value = "火神戒"/>
+        <element value="火"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="10000"/>
+        <type value="戒指"/>
+        <properties>
+            <effect name="StrEffect" min="15" max="25" rate="100" element="false"/>
+            <effect name="AtkEffect" min="100" max="200" rate="80" element="false"/>
+            <effect name="AgiEffect" min="20" max="30" rate="60" element="true"/>
+        </properties>
+    </accessory>
+    <accessory local="true">
+        <name value = "神心项链"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="15000"/>
+        <type value="项链"/>
+        <properties>
+            <effect name="AgiEffect" min="85" max="95" rate="100" element="false"/>
+            <effect name="AtkEffect" min="600" max="700" rate="90" element="false"/>
+            <effect name="HpEffect" min="700" max="900" rate="40" element="true"/>
+        </properties>
+    </accessory>
+    <accessory local="true">
+        <name value = "银甲"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="15000"/>
+        <type value="防具"/>
+        <properties>
+            <effect name="DefEffect" min="65" max="195" rate="100" element="false"/>
+            <effect name="StrEffect" min="10" max="60" rate="100" element="false"/>
+            <effect name="HpEffect" min="300" max="1000" rate="50" element="true"/>
+        </properties>
+    </accessory>
+    <accessory local="true">
+        <name value = "金甲"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="15000"/>
+        <type value="防具"/>
+        <properties>
+            <effect name="DefEffect" min="70" max="175" rate="100" element="false"/>
+            <effect name="HpEffect" min="700" max="1075" rate="100" element="false"/>
+            <effect name="StrEffect" min="15" max="100" rate="50" element="true"/>
+        </properties>
+    </accessory>
+    <accessory local="true">
+        <name value = "合金剑"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="15000"/>
+        <type value="武器"/>
+        <properties>
+            <effect name="AtkEffect" min="70" max="175" rate="100" element="false"/>
+            <effect name="AgiEffect" min="10" max="75" rate="100" element="false"/>
+            <effect name="StrEffect" min="20" max="100" rate="50" element="true"/>
+        </properties>
+    </accessory>
 </accessories>

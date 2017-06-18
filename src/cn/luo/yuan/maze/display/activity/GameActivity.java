@@ -52,6 +52,7 @@ public class GameActivity extends Activity {
     DataManager dataManager;
     GameContext control;
     private PopupMenu popupMenu;
+    private Thread updateMonsterThread;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,63 +89,22 @@ public class GameActivity extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
-    private void randomMonsterBook(){
-        Monster monster = control.getPetMonsterHelper().randomMonster();
-        if(monster != null) {
-            View view = findViewById(R.id.monster_view);
-            Animation animation= AnimationUtils.loadAnimation(this, R.anim.revert);
-            animation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation arg0) {
-                    control.getViewHandler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            ((TextView) view.findViewById(R.id.monster_name)).setText(monster.getType());
-                            ((TextView) view.findViewById(R.id.monster_sex)).setText(monster.getSex() < 0 ? "♂♀" : (monster.getSex() == 0 ? "♂" : "♀"));
-                            ((TextView) view.findViewById(R.id.monster_rank)).setText(StringUtils.formatStar(monster.getRank()));
-                            ((TextView) view.findViewById(R.id.monster_race)).setText(monster.getRace().getName());
-                            ((TextView) view.findViewById(R.id.monster_atk_value)).setText(StringUtils.formatNumber(monster.getAtk()));
-                            ((TextView) view.findViewById(R.id.monster_def_value)).setText(StringUtils.formatNumber(monster.getDef()));
-                            ((TextView) view.findViewById(R.id.monster_hp_value)).setText(StringUtils.formatNumber(monster.getMaxHp()));
-                            ((TextView) view.findViewById(R.id.monster_egg_rate)).setText(StringUtils.formatPercentage(monster.getEggRate()));
-                            ((TextView) view.findViewById(R.id.monster_pet_rate)).setText(StringUtils.formatPercentage(monster.getPetRate()));
-                            ((TextView) view.findViewById(R.id.monster_desc)).setText(control.getPetMonsterHelper().getDescription(monster.getIndex(), monster.getType()));
-                            ((ImageView) view.findViewById(R.id.monster_image)).setImageDrawable(PetMonsterLoder.loadMonsterImage(monster.getIndex()));
-                        }
-                    }, 1000);
-                }   //在动画开始时使用
-
-                @Override
-                public void onAnimationRepeat(Animation arg0) {}  //在动画重复时使用
-
-                @Override
-                public void onAnimationEnd(Animation arg0) {
-
-                }
-            });
-            view.startAnimation(animation);
-        }
-    }
-
-    private Thread updateMonsterThread;
-
-
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.switch_msg_view:
-                if(findViewById(R.id.info_view).getVisibility() == View.VISIBLE){
+                if (findViewById(R.id.info_view).getVisibility() == View.VISIBLE) {
+                    findViewById(R.id.info_view).setVisibility(View.GONE);
+                    findViewById(R.id.monster_view).setVisibility(View.VISIBLE);
                     control.getViewHandler().post(new Runnable() {
                         @Override
                         public void run() {
-                            findViewById(R.id.info_view).setVisibility(View.GONE);
-                            findViewById(R.id.monster_view).setVisibility(View.VISIBLE);
                             updateMonsterThread = new Thread(new Runnable() {
                                 @Override
                                 public void run() {
                                     Runnable update = new Runnable() {
                                         @Override
                                         public void run() {
-                                           randomMonsterBook();
+                                            randomMonsterBook();
                                         }
                                     };
                                     while (findViewById(R.id.monster_view).getVisibility() == View.VISIBLE) {
@@ -160,15 +120,16 @@ public class GameActivity extends Activity {
                             updateMonsterThread.start();
                         }
                     });
-                }else{
+                } else {
                     control.getViewHandler().post(new Runnable() {
                         @Override
                         public void run() {
-                            if(updateMonsterThread!=null){
-                                updateMonsterThread = null;
-                            }
                             findViewById(R.id.info_view).setVisibility(View.VISIBLE);
                             findViewById(R.id.monster_view).setVisibility(View.GONE);
+                            if (updateMonsterThread != null) {
+                                updateMonsterThread = null;
+                            }
+
                         }
                     });
                 }
@@ -201,7 +162,7 @@ public class GameActivity extends Activity {
             case R.id.third_click_skill:
                 break;
             case R.id.range_point:
-                if(control.getHero().getPoint() > 0){
+                if (control.getHero().getPoint() > 0) {
                     new RangePointDialog(control).show();
                 }
                 break;
@@ -336,48 +297,48 @@ public class GameActivity extends Activity {
                     Skill[] heroSkills = hero.getSkills();
                     if (heroSkills.length > 0 && heroSkills[0] != null && !(heroSkills[0] instanceof EmptySkill)) {
                         ((TextView) context.findViewById(R.id.first_skill)).setText(Html.fromHtml(heroSkills[0].getName()));
-                    }else {
+                    } else {
                         ((TextView) context.findViewById(R.id.first_skill)).setText(Resource.getString(R.string.not_mount));
                     }
                     if (heroSkills.length > 1 && heroSkills[1] != null && !(heroSkills[1] instanceof EmptySkill)) {
                         ((TextView) context.findViewById(R.id.secondary_skill)).setText(Html.fromHtml(heroSkills[1].getName()));
-                    }else {
+                    } else {
                         ((TextView) context.findViewById(R.id.secondary_skill)).setText(R.string.not_mount);
                     }
                     if (heroSkills.length > 2 && heroSkills[2] != null && !(heroSkills[2] instanceof EmptySkill)) {
                         ((TextView) context.findViewById(R.id.third_skill)).setText(Html.fromHtml(heroSkills[2].getName()));
-                    }else {
+                    } else {
                         ((TextView) context.findViewById(R.id.third_skill)).setText(Resource.getString(R.string.not_mount));
                     }
                     if (heroSkills.length > 3 && heroSkills[3] != null && !(heroSkills[3] instanceof EmptySkill)) {
                         ((TextView) context.findViewById(R.id.fourth_skill)).setText(Html.fromHtml(heroSkills[3].getName()));
-                    }else{
-                        if(hero.getReincarnate() >= 2){
+                    } else {
+                        if (hero.getReincarnate() >= 2) {
                             ((TextView) context.findViewById(R.id.fourth_skill)).setText(R.string.not_mount);
                             context.findViewById(R.id.fourth_skill).setEnabled(true);
-                        }else{
+                        } else {
                             ((TextView) context.findViewById(R.id.fourth_skill)).setText(R.string.fourth_skill_enable);
                             context.findViewById(R.id.fourth_skill).setEnabled(false);
                         }
                     }
                     if (heroSkills.length > 4 && heroSkills[4] != null && !(heroSkills[4] instanceof EmptySkill)) {
                         ((TextView) context.findViewById(R.id.fifit_skill)).setText(Html.fromHtml(heroSkills[4].getName()));
-                    }else{
-                        if(hero.getReincarnate() >= 4){
+                    } else {
+                        if (hero.getReincarnate() >= 4) {
                             ((TextView) context.findViewById(R.id.fifit_skill)).setText(R.string.not_mount);
                             context.findViewById(R.id.fifit_skill).setEnabled(true);
-                        }else{
+                        } else {
                             ((TextView) context.findViewById(R.id.fifit_skill)).setText(R.string.fifth_skill_enable);
                             context.findViewById(R.id.fifit_skill).setEnabled(false);
                         }
                     }
                     if (heroSkills.length > 5 && heroSkills[5] != null && !(heroSkills[5] instanceof EmptySkill)) {
                         ((TextView) context.findViewById(R.id.sixth_skill)).setText(Html.fromHtml(heroSkills[5].getName()));
-                    }else{
-                        if(hero.getReincarnate() >= 8){
+                    } else {
+                        if (hero.getReincarnate() >= 8) {
                             ((TextView) context.findViewById(R.id.sixth_skill)).setText(R.string.not_mount);
                             context.findViewById(R.id.sixth_skill).setEnabled(true);
-                        }else{
+                        } else {
                             ((TextView) context.findViewById(R.id.sixth_skill)).setText(R.string.sixth_skill_enable);
                             context.findViewById(R.id.sixth_skill).setEnabled(false);
                         }
@@ -394,12 +355,12 @@ public class GameActivity extends Activity {
                 public void run() {
                     LinearLayout petRoot = (LinearLayout) context.findViewById(R.id.pets_root);
                     ArrayList<Pet> pets = new ArrayList<>(hero.getPets());
-                    if(pets.size() > 0) {
+                    if (pets.size() > 0) {
                         for (int i = 0; i < pets.size(); i++) {
                             Pet pet = pets.get(i);
                             View view = petRoot.getChildAt(i);
                             if (view == null || !(view instanceof PetTextView)) {
-                                if(view!=null){
+                                if (view != null) {
                                     petRoot.removeView(view);
                                 }
                                 view = new PetTextView(context, pet);
@@ -408,27 +369,27 @@ public class GameActivity extends Activity {
                                 ((PetTextView) view).changePet(pet);
                             }
                         }
-                        if(pets.size() < petRoot.getChildCount()){
-                            for (int i = pets.size(); i < petRoot.getChildCount(); i++){
+                        if (pets.size() < petRoot.getChildCount()) {
+                            for (int i = pets.size(); i < petRoot.getChildCount(); i++) {
                                 petRoot.removeViewAt(i);
                             }
                         }
-                    }else{
+                    } else {
                         String[] helps = Resource.getFilesInAssets("help");
 
                         View tv = petRoot.getChildAt(0);
-                        if(tv == null || !(tv instanceof RevealTextView)){
-                            if(tv!=null){
+                        if (tv == null || !(tv instanceof RevealTextView)) {
+                            if (tv != null) {
                                 petRoot.removeView(tv);
                             }
                             tv = new RevealTextView(context);
                             petRoot.addView(tv);
-                        }else{
-                            if(tv.getTag() instanceof Number && System.currentTimeMillis() - ((Number)tv.getTag()).longValue() < 30000){
+                        } else {
+                            if (tv.getTag() instanceof Number && System.currentTimeMillis() - ((Number) tv.getTag()).longValue() < 30000) {
                                 return;
                             }
                         }
-                        ((RevealTextView)tv).setAnimatedText(Html.fromHtml(Resource.readStringFromAssets("help", context.control.getRandom().randomItem(helps))));
+                        ((RevealTextView) tv).setAnimatedText(Html.fromHtml(Resource.readStringFromAssets("help", context.control.getRandom().randomItem(helps))));
                         tv.setTag(System.currentTimeMillis());
                     }
                 }
@@ -468,7 +429,7 @@ public class GameActivity extends Activity {
                     new LocalShop(control).show();
                     break;
                 case R.id.pets:
-                    new PetDialog(control, new PetAdapter(context,control.getDataManager(),"")).show();
+                    new PetDialog(control, new PetAdapter(context, control.getDataManager(), "")).show();
                     break;
                 case R.id.pause:
                     boolean pause = control.pauseGame();
@@ -489,8 +450,58 @@ public class GameActivity extends Activity {
                 case R.id.save:
                     control.save();
                     break;
+                default:
+                        AlertDialog dialog = new AlertDialog.Builder(context).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create();
+                        ImageView imageView = new ImageView(context);
+                        imageView.setImageResource(R.drawable.working);
+                        dialog.setView(imageView);
+                        dialog.show();
             }
             return false;
+        }
+    }
+
+    private void randomMonsterBook() {
+        Monster monster = control.getPetMonsterHelper().randomMonster();
+        if (monster != null) {
+            View view = findViewById(R.id.monster_view);
+            Animation animation = AnimationUtils.loadAnimation(this, R.anim.revert);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation arg0) {
+                    control.getViewHandler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((TextView) view.findViewById(R.id.monster_name)).setText(monster.getType());
+                            ((TextView) view.findViewById(R.id.monster_sex)).setText(monster.getSex() < 0 ? "♂♀" : (monster.getSex() == 0 ? "♂" : "♀"));
+                            ((TextView) view.findViewById(R.id.monster_rank)).setText(StringUtils.formatStar(monster.getRank()));
+                            ((TextView) view.findViewById(R.id.monster_race)).setText(monster.getRace().getName());
+                            ((TextView) view.findViewById(R.id.monster_atk_value)).setText(StringUtils.formatNumber(monster.getAtk()));
+                            ((TextView) view.findViewById(R.id.monster_def_value)).setText(StringUtils.formatNumber(monster.getDef()));
+                            ((TextView) view.findViewById(R.id.monster_hp_value)).setText(StringUtils.formatNumber(monster.getMaxHp()));
+                            ((TextView) view.findViewById(R.id.monster_egg_rate)).setText(StringUtils.formatPercentage(monster.getEggRate()));
+                            ((TextView) view.findViewById(R.id.monster_pet_rate)).setText(StringUtils.formatPercentage(monster.getPetRate()));
+                            ((TextView) view.findViewById(R.id.monster_desc)).setText(control.getPetMonsterHelper().getDescription(monster.getIndex(), monster.getType()));
+                            ((ImageView) view.findViewById(R.id.monster_image)).setImageDrawable(PetMonsterLoder.loadMonsterImage(monster.getIndex()));
+                        }
+                    }, 1000);
+                }   //在动画开始时使用
+
+                @Override
+                public void onAnimationRepeat(Animation arg0) {
+                }  //在动画重复时使用
+
+                @Override
+                public void onAnimationEnd(Animation arg0) {
+
+                }
+            });
+            view.startAnimation(animation);
         }
     }
 

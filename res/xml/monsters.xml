@@ -75,7 +75,7 @@
     </monster>
     <monster>
         <index>3</index>
-        <meet meet_rate="90" min_level="2"/>
+        <meet meet_rate="90" min_level="1"/>
         <name>异壳虫</name>
         <desc>不知道它们怎么产生的，但是它们在迷宫底层绝对是你的噩梦。
         </desc>
@@ -93,7 +93,7 @@
     </monster>
     <monster>
         <index>4</index>
-        <meet meet_rate="90" min_level="1"/>
+        <meet meet_rate="90" min_level="2"/>
         <name>巨型飞蛾</name>
         <desc>身躯巨大的飞蛾，喜欢往光亮的地方聚集。喜欢在你的头顶飞来飞去。        </desc>
         <atk>35</atk>
@@ -178,6 +178,78 @@
         <sex>1</sex>
         <race>Wizardsr</race>
         <rank>6</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>6</index>
+        <meet meet_rate="70" min_level="2"/>
+        <name>老鼠</name>
+        <desc>老鼠是一种啮齿动物，体形有大有小。当然这个世界的老鼠大小可是和普通人一样大，所以被老鼠打败了也不要觉得丢人。
+        </desc>
+        <atk>56</atk>
+        <def>12</def>
+        <hp>115</hp>
+        <hit>2</hit>
+        <silent>1</silent>
+        <egg_rate>20</egg_rate>
+        <pet_rate>50</pet_rate>
+        <sex>-1</sex>
+        <race>Eviler</race>
+        <rank>1</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>2</index>
+        <meet meet_rate="65" min_level="1"/>
+        <name>大蚯蚓</name>
+        <desc>这并不是普通的蚯蚓，据说它们是基因改造产生的，当然你还是可以抓住它们然后拿去钓鱼，不过你得先找到可以钓鱼的地方。
+        </desc>
+        <atk>15</atk>
+        <def>23</def>
+        <hp>190</hp>
+        <hit>0</hit>
+        <silent>0</silent>
+        <egg_rate>30</egg_rate>
+        <pet_rate>60</pet_rate>
+        <sex>-1</sex>
+        <race>Ghosr</race>
+        <rank>1</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>5</index>
+        <meet meet_rate="65" min_level="3"/>
+        <name>猪猪</name>
+        <desc>这种可以吃又可以玩的怪物，骚年不抓一只养养看吗？
+        </desc>
+        <atk>35</atk>
+        <def>114</def>
+        <hp>95</hp>
+        <hit>2</hit>
+        <silent>1</silent>
+        <egg_rate>30</egg_rate>
+        <pet_rate>60</pet_rate>
+        <sex>-1</sex>
+        <race>Eviler</race>
+        <rank>1</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>88</index>
+        <meet meet_rate="5" min_level="300"/>
+        <name>作者（伪）</name>
+        <desc>游荡在这个迷宫的一种意志的化身。没有实体，所以无法捕捉。据说是因为作者在构思这个游戏的时候因为睡眠不足产生的一种怨念。
+        </desc>
+        <atk>210</atk>
+        <def>1</def>
+        <hp>210</hp>
+        <hit>20</hit>
+        <silent>90</silent>
+        <egg_rate>0</egg_rate>
+        <pet_rate>0</pet_rate>
+        <sex>0</sex>
+        <race>Elyosr</race>
+        <rank>9</rank>
         <evolution></evolution>
     </monster>
 </monsters>

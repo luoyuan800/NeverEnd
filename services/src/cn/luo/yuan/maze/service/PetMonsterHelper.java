@@ -40,7 +40,7 @@ public class PetMonsterHelper {
     }
 
     public  boolean isCatchAble(Monster monster, Hero hero, Random random, int petCount) {
-        if (petCount < Data.MAX_PET_COUNT || monster.getRace().ordinal() != hero.getRace().ordinal() + 1 || monster.getRace().ordinal() != hero.getRace().ordinal() - 5) {
+        if (monster.getPetRate() > 0 && (petCount < Data.MAX_PET_COUNT && monster.getRace().ordinal() != hero.getRace().ordinal() + 1 && monster.getRace().ordinal() != hero.getRace().ordinal() - 5)) {
             float rate = (100 - monster.getPetRate()) + random.nextInt(petCount);
             if(rate > 100 && monster.getPetRate() > 0){
                 rate = 100 - monster.getPetRate() + random.nextFloat(petCount + 10);

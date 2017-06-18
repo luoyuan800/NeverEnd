@@ -221,6 +221,10 @@ public class AccessoryHelper {
                                 if (accessory != null)
                                     accessory.setAuthor(parser.getAttributeValue(null, "value"));
                                 break;
+                            case "element":
+                                if (accessory != null)
+                                    accessory.setElement(Element.getByName(parser.getAttributeValue(null, "value")));
+                                break;
                             case "price":
                                 if (accessory != null)
                                     accessory.setPrice(Long.parseLong(parser.getAttributeValue(null, "value")));
