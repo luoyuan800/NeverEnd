@@ -49,8 +49,8 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
                 final Maze maze = dataManager.loadMaze();
                 final AlertDialog dialog = new AlertDialog.Builder(SelectedActivity.this).create();
                 dialog.setTitle(Resource.getString(R.string.name_input));
+                dialog.setView(View.inflate(SelectedActivity.this,R.layout.init_hero, null));
                 dialog.show();
-                dialog.setContentView(R.layout.init_hero);
                 dialog.setCancelable(false);
                 Spinner element = (Spinner) dialog.findViewById(R.id.select_element);
                 ArrayAdapter<Element> fa = new ArrayAdapter<>(SelectedActivity.this, android.R.layout.simple_spinner_item, Arrays.asList(Element.values()));

@@ -257,71 +257,6 @@
             android:layout_alignParentEnd="true"/>
 
     <LinearLayout
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/linearLayout3"
-            >
-        <TextView
-                android:id="@+id/sword"
-                android:gravity="center_horizontal"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/not_mount"
-                android:textColor="#3506da"
-                android:textSize="13sp"
-                android:onClick="onClick"/>
-
-        <TextView
-                android:id="@+id/armor"
-                android:gravity="center_horizontal"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/not_mount"
-                android:textColor="#0307da"
-                android:textSize="13sp"
-                android:onClick="onClick"/>
-
-        <TextView
-                android:id="@+id/hat_view"
-                android:gravity="center_horizontal"
-                android:layout_width="150dp"
-                android:layout_height="20sp"
-                android:layout_gravity="center"
-                android:textSize="13sp"
-                android:text="单金莲（木） + 1"
-                android:onClick="onClick"
-                />
-
-        <TextView
-                android:id="@+id/necklace_view"
-                android:gravity="center_horizontal"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="13sp"
-                android:text="@string/not_mount"
-                android:onClick="onClick"
-                />
-
-        <TextView
-                android:id="@+id/ring_view"
-                android:gravity="center_horizontal"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="13sp"
-                android:text="@string/not_mount"
-                android:onClick="onClick"
-                />
-
-    </LinearLayout>
-
-    <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -374,11 +309,12 @@
 
     <LinearLayout
             android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/linearLayout3"
             android:layout_above="@+id/linearLayout4"
-            android:layout_alignParentEnd="true">
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/linearLayout2">
 
         <LinearLayout
                 android:layout_gravity="center"
@@ -473,6 +409,70 @@
             android:background="@color/toumin"
             android:onClick="onClick"
             />
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/linearLayout3">
+        <TextView
+                android:id="@+id/sword"
+                android:gravity="center_horizontal"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/not_mount"
+                android:textColor="#3506da"
+                android:textSize="13sp"
+                android:onClick="onClick"/>
+
+        <TextView
+                android:id="@+id/armor"
+                android:gravity="center_horizontal"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/not_mount"
+                android:textColor="#0307da"
+                android:textSize="13sp"
+                android:onClick="onClick"/>
+
+        <TextView
+                android:id="@+id/hat_view"
+                android:gravity="center_horizontal"
+                android:layout_width="150dp"
+                android:layout_height="20sp"
+                android:layout_gravity="center"
+                android:textSize="13sp"
+                android:text="单金莲（木） + 1"
+                android:onClick="onClick"
+                />
+
+        <TextView
+                android:id="@+id/necklace_view"
+                android:gravity="center_horizontal"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="13sp"
+                android:text="@string/not_mount"
+                android:onClick="onClick"
+                />
+
+        <TextView
+                android:id="@+id/ring_view"
+                android:gravity="center_horizontal"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="13sp"
+                android:text="@string/not_mount"
+                android:onClick="onClick"
+                />
+
+    </LinearLayout>
 
 
 </RelativeLayout>

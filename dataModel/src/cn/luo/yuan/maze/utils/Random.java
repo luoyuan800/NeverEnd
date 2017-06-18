@@ -1,5 +1,7 @@
 package cn.luo.yuan.maze.utils;
 
+import java.util.ArrayList;
+
 /**
  * Copyright 2015 gluo.
  * ALL RIGHTS RESERVED.
@@ -95,5 +97,12 @@ public class Random extends java.util.Random {
             }
         }
         return number;
+    }
+
+    public <T> T randomItem(ArrayList<T> ts) {
+        if(ts.size() <= 0){
+            return null;
+        }
+        return ts.get(nextInt(ts.size()));
     }
 }

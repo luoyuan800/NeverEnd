@@ -95,15 +95,20 @@ public class AccessoryHelper {
                 }
                 major.setLevel(major.getLevel() + 1);
                 if (!major.getColor().equals(Data.DARKGOLD_COLOR) && random.nextInt(100) < random.nextLong(major.getLevel())) {
-                    if (major.getColor().equals(Data.DEFAULT_QUALITY_COLOR)) {
-                        major.setColor(Data.BLUE_COLOR);
-                    } else if (major.getColor().equals(Data.BLUE_COLOR)) {
-                        major.setColor(Data.RED_COLOR);
-                    } else if (major.getColor().equals(Data.RED_COLOR)) {
-                        major.setColor(Data.ORANGE_COLOR);
-                    } else if (major.getColor().equals(Data.ORANGE_COLOR) && random.nextInt(100) < random.nextLong(major.getLevel() / Data.DARKGOLD_RATE_REDUCE)) {
-                        major.setColor(Data.DARKGOLD_COLOR);
+                    switch (major.getColor()) {
+                        case Data.DEFAULT_QUALITY_COLOR:
+                            major.setColor(Data.BLUE_COLOR);
+                            break;
+                        case Data.BLUE_COLOR:
+                            major.setColor(Data.RED_COLOR);
+                            break;
+                        case Data.RED_COLOR:
+                            major.setColor(Data.ORANGE_COLOR);
+                            break;
                     }
+                    /*else if (major.getColor().equals(Data.ORANGE_COLOR) && random.nextInt(100) < random.nextLong(major.getLevel() / Data.DARKGOLD_RATE_REDUCE)) {
+                        major.setColor(Data.DARKGOLD_COLOR);
+                    }*/
                 }
                 return true;
             } else {

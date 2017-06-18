@@ -49,14 +49,14 @@ public class DataManager implements DataManagerInterface {
         this.index = index;
         this.database = Sqlite.getSqlite(context);
         this.context = context;
-        accessoryLoader = new SerializeLoader<>(Accessory.class, context);
-        mazeLoader = new SerializeLoader<>(Maze.class, context);
-        heroLoader = new SerializeLoader<>(Hero.class, context);
-        petLoader = new SerializeLoader<>(Pet.class, context);
-        goodsLoader = new SerializeLoader<>(Goods.class, context);
-        skillLoader = new SerializeLoader<>(Skill.class, context);
-        clickSkillLoader = new SerializeLoader<>(ClickSkill.class, context);
-        taskLoader = new SerializeLoader<Task>(Task.class, context);
+        accessoryLoader = new SerializeLoader<>(Accessory.class, context, index);
+        mazeLoader = new SerializeLoader<>(Maze.class, context, index);
+        heroLoader = new SerializeLoader<>(Hero.class, context, index);
+        petLoader = new SerializeLoader<>(Pet.class, context, index);
+        goodsLoader = new SerializeLoader<>(Goods.class, context, index);
+        skillLoader = new SerializeLoader<>(Skill.class, context, index);
+        clickSkillLoader = new SerializeLoader<>(ClickSkill.class, context, index);
+        taskLoader = new SerializeLoader<Task>(Task.class, context, index);
         this.context = context;
     }
 
@@ -73,18 +73,7 @@ public class DataManager implements DataManagerInterface {
             }
         }
         Hero hero = new Hero();
-        hero.setAtkGrow(1);
-        hero.setHpGrow(2);
-        hero.setDefGrow(3);
-        hero.setMaxHp(20);
-        hero.setHp(20);
-        hero.setDef(1);
-        hero.setAtk(5);
         hero.setIndex(index);
-        hero.setMaterial(0);
-        hero.setStr(0);
-        hero.setAgi(0);
-        hero.setPoint(0);
         return hero;
     }
 
@@ -95,7 +84,7 @@ public class DataManager implements DataManagerInterface {
     public List<Accessory> loadMountedAccessory(Hero hero) {
         List<Accessory> accessories = new ArrayList<>();
         for(Accessory accessory : accessoryLoader.loadAll()){
-            if(accessory.isMounted()){
+            if(accessory.getHeroIndex() == index && accessory.isMounted()){
                 accessories.add(accessory);
             }
         }
@@ -123,7 +112,7 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void saveAccessory(Accessory accessory) {
-
+        accessory.setHeroIndex(index);
         if (StringUtils.isNotEmpty(accessory.getId())) {
             //Already existed, 我们会进行update操作
             accessoryLoader.update(accessory);
@@ -166,12 +155,7 @@ public class DataManager implements DataManagerInterface {
     }
 
     public int getPetCount() {
-        try (Cursor cursor = database.excuseSOL("select count(*) from pet")) {
-            if (!cursor.isAfterLast())
-                return cursor.getInt(0);
-            else
-                return 0;
-        }
+        return petLoader.size();
     }
 
     /**
@@ -206,6 +190,7 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void savePet(Pet pet) {
+        pet.setHeroIndex(index);
         if (StringUtils.isNotEmpty(pet.getId())) {
             petLoader.update(pet);
         } else {
@@ -226,12 +211,13 @@ public class DataManager implements DataManagerInterface {
         return petLoader.loadLimit(start, rows, new Index<Pet>() {
             @Override
             public boolean match(Pet pet) {
-                return pet.getName().contains(keyWord) || pet.getTag().contains(keyWord);
+                return pet.getHeroIndex() == index && (pet.getName().contains(keyWord) || pet.getTag().contains(keyWord));
             }
         }, comparator);
     }
 
     public void saveGoods(Goods goods) {
+        goods.setHeroIndex(index);
         goodsLoader.save(goods, goods.getClass().getSimpleName() + "@" + index);
     }
 
@@ -283,7 +269,7 @@ public class DataManager implements DataManagerInterface {
         return accessoryLoader.loadLimit(start, row, new Index<Accessory>() {
             @Override
             public boolean match(Accessory accessory) {
-                return accessory.getName().contains(key);
+                return accessory.getHeroIndex() == index && accessory.getName().contains(key);
             }
         }, order);
     }
@@ -322,7 +308,7 @@ public class DataManager implements DataManagerInterface {
     public List<Pet> loadMountPets() {
         List<Pet> pets = new ArrayList<>();
         for(Pet pet : petLoader.loadAll()){
-            if(pet.isMounted()){
+            if(pet.getHeroIndex() == index && pet.isMounted()){
                 pets.add(pet);
             }
         }

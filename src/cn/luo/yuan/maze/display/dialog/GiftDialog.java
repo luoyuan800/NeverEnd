@@ -37,7 +37,8 @@ public class GiftDialog implements View.OnClickListener {
         giftButton.setTag(Gift.HeroHeart);
         giftButton.setOnClickListener(this);
         giftButton = (Button) mainDialog.findViewById(R.id.DarkHeard);
-
+        giftButton.setTag(Gift.DarkHeard);
+        giftButton.setOnClickListener(this);
         giftButton = (Button) mainDialog.findViewById(R.id.Warrior);
 
         giftButton = (Button) mainDialog.findViewById(R.id.Searcher);

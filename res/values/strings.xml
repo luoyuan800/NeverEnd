@@ -87,4 +87,5 @@
     <string name="sort_intimacy_up">亲↑</string>
     <string name="sort_intimacy_down">亲↓</string>
     <string name="buy_label">购买</string>
+    <string name="shop_tip">商店中的物品每次开启都随机刷新，如果没有你想要的，多打开几次吧！</string>
 </resources>

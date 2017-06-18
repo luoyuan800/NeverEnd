@@ -1,16 +1,13 @@
 package cn.luo.yuan.maze.service;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.ScrollView;
+import android.widget.TextView;
+import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.display.adapter.ItemAdapter;
 import cn.luo.yuan.maze.display.view.LoadMoreListView;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.goods.GoodsType;
 import cn.luo.yuan.maze.utils.Random;
@@ -31,7 +28,7 @@ public class LocalShop {
         this.random = context.getRandom();
     }
 
-    public void show(){
+    public void show() {
         AlertDialog shopDialog = new AlertDialog.Builder(context.getContext()).create();
         shopDialog.setTitle("本地商店");
         shopDialog.setButton(DialogInterface.BUTTON_POSITIVE, "退出", new DialogInterface.OnClickListener() {
@@ -40,11 +37,18 @@ public class LocalShop {
                 dialogInterface.dismiss();
             }
         });
-        LoadMoreListView list = new LoadMoreListView(context.getContext());
-        ItemAdapter adapter = new ItemAdapter(context, randomAccessory());
-        list.setAdapter(adapter);
-        list.onLoadMoreComplete(true);
-        shopDialog.setView(list);
+        List<Item> items = randomAccessory();
+        if (items.size() > 0) {
+            LoadMoreListView list = new LoadMoreListView(context.getContext());
+            ItemAdapter adapter = new ItemAdapter(context, items);
+            list.setAdapter(adapter);
+            list.onLoadMoreComplete(true);
+            shopDialog.setView(list);
+        } else {
+            TextView tv = new TextView(context.getContext());
+            tv.setText(R.string.shop_tip);
+            shopDialog.setView(tv);
+        }
         shopDialog.show();
     }
 
@@ -52,17 +56,17 @@ public class LocalShop {
         List<Item> acces = new ArrayList<>();
         AccessoryHelper accessoryHelper = AccessoryHelper.getOrCreate(context);
         for (Accessory accessory : accessoryHelper.getRandomAccessories(random.nextInt(5))) {
-                Item item = new Item();
-                item.name = accessory.getName();
-                item.color = accessory.getColor();
-                item.count = 1;
-                item.desc = accessory.getDesc();
-                item.author = accessory.getAuthor();
-                item.effects = accessory.getEffects();
-                item.price = accessory.getPrice();
-                item.instance = accessory;
-                item.type = accessory.getType();
-                acces.add(item);
+            Item item = new Item();
+            item.name = accessory.getName();
+            item.color = accessory.getColor();
+            item.count = 1;
+            item.desc = accessory.getDesc();
+            item.author = accessory.getAuthor();
+            item.effects = accessory.getEffects();
+            item.price = accessory.getPrice();
+            item.instance = accessory;
+            item.type = accessory.getType();
+            acces.add(item);
         }
         return acces;
     }
@@ -94,19 +98,20 @@ public class LocalShop {
         public String name;
         public int count;
         public long price;
+        public Object instance;
+        public boolean special;
         String type;
         List<Effect> effects;
         String desc;
         String color;
-        public Object instance;
-        public boolean special;
 
         public String toString() {
-            if (effects == null) return name + " * " + count + (special ? " 特价":" 价格") + " : " + StringUtils.formatNumber(price) + "<br>" + desc;
+            if (effects == null)
+                return name + " * " + count + (special ? " 特价" : " 价格") + " : " + StringUtils.formatNumber(price) + "<br>" + desc;
             return "<font color='" + color + "'>" + name + "</font>(" + type + ")" + " * "
-                    + count + (special ? " 特价":" 价格") + " : " + StringUtils.formatNumber(price)
-                    + (StringUtils.isNotEmpty(author)? "<br>" + author : "")
-                    + (StringUtils.isNotEmpty(desc) ? "<br>"+desc : "")
+                    + count + (special ? " 特价" : " 价格") + " : " + StringUtils.formatNumber(price)
+                    + (StringUtils.isNotEmpty(author) ? "<br>" + author : "")
+                    + (StringUtils.isNotEmpty(desc) ? "<br>" + desc : "")
                     + "<br>" + StringUtils.formatEffectsAsHtml(effects);
         }
     }

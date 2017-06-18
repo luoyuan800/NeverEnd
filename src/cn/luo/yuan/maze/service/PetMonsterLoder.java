@@ -69,39 +69,40 @@ public class PetMonsterLoder implements MonsterLoader {
         int keyIndex = getRandom().nextInt(addKey ? (keys.size() + 1) : keys.size());
         if (keyIndex < keys.size()) {
             MonsterKey key = keys.get(keyIndex);
-            Monster monster = getMonsterCache().get(key).get();
-            if (key.min_level < level && getRandom().nextInt(100 + key.count) < key.meet_rate) {
-
-                if (monster == null) {
-                    monster = loadMonsterByIndex(key.index);
-                }
-                if (monster != null) {
-                    clone = monster.clone();
-                    if (clone != null) {
-                        if (addKey) {
-                            key.count++;
-                        }
-                        if (addKey) {
-                            if (clone.getSex() < 0) {
-                                clone.setSex(getRandom().nextInt(1));
-                            }
-                            clone.setAtk(clone.getAtk() + level * Data.MONSTER_ATK_RISE_PRE_LEVEL);
-                            clone.setDef(clone.getDef() + level * Data.MONSTER_DEF_RISE_PRE_LEVEL);
-                            clone.setMaxHp(clone.getMaxHp() + level * Data.MONSTER_HP_RISE_PRE_LEVEL);
-                            clone.setHp(clone.getMaxHp());
-                            clone.setElement(Element.values()[getRandom().nextInt(Element.values().length)]);
-                            clone.setMaterial(Data.getMonsterMaterial(clone.getMaxHp(), clone.getAtk(), level, getRandom()));
-                            clone.setFirstName(FirstName.getRandom(level, getRandom()));
-                            clone.setSecondName(SecondName.getRandom(level, getRandom()));
-                            clone.setColor(Data.DEFAULT_QUALITY_COLOR);
-                        }
-                    }
-                }
-            } else {
+            while (keyIndex < keys.size() && getRandom().nextInt(100 + key.count) >= key.meet_rate) {
                 if (addKey) {
                     key.count--;
                 }
+                key = getRandom().randomItem(keys);
             }
+            Monster monster = getMonsterCache().get(key).get();
+
+            if (monster == null) {
+                monster = loadMonsterByIndex(key.index);
+            }
+            if (monster != null) {
+                clone = monster.clone();
+                if (clone != null) {
+                    if (addKey) {
+                        key.count++;
+                    }
+                    if (addKey) {
+                        if (clone.getSex() < 0) {
+                            clone.setSex(getRandom().nextInt(1));
+                        }
+                        clone.setAtk(clone.getAtk() + level * Data.MONSTER_ATK_RISE_PRE_LEVEL);
+                        clone.setDef(clone.getDef() + level * Data.MONSTER_DEF_RISE_PRE_LEVEL);
+                        clone.setMaxHp(clone.getMaxHp() + level * Data.MONSTER_HP_RISE_PRE_LEVEL);
+                        clone.setHp(clone.getMaxHp());
+                        clone.setElement(Element.values()[getRandom().nextInt(Element.values().length)]);
+                        clone.setMaterial(Data.getMonsterMaterial(clone.getMaxHp(), clone.getAtk(), level, getRandom()));
+                        clone.setFirstName(FirstName.getRandom(level, getRandom()));
+                        clone.setSecondName(SecondName.getRandom(level, getRandom()));
+                        clone.setColor(Data.DEFAULT_QUALITY_COLOR);
+                    }
+                }
+            }
+
         }
         return clone;
     }
@@ -131,10 +132,10 @@ public class PetMonsterLoder implements MonsterLoader {
                             break;
                         case "desc":
                             String desc = parser.nextText();
-                            if((index > 0 && monsterIndex!=index) || (type!=null && !type.equals(name))) {
+                            if ((index > 0 && monsterIndex != index) || (type != null && !type.equals(name))) {
                                 nextMonsterTag(parser);
                                 continue loop;
-                            }else{
+                            } else {
                                 return desc;
                             }
                     }
@@ -170,7 +171,7 @@ public class PetMonsterLoder implements MonsterLoader {
                                 if (monsterIndex > 0 && monsterIndex == index) {
                                     evolutionIndex = currentEveIndex;
                                 }
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 //LogHelper.logException(e,"Not need care");
                             }
                             break loop;

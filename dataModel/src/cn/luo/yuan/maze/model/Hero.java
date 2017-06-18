@@ -22,15 +22,15 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private int index;//存档编号
     private String name;//名字
-    private EncodeLong maxHp = new EncodeLong(0);//血上限
-    private EncodeLong hp = new EncodeLong(0);//当前血量
-    private EncodeLong atk = new EncodeLong(0);//基础攻击
-    private EncodeLong def = new EncodeLong(0);//基础防御
+    private EncodeLong maxHp = new EncodeLong(20);//血上限
+    private EncodeLong hp = new EncodeLong(20);//当前血量
+    private EncodeLong atk = new EncodeLong(15);//基础攻击
+    private EncodeLong def = new EncodeLong(5);//基础防御
     private EncodeLong agi = new EncodeLong(0);//敏捷
     private EncodeLong str = new EncodeLong(0);//力量
-    private EncodeLong hpGrow = new EncodeLong(0);//血量成长（每点力量）
-    private EncodeLong defGrow = new EncodeLong(0);//防御成长（每点敏捷）
-    private EncodeLong atkGrow = new EncodeLong(0);//攻击成长（每点力量）
+    private EncodeLong hpGrow = new EncodeLong(2);//血量成长（每点力量）
+    private EncodeLong defGrow = new EncodeLong(3);//防御成长（每点敏捷）
+    private EncodeLong atkGrow = new EncodeLong(1);//攻击成长（每点力量）
     private long birthDay;//生日
     private EncodeLong reincarnate = new EncodeLong(0);//转生次数
     private EncodeLong material = new EncodeLong(0);//锻造点（货币）

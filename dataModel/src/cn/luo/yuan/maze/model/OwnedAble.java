@@ -11,4 +11,7 @@ public interface OwnedAble {
 
     void setOwnerName(String name);
     void setKeeperName(String name);
+
+    void setHeroIndex(int index);
+    int getHeroIndex();
 }

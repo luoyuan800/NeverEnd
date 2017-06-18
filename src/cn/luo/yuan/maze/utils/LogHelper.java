@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 public class LogHelper {
     private static String pkgName;
     private static int versionCode;
+
     public static void initLogSystem(Context context){
         pkgName = context.getPackageName();
         try {
@@ -22,6 +23,10 @@ public class LogHelper {
         }
     }
     public static void logException(final Exception e, String msg) {
+        logException(e, msg, null);
+    }
+
+    public static void logException(final Exception e, String msg, Context context) {
         e.printStackTrace();
         try {
 

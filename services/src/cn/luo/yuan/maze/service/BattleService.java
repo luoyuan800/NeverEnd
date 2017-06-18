@@ -40,7 +40,7 @@ public class BattleService {
     public boolean battle(long level) {
         long round = 1;
         boolean heroAtk = random.nextBoolean();
-        while (hero.getHp() > 0 && monster.getHp() > 0) {
+        while (hero.getCurrentHp() > 0 && monster.getCurrentHp() > 0) {
             if(runninfService!=null && runninfService.isPause()){
                 continue;
             }
@@ -63,7 +63,7 @@ public class BattleService {
             }
 
         }
-        if (monster.getHp() <= 0) {
+        if (monster.getCurrentHp() <= 0) {
             if(hero instanceof NameObject && monster instanceof NameObject){
                 battleMessage.win((NameObject)hero, (NameObject)monster);
             }

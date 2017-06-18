@@ -13,6 +13,15 @@ import cn.luo.yuan.maze.utils.StringUtils
  * Created by gluo on 5/5/2017.
  */
 class Medallion() : Goods {
+    override fun setHeroIndex(index: Int) {
+        this.index = index
+    }
+
+    override fun getHeroIndex(): Int {
+        return index
+    }
+
+    var index = 0
     override fun setKeeperName(name: String?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

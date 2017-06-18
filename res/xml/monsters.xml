@@ -13,7 +13,7 @@
         <hit>1</hit>
         <silent>0</silent>
         <egg_rate>89</egg_rate>
-        <pet_rate>55</pet_rate>
+        <pet_rate>35</pet_rate>
         <sex>-1</sex>
         <race>Nonsr</race>
         <rank>1</rank>
@@ -49,7 +49,7 @@
         <hit>2</hit>
         <silent>14</silent>
         <egg_rate>15</egg_rate>
-        <pet_rate>25</pet_rate>
+        <pet_rate>15</pet_rate>
         <sex>1</sex>
         <race>Orger</race>
         <rank>2</rank>
@@ -85,7 +85,7 @@
         <hit>1</hit>
         <silent>0</silent>
         <egg_rate>80</egg_rate>
-        <pet_rate>50</pet_rate>
+        <pet_rate>30</pet_rate>
         <sex>-1</sex>
         <race>Nonsr</race>
         <rank>1</rank>
@@ -102,7 +102,7 @@
         <hit>1</hit>
         <silent>0</silent>
         <egg_rate>40</egg_rate>
-        <pet_rate>55</pet_rate>
+        <pet_rate>35</pet_rate>
         <sex>-1</sex>
         <race>Wizardsr</race>
         <rank>1</rank>
@@ -120,7 +120,7 @@
         <hit>1</hit>
         <silent>9</silent>
         <egg_rate>50</egg_rate>
-        <pet_rate>20</pet_rate>
+        <pet_rate>10</pet_rate>
         <sex>-1</sex>
         <race>Nonsr</race>
         <rank>1</rank>
@@ -173,7 +173,7 @@
         <hp>90</hp>
         <hit>15</hit>
         <silent>60</silent>
-        <egg_rate>1</egg_rate>
+        <egg_rate>0</egg_rate>
         <pet_rate>0</pet_rate>
         <sex>1</sex>
         <race>Wizardsr</race>
@@ -192,7 +192,7 @@
         <hit>2</hit>
         <silent>1</silent>
         <egg_rate>20</egg_rate>
-        <pet_rate>50</pet_rate>
+        <pet_rate>30</pet_rate>
         <sex>-1</sex>
         <race>Eviler</race>
         <rank>1</rank>
@@ -210,7 +210,7 @@
         <hit>0</hit>
         <silent>0</silent>
         <egg_rate>30</egg_rate>
-        <pet_rate>60</pet_rate>
+        <pet_rate>35</pet_rate>
         <sex>-1</sex>
         <race>Ghosr</race>
         <rank>1</rank>

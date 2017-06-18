@@ -12,6 +12,7 @@ public class Pet extends Monster implements IDModel, OwnedAble {
     private EncodeLong level = new EncodeLong(0);
     private String id = StringUtils.EMPTY_STRING;
     private String tag = StringUtils.EMPTY_STRING;
+    private int heroIndex;
     private boolean mounted;
     private EncodeLong intimacy = new EncodeLong(0);
     private String ownerId = StringUtils.EMPTY_STRING;
@@ -115,5 +116,15 @@ public class Pet extends Monster implements IDModel, OwnedAble {
 
     public void setKeeperName(String keeperName) {
         this.keeperName = keeperName;
+    }
+
+    @Override
+    public int getHeroIndex() {
+        return heroIndex;
+    }
+
+    @Override
+    public void setHeroIndex(int heroIndex) {
+        this.heroIndex = heroIndex;
     }
 }

@@ -7,6 +7,14 @@ import cn.luo.yuan.maze.model.goods.GoodsProperties
  * Created by gluo on 5/9/2017.
  */
 class EmptyGoods : Goods {
+    override fun setHeroIndex(index: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getHeroIndex(): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun setKeeperId(id: String?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

@@ -226,9 +226,8 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
             clone.material = new EncodeLong(clone.getMaterial());
             return clone;
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            return this;
         }
-        return null;
     }
 
     public void setSkill(Skill skill) {

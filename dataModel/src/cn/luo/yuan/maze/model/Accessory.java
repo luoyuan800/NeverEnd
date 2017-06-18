@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.model;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
+import sun.rmi.log.LogHandler;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
  */
 public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, Cloneable {
     private static final long serialVersionUID = Field.SERVER_VERSION;
+    private int heroIndex;
     private String name;
     private String id;
     private String type;
@@ -192,8 +194,17 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, 
             }
             return a;
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
             return this;
         }
+    }
+
+    @Override
+    public int getHeroIndex() {
+        return heroIndex;
+    }
+
+    @Override
+    public void setHeroIndex(int heroIndex) {
+        this.heroIndex = heroIndex;
     }
 }

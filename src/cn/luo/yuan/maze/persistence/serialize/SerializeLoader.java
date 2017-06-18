@@ -3,7 +3,6 @@ package cn.luo.yuan.maze.persistence.serialize;
 import android.content.Context;
 import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.model.Index;
-import cn.luo.yuan.maze.utils.LogHelper;
 
 import java.io.InvalidClassException;
 import java.io.Serializable;
@@ -20,11 +19,13 @@ public class SerializeLoader<T extends Serializable> {
     private ObjectDB<T> db;
     private Class<T> clazz;
     private Context context;
+    private int index;
 
-    public SerializeLoader(Class<T> type, Context context) {
+    public SerializeLoader(Class<T> type, Context context, int heroIndex) {
         db = new ObjectDB<T>(type, context);
         clazz = type;
         this.context = context;
+        this.index = heroIndex;
     }
 
     public T load(String id) {
