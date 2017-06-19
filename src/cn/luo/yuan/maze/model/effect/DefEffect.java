@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model.effect;
 
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.Field;
 
@@ -9,14 +10,14 @@ import cn.luo.yuan.maze.utils.Field;
  */
 public class DefEffect extends cn.luo.yuan.maze.model.effect.original.DefEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
-    private long def;
+    private EncodeLong def = new EncodeLong(0);
 
     public long getDef() {
-        return def;
+        return def.getValue();
     }
 
     public void setDef(long def) {
-        this.def = def;
+        this.def.setValue(def);
     }
 
     public String toString(){

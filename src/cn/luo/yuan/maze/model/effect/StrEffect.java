@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model.effect;
 
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.Resource;
 
@@ -9,14 +10,14 @@ import cn.luo.yuan.maze.utils.Resource;
  */
 public class StrEffect extends cn.luo.yuan.maze.model.effect.original.StrEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
-    private long str;
+    private EncodeLong str = new EncodeLong(0);
 
     public long getStr() {
-        return str;
+        return str.getValue();
     }
 
     public void setStr(long str) {
-        this.str = str;
+        this.str.setValue(str);
     }
 
     public String toString() {

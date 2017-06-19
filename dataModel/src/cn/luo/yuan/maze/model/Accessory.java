@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model;
 
 import cn.luo.yuan.maze.model.effect.Effect;
+import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 import sun.rmi.log.LogHandler;
@@ -18,7 +19,7 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, 
     private String name;
     private String id;
     private String type;
-    private long level;
+    private EncodeLong level = new EncodeLong(0);
     private String color = Data.DEFAULT_QUALITY_COLOR;
     private boolean mounted;
     private List<Effect> effects = new ArrayList<>(5);
@@ -36,11 +37,11 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, 
     }
 
     public String getDisplayName(){
-        return "<font color='" + color + "'>" + name + "</font>" + "(" + type + ") "  + element.getCn() + (level>0?(" + " + level):"") + (isMounted() ? "√" : "");
+        return "<font color='" + color + "'>" + name + "</font>" + "(" + type + ") "  + element.getCn() + (level.getValue()>0?(" + " + level):"") + (isMounted() ? "√" : "");
     }
 
     public String toString(){
-        return "<font color='" + color + "'>" + name + "</font>("  + element.getCn() + (level>0?(") + " + level):")");
+        return "<font color='" + color + "'>" + name + "</font>("  + element.getCn() + (level.getValue()>0?(") + " + level):")");
     }
     public String getName() {
         return name;
@@ -97,11 +98,11 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, 
     }
 
     public long getLevel() {
-        return level;
+        return level.getValue();
     }
 
     public void setLevel(long level) {
-        this.level = level;
+        this.level.setValue(level);
     }
 
     public String getColor() {

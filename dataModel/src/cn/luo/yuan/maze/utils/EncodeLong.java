@@ -18,6 +18,10 @@ public class EncodeLong implements Serializable {
         setValue(def);
     }
 
+    public String toString(){
+        return StringUtils.formatNumber(getValue());
+    }
+
     public long getValue() {
         byte[] value;
         byte[] key;

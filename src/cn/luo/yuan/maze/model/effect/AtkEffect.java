@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model.effect;
 
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.Field;
 
@@ -9,14 +10,14 @@ import cn.luo.yuan.maze.utils.Field;
  */
 public class AtkEffect extends cn.luo.yuan.maze.model.effect.original.AtkEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
-    private long atk;
+    private EncodeLong atk = new EncodeLong(0);
 
     public long getAtk() {
-        return atk;
+        return atk.getValue();
     }
 
     public void setAtk(long atk) {
-        this.atk = atk;
+        this.atk.setValue(atk);
     }
 
     public String toString(){

@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model.effect;
 
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.Resource;
 
@@ -9,14 +10,14 @@ import cn.luo.yuan.maze.utils.Resource;
  */
 public class HpEffect extends cn.luo.yuan.maze.model.effect.original.HpEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
-    private long hp;
+    private EncodeLong hp = new EncodeLong(0);
 
     public long getHp() {
-        return hp;
+        return hp.getValue();
     }
 
     public void setHp(long hp) {
-        this.hp = hp;
+        this.hp.setValue(hp);
     }
 
     public String toString() {

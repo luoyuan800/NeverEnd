@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model.effect;
 
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Resource;
 import cn.luo.yuan.maze.utils.Field;
 
@@ -9,14 +10,14 @@ import cn.luo.yuan.maze.utils.Field;
  */
 public class AgiEffect extends cn.luo.yuan.maze.model.effect.original.AgiEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
-    private long agi;
+    private EncodeLong agi = new EncodeLong(0);
 
     public long getAgi() {
-        return agi;
+        return agi.getValue();
     }
 
     public void setAgi(long agi) {
-        this.agi = agi;
+        this.agi.setValue(agi);
     }
     public String toString(){
         return Resource.getString(R.string.agi_effect) + agi;
