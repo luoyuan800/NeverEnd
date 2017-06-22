@@ -3,7 +3,9 @@ package cn.luo.yuan.maze.server.persistence;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.index.HeroIndex;
+import cn.luo.yuan.maze.server.model.SingleMessage;
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +23,7 @@ import java.util.Set;
 public class HeroTable {
     private ObjectTable<Hero> heroDb;
     private ObjectTable<Maze> mazeDb;
+    private ObjectTable<SingleMessage> msgerDb;
     private HashMap<HeroIndex, SoftReference<Hero>> cache;
     private long maxLevel = 1;
     private File root;
@@ -125,6 +128,15 @@ public class HeroTable {
     public void clear() {
         heroDb.clear();
         mazeDb.clear();
+    }
+
+    @Nullable
+    public SingleMessage getMessager(String id) {
+        return msgerDb.loadObject(id);
+    }
+
+    public void saveMessager(SingleMessage singleMessage, String id) throws IOException {
+        msgerDb.save(singleMessage, id);
     }
 
     private Hero loadHero(String id) throws IOException, ClassNotFoundException {

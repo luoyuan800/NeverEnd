@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.utils;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Copyright 2015 gluo.
@@ -10,8 +11,23 @@ import java.util.ArrayList;
 public class Random extends java.util.Random {
     private static final long serialVersionUID = 1L;
     public Random(long seed){
-        super(seed);
+        super(seedUniquifier() ^ seed);
     }
+
+    private static long seedUniquifier() {
+        // L'Ecuyer, "Tables of Linear Congruential Generators of
+        // Different Sizes and Good Lattice Structure", 1999
+        for (;;) {
+            long current = seedUniquifier.get();
+            long next = current * 181783497276652981L;
+            if (seedUniquifier.compareAndSet(current, next))
+                return next;
+        }
+    }
+    private static final AtomicLong seedUniquifier
+            = new AtomicLong(8682522807148012L);
+
+
     public long nextLong(long num) {
         try {
             if (num <= 0) {
@@ -44,7 +60,8 @@ public class Random extends java.util.Random {
         return super.nextInt(num);
     }
 
-    public <T> T randomItem(T...ts){
+    @SafeVarargs
+    public final <T> T randomItem(T... ts){
         if(ts == null || ts.length == 0){
             return null;
         }

@@ -8,76 +8,25 @@ import cn.luo.yuan.maze.model.skill.SkillAbleObject;
 import cn.luo.yuan.maze.server.model.Group;
 import cn.luo.yuan.maze.service.BattleMessage;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by gluo on 5/26/2017.
  */
-public class Message implements BattleMessage {
-    @Override
-    public void battleTooLong() {
+public abstract class Message implements BattleMessage {
 
-    }
+    public abstract void createGroup(@NotNull NameObject hero, @NotNull NameObject other) ;
 
-    @Override
-    public void win(NameObject winner, NameObject loser) {
+    public abstract void groupGoToLevel(@NotNull Group group) ;
 
-    }
+    public abstract void joinGroup(@Nullable String join, @Nullable String groupName);
+    public abstract void heroChallengeGroup(@NotNull String hero, @NotNull String group);
 
-    @Override
-    public void lost(NameObject loser, NameObject winner) {
+    public abstract void groupBattle(@NotNull String group_1, @NotNull String group_2);
 
-    }
+    public abstract void groupBattler(@Nullable String group_hero);
 
-    @Override
-    public void hit(NameObject hero) {
+    public abstract void heroWinGroup(@Nullable String hero, @NotNull String groupName) ;
 
-    }
-
-    @Override
-    public void harm(NameObject atker, NameObject defender, long harm) {
-
-    }
-
-    @Override
-    public void petSuppress(NameObject pet, NameObject monster) {
-
-    }
-
-    @Override
-    public void petDefend(Pet pet) {
-
-    }
-
-    @Override
-    public void dodge(NameObject hero, NameObject monster) {
-
-    }
-
-    @Override
-    public void parry(NameObject hero) {
-
-    }
-
-    @Override
-    public void silent(SkillAbleObject atker, HarmAble target, Skill skill) {
-
-    }
-
-    @Override
-    public void releaseSkill(HarmAble target, Skill skill) {
-
-    }
-
-    @Override
-    public void rowMessage(String msg) {
-
-    }
-
-    public void createGroup(@NotNull NameObject hero, @NotNull NameObject other) {
-        System.out.println(hero.getName() + " and " + other.getName() + " create group ");
-    }
-
-    public void groupGoToLevel(@NotNull Group group) {
-        System.out.println(group.getId() + " go to " + group.getLevel());
-    }
+    public abstract void groupWinHero(@NotNull String groupName, @Nullable String heroName) ;
 }

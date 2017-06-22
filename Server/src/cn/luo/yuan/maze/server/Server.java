@@ -3,7 +3,9 @@ package cn.luo.yuan.maze.server;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.ExchangeObject;
+import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.OwnedAble;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.effect.Effect;
@@ -16,6 +18,7 @@ import cn.luo.yuan.maze.model.effect.original.PetRateEffect;
 import cn.luo.yuan.maze.model.effect.original.SkillRateEffect;
 import cn.luo.yuan.maze.model.effect.original.StrEffect;
 import cn.luo.yuan.maze.model.goods.Goods;
+import cn.luo.yuan.maze.server.model.SingleMessage;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
 import cn.luo.yuan.maze.server.persistence.GroupTable;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
@@ -255,6 +258,19 @@ public class Server {
         post("retrieve_warehouse",((request, response) -> {
             writeObject(response, warehouseTable.retrieveAll(request.headers(OWNER_ID_FIELD)));
             return RESPONSE_RESULT_SUCCESS;
+        }));
+
+        post("submit_hero", ((request, response) ->{
+            Hero hero = (Hero) readObject(request);
+            Maze maze = (Maze) readObject(request);
+            if(hero!=null && maze!=null) {
+                heroTable.saveHero(hero);
+                heroTable.saveMaze(maze,hero.getId());
+                heroTable.saveMessager(new SingleMessage(), hero.getId());
+                return RESPONSE_RESULT_SUCCESS;
+            }else{
+                return RESPONSE_RESULT_FAILED;
+            }
         }));
         //run(heroTable, groupTable)
     }
