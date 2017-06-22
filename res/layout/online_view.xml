@@ -34,51 +34,6 @@
 
         </LinearLayout>
 
-        <ScrollView
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            <TextView
-                    android:text="TextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/online_ranke"/>
-        </ScrollView>
-
     </LinearLayout>
 
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="180dp">
-
-        <ListView
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_submited_items"/>
-
-        <LinearLayout
-                android:gravity="bottom"
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-
-            <Button
-                    android:text="上传"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/upload_item"
-                    style="@android:style/Widget.Button.Inset"/>
-
-            <Button
-                    android:text="查阅"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/query_items"
-                    style="@android:style/Widget.Button.Inset"/>
-        </LinearLayout>
-    </LinearLayout>
 </LinearLayout>
