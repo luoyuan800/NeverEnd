@@ -3,37 +3,46 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:weightSum="1">
+              >
 
     <LinearLayout
+            android:layout_weight="1"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="206dp"
-            android:layout_weight="0.67">
+            android:layout_height="match_parent">
+
+        <cn.luo.yuan.maze.display.view.RollTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/online_battle_msg"
+                android:layout_weight="1"/>
 
         <LinearLayout
-                android:layout_weight="1"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:weightSum="1">
+                android:layout_weight="1">
 
-            <cn.luo.yuan.maze.display.view.RollTextView
-                    android:id="@+id/online_msg"
+            <TextView
+                    android:text="当前所在的队伍"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_weight="0.95"/>
-
-            <Button
-                    android:text="上传人物"
-                    android:layout_gravity="end"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/upload_getback_button"
-                    style="@android:style/Widget.Button.Inset"/>
+                    android:layout_weight="1"
+                    android:id="@+id/group_message"/>
 
+            <TextView
+                    android:layout_weight="1"
+                    android:text="现在取回可以获得的奖励"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/online_award"/>
         </LinearLayout>
-
     </LinearLayout>
 
+    <Button
+            android:text="取回"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/action_button"
+            style="@android:style/Widget.Button.Transparent"/>
 </LinearLayout>
