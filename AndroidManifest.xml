@@ -19,5 +19,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".display.activity.GameActivity"/>
+        <activity android:name=".display.activity.OnlineActivity"/>
     </application>
 </manifest>

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              >
+              tools:context=".display.activity.OnlineActivity"
+        >
 
     <LinearLayout
             android:layout_weight="1"
@@ -24,7 +26,7 @@
                 android:layout_weight="1">
 
             <TextView
-                    android:text="当前所在的队伍"
+                    android:text="加载中……"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -32,7 +34,7 @@
 
             <TextView
                     android:layout_weight="1"
-                    android:text="现在取回可以获得的奖励"
+                    android:text="加载中……"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/online_award"/>
@@ -44,5 +46,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/action_button"
+            android:onClick="onClick"
             style="@android:style/Widget.Button.Transparent"/>
 </LinearLayout>

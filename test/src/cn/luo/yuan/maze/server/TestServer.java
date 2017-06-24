@@ -7,7 +7,7 @@ import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.types.Medallion;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
-import cn.luo.yuan.maze.service.RestConnection;
+import cn.luo.yuan.maze.utils.RestConnection;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;

@@ -56,8 +56,7 @@ public class GameActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Resource.init(this);
-        LogHelper.initLogSystem(this);
+        initResources();
         setContentView(R.layout.game_layout);
         Intent intent = getIntent();
 //        ListenerService.init();
@@ -75,6 +74,16 @@ public class GameActivity extends Activity {
 
             }
         }).start();
+    }
+
+    private void initResources() {
+        Resource.init(this);
+        LogHelper.initLogSystem(this);
+    }
+
+    protected void onResume() {
+        super.onResume();
+        initResources();
     }
 
     @Override

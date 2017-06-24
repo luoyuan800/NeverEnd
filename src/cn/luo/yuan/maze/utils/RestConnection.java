@@ -1,4 +1,4 @@
-package cn.luo.yuan.maze.service;
+package cn.luo.yuan.maze.utils;
 
 import android.os.Environment;
 import cn.luo.yuan.maze.utils.Field;

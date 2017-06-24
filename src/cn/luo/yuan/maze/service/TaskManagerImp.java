@@ -3,9 +3,9 @@ package cn.luo.yuan.maze.service;
 import cn.luo.yuan.maze.model.Index;
 import cn.luo.yuan.maze.task.Task;
 import cn.luo.yuan.maze.utils.Field;
+import cn.luo.yuan.maze.utils.RestConnection;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.List;
 
