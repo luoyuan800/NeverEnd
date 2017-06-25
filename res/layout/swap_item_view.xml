@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        <ImageView
+                android:src="@drawable/evo_an"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/item_img"/>
+
+        <TextView
+                android:gravity="center"
+                android:textAlignment="center"
+                android:text="暗伊布"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/item_name"
+                />
+    </LinearLayout>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center">
+
+        <TextView
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:text="——>\n<——"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        <Button
+                android:text="取回"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/get_back_item_button"
+                android:visibility="visible"
+                style="@android:style/Widget.Button.Inset"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        <ImageView
+                android:src="@drawable/evo_cao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/swap_item_img"/>
+
+        <TextView
+                android:gravity="center"
+                android:textAlignment="center"
+                android:text="草伊布"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/swap_item_name"
+                />
+    </LinearLayout>
+
+</LinearLayout>

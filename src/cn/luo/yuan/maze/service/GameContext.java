@@ -2,7 +2,7 @@ package cn.luo.yuan.maze.service;
 
 import android.content.Context;
 import android.util.Log;
-import cn.luo.yuan.maze.display.activity.GameActivity;
+import cn.luo.yuan.maze.display.handler.GameActivityViewHandler;
 import cn.luo.yuan.maze.display.view.RollTextView;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.effect.Effect;
@@ -13,7 +13,6 @@ import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.utils.Random;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class GameContext implements InfoControlInterface {
     private Hero hero;
     private Maze maze;
     private DataManager dataManager;
-    private GameActivity.ViewHandler viewHandler;
+    private GameActivityViewHandler viewHandler;
     private Random random;
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
     private AccessoryHelper accessoryHelper;
@@ -197,11 +196,11 @@ public class GameContext implements InfoControlInterface {
         }
     }
 
-    public GameActivity.ViewHandler getViewHandler() {
+    public GameActivityViewHandler getViewHandler() {
         return viewHandler;
     }
 
-    public void setViewHandler(GameActivity.ViewHandler viewHandler) {
+    public void setViewHandler(GameActivityViewHandler viewHandler) {
         this.viewHandler = viewHandler;
     }
 
