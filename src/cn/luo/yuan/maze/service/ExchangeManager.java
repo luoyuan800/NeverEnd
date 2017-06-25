@@ -55,7 +55,7 @@ public class ExchangeManager {
         try {
             HttpURLConnection urlConnection = server.getHttpURLConnection("/query_my_exchange", RestConnection.POST);
             urlConnection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
-            return (List<ExchangeObject>) server.connect(urlConnection);
+             return (List<ExchangeObject>) server.connect(urlConnection);
         } catch (Exception e) {
             LogHelper.logException(e, "");
         }

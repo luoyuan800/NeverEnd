@@ -38,7 +38,7 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
                 android:textAlignment="center"
-                android:text="——>\n<——"
+                android:text="@string/mark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />

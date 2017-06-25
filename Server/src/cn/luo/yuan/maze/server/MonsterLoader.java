@@ -27,6 +27,11 @@ public class MonsterLoader implements cn.luo.yuan.maze.service.MonsterLoader {
     }
 
     @Override
+    public Monster randomMonster(long level, boolean addKey) {
+        return null;
+    }
+
+    @Override
     public String getDescription(int index, String type) {
         return null;
     }

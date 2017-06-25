@@ -33,10 +33,6 @@
     <string name="move_to_next_level">%1$s进入了%2$s层迷宫， 获得了&lt;font color=\'#FF8C00\'&gt;%3$s&lt;/font&gt;点数奖励></string>
     <string name="pet_defend">%1$s舍身救主，挡下了攻击！</string>
     <string name="pet_index_suppression">%1$被%2$s的霸气震慑得不敢动弹</string>
-    <string name="qy_desc">这并不是普通的蚯蚓，据说它们是基因改造产生的，当然你还是可以抓住它们然后拿去钓鱼，不过你得先找到可以钓鱼的地方。</string>
-    <string name="pc_desc">不知道它们怎么产生的，但是它们在迷宫底层绝对是你的噩梦。</string>
-    <string name="feie_desc">身躯巨大的飞蛾，喜欢往光亮的地方聚集。喜欢在你的头顶飞来飞去。</string>
-    <string name="zz_desc">这种可以吃又可以玩的怪物，骚年不抓一只养养看吗？</string>
     <string name="pet_catch">成功捕获%1$s</string>
     <string name="pet_rate_effect">增加捕获概率：</string>
     <string name="lost">%1$s被打败后掉回了第一层</string>
@@ -91,5 +87,6 @@
     <string name="upload">上传</string>
     <string name="query_exchange_items">别人上传的</string>
     <string name="my_exchange_items">我上传的</string>
-    <string name="syn_server">正在同步服务器数据</string>
+    <string name="syn_server">正在同步服务器数据……</string>
+    <string name="mark"><![CDATA[——>\n<——]]></string>
 </resources>

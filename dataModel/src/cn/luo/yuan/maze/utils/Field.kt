@@ -22,7 +22,7 @@ class Field {
         const val RESPONSE_OBJECT_TYPE = "object"
         const val RESPONSE_STRING_TYPE = "string"
         const val RESPONSE_NONE_TYPE = "none"
-        const val SERVER_URL = "http://localhost:4567"
+        const val SERVER_URL = "http://192.168.1.111:4567"
         const val PET_TYPE = 1;
         const val ACCESSORY_TYPE = 2;
         const val GOODS_TYPE = 3;

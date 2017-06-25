@@ -47,5 +47,5 @@
             android:layout_height="wrap_content"
             android:id="@+id/action_button"
             android:onClick="onClick"
-            style="@android:style/Widget.Button.Transparent"/>
+            style="@android:style/Widget.DeviceDefault.Button.Inset"/>
 </LinearLayout>

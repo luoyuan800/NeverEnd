@@ -116,7 +116,7 @@ public class OnlineActivity extends Activity {
                 SimplerDialogBuilder.build("你确定退出战斗塔吗？", Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        SimplerDialogBuilder.build("正在同步服务器数据……", OnlineActivity.this);
+                        SimplerDialogBuilder.build("正在同步服务器数据……", OnlineActivity.this, false);
                         executor.execute(new Runnable() {
                             @Override
                             public void run() {

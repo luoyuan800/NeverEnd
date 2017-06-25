@@ -67,6 +67,9 @@ public class RunningService implements RunningServiceInterface {
                 if (pause) {
                     return;
                 }
+                if ((System.currentTimeMillis() - startTime) % 1000 == 300) {//每隔五分钟自动存储一次
+                    gameContext.save();
+                }
                 maze.setStep(maze.getStep() + 1);
                 if (maze.getStep() > 100 || random.nextLong(10000) > 9985 || random.nextLong(maze.getStep()) > 10 + random.nextLong(22) || random.nextLong(maze.getStreaking() + 1) > 50 + maze.getLevel()) {
                     maze.setLevel(maze.getLevel() + 1);
@@ -101,9 +104,7 @@ public class RunningService implements RunningServiceInterface {
                     mazeLevelCalculate();
                     hero.setPoint(hero.getPoint() + point);
                     gameContext.addMessage(msg);
-                    if ((System.currentTimeMillis() - startTime) % 1000 == 300) {//每隔五分钟自动存储一次
-                        gameContext.save();
-                    }
+
                     maze.setStep(0);
                 } else {
                     boolean meet = false;
