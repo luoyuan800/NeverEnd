@@ -33,10 +33,14 @@ public class GameContext implements InfoControlInterface {
     private DataManager dataManager;
     private GameActivityViewHandler viewHandler;
     private Random random;
-    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
     private AccessoryHelper accessoryHelper;
     private PetMonsterHelper petMonsterHelper;
     private TaskManagerImp taskManager;
+
+    public ScheduledExecutorService getExecutor(){
+        return executor;
+    }
 
     public GameContext(Context context, DataManager dataManager) {
         this.context = context;

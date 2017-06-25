@@ -344,6 +344,16 @@ public class DataManager implements DataManagerInterface {
         taskLoader.save(task,task.getId());
     }
 
+    public void save(IDModel object) {
+        if(object instanceof Pet){
+            savePet((Pet) object);
+        }else if(object instanceof Accessory){
+            saveAccessory((Accessory) object);
+        } else if(object instanceof Goods){
+            saveGoods((Goods) object);
+        }
+    }
+
     private Maze newMaze() {
         Maze maze = new Maze();
         maze.setMaxLevel(1);

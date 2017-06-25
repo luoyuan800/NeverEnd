@@ -89,4 +89,7 @@
     <string name="buy_label">购买</string>
     <string name="shop_tip">商店中的物品每次开启都随机刷新，如果没有你想要的，多打开几次吧！</string>
     <string name="upload">上传</string>
+    <string name="query_exchange_items">别人上传的</string>
+    <string name="my_exchange_items">我上传的</string>
+    <string name="syn_server">正在同步服务器数据</string>
 </resources>

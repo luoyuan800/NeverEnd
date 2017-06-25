@@ -130,4 +130,7 @@ public class ExchangeManager {
         return false;
     }
 
+    public IDModel queryMyAvaiableItemForExchange(int expectedType, String expectedKeyWord) {
+        return null;
+    }
 }

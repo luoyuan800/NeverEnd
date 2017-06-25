@@ -14,6 +14,7 @@ class ExchangeObject(val exchange: IDModel, val ownerId: String) : Serializable,
         private const val serialVersionUID: Long = SERVER_VERSION
     }
 
+    var expectedKeyWord = ""
     var expectedType: Int = 0
     var submitTime = 0L;
     var changedTime = 0L;

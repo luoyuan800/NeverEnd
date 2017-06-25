@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.display.adapter.PetAdapter;
+import cn.luo.yuan.maze.display.dialog.ExchangeDialog;
 import cn.luo.yuan.maze.display.dialog.PetDialog;
 import cn.luo.yuan.maze.service.GameContext;
 import cn.luo.yuan.maze.service.LocalShop;
@@ -41,6 +42,9 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.excahnge:
+                new ExchangeDialog(control).show();
+                break;
             case R.id.local_shop:
                 new LocalShop(control).show();
                 break;
