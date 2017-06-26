@@ -4,7 +4,6 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.NameObject;
-import cn.luo.yuan.maze.service.GameContext;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 
 /**

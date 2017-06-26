@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import cn.luo.yuan.maze.utils.LogHelper;
+import cn.luo.yuan.maze.client.utils.LogHelper;
 
 
 /**

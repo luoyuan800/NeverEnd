@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.server.model;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillAbleObject;
 import cn.luo.yuan.maze.server.Message;
@@ -18,11 +19,11 @@ import java.util.Set;
  * Created by gluo on 6/20/2017.
  */
 public class Messager extends Message {
-    private Set<SingleMessage> sms = new HashSet<>();
-    public void addReceiver(SingleMessage sms){
+    private Set<ServerRecord> sms = new HashSet<>();
+    public void addReceiver(ServerRecord sms){
         this.sms.add(sms);
     }
-    public void removeReceiver(SingleMessage sms){
+    public void removeReceiver(ServerRecord sms){
         this.sms.remove(sms);
     }
     @Override

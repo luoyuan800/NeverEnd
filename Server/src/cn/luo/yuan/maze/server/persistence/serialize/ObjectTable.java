@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -24,12 +25,14 @@ import java.util.UUID;
 /**
  * Created by gluo on 11/28/2016.
  */
-public class ObjectTable<T extends Serializable>{
+public class ObjectTable<T extends Serializable> implements Runnable{
     private File root;
     private Class<T> table;
     private HashMap<String, SoftReference<T>> cache;
+    private ReferenceQueue<T> queue;
 
     public ObjectTable(Class<T> table, File root) {
+        queue = new ReferenceQueue<T>();
         this.root = new File(root, table.getName());
         if(!this.root.exists()){
             this.root.mkdirs();
@@ -44,7 +47,7 @@ public class ObjectTable<T extends Serializable>{
             throw new IOException("Object with id: " + id + " already existed!");
         }
         saveObject(object, entry);
-        cache.put(id, new SoftReference<T>(object));
+        cache.put(id, new SoftReference<T>(object, queue));
         return id;
     }
 
@@ -54,7 +57,7 @@ public class ObjectTable<T extends Serializable>{
             file.delete();
         }
         saveObject(object, file);
-        cache.put(id, new SoftReference<T>(object));
+        cache.put(id, new SoftReference<T>(object, queue));
         return id;
     }
 
@@ -124,6 +127,19 @@ public class ObjectTable<T extends Serializable>{
 
     public void close(){
         cache.clear();
+    }
+
+    @Override
+    public void run() {
+        T t = queue.poll().get();
+        if(t!=null){
+            if(t instanceof IDModel)
+                try {
+                    update(t, ((IDModel) t).getId());
+                } catch (IOException e) {
+                    //DO nothing
+                }
+        }
     }
 
     private void saveObject(T object, File entry) throws IOException {

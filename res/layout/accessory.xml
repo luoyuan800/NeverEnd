@@ -74,7 +74,7 @@
 </LinearLayout>
     </LinearLayout>
 
-    <cn.luo.yuan.maze.display.view.LoadMoreListView
+    <cn.luo.yuan.maze.client.display.view.LoadMoreListView
             android:id="@+id/accessories_list"
             android:layout_height="400dp"
             android:layout_width="150dp"/>

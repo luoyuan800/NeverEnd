@@ -1,7 +1,7 @@
 package cn.luo.yuan.maze.model.effect;
 
 import cn.luo.yuan.maze.R;
-import cn.luo.yuan.maze.utils.Resource;
+import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 /**

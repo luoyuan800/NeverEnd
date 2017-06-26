@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.service;
 
 import android.content.Context;
+import cn.luo.yuan.maze.client.service.GameContext;
 import cn.luo.yuan.maze.utils.Random;
 
 /**

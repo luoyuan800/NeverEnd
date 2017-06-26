@@ -47,7 +47,7 @@
                     android:layout_weight="1"/>
         </LinearLayout>
 
-        <cn.luo.yuan.maze.display.view.LoadMoreListView
+        <cn.luo.yuan.maze.client.display.view.LoadMoreListView
             android:layout_height="300dp"
             android:layout_width="match_parent"
             android:layout_weight="1"

@@ -8,6 +8,7 @@ import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.OwnedAble;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.original.AgiEffect;
 import cn.luo.yuan.maze.model.effect.original.AtkEffect;
@@ -18,6 +19,7 @@ import cn.luo.yuan.maze.model.effect.original.PetRateEffect;
 import cn.luo.yuan.maze.model.effect.original.SkillRateEffect;
 import cn.luo.yuan.maze.model.effect.original.StrEffect;
 import cn.luo.yuan.maze.model.goods.Goods;
+import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.server.model.SingleMessage;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
 import cn.luo.yuan.maze.server.persistence.GroupTable;
@@ -39,7 +41,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -57,8 +61,7 @@ public class Server {
     public static void main(String... args) throws IOException, ClassNotFoundException {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
         File root = new File("data");
-        GroupTable groupTable = new GroupTable(root);
-        HeroTable heroTable = new HeroTable(root);
+        Map<String, HeroTable> heroTableCache = new HashMap<>();
         WarehouseTable warehouseTable = new WarehouseTable(root);
         executor.scheduleAtFixedRate(warehouseTable,0, 1, TimeUnit.DAYS);
         ExchangeTable exchangeTable = new ExchangeTable(root);
@@ -261,18 +264,36 @@ public class Server {
         }));
 
         post("submit_hero", ((request, response) ->{
-            Hero hero = (Hero) readObject(request);
-            Maze maze = (Maze) readObject(request);
-            if(hero!=null && maze!=null) {
-                heroTable.saveHero(hero);
-                heroTable.saveMaze(maze,hero.getId());
-                heroTable.saveMessager(new SingleMessage(), hero.getId());
+            ServerData data = readObject(request);
+            if(data!=null && data.hero!=null && data.maze!=null) {
+                HeroTable table = heroTableCache.get(data.hero.getId());
+                if(table == null){
+                    table = new HeroTable(new File(root,data.hero.getId()));
+                    heroTableCache.put(data.hero.getId(), table);
+                }
+                table.saveHero(data.hero);
+                table.saveMaze(data.maze);
+                if(data.accessories!=null){
+                    for(Accessory accessory : data.accessories){
+                        table.save(accessory);
+                    }
+                }
+                if(data.pets!=null){
+                    for(Pet pet: data.pets){
+                        table.save(pet);
+                    }
+                }
+                if(data.skills!=null){
+                    for(Skill skill: data.skills){
+                        table.save(skill);
+                    }
+                }
                 return RESPONSE_RESULT_SUCCESS;
             }else{
                 return RESPONSE_RESULT_FAILED;
             }
         }));
-        //run(heroTable, groupTable)
+        executor.scheduleAtFixedRate(new HeroBattleService(heroTableCache),0, 5, TimeUnit.MINUTES);
     }
 
     private static Effect buildEffect(String effectName, String value){
@@ -337,9 +358,9 @@ public class Server {
         return exMy;
     }
 
-    private static Object readObject(Request request) throws IOException, ClassNotFoundException {
+    private static <T> T readObject(Request request) throws IOException, ClassNotFoundException {
         try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(request.bodyAsBytes()))) {
-            return ois.readObject();
+            return (T)ois.readObject();
         }
     }
 

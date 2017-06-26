@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.service;
 
+import cn.luo.yuan.maze.client.service.AccessoryHelper;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.effect.AgiEffect;
 import cn.luo.yuan.maze.model.effect.Effect;
@@ -7,7 +8,6 @@ import cn.luo.yuan.maze.model.effect.FloatValueEffect;
 import cn.luo.yuan.maze.model.effect.LongValueEffect;
 import cn.luo.yuan.maze.model.effect.original.AtkEffect;
 import cn.luo.yuan.maze.model.effect.original.MeetRateEffect;
-import cn.luo.yuan.maze.utils.annotation.LongValue;
 import org.testng.annotations.Test;
 
 /**

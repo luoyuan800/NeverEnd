@@ -1,3 +1,4 @@
+/*
 package cn.luo.yuan.maze.server
 
 import cn.luo.yuan.maze.model.Hero
@@ -11,9 +12,11 @@ import cn.luo.yuan.maze.service.RunningServiceInterface
 import cn.luo.yuan.maze.utils.Random
 import kotlin.system.measureNanoTime
 
+*/
 /**
  * Created by gluo on 5/23/2017.
- */
+ *//*
+
 
 public class Running: RunningServiceInterface {
     override fun run() {
@@ -223,3 +226,4 @@ public class Running: RunningServiceInterface {
 
 }
 
+*/

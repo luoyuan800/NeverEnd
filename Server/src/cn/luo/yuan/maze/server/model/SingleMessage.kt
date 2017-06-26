@@ -3,13 +3,14 @@ package cn.luo.yuan.maze.server.model
 import cn.luo.yuan.maze.model.IDModel
 import java.io.Serializable
 import java.util.*
+import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * Created by gluo on 6/20/2017.
  */
 class SingleMessage : Serializable, IDModel {
     private var mid = ""
-    private val message = ArrayDeque<String>(100)
+    private val message = ConcurrentLinkedQueue<String>()
 
     override fun getId(): String {
         return mid
