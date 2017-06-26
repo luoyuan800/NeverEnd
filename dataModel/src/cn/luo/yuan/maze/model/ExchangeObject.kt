@@ -19,7 +19,7 @@ class ExchangeObject(val exchange: IDModel, val ownerId: String) : Serializable,
         return delete
     }
 
-    fun markDelete() {
+    override fun markDelete() {
         delete = true
     }
 

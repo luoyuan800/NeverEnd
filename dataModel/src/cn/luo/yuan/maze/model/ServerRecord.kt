@@ -12,7 +12,7 @@ class ServerRecord : IDModel, Serializable {
         return delete
     }
 
-    fun markDelete() {
+    override fun markDelete() {
         delete = true
     }
     private var id: String? = null

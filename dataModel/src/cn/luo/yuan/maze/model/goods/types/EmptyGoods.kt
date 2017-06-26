@@ -12,7 +12,7 @@ class EmptyGoods : Goods {
         return delete
     }
 
-    fun markDelete() {
+    override fun markDelete() {
         delete = true
     }
     override fun setHeroIndex(index: Int) {
