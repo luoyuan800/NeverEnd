@@ -4,6 +4,7 @@ import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
@@ -102,6 +103,13 @@ public class HeroTable {
 
     public ServerRecord getRecord(String id) {
         return recordDb.loadObject(id);
+    }
+
+    public void delete() {
+        heroDb.clear();
+        mazeDb.clear();
+        accDb.clear();
+        petDb.clear();
     }
 
     private Hero loadHero(String id) throws IOException, ClassNotFoundException {

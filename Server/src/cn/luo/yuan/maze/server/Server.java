@@ -3,12 +3,11 @@ package cn.luo.yuan.maze.server;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.ExchangeObject;
-import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.IDModel;
-import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.OwnedAble;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.ServerData;
+import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.original.AgiEffect;
 import cn.luo.yuan.maze.model.effect.original.AtkEffect;
@@ -20,7 +19,6 @@ import cn.luo.yuan.maze.model.effect.original.SkillRateEffect;
 import cn.luo.yuan.maze.model.effect.original.StrEffect;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.skill.Skill;
-import cn.luo.yuan.maze.server.model.SingleMessage;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
 import cn.luo.yuan.maze.server.persistence.GroupTable;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
@@ -29,6 +27,7 @@ import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
 import cn.luo.yuan.maze.task.Task;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
+import com.sun.prism.impl.Disposer;
 import org.jetbrains.annotations.NotNull;
 import spark.Request;
 import spark.Response;
@@ -39,8 +38,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +58,7 @@ public class Server {
     public static void main(String... args) throws IOException, ClassNotFoundException {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
         File root = new File("data");
+        File heroDir = new File(root, "hero");
         Map<String, HeroTable> heroTableCache = new HashMap<>();
         WarehouseTable warehouseTable = new WarehouseTable(root);
         executor.scheduleAtFixedRate(warehouseTable,0, 1, TimeUnit.DAYS);
@@ -266,11 +264,19 @@ public class Server {
         post("submit_hero", ((request, response) ->{
             ServerData data = readObject(request);
             if(data!=null && data.hero!=null && data.maze!=null) {
+                data.maze.setId(data.hero.getId());
                 HeroTable table = heroTableCache.get(data.hero.getId());
                 if(table == null){
-                    table = new HeroTable(new File(root,data.hero.getId()));
+                    table = new HeroTable(new File(heroDir,data.hero.getId()));
                     heroTableCache.put(data.hero.getId(), table);
                 }
+                ServerRecord record = table.getRecord(data.hero.getId());
+                if(record == null){
+                    record = new ServerRecord();
+                }
+                record.setRange(Integer.MAX_VALUE);
+                record.setData(data);
+                table.save(record);
                 table.saveHero(data.hero);
                 table.saveMaze(data.maze);
                 if(data.accessories!=null){
@@ -293,6 +299,64 @@ public class Server {
                 return RESPONSE_RESULT_FAILED;
             }
         }));
+
+        post("get_back_hero", ((request, response) -> {
+            String id = request.queryParams(Field.OWNER_ID_FIELD);
+            if(StringUtils.isNotEmpty(id)){
+                HeroTable table = heroTableCache.get(id);
+                if(table!=null){
+                    ServerRecord record = table.getRecord(id);
+                    heroTableCache.remove(id);
+                    table.getRecord(id).setData(null);
+                    table.delete();
+                    writeObject(response,record.getData());
+                    return Field.RESPONSE_RESULT_SUCCESS;
+                }
+            }
+            return Field.RESPONSE_RESULT_FAILED;
+        }));
+
+        post("query_hero_data", ((request, response) -> {
+            String id = request.queryParams(Field.OWNER_ID_FIELD);
+            if(StringUtils.isNotEmpty(id)){
+                HeroTable table = heroTableCache.get(id);
+                if(table!=null){
+                    ServerRecord record = table.getRecord(id);
+                    writeObject(response,record.getData());
+                    return Field.RESPONSE_RESULT_SUCCESS;
+                }
+            }
+            return Field.RESPONSE_RESULT_FAILED;
+        }));
+
+        post("query_battle_award", (request, response) -> {
+            String id = request.queryParams(Field.OWNER_ID_FIELD);
+            if(StringUtils.isNotEmpty(id)){
+                HeroTable table = heroTableCache.get(id);
+                if(table!=null){
+                    ServerRecord record = table.getRecord(id);
+                    return record.getData().toString();
+                }
+            }
+            return StringUtils.EMPTY_STRING;
+        });
+
+        post("pool_battle_msg", (request, response) -> {
+            String id = request.queryParams(Field.OWNER_ID_FIELD);
+            int count = Integer.parseInt(request.queryParams(Field.COUNT));
+            if(StringUtils.isNotEmpty(id)){
+                HeroTable table = heroTableCache.get(id);
+                if(table!=null){
+                    ServerRecord record = table.getRecord(id);
+                    String s = "";
+                    while (count-- > 0){
+                        s += record.getMessages().poll() + (count > 0 ? "<br>" : "");
+                    }
+                    return s;
+                }
+            }
+            return StringUtils.EMPTY_STRING;
+        });
         executor.scheduleAtFixedRate(new HeroBattleService(heroTableCache),0, 5, TimeUnit.MINUTES);
     }
 

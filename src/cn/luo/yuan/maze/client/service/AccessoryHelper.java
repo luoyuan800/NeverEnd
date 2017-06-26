@@ -40,7 +40,7 @@ public class AccessoryHelper extends cn.luo.yuan.maze.service.AccessoryHelper {
     /**
      * For test
      */
-    AccessoryHelper() {
+    public AccessoryHelper() {
         random = new Random(System.currentTimeMillis());
     }
 

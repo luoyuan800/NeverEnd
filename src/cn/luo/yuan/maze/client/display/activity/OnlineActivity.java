@@ -62,7 +62,7 @@ public class OnlineActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ServerData data = service.queryOnlineData(gameContext);
+                ServerData data = service.queryOnlineHeroData(gameContext);
                 if(data.hero == null){
                     handler.post(new Runnable() {
                         @Override
@@ -132,7 +132,7 @@ public class OnlineActivity extends Activity {
     public void getBackHeroData() {
         String award = service.queryAwardString(gameContext);
         ServerData data = service.getBackHero(gameContext);
-        if(StringUtils.isNotEmpty(award)) {
+        if(data!=null && StringUtils.isNotEmpty(award)) {
             gameContext.getHero().setMaterial(gameContext.getHero().getMaterial() + data.material);
             if (data.accessories != null) {
                 for (Accessory accessory : data.accessories) {

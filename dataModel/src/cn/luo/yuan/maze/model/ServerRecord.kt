@@ -1,7 +1,6 @@
 package cn.luo.yuan.maze.model
 
 import java.io.Serializable
-import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
@@ -11,9 +10,9 @@ class ServerRecord : IDModel, Serializable {
     private var id: String? = null
     var winCount = 0
     var lostCount = 0
-    var range = -1
+    var range = Int.MAX_VALUE
     val messages = ConcurrentLinkedQueue<String>()
-    val data = ServerData()
+    var data = ServerData()
     override fun getId(): String? {
         return id
     }

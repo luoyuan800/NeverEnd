@@ -27,10 +27,10 @@ public interface MonsterLoader {
     Monster loadMonsterByIndex(int index);
 
     static class MonsterKey {
-        int count;
-        float meet_rate;
-        float min_level;
-        int index;
+        public int count;
+        public float meet_rate;
+        public float min_level;
+        public int index;
 
         public int hashCode() {
             return index;

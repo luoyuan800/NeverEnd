@@ -1,8 +1,13 @@
 package cn.luo.yuan.maze.server;
 
+import cn.luo.yuan.maze.client.service.ServerService;
 import cn.luo.yuan.maze.model.Accessory;
+import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.ExchangeObject;
+import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.types.Medallion;
 import cn.luo.yuan.maze.model.names.FirstName;
@@ -15,6 +20,7 @@ import org.testng.annotations.Test;
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -179,6 +185,38 @@ public class TestServer {
         urlConnection.addRequestProperty("owner_id", "exchanger");
         List<ExchangeObject>  moa = (List<ExchangeObject>) connection.connect(urlConnection);
         assertNotEquals(moa.size(), mo.size());
+    }
+
+    @Test
+    public void testSubmitHero(){
+        Hero hero = new Hero();
+        hero.setMaxHp(2000);
+        hero.setHp(1000);
+        hero.setAtk(10);
+        hero.setDef(5);
+        hero.setElement(Element.EARTH);
+        hero.setId(UUID.randomUUID().toString());
+        Maze maze = new Maze();
+        Pet pet = new Pet();
+        pet.setType("test");
+        pet.setFirstName(FirstName.angry);
+        pet.setSecondName(SecondName.blue);
+        pet.setHp(100);
+        pet.setMaxHp(100);
+        pet.setAtk(100);
+        pet.setDef(100);
+        pet.setIndex(100);
+        pet.setId(hero.getId());
+        pet.setOwnerName("100");
+        pet.setOwnerId("101");
+        hero.getPets().add(pet);
+        ServerData upload = new ServerData();
+        upload.hero = hero;
+        upload.maze = maze;
+        upload.pets = new ArrayList<>(hero.getPets());
+        ServerService serverService = new ServerService("http://localhost:4567","test");
+        serverService.uploadHero(upload);
+        assertTrue(new File("data/hero/cn.luo.yuan.maze.model.hero/" + hero.getId()).exists());
     }
 
 }

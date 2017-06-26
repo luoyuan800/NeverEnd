@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.server.model;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillAbleObject;
@@ -10,9 +11,7 @@ import cn.luo.yuan.maze.server.Message;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -23,7 +22,7 @@ public class Messager extends Message {
     public void addReceiver(ServerRecord sms){
         this.sms.add(sms);
     }
-    public void removeReceiver(ServerRecord sms){
+    public void removeReceiver(ServerData sms){
         this.sms.remove(sms);
     }
     @Override

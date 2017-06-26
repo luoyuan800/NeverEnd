@@ -11,7 +11,7 @@ import cn.luo.yuan.maze.utils.Random
 /**
  * Created by gluo on 6/20/2017.
  */
-class GroupBattle(private val g1: Group, private val g2: Group?, private val hero: Hero?, private val heroTable: HeroTable, private val groupTable: GroupTable, private val msger: Messager, private val rs:Running) {
+/*class GroupBattle(private val g1: Group, private val g2: Group?, private val hero: Hero?, private val heroTable: HeroTable, private val groupTable: GroupTable, private val msger: Messager, private val rs:Running) {
     private val random
             = Random(System.currentTimeMillis())
 
@@ -56,3 +56,4 @@ class GroupBattle(private val g1: Group, private val g2: Group?, private val her
         return false
     }
 }
+*/

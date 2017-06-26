@@ -6,6 +6,7 @@ package cn.luo.yuan.maze.utils
 class Field {
     //Use static file should define companion object
     companion object {
+        const val COUNT: String = "count"
         const val SERVER_VERSION: Long = 0L
         const val STATE_SUCCESS = "1"
         const val STATE_FAILED = "21"
