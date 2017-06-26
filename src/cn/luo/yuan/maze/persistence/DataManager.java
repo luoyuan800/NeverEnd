@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -357,6 +358,10 @@ public class DataManager implements DataManagerInterface {
         } else if(object instanceof Goods){
             saveGoods((Goods) object);
         }
+    }
+
+    public <T> List<T> loadAllGoods() {
+        return Collections.emptyList();
     }
 
     private Maze newMaze() {

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <RadioButton
+                android:text="宠物"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pet_type"
+                android:layout_weight="1"/>
+
+        <RadioButton
+                android:text="装备"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/accessory_type"
+                android:layout_weight="1"/>
+
+        <RadioButton
+                android:text="物品"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/goods_type"
+                android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/key_text"
+            android:hint="输入关键字进行过滤"
+            style="@android:style/Widget.ExpandableListView"/>
+
+    <cn.luo.yuan.maze.client.display.view.LoadMoreListView
+            android:layout_weight="1"
+            android:id="@+id/item_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+</LinearLayout>
