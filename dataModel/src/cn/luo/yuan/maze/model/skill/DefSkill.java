@@ -12,7 +12,14 @@ public abstract class DefSkill implements Skill, MountAble {
     private boolean enable;
     private float rate = 5;
     private String id;
-
+    private boolean delete;
+    @Override
+    public boolean isDelete() {
+        return delete;
+    }
+    public void markDelete(){
+        delete = true;
+    }
     public boolean isMounted(){
         return mounted;
     }

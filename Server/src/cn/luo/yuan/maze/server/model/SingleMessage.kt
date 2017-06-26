@@ -9,6 +9,14 @@ import java.util.concurrent.ConcurrentLinkedQueue
  * Created by gluo on 6/20/2017.
  */
 class SingleMessage : Serializable, IDModel {
+    private var delete: Boolean = false
+    override fun isDelete(): Boolean {
+        return delete
+    }
+
+    fun markDelete() {
+        delete = true
+    }
     private var mid = ""
     private val message = ConcurrentLinkedQueue<String>()
 

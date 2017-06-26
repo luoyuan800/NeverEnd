@@ -14,6 +14,14 @@ import java.util.List;
  * Created by luoyuan on 2017/3/18.
  */
 public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, Cloneable {
+    private boolean delete;
+    @Override
+    public boolean isDelete() {
+        return delete;
+    }
+    public void markDelete(){
+        delete = true;
+    }
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private int heroIndex;
     private String name;
@@ -50,6 +58,8 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, 
     public void setName(String name) {
         this.name = name;
     }
+
+
 
     public String getId() {
         return id;

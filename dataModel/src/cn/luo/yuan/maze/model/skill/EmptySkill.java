@@ -6,6 +6,14 @@ import cn.luo.yuan.maze.model.skill.result.SkillResult;
  * Created by gluo on 4/27/2017.
  */
 public class EmptySkill implements Skill {
+    private boolean delete;
+    @Override
+    public boolean isDelete() {
+        return delete;
+    }
+    public void markDelete(){
+        delete = true;
+    }
     public static final Skill EMPTY_SKILL = new EmptySkill();
     @Override
     public SkillResult invoke(SkillParameter parameter) {

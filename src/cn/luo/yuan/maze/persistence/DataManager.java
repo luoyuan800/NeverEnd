@@ -199,6 +199,7 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void deletePet(Pet pet) {
+        pet.markDelete();
         petLoader.delete(pet.getId());
     }
 
@@ -290,6 +291,7 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void deleteClickSkill(ClickSkill clickSkill){
+        clickSkill.markDelete();
         clickSkillLoader.delete(clickSkill.getName() + "@" + index);
     }
 
@@ -316,6 +318,9 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void delete(Serializable object) {
+        if(object instanceof IDModel){
+            ((IDModel) object).markDelete();
+        }
         if(object instanceof Pet){
             deletePet((Pet)object);
         } else if(object instanceof Accessory){

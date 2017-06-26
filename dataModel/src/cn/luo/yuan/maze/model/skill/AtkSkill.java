@@ -8,6 +8,14 @@ import cn.luo.yuan.maze.utils.Random;
  * Created by gluo on 4/27/2017.
  */
 public abstract class AtkSkill implements Skill, MountAble {
+    private boolean delete;
+    @Override
+    public boolean isDelete() {
+        return delete;
+    }
+    public void markDelete(){
+        delete = true;
+    }
     private String id;
     private boolean mounted;
     private boolean enable;

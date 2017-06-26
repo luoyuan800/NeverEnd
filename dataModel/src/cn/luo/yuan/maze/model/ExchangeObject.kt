@@ -14,6 +14,15 @@ class ExchangeObject(val exchange: IDModel, val ownerId: String) : Serializable,
         private const val serialVersionUID: Long = SERVER_VERSION
     }
 
+    private var delete: Boolean = false
+    override fun isDelete(): Boolean {
+        return delete
+    }
+
+    fun markDelete() {
+        delete = true
+    }
+
     var expectedKeyWord = ""
     var expectedType: Int = 0
     var submitTime = 0L;

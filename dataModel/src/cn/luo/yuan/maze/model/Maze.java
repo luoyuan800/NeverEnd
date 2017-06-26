@@ -14,6 +14,14 @@ import static cn.luo.yuan.maze.service.EffectHandler.getEffectAdditionFloatValue
  * Created by luoyuan on 2017/3/19.
  */
 public class Maze implements IDModel, Serializable {
+    private boolean delete;
+    @Override
+    public boolean isDelete() {
+        return delete;
+    }
+    public void markDelete(){
+        delete = true;
+    }
     private static final long serialVersionUID = 1L;
     private String id;
     private EncodeLong maxLevel = new EncodeLong(1);

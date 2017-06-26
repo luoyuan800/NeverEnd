@@ -18,7 +18,14 @@ public abstract class ClickSkill implements Serializable, IDModel {
     private long lastUseTime;
     private int index;
     private long duration;
-
+    private boolean delete;
+    @Override
+    public boolean isDelete() {
+        return delete;
+    }
+    public void markDelete(){
+        delete = true;
+    }
     public void use(Hero hero, HarmAble monster, InfoControlInterface context) {
             click++;
             this.lastUseTime = System.currentTimeMillis();

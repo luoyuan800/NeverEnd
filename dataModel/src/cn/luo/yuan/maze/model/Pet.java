@@ -8,6 +8,14 @@ import cn.luo.yuan.maze.utils.Field;
  * Created by gluo on 4/25/2017.
  */
 public class Pet extends Monster implements IDModel, OwnedAble {
+    private boolean delete;
+    @Override
+    public boolean isDelete() {
+        return delete;
+    }
+    public void markDelete(){
+        delete = true;
+    }
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private EncodeLong level = new EncodeLong(0);
     private String id = StringUtils.EMPTY_STRING;

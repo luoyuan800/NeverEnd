@@ -7,6 +7,14 @@ import java.util.concurrent.ConcurrentLinkedQueue
  * Created by gluo on 6/26/2017.
  */
 class ServerRecord : IDModel, Serializable {
+    private var delete: Boolean = false
+    override fun isDelete(): Boolean {
+        return delete
+    }
+
+    fun markDelete() {
+        delete = true
+    }
     private var id: String? = null
     var winCount = 0
     var lostCount = 0

@@ -13,6 +13,14 @@ import cn.luo.yuan.maze.utils.StringUtils
  * Created by gluo on 5/5/2017.
  */
 class Medallion() : Goods {
+    private var delete: Boolean = false
+    override fun isDelete(): Boolean {
+        return delete
+    }
+
+    fun markDelete() {
+        delete = true
+    }
     override fun setHeroIndex(index: Int) {
         this.index = index
     }

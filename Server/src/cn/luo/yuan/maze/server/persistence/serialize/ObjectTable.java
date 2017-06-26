@@ -118,7 +118,7 @@ public class ObjectTable<T extends Serializable> implements Runnable{
             if(ref!=null) {
                 T t = ref.get();
                 if (t != null) {
-                    if (t instanceof IDModel) {
+                    if (t instanceof IDModel && !((IDModel) t).isDelete()) {
                         update(t, ((IDModel) t).getId());
                     }
                 }

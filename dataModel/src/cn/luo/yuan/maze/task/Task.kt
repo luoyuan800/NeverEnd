@@ -13,6 +13,14 @@ import java.util.*
  * Created by gluo on 6/12/2017.
  */
 class Task(var name: String, var desc: String) : IDModel, Serializable {
+    private var delete: Boolean = false
+    override fun isDelete(): Boolean {
+        return delete
+    }
+
+    override fun markDelete() {
+        delete = true
+    }
     companion object {
         private const val serialVersionUID: Long = Field.SERVER_VERSION
     }

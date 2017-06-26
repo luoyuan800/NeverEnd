@@ -125,9 +125,10 @@ public class ObjectDB<T extends Serializable> {
 
     public void fuse() {
         for(SoftReference<T> ref : cache.values()){
-            if(ref!=null && ref.get()!=null){
-                if(ref.get() instanceof IDModel){
-                    save(ref.get(),((IDModel) ref.get()).getId());
+            T t = ref.get();
+            if(ref!=null && t !=null){
+                if(t instanceof IDModel && !((IDModel) t).isDelete()){
+                    save(t,((IDModel) t).getId());
                 }
             }
         }
