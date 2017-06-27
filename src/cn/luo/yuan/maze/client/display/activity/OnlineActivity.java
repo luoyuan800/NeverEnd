@@ -22,6 +22,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -39,9 +40,15 @@ public class OnlineActivity extends Activity {
         Resource.init(this);
         LogHelper.initLogSystem(this);
         setContentView(R.layout.online_view);
-        executor = gameContext.getExecutor();
+        executor = Executors.newScheduledThreadPool(4);
         gameContext.setContext(this);
         initView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        executor.shutdown();
+        super.onDestroy();
     }
 
     public NeverEnd getContext() {

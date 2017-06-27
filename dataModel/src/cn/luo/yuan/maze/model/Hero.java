@@ -245,7 +245,7 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     }
 
     public String getDisplayName() {
-        return "<font color=\"#da5f0a\">" + getName() + "</font>(" + getElement() + ")" + "[" + getRace() + "]";
+        return "[" + getRace() + "]" + "<font color=\"" + race.getColor() + "\">" + getName() + "</font>(" + getElement() + ")";
     }
 
     public long getPoint() {
