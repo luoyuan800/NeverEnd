@@ -40,11 +40,11 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>) :
                         if (bs.battle(maze.level + omaze.level)) {
                             table.getRecord(id).winCount ++
                             otable.getRecord(oid).lostCount ++
-                            table.getRecord(id).data.material += random.nextLong(maze.maxLevel + omaze.maxLevel)
+                            table.getRecord(id).data!!.material += random.nextLong(maze.maxLevel + omaze.maxLevel)
                         } else {
                             table.getRecord(id).lostCount ++
                             otable.getRecord(oid).winCount ++
-                            otable.getRecord(oid).data.material += random.nextLong(maze.maxLevel + omaze.maxLevel)
+                            otable.getRecord(oid).data!!.material += random.nextLong(maze.maxLevel + omaze.maxLevel)
                         }
                         continue
                     }

@@ -8,7 +8,6 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Element;
-import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.effect.*;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Random;
@@ -18,7 +17,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -29,7 +27,7 @@ public class AccessoryHelper extends cn.luo.yuan.maze.service.AccessoryHelper {
     private Context context;
     private Random random;
     private ArrayMap<AccessoryKey, WeakReference<Accessory>> accessoryCache;
-    private GameContext control;
+    private NeverEnd control;
 
     private AccessoryHelper(Context context, Random random) {
         this.context = context;
@@ -44,7 +42,7 @@ public class AccessoryHelper extends cn.luo.yuan.maze.service.AccessoryHelper {
         random = new Random(System.currentTimeMillis());
     }
 
-    public static AccessoryHelper getOrCreate(GameContext control) {
+    public static AccessoryHelper getOrCreate(NeverEnd control) {
         if (instance == null) {
             synchronized (AccessoryHelper.class) {
                 if (instance == null) {

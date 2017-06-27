@@ -14,9 +14,9 @@ import java.util.List;
  * Created by gluo on 6/13/2017.
  */
 public class TaskManagerImp implements TaskManager {
-    private GameContext context;
+    private NeverEnd context;
 
-    public TaskManagerImp(GameContext context) {
+    public TaskManagerImp(NeverEnd context) {
         this.context = context;
     }
 

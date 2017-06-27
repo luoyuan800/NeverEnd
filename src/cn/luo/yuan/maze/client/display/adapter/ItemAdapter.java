@@ -11,7 +11,7 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.GoodsType;
-import cn.luo.yuan.maze.client.service.GameContext;
+import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.LocalShop;
 
 import java.util.List;
@@ -24,9 +24,9 @@ import java.util.List;
 public class ItemAdapter extends BaseAdapter {
     private int iteViewId;
     private List<LocalShop.Item> items;
-    private GameContext context;
+    private NeverEnd context;
 
-    public ItemAdapter(GameContext context, List<LocalShop.Item> items) {
+    public ItemAdapter(NeverEnd context, List<LocalShop.Item> items) {
         this.items = items;
         this.context = context;
     }

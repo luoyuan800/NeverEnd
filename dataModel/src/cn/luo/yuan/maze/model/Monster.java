@@ -5,6 +5,7 @@ import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillAbleObject;
 import cn.luo.yuan.maze.utils.EncodeLong;
+import cn.luo.yuan.maze.utils.Field;
 
 import java.io.Serializable;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * Created by gluo on 4/1/2017.
  */
 public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbleObject,Cloneable, Serializable {
+    private static final long serialVersionUID = Field.SERVER_VERSION;
     private FirstName firstName;
     private SecondName secondName;
     private String type;

@@ -10,7 +10,9 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
 
-    <application android:label="@string/app_name" android:icon="@drawable/ic_launcher">
+    <application android:label="@string/app_name" android:icon="@drawable/ic_launcher"
+            android:name=".client.service.NeverEnd"
+            >
         <activity android:name=".client.display.activity.SelectedActivity"
                   android:label="@string/app_name">
             <intent-filter>

@@ -15,9 +15,9 @@ import java.util.List;
  * Created by gluo on 6/16/2017.
  */
 public class WarehouseManager {
-    private GameContext context;
+    private NeverEnd context;
     private RestConnection server;
-    public WarehouseManager(GameContext context){
+    public WarehouseManager(NeverEnd context){
         server = new RestConnection(Field.SERVER_URL, context.getVersion());
         this.context = context;
     }

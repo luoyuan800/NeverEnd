@@ -14,7 +14,7 @@ import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.skill.Skill;
-import cn.luo.yuan.maze.client.service.GameContext;
+import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.service.PetMonsterHelper;
 import cn.luo.yuan.maze.client.service.PetMonsterLoder;
 import cn.luo.yuan.maze.client.utils.Resource;
@@ -25,14 +25,14 @@ import cn.luo.yuan.maze.utils.StringUtils;
  */
 public class PetDialog implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     Handler handler = new Handler();
-    private GameContext control;
+    private NeverEnd control;
     private AlertDialog.Builder builder;
     private PetAdapter adapter;
     private Pet currentPet;
     private LoadMoreListView loadMoreListView;
     private AlertDialog dialog;
 
-    public PetDialog(GameContext control, PetAdapter adapter) {
+    public PetDialog(NeverEnd control, PetAdapter adapter) {
         setAdapter(adapter);
         this.control = control;
         builder = new AlertDialog.Builder(control.getContext()).setTitle(Resource.getString(R.string.pet_dialog_title)).setView(R.layout.pet_view);

@@ -26,7 +26,7 @@ import cn.luo.yuan.maze.client.display.handler.MenuItemClickListener;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.persistence.DataManager;
-import cn.luo.yuan.maze.client.service.GameContext;
+import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.PetMonsterLoder;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
@@ -37,20 +37,21 @@ import cn.luo.yuan.maze.utils.StringUtils;
  */
 public class GameActivity extends Activity {
     public DataManager dataManager;
-    public GameContext control;
+    public NeverEnd control;
     private PopupMenu popupMenu;
     private Thread updateMonsterThread;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initResources();
         setContentView(R.layout.game_layout);
         Intent intent = getIntent();
 //        ListenerService.init();
         dataManager = new DataManager(intent.getIntExtra("index", -1), this);
-        control = new GameContext(this, dataManager);
+        control = (NeverEnd)getApplication();
+        control.setContext(this, dataManager);
         control.setViewHandler(new GameActivityViewHandler(this));
         control.setTextView((RollTextView) findViewById(R.id.info_view));
+        initResources();
         /*ProgressDialog progressDialog = new ProgressDialog(GameActivity.this);
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.show();*/
@@ -66,6 +67,7 @@ public class GameActivity extends Activity {
     private void initResources() {
         Resource.init(this);
         LogHelper.initLogSystem(this);
+        control.setContext(this);
     }
 
     protected void onResume() {

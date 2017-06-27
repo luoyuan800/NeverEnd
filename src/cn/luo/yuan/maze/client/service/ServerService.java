@@ -13,7 +13,7 @@ import java.net.HttpURLConnection;
  */
 public class ServerService {
     private RestConnection server;
-    public ServerService(GameContext context){
+    public ServerService(NeverEnd context){
         server = new RestConnection(Field.SERVER_URL, context.getVersion());
     }
 
@@ -25,15 +25,15 @@ public class ServerService {
         server = new RestConnection(url, version);
     }
 
-    public ServerData queryOnlineHeroData(GameContext gameContext) {
-        try {
+    public ServerData queryOnlineHeroData(NeverEnd gameContext) throws IOException {
             HttpURLConnection connection = server.getHttpURLConnection("/query_hero_data", RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, gameContext.getHero().getId());
-            return (ServerData)server.connect(connection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+            Object obj = server.connect(connection);
+            if(obj instanceof ServerData){
+                return (ServerData) obj;
+            }else{
+                return null;
+            }
     }
 
     public boolean uploadHero(ServerData uploaddData) {
@@ -46,7 +46,18 @@ public class ServerService {
         return false;
     }
 
-    public String postSingleBattleMsg(GameContext context) {
+    public String postOnlineData(NeverEnd context){
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection("/pool_online_data_msg", RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            return server.connect(connection).toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return StringUtils.EMPTY_STRING;
+    }
+
+    public String postSingleBattleMsg(NeverEnd context) {
         try {
             HttpURLConnection connection = server.getHttpURLConnection("/pool_battle_msg", RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
@@ -58,7 +69,7 @@ public class ServerService {
         return StringUtils.EMPTY_STRING;
     }
 
-    public String queryAwardString(GameContext gameContext) {
+    public String queryAwardString(NeverEnd gameContext) {
         try {
             HttpURLConnection connection = server.getHttpURLConnection("/query_battle_award", RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, gameContext.getHero().getId());
@@ -69,7 +80,7 @@ public class ServerService {
         return StringUtils.EMPTY_STRING;
     }
 
-    public ServerData getBackHero(GameContext gameContext) {
+    public ServerData getBackHero(NeverEnd gameContext) {
         try {
             HttpURLConnection connection = server.getHttpURLConnection("/get_back_hero", RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, gameContext.getHero().getId());

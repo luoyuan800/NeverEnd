@@ -12,7 +12,7 @@ import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.client.service.GameContext;
+import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -27,7 +27,7 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
     private StringAdapter<Accessory> accessoryAdapter;
     private List<Accessory> accessories;
     private String key = "";
-    private GameContext context;
+    private NeverEnd context;
     private Accessory main, fuse;
     private Comparator<Accessory> order = new Comparator<Accessory>() {
         @Override
@@ -37,7 +37,7 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
         }
     };
 
-    public AccessoriesDialog(GameContext context) {
+    public AccessoriesDialog(NeverEnd context) {
         this.context = context;
         AlertDialog.Builder builder = new AlertDialog.Builder(context.getContext());
         builder.setView(R.layout.accessory);

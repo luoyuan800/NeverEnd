@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
-import cn.luo.yuan.maze.client.service.GameContext;
+import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 /**
@@ -14,14 +14,14 @@ import cn.luo.yuan.maze.utils.StringUtils;
  */
 public class RangePointDialog implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     private Dialog dialog;
-    private GameContext context;
+    private NeverEnd context;
     private int maxPoint;
     private SeekBar strAddValue;
     private SeekBar agiAddValue;
     private TextView strAddShow;
     private TextView agiAddShow;
 
-    public RangePointDialog(GameContext context) {
+    public RangePointDialog(NeverEnd context) {
         this.context = context;
         long point = context.getHero().getPoint();
         if (point > Integer.MAX_VALUE) {

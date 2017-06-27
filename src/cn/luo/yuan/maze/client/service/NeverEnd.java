@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.client.service;
 
+import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 import cn.luo.yuan.maze.client.display.handler.GameActivityViewHandler;
@@ -27,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by luoyuan on 2017/3/28.
  */
-public class GameContext implements InfoControlInterface {
+public class NeverEnd extends Application implements InfoControlInterface {
     private RunningService runningService;
     private RollTextView textView;
     private Context context;
@@ -45,7 +46,9 @@ public class GameContext implements InfoControlInterface {
         return executor;
     }
 
-    public GameContext(Context context, DataManager dataManager) {
+    public NeverEnd(){
+    }
+    public void setContext(Context context,DataManager dataManager){
         this.context = context;
         petMonsterHelper = PetMonsterHelper.instance;
         this.setDataManager(dataManager);
@@ -55,7 +58,9 @@ public class GameContext implements InfoControlInterface {
         taskManager= new TaskManagerImp(this);
         handlerData(dataManager);
     }
-
+    public void setContext(Context context){
+        this.context = context;
+    }
     public void addMessage(String msg) {
         textView.addMessage(msg);
     }

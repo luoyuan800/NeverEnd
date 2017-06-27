@@ -6,7 +6,7 @@ import android.view.View;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.skill.click.*;
-import cn.luo.yuan.maze.client.service.GameContext;
+import cn.luo.yuan.maze.client.service.NeverEnd;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,8 +19,8 @@ public class ClickSkillDialog implements View.OnClickListener {
     private AlertDialog dialog;
     private View view;
     private int index = 0;
-    private GameContext context;
-    public ClickSkillDialog(GameContext context){
+    private NeverEnd context;
+    public ClickSkillDialog(NeverEnd context){
         dialog = new AlertDialog.Builder(context.getContext()).create();
         view = View.inflate(context.getContext(), R.layout.click_skill_list, null);
         dialog.setView(view);

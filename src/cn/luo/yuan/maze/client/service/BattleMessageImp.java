@@ -14,8 +14,8 @@ import cn.luo.yuan.maze.utils.StringUtils;
  * Created by gluo on 5/19/2017.
  */
 public class BattleMessageImp implements BattleMessage {
-    private GameContext control;
-    public BattleMessageImp(GameContext control){
+    private NeverEnd control;
+    public BattleMessageImp(NeverEnd control){
         this.control = control;
     }
     public void battleTooLong(){

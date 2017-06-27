@@ -43,14 +43,6 @@ constructor(root: File) : HeroTable(root) {
         //Do nothing
     }
 
-    override fun saveMaze(maze: Maze?, id: String?) {
-        //Do nothing
-    }
-
-    override fun saveHero(hero: Hero?) {
-        //Do nothing
-    }
-
     override fun getRecord(id: String?): ServerRecord {
         return ServerRecord()
     }

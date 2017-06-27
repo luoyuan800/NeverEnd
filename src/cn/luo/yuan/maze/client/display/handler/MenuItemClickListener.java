@@ -8,17 +8,18 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.client.display.dialog.ExchangeDialog;
 import cn.luo.yuan.maze.client.display.dialog.PetDialog;
-import cn.luo.yuan.maze.client.service.GameContext;
+import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.LocalShop;
 
 public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
     private Context context;
-    private GameContext control;
+    private NeverEnd control;
 
-    public MenuItemClickListener(Context context, GameContext control) {
+    public MenuItemClickListener(Context context, NeverEnd control) {
         this.context = context;
         this.control = control;
     }
@@ -42,6 +43,11 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.online_battle:
+                Intent gameIntent = new Intent(context, OnlineActivity.class);
+
+                context.startActivity(gameIntent);
+                break;
             case R.id.excahnge:
                 new ExchangeDialog(control).show();
                 break;

@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.*;
 import cn.luo.yuan.maze.R;
@@ -18,7 +17,7 @@ import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.ExchangeObject;
 import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.client.service.ExchangeManager;
-import cn.luo.yuan.maze.client.service.GameContext;
+import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.goods.Goods;
@@ -32,7 +31,7 @@ import java.util.List;
  * Created by luoyuan on 2017/6/25.
  */
 public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
-    private GameContext context;
+    private NeverEnd context;
     private ExchangeManager manager;
     private AlertDialog progress;
     private Dialog currentShowingDialog;
@@ -293,7 +292,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
         currentShowingDialog = SimplerDialogBuilder.build(view,Resource.getString(R.string.close),null,context.getContext());
     }
 
-    public ExchangeDialog(GameContext context) {
+    public ExchangeDialog(NeverEnd context) {
         this.context = context;
         manager = new ExchangeManager(context);
         progress = SimplerDialogBuilder.build(Resource.getString(R.string.syn_server), context.getContext(), true);

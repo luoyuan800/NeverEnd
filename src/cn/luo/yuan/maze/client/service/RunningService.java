@@ -28,7 +28,7 @@ import static cn.luo.yuan.maze.service.ListenerService.winListeners;
  */
 public class RunningService implements RunningServiceInterface {
     private Hero hero;
-    private GameContext gameContext;
+    private NeverEnd gameContext;
     private Maze maze;
     private boolean running;
     private boolean pause;
@@ -39,7 +39,7 @@ public class RunningService implements RunningServiceInterface {
     private HarmAble target;
     private RandomEventService randomEventService;
 
-    public RunningService(Hero hero, Maze maze, GameContext gameContext, DataManager dataManager, long fps) {
+    public RunningService(Hero hero, Maze maze, NeverEnd gameContext, DataManager dataManager, long fps) {
         this.hero = hero;
         this.gameContext = gameContext;
         this.maze = maze;
@@ -78,7 +78,7 @@ public class RunningService implements RunningServiceInterface {
                 maze.setStep(maze.getStep() + 1);
                 if (maze.getStep() > 100 || random.nextLong(10000) > 9985 || random.nextLong(maze.getStep()) > 10 + random.nextLong(22) || random.nextLong(maze.getStreaking() + 1) > 50 + maze.getLevel()) {
                     maze.setLevel(maze.getLevel() + 1);
-                    Log.i("maze", "End to next level");
+                    Log.d("maze", "End to next level");
                     long point = 1;
                     long add = random.nextLong(maze.getLevel() / Data.LEVEL_BASE_POINT_REDUCE);
                     if (add < 10) {
@@ -117,7 +117,7 @@ public class RunningService implements RunningServiceInterface {
                         if (maze.getStep() > 10 && random.nextInt(100) < 35) {
                             //Defender
                         }
-                        Log.i("maze", "Try to find target battle");
+                        Log.d("maze", "Try to find target battle");
                         Monster monster = monsterHelper.randomMonster(maze.getLevel());
                         this.target = monster;
                         if (monster != null) {
@@ -127,7 +127,7 @@ public class RunningService implements RunningServiceInterface {
                             BattleMessage battleMessage = new BattleMessageImp(gameContext);
                             battleService.setBattleMessage(battleMessage);
                             if (battleService.battle(gameContext.getMaze().getLevel())) {
-                                Log.i("maze", "Battle win " + monster.getDisplayName());
+                                Log.d("maze", "Battle win " + monster.getDisplayName());
                                 maze.setStreaking(maze.getStreaking() + 1);
                                 hero.setMaterial(hero.getMaterial() + monster.getMaterial());
                                 gameContext.addMessage(String.format(gameContext.getContext().getString(R.string.add_mate), StringUtils.formatNumber(monster.getMaterial())));
@@ -148,7 +148,7 @@ public class RunningService implements RunningServiceInterface {
                                     listener.win(hero, monster);
                                 }
                             } else {
-                                Log.i("maze", "Battle failed with " + monster.getDisplayName());
+                                Log.d("maze", "Battle failed with " + monster.getDisplayName());
                                 maze.setStreaking(0);
                                 for (LostListener lostListener : lostListeners.values()) {
                                     lostListener.lost(hero, monster);
@@ -161,7 +161,7 @@ public class RunningService implements RunningServiceInterface {
                                     }
                                     maze.setLevel(1);
                                 }
-                                Log.i("maze", "Battle failed restore");
+                                Log.d("maze", "Battle failed restore");
                             }
                             gameContext.getViewHandler().refreshPets(hero);
                         }

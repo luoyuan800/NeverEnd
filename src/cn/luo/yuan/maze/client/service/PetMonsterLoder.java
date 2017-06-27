@@ -28,15 +28,15 @@ import java.util.Map;
  */
 public class PetMonsterLoder implements MonsterLoader {
     private static PetMonsterLoder instance;
-    private GameContext control;
+    private NeverEnd control;
     private ArrayMap<MonsterKey, WeakReference<Monster>> monsterCache = new ArrayMap<>();
 
-    private PetMonsterLoder(GameContext control) {
+    private PetMonsterLoder(NeverEnd control) {
         this.control = control;
         init();
     }
 
-    public static PetMonsterLoder getOrCreate(GameContext control) {
+    public static PetMonsterLoder getOrCreate(NeverEnd control) {
         if (instance == null) {
             synchronized (PetMonsterLoder.class) {
                 if (instance == null) {

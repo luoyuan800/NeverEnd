@@ -20,10 +20,10 @@ import java.util.List;
  * Created by gluo on 5/9/2017.
  */
 public class LocalShop {
-    private GameContext context;
+    private NeverEnd context;
     private Random random;
 
-    public LocalShop(GameContext context) {
+    public LocalShop(NeverEnd context) {
         this.context = context;
         this.random = context.getRandom();
     }

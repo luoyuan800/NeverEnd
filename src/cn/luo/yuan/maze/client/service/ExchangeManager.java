@@ -20,9 +20,9 @@ import java.util.List;
  */
 public class ExchangeManager {
     private RestConnection server;
-    private GameContext context;
+    private NeverEnd context;
 
-    public ExchangeManager(GameContext context) {
+    public ExchangeManager(NeverEnd context) {
         this.context = context;
         server = new RestConnection(Field.SERVER_URL, context.getVersion());
     }

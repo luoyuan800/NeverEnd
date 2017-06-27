@@ -13,11 +13,25 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <cn.luo.yuan.maze.client.display.view.RollTextView
+        <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/online_battle_msg"
-                android:layout_weight="1"/>
+                android:layout_weight="1">
+
+            <TextView
+                    android:text=""
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/online_data"
+                    />
+
+            <cn.luo.yuan.maze.client.display.view.RollTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/online_battle_msg"
+                    android:layout_weight="1"/>
+        </LinearLayout>
 
         <LinearLayout
                 android:orientation="vertical"
@@ -26,11 +40,25 @@
                 android:layout_weight="1">
 
             <TextView
+                    android:text="队伍信息"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView"
+                    android:textStyle="normal|bold"/>
+
+            <TextView
                     android:text="加载中……"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:id="@+id/group_message"/>
+
+            <TextView
+                    android:text="已经获得的奖励"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView2"
+                    android:textStyle="normal|bold"/>
 
             <TextView
                     android:layout_weight="1"
@@ -47,5 +75,5 @@
             android:layout_height="wrap_content"
             android:id="@+id/action_button"
             android:onClick="onClick"
-            style="@android:style/Widget.DeviceDefault.Button.Inset"/>
+            style="@android:style/Widget.Button.Inset"/>
 </LinearLayout>

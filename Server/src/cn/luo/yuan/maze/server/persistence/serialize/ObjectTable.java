@@ -45,10 +45,11 @@ public class ObjectTable<T extends Serializable> implements Runnable{
     public synchronized String save(T object, String id) throws IOException {
         File entry = buildFile(id);
         if (entry.exists()) {
-            throw new IOException("Object with id: " + id + " already existed!");
+            return update(object, id);
+        }else {
+            saveObject(object, entry);
+            cache.put(id, new SoftReference<T>(object, queue));
         }
-        saveObject(object, entry);
-        cache.put(id, new SoftReference<T>(object, queue));
         return id;
     }
 

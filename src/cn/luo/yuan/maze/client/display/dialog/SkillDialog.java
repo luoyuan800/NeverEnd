@@ -10,7 +10,7 @@ import android.widget.TabHost;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.skill.*;
-import cn.luo.yuan.maze.client.service.GameContext;
+import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.service.SkillHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 
@@ -18,10 +18,10 @@ import cn.luo.yuan.maze.client.utils.Resource;
  * Created by luoyuan on 2017/5/28.
  */
 public class SkillDialog implements View.OnClickListener {
-    private GameContext context;
+    private NeverEnd context;
     private Dialog dialog;
 
-    public SkillDialog(GameContext context) {
+    public SkillDialog(NeverEnd context) {
         this.context = context;
         dialog = new AlertDialog.Builder(context.getContext())
                 .setTitle(Resource.getString(R.string.skill_title))

@@ -278,8 +278,6 @@ public class Server {
                 record.setRange(Integer.MAX_VALUE);
                 record.setData(data);
                 table.save(record);
-                table.saveHero(data.hero);
-                table.saveMaze(data.maze);
                 if(data.accessories!=null){
                     for(Accessory accessory : data.accessories){
                         table.save(accessory);
@@ -302,14 +300,13 @@ public class Server {
         }));
 
         post("get_back_hero", ((request, response) -> {
-            String id = request.queryParams(Field.OWNER_ID_FIELD);
+            String id = request.headers(Field.OWNER_ID_FIELD);
             if(StringUtils.isNotEmpty(id)){
                 HeroTable table = heroTableCache.get(id);
                 if(table!=null){
                     ServerRecord record = table.getRecord(id);
                     heroTableCache.remove(id);
                     table.getRecord(id).setData(null);
-                    table.delete();
                     writeObject(response,record.getData());
                     return Field.RESPONSE_RESULT_SUCCESS;
                 }
@@ -318,7 +315,7 @@ public class Server {
         }));
 
         post("query_hero_data", ((request, response) -> {
-            String id = request.queryParams(Field.OWNER_ID_FIELD);
+            String id = request.headers(Field.OWNER_ID_FIELD);
             if(StringUtils.isNotEmpty(id)){
                 HeroTable table = heroTableCache.get(id);
                 if(table!=null){
@@ -331,7 +328,7 @@ public class Server {
         }));
 
         post("query_battle_award", (request, response) -> {
-            String id = request.queryParams(Field.OWNER_ID_FIELD);
+            String id = request.headers(Field.OWNER_ID_FIELD);
             if(StringUtils.isNotEmpty(id)){
                 HeroTable table = heroTableCache.get(id);
                 if(table!=null){
@@ -342,9 +339,24 @@ public class Server {
             return StringUtils.EMPTY_STRING;
         });
 
+        post("pool_online_data_msg", (request, response) -> {
+            String id = request.headers(Field.OWNER_ID_FIELD);
+            if(StringUtils.isNotEmpty(id)){
+                HeroTable table = heroTableCache.get(id);
+                if(table!=null){
+                    ServerRecord record = table.getRecord(id);
+                    return record.getData().hero.getDisplayName() + "<br>"
+                            + "胜利：" + StringUtils.formatNumber(record.getWinCount()) + "<br>"
+                            + "失败：" + StringUtils.formatNumber(record.getLostCount()) + "<br>"
+                            + "胜率：" + StringUtils.formatPercentage((float)record.getWinCount()/(record.getLostCount() + record.getWinCount() + 1));
+                }
+            }
+            return StringUtils.EMPTY_STRING;
+        });
+
         post("pool_battle_msg", (request, response) -> {
-            String id = request.queryParams(Field.OWNER_ID_FIELD);
-            int count = Integer.parseInt(request.queryParams(Field.COUNT));
+            String id = request.headers(Field.OWNER_ID_FIELD);
+            int count = Integer.parseInt(request.headers(Field.COUNT));
             if(StringUtils.isNotEmpty(id)){
                 HeroTable table = heroTableCache.get(id);
                 if(table!=null){
