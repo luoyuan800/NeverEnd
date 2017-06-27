@@ -74,18 +74,13 @@ public class ExchangeManager {
         return (T)model;
     }
 
-    public <T> T getBackMyExchange(String id) {
+    public Object getBackMyExchange(String id) {
         try {
             HttpURLConnection connection = server.getHttpURLConnection("/get_back_exchange", RestConnection.POST);
             connection.addRequestProperty(Field.EXCHANGE_ID_FIELD, id);
             Object object = server.connect(connection);
-            if(object instanceof Accessory){
-                object = context.covertAccessoryToLocal((Accessory) object);
-            }
-            if(object instanceof OwnedAble){
-                ((OwnedAble)object).setKeeperId(context.getHero().getId());
-            }
-            return (T) object;
+
+            return object;
         } catch (Exception e) {
             LogHelper.logException(e, "");
         }
@@ -131,6 +126,19 @@ public class ExchangeManager {
     }
 
     public IDModel queryMyAvaiableItemForExchange(int expectedType, String expectedKeyWord) {
+        return null;
+    }
+
+    public <T> T acknowledge(ExchangeObject eo) {
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection("/acknowledge_my_exchange", RestConnection.POST);
+            connection.addRequestProperty(Field.EXCHANGE_ID_FIELD, eo.getId());
+            if(Field.RESPONSE_RESULT_OK.equals(server.connect(connection))){
+                unBox(eo);
+            }
+        } catch (Exception e) {
+            LogHelper.logException(e, "");
+        }
         return null;
     }
 }

@@ -36,7 +36,7 @@ public class GameContext implements InfoControlInterface {
     private DataManager dataManager;
     private GameActivityViewHandler viewHandler;
     private Random random;
-    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
+    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(5);
     private AccessoryHelper accessoryHelper;
     private PetMonsterHelper petMonsterHelper;
     private TaskManagerImp taskManager;

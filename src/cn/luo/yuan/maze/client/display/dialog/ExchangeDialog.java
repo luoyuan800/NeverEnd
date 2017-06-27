@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.client.display.dialog;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
@@ -19,7 +20,10 @@ import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.client.service.ExchangeManager;
 import cn.luo.yuan.maze.client.service.GameContext;
 import cn.luo.yuan.maze.client.utils.Resource;
+import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.goods.Goods;
+import cn.luo.yuan.maze.utils.Field;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.List;
@@ -27,10 +31,11 @@ import java.util.List;
 /**
  * Created by luoyuan on 2017/6/25.
  */
-public class ExchangeDialog implements View.OnClickListener {
+public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
     private GameContext context;
     private ExchangeManager manager;
     private AlertDialog progress;
+    private Dialog currentShowingDialog;
 
     private Handler handler = new Handler(){
         public void handleMessage(Message msg){
@@ -41,27 +46,112 @@ public class ExchangeDialog implements View.OnClickListener {
                 case 1:
                     if(msg.obj instanceof List){
                         List<ExchangeObject> objects = (List<ExchangeObject>) msg.obj;
+                        progress.dismiss();
                         showSubmitedDialog(objects);
                     }
                     break;
                 case 2:
-                    if(msg.obj instanceof List){
-                        List<ExchangeObject> objects = (List<ExchangeObject>) msg.obj;
-                        progress.dismiss();
-                        showOtherSubmitedDialog(objects);
-                    }
+                    showOtherSubmitedDialog();
             }
         }
     };
 
     @Override
-    public void onClick(View v) {
-        Object obj = v.getTag(R.string.item);
+    public  void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Object item = parent.getAdapter().getItem(position);
+        if(item instanceof Serializable) {
+            if(currentShowingDialog!=null){
+                currentShowingDialog.dismiss();
+                currentShowingDialog = null;
+            }
+            progress.show();
+            context.getExecutor().submit(new Runnable() {
+                @Override
+                public void run() {
+                    if(manager.submitExchange((Serializable) item)){
+                        Toast.makeText(context.getContext(), "成功上传" + (item instanceof NameObject ? ((NameObject) item).getName() : ""), Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(context.getContext(), "上传失败，请检测网络后重试。", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+        }
+    }
+
+    private void showOtherSubmitedDialog() {
+        View view = View.inflate(context.getContext(), R.layout.select_submit, null);
+        RadioButton petR = (RadioButton) view.findViewById(R.id.pet_type);
+        RadioButton accessoryR = (RadioButton) view.findViewById(R.id.accessory_type);
+        RadioButton goodsR = (RadioButton) view.findViewById(R.id.goods_type);
+        EditText key = (EditText)view.findViewById(R.id.key_text);
+        LoadMoreListView list = (LoadMoreListView) view.findViewById(R.id.item_list);
+        SimplerDialogBuilder.build(view, Resource.getString(R.string.close), null, context.getContext());
+
+        progress.show();
+        Runnable updateTask = new Runnable() {
+            @Override
+            public void run() {
+                List<ExchangeObject> exchangeObjects =
+                        manager.queryAvailableExchanges(petR.isChecked() ? Field.PET_TYPE :
+                                accessoryR.isChecked() ? Field.ACCESSORY_TYPE : Field.GOODS_TYPE);
+                if(progress.isShowing()) {
+                    progress.dismiss();
+                }
+                if(list.getAdapter() == null){
+                    list.setAdapter(buildExchangeAdapter(exchangeObjects));
+                }else{
+                    ExchangeAdapter adapter = (ExchangeAdapter) list.getAdapter();
+                    adapter.setExchanges(exchangeObjects);
+                    adapter.notifyDataSetChanged();
+                }
+
+            }
+        };
+        petR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    accessoryR.setChecked(false);
+                    goodsR.setChecked(false);
+                    progress.show();
+                    context.getExecutor().submit(updateTask);
+                }
+            }
+        });
+        petR.setChecked(true);
+
+        accessoryR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    petR.setChecked(false);
+                    goodsR.setChecked(false);
+                    progress.show();
+                    context.getExecutor().submit(updateTask);
+                }
+            }
+        });
+
+
+        goodsR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    accessoryR.setChecked(false);
+                    petR.setChecked(false);
+                    progress.show();
+                    context.getExecutor().submit(updateTask);
+                }
+            }
+        });
+        context.getExecutor().submit(updateTask);
 
     }
 
-    private void showOtherSubmitedDialog(List<ExchangeObject> objects) {
-        ExchangeAdapter ea = new ExchangeAdapter(objects, new View.OnClickListener() {
+    @NotNull
+    private ExchangeAdapter buildExchangeAdapter(List<ExchangeObject> objects) {
+        return new ExchangeAdapter(objects, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 progress.show();
@@ -84,13 +174,6 @@ public class ExchangeDialog implements View.OnClickListener {
 
             }
         });
-        LinearLayout linearLayout = new LinearLayout(context.getContext());
-        CheckBox cb = new CheckBox(context.getContext());
-        linearLayout.addView(cb);
-        ListView list = new ListView(context.getContext());
-        list.setAdapter(ea);
-        linearLayout.addView(list);
-        SimplerDialogBuilder.build(linearLayout, Resource.getString(R.string.close), null, context.getContext());
     }
 
     private void showSubmitedDialog(List<ExchangeObject> objects) {
@@ -102,7 +185,24 @@ public class ExchangeDialog implements View.OnClickListener {
                 context.getExecutor().submit(new Runnable() {
                     @Override
                     public void run() {
-                        manager.getBackMyExchange(eo.getId());
+                        IDModel model;
+                        if(eo.getChanged() == null) {
+                            Object result = manager.getBackMyExchange(eo.getId());
+                            if (result instanceof ExchangeObject) {
+                                model = manager.acknowledge(eo);
+
+                            }else{
+                                model = manager.unBox(eo);
+                            }
+                        }else{
+                            model = manager.acknowledge(eo);
+                        }
+                        if(model!=null){
+                            context.getDataManager().save(model);
+                        }
+                        if (model instanceof NameObject) {
+                            Toast.makeText(context.getContext(), "取回" + ((NameObject) model).getName(), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 ExchangeAdapter adapter = (ExchangeAdapter) v.getTag(R.string.adapter);
@@ -123,6 +223,7 @@ public class ExchangeDialog implements View.OnClickListener {
         RadioButton goodsR = (RadioButton) view.findViewById(R.id.goods_type);
         EditText key = (EditText)view.findViewById(R.id.key_text);
         LoadMoreListView list = (LoadMoreListView) view.findViewById(R.id.item_list);
+        list.setOnItemClickListener(ExchangeDialog.this);
         petR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -189,6 +290,7 @@ public class ExchangeDialog implements View.OnClickListener {
             }
         });
         petR.setChecked(true);
+        currentShowingDialog = SimplerDialogBuilder.build(view,Resource.getString(R.string.close),null,context.getContext());
     }
 
     public ExchangeDialog(GameContext context) {
@@ -245,16 +347,6 @@ public class ExchangeDialog implements View.OnClickListener {
     }
 
     private void showExchanges() {
-        progress.show();
-        context.getExecutor().submit(new Runnable() {
-            @Override
-            public void run() {
-                List<ExchangeObject> exchangeObjects = manager.queryAvailableExchanges(-1);
-                Message msg = new Message();
-                msg.what = 2;
-                msg.obj = exchangeObjects;
-                handler.sendMessage(msg);
-            }
-        });
+
     }
 }
