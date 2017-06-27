@@ -216,7 +216,7 @@ public class TestServer {
         upload.pets = new ArrayList<>(hero.getPets());
         ServerService serverService = new ServerService("http://localhost:4567","test");
         serverService.uploadHero(upload);
-        assertTrue(new File("data/hero/cn.luo.yuan.maze.model.hero/" + hero.getId()).exists());
+        assertTrue(new File("data/hero/" + hero.getId()).exists());
     }
 
 }

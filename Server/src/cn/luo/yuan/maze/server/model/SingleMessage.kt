@@ -14,7 +14,7 @@ class SingleMessage : Serializable, IDModel {
         return delete
     }
 
-    fun markDelete() {
+    override fun markDelete() {
         delete = true
     }
     private var mid = ""

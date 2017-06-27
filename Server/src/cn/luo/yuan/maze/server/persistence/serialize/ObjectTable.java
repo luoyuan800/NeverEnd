@@ -82,6 +82,9 @@ public class ObjectTable<T extends Serializable> implements Runnable{
         if (object == null) {
             String name = getName(id);
             object = load(name);
+            if(object instanceof IDModel){
+                cache.put(((IDModel) object).getId(), new SoftReference<T>(object));
+            }
         }
         return object;
     }
@@ -89,10 +92,10 @@ public class ObjectTable<T extends Serializable> implements Runnable{
     public List<T> loadAll() {
         List<T> list = new ArrayList<>();
         if (root.isDirectory()) {
-            for (File file : root.listFiles()) {
-                T entry = loadEntry(file);
-                if (entry != null)
-                    list.add(entry);
+            for (String id : root.list()) {
+                T obj = loadObject(id);
+                if (obj != null)
+                    list.add(obj);
             }
         }
         return list;

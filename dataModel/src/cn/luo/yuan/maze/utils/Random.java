@@ -60,8 +60,7 @@ public class Random extends java.util.Random {
         return super.nextInt(num);
     }
 
-    @SafeVarargs
-    public final <T> T randomItem(T... ts){
+    public final <T> T randomItem(T[] ts){
         if(ts == null || ts.length == 0){
             return null;
         }

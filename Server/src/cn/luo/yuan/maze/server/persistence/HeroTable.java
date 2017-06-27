@@ -4,7 +4,6 @@ import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Pet;
-import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
@@ -37,7 +36,7 @@ public class HeroTable {
 
     }
 
-    public Hero getHero(String id) throws IOException, ClassNotFoundException {
+    public Hero getHero(String id, long level) throws IOException, ClassNotFoundException {
         return loadHero(id);
     }
 
@@ -67,7 +66,7 @@ public class HeroTable {
 
     }
 
-    public Maze getMaze(String id) throws IOException, ClassNotFoundException {
+    public Maze getMaze(String id, long level) throws IOException, ClassNotFoundException {
         return mazeDb.loadObject(id);
     }
 

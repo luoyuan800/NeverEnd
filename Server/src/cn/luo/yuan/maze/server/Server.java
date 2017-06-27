@@ -59,7 +59,7 @@ public class Server {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
         File root = new File("data");
         File heroDir = new File(root, "hero");
-        Map<String, HeroTable> heroTableCache = new HashMap<>();
+        Map<String, HeroTable> heroTableCache = initHeroTableCache(heroDir);
         WarehouseTable warehouseTable = new WarehouseTable(root);
         executor.scheduleAtFixedRate(warehouseTable,0, 1, TimeUnit.DAYS);
         ExchangeTable exchangeTable = new ExchangeTable(root);
@@ -273,6 +273,7 @@ public class Server {
                 ServerRecord record = table.getRecord(data.hero.getId());
                 if(record == null){
                     record = new ServerRecord();
+                    record.setId(data.hero.getId());
                 }
                 record.setRange(Integer.MAX_VALUE);
                 record.setData(data);
@@ -428,12 +429,12 @@ public class Server {
         }
     }
 
-    public static void stop() {
+    static void stop() {
         Spark.stop();
     }
 
     //Only use for unit test
-    public static void clear() throws IOException, ClassNotFoundException {
+    static void clear() throws IOException, ClassNotFoundException {
         File root = new File("data");
         GroupTable groupTable = new GroupTable(root);
         groupTable.getGroupDb().clear();
@@ -441,5 +442,24 @@ public class Server {
         heroTable.clear();
         ExchangeTable exchangeTable = new ExchangeTable(root);
         exchangeTable.getExchangeDb().clear();
+    }
+
+    private static Map<String, HeroTable> initHeroTableCache(File root){
+        Map<String, HeroTable> cache = new HashMap<>();
+        if(root.exists()) {
+            for (String name : root.list()) {
+                try {
+                    HeroTable table = new HeroTable(new File(root, name));
+                    if (table.getHero(name, 0) != null) {
+                        cache.put(name, table);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }else{
+            root.mkdirs();
+        }
+        return cache;
     }
 }
