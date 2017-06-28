@@ -25,6 +25,9 @@ class ServerRecord : IDModel, Serializable {
     var range = Int.MAX_VALUE
     val messages = ConcurrentLinkedQueue<String>()
     var data:ServerData? = ServerData()
+    var dieTime = 0L
+    var dieCount = 0L
+
     override fun getId(): String? {
         return id
     }

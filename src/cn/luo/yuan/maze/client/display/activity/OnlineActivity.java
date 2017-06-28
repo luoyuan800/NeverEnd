@@ -77,8 +77,8 @@ public class OnlineActivity extends Activity {
 
     private void initDialog(Dialog showing) {
         try {
-            ServerData data = service.queryOnlineHeroData(gameContext);
-            if (data == null || data.hero == null) {
+            String data = service.postOnlineData(gameContext);
+            if (StringUtils.isEmpty(data)) {
                 handler.sendEmptyMessage(1);//showuploaddialog
             } else {
                 startPost();
@@ -121,12 +121,12 @@ public class OnlineActivity extends Activity {
     }
 
     private void upload() {
-        ServerData uploaddData = new ServerData();
-        uploaddData.hero = gameContext.getHero();
-        uploaddData.accessories = new ArrayList<>(gameContext.getHero().getAccessories());
-        uploaddData.pets = new ArrayList<>(gameContext.getHero().getPets());
-        uploaddData.skills = Arrays.asList(gameContext.getHero().getSkills());
-        uploaddData.maze = gameContext.getMaze();
+        ServerData uploadData = new ServerData();
+        uploadData.hero = gameContext.getHero();
+        uploadData.accessories = new ArrayList<>(gameContext.getHero().getAccessories());
+        uploadData.pets = new ArrayList<>(gameContext.getHero().getPets());
+        uploadData.skills = Arrays.asList(gameContext.getHero().getSkills());
+        uploadData.maze = gameContext.getMaze();
         AlertDialog uploadDialog = new AlertDialog.Builder(OnlineActivity.this).setMessage("上传中……").setCancelable(true).setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
@@ -137,7 +137,7 @@ public class OnlineActivity extends Activity {
         executor.submit(new Runnable() {
             @Override
             public void run() {
-                if(service.uploadHero(uploaddData)){
+                if(service.uploadHero(uploadData)){
                     initDialog(uploadDialog);
                 }else{
                    handler.sendEmptyMessage(0);
@@ -170,12 +170,12 @@ public class OnlineActivity extends Activity {
         ServerData data = service.getBackHero(gameContext);
         if(data!=null && StringUtils.isNotEmpty(award)) {
             gameContext.getHero().setMaterial(gameContext.getHero().getMaterial() + data.material);
-            if (data.accessories != null) {
+            if (data.awardAccessories != null) {
                 for (Accessory accessory : data.accessories) {
                     gameContext.getDataManager().saveAccessory(accessory);
                 }
             }
-            if (data.pets != null) {
+            if (data.awardPets != null) {
                 for (Pet pet : data.pets) {
                     gameContext.getDataManager().savePet(pet);
                 }

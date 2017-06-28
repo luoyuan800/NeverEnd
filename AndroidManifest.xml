@@ -12,6 +12,7 @@
 
     <application android:label="@string/app_name" android:icon="@drawable/ic_launcher"
             android:name=".client.service.NeverEnd"
+                 android:theme="@android:style/Theme.Holo.Light"
             >
         <activity android:name=".client.display.activity.SelectedActivity"
                   android:label="@string/app_name">

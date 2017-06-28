@@ -94,6 +94,11 @@ public class Messager extends Message {
     }
 
     @Override
+    public void startBattle(String hero, String monster) {
+
+    }
+
+    @Override
     public void createGroup(@NotNull NameObject hero, @NotNull NameObject other) {
 
     }
@@ -130,5 +135,13 @@ public class Messager extends Message {
     @Override
     public void groupWinHero(@NotNull String groupName, @Nullable String heroName) {
 
+    }
+
+    public void restore(@Nullable String hero) {
+        notification(hero + "生命值已经恢复！");
+    }
+
+    public void waitingForRestore(@Nullable String hero, long period) {
+        notification(hero + "已经挂掉，还要等待" + (period/1000) + "秒才能复活！");
     }
 }

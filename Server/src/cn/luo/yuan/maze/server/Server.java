@@ -306,8 +306,11 @@ public class Server {
                 if(table!=null){
                     ServerRecord record = table.getRecord(id);
                     heroTableCache.remove(id);
-                    table.getRecord(id).setData(null);
-                    writeObject(response,record.getData());
+                    ServerData data = new ServerData(record.getData());
+                    writeObject(response,data);
+                    record.setData(null);
+                    record.setDieCount(0);
+                    record.setDieTime(0);
                     return Field.RESPONSE_RESULT_SUCCESS;
                 }
             }
@@ -333,7 +336,9 @@ public class Server {
                 HeroTable table = heroTableCache.get(id);
                 if(table!=null){
                     ServerRecord record = table.getRecord(id);
-                    return record.getData().toString();
+                    if(record.getData()!=null) {
+                        return record.getData().toString();
+                    }
                 }
             }
             return StringUtils.EMPTY_STRING;
@@ -345,10 +350,11 @@ public class Server {
                 HeroTable table = heroTableCache.get(id);
                 if(table!=null){
                     ServerRecord record = table.getRecord(id);
-                    return record.getData().hero.getDisplayName() + "<br>"
-                            + "胜利：" + StringUtils.formatNumber(record.getWinCount()) + "<br>"
-                            + "失败：" + StringUtils.formatNumber(record.getLostCount()) + "<br>"
-                            + "胜率：" + StringUtils.formatPercentage((float)record.getWinCount()/(record.getLostCount() + record.getWinCount() + 1));
+                    if(record.getData()!=null) {
+                        return record.getData().hero.getDisplayName() + "<br>"
+                                + "胜利：" + StringUtils.formatNumber(record.getWinCount()) + "<br>"
+                                + "失败：" + StringUtils.formatNumber(record.getLostCount()) + "<br>";
+                    }
                 }
             }
             return StringUtils.EMPTY_STRING;
@@ -362,7 +368,7 @@ public class Server {
                 if(table!=null){
                     ServerRecord record = table.getRecord(id);
                     String s = "";
-                    while (count-- > 0){
+                    while (count-- > 0 && record.getMessages().size() > 0){
                         s += record.getMessages().poll() + (count > 0 ? "<br>" : "");
                     }
                     return s;
@@ -370,7 +376,12 @@ public class Server {
             }
             return StringUtils.EMPTY_STRING;
         });
-        executor.scheduleAtFixedRate(new HeroBattleService(heroTableCache),0, 5, TimeUnit.MINUTES);
+        executor.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                new HeroBattleService(new HashMap<String, HeroTable>(heroTableCache)).run();
+            }
+        },0, 5, TimeUnit.MINUTES);
     }
 
     private static Effect buildEffect(String effectName, String value){
@@ -448,12 +459,7 @@ public class Server {
     //Only use for unit test
     static void clear() throws IOException, ClassNotFoundException {
         File root = new File("data");
-        GroupTable groupTable = new GroupTable(root);
-        groupTable.getGroupDb().clear();
-        HeroTable heroTable = new HeroTable(root);
-        heroTable.clear();
-        ExchangeTable exchangeTable = new ExchangeTable(root);
-        exchangeTable.getExchangeDb().clear();
+        root.delete();
     }
 
     private static Map<String, HeroTable> initHeroTableCache(File root){
@@ -466,11 +472,11 @@ public class Server {
                         cache.put(name, table);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LogHelper.error(e);
                 }
             }
         }else{
-            root.mkdirs();
+            LogHelper.info("create root file " + root.getAbsolutePath() + ", result: " + root.mkdirs());
         }
         return cache;
     }

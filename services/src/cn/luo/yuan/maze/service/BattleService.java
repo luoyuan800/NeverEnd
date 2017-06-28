@@ -40,6 +40,7 @@ public class BattleService {
     public boolean battle(long level) {
         long round = 1;
         boolean heroAtk = random.nextBoolean();
+        battleMessage.startBattle(hero instanceof NameObject ? ((NameObject) hero).getDisplayName() : "", monster instanceof NameObject ? ((NameObject) monster).getDisplayName() : "");
         while (hero.getCurrentHp() > 0 && monster.getCurrentHp() > 0) {
             if(runninfService!=null && runninfService.isPause()){
                 continue;

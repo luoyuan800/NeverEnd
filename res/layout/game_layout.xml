@@ -245,16 +245,7 @@
                 android:background="@color/toumin" />
     </LinearLayout>
 
-    <ImageButton
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@android:drawable/ic_dialog_dialer"
-            android:id="@+id/fab"
-            android:elevation="1dp"
-            android:background="@color/active"
-            android:onClick="showButtons"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"/>
+
 
     <LinearLayout
             android:orientation="horizontal"
@@ -398,18 +389,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <ImageButton
-            android:src="@android:drawable/ic_menu_revert"
-            android:layout_width="15sp"
-            android:layout_height="15sp"
-            android:id="@+id/switch_msg_view"
-            android:layout_alignParentEnd="true"
-            android:layout_alignStart="@+id/fab"
-            android:layout_below="@+id/linearLayout"
-            android:background="@color/toumin"
-            android:onClick="onClick"
-            />
-
     <LinearLayout
             android:orientation="vertical"
             android:gravity="center_horizontal"
@@ -473,6 +452,27 @@
                 />
 
     </LinearLayout>
+    <ImageButton
+            android:src="@android:drawable/ic_menu_revert"
+            android:layout_width="15sp"
+            android:layout_height="15sp"
+            android:id="@+id/switch_msg_view"
+            android:layout_alignParentEnd="true"
+            android:layout_alignStart="@+id/fab"
+            android:layout_below="@+id/linearLayout"
+            android:background="@color/toumin"
+            android:onClick="onClick"
+    />
 
+    <ImageButton
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@android:drawable/ic_dialog_dialer"
+            android:id="@+id/fab"
+            android:elevation="1dp"
+            android:background="@color/active"
+            android:onClick="showButtons"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>

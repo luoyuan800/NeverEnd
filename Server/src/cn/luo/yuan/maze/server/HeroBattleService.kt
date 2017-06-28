@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.server
 
+import cn.luo.yuan.maze.model.Data
 import cn.luo.yuan.maze.model.Maze
 import cn.luo.yuan.maze.model.ServerRecord
 import cn.luo.yuan.maze.server.model.Messager
@@ -22,10 +23,16 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>) :
 
     val random = Random(System.currentTimeMillis());
     override fun run() {
+        if(tableCache.size < 20){
+            tableCache.put("npc", NPCTable(File("data/npc")))
+        }else{
+            tableCache.remove("npc");
+        }
         for ((id, table) in tableCache) {
             val hero = table.getHero(id, 0)
             val messager = Messager()
-            messager.addReceiver(table.getRecord(id))
+            val record = table.getRecord(id)
+            messager.addReceiver(record)
             if (hero.currentHp > 0) {
                 val maze = table.getMaze(id, 0)
                 val oid = filterMatch(id, maze.maxLevel)
@@ -38,11 +45,15 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>) :
                         val bs = BattleService(hero, ohero, random, this)
                         bs.setBattleMessage(messager)
                         if (bs.battle(maze.level + omaze.level)) {
-                            table.getRecord(id).winCount ++
+                            record.winCount ++
                             otable.getRecord(oid).lostCount ++
-                            table.getRecord(id).data!!.material += random.nextLong(maze.maxLevel + omaze.maxLevel)
+                            otable.getRecord(oid).dieCount++
+                            otable.getRecord(oid).dieTime = System.currentTimeMillis()
+                            record.data!!.material += random.nextLong(maze.maxLevel + omaze.maxLevel)
                         } else {
-                            table.getRecord(id).lostCount ++
+                            record.dieCount++
+                            record.dieTime = System.currentTimeMillis()
+                            record.lostCount ++
                             otable.getRecord(oid).winCount ++
                             otable.getRecord(oid).data!!.material += random.nextLong(maze.maxLevel + omaze.maxLevel)
                         }
@@ -50,9 +61,16 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>) :
                     }
                 }
                 //TODO Random events
+            }else{
+                val period = Data.RESTOREPERIOD - (System.currentTimeMillis() - record.dieTime)
+                if(period <= 0){
+                    hero.hp = hero.maxHp
+                    messager.restore(hero.displayName)
+                }else{
+                    messager.waitingForRestore(hero.displayName, period)
+                }
             }
         }
-        tableCache.remove("npc")
         range()
         for(table in tableCache.values){
             table.save()
@@ -75,12 +93,9 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>) :
             val table = tableCache[it] as HeroTable
             val maze = table.getMaze(it, 0)
             val hero = table.getHero(it, 0)
-            hero.currentHp > 0 && it!=id && Math.abs(maze.maxLevel - level) < 100
+           it == "npc" || (hero.currentHp > 0 && it!=id && Math.abs(maze.maxLevel - level) < 100)
         })
-        if(items.size < 10){
-            tableCache.put("npc", NPCTable(File("data/npc")))
-            items.add("npc")
-        }
+
         return random.randomItem(items)
     }
 }

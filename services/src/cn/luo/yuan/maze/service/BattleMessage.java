@@ -27,4 +27,6 @@ public interface BattleMessage {
     void releaseSkill(HarmAble target, Skill skill);
 
     void rowMessage(String msg);
+
+    void startBattle(String hero, String monster);
 }

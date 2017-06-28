@@ -22,6 +22,16 @@ public class ServerData implements Serializable {
     public List<Skill> skills;
     public long material;
 
+    public ServerData(){
+
+    }
+
+    public ServerData(ServerData data) {
+        awardAccessories = data.awardAccessories;
+        awardPets = data.awardPets;
+        material = data.material;
+    }
+
     public String toString(){
         StringBuilder acces = new StringBuilder();
         if(awardAccessories!=null && awardAccessories.size() > 0){
@@ -42,7 +52,7 @@ public class ServerData implements Serializable {
         return "可以获得锻造点：" + StringUtils.formatNumber(material) + "<br>"
                 + "装备：<br>"
                 + petb
-                + "宠物："
+                + "<br>宠物：<br>"
                 + petb;
     }
  }

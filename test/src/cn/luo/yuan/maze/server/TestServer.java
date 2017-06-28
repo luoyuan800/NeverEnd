@@ -7,12 +7,14 @@ import cn.luo.yuan.maze.model.ExchangeObject;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.types.Medallion;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.client.utils.RestConnection;
+import cn.luo.yuan.maze.utils.StringUtils;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -70,7 +72,7 @@ public class TestServer {
 
     @AfterTest
     public void stop() throws IOException, ClassNotFoundException {
-        Server.clear();
+        //Server.clear();
         Server.stop();
     }
 
@@ -190,12 +192,14 @@ public class TestServer {
     @Test
     public void testSubmitHero(){
         Hero hero = new Hero();
+        hero.setName("QA_" + System.currentTimeMillis());
         hero.setMaxHp(2000);
         hero.setHp(1000);
         hero.setAtk(10);
         hero.setDef(5);
         hero.setElement(Element.EARTH);
-        hero.setId(UUID.randomUUID().toString());
+        hero.setRace(Race.Elyosr.ordinal());
+        hero.setId("test");
         Maze maze = new Maze();
         Pet pet = new Pet();
         pet.setType("test");
@@ -217,6 +221,61 @@ public class TestServer {
         ServerService serverService = new ServerService("http://localhost:4567","test");
         serverService.uploadHero(upload);
         assertTrue(new File("data/hero/" + hero.getId()).exists());
+        assertTrue(serverService.postOnlineData(hero.getId()).contains(hero.getDisplayName()));
+    }
+
+    @Test
+    public void testBattle(){
+        Hero hero = new Hero();
+        hero.setRace(Race.Wizardsr.ordinal());
+        hero.setName("QA_" + System.currentTimeMillis());
+        hero.setMaxHp(2000);
+        hero.setHp(1000);
+        hero.setAtk(10);
+        hero.setDef(5);
+        hero.setElement(Element.EARTH);
+        hero.setId(UUID.randomUUID().toString());
+        Maze maze = new Maze();
+        ServerData upload = new ServerData();
+        upload.hero = hero;
+        upload.maze = maze;
+        ServerService serverService = new ServerService("http://localhost:4567","test");
+        serverService.uploadHero(upload);
+        assertTrue(new File("data/hero/" + hero.getId()).exists());
+        try {
+            Thread.sleep(360000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        String str = serverService.postBattleMsg(hero.getId(), 1);
+        System.out.println(str);
+        //assertTrue(StringUtils.isNotEmpty(str), "Should has battle message!");
+        while (StringUtils.isNotEmpty(str = serverService.postBattleMsg(hero.getId(), 1))){
+            System.out.println(str);
+        }
+    }
+
+    @Test
+    public void testPollBattleMessage(){
+        try {
+            Thread.sleep(20000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ServerService serverService = new ServerService("http://localhost:4567","test");
+        String str = serverService.postBattleMsg("test", 1);
+        System.out.println(str);
+        //assertTrue(StringUtils.isNotEmpty(str), "Should has battle message!");
+        while (StringUtils.isNotEmpty(str = serverService.postBattleMsg("test", 1))){
+            System.out.println(str);
+        }
+    }
+
+    public static void main(String...args){
+        ServerService serverService = new ServerService("http://localhost:4567","test");
+        String str = serverService.postBattleMsg("test", 1);
+        System.out.println(str);
     }
 
 }

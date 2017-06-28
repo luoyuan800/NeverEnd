@@ -47,9 +47,13 @@ public class ServerService {
     }
 
     public String postOnlineData(NeverEnd context){
+        return postOnlineData(context.getHero().getId());
+    }
+
+    public String postOnlineData(String id) {
         try {
             HttpURLConnection connection = server.getHttpURLConnection("/pool_online_data_msg", RestConnection.POST);
-            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, id);
             return server.connect(connection).toString();
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,10 +62,14 @@ public class ServerService {
     }
 
     public String postSingleBattleMsg(NeverEnd context) {
+        return postBattleMsg(context.getHero().getId(),1);
+    }
+
+    public String postBattleMsg(String id, int count) {
         try {
             HttpURLConnection connection = server.getHttpURLConnection("/pool_battle_msg", RestConnection.POST);
-            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
-            connection.addRequestProperty(Field.COUNT,"1");
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, id);
+            connection.addRequestProperty(Field.COUNT,String.valueOf(count));
             return server.connect(connection).toString();
         } catch (Exception e) {
             e.printStackTrace();

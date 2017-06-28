@@ -81,4 +81,9 @@ public class BattleMessageImp implements BattleMessage {
     public void rowMessage(String msg) {
         control.addMessage(msg);
     }
+
+    @Override
+    public void startBattle(String hero, String monster) {
+
+    }
 }
