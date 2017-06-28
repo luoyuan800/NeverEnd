@@ -381,6 +381,9 @@ public class Server {
                 HeroTable table = heroTableCache.get(id);
                 if(table!=null){
                     ServerRecord record = table.getRecord(id);
+                    if(record.getMessages().size() > 50){
+                        count += 5;
+                    }
                     String s = "";
                     while (count-- > 0 && record.getMessages().size() > 0){
                         s += record.getMessages().poll() + (count > 0 ? "<br>" : "");

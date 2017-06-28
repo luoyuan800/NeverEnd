@@ -45,7 +45,7 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>) :
                         messager.addReceiver(otable.getRecord(oid))
                         val bs = BattleService(hero, ohero, random, this)
                         bs.setBattleMessage(messager)
-                        val awardMaterial = random.nextLong(maze.maxLevel + omaze.maxLevel)
+                        val awardMaterial = random.nextLong(maze.maxLevel + omaze.maxLevel) + 1
                         if (bs.battle(maze.level + omaze.level)) {
                             record.winCount ++
                             otable.getRecord(oid).lostCount ++

@@ -183,10 +183,17 @@ public class StringUtils {
     }
 
     private static DateFormat dateInstance;
-    public static String getDate() {
+    public static String getCurrentDate() {
         if(dateInstance == null){
             dateInstance = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.MEDIUM);
         }
         return dateInstance.format(new Date(System.currentTimeMillis()));
+    }
+    private static DateFormat timeInstance;
+    public static String getCurrentTime() {
+        if(timeInstance == null){
+            timeInstance = DateFormat.getTimeInstance(DateFormat.MEDIUM);
+        }
+        return timeInstance.format(new Date(System.currentTimeMillis()));
     }
 }
