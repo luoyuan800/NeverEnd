@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.server.persistence.serialize;
 
 import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.model.Index;
+import cn.luo.yuan.maze.server.LogHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -229,7 +230,7 @@ public class ObjectTable<T extends Serializable> implements Runnable{
                 }
             }
         }catch (Exception e){
-           e.printStackTrace();
+            LogHelper.error(e);
         }
         return deleted;
     }

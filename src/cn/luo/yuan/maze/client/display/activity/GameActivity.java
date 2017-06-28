@@ -110,7 +110,7 @@ public class GameActivity extends Activity {
                                         try {
                                             Thread.sleep(10000);
                                         } catch (InterruptedException e) {
-                                            e.printStackTrace();
+                                            LogHelper.logException(e, "GameActivity ->111Switch");
                                         }
                                     }
                                 }

@@ -11,6 +11,8 @@ import java.io.IOException
  */
 class NPCTable @Throws(IOException::class, ClassNotFoundException::class)
 constructor(root: File) : HeroTable(root) {
+    val name = arrayOf("袁酥兄","龙剑森","小梅","雷二蛋", "某鸟")
+    val major = arrayOf("伯爵","贱客","诗人","骑士", "流氓")
     val random = Random(System.currentTimeMillis())
     @Throws(IOException::class, ClassNotFoundException::class)
     override fun getHero(id: String, level: Long): Hero {
@@ -27,7 +29,7 @@ constructor(root: File) : HeroTable(root) {
     }
 
     private fun randomName(): String? {
-        return "测试人员"
+        return random.randomItem(major) + "☆" + random.randomItem(name)
     }
 
     @Throws(IOException::class, ClassNotFoundException::class)

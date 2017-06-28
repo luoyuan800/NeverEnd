@@ -193,6 +193,8 @@ public class OnlineActivity extends Activity {
     }
 
     private void startPost(){
+        ((RollTextView)findViewById(R.id.online_battle_msg)).addMessage("等待中……");
+
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {

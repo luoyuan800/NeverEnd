@@ -54,16 +54,25 @@ public class Server {
     /**
      * Created by gluo on 6/1/2017.
      */
+    private File root = new File("data");
+    private File heroDir = new File(root, "hero");
+    private WarehouseTable warehouseTable = new WarehouseTable(root);
+    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
+    private Map<String, HeroTable> heroTableCache = initHeroTableCache(heroDir);
+    private ExchangeTable exchangeTable = new ExchangeTable(root);
+    private ObjectTable<Task> taskTable = new ObjectTable<>(Task.class, root);
 
-    public static void main(String... args) throws IOException, ClassNotFoundException {
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
-        File root = new File("data");
-        File heroDir = new File(root, "hero");
-        Map<String, HeroTable> heroTableCache = initHeroTableCache(heroDir);
-        WarehouseTable warehouseTable = new WarehouseTable(root);
+    public static void main(String...args){
+        try {
+            new Server().run();
+        } catch (Exception e) {
+            LogHelper.error(e);
+        }
+    }
+    private void run() throws IOException, ClassNotFoundException {
+
         executor.scheduleAtFixedRate(warehouseTable,0, 1, TimeUnit.DAYS);
-        ExchangeTable exchangeTable = new ExchangeTable(root);
-        ObjectTable<Task> taskTable = new ObjectTable<>(Task.class, root);
+
         post("submit_exchange", (request, response) -> {
             Object ex = readObject(request);
             Object exchange = null;
@@ -248,6 +257,7 @@ public class Server {
             if(o instanceof OwnedAble){
                 if(((OwnedAble) o).getKeeperId().equals(request.headers(OWNER_ID_FIELD))){
                     writeObject(response, o);
+                    warehouseTable.delete(o);
                 }else{
                     response.header(RESPONSE_CODE, NOT_YOUR_ITEM);
                     return RESPONSE_RESULT_FAILED;
@@ -381,7 +391,7 @@ public class Server {
             public void run() {
                 new HeroBattleService(new HashMap<String, HeroTable>(heroTableCache)).run();
             }
-        },0, 5, TimeUnit.MINUTES);
+        },0, 1, TimeUnit.MINUTES);
     }
 
     private static Effect buildEffect(String effectName, String value){
@@ -452,7 +462,14 @@ public class Server {
         }
     }
 
-    static void stop() {
+     void stop() {
+        for(HeroTable table : heroTableCache.values()){
+            try {
+                table.save();
+            } catch (IOException e) {
+                LogHelper.error(e);
+            }
+        }
         Spark.stop();
     }
 

@@ -95,7 +95,7 @@ public class Messager extends Message {
 
     @Override
     public void startBattle(String hero, String monster) {
-
+        notification("<b>" + hero + "和" + monster + "开始战斗！</b>");
     }
 
     @Override
@@ -143,5 +143,9 @@ public class Messager extends Message {
 
     public void waitingForRestore(@Nullable String hero, long period) {
         notification(hero + "已经挂掉，还要等待" + (period/1000) + "秒才能复活！");
+    }
+
+    public void materialGet(@Nullable String geter, long awardMaterial) {
+        notification(geter + "获得了" + StringUtils.formatNumber(awardMaterial) + "锻造点");
     }
 }

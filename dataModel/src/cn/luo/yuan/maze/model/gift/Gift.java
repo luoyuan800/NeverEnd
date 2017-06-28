@@ -66,22 +66,16 @@ public enum Gift {
         return recount;
     }
 
-    public void handler(InfoControlInterface control) {
-        try {
+    public void handler(InfoControlInterface control) throws IllegalAccessException, InstantiationException {
             GiftHandler handler = handlerType.newInstance();
             handler.handler(control);
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
+
     }
 
-    public void unHandler(InfoControlInterface control) {
-        try {
+    public void unHandler(InfoControlInterface control) throws IllegalAccessException, InstantiationException {
+
             GiftHandler handler = handlerType.newInstance();
             handler.unHandler(control);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public static List<Gift> values(int recount){

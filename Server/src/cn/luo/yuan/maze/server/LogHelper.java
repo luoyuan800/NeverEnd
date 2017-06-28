@@ -22,7 +22,7 @@ public class LogHelper {
             handler.setFormatter(new SimpleFormatter());
             logger.addHandler(handler);
         } catch (IOException e) {
-            e.printStackTrace();
+            LogHelper.error(e);
         }
     }
 

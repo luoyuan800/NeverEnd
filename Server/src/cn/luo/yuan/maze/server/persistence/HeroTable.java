@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.server.persistence;
 
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.server.LogHelper;
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
 import cn.luo.yuan.maze.service.AccessoryHelper;
 
@@ -41,7 +42,7 @@ public class HeroTable {
         try {
             recordDb.fuse();
         } catch (IOException e) {
-            e.printStackTrace();
+            LogHelper.error(e);
         }
     }
 

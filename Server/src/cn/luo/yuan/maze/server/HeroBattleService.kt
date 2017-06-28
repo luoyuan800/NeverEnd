@@ -44,18 +44,21 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>) :
                         messager.addReceiver(otable.getRecord(oid))
                         val bs = BattleService(hero, ohero, random, this)
                         bs.setBattleMessage(messager)
+                        val awardMaterial = random.nextLong(maze.maxLevel + omaze.maxLevel)
                         if (bs.battle(maze.level + omaze.level)) {
                             record.winCount ++
                             otable.getRecord(oid).lostCount ++
                             otable.getRecord(oid).dieCount++
                             otable.getRecord(oid).dieTime = System.currentTimeMillis()
-                            record.data!!.material += random.nextLong(maze.maxLevel + omaze.maxLevel)
+                            messager.materialGet(hero.displayName, awardMaterial);
+                            record.data!!.material += awardMaterial
                         } else {
+                            messager.materialGet(ohero.displayName, awardMaterial);
                             record.dieCount++
                             record.dieTime = System.currentTimeMillis()
                             record.lostCount ++
                             otable.getRecord(oid).winCount ++
-                            otable.getRecord(oid).data!!.material += random.nextLong(maze.maxLevel + omaze.maxLevel)
+                            otable.getRecord(oid).data!!.material += awardMaterial
                         }
                         continue
                     }

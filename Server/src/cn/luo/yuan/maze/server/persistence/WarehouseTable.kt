@@ -6,7 +6,9 @@ import cn.luo.yuan.maze.model.Pet
 import cn.luo.yuan.maze.model.goods.Goods
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable
 import cn.luo.yuan.maze.utils.Field
+import org.omg.CORBA.Object
 import java.io.File
+import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 /**
  * Created by gluo on 6/15/2017.
@@ -28,6 +30,14 @@ class WarehouseTable(root:File):Runnable{
             is Pet -> petWH.save(obj)
             is Accessory -> accessoryWH.save(obj)
             is Goods -> goodsWH.save(obj)
+        }
+    }
+
+    fun delete(obj:Any?){
+        when(obj){
+            is Pet -> petWH.delete(obj.id)
+            is Accessory -> accessoryWH.delete(obj.id)
+            is Goods -> goodsWH.delete(obj.id)
         }
     }
 

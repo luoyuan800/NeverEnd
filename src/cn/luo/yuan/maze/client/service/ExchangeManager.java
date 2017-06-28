@@ -46,7 +46,7 @@ public class ExchangeManager {
                 return true;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LogHelper.logException(e, "ExchanmgManager->49");
         }
         return false;
     }
@@ -57,7 +57,7 @@ public class ExchangeManager {
             urlConnection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
              return (List<ExchangeObject>) server.connect(urlConnection);
         } catch (Exception e) {
-            LogHelper.logException(e, "");
+            LogHelper.logException(e, "ExchanmgManager->60");
         }
         return null;
     }
@@ -82,7 +82,7 @@ public class ExchangeManager {
 
             return object;
         } catch (Exception e) {
-            LogHelper.logException(e, "");
+            LogHelper.logException(e, "ExchanmgManager->85");
         }
         return null;
     }
@@ -105,7 +105,7 @@ public class ExchangeManager {
             }
 
         } catch (Exception e) {
-            LogHelper.logException(e, "");
+            LogHelper.logException(e, "ExchanmgManager->108");
         }
         return eos;
     }
@@ -120,7 +120,7 @@ public class ExchangeManager {
                 return true;
             }
         }catch (Exception e){
-            LogHelper.logException(e, "");
+            LogHelper.logException(e, "ExchanmgManager->123");
         }
         return false;
     }
@@ -137,7 +137,7 @@ public class ExchangeManager {
                 unBox(eo);
             }
         } catch (Exception e) {
-            LogHelper.logException(e, "");
+            LogHelper.logException(e, "ExchanmgManager->140");
         }
         return null;
     }

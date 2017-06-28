@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 import cn.luo.yuan.maze.client.display.handler.GameActivityViewHandler;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
+import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.gift.Gift;
@@ -123,13 +124,21 @@ public class NeverEnd extends Application implements InfoControlInterface {
     public void save() {
         Gift gift = hero.getGift();
         if (gift != null) {
-            gift.unHandler(this);
+            try {
+                gift.unHandler(this);
+            } catch (Exception e) {
+                LogHelper.logException(e, "NeverEnd ->save->gift.un handler("+ gift+ ")");
+            }
         }
         dataManager.saveHero(hero);
         dataManager.saveMaze(maze);
         dataManager.fuseCache();
         if (gift != null) {
-            gift.handler(this);
+            try {
+                gift.handler(this);
+            } catch (Exception e) {
+                LogHelper.logException(e, "NeverEnd ->save->gift.handler("+ gift+ ")");
+            }
         }
     }
 
@@ -176,7 +185,11 @@ public class NeverEnd extends Application implements InfoControlInterface {
         //Gift handle
         Gift gift =hero.getGift();
         if (gift != null) {
-            gift.handler(this);
+            try {
+                gift.handler(this);
+            } catch (Exception e) {
+                LogHelper.logException(e, "NeverEnd ->handlerData->gift.handler("+ gift+ ")");
+            }
         }
 
         //Accessory handle

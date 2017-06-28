@@ -36,7 +36,7 @@ public class Data {
     public static float HIT_AGI_RATE = 0.001f;//敏捷转化重击率衰减
     public static float HIT_STR_RATE = 0.002f;//力量转化重击率加成
     public static int SKILL_ENABLE_COST = 50;//激活技能消耗的能力点
-    public static final long RESTOREPERIOD = 30 * 60 * 1000;//死亡后复活的时间（Server）
+    public static final long RESTOREPERIOD = 10000;//30 * 60 * 1000;//死亡后复活的时间（Server）
 
     /**
      * 计算击败一个怪物可以获得的锻造点

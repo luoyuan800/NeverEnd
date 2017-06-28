@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.client.service;
 
+import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.client.utils.RestConnection;
@@ -41,7 +42,7 @@ public class ServerService {
             HttpURLConnection connection = server.getHttpURLConnection("/submit_hero", RestConnection.POST);
             return Field.RESPONSE_RESULT_SUCCESS.equals(server.connect(uploaddData, connection));
         } catch (Exception e) {
-            e.printStackTrace();
+            LogHelper.logException(e,"ServiceService->45");
         }
         return false;
     }
@@ -56,7 +57,7 @@ public class ServerService {
             connection.addRequestProperty(Field.OWNER_ID_FIELD, id);
             return server.connect(connection).toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            LogHelper.logException(e,"ServiceService->60");
         }
         return StringUtils.EMPTY_STRING;
     }
@@ -72,7 +73,8 @@ public class ServerService {
             connection.addRequestProperty(Field.COUNT,String.valueOf(count));
             return server.connect(connection).toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            LogHelper.logException(e,"ServiceService->76");
+
         }
         return StringUtils.EMPTY_STRING;
     }
@@ -83,7 +85,7 @@ public class ServerService {
             connection.addRequestProperty(Field.OWNER_ID_FIELD, gameContext.getHero().getId());
             return server.connect(connection).toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            LogHelper.logException(e,"ServiceService->88");
         }
         return StringUtils.EMPTY_STRING;
     }
@@ -94,7 +96,7 @@ public class ServerService {
             connection.addRequestProperty(Field.OWNER_ID_FIELD, gameContext.getHero().getId());
             return (ServerData) server.connect(connection);
         } catch (Exception e) {
-            e.printStackTrace();
+            LogHelper.logException(e,"ServiceService->98");
         }
         return null;
     }
