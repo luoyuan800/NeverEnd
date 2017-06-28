@@ -38,7 +38,7 @@ public class TestServer {
     private RestConnection connection = new RestConnection("http://localhost:4567", "");
     @BeforeTest
     public void start() {
-        new Thread(() -> {
+        /*new Thread(() -> {
             try {
                 Server.main(new String[0]);
             } catch (IOException e) {
@@ -46,7 +46,7 @@ public class TestServer {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-        }).start();
+        }).start();*/
     }
 
     @Test
@@ -73,7 +73,7 @@ public class TestServer {
     @AfterTest
     public void stop() throws IOException, ClassNotFoundException {
         //Server.clear();
-        Server.stop();
+        //Server.stop();
     }
 
     @Test

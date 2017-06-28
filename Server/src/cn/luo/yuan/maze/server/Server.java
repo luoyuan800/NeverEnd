@@ -365,8 +365,8 @@ public class Server {
                     ServerRecord record = table.getRecord(id);
                     if(record.getData()!=null) {
                         return record.getData().hero.getDisplayName() + "<br>"
-                                + "排名：" + record.getRange() + "<br>"
-                                + "胜利：" + StringUtils.formatNumber(record.getWinCount()) + "<br>"
+                                + "排名：" + record.getRange() + "， 胜率：" +  StringUtils.formatPercentage(record.getWinCount()/(record.getWinCount() + record.getLostCount() + 1))
+                                + "胜利：" + StringUtils.formatNumber(record.getWinCount()) + "， "
                                 + "失败：" + StringUtils.formatNumber(record.getLostCount()) + "<br>";
                     }
                 }
