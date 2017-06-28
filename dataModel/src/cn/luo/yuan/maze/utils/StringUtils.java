@@ -4,7 +4,9 @@ import cn.luo.yuan.maze.model.OwnedAble;
 import cn.luo.yuan.maze.model.effect.Effect;
 
 import java.math.RoundingMode;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -180,5 +182,11 @@ public class StringUtils {
         return !isNotEmpty(object);
     }
 
-
+    private static DateFormat dateInstance;
+    public static String getDate() {
+        if(dateInstance == null){
+            dateInstance = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.MEDIUM);
+        }
+        return dateInstance.format(new Date(System.currentTimeMillis()));
+    }
 }

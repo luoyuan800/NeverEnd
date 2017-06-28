@@ -70,6 +70,7 @@ public class Server {
         }
     }
     private void run() throws IOException, ClassNotFoundException {
+        LogHelper.info("starting");
 
         executor.scheduleAtFixedRate(warehouseTable,0, 1, TimeUnit.DAYS);
 
@@ -303,6 +304,7 @@ public class Server {
                         table.save(skill);
                     }
                 }
+                LogHelper.info(record.getData().hero.getDisplayName() + " Submit!");
                 return RESPONSE_RESULT_SUCCESS;
             }else{
                 return RESPONSE_RESULT_FAILED;
@@ -315,6 +317,7 @@ public class Server {
                 HeroTable table = heroTableCache.get(id);
                 if(table!=null){
                     ServerRecord record = table.getRecord(id);
+                    LogHelper.info(record.getData().hero.getDisplayName() + " Get back!");
                     heroTableCache.remove(id);
                     ServerData data = new ServerData(record.getData());
                     writeObject(response,data);
@@ -362,6 +365,7 @@ public class Server {
                     ServerRecord record = table.getRecord(id);
                     if(record.getData()!=null) {
                         return record.getData().hero.getDisplayName() + "<br>"
+                                + "排名：" + record.getRange() + "<br>"
                                 + "胜利：" + StringUtils.formatNumber(record.getWinCount()) + "<br>"
                                 + "失败：" + StringUtils.formatNumber(record.getLostCount()) + "<br>";
                     }
@@ -392,6 +396,7 @@ public class Server {
                 new HeroBattleService(new HashMap<String, HeroTable>(heroTableCache)).run();
             }
         },0, 1, TimeUnit.MINUTES);
+        LogHelper.info("started");
     }
 
     private static Effect buildEffect(String effectName, String value){
@@ -463,6 +468,8 @@ public class Server {
     }
 
      void stop() {
+        LogHelper.info("shutDown");
+        executor.shutdown();
         for(HeroTable table : heroTableCache.values()){
             try {
                 table.save();

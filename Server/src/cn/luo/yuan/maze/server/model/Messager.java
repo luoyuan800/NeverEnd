@@ -27,6 +27,7 @@ public class Messager extends Message {
         this.sms.remove(sms);
     }
     public void notification(String msg){
+        msg = StringUtils.getDate() + " - " + msg;
         for(ServerRecord sr : sms){
             sr.getMessages().add(msg);
         }

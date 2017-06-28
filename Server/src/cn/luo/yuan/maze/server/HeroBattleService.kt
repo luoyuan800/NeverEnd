@@ -23,6 +23,7 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>) :
 
     val random = Random(System.currentTimeMillis());
     override fun run() {
+        LogHelper.info("Start battle, number:" + tableCache.size)
         if(tableCache.size < 20){
             tableCache.put("npc", NPCTable(File("data/npc")))
         }else{
