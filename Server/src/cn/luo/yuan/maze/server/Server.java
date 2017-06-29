@@ -48,6 +48,7 @@ import java.util.concurrent.TimeUnit;
 import static cn.luo.yuan.maze.utils.Field.*;
 import static spark.Spark.post;
 import static spark.Spark.get;
+import static spark.SparkBase.port;
 
 public class Server {
 
@@ -72,7 +73,7 @@ public class Server {
     }
     private void run() throws IOException, ClassNotFoundException {
         LogHelper.info("starting");
-
+        port(4568);
         executor.scheduleAtFixedRate(warehouseTable,0, 1, TimeUnit.DAYS);
 
         post("submit_exchange", (request, response) -> {
@@ -395,12 +396,15 @@ public class Server {
             return StringUtils.EMPTY_STRING;
         });
 
-        get("stop",((request, response) -> {
+        get("/stop",((request, response) -> {
             if("gavin.luo".equals(request.queryParams("pass"))){
                 stop();
             }
             return RESPONSE_RESULT_OK;
         }));
+
+        get("/status",((request, response) -> heroTableCache.size()));
+
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {

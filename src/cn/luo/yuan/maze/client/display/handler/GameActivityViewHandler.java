@@ -44,8 +44,8 @@ public class GameActivityViewHandler extends Handler {
                 ((TextView) context.findViewById(R.id.hero_gift)).setText(StringUtils.isNotEmpty(context.control.getHero().getGift().getName()) ? context.control.getHero().getGift().getName() : "");
                 ((TextView) context.findViewById(R.id.hero_atk)).setText(StringUtils.formatNumber(hero.getUpperAtk()));
                 ((TextView) context.findViewById(R.id.hero_def)).setText(StringUtils.formatNumber(hero.getUpperDef()));
-                ((TextView) context.findViewById(R.id.hero_str)).setText(StringUtils.formatNumber(hero.getStr()));
-                ((TextView) context.findViewById(R.id.hero_agi)).setText(StringUtils.formatNumber(hero.getAgi()));
+                ((TextView) context.findViewById(R.id.hero_str)).setText(StringUtils.formatNumber(hero.getMaxStr()));
+                ((TextView) context.findViewById(R.id.hero_agi)).setText(StringUtils.formatNumber(hero.getMaxAgi()));
             }
         });
     }
