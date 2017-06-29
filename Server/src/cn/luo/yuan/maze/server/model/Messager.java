@@ -149,4 +149,8 @@ public class Messager extends Message {
     public void materialGet(@Nullable String geter, long awardMaterial) {
         notification(geter + "获得了" + StringUtils.formatNumber(awardMaterial) + "锻造点");
     }
+
+    public void restoreLimit(@Nullable String hero) {
+        notification(hero + "的重生次数已经达到上限，请取回后重新上传。");
+    }
 }

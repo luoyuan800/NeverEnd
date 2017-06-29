@@ -89,7 +89,7 @@ public class PetMonsterLoder implements MonsterLoader {
                     }
                     if (addKey) {
                         if (clone.getSex() < 0) {
-                            clone.setSex(getRandom().nextInt(1));
+                            clone.setSex(getRandom().nextInt(2));
                         }
                         clone.setAtk(clone.getAtk() + level * Data.MONSTER_ATK_RISE_PRE_LEVEL);
                         clone.setDef(clone.getDef() + level * Data.MONSTER_DEF_RISE_PRE_LEVEL);

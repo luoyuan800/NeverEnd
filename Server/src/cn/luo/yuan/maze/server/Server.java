@@ -47,6 +47,7 @@ import java.util.concurrent.TimeUnit;
 
 import static cn.luo.yuan.maze.utils.Field.*;
 import static spark.Spark.post;
+import static spark.Spark.get;
 
 public class Server {
 
@@ -393,6 +394,13 @@ public class Server {
             }
             return StringUtils.EMPTY_STRING;
         });
+
+        get("stop",((request, response) -> {
+            if("gavin.luo".equals(request.queryParams("pass"))){
+                stop();
+            }
+            return RESPONSE_RESULT_OK;
+        }));
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {

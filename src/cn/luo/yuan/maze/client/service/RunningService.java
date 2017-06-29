@@ -131,7 +131,7 @@ public class RunningService implements RunningServiceInterface {
                                 maze.setStreaking(maze.getStreaking() + 1);
                                 hero.setMaterial(hero.getMaterial() + monster.getMaterial());
                                 gameContext.addMessage(String.format(gameContext.getContext().getString(R.string.add_mate), StringUtils.formatNumber(monster.getMaterial())));
-                                Pet pet = tryCatch(monster, dataManager.getPetCount());
+                                Pet pet = tryCatch(monster, dataManager.getPetCount(), maze.getLevel());
                                 if (pet != null) {
                                     gameContext.addMessage(String.format(Resource.getString(R.string.pet_catch), pet.getDisplayName()));
                                     dataManager.savePet(pet);
@@ -193,10 +193,10 @@ public class RunningService implements RunningServiceInterface {
         return target;
     }
 
-    private Pet tryCatch(Monster monster, int petCount) {
+    private Pet tryCatch(Monster monster, int petCount, long level) {
         try {
             if (gameContext.getPetMonsterHelper().isCatchAble(monster, hero, random, petCount)) {
-                return gameContext.getPetMonsterHelper().monsterToPet(monster, hero);
+                return gameContext.getPetMonsterHelper().monsterToPet(monster, hero, level);
             } else {
                 return null;
             }

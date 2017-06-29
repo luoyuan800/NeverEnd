@@ -17,7 +17,7 @@ public class PetMonsterHelper {
     private MonsterLoader monsterLoader;
     private Random random;
 
-    public  Pet monsterToPet(Monster monster, Hero hero) throws MonsterToPetException {
+    public  Pet monsterToPet(Monster monster, Hero hero, long level) throws MonsterToPetException {
         Pet pet = new Pet();
         for (Method method : Monster.class.getMethods()) {
             if (method.getName().startsWith("get")) {
@@ -30,9 +30,13 @@ public class PetMonsterHelper {
 
             }
         }
-        pet.setAtk(random.reduceToSpecialDigit(pet.getAtk(), 2));
-        pet.setDef(random.reduceToSpecialDigit(pet.getDef(), 2));
-        pet.setMaxHp(random.reduceToSpecialDigit(pet.getMaxHp(), 2));
+
+        long atk_l = level * Data.MONSTER_ATK_RISE_PRE_LEVEL;
+        long def_l = level * Data.MONSTER_DEF_RISE_PRE_LEVEL;
+        long hp_l = level * Data.MONSTER_HP_RISE_PRE_LEVEL;
+        pet.setAtk(pet.getAtk() - atk_l + random.reduceToSpecialDigit(atk_l, 2));
+        pet.setDef(pet.getDef() - def_l + random.reduceToSpecialDigit(def_l, 2));
+        pet.setMaxHp(pet.getMaxHp() - hp_l + random.reduceToSpecialDigit(hp_l, 2));
         pet.setHp(pet.getMaxHp());
         pet.setOwnerId(hero.getId());
         pet.setOwnerName(hero.getName());

@@ -50,7 +50,7 @@
         <silent>14</silent>
         <egg_rate>15</egg_rate>
         <pet_rate>15</pet_rate>
-        <sex>1</sex>
+        <sex>-1</sex>
         <race>Orger</race>
         <rank>2</rank>
         <evolution>55</evolution>

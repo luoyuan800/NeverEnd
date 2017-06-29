@@ -73,7 +73,7 @@ public class TestPetMonsterHelper {
         Hero hero = new Hero();
         hero.setName("test");
         hero.setId("11111");
-        Pet p = helper.monsterToPet(monster, hero);
+        Pet p = helper.monsterToPet(monster, hero, 1);
         assertEquals(p.getType(), monster.getType());
         assertEquals(p.getFirstName(), monster.getFirstName());
     }

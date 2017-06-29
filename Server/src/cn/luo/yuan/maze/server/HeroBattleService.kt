@@ -66,12 +66,16 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>) :
                 }
                 //TODO Random events
             }else{
-                val period = Data.RESTOREPERIOD - (System.currentTimeMillis() - record.dieTime)
-                if(period <= 0){
-                    hero.hp = hero.maxHp
-                    messager.restore(hero.displayName)
-                }else{
-                    messager.waitingForRestore(hero.displayName, period)
+                if(record.dieCount > record.restoreLimit){
+                    messager.restoreLimit(hero.displayName);
+                }else {
+                    val period = Data.RESTOREPERIOD - (System.currentTimeMillis() - record.dieTime)
+                    if (period <= 0) {
+                        hero.hp = hero.maxHp
+                        messager.restore(hero.displayName)
+                    } else {
+                        messager.waitingForRestore(hero.displayName, period)
+                    }
                 }
             }
         }

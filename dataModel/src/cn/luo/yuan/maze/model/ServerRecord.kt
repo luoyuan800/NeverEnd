@@ -27,6 +27,7 @@ class ServerRecord : IDModel, Serializable {
     var data:ServerData? = ServerData()
     var dieTime = 0L
     var dieCount = 0L
+    var restoreLimit = Data.RESTORE_LIMIT
 
     override fun getId(): String? {
         return id
