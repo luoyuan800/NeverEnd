@@ -9,6 +9,11 @@
               android:layout_alignParentTop="true"
               android:baselineAligned="false">
 
+    <cn.luo.yuan.maze.client.display.view.LoadMoreListView
+            android:id="@+id/accessories_list"
+            android:layout_height="400dp"
+            android:layout_width="150dp"/>
+
     <LinearLayout
             android:orientation="vertical"
             android:layout_weight="1"
@@ -74,8 +79,4 @@
 </LinearLayout>
     </LinearLayout>
 
-    <cn.luo.yuan.maze.client.display.view.LoadMoreListView
-            android:id="@+id/accessories_list"
-            android:layout_height="400dp"
-            android:layout_width="150dp"/>
 </LinearLayout>

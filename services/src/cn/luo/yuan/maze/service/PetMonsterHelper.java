@@ -102,9 +102,12 @@ public class PetMonsterHelper {
     }
 
     public boolean evolution(Pet pet) {
-        int eveIndex = monsterLoader.getEvolutionIndex(pet.getIndex());
-
-        return evolution(pet, eveIndex);
+        if(pet.getIntimacy() > 100) {
+            int eveIndex = monsterLoader.getEvolutionIndex(pet.getIndex());
+            return evolution(pet, eveIndex);
+        }else{
+            return false;
+        }
     }
 
     public boolean evolution(Pet pet, int eveIndex) {
