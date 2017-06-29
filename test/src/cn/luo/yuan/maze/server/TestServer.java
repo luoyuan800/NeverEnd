@@ -190,7 +190,7 @@ public class TestServer {
     }
 
     @Test
-    public void testSubmitHero(){
+    public void testSubmitHero() throws IOException {
         Hero hero = new Hero();
         hero.setName("QA_" + System.currentTimeMillis());
         hero.setMaxHp(2000);

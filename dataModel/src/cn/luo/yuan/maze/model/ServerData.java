@@ -49,7 +49,7 @@ public class ServerData implements Serializable {
         }else{
             petb.append("无");
         }
-        return "可以获得锻造点：" + StringUtils.formatNumber(material) + "<br>"
+        return "锻造点：" + StringUtils.formatNumber(material) + "<br>"
                 + "装备：<br>"
                 + petb
                 + "<br>宠物：<br>"

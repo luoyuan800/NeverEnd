@@ -326,6 +326,8 @@ public class Server {
                     record.setData(null);
                     record.setDieCount(0);
                     record.setDieTime(0);
+                    record.getMessages().clear();
+                    table.save();
                     return Field.RESPONSE_RESULT_SUCCESS;
                 }
             }

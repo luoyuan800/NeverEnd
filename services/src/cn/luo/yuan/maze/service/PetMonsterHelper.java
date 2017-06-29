@@ -1,10 +1,9 @@
 package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.exception.MonsterToPetException;
-import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.model.Monster;
-import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.*;
+import cn.luo.yuan.maze.model.skill.EmptySkill;
+import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.utils.Random;
 
 import java.lang.reflect.Method;
@@ -12,7 +11,7 @@ import java.lang.reflect.Method;
 /**
  * Created by luoyuan on 2017/5/13.
  */
-public class PetMonsterHelper {
+public class PetMonsterHelper implements PetMonsterHelperInterface {
     public static PetMonsterHelper instance = new PetMonsterHelper();
     private MonsterLoader monsterLoader;
     private Random random;
@@ -136,9 +135,12 @@ public class PetMonsterHelper {
         this.random = random;
     }
 
-
-    private Monster loadMonsterByIndex(int index) {
-       return monsterLoader.loadMonsterByIndex(index);
+    public Pet eggToPet(Pet pet, Hero hero) {
+        try {
+            return monsterToPet(pet, hero, 1);
+        } catch (MonsterToPetException e) {
+            return null;
+        }
     }
 
     public boolean mountPet(Pet pet, Hero hero){
@@ -149,6 +151,52 @@ public class PetMonsterHelper {
             hero.getPets().add(pet);
             return true;
         }
+    }
+
+    public Egg buildEgg(Pet p1, Pet p2, InfoControlInterface gameControl) {
+        if (!p1.getId().equals(p2.getId())) {
+            if (p1.getSex() != p2.getSex()) {
+                if (p1.getElement().isReinforce(p2.getElement())) {
+                    if (gameControl.getRandom().nextInt(200) < (p1.getEggRate() + p2.getEggRate()) + EffectHandler.getEffectAdditionFloatValue(EffectHandler.EGG, gameControl.getHero().getEffects())) {
+                        Egg egg = new Egg();
+                        egg.setType(p1.getSex() == 1 ? p1.getType() : p2.getType());
+                        egg.setElement(gameControl.getRandom().randomItem(Element.values()));
+                        egg.setRace(gameControl.getRandom().randomItem(new Integer[]{p1.getRace().ordinal(), p2.getRace().ordinal()}));
+                        egg.setRank(p1.getSex() == 1 ? p1.getRank() : p2.getRank());
+                        egg.setIndex(p1.getSex() == 1 ? p1.getIndex() : p2.getIndex());
+                        egg.setFirstName(p1.getSex() == 0 ? p1.getFirstName() : p2.getFirstName());
+                        egg.setSecondName(p1.getSex() == 0 ? p2.getSecondName() : p2.getSecondName());
+                        Skill skill = gameControl.getRandom().randomItem(new Skill[]{p1.getSkill(), p2.getSkill(), EmptySkill.EMPTY_SKILL});
+                        if (skill != EmptySkill.EMPTY_SKILL) {
+                            egg.setSkill(skill);
+                        }
+                        egg.setColor(p1.getSex() == 0 ? p1.getColor() : p2.getColor());
+                        egg.step = (p1.getRank() + p2.getRank()) * 10;
+                        egg.setFarther(p1.getSex() == 0? p1.getDisplayName() : p2.getDisplayName());
+                        egg.setMother(p1.getSex() == 1? p1.getDisplayName() : p2.getDisplayName());
+                        egg.setKeeperId(gameControl.getHero().getId());
+                        egg.setOwnerId(gameControl.getHero().getId());
+                        egg.setOwnerName(gameControl.getHero().getDisplayName());
+                        egg.setKeeperName(gameControl.getHero().getDisplayName());
+                        Monster m1 = loadMonsterByIndex(p1.getIndex());
+                        Monster m2 = loadMonsterByIndex(p2.getIndex());
+                        if (m1 != null && m2 != null) {
+                            egg.setMaxHp(gameControl.getRandom().nextLong(m1.getMaxHp()) + m2.getMaxHp());
+                            egg.setAtk(gameControl.getRandom().nextLong(m2.getAtk()) + m1.getAtk());
+                            egg.setAtk(gameControl.getRandom().nextLong(m1.getDef()) + m2.getDef());
+                            egg.setHitRate(m1.getHitRate());
+                            egg.setEggRate(p1.getSex() == 1 ? m1.getEggRate() : m2.getEggRate());
+                        }
+                        return egg;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private Monster loadMonsterByIndex(int index) {
+        return monsterLoader.loadMonsterByIndex(index);
     }
 
 }

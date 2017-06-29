@@ -231,7 +231,6 @@ public class GameActivity extends Activity {
 
     @Override
     protected void onDestroy(){
-        control.save();
         control.stopGame();
         super.onDestroy();
     }
@@ -247,6 +246,7 @@ public class GameActivity extends Activity {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        control.save();
                         finish();
                         System.exit(0);
                     }

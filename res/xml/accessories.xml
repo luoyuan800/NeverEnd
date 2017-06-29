@@ -118,4 +118,16 @@
             <effect name="StrEffect" min="20" max="100" rate="50" element="true"/>
         </properties>
     </accessory>
+    <accessory local="true">
+        <name value = "天雷盔"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="150000"/>
+        <type value="帽子"/>
+        <properties>
+            <effect name="StrEffect" min="100" max="120" rate="100" element="false"/>
+            <effect name="HpEffect" min="150" max="300" rate="50" element="true"/>
+        </properties>
+    </accessory>
 </accessories>

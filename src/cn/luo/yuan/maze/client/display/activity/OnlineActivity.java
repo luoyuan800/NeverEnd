@@ -20,6 +20,7 @@ import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.Executors;
@@ -60,9 +61,9 @@ public class OnlineActivity extends Activity {
     }
 
     private void initView(){
-        AlertDialog dialog = new AlertDialog.Builder(this).setMessage("正在同步服务器数据，请稍候……").setCancelable(false).setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
+        AlertDialog dialog = new AlertDialog.Builder(this).setMessage("正在同步服务器数据，请稍候……").setCancelable(true).setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onCancel(DialogInterface dialog) {
                 dialog.dismiss();
                 finish();
             }
@@ -105,6 +106,11 @@ public class OnlineActivity extends Activity {
         },this);
     }
 
+    public void finish(){
+        executor.shutdown();
+        super.finish();
+    }
+
     public void showUploadDialog() {
         handler.post(new Runnable() {
             @Override
@@ -114,6 +120,12 @@ public class OnlineActivity extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         upload();
+                    }
+                }).setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        dialog.dismiss();
+                        finish();
                     }
                 }).show();
             }
@@ -152,11 +164,12 @@ public class OnlineActivity extends Activity {
                 SimplerDialogBuilder.build("你确定退出战斗塔吗？", Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        SimplerDialogBuilder.build("正在同步服务器数据……", OnlineActivity.this, false);
+                        dialog.dismiss();
+                        Dialog sycDialog = SimplerDialogBuilder.build("正在同步服务器数据……", OnlineActivity.this, false);
                         executor.execute(new Runnable() {
                             @Override
                             public void run() {
-                                getBackHeroData();
+                                getBackHeroData(sycDialog);
                             }
                         });
                     }
@@ -165,7 +178,7 @@ public class OnlineActivity extends Activity {
         }
     }
 
-    private void getBackHeroData() {
+    private void getBackHeroData(Dialog progress) {
         String award = service.queryAwardString(gameContext);
         ServerData data = service.getBackHero(gameContext);
         if(data!=null && StringUtils.isNotEmpty(award)) {
@@ -180,13 +193,22 @@ public class OnlineActivity extends Activity {
                     gameContext.getDataManager().savePet(pet);
                 }
             }
-            SimplerDialogBuilder.build("你获得了：<br>" + award, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+            if(progress!=null){
+                progress.dismiss();
+            }
+            handler.post(new Runnable() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    finish();
+                public void run() {
+                    SimplerDialogBuilder.build("获得奖励<br>" + award, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            finish();
+                        }
+                    },OnlineActivity.this);
                 }
-            },OnlineActivity.this);
+            });
+
         }else{
             finish();
         }
@@ -233,14 +255,21 @@ public class OnlineActivity extends Activity {
         }
     }
     private void postOnlineDataMsg(){
-        String msg = service.postOnlineData(gameContext);
-        if(StringUtils.isNotEmpty(msg)) {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    ((TextView)findViewById(R.id.online_data)).setText(Html.fromHtml(msg));
-                }
-            });
+        try {
+            String msg = service.postOnlineData(gameContext);
+            if (StringUtils.isNotEmpty(msg)) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((TextView) findViewById(R.id.online_data)).setText(Html.fromHtml(msg));
+                    }
+                });
+            }
+        }catch (Exception e){
+            handler.sendEmptyMessage(0);//showErrorDialog();
+            if(!(e instanceof IOException)){
+                LogHelper.logException(e, "OnlineActivity -> 256");
+            }
         }
     }
 

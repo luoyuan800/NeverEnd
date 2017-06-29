@@ -1,7 +1,11 @@
 package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.model.Data;
+import cn.luo.yuan.maze.model.Egg;
+import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Pet;
+
+import java.util.ArrayList;
 
 /**
  * Created by gluo on 5/25/2017.
@@ -92,21 +96,20 @@ public class RandomEventService {
                                     }*/
                     break;
                 case 5:
-                                    /*GoodsType mirrori = GoodsType.Mirror;
-                                    if (mirrori.getCount() > 0 && !mirrori.isLock() && gameControl.getRandom().nextLong(mirrori.getCount()) < 3) {
-                                        addMessage(context, gameControl.getHero().getFormatName() + "拿出镜子照了一下，觉得自己很帅帅哒/亮亮哒！");
-                                        addMessage(context, gameControl.getHero().getFormatName() + "敏捷加  " + mirrori.getCount());
-                                        gameControl.getHero().addAgility(mirrori.getCount());
-                                        if (context.getBirthDay()) {
-                                            addMessage(context, "生日还一个孤零零的照镜子，能力点增加 " + mirrori.getCount());
-                                            gameControl.getHero().addPoint(mirrori.getCount());
-                                        }
-                                        mirrori.use();*/
-                                   /* } else {
-                                        addMessage(context, gameControl.getHero().getFormatName() + "正在发呆...");
-                                    }*/
+                    ArrayList<Pet> pets = new ArrayList<>(gameControl.getHero().getPets());
+                    for(Pet p1 : pets){
+                        for(Pet p2 : pets){
+                            Egg egg = gameControl.getPetMonsterHelper().buildEgg(p1, p2, gameControl);
+                            if(egg!=null){
+                                gameControl.addMessage(p1.getDisplayName() + "和" + p2.getDisplayName() + "生了一个蛋");
+                                gameControl.getDataManager().savePet(egg);
+                            }
+                        }
+                    }
                     break;
             }
         }
     }
+
+
 }

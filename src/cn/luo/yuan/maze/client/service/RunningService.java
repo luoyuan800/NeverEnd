@@ -2,25 +2,21 @@ package cn.luo.yuan.maze.client.service;
 
 import android.util.Log;
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.client.utils.LogHelper;
+import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.exception.MonsterToPetException;
 import cn.luo.yuan.maze.listener.LostListener;
 import cn.luo.yuan.maze.listener.PetCatchListener;
 import cn.luo.yuan.maze.listener.WinListener;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.persistence.DataManager;
-import cn.luo.yuan.maze.service.BattleMessage;
-import cn.luo.yuan.maze.service.BattleService;
-import cn.luo.yuan.maze.service.PetMonsterHelper;
-import cn.luo.yuan.maze.service.RandomEventService;
-import cn.luo.yuan.maze.service.RunningServiceInterface;
-import cn.luo.yuan.maze.client.utils.LogHelper;
+import cn.luo.yuan.maze.service.*;
 import cn.luo.yuan.maze.utils.Random;
-import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
-import static cn.luo.yuan.maze.service.ListenerService.lostListeners;
-import static cn.luo.yuan.maze.service.ListenerService.petCatchListeners;
-import static cn.luo.yuan.maze.service.ListenerService.winListeners;
+import java.util.ArrayList;
+
+import static cn.luo.yuan.maze.service.ListenerService.*;
 
 
 /**
@@ -40,6 +36,7 @@ public class RunningService implements RunningServiceInterface {
     private RandomEventService randomEventService;
 
     public RunningService(Hero hero, Maze maze, NeverEnd gameContext, DataManager dataManager, long fps) {
+        startTime = System.currentTimeMillis();
         this.hero = hero;
         this.gameContext = gameContext;
         this.maze = maze;
@@ -66,11 +63,26 @@ public class RunningService implements RunningServiceInterface {
     @Override
     public void run() {
         PetMonsterHelper monsterHelper = gameContext.getPetMonsterHelper();
-        startTime = System.currentTimeMillis();
         if (running) {
             try {
                 if (pause) {
                     return;
+                }
+                for (Pet pet : new ArrayList<>(hero.getPets())) {
+                    if (pet instanceof Egg) {
+                        ((Egg) pet).step--;
+                        if (((Egg) pet).step <= 0) {
+                            Pet p = monsterHelper.eggToPet(pet, hero);
+                            if (p != null) {
+                                dataManager.save(p);
+                                hero.getPets().add(p);
+                                hero.getPets().remove(pet);
+                                dataManager.delete(pet);
+                                gameContext.getViewHandler().refreshPets(hero);
+                                gameContext.addMessage(p.getDisplayNameWithLevel() + "出生了！");
+                            }
+                        }
+                    }
                 }
                 if ((System.currentTimeMillis() - startTime) % 1000 == 300) {//每隔五分钟自动存储一次
                     gameContext.save();
@@ -167,7 +179,7 @@ public class RunningService implements RunningServiceInterface {
                         }
                         target = null;
                     }
-                    if(!meet) {
+                    if (!meet) {
                         randomEventService.random();
                     }
                 }

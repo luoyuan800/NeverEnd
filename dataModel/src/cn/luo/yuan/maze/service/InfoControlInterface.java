@@ -22,4 +22,5 @@ public interface InfoControlInterface {
 
     DataManagerInterface getDataManager();
     TaskManager getTaskManager();
+    PetMonsterHelperInterface getPetMonsterHelper();
 }

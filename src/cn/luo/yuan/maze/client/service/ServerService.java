@@ -47,17 +47,20 @@ public class ServerService {
         return false;
     }
 
-    public String postOnlineData(NeverEnd context){
+    public String postOnlineData(NeverEnd context) throws IOException {
         return postOnlineData(context.getHero().getId());
     }
 
-    public String postOnlineData(String id) {
+    public String postOnlineData(String id) throws IOException {
         try {
             HttpURLConnection connection = server.getHttpURLConnection("/pool_online_data_msg", RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, id);
             return server.connect(connection).toString();
         } catch (Exception e) {
             LogHelper.logException(e,"ServiceService->60");
+            if(e instanceof IOException){
+                throw e;
+            }
         }
         return StringUtils.EMPTY_STRING;
     }
@@ -74,7 +77,6 @@ public class ServerService {
             return server.connect(connection).toString();
         } catch (Exception e) {
             LogHelper.logException(e,"ServiceService->76");
-
         }
         return StringUtils.EMPTY_STRING;
     }

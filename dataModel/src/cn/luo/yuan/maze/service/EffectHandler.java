@@ -19,7 +19,8 @@ import java.util.Collection;
  * 这是一个静态工具类，处理效果相关的代码都放到这里比较好
  */
 public class EffectHandler {
-    public static final String HP = "hp", STR="str", AGI="agi", ATK="atk", DEF="def", MEET_RATE="meet", PET_RATE="pet", SKILL_RATE = "skill_rate";
+    public static final String HP = "hp", STR="str", AGI="agi", ATK="atk", DEF="def", MEET_RATE="meet", PET_RATE="pet", SKILL_RATE = "skill_rate", EGG="egg_rate";
+
     public static long getEffectAdditionLongValue(String property, Collection<Effect> effects){
         switch (property){
             case "str":

@@ -236,6 +236,10 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
         this.skill = skill;
     }
 
+    public Skill getSkill(){
+        return  skill;
+    }
+
     public int getRank() {
         return rank;
     }
