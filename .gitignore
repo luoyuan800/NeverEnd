@@ -38,3 +38,11 @@ captures/
 
 # Keystore files
 *.jks
+/test/data/
+/data/
+/Server/.settings/
+/Server/.classpath
+/Server/.project
+/services/META-INF/
+/dataModel/META-INF/
+/Server/WebContent/
