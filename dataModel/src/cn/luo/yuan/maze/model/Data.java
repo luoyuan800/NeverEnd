@@ -26,8 +26,8 @@ public class Data {
     public static float PORTAL_RATE = 0.05f;//传送门的概率
     public static int LEVEL_BASE_POINT_REDUCE = 1000;//爬楼奖励的点数基数分母（random（level/reduce））
     public static long REFRESH_SPEED = 500;//刷新间隔
-    public static long MONSTER_ATK_RISE_PRE_LEVEL = 100;//怪物每层的攻击成长
-    public static long MONSTER_HP_RISE_PRE_LEVEL = 500;//怪物每层的生命成长
+    public static long MONSTER_ATK_RISE_PRE_LEVEL = 80;//怪物每层的攻击成长
+    public static long MONSTER_HP_RISE_PRE_LEVEL = 200;//怪物每层的生命成长
     public static long MONSTER_DEF_RISE_PRE_LEVEL = 50;//怪物每层的防御成长
     public static float DODGE_AGI_RATE = 0.0001f;//敏捷转换成闪避率加成
     public static float DODGE_STR_RATE = 0.0001f;//力量转换成闪避率衰减
