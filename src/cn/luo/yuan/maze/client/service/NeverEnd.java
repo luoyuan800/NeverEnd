@@ -69,6 +69,13 @@ public class NeverEnd extends Application implements InfoControlInterface {
     @Override
     public void stopGame() {
         executor.shutdown();
+        executor = null;
+        dataManager.fuseCache();
+        dataManager = null;
+        petMonsterHelper = null;
+        accessoryHelper = null;
+        taskManager = null;
+
     }
 
     public boolean pauseGame() {

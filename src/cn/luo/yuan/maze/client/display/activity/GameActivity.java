@@ -25,6 +25,7 @@ import cn.luo.yuan.maze.client.display.handler.GameActivityViewHandler;
 import cn.luo.yuan.maze.client.display.handler.MenuItemClickListener;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
 import cn.luo.yuan.maze.model.Monster;
+import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.PetMonsterLoder;
@@ -42,11 +43,15 @@ public class GameActivity extends Activity {
     private Thread updateMonsterThread;
 
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.game_layout);
         Intent intent = getIntent();
 //        ListenerService.init();
-        dataManager = new DataManager(intent.getIntExtra("index", -1), this);
+        dataManager = new DataManager(intent.getIntExtra("index", -1), this);super.onCreate(savedInstanceState);
+        NeverEndConfig config = dataManager.getConfig();
+        if(config.getTheme() != 0){
+            setTheme(config.getTheme());
+        }
+        setContentView(R.layout.game_layout);
+
         control = (NeverEnd)getApplication();
         control.setContext(this, dataManager);
         control.setViewHandler(new GameActivityViewHandler(this));

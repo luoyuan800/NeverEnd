@@ -14,6 +14,7 @@ import cn.luo.yuan.maze.client.display.dialog.ExchangeDialog;
 import cn.luo.yuan.maze.client.display.dialog.PetDialog;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.LocalShop;
+import cn.luo.yuan.maze.model.NeverEndConfig;
 
 public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
     private Context context;
@@ -43,6 +44,16 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.theme:
+                NeverEndConfig config = control.getDataManager().getConfig();
+                if(config.getTheme() == android.R.style.Theme_Holo){
+                   config.setTheme(android.R.style.Theme_Holo_Light);
+                }else{
+                    config.setTheme(android.R.style.Theme_Holo);
+                }
+                control.getDataManager().save(config);
+                control.getViewHandler().reCreate();
+                break;
             case R.id.online_battle:
                 Intent gameIntent = new Intent(context, OnlineActivity.class);
 

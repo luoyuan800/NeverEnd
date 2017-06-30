@@ -229,5 +229,13 @@ public class GameActivityViewHandler extends Handler {
 
     }
 
+    public void reCreate() {
+        post(new Runnable() {
+            @Override
+            public void run() {
+                context.recreate();
+            }
+        });
+    }
 }
 

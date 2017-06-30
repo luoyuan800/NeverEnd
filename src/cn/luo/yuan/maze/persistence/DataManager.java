@@ -9,11 +9,14 @@ import cn.luo.yuan.maze.model.goods.GoodsType;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
+import cn.luo.yuan.maze.persistence.serialize.ObjectDB;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
 import cn.luo.yuan.maze.task.Task;
 import cn.luo.yuan.maze.utils.StringUtils;
+import cn.luo.yuan.maze.utils.annotation.StringValue;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.InvalidClassException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,6 +45,7 @@ public class DataManager implements DataManagerInterface {
     private SerializeLoader<Skill> skillLoader;
     private SerializeLoader<ClickSkill> clickSkillLoader;
     private SerializeLoader<Task> taskLoader;
+    private ObjectDB<NeverEndConfig> configDB;
 
     private Sqlite database;
     private Context context;
@@ -58,6 +62,7 @@ public class DataManager implements DataManagerInterface {
         skillLoader = new SerializeLoader<>(Skill.class, context, index);
         clickSkillLoader = new SerializeLoader<>(ClickSkill.class, context, index);
         taskLoader = new SerializeLoader<Task>(Task.class, context, index);
+        configDB = new ObjectDB<>(NeverEndConfig.class, context);
         this.context = context;
     }
 
@@ -357,6 +362,8 @@ public class DataManager implements DataManagerInterface {
             saveAccessory((Accessory) object);
         } else if(object instanceof Goods){
             saveGoods((Goods) object);
+        } else if(object instanceof NeverEndConfig){
+            configDB.save((NeverEndConfig) object, object.getId());
         }
     }
 
@@ -370,5 +377,20 @@ public class DataManager implements DataManagerInterface {
         maze.setLevel(1);
         maze.setMeetRate(99.9f);
         return maze;
+    }
+
+    public NeverEndConfig getConfig(){
+        NeverEndConfig config = null;
+        try {
+            config = configDB.loadObject(String.valueOf(index));
+        } catch (InvalidClassException e) {
+            e.printStackTrace();
+        }
+        if(config == null){
+            config = new NeverEndConfig();
+            config.setId(String.valueOf(index));
+            configDB.save(config);
+        }
+        return config;
     }
 }
