@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.client.display.dialog;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.Html;
@@ -35,7 +36,12 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
     public PetDialog(NeverEnd control, PetAdapter adapter) {
         setAdapter(adapter);
         this.control = control;
-        builder = new AlertDialog.Builder(control.getContext()).setTitle(Resource.getString(R.string.pet_dialog_title)).setView(R.layout.pet_view);
+        builder = new AlertDialog.Builder(control.getContext()).setTitle(Resource.getString(R.string.pet_dialog_title));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.setView(R.layout.pet_view);
+        }else{
+            builder.setView(View.inflate(control.getContext(),R.layout.pet_view, null));
+        }
     }
 
     public PetDialog setTitle(String title) {
@@ -272,9 +278,9 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
     }
 
     private void refreshSortButton() {
-        ((Button) dialog.findViewById(R.id.sort_color)).setText(adapter.getSortOrderRevert() ? R.string.sort_color_up : R.string.sort_color_down);
-        ((Button) dialog.findViewById(R.id.sort_name)).setText(adapter.getSortOrderRevert() ? R.string.sort_name_up : R.string.sort_name_down);
-        ((Button) dialog.findViewById(R.id.sort_type)).setText(adapter.getSortOrderRevert() ? R.string.sort_type_up : R.string.sort_type_down);
-        ((Button) dialog.findViewById(R.id.sort_intimacy)).setText(adapter.getSortOrderRevert() ? R.string.sort_intimacy_up : R.string.sort_intimacy_down);
+        ((Button) dialog.findViewById(R.id.sort_color)).setText(adapter.getSortOrderRevert() ? R.string.sort_color_down : R.string.sort_color_up);
+        ((Button) dialog.findViewById(R.id.sort_name)).setText(adapter.getSortOrderRevert() ? R.string.sort_name_down : R.string.sort_name_up);
+        ((Button) dialog.findViewById(R.id.sort_type)).setText(adapter.getSortOrderRevert() ? R.string.sort_type_down : R.string.sort_type_up);
+        ((Button) dialog.findViewById(R.id.sort_intimacy)).setText(adapter.getSortOrderRevert() ? R.string.sort_intimacy_down : R.string.sort_intimacy_up);
     }
 }

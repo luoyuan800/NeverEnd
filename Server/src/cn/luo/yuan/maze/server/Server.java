@@ -20,14 +20,12 @@ import cn.luo.yuan.maze.model.effect.original.StrEffect;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
-import cn.luo.yuan.maze.server.persistence.GroupTable;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
 import cn.luo.yuan.maze.server.persistence.WarehouseTable;
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
 import cn.luo.yuan.maze.task.Task;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
-import com.sun.prism.impl.Disposer;
 import org.jetbrains.annotations.NotNull;
 import spark.Request;
 import spark.Response;
@@ -46,8 +44,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static cn.luo.yuan.maze.utils.Field.*;
-import static spark.Spark.post;
 import static spark.Spark.get;
+import static spark.Spark.post;
 import static spark.SparkBase.port;
 
 public class Server {
@@ -78,35 +76,15 @@ public class Server {
 
         post("submit_exchange", (request, response) -> {
             Object ex = readObject(request);
-            Object exchange = null;
-            if (!(ex instanceof ExchangeObject) && ex instanceof IDModel) {
-                exchange = new ExchangeObject((IDModel) ex, request.headers(Field.OWNER_ID_FIELD));
+            String ownerId = request.headers(Field.OWNER_ID_FIELD);
+            if (exchangeTable.addExchange(ex, ownerId)) {
+                response.header(Field.RESPONSE_TYPE, RESPONSE_NONE_TYPE);
+                response.header(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
+                return Field.RESPONSE_RESULT_SUCCESS;
             } else {
-                exchange = ex;
-            }
-
-            if (exchange instanceof ExchangeObject) {
-                if (ex instanceof Pet) {
-                    ((ExchangeObject) exchange).setType(1);
-                } else if (ex instanceof Accessory) {
-                    ((ExchangeObject) exchange).setType(2);
-                } else if (ex instanceof Goods) {
-                    ((ExchangeObject) exchange).setType(3);
-                }
-                ((ExchangeObject) exchange).setSubmitTime(System.currentTimeMillis());
-                if (exchangeTable.addExchange((ExchangeObject) exchange)) {
-                    response.header(Field.RESPONSE_TYPE, RESPONSE_NONE_TYPE);
-                    response.header(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
-                    return Field.RESPONSE_RESULT_SUCCESS;
-                } else {
-                    response.header(RESPONSE_TYPE, RESPONSE_STRING_TYPE);
-                    response.header(RESPONSE_CODE, Field.STATE_FAILED.toString());
-                    return "Could not add exchange, maybe there already an exchange object has the same id existed!";
-                }
-            } else {
-                response.header(Field.RESPONSE_TYPE, RESPONSE_STRING_TYPE);
-                response.header(Field.RESPONSE_CODE, Field.STATE_FAILED);
-                return "Could not add exchange, Wrong type!";
+                response.header(RESPONSE_TYPE, RESPONSE_STRING_TYPE);
+                response.header(RESPONSE_CODE, Field.STATE_FAILED.toString());
+                return "Could not add exchange, maybe there already an exchange object has the same id existed!";
             }
         });
 
@@ -283,30 +261,7 @@ public class Server {
                     table = new HeroTable(new File(heroDir,data.hero.getId()));
                     heroTableCache.put(data.hero.getId(), table);
                 }
-                ServerRecord record = table.getRecord(data.hero.getId());
-                if(record == null){
-                    record = new ServerRecord();
-                    record.setId(data.hero.getId());
-                }
-                record.setRange(Integer.MAX_VALUE);
-                record.setData(data);
-                table.save(record);
-                if(data.accessories!=null){
-                    for(Accessory accessory : data.accessories){
-                        table.save(accessory);
-                    }
-                }
-                if(data.pets!=null){
-                    for(Pet pet: data.pets){
-                        table.save(pet);
-                    }
-                }
-                if(data.skills!=null){
-                    for(Skill skill: data.skills){
-                        table.save(skill);
-                    }
-                }
-                LogHelper.info(record.getData().hero.getDisplayName() + " Submit!");
+                table.submitHero(data);
                 return RESPONSE_RESULT_SUCCESS;
             }else{
                 return RESPONSE_RESULT_FAILED;
@@ -318,16 +273,9 @@ public class Server {
             if(StringUtils.isNotEmpty(id)){
                 HeroTable table = heroTableCache.get(id);
                 if(table!=null){
-                    ServerRecord record = table.getRecord(id);
-                    LogHelper.info(record.getData().hero.getDisplayName() + " Get back!");
                     heroTableCache.remove(id);
-                    ServerData data = new ServerData(record.getData());
+                    ServerData data = table.getBackHero(id);
                     writeObject(response,data);
-                    record.setData(null);
-                    record.setDieCount(0);
-                    record.setDieTime(0);
-                    record.getMessages().clear();
-                    table.save();
                     return Field.RESPONSE_RESULT_SUCCESS;
                 }
             }
@@ -352,10 +300,7 @@ public class Server {
             if(StringUtils.isNotEmpty(id)){
                 HeroTable table = heroTableCache.get(id);
                 if(table!=null){
-                    ServerRecord record = table.getRecord(id);
-                    if(record.getData()!=null) {
-                        return record.getData().toString();
-                    }
+                    return table.queryBattleAward(id);
                 }
             }
             return StringUtils.EMPTY_STRING;
@@ -366,13 +311,7 @@ public class Server {
             if(StringUtils.isNotEmpty(id)){
                 HeroTable table = heroTableCache.get(id);
                 if(table!=null){
-                    ServerRecord record = table.getRecord(id);
-                    if(record.getData()!=null) {
-                        return record.getData().hero.getDisplayName() + "<br>"
-                                + "排名：" + record.getRange() + "， 胜率：" +  StringUtils.formatPercentage(record.getWinCount() * 100/(record.getWinCount() + record.getLostCount() + 1))
-                                + "<br>胜利：" + StringUtils.formatNumber(record.getWinCount()) + "， "
-                                + "失败：" + StringUtils.formatNumber(record.getLostCount()) + "<br>";
-                    }
+                    return table.queryDataString(id);
                 }
             }
             return StringUtils.EMPTY_STRING;
@@ -384,15 +323,7 @@ public class Server {
             if(StringUtils.isNotEmpty(id)){
                 HeroTable table = heroTableCache.get(id);
                 if(table!=null){
-                    ServerRecord record = table.getRecord(id);
-                    if(record.getMessages().size() > 50){
-                        count += 5;
-                    }
-                    String s = "";
-                    while (count-- > 0 && record.getMessages().size() > 0){
-                        s += record.getMessages().poll() + (count > 0 ? "<br>" : "");
-                    }
-                    return s;
+                    return table.pollBattleMsg(id, count);
                 }
             }
             return StringUtils.EMPTY_STRING;

@@ -67,6 +67,11 @@ public class TestRandomEventService {
             public TaskManagerImp getTaskManager() {
                 return null;
             }
+
+            @Override
+            public PetMonsterHelperInterface getPetMonsterHelper() {
+                return null;
+            }
         };
         RandomEventService service = spy(new RandomEventService(gameContext));
         int i = 100;

@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content" android:orientation="horizontal">
         <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:id="@+id/pet_name"
                 android:layout_weight="1"
                 android:text="神奇的宠物猫♀"/>

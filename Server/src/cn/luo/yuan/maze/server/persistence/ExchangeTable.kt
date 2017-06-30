@@ -1,6 +1,10 @@
 package cn.luo.yuan.maze.server.persistence
 
+import cn.luo.yuan.maze.model.Accessory
 import cn.luo.yuan.maze.model.ExchangeObject
+import cn.luo.yuan.maze.model.IDModel
+import cn.luo.yuan.maze.model.Pet
+import cn.luo.yuan.maze.model.goods.Goods
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable
 import com.sun.jmx.snmp.SnmpPduRequestType
 import java.io.File
@@ -17,6 +21,18 @@ class ExchangeTable(root: File) {
     }
     val exchangeDb = ObjectTable(ExchangeObject::class.java, root)
     val cache = mutableMapOf<key, SoftReference<ExchangeObject>>()
+    fun addExchange(ex : Any?, ownerId:String):Boolean{
+        val exchange = ExchangeObject(ex as IDModel, ownerId)
+        if (ex is Pet) {
+            exchange.type = 1
+        } else if (ex is Accessory) {
+            exchange.type = 2
+        } else if (ex is Goods) {
+            exchange.type = 3
+        }
+        exchange.submitTime = System.currentTimeMillis()
+        return addExchange(exchange)
+    }
     fun addExchange(exchange: ExchangeObject): Boolean {
         val ref = exchangeDb.loadObject(exchange.id);
         if (ref != null ) {

@@ -79,7 +79,11 @@ public class PetMonsterHelper implements PetMonsterHelperInterface {
     }
 
     public boolean upgrade(Pet major, Pet minor) {
-        if (major != minor && random.nextLong(major.getLevel()) + random.nextLong(minor.getLevel() / 10) < Data.PET_UPGRADE_LIMIT) {
+        int petUpgradeLimit = Data.PET_UPGRADE_LIMIT;
+        if(major.getIndex() != minor.getIndex()){
+            petUpgradeLimit /= 2;
+        }
+        if (major != minor && random.nextLong(major.getLevel()) + random.nextLong(minor.getLevel() / 10) < petUpgradeLimit) {
             major.setLevel(major.getLevel() + 1);
             long atk = major.getAtk() + random.nextLong(minor.getAtk() * (minor.getLevel() + 1) / 2);
             if (atk > 0) {
