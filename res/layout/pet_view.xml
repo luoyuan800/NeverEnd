@@ -59,11 +59,15 @@
                 style="@android:style/Widget.Button.Inset"
                 android:id="@+id/close"/>
     </LinearLayout>
-    <LinearLayout
-            android:orientation="vertical"
+    <ScrollView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="4"
+            >
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:id="@+id/pet_detail_view">
         <LinearLayout
                 android:layout_width="match_parent"
@@ -285,4 +289,5 @@
         </LinearLayout>
 
     </LinearLayout>
+    </ScrollView>
 </LinearLayout>

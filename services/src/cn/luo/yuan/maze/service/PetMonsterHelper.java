@@ -180,8 +180,8 @@ public class PetMonsterHelper implements PetMonsterHelperInterface {
                         egg.setMother(p1.getSex() == 1? p1.getDisplayName() : p2.getDisplayName());
                         egg.setKeeperId(gameControl.getHero().getId());
                         egg.setOwnerId(gameControl.getHero().getId());
-                        egg.setOwnerName(gameControl.getHero().getDisplayName());
-                        egg.setKeeperName(gameControl.getHero().getDisplayName());
+                        egg.setOwnerName(gameControl.getHero().getName());
+                        egg.setKeeperName(gameControl.getHero().getName());
                         Monster m1 = loadMonsterByIndex(p1.getIndex());
                         Monster m2 = loadMonsterByIndex(p2.getIndex());
                         if (m1 != null && m2 != null) {
