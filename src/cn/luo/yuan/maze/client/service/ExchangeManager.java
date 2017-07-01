@@ -27,7 +27,7 @@ public class ExchangeManager {
         server = new RestConnection(Field.SERVER_URL, context.getVersion());
     }
 
-    public boolean submitExchange(Serializable object) {
+    public boolean submitExchange(Serializable object, String limit, int expectType) {
         if(object instanceof Accessory){
             object = context.convertToServerObject(object);
         }
@@ -40,6 +40,8 @@ public class ExchangeManager {
         try {
             HttpURLConnection connection = server.getHttpURLConnection("/submit_exchange", RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            connection.addRequestProperty(Field.EXPECT_TYPE, String.valueOf(expectType));
+            connection.addRequestProperty(Field.LIMIT_STRING, limit);
             server.connect(object, connection);
             if (connection.getHeaderField(Field.RESPONSE_CODE).equals(Field.STATE_SUCCESS)) {
                 context.getDataManager().delete(object);

@@ -89,4 +89,7 @@
     <string name="my_exchange_items">我上传的</string>
     <string name="syn_server">正在同步服务器数据……</string>
     <string name="mark"><![CDATA[——>\n<——]]></string>
+    <string name="pet_type">宠物</string>
+    <string name="acc_type">装备</string>
+    <string name="goods_type">物品</string>
 </resources>

@@ -48,7 +48,7 @@ public class ExchangeAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         if (view == null) {
-            view = View.inflate(parent.getContext(), R.layout.swap_item_view, parent);
+            view = View.inflate(parent.getContext(), R.layout.swap_item_view, null);
         }
         ExchangeObject item = exchanges.get(position);
         if (item != view.getTag(R.string.item)) {
@@ -94,7 +94,10 @@ public class ExchangeAdapter extends BaseAdapter {
             }
         }
         view.setTag(R.string.item, item);
-        view.findViewById(R.id.get_back_item_button).setOnClickListener(listener);
+        View button = view.findViewById(R.id.get_back_item_button);
+        button.setOnClickListener(listener);
+        button.setTag(R.string.item, item);
+        button.setTag(R.string.adapter, ExchangeAdapter.this);
         return view;
     }
 

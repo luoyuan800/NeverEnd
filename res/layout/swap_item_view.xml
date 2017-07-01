@@ -18,6 +18,7 @@
                 android:id="@+id/item_img"/>
 
         <TextView
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:textAlignment="center"
                 android:text="暗伊布"
@@ -66,6 +67,7 @@
                 android:id="@+id/swap_item_img"/>
 
         <TextView
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:textAlignment="center"
                 android:text="草伊布"

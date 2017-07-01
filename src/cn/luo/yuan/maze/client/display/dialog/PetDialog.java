@@ -193,6 +193,7 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                             control.getDataManager().deletePet(currentPet);
                             adapter.removePet(currentPet);
                             adapter.notifyDataSetChanged();
+                            currentPet = null;
                             refreshDetailView(PetDialog.this.dialog.findViewById(R.id.pet_detail_view));
                         }
                     }).setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {

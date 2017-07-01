@@ -71,13 +71,15 @@ public class Server {
     }
     private void run() throws IOException, ClassNotFoundException {
         LogHelper.info("starting");
-        port(166);
+        port(4568);
         executor.scheduleAtFixedRate(warehouseTable,0, 1, TimeUnit.DAYS);
 
         post("submit_exchange", (request, response) -> {
             Object ex = readObject(request);
             String ownerId = request.headers(Field.OWNER_ID_FIELD);
-            if (exchangeTable.addExchange(ex, ownerId)) {
+            String limit = request.headers(Field.LIMIT_STRING);
+            int expectType = Integer.parseInt(request.headers(Field.EXPECT_TYPE));
+            if (exchangeTable.addExchange(ex, ownerId, limit, expectType)) {
                 response.header(Field.RESPONSE_TYPE, RESPONSE_NONE_TYPE);
                 response.header(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
                 return Field.RESPONSE_RESULT_SUCCESS;

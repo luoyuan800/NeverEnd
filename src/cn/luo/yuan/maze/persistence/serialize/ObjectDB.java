@@ -32,6 +32,11 @@ public class ObjectDB<T extends Serializable> {
     }
 
     public synchronized String save(T object, String id) {
+        if(object instanceof IDModel){
+            if(((IDModel) object).isDelete()){
+                return id;
+            }
+        }
         String path = getName(id);
         try {
             ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput(path, Context.MODE_PRIVATE));
@@ -49,6 +54,9 @@ public class ObjectDB<T extends Serializable> {
         if(object instanceof IDModel){
             if(StringUtils.isEmpty(((IDModel) object).getId())){
                 ((IDModel) object).setId(UUID.randomUUID().toString());
+            }
+            if(((IDModel) object).isDelete()){
+                return ((IDModel) object).getId();
             }
         }
         return save(object, object instanceof IDModel? ((IDModel) object).getId() : UUID.randomUUID().toString());

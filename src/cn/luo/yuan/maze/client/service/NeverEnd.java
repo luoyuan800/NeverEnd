@@ -38,7 +38,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
     private DataManager dataManager;
     private GameActivityViewHandler viewHandler;
     private Random random;
-    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(5);
+    private ScheduledExecutorService executor;
     private AccessoryHelper accessoryHelper;
     private PetMonsterHelper petMonsterHelper;
     private TaskManagerImp taskManager;
@@ -51,6 +51,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
     }
     public void setContext(Context context,DataManager dataManager){
         this.context = context;
+        executor = Executors.newScheduledThreadPool(5);
         petMonsterHelper = PetMonsterHelper.instance;
         this.setDataManager(dataManager);
         accessoryHelper = AccessoryHelper.getOrCreate(this);

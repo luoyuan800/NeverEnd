@@ -11,21 +11,21 @@
             android:layout_height="wrap_content">
 
         <RadioButton
-                android:text="宠物"
+                android:text="@string/pet_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/pet_type"
                 android:layout_weight="1"/>
 
         <RadioButton
-                android:text="装备"
+                android:text="@string/acc_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/accessory_type"
                 android:layout_weight="1"/>
 
         <RadioButton
-                android:text="物品"
+                android:text="@string/goods_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/goods_type"

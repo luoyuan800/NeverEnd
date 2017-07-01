@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.client.display.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
@@ -39,6 +40,18 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
     private Handler handler = new Handler(){
         public void handleMessage(Message msg){
             switch (msg.what){
+                case 5:
+                    if(progress.isShowing()){
+                        progress.dismiss();
+                    }
+                    SimplerDialogBuilder.build("网络异常，请稍后再试", Resource.getString(R.string.close), (DialogInterface.OnClickListener)null, context.getContext());
+                case 4:
+                    if(progress.isShowing()){
+                        progress.dismiss();
+                    }
+                    Object item = msg.obj;
+                    Toast.makeText(context.getContext(), "成功上传" + (item instanceof NameObject ? ((NameObject) item).getName() : ""), Toast.LENGTH_SHORT).show();
+                    break;
                 case 3:
                     showSelectDialog();
                     break;
@@ -63,18 +76,72 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                 currentShowingDialog.dismiss();
                 currentShowingDialog = null;
             }
-            progress.show();
-            context.getExecutor().submit(new Runnable() {
+            LinearLayout root = new LinearLayout(context.getContext());
+            root.setOrientation(LinearLayout.VERTICAL);
+            RadioButton petType = new RadioButton(context.getContext());
+            petType.setText(R.string.pet_type);
+            RadioButton accType = new RadioButton(context.getContext());
+            accType.setText(R.string.acc_type);
+            RadioButton goodesType = new RadioButton(context.getContext());
+            goodesType.setText(R.string.goods_type);
+            LinearLayout rbg = new LinearLayout(context.getContext());
+            rbg.setOrientation(LinearLayout.HORIZONTAL);
+            rbg.addView(petType);
+            rbg.addView(accType);
+            rbg.addView(goodesType);
+            root.addView(rbg);
+            EditText limit = new EditText(context.getContext());
+            limit.setHint("输入你的限制条件");
+            root.addView(limit);
+            petType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void run() {
-                    if(manager.submitExchange((Serializable) item)){
-                        Toast.makeText(context.getContext(), "成功上传" + (item instanceof NameObject ? ((NameObject) item).getName() : ""), Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(context.getContext(), "上传失败，请检测网络后重试。", Toast.LENGTH_SHORT).show();
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        accType.setChecked(false);
+                        goodesType.setChecked(false);
                     }
-
                 }
             });
+            accType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        petType.setChecked(false);
+                        goodesType.setChecked(false);
+                    }
+                }
+            });
+            goodesType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        petType.setChecked(false);
+                        accType.setChecked(false);
+                    }
+                }
+            });
+            petType.setChecked(true);
+            Dialog dialog = SimplerDialogBuilder.build(root, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    progress.show();
+                    context.getExecutor().submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(manager.submitExchange((Serializable) item, limit.getText().toString(), petType.isChecked() ? Field.PET_TYPE : accType.isChecked() ? Field.ACCESSORY_TYPE : Field.GOODS_TYPE)){
+                                Message message = new Message();
+                                message.what = 4;
+                                message.obj = item;
+                                handler.sendMessage(message);
+                            }else{
+                                Toast.makeText(context.getContext(), "上传失败，请检测网络后重试。", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    });
+                }
+            }, context.getContext());
+
         }
     }
 
@@ -131,7 +198,6 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                 }
             }
         });
-
 
         goodsR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -346,6 +412,12 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
     }
 
     private void showExchanges() {
-
+        progress.show();
+        context.getExecutor().submit(new Runnable() {
+            @Override
+            public void run() {
+                handler.sendEmptyMessage(2);
+            }
+        });
     }
 }
