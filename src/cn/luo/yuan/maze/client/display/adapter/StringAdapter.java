@@ -52,7 +52,7 @@ public class StringAdapter <T> extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null){
             convertView = new TextView(parent.getContext());
-            ((TextView)convertView).setTextSize(20);
+            ((TextView)convertView).setTextSize(18);
             if(listener!=null) {
                 convertView.setOnClickListener(listener);
             }

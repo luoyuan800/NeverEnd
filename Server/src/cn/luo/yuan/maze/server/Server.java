@@ -71,7 +71,7 @@ public class Server {
     }
     private void run() throws IOException, ClassNotFoundException {
         LogHelper.info("starting");
-        port(4568);
+        port(166);
         executor.scheduleAtFixedRate(warehouseTable,0, 1, TimeUnit.DAYS);
 
         post("submit_exchange", (request, response) -> {

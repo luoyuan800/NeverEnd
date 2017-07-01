@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.client.service;
 
 import cn.luo.yuan.maze.client.utils.LogHelper;
+import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.client.utils.RestConnection;

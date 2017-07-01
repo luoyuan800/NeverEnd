@@ -252,4 +252,94 @@
         <rank>9</rank>
         <evolution></evolution>
     </monster>
+    <monster>
+        <index>56</index>
+        <meet meet_rate="20" min_level="100"/>
+        <name>夔牛</name>
+        <desc>夔状如牛，一足，苍灰色，出入水必有风雨，能发出雷鸣之声，并伴以日月般的光芒。
+        </desc>
+        <atk>30</atk>
+        <def>235</def>
+        <hp>118</hp>
+        <hit>60</hit>
+        <silent>60</silent>
+        <egg_rate>10</egg_rate>
+        <pet_rate>20</pet_rate>
+        <sex>-1</sex>
+        <race>Orger</race>
+        <rank>49</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>59</index>
+        <meet meet_rate="20" min_level="100"/>
+        <name>玄武</name>
+        <desc>玄武，北方之神，龟蛇合体。北方七神之宿，实始于斗，镇北方，主风雨。
+        </desc>
+        <atk>160</atk>
+        <def>179</def>
+        <hp>195</hp>
+        <hit>60</hit>
+        <silent>30</silent>
+        <egg_rate>10</egg_rate>
+        <pet_rate>20</pet_rate>
+        <sex>-1</sex>
+        <race>Orger</race>
+        <rank>4</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>60</index>
+        <meet meet_rate="10" min_level="200"/>
+        <name>白泽</name>
+        <desc>白泽是中国古代汉族神话传说中昆仑山上著名的神兽。它浑身雪白，有翼，能说人话，通万物之情，很少出没，除非当世有圣人治理天下，才奉书而至，常与麒麟或凤凰等，视同为德行高的统治者治世的象征。 是可使人逢凶化吉的吉祥之兽。
+        </desc>
+        <atk>86</atk>
+        <def>201</def>
+        <hp>219</hp>
+        <hit>50</hit>
+        <silent>30</silent>
+        <egg_rate>10</egg_rate>
+        <pet_rate>5</pet_rate>
+        <sex>-1</sex>
+        <race>Elyosr</race>
+        <rank>4</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>63</index>
+        <meet meet_rate="15" min_level="90"/>
+        <name>蜚</name>
+        <desc>有兽焉，其状如牛而白首，一目而蛇尾，其名曰蜚，行水则竭，行草则死，见则天下大疫。
+        </desc>
+        <atk>79</atk>
+        <def>195</def>
+        <hp>254</hp>
+        <hit>5</hit>
+        <silent>30</silent>
+        <egg_rate>30</egg_rate>
+        <pet_rate>35</pet_rate>
+        <sex>-1</sex>
+        <race>Eviler</race>
+        <rank>3</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>64</index>
+        <meet meet_rate="15" min_level="390"/>
+        <name>九凤</name>
+        <desc>大荒之中，有山名曰北极柜。海水北注焉。有神九首，人面鸟身，句曰九凤。
+        </desc>
+        <atk>176</atk>
+        <def>197</def>
+        <hp>119</hp>
+        <hit>15</hit>
+        <silent>3</silent>
+        <egg_rate>20</egg_rate>
+        <pet_rate>25</pet_rate>
+        <sex>-1</sex>
+        <race>Eviler</race>
+        <rank>4</rank>
+        <evolution></evolution>
+    </monster>
 </monsters>

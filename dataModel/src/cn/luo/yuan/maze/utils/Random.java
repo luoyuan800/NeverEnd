@@ -75,12 +75,22 @@ public class Random extends java.util.Random {
 
 
     public long randomRange(long min, long max) {
+        boolean negative = min < 0 && max < 0;
+        if(negative){
+            min = -min;
+            max = -max;
+        }
         if(max < min){
             max = max ^ min;
             min = max ^ min;
             max = max ^ min;
         }
-        return min + nextLong(max - min);
+
+        long value = min + nextLong(max - min);
+        if(negative){
+            value = -value;
+        }
+        return value;
     }
 
     public float randomRange(float min, float max) {

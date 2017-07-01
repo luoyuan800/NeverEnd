@@ -10,6 +10,7 @@ import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.effect.*;
 import cn.luo.yuan.maze.client.utils.LogHelper;
+import cn.luo.yuan.maze.model.effect.original.EggRateEffect;
 import cn.luo.yuan.maze.utils.Random;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -185,6 +186,11 @@ public class AccessoryHelper extends cn.luo.yuan.maze.service.AccessoryHelper {
                                         boolean elementControl = Boolean.parseBoolean(parser.getAttributeValue(null,"element"));
                                         if (random.nextLong(100) < rate) {
                                             switch (effectName) {
+                                                case "EggRateEffect":
+                                                    EggRateEffect eggRateEffect = new EggRateEffect();
+                                                    eggRateEffect.setEggRate(random.randomRange(min,max));
+                                                    initEffect(eggRateEffect,elementControl);
+                                                    accessory.getEffects().add(eggRateEffect);
                                                 case "SkillRateEffect":
                                                     SkillRateEffect skillRateEffect = new SkillRateEffect();
                                                     skillRateEffect.setSkillRate(random.randomRange(min, max));

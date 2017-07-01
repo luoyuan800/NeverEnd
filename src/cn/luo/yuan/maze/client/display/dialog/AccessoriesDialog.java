@@ -170,13 +170,19 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
         return false;
     }
 
-    public void refreshFuseAccessoryView() {
+    private void refreshFuseAccessoryView() {
         if (fuse != null) {
             ((TextView) dialog.findViewById(R.id.accessory_name_2)).setText(Html.fromHtml(fuse.getDisplayName()));
             ((TextView) dialog.findViewById(R.id.accessory_effects_2)).setText(Html.fromHtml(StringUtils.formatEffectsAsHtml(fuse.getEffects())));
+            if(StringUtils.isNotEmpty(fuse.getDesc())) {
+                ((TextView) dialog.findViewById(R.id.accessory_desc_2)).setText(Html.fromHtml(fuse.getDesc()));
+            }else{
+                ((TextView) dialog.findViewById(R.id.accessory_desc_2)).setText(StringUtils.EMPTY_STRING);
+            }
         } else {
             ((TextView) dialog.findViewById(R.id.accessory_name_2)).setText(StringUtils.EMPTY_STRING);
             ((TextView) dialog.findViewById(R.id.accessory_effects_2)).setText(StringUtils.EMPTY_STRING);
+            ((TextView) dialog.findViewById(R.id.accessory_desc_2)).setText(StringUtils.EMPTY_STRING);
         }
         detectFuseAble();
     }
@@ -190,10 +196,16 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
             } else {
                 ((Button) dialog.findViewById(R.id.accessory_mount)).setText(Resource.getString(R.string.need_mount));
             }
+            if(StringUtils.isNotEmpty(main.getDesc())) {
+                ((TextView) dialog.findViewById(R.id.accessory_desc)).setText(Html.fromHtml(main.getDesc()));
+            }else{
+                ((TextView) dialog.findViewById(R.id.accessory_desc)).setText(StringUtils.EMPTY_STRING);
+            }
             dialog.findViewById(R.id.accessory_mount).setEnabled(true);
         } else {
             ((TextView) dialog.findViewById(R.id.accessory_name)).setText(StringUtils.EMPTY_STRING);
             ((TextView) dialog.findViewById(R.id.accessory_effects)).setText(StringUtils.EMPTY_STRING);
+            ((TextView) dialog.findViewById(R.id.accessory_desc)).setText(StringUtils.EMPTY_STRING);
             ((Button) dialog.findViewById(R.id.accessory_mount)).setText(Resource.getString(R.string.need_un_mount));
             dialog.findViewById(R.id.accessory_mount).setEnabled(false);
         }

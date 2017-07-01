@@ -126,8 +126,87 @@
         <price value="150000"/>
         <type value="帽子"/>
         <properties>
-            <effect name="StrEffect" min="100" max="120" rate="100" element="false"/>
+            <effect name="StrEffect" min="10" max="120" rate="100" element="false"/>
             <effect name="HpEffect" min="150" max="300" rate="50" element="true"/>
+        </properties>
+    </accessory>
+    <accessory local="true">
+        <name value = "神心戒"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="100000"/>
+        <type value="戒指"/>
+        <properties>
+            <effect name="AgiEffect" min="20" max="30" rate="100" element="false"/>
+            <effect name="StrEffect" min="15" max="30" rate="50" element="false"/>
+            <effect name="AgiEffect" min="20" max="35" rate="50" element="true"/>
+        </properties>
+    </accessory>
+    <accessory local="true">
+        <name value = "青云冠"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="160000"/>
+        <type value="帽子"/>
+        <properties>
+            <effect name="AgiEffect" min="50" max="130" rate="100" element="false"/>
+            <effect name="DefEffect" min="1000" max="1300" rate="100" element="false"/>
+            <effect name="StrEffect" min="60" max="175" rate="50" element="true"/>
+        </properties>
+    </accessory>
+    <accessory local="true">
+        <name value = "星尘冠"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="120000"/>
+        <type value="帽子"/>
+        <properties>
+            <effect name="AtkEffect" min="500" max="2000" rate="100" element="false"/>
+            <effect name="StrEffect" min="10" max="200" rate="50" element="true"/>
+            <effect name="DefEffect" min="600" max="2275" rate="50" element="true"/>
+        </properties>
+    </accessory>
+    <accessory local="true">
+        <name value = "旭日盔"/>
+        <description value="日出东方，唯我不败"/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="220000"/>
+        <type value="帽子"/>
+        <properties>
+            <effect name="AtkEffect" min="100" max="1500" rate="100" element="false"/>
+            <effect name="HPEffect" min="100" max="2000" rate="100" element="false"/>
+            <effect name="AgiEffect" min="50" max="1000" rate="50" element="true"/>
+        </properties>
+    </accessory>
+    <accessory local="true">
+        <name value = "天使眼淚"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="270000"/>
+        <type value="项链"/>
+        <properties>
+            <effect name="DefEffect" min="500" max="1500" rate="100" element="false"/>
+            <effect name="HPEffect" min="500" max="4000" rate="50" element="false"/>
+            <effect name="AtkEffect" min="150" max="600" rate="50" element="true"/>
+        </properties>
+    </accessory>
+    <accessory local="true">
+        <name value = "六娃"/>
+        <description value="您捡到一只六娃"/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="270000"/>
+        <type value="帽子"/>
+        <properties>
+            <effect name="StrEffect" min="50" max="1500" rate="100" element="false"/>
+            <effect name="AgiEffect" min="10" max="400" rate="50" element="false"/>
+            <effect name="AgiEffect" min="15" max="2000" rate="50" element="true"/>
+            <effect name="HpEffect" min="-3000" max="-20" rate="100" element="true"/>
         </properties>
     </accessory>
 </accessories>

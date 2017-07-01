@@ -135,7 +135,10 @@ public class OnlineActivity extends Activity {
     private void upload() {
         ServerData uploadData = new ServerData();
         uploadData.hero = gameContext.getHero();
-        uploadData.accessories = new ArrayList<>(gameContext.getHero().getAccessories());
+        uploadData.accessories = new ArrayList<>(gameContext.getHero().getAccessories().size());
+        for(Accessory accessory : gameContext.getHero().getAccessories()){
+                uploadData.accessories.add((Accessory) gameContext.convertToServerObject(accessory));
+        }
         uploadData.pets = new ArrayList<>(gameContext.getHero().getPets());
         uploadData.skills = Arrays.asList(gameContext.getHero().getSkills());
         uploadData.maze = gameContext.getMaze();
@@ -185,7 +188,7 @@ public class OnlineActivity extends Activity {
             gameContext.getHero().setMaterial(gameContext.getHero().getMaterial() + data.material);
             if (data.awardAccessories != null) {
                 for (Accessory accessory : data.accessories) {
-                    gameContext.getDataManager().saveAccessory(accessory);
+                    gameContext.getDataManager().saveAccessory(gameContext.covertAccessoryToLocal(accessory));
                 }
             }
             if (data.awardPets != null) {
