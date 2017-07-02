@@ -343,7 +343,7 @@ public class Server {
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                new HeroBattleService(new HashMap<String, HeroTable>(heroTableCache)).run();
+                new HeroBattleService(initHeroTableCache(heroDir)).run();
             }
         },0, 1, TimeUnit.MINUTES);
         LogHelper.info("started");

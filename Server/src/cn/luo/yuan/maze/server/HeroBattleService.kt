@@ -83,6 +83,7 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>) :
         for(table in tableCache.values){
             table.save()
         }
+        LogHelper.info("Finsihed battle!")
     }
 
     private fun range(){

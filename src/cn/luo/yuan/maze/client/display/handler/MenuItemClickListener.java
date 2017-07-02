@@ -59,9 +59,9 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
 
                 context.startActivity(gameIntent);
                 break;
-            case R.id.excahnge:
+            /*case R.id.excahnge:
                 new ExchangeDialog(control).show();
-                break;
+                break;*/
             case R.id.local_shop:
                 new LocalShop(control).show();
                 break;
