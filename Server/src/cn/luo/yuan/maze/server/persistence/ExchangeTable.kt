@@ -1,9 +1,6 @@
 package cn.luo.yuan.maze.server.persistence
 
-import cn.luo.yuan.maze.model.Accessory
-import cn.luo.yuan.maze.model.ExchangeObject
-import cn.luo.yuan.maze.model.IDModel
-import cn.luo.yuan.maze.model.Pet
+import cn.luo.yuan.maze.model.*
 import cn.luo.yuan.maze.model.goods.Goods
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable
 import java.io.File
@@ -51,13 +48,28 @@ class ExchangeTable(root: File) {
         val result = mutableListOf<ExchangeObject>()
         if (cache.size == exchangeDb.size()) {
             for ((key, value) in cache.entries) {
-                if (value.get() != null && value.get()?.type == type && value.get()?.changed == null) {
-                    result.add(value.get()!!)
+                val exchangeObject = value.get()
+                if (exchangeObject != null) {
+                    if(exchangeObject.type == type && exchangeObject.changed == null) {
+                        if(exchangeObject.exchange is NameObject){
+                            if((exchangeObject.exchange as NameObject).name.contains(limit)){
+                                result.add(value.get()!!)
+                            }
+                        }else{
+                            result.add(value.get()!!)
+                        }
+                    }
                 } else {
                     val eo = exchangeDb.loadObject(key.id)
                     if (eo != null) {
                         if (eo.type == type && eo.changed == null) {
-                            result.add(eo);
+                            if(eo.exchange is NameObject){
+                                if((eo.exchange as NameObject).name.contains(limit)){
+                                    result.add(value.get()!!)
+                                }
+                            }else{
+                                result.add(value.get()!!)
+                            }
                         }
                         cache.put(key, SoftReference(eo))
                     }
