@@ -47,7 +47,7 @@ class ExchangeTable(root: File) {
         return true
     }
 
-    fun loadAll(type: Int): List<ExchangeObject> {
+    fun loadAll(type: Int, limit: String): List<ExchangeObject> {
         val result = mutableListOf<ExchangeObject>()
         if (cache.size == exchangeDb.size()) {
             for ((key, value) in cache.entries) {

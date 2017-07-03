@@ -253,7 +253,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
         List<Effect> effects = new ArrayList<>(a.getEffects());
         a.getEffects().clear();
         for(Effect effect : effects){
-            a.getEffects().add(ClientEffectHandler.buildEffect(effect.getName(), effect.getValue().toString()));
+            a.getEffects().add(ClientEffectHandler.buildClientEffect(effect));
         }
         return a;
     }

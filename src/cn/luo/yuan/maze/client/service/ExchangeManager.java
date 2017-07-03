@@ -89,21 +89,23 @@ public class ExchangeManager {
         return null;
     }
 
-    public List<ExchangeObject> queryAvailableExchanges(int limitType) {
+    public List<ExchangeObject> queryAvailableExchanges(int limitType, String limitKey) {
         List<ExchangeObject> eos = new ArrayList<>();
         try {
-            HttpURLConnection connection;
+            HttpURLConnection connection = null;
             if (limitType == Field.PET_TYPE || limitType == -1) {
                 connection = server.getHttpURLConnection("/exchange_pet_list", RestConnection.POST);
-                eos.addAll((List<ExchangeObject>) server.connect(connection));
             }
             if (limitType == Field.ACCESSORY_TYPE || limitType == -1) {
                 connection = server.getHttpURLConnection("/exchange_accessory_list", RestConnection.POST);
-                eos.addAll((List<ExchangeObject>) server.connect(connection));
             }
             if (limitType == Field.GOODS_TYPE || limitType == -1) {
                 connection = server.getHttpURLConnection("/exchange_goods_list", RestConnection.POST);
+            }
+            if(connection!=null) {
+                connection.addRequestProperty(Field.LIMIT_STRING, limitKey);
                 eos.addAll((List<ExchangeObject>) server.connect(connection));
+
             }
 
         } catch (Exception e) {

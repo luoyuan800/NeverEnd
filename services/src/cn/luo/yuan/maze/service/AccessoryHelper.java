@@ -60,12 +60,4 @@ public class AccessoryHelper {
         }
     }
 
-    protected static void initEffect(Effect effect, boolean elementControl){
-        effect.setElementControl(elementControl);
-        if(elementControl){
-            effect.setEnable(false);
-        }else{
-            effect.setEnable(true);
-        }
-    }
 }

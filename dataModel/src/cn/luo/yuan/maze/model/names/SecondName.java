@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model.names;
 
 
+import cn.luo.yuan.maze.utils.MathUtils;
 import cn.luo.yuan.maze.utils.Random;
 
 /**
@@ -14,17 +15,17 @@ public enum SecondName {
     large("大",5,8,4,0),
     larger("大大",10,5,1,0),
     face("人面",20,15,2,20),
-    Strong("强壮",40,-10,1,10),
+    Strong("强壮",40,-5,1,10),
     weak("无力",23,80,-11,30),
-    redB("厚唇",100,30,-1,5),
-    food("笨",120,43,-1,50),
-    reckless("鲁莽",150,50,-1,0),
-    violence("暴力",160,100,-1, 3),
-    fat("胖",180,130,-21,0),
-    red("瘦",150,213,-80,0),
-    green("疯",150,313,-101,0),
-    blue("狂",150,13,-11,10),
-    brave("勇敢",150,13,-11,10),
+    redB("厚唇",85,10,-1,5),
+    food("笨",30,33,-1,50),
+    reckless("鲁莽",50,50,-1,0),
+    violence("暴力",60,10,-1, 3),
+    fat("胖",20,130,-21,0),
+    red("瘦",50,3,-80,0),
+    green("疯",50,13,-101,0),
+    blue("狂",40,43,-11,10),
+    brave("勇敢",20,63,-11,10),
     defender("【守护者】",20,13,0,60),
     empty("",0,0,0,0)
     ;
@@ -70,4 +71,15 @@ public enum SecondName {
     public float getSilent() {
         return silent;
     }
+
+    public long getReducedAtk(long value){
+        return MathUtils.getReducedValue(value, additionAtk);
+    }
+
+
+
+    public long getReducedHp(long value){
+        return MathUtils.getReducedValue(value, additionHp);
+    }
+
 }

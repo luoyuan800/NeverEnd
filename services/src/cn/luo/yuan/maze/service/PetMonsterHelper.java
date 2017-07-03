@@ -16,10 +16,10 @@ public class PetMonsterHelper implements PetMonsterHelperInterface {
     private MonsterLoader monsterLoader;
     private Random random;
 
-    public  Pet monsterToPet(Monster monster, Hero hero, long level) throws MonsterToPetException {
+    public Pet monsterToPet(Monster monster, Hero hero, long level) throws MonsterToPetException {
         Pet pet = new Pet();
         for (Method method : Monster.class.getMethods()) {
-            if (method.getName().startsWith("get")) {
+            if (method.getName().startsWith("get") && !method.getName().endsWith("Atk") && !method.getName().endsWith("Def") && !method.getName().endsWith("Hp")) {
                 try {
                     Method set = Pet.class.getMethod(method.getName().replaceFirst("get", "set"), method.getReturnType());
                     set.invoke(pet, method.invoke(monster));
@@ -29,14 +29,21 @@ public class PetMonsterHelper implements PetMonsterHelperInterface {
 
             }
         }
-
+        pet.setMaxHp(monster.getMaxHp());
+        pet.setHp(pet.getMaxHp());
+        pet.setAtk(monster.getAtk());
+        pet.setDef(monster.getDef());
+        pet.setSecondName(null);
+        pet.setFirstName(null);
         long atk_l = level * Data.MONSTER_ATK_RISE_PRE_LEVEL;
         long def_l = level * Data.MONSTER_DEF_RISE_PRE_LEVEL;
         long hp_l = level * Data.MONSTER_HP_RISE_PRE_LEVEL;
-        pet.setAtk(pet.getAtk() - atk_l + random.reduceToSpecialDigit(atk_l, 2));
-        pet.setDef(pet.getDef() - def_l + random.reduceToSpecialDigit(def_l, 2));
-        pet.setMaxHp(pet.getMaxHp() - hp_l + random.reduceToSpecialDigit(hp_l, 2));
+        pet.setAtk(pet.getAtk() - atk_l + random.nextLong(random.reduceToSpecialDigit(atk_l, 3)));
+        pet.setDef(pet.getDef() - def_l + random.nextLong(random.reduceToSpecialDigit(def_l, 3)));
+        pet.setMaxHp(pet.getMaxHp() - hp_l + random.nextLong(random.reduceToSpecialDigit(hp_l, 3)));
         pet.setHp(pet.getMaxHp());
+        pet.setFirstName(monster.getFirstName());
+        pet.setSecondName(monster.getSecondName());
         pet.setOwnerId(hero.getId());
         pet.setOwnerName(hero.getName());
         return pet;
@@ -168,8 +175,6 @@ public class PetMonsterHelper implements PetMonsterHelperInterface {
                         egg.setRace(gameControl.getRandom().randomItem(new Integer[]{p1.getRace().ordinal(), p2.getRace().ordinal()}));
                         egg.setRank(p1.getSex() == 1 ? p1.getRank() : p2.getRank());
                         egg.setIndex(p1.getSex() == 1 ? p1.getIndex() : p2.getIndex());
-                        egg.setFirstName(p1.getSex() == 0 ? p1.getFirstName() : p2.getFirstName());
-                        egg.setSecondName(p1.getSex() == 0 ? p2.getSecondName() : p2.getSecondName());
                         Skill skill = gameControl.getRandom().randomItem(new Skill[]{p1.getSkill(), p2.getSkill(), EmptySkill.EMPTY_SKILL});
                         if (skill != EmptySkill.EMPTY_SKILL) {
                             egg.setSkill(skill);
@@ -191,6 +196,9 @@ public class PetMonsterHelper implements PetMonsterHelperInterface {
                             egg.setHitRate(m1.getHitRate());
                             egg.setEggRate(p1.getSex() == 1 ? m1.getEggRate() : m2.getEggRate());
                         }
+                        egg.setFirstName(p1.getSex() == 0 ? p1.getFirstName() : p2.getFirstName());
+                        egg.setSecondName(p1.getSex() == 0 ? p2.getSecondName() : p2.getSecondName());
+                        egg.setIntimacy(30);
                         return egg;
                     }
                 }

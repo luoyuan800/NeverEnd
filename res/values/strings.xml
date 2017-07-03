@@ -92,4 +92,5 @@
     <string name="pet_type">宠物</string>
     <string name="acc_type">装备</string>
     <string name="goods_type">物品</string>
+    <string name="exchange_label">交换</string>
 </resources>

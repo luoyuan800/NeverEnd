@@ -9,46 +9,65 @@ import cn.luo.yuan.maze.model.effect.MeetRateEffect;
 import cn.luo.yuan.maze.model.effect.PetRateEffect;
 import cn.luo.yuan.maze.model.effect.SkillRateEffect;
 import cn.luo.yuan.maze.model.effect.StrEffect;
+import cn.luo.yuan.maze.model.effect.original.ClickMaterialEffect;
+import cn.luo.yuan.maze.model.effect.original.EggRateEffect;
 
 /**
  * Created by gluo on 6/16/2017.
  */
 public class ClientEffectHandler {
-    public static Effect buildEffect(String effectName, String value){
-        switch (effectName) {
-            case "SkillRateEffect":
-                SkillRateEffect skillRateEffect = new SkillRateEffect();
-                skillRateEffect.setSkillRate(Float.parseFloat(value));
-                return skillRateEffect;
-            case "AgiEffect":
-                AgiEffect agiEffect = new AgiEffect();
-                agiEffect.setAgi(Long.parseLong(value));
-                return agiEffect;
-            case "AtkEffect":
-                AtkEffect atkEffect = new AtkEffect();
-                atkEffect.setAtk(Long.parseLong(value));
-                return atkEffect;
-            case "DefEffect":
-                DefEffect defEffect = new DefEffect();
-                defEffect.setDef(Long.parseLong(value));
-                return defEffect;
-            case "HpEffect":
-                HpEffect hpEffect = new HpEffect();
-                hpEffect.setHp(Long.parseLong(value));
-                return hpEffect;
-            case "StrEffect":
-                StrEffect strEffect = new StrEffect();
-                strEffect.setStr(Long.parseLong(value));
-                return strEffect;
-            case "MeetRateEffect":
-                MeetRateEffect meetRateEffect = new MeetRateEffect();
-                meetRateEffect.setMeetRate(Float.parseFloat(value));
-                return meetRateEffect;
-            case "PetRateEffect":
-                PetRateEffect petRateEffect = new PetRateEffect();
-                petRateEffect.setPetRate(Float.parseFloat(value));
-                return petRateEffect;
+    public static Effect buildClientEffect(Effect effect){
+        Effect clientEffect = buildEffect(effect.getName(), effect.getValue().toString(), effect.isElementControl());
+        if(clientEffect!=null){
+            return  clientEffect;
+        }else{
+            return effect;
         }
-        return null;
+    }
+    public static Effect buildEffect(String effectName, String value, boolean elementControl){
+        Effect effect = null;
+        switch (effectName) {
+            case "ClickMaterialEffect":
+                effect = new ClickMaterialEffect();
+                ((ClickMaterialEffect)effect).setValue(Long.parseLong(value));
+            case "EggRateEffect":
+                effect = new EggRateEffect();
+                ((EggRateEffect)effect).setEggRate(Float.parseFloat(value));
+                break;
+            case "SkillRateEffect":
+                effect = new SkillRateEffect();
+                ((SkillRateEffect)effect).setSkillRate(Float.parseFloat(value));
+                break;
+            case "AgiEffect":
+                effect = new AgiEffect();
+                ((AgiEffect)effect).setAgi(Long.parseLong(value));
+            case "AtkEffect":
+                effect = new AtkEffect();
+                ((AtkEffect)effect).setAtk(Long.parseLong(value));
+            case "DefEffect":
+                 effect = new DefEffect();
+                ((DefEffect)effect).setDef(Long.parseLong(value));
+            case "HpEffect":
+                 effect = new HpEffect();
+                ((HpEffect)effect).setHp(Long.parseLong(value));
+            case "StrEffect":
+                 effect = new StrEffect();
+                ((StrEffect)effect).setStr(Long.parseLong(value));
+            case "MeetRateEffect":
+                 effect = new MeetRateEffect();
+                ((MeetRateEffect)effect).setMeetRate(Float.parseFloat(value));
+            case "PetRateEffect":
+                 effect = new PetRateEffect();
+                ((PetRateEffect)effect).setPetRate(Float.parseFloat(value));
+        }
+        if(effect!=null){
+            effect.setElementControl(elementControl);
+            if(elementControl){
+                effect.setEnable(false);
+            }else{
+                effect.setEnable(true);
+            }
+        }
+        return effect;
     }
 }

@@ -12,6 +12,7 @@ import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
+import dalvik.annotation.TestTargetClass;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -110,22 +111,27 @@ public class TestPetMonsterHelper {
     @Test
     public void testMonsterToPet() throws MonsterToPetException {
         Monster monster = new Monster();
-        monster.setHp(100);
-        monster.setMaxHp(100);
+        long level = 100;
+        monster.setHp(100 + level * Data.MONSTER_HP_RISE_PRE_LEVEL);
+        monster.setMaxHp(100 + level * Data.MONSTER_HP_RISE_PRE_LEVEL);
         monster.setColor(Data.DARKGOLD_COLOR);
-        monster.setAtk(100);
-        monster.setDef(100);
+        monster.setAtk(100 + level * Data.MONSTER_ATK_RISE_PRE_LEVEL);
+        monster.setDef(100 + level * Data.MONSTER_DEF_RISE_PRE_LEVEL);
         monster.setFirstName(FirstName.angry);
         monster.setSecondName(SecondName.blue);
         monster.setType("测试");
         monster.setIndex(1);
         PetMonsterHelper helper = PetMonsterHelper.instance;
+        helper.setRandom(new Random(System.currentTimeMillis()));
         Hero hero = new Hero();
         hero.setName("test");
         hero.setId("11111");
-        Pet p = helper.monsterToPet(monster, hero, 1);
+        Pet p = helper.monsterToPet(monster, hero, level);
         assertEquals(p.getType(), monster.getType());
         assertEquals(p.getFirstName(), monster.getFirstName());
+        assertLarger(monster.getAtk(), p.getAtk());
+        assertLarger(monster.getDef(), p.getDef());
+        assertLarger(monster.getMaxHp(), p.getMaxHp());
     }
 
     public void assertLarger(Object o1, Object o2) {
@@ -135,4 +141,5 @@ public class TestPetMonsterHelper {
     public void assertEquals(Object o1, Object o2) {
         System.out.println(o1 + " should equals to " + o2);
     }
+
 }

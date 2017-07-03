@@ -91,7 +91,8 @@ public class Server {
         });
 
         post("exchange_pet_list", (request, response) -> {
-            List<ExchangeObject> pets = exchangeTable.loadAll(1);
+            String limit = request.headers(Field.LIMIT_STRING);
+            List<ExchangeObject> pets = exchangeTable.loadAll(1, limit);
             response.header(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
             response.header(Field.RESPONSE_TYPE, RESPONSE_OBJECT_TYPE);
             ObjectOutputStream oos = new ObjectOutputStream(response.getOutputStream());
@@ -103,7 +104,8 @@ public class Server {
         });
 
         post("exchange_accessory_list", (request, response) -> {
-            List<ExchangeObject> pets = exchangeTable.loadAll(2);
+            String limit = request.headers(Field.LIMIT_STRING);
+            List<ExchangeObject> pets = exchangeTable.loadAll(2, limit);
             response.header(RESPONSE_CODE, Field.STATE_SUCCESS);
             response.header(RESPONSE_TYPE, RESPONSE_OBJECT_TYPE);
             ObjectOutputStream oos = new ObjectOutputStream(response.getOutputStream());
@@ -115,7 +117,8 @@ public class Server {
         });
 
         post("exchange_goods_list", (request, response) -> {
-            List<ExchangeObject> pets = exchangeTable.loadAll(3);
+            String limit = request.headers(Field.LIMIT_STRING);
+            List<ExchangeObject> pets = exchangeTable.loadAll(3, limit);
             response.header(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
             response.header(Field.RESPONSE_TYPE, RESPONSE_OBJECT_TYPE);
             ObjectOutputStream oos = new ObjectOutputStream(response.getOutputStream());

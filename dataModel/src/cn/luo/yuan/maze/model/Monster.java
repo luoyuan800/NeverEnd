@@ -41,11 +41,11 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
 
     public void setFirstName(FirstName firstName) {
         if(this.firstName!=null){
-            setAtk(getAtk() - firstName.getAtkAddition(getAtk()));
-            setMaxHp(getMaxHp() - firstName.getHPAddition(getMaxHp()));
+            setAtk(this.firstName.getReducedAtk(getAtk()));
+            setMaxHp(this.firstName.getReducedHp(getMaxHp()));
             setHp(getMaxHp());
-            silent -= firstName.getSilent();
-            eggRate -= firstName.getEggRate();
+            silent -= this.firstName.getSilent();
+            eggRate -= this.firstName.getEggRate();
 
         }
         this.firstName = firstName;
@@ -64,11 +64,11 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
 
     public void setSecondName(SecondName secondName) {
         if(this.secondName!=null){
-            setAtk(getAtk() - secondName.getAtkAddition(getAtk()));
-            setMaxHp(getMaxHp() - secondName.getHpAddition(getMaxHp()));
+            setAtk(this.secondName.getReducedAtk(getAtk()));
+            setMaxHp(this.secondName.getReducedHp(getMaxHp()));
             setHp(getMaxHp());
-            silent -= secondName.getSilent();
-            petRate -= secondName.getPetRate();
+            silent -= this.secondName.getSilent();
+            petRate -= this.secondName.getPetRate();
         }
         this.secondName = secondName;
         if(this.secondName!=null){

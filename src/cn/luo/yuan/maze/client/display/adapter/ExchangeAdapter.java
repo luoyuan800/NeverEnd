@@ -4,6 +4,7 @@ import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
@@ -11,6 +12,7 @@ import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.client.service.PetMonsterLoder;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.client.utils.Resource;
+import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.List;
 
@@ -20,6 +22,7 @@ import java.util.List;
 public class ExchangeAdapter extends BaseAdapter {
     private List<ExchangeObject> exchanges;
     private View.OnClickListener listener;
+    private String buttonString = null;
 
     public void setExchanges(List<ExchangeObject> exchanges){
         this.exchanges = exchanges;
@@ -94,8 +97,11 @@ public class ExchangeAdapter extends BaseAdapter {
             }
         }
         view.setTag(R.string.item, item);
-        View button = view.findViewById(R.id.get_back_item_button);
+        Button button = (Button)view.findViewById(R.id.get_back_item_button);
         button.setOnClickListener(listener);
+        if(StringUtils.isNotEmpty(buttonString)){
+            button.setText(buttonString);
+        }
         button.setTag(R.string.item, item);
         button.setTag(R.string.adapter, ExchangeAdapter.this);
         return view;
@@ -103,5 +109,9 @@ public class ExchangeAdapter extends BaseAdapter {
 
     public List<ExchangeObject> getExchanges() {
         return exchanges;
+    }
+
+    public void setButtonString(String buttonString) {
+        this.buttonString = buttonString;
     }
 }

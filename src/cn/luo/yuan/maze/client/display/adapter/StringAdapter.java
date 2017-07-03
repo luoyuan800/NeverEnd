@@ -21,6 +21,11 @@ public class StringAdapter <T> extends BaseAdapter {
         this.data = data;
     }
 
+    public void addAll(List<T> list){
+        data.addAll(list);
+        notifyDataSetChanged();
+    }
+
     public List<T> getData(){
         return data;
     }

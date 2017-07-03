@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.*;
@@ -40,6 +41,10 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
     private Handler handler = new Handler(){
         public void handleMessage(Message msg){
             switch (msg.what){
+                case 6:
+                    ExchangeObject eo = (ExchangeObject) msg.obj;
+                    showSelectExchangeDialog(eo);
+                    break;
                 case 5:
                     if(progress.isShowing()){
                         progress.dismiss();
@@ -50,10 +55,10 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                         progress.dismiss();
                     }
                     Object item = msg.obj;
-                    Toast.makeText(context.getContext(), "成功上传" + (item instanceof NameObject ? ((NameObject) item).getName() : ""), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context.getContext(), Html.fromHtml(item.toString()), Toast.LENGTH_SHORT).show();
                     break;
                 case 3:
-                    showSelectDialog();
+                    showSelectSubmitDialog();
                     break;
                 case 1:
                     if(msg.obj instanceof List){
@@ -67,6 +72,63 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
             }
         }
     };
+
+    private void showSelectExchangeDialog(final ExchangeObject eo) {
+        ListAdapter adapter;
+        LoadMoreListView list = new LoadMoreListView(context.getContext());
+        switch (eo.getExpectedType()){
+            case Field.PET_TYPE:
+                adapter = new PetAdapter(context.getContext(), context.getDataManager(), eo.getExpectedKeyWord());
+                list.setAdapter(adapter);
+                list.setOnLoadListener((LoadMoreListView.OnRefreshLoadingMoreListener) adapter);
+                break;
+            case Field.ACCESSORY_TYPE:
+                adapter = new StringAdapter<Accessory>(context.getDataManager().loadAccessories(0,50,eo.getExpectedKeyWord(),null));
+                list.setAdapter(adapter);
+                list.setOnLoadListener(new LoadMoreListView.OnRefreshLoadingMoreListener() {
+                    @Override
+                    public void onLoadMore(LoadMoreListView loadMoreListView) {
+                        List<Accessory> accessories = context.getDataManager().loadAccessories(adapter.getCount(), 50, eo.getExpectedKeyWord(),null);
+                        if (accessories.size() > 0) {
+                            ((StringAdapter<Accessory>)adapter).addAll(accessories);
+                            loadMoreListView.onLoadMoreComplete(false);
+                        } else {
+                            loadMoreListView.onLoadMoreComplete(true);
+                        }
+                    }
+                });
+                break;
+            case Field.GOODS_TYPE:
+                adapter = new StringAdapter<Goods>(context.getDataManager().loadAllGoods());
+                list.setAdapter(adapter);
+                list.onLoadMoreComplete(true);
+                break;
+        }
+        Dialog selectDialog = SimplerDialogBuilder.build(list, Resource.getString(R.string.close), null, context.getContext());
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object myItem = parent.getAdapter().getItem(position);
+                selectDialog.dismiss();
+                progress.show();
+                context.getExecutor().submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (manager.requestExchange((Serializable) myItem, eo)) {
+                            context.getDataManager().save(eo.getExchange());
+                            if(currentShowingDialog!=null && currentShowingDialog.isShowing()){
+                                currentShowingDialog.dismiss();
+                            }
+                            Message message = new Message() ;
+                            message.what = 4;
+                            message.obj = "交换成功！获得了" + (eo.getExchange() instanceof NameObject ? ((NameObject) eo.getExchange()).getDisplayName() : "");
+                            handler.sendMessage(message);
+                        }
+                    }
+                });
+            }
+        });
+    }
 
     @Override
     public  void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -131,7 +193,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                             if(manager.submitExchange((Serializable) item, limit.getText().toString(), petType.isChecked() ? Field.PET_TYPE : accType.isChecked() ? Field.ACCESSORY_TYPE : Field.GOODS_TYPE)){
                                 Message message = new Message();
                                 message.what = 4;
-                                message.obj = item;
+                                message.obj = "成功上传" + (item instanceof NameObject ? ((NameObject) item).getName() : "");
                                 handler.sendMessage(message);
                             }else{
                                 Toast.makeText(context.getContext(), "上传失败，请检测网络后重试。", Toast.LENGTH_SHORT).show();
@@ -152,20 +214,21 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
         RadioButton goodsR = (RadioButton) view.findViewById(R.id.goods_type);
         EditText key = (EditText)view.findViewById(R.id.key_text);
         LoadMoreListView list = (LoadMoreListView) view.findViewById(R.id.item_list);
-        SimplerDialogBuilder.build(view, Resource.getString(R.string.close), null, context.getContext());
-
+        currentShowingDialog = SimplerDialogBuilder.build(view, Resource.getString(R.string.close), null, context.getContext());
         progress.show();
         Runnable updateTask = new Runnable() {
             @Override
             public void run() {
                 List<ExchangeObject> exchangeObjects =
                         manager.queryAvailableExchanges(petR.isChecked() ? Field.PET_TYPE :
-                                accessoryR.isChecked() ? Field.ACCESSORY_TYPE : Field.GOODS_TYPE);
+                                accessoryR.isChecked() ? Field.ACCESSORY_TYPE : Field.GOODS_TYPE, key.getText().toString());
                 if(progress.isShowing()) {
                     progress.dismiss();
                 }
                 if(list.getAdapter() == null){
-                    list.setAdapter(buildExchangeAdapter(exchangeObjects));
+                    ExchangeAdapter adapter = buildExchangeAdapter(exchangeObjects);
+                    adapter.setButtonString(Resource.getString(R.string.exchange_label));
+                    list.setAdapter(adapter);
                 }else{
                     ExchangeAdapter adapter = (ExchangeAdapter) list.getAdapter();
                     adapter.setExchanges(exchangeObjects);
@@ -219,23 +282,12 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
         return new ExchangeAdapter(objects, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progress.show();
-                context.getExecutor().submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        ExchangeObject eo = (ExchangeObject) v.getTag(R.string.item);
-                        IDModel myItem = manager.queryMyAvaiableItemForExchange(eo.getExpectedType(), eo.getExpectedKeyWord());
-                        if (manager.requestExchange((Serializable) myItem, eo)) {
-                            context.getDataManager().save(eo.getExchange());
-                            ExchangeAdapter adapter = (ExchangeAdapter) v.getTag(R.string.adapter);
-                            List<ExchangeObject> exchangeObjects = manager.queryAvailableExchanges(-1);
-                            adapter.setExchanges(exchangeObjects);
-                            adapter.notifyDataSetChanged();
-                            SimplerDialogBuilder.build("交换成功！", Resource.getString(R.string.conform), null, context.getContext());
-                            progress.dismiss();
-                        }
-                    }
-                });
+                ExchangeObject eo = (ExchangeObject) v.getTag(R.string.item);
+                Message message = new Message();
+                message.what = 6;
+                message.obj = eo;
+                handler.sendMessage(message);
+
 
             }
         });
@@ -281,7 +333,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
         SimplerDialogBuilder.build(list, Resource.getString(R.string.close), null, context.getContext());
     }
 
-    private void showSelectDialog() {
+    private void showSelectSubmitDialog() {
         View view = View.inflate(context.getContext(),R.layout.select_submit, null);
         RadioButton petR = (RadioButton) view.findViewById(R.id.pet_type);
         RadioButton accessoryR = (RadioButton) view.findViewById(R.id.accessory_type);

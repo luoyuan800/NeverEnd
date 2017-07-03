@@ -10,7 +10,6 @@ import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.effect.*;
 import cn.luo.yuan.maze.client.utils.LogHelper;
-import cn.luo.yuan.maze.model.effect.original.EggRateEffect;
 import cn.luo.yuan.maze.utils.Random;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -185,61 +184,8 @@ public class AccessoryHelper extends cn.luo.yuan.maze.service.AccessoryHelper {
                                         int rate = Integer.parseInt(parser.getAttributeValue(null, "rate"));
                                         boolean elementControl = Boolean.parseBoolean(parser.getAttributeValue(null,"element"));
                                         if (random.nextLong(100) < rate) {
-                                            switch (effectName) {
-                                                case "EggRateEffect":
-                                                    EggRateEffect eggRateEffect = new EggRateEffect();
-                                                    eggRateEffect.setEggRate(random.randomRange(min,max));
-                                                    initEffect(eggRateEffect,elementControl);
-                                                    accessory.getEffects().add(eggRateEffect);
-                                                case "SkillRateEffect":
-                                                    SkillRateEffect skillRateEffect = new SkillRateEffect();
-                                                    skillRateEffect.setSkillRate(random.randomRange(min, max));
-                                                    initEffect(skillRateEffect, elementControl);
-                                                    accessory.getEffects().add(skillRateEffect);
-                                                case "AgiEffect":
-                                                    AgiEffect agiEffect = new AgiEffect();
-                                                    agiEffect.setAgi(random.randomRange(min, max));
-                                                    accessory.getEffects().add(agiEffect);
-                                                    initEffect(agiEffect, elementControl);
-                                                case "AtkEffect":
-                                                    AtkEffect atkEffect = new AtkEffect();
-                                                    atkEffect.setAtk(random.randomRange(min, max));
-                                                    accessory.getEffects().add(atkEffect);
-                                                    initEffect(atkEffect, elementControl);
-                                                    break;
-                                                case "DefEffect":
-                                                    DefEffect defEffect = new DefEffect();
-                                                    defEffect.setDef(random.randomRange(min, max));
-                                                    accessory.getEffects().add(defEffect);
-                                                    initEffect(defEffect, elementControl);
-                                                    break;
-                                                case "HpEffect":
-                                                    HpEffect hpEffect = new HpEffect();
-                                                    hpEffect.setHp(random.randomRange(min, max));
-                                                    accessory.getEffects().add(hpEffect);
-                                                    initEffect(hpEffect, elementControl);
-                                                    break;
-                                                case "StrEffect":
-                                                    StrEffect strEffect = new StrEffect();
-                                                    strEffect.setStr(random.randomRange(min, max));
-                                                    accessory.getEffects().add(strEffect);
-                                                    initEffect(strEffect, elementControl);
-                                                    break;
-                                                case "MeetRateEffect":
-                                                    MeetRateEffect meetRateEffect = new MeetRateEffect();
-                                                    float meetRate = random.randomRange(Float.parseFloat(parser.getAttributeValue(null, "max")) * 100, Float.parseFloat(parser.getAttributeValue(null, "min")) * 100) / 100f;
-                                                    meetRateEffect.setMeetRate(meetRate);
-                                                    meetRateEffect.setElementControl(elementControl);
-                                                    initEffect(meetRateEffect, elementControl);
-                                                    break;
-                                                case "PetRateEffect":
-                                                    PetRateEffect petRateEffect = new PetRateEffect();
-                                                    float petRate = random.randomRange(Float.parseFloat(parser.getAttributeValue(null, "max")) * 100, Float.parseFloat(parser.getAttributeValue(null, "min")) * 100) / 100f;
-                                                    petRateEffect.setPetRate(petRate);
-                                                    initEffect(petRateEffect, elementControl);
-                                                    accessory.getEffects().add(petRateEffect);
-                                                    break;
-                                            }
+                                            Effect effect = ClientEffectHandler.buildEffect(effectName,String.valueOf(random.randomRange(min,max)), elementControl);
+                                            accessory.getEffects().add(effect);
                                         }
                                     } catch (Exception e) {
                                         LogHelper.logException(e, "AccessoryHelper->loadAccessoryByName->effects parse {" + accessory.getName() + "}");

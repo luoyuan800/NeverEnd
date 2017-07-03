@@ -17,8 +17,8 @@ public enum FirstName {
     crazy("发狂",50,20,0.1f,0),
     magical("神奇",60,40,0 ,-5),
     neural("神经",50,75,1 ,-10),
-    legendary("传奇",100,80,1 ,-30),
-    unbeatable("无敌",150,110,5 ,-100),
+    legendary("传奇",55,80,1 ,-30),
+    unbeatable("无敌",50,110,5 ,-100),
     really("真正",150,110,5 ,-100),
     image("镜像",150,110,5 ,-100),
     stupid("傻乎乎",150,110,5 ,-100),
@@ -72,6 +72,18 @@ public enum FirstName {
             }
         }
         return null;
+    }
+
+    public long getReducedAtk(long value){
+        return getReducedValue(value, atkPercent);
+    }
+
+    private long getReducedValue(long value, float percent) {
+        return  (long)(value/(percent/100 + 1));
+    }
+
+    public long getReducedHp(long value){
+        return getReducedValue(value, hpPercent);
     }
 
 }

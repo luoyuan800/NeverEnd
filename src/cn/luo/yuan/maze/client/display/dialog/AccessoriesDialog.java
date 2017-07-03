@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.client.display.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
@@ -40,7 +41,11 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
     public AccessoriesDialog(NeverEnd context) {
         this.context = context;
         AlertDialog.Builder builder = new AlertDialog.Builder(context.getContext());
-        builder.setView(R.layout.accessory);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.setView(R.layout.accessory);
+        }else{
+            builder.setView(View.inflate(context.getContext(),R.layout.accessory, null));
+        }
         dialog = builder.create();
         accessories = context.getDataManager().loadAccessories(0, 10, key, order);
         accessoryAdapter = new StringAdapter<>(accessories);
