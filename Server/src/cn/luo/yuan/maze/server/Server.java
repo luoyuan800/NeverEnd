@@ -31,11 +31,8 @@ import spark.Request;
 import spark.Response;
 import spark.Spark;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +74,7 @@ public class Server {
         post("submit_exchange", (request, response) -> {
             Object ex = readObject(request);
             String ownerId = request.headers(Field.OWNER_ID_FIELD);
-            String limit = request.headers(Field.LIMIT_STRING);
+            String limit = readEncodeHeader(request, Field.LIMIT_STRING);
             int expectType = Integer.parseInt(request.headers(Field.EXPECT_TYPE));
             if (exchangeTable.addExchange(ex, ownerId, limit, expectType)) {
                 response.header(Field.RESPONSE_TYPE, RESPONSE_NONE_TYPE);
@@ -91,8 +88,9 @@ public class Server {
         });
 
         post("exchange_pet_list", (request, response) -> {
-            String limit = request.headers(Field.LIMIT_STRING);
-            List<ExchangeObject> pets = exchangeTable.loadAll(1, limit);
+            String limit = readEncodeHeader(request, Field.LIMIT_STRING);
+            String keeper = request.headers(Field.OWNER_ID_FIELD);
+            List<ExchangeObject> pets = exchangeTable.loadAll(1, limit, keeper);
             response.header(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
             response.header(Field.RESPONSE_TYPE, RESPONSE_OBJECT_TYPE);
             ObjectOutputStream oos = new ObjectOutputStream(response.getOutputStream());
@@ -104,8 +102,9 @@ public class Server {
         });
 
         post("exchange_accessory_list", (request, response) -> {
-            String limit = request.headers(Field.LIMIT_STRING);
-            List<ExchangeObject> pets = exchangeTable.loadAll(2, limit);
+            String limit = readEncodeHeader(request, Field.LIMIT_STRING);
+            String keeper = request.headers(Field.OWNER_ID_FIELD);
+            List<ExchangeObject> pets = exchangeTable.loadAll(2, limit, keeper);
             response.header(RESPONSE_CODE, Field.STATE_SUCCESS);
             response.header(RESPONSE_TYPE, RESPONSE_OBJECT_TYPE);
             ObjectOutputStream oos = new ObjectOutputStream(response.getOutputStream());
@@ -117,8 +116,9 @@ public class Server {
         });
 
         post("exchange_goods_list", (request, response) -> {
-            String limit = request.headers(Field.LIMIT_STRING);
-            List<ExchangeObject> pets = exchangeTable.loadAll(3, limit);
+            String limit = readEncodeHeader(request, Field.LIMIT_STRING);
+            String keeper = request.headers(Field.OWNER_ID_FIELD);
+            List<ExchangeObject> pets = exchangeTable.loadAll(3, limit, keeper);
             response.header(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
             response.header(Field.RESPONSE_TYPE, RESPONSE_OBJECT_TYPE);
             ObjectOutputStream oos = new ObjectOutputStream(response.getOutputStream());
@@ -350,6 +350,12 @@ public class Server {
             }
         },0, 1, TimeUnit.MINUTES);
         LogHelper.info("started");
+    }
+
+    private String readEncodeHeader(Request request,String head) throws UnsupportedEncodingException {
+        String limit = request.headers(head);
+        limit = limit == null ? StringUtils.EMPTY_STRING : URLDecoder.decode(limit,"utf-8");
+        return limit;
     }
 
     private static Effect buildEffect(String effectName, String value){

@@ -123,7 +123,7 @@
         <description value=""/>
         <color value="#556B2F"/>
         <author value=""/>
-        <price value="150000"/>
+        <price value="15000"/>
         <type value="帽子"/>
         <properties>
             <effect name="StrEffect" min="10" max="120" rate="100" element="false"/>
@@ -135,7 +135,7 @@
         <description value=""/>
         <color value="#556B2F"/>
         <author value=""/>
-        <price value="100000"/>
+        <price value="10000"/>
         <type value="戒指"/>
         <properties>
             <effect name="AgiEffect" min="20" max="30" rate="100" element="false"/>
@@ -148,7 +148,7 @@
         <description value=""/>
         <color value="#556B2F"/>
         <author value=""/>
-        <price value="160000"/>
+        <price value="16000"/>
         <type value="帽子"/>
         <properties>
             <effect name="AgiEffect" min="50" max="130" rate="100" element="false"/>
@@ -161,7 +161,7 @@
         <description value=""/>
         <color value="#556B2F"/>
         <author value=""/>
-        <price value="120000"/>
+        <price value="12000"/>
         <type value="帽子"/>
         <properties>
             <effect name="AtkEffect" min="500" max="2000" rate="100" element="false"/>
@@ -174,7 +174,7 @@
         <description value="日出东方，唯我不败"/>
         <color value="#556B2F"/>
         <author value=""/>
-        <price value="220000"/>
+        <price value="22000"/>
         <type value="帽子"/>
         <properties>
             <effect name="AtkEffect" min="100" max="1500" rate="100" element="false"/>
@@ -187,7 +187,7 @@
         <description value=""/>
         <color value="#556B2F"/>
         <author value=""/>
-        <price value="270000"/>
+        <price value="27000"/>
         <type value="项链"/>
         <properties>
             <effect name="DefEffect" min="500" max="1500" rate="100" element="false"/>
@@ -200,7 +200,7 @@
         <description value="您捡到一只六娃"/>
         <color value="#556B2F"/>
         <author value=""/>
-        <price value="270000"/>
+        <price value="27000"/>
         <type value="帽子"/>
         <properties>
             <effect name="StrEffect" min="50" max="1500" rate="100" element="false"/>

@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.server.persistence
 import cn.luo.yuan.maze.model.*
 import cn.luo.yuan.maze.model.goods.Goods
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable
+import cn.luo.yuan.maze.utils.StringUtils
 import java.io.File
 import java.lang.ref.SoftReference
 
@@ -44,33 +45,21 @@ class ExchangeTable(root: File) {
         return true
     }
 
-    fun loadAll(type: Int, limit: String): List<ExchangeObject> {
+
+
+    fun loadAll(type: Int, limit: String?, keeper: String): List<ExchangeObject> {
+        val limitWaord = limit ?: StringUtils.EMPTY_STRING
+
         val result = mutableListOf<ExchangeObject>()
         if (cache.size == exchangeDb.size()) {
             for ((key, value) in cache.entries) {
                 val exchangeObject = value.get()
                 if (exchangeObject != null) {
-                    if(exchangeObject.type == type && exchangeObject.changed == null) {
-                        if(exchangeObject.exchange is NameObject){
-                            if((exchangeObject.exchange as NameObject).name.contains(limit)){
-                                result.add(value.get()!!)
-                            }
-                        }else{
-                            result.add(value.get()!!)
-                        }
-                    }
+                    addToResult(exchangeObject, limitWaord, result, type, keeper)
                 } else {
                     val eo = exchangeDb.loadObject(key.id)
                     if (eo != null) {
-                        if (eo.type == type && eo.changed == null) {
-                            if(eo.exchange is NameObject){
-                                if((eo.exchange as NameObject).name.contains(limit)){
-                                    result.add(value.get()!!)
-                                }
-                            }else{
-                                result.add(value.get()!!)
-                            }
-                        }
+                        addToResult(eo, limitWaord, result, type, keeper)
                         cache.put(key, SoftReference(eo))
                     }
                 }
@@ -80,26 +69,42 @@ class ExchangeTable(root: File) {
                 val eo = exchangeDb.loadObject(id);
                 if (eo != null) {
                     cache.put(key(eo.id, eo.type, eo.expectedType), SoftReference(eo))
-                    if (eo.type == type && eo.changed == null) {
-                        result.add(eo)
-                    }
+                    addToResult(eo, limitWaord, result, type, keeper)
                 }
             }
         }
         return result
     }
 
-    fun loadAll(id: String): List<ExchangeObject> {
+    private fun addToResult(exchangeObject: ExchangeObject, limitWaord: String, result: MutableList<ExchangeObject>, type: Int, keeper: String) {
+        if (exchangeObject.type == type && exchangeObject.changed == null) {
+            val exchange = exchangeObject.exchange
+            if(exchange is OwnedAble){
+                if(exchange.keeperId == keeper){
+                    return;
+                }
+            }
+            if (exchange is NameObject) {
+                if ((exchange as NameObject).name.contains(limitWaord)) {
+                    result.add(exchangeObject)
+                }
+            } else {
+                result.add(exchangeObject)
+            }
+        }
+    }
 
+    fun loadAll(id: String): List<ExchangeObject> {
         val result = mutableListOf<ExchangeObject>()
         if (cache.size == exchangeDb.size()) {
             for ((key, value) in cache.entries) {
-                if (value.get() != null && value.get()?.ownerId == id) {
-                    result.add(value.get()!!)
+                val exchangeObject = value.get()
+                if (exchangeObject != null && exchangeObject.ownerId == id && !exchangeObject.acknowledge) {
+                    result.add(exchangeObject)
                 } else {
                     val eo = exchangeDb.loadObject(key.id)
                     if (eo != null) {
-                        if (eo.ownerId == id) {
+                        if (eo.ownerId == id && !eo.acknowledge) {
                             result.add(eo);
                         }
                         cache.put(key, SoftReference(eo))
@@ -111,7 +116,7 @@ class ExchangeTable(root: File) {
                 val eo = exchangeDb.loadObject(exchangeId);
                 if (eo != null) {
                     cache.put(key(eo.id, eo.type, eo.expectedType), SoftReference(eo))
-                    if (eo.ownerId == id) {
+                    if (eo.ownerId == id && !eo.acknowledge) {
                         result.add(eo)
                     }
                 }

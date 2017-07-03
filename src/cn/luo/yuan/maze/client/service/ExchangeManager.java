@@ -12,6 +12,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,12 +37,17 @@ public class ExchangeManager {
                 ((OwnedAble)object).setOwnerId(context.getHero().getId());
                 ((OwnedAble)object).setOwnerName(context.getHero().getName());
             }
+            if(StringUtils.isEmpty(((OwnedAble)object).getKeeperId())){
+                ((OwnedAble)object).setKeeperId(context.getHero().getId());
+                ((OwnedAble)object).setKeeperName(context.getHero().getName());
+            }
         }
         try {
             HttpURLConnection connection = server.getHttpURLConnection("/submit_exchange", RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
             connection.addRequestProperty(Field.EXPECT_TYPE, String.valueOf(expectType));
-            connection.addRequestProperty(Field.LIMIT_STRING, limit);
+
+            connection.addRequestProperty(Field.LIMIT_STRING,URLEncoder.encode(limit,"utf-8"));
             server.connect(object, connection);
             if (connection.getHeaderField(Field.RESPONSE_CODE).equals(Field.STATE_SUCCESS)) {
                 context.getDataManager().delete(object);
@@ -91,6 +97,7 @@ public class ExchangeManager {
 
     public List<ExchangeObject> queryAvailableExchanges(int limitType, String limitKey) {
         List<ExchangeObject> eos = new ArrayList<>();
+        limitKey = limitKey == null? StringUtils.EMPTY_STRING : limitKey;
         try {
             HttpURLConnection connection = null;
             if (limitType == Field.PET_TYPE || limitType == -1) {
@@ -103,7 +110,8 @@ public class ExchangeManager {
                 connection = server.getHttpURLConnection("/exchange_goods_list", RestConnection.POST);
             }
             if(connection!=null) {
-                connection.addRequestProperty(Field.LIMIT_STRING, limitKey);
+                connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+                connection.addRequestProperty(Field.LIMIT_STRING, URLEncoder.encode(limitKey,"utf-8"));
                 eos.addAll((List<ExchangeObject>) server.connect(connection));
 
             }
@@ -121,6 +129,11 @@ public class ExchangeManager {
             conn.addRequestProperty(Field.EXCHANGE_ID_FIELD, targetExchange.getId());
             server.connect(myObject,conn);
             if(conn.getHeaderField(Field.RESPONSE_CODE).equals(Field.STATE_SUCCESS)){
+                Object obj = targetExchange.getExchange();
+                if(obj instanceof OwnedAble){
+                    ((OwnedAble) obj).setKeeperName(context.getHero().getName());
+                    ((OwnedAble) obj).setKeeperId(context.getHero().getId());
+                }
                 return true;
             }
         }catch (Exception e){
@@ -138,7 +151,7 @@ public class ExchangeManager {
             HttpURLConnection connection = server.getHttpURLConnection("/acknowledge_my_exchange", RestConnection.POST);
             connection.addRequestProperty(Field.EXCHANGE_ID_FIELD, eo.getId());
             if(Field.RESPONSE_RESULT_OK.equals(server.connect(connection))){
-                unBox(eo);
+                return unBox(eo.getChanged());
             }
         } catch (Exception e) {
             LogHelper.logException(e, "ExchanmgManager->140");
