@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="jquery,ui,easy,easyui,web">
+    <meta name="description" content="easyui help you build your web page easily!">
+    <title>OnlineMonitor</title>
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5.1/themes/metro/easyui.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5.1/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5.1/project.css">
+    <script type="text/javascript" src="jquery-easyui-1.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="http://www.jeasyui.com/easyui/jquery.edatagrid.js"></script>
+</head>
+<body>
+<center>
+    <div class="easyui-layout" style="width:100%;height:450px;">
+        <div data-options="region:'center',border:false">
+            <h2>云监控，您不需要任何资源去部署监控系统！</h2>
+            <h3>Cloud Monitor，Save your computer resources!</h3>
+            <h2>定制监控信息和显示模式!</h2>
+            <h3>Write monitor for you expect!</h3>
+            <a href="luoyuan@onlinemonitor.top">Contact Me（发邮件告诉我您的需求！）</a>
+            <p>
+                <a href="luoyuan@onlinemonitor.top">luoyuan@onlinemonitor.top</a>
+            </p>
+        </div>
+        <div id="p" data-options="region:'east',border:false" style="width:40%;padding:10px">
+            <center>
+                <h2>Login to System</h2>
+                <p>使用用户名和密码登陆系统</p>
+                <div style="margin:20px 0;"></div>
+                <div class="easyui-panel" title="Login to system" style="width:100%;max-width:400px;padding:30px 60px;">
+                    <form id="ff" method="post" action="/login">
+                        <div style="margin-bottom:10px">
+                            <input class="easyui-textbox" name="user_id" style="width:100%;height:40px;padding:12px"
+                                   data-options="prompt:'Username',iconCls:'icon-man',iconWidth:38">
+                        </div>
+                        <div style="margin-bottom:20px">
+                            <input class="easyui-textbox" name="user_pass" type="password"
+                                   style="width:100%;height:40px;padding:12px"
+                                   data-options="prompt:'Password',iconCls:'icon-lock',iconWidth:38">
+                        </div>
+                        <div style="margin-bottom:20px">
+                            <input type="checkbox" checked="checked">
+                            <span>Remember me</span>
+                        </div>
+                        <div>
+                            <!--<a href="javascript:void(0)" onclick="submitForm()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="padding:5px 0px;width:100%;">
+                                <span style="font-size:14px;">Login</span>
+                            </a>-->
+                            <input type="submit" onclick="submitForm()" class="easyui-linkbutton"
+                                   data-options="iconCls:'icon-ok'"
+                                   style="font-size:14px;padding:5px 0px;width:100%;"
+                                   value="Login（登录）">
+                        </div>
+                    </form>
+                </div>
+                <p><a href="/register.html">Need a new account?（还没有帐号？免费注册！）</a></p>
+            </center>
+            <script>
+    function submitForm(){
+        $('#ff').form({
+            success:function(data){
+                if(data == 'success'){
+                    window.location.href='/'
+                }else{
+                    if(data == 'admin'){
+                        window.location.href='manager.html'
+                    }else{
+                        $.messager.alert('Result（结果）', data, 'error');
+                    }
+                }
+            }
+        });
+        $('#ff').form('submit');
+    }
+    function clearForm(){
+        $('#ff').form('clear');
+    }
+
+            </script>
+        </div>
+    </div>
+</center>
+</body>
+</html>

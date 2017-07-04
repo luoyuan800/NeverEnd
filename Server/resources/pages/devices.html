@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="jquery,ui,easy,easyui,web">
+    <meta name="description" content="easyui help you build your web page easily!">
+    <title>@{title}</title>
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5.1/themes/metro/easyui.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5.1/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5.1/project.css">
+    <script type="text/javascript" src="jquery-easyui-1.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="http://www.jeasyui.com/easyui/jquery.edatagrid.js"></script>
+</head>
+<body>
+@{header}
+<center>
+    <table id="dg" title="Devices" class="easyui-treegrid" style="height:300px"
+
+           data-options="
+                    iconCls: 'icon-large-shapes',
+                    fitColumns: true,
+                    url: '/retrieve_devices',
+                    pagination: true,
+                    pageSize: 10,
+                    pageList: [2,10,20],
+                    idField: 'id',
+                    treeField: 'name',
+                    onBeforeLoad: function(row,param){
+                        if (!row) {    // load top level rows
+                            param.id = 0;    // set id=0, indicate to load new page rows
+                        }
+                    },
+                    toolbar:toolbar,
+                    onLoadError: function(jqXHR, textStatus, errorThrown){
+                        if(jqXHR.responseText == 'login'){
+                            location.href = '/login.html';
+                        }
+                    },
+                    onClickCell: function(field,row){
+                        if(field == 'alarmcount'){
+                            $('#dlg').dialog('open')
+                            $('#adg').datagrid('reload','/retrieve_alarms?device_id=' + row.id);
+                        }
+                        //alert(row + '\n' + field);
+                        //
+                    }
+
+                ">
+        <thead>
+        <tr>
+            <th field="name" width="150">Name（名字）</th>
+            <th field="ipaddress" width="250" align="right">IPAddress（地址）</th>
+            <!--<th field="price" width="150" align="right" formatter="formatDollar">Price</th>-->
+            <th field="tag" width="250" align="right">Tag（备注）</th>
+            <th field="availability" width="300" align="left" formatter="formatAvi">Availability（连通性）</th>
+            <th field="lastupdate" width="200" align="right" formatter="formatDate">Last Update（更新）</th>
+            <th field="alarmcount" width="30" formatter="formatAlarms" align="center" sortable="true"
+                clickable="true"></th>
+        </tr>
+        </thead>
+    </table>
+    <div id="dlg" class="easyui-dialog" title="Alarms（警告）" style="width:800px;height:300px;padding:10px"
+         data-options="
+                iconCls: 'icon-tip',
+                closed: true,
+                toolbar: [{
+                    text:'Clear',
+                    iconCls:'icon-add',
+                    handler:function(){
+                        var rows = $('#adg').datagrid('getSelections');
+                        for(var i=0; i<rows.length; i++){
+                            var row = rows[i];
+                            var index = $('#adg').datagrid('getRowIndex', row);
+                            $.post('/clear_alarm',{'alarm_id' : row.id});
+                            $('#adg').datagrid('deleteRow', index);
+                        }
+                        $('#dg').treegrid('reload');
+                    }
+                }]
+            ">
+        <table id="adg" title="Alarms" class="easyui-datagrid" style="height:250px"
+
+               data-options="
+                    method:'get',
+                    pagination: true,
+                    pageSize: 10,
+                    pageList: [2,10,20],
+                    idField: 'id',
+                    treeField: 'name'
+
+                ">
+            <thead>
+            <tr>
+                <th field="severity" width="130" formatter="formatSeverity">Severity（等级）</th>
+                <th field="message" width="350">Message（消息）</th>
+                <th field="createdtime" width="200" align="right" formatter="formatDate">Last Update（更新）</th>
+                <!--<th field="cleared" width="100" formatter="formatCleaned">Cleared（清除）</th>-->
+            </tr>
+            </thead>
+        </table>
+    </div>
+</center>
+<!-- <div id="toolbar">
+     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="/add_device.html">Add Device（添加设备）</a>
+     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="/config_device.html">Config（编辑）</a>
+     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="/remove_device.html">Delete Device（删除设备）</a>
+ </div>-->
+<script>
+
+            var toolbar = [{
+                text:'Add Device（添加设备）',
+                iconCls:'icon-add',
+                handler:function(){window.location.href='/device_add'}
+            },{
+                text:'Config（编辑）',
+                disabled:true,
+                iconCls:'icon-save',
+                handler:function(){alert('save')}
+            },'-',{
+                text:'Delete（删除）',
+                iconCls:'icon-save',
+                disabled:true,
+                handler:function(){alert('delete')}
+            }];
+
+            Date.prototype.Format = function (fmt) { //author: meizz
+                var o = {
+                    "M+": this.getMonth() + 1, //月份
+                    "d+": this.getDate(), //日
+                    "h+": this.getHours(), //小时
+                    "m+": this.getMinutes(), //分
+                    "s+": this.getSeconds(), //秒
+                    "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                    "S": this.getMilliseconds() //毫秒
+                };
+                if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+                for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                return fmt;
+            }
+
+            function formatDate(value){
+                if (value){
+                    return new Date(value).Format("yyyy-MM-dd hh:mm:ss");
+                } else {
+                    return '';
+                }
+            }
+            function formatSeverity(value){
+                if (value == 1){
+                    return 'WARN';
+                } else if(value == 2){
+                    return 'ERROR';
+                } else{
+                    return 'NORMAL';
+                }
+            }
+			function formatProgress(value){
+				if (value!=null){
+					var color = '#cc0000';
+					if(value == 100){
+						color = '#66CD00';
+					}else if(value > 30){
+						color = '#FFC125';
+					}
+					var s = '';
+					if(value == 0){
+					    s = '<div style="width:100%;background:' + color + ';border:1px solid #ccc">' +
+							value + '%' + '</div>';
+					}else{
+					    s = '<div style="width:100%;border:1px solid #ccc">' +
+							'<div style="width:' + value + '%;background:' + color + ';color:#fff">' + value + '%' + '</div>'
+							'</div>';
+                    }
+					return s;
+				} else {
+					return '';
+				}
+			}
+
+			function formatAvi(avi, row){
+                var s = '';
+                s = '<div style="width:100%"><img src="/get_availability?device_id=' + row.id + '"/>' + avi + '%</div>';
+                return s;
+			}
+			function formatCleaned(cleared){
+                var s = '';
+                s = '<div style="width:100%"><a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove">Clear</a></div>';
+                return s;
+			}
+
+			function formatAlarms(count){
+				color = '#66CD00';
+				if (count > 0){
+					var color = '#FFC125';
+
+				}
+				var s = '';
+                s = '<div style="width:100%;border:1px solid #ccc">' +
+                    '<div style="width:100%;background:' + color + ';color:#fff"><center><a href="javascript:void(0)">' + count  + '</a></center></div>'
+                    '</div>';
+                return s;
+			}
+
+			function getSelected(){
+			var row = $('#dg').datagrid('getSelected');
+			if (row){
+				$.messager.alert('Info', row.itemid+":"+row.productid+":"+row.attr1);
+			}
+		    }
+            function getSelections(){
+                var ss = [];
+                var rows = $('#dg').datagrid('getSelections');
+                for(var i=0; i<rows.length; i++){
+                    var row = rows[i];
+                    ss.push('<span>'+row.itemid+":"+row.productid+":"+row.attr1+'</span>');
+                }
+                $.messager.alert('Info', ss.join('<br/>'));
+            }
+
+</script>
+
+<ul style="float:right;">
+    <div id="footer" style="margin-right:2px;margin-left:auto;color:#00F">
+        (c) 2017 LuoYuan
+    </div>
+</ul>
+</body>
+</html>

@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="jquery,ui,easy,easyui,web">
+    <meta name="description" content="easyui help you build your web page easily!">
+    <title>@{title}</title>
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5.1/themes/metro/easyui.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5.1/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5.1/project.css">
+    <script type="text/javascript" src="jquery-easyui-1.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="http://www.jeasyui.com/easyui/jquery.edatagrid.js"></script>
+</head>
+<body>
+@{header}
+<center>
+    <table id="dg" title="Rules" class="easyui-treegrid" style="height:300px"
+
+           data-options="
+                    url: '/get_rules',
+                    method:'get',
+                    pagination: true,
+                    pageSize: 10,
+                    pageList: [2,10,20],
+                    idField: 'id',
+                    treeField: 'name',
+                    onBeforeLoad: function(row,param){
+                        if (!row) {    // load top level rows
+                            param.id = 0;    // set id=0, indicate to load new page rows
+                        }
+                    },
+                    toolbar:toolbar,
+                    onLoadError: function(jqXHR, textStatus, errorThrown){
+                        if(jqXHR.responseText == 'login'){
+                            location.href = '/login.html';
+                        }
+                    },
+                    onClickCell: function(field,row){
+                        if(field == 'status'){
+                            if(row.status == 'true'){
+                                $.post('/disable_rule',{'rule_id' : row.id});
+                            }else{
+                                $.post('/enable_rule',{'rule_id' : row.id});
+                            }
+                            $('#dg').treegrid('reload');
+                        }
+                    }
+                ">
+        <thead>
+        <tr>
+            <th field="name" width="150">Name（名字）</th>
+            <th field="expression" width="300" align="right" formatter="getClazz">Object（类）</th>
+            <th field="id" width="250" align="right" formatter="getProperty">Property（属性）</th>
+            <th field="tag" width="250" align="right" >Tag（备注）</th>
+            <th field="status" width="100" align="center" formatter="formatEnable">Enable（生效）</th>
+            <!--<th field="availability" width="300" align="left" formatter="formatAvi">Availability（连通性）</th>
+            <th field="lastupdate" width="200" align="right" formatter="formatDate">Last Update（更新）</th>
+            <th field="alarmcount" width="30" formatter="formatAlarms" align="center" sortable="true"
+                clickable="true"></th>-->
+        </tr>
+        </thead>
+    </table>
+</center>
+<!-- <div id="toolbar">
+     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="/add_device.html">Add Device（添加设备）</a>
+     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="/config_device.html">Config（编辑）</a>
+     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="/remove_device.html">Delete Device（删除设备）</a>
+ </div>-->
+<script>
+
+            var toolbar = [{
+                text:'Add Rule（添加规则）',
+                iconCls:'icon-add',
+                handler:function(){window.location.href='/rule_add'}
+            },{
+                text:'Config（编辑）',
+                iconCls:'icon-save',
+                disabled:true,
+                handler:function(){alert('save')}
+            },'-',{
+                text:'Delete（删除）',
+                iconCls:'icon-remove',
+
+                handler:function(){
+                    var row = $('#dg').treegrid('getSelected');
+                    if(row){
+                        $.post('delete_rule', {'rule_id':row.id}, function(data){
+                            if(data == 'failed'){
+                               $.messager.alert('Error','Please try again!（网络错误，请重试！）');
+                            }
+                        });
+                        $('#dg').treegrid('reload');
+                    }
+                }
+            }];
+
+            Date.prototype.Format = function (fmt) { //author: meizz
+                var o = {
+                    "M+": this.getMonth() + 1, //月份
+                    "d+": this.getDate(), //日
+                    "h+": this.getHours(), //小时
+                    "m+": this.getMinutes(), //分
+                    "s+": this.getSeconds(), //秒
+                    "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                    "S": this.getMilliseconds() //毫秒
+                };
+                if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+                for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                return fmt;
+            }
+
+            function getProperty(value, row){
+                if (value){
+                    return row.expression.property;
+                } else {
+                    return '';
+                }
+            }
+            function getClazz(value){
+                if (value){
+                    return value.clazz;
+                } else {
+                    return '';
+                }
+            }
+            function formatDate(value){
+                if (value){
+                    return new Date(value).Format("yyyy-MM-dd hh:mm:ss");
+                } else {
+                    return '';
+                }
+            }
+
+			function formatEnable(value){
+                var s = '<a href="javascript:void(0)">' + value + '</a>';
+                return s;
+			}
+
+			function formatAvi(avi, row){
+                var s = '';
+                s = '<div style="width:100%"><img src="/get_availability?device_id=' + row.id + '"/>' + avi + '%</div>';
+                return s;
+			}
+
+			function formatAlarms(count){
+				color = '#66CD00';
+				if (count > 0){
+					var color = '#FFC125';
+
+				}
+				var s = '';
+                s = '<div style="width:100%;border:1px solid #ccc">' +
+                    '<div style="width:100%;background:' + color + ';color:#fff"><center>' + count  + '</center></div>'
+                    '</div>';
+                return s;
+			}
+
+			function getSelected(){
+			var row = $('#dg').datagrid('getSelected');
+			if (row){
+				$.messager.alert('Info', row.itemid+":"+row.productid+":"+row.attr1);
+			}
+		    }
+            function getSelections(){
+                var ss = [];
+                var rows = $('#dg').datagrid('getSelections');
+                for(var i=0; i<rows.length; i++){
+                    var row = rows[i];
+                    ss.push('<span>'+row.itemid+":"+row.productid+":"+row.attr1+'</span>');
+                }
+                $.messager.alert('Info', ss.join('<br/>'));
+            }
+
+
+</script>
+<ul style="float:right;">
+    <div id="footer" style="margin-right:2px;margin-left:auto;color:#00F">
+        (c) 2017 LuoYuan
+    </div>
+</ul>
+</body>
+</html>

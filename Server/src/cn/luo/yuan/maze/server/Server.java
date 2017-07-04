@@ -19,6 +19,7 @@ import cn.luo.yuan.maze.model.effect.original.SkillRateEffect;
 import cn.luo.yuan.maze.model.effect.original.StrEffect;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.server.model.User;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
 import cn.luo.yuan.maze.server.persistence.WarehouseTable;
@@ -44,6 +45,7 @@ import static cn.luo.yuan.maze.utils.Field.*;
 import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.SparkBase.port;
+import static spark.SparkBase.staticFileLocation;
 
 public class Server {
 
@@ -58,7 +60,7 @@ public class Server {
     private Map<String, HeroTable> heroTableCache = initHeroTableCache(heroDir);
     private ExchangeTable exchangeTable = new ExchangeTable(root);
     private ObjectTable<Task> taskTable = new ObjectTable<>(Task.class, root);
-
+    private User user;
     public static void main(String...args){
         try {
             new Server().run();
@@ -70,6 +72,35 @@ public class Server {
         LogHelper.info("starting");
         port(4568);
         executor.scheduleAtFixedRate(warehouseTable,0, 1, TimeUnit.DAYS);
+        staticFileLocation("/pages");
+        ObjectTable<User> userDb = new ObjectTable<>(User.class,root);
+        user = userDb.loadObject("root");
+        if(user == null){
+            user = new User();
+            user.pass.setValue(111);
+            user.name = "luo";
+            userDb.save(user);
+        }
+        get("/", ((request, response) -> {
+            if(user.login){
+                return "";
+            }else{
+                response.redirect("/login.html");
+                return response;
+            }
+        }));
+        post("/login", ((request, response) -> {
+            String password = request.queryParams("user_pass");
+            if(password!=null && String.valueOf(user.pass.getValue()).equals(password)) {
+                request.session().attribute("user_id", user.name);
+                request.session().attribute("login", true);
+                request.session().attribute("user_name", user.name);
+                user.login = true;
+                return RESPONSE_RESULT_OK;
+            }else{
+                return "Verify failed（校验失败！）";
+            }
+        }));
 
         post("submit_exchange", (request, response) -> {
             Object ex = readObject(request);
@@ -207,27 +238,32 @@ public class Server {
         }));
 
         post("add_task", ((request, response) -> {
-            Task task = new Task(request.queryParams("name"), request.queryParams("desc"));
-            task.setId(task.getName());
-            task.setMaterial(Integer.parseInt(request.queryParams("material")));
-            task.setPoint(Integer.parseInt(request.queryParams("point")));
-            if(StringUtils.isNotEmpty(request.queryParams("accessory_name"))){
-                Accessory accessory = new Accessory();
-                accessory.setName(request.queryParams("accessory_name"));
-                accessory.setColor(request.queryParams("accessory_color"));
-                for(String effect : request.queryParams("accessory_effects").split(";")){
-                    String[] ev = effect.split(":");
-                    if(ev.length > 1){
-                        accessory.getEffects().add(buildEffect(ev[0], ev[1]));
+            try {
+                Task task = new Task(request.queryParams("name"), request.queryParams("desc"));
+                task.setId(task.getName());
+                task.setMaterial(Integer.parseInt(request.queryParams("material")));
+                task.setPoint(Integer.parseInt(request.queryParams("point")));
+                if (StringUtils.isNotEmpty(request.queryParams("accessory_name"))) {
+                    Accessory accessory = new Accessory();
+                    accessory.setName(request.queryParams("accessory_name"));
+                    accessory.setColor(request.queryParams("accessory_color"));
+                    for (String effect : request.queryParams("accessory_effects").split(";")) {
+                        String[] ev = effect.split(":");
+                        if (ev.length > 1) {
+                            accessory.getEffects().add(buildEffect(ev[0], ev[1]));
+                        }
                     }
+                    accessory.setLevel(Long.parseLong(request.queryParams("accessory_level")));
+                    accessory.setElement(Element.getByName(request.queryParams("accessory_element")));
+                    accessory.setType(request.queryParams("accessory_type"));
                 }
-                accessory.setLevel(Long.parseLong(request.queryParams("accessory_level")));
-                accessory.setElement(Element.getByName(request.queryParams("accessory_element")));
-                accessory.setType(request.queryParams("accessory_type"));
+                //TODO Pet
+                taskTable.save(task, task.getId());
+                return RESPONSE_RESULT_SUCCESS;
+            }catch (Exception e){
+                e.printStackTrace();
+                return RESPONSE_RESULT_FAILED;
             }
-            //TODO Pet
-            taskTable.save(task, task.getId());
-            return RESPONSE_RESULT_SUCCESS;
         }));
 
         post("store_warehouse", ((request, response) -> {

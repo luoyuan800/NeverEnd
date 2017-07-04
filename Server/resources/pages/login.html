@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login - 登陆</title>
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5.1/themes/metro/easyui.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5.1/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5.1/project.css">
+    <script type="text/javascript" src="jquery-easyui-1.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
+</head>
+<body>
+<center>
+<h2>Login to System</h2>
+<p>使用用户名和密码登陆系统</p>
+<div style="margin:20px 0;"></div>
+<div class="easyui-panel" title="Login to system" style="width:100%;max-width:400px;padding:30px 60px;">
+    <form id="ff" method="post" action="/login">
+    <div style="margin-bottom:10px">
+        <input class="easyui-textbox" name="user_id" style="width:100%;height:40px;padding:12px" data-options="prompt:'Username',iconCls:'icon-man',iconWidth:38">
+    </div>
+    <div style="margin-bottom:20px">
+        <input class="easyui-textbox" name="user_pass" type="password" style="width:100%;height:40px;padding:12px" data-options="prompt:'Password',iconCls:'icon-lock',iconWidth:38">
+    </div>
+    <div style="margin-bottom:20px">
+        <input type="checkbox" checked="checked">
+        <span>Remember me</span>
+    </div>
+    <div>
+        <!--<a href="javascript:void(0)" onclick="submitForm()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="padding:5px 0px;width:100%;">
+            <span style="font-size:14px;">Login</span>
+        </a>-->
+        <input type="submit" onclick="submitForm()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'"
+               style="font-size:14px;padding:5px 0px;width:100%;"
+               value="Login（登录）">
+    </div>
+    </form>
+</div>
+    <p><a href="/register.html"  >Need a new account?（还没有帐号？免费注册！）</a></p>
+</center>
+<script>
+    function submitForm(){
+        $('#ff').form({
+            success:function(data){
+                if(data == 'success'){
+                    window.location.href='/'
+                }else{
+                    if(data == 'admin'){
+                        window.location.href='manager.html'
+                    }else{
+                        $.messager.alert('Result（结果）', data, 'error');
+                    }
+                }
+            }
+        });
+        $('#ff').form('submit');
+    }
+    function clearForm(){
+        $('#ff').form('clear');
+    }
+</script>
+</body>
+</html>

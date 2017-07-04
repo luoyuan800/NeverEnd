@@ -30,6 +30,7 @@ public class ClientEffectHandler {
             case "ClickMaterialEffect":
                 effect = new ClickMaterialEffect();
                 ((ClickMaterialEffect)effect).setValue(Long.parseLong(value));
+                break;
             case "EggRateEffect":
                 effect = new EggRateEffect();
                 ((EggRateEffect)effect).setEggRate(Float.parseFloat(value));
@@ -41,24 +42,31 @@ public class ClientEffectHandler {
             case "AgiEffect":
                 effect = new AgiEffect();
                 ((AgiEffect)effect).setAgi(Long.parseLong(value));
+                break;
             case "AtkEffect":
                 effect = new AtkEffect();
                 ((AtkEffect)effect).setAtk(Long.parseLong(value));
+                break;
             case "DefEffect":
                  effect = new DefEffect();
                 ((DefEffect)effect).setDef(Long.parseLong(value));
+                break;
             case "HpEffect":
                  effect = new HpEffect();
                 ((HpEffect)effect).setHp(Long.parseLong(value));
+                break;
             case "StrEffect":
                  effect = new StrEffect();
                 ((StrEffect)effect).setStr(Long.parseLong(value));
+                break;
             case "MeetRateEffect":
                  effect = new MeetRateEffect();
                 ((MeetRateEffect)effect).setMeetRate(Float.parseFloat(value));
+                break;
             case "PetRateEffect":
                  effect = new PetRateEffect();
                 ((PetRateEffect)effect).setPetRate(Float.parseFloat(value));
+                break;
         }
         if(effect!=null){
             effect.setElementControl(elementControl);

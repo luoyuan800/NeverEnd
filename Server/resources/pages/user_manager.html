@@ -1,0 +1,33 @@
+<a href="/devices" class="easyui-linkbutton c1" style="width:260px">Devices List（查看设备列表）</a> <p>
+    <a href="/device_add" class="easyui-linkbutton c2" style="width:260px">Add Device（添加设备）</a> <p>
+    <a href="/rule_add" class="easyui-linkbutton c3" style="width:260px">Add Rule（添加监控规则）</a><p>
+    <a href="/rule_list" class="easyui-linkbutton c4" style="width:260px">Rules List（查看规则列表）</a><p>
+    <a href="/logout" class="easyui-linkbutton c5" style="width:260px">Logout（注销登录）</a>
+<p>
+<p>
+    <a href="javascript:void(0)" class="easyui-linkbutton c5" style="width:260px" onclick="showDelete()">Delete User
+        Data（删除用户）</a>
+    <div id="delete" class="easyui-dialog" title="Delete User" style="width:460px;height:200px;"
+         data-options="iconCls:'icon-save',resizable:true,modal:true,closed:true,buttons:'#bb'">
+        删除用户数据会清空所有的设备信息和删除帐号，删除操作无法恢复，请慎重！
+<p>Will delete all devices and user account, please take care!</p>
+<form id='ff' action="/delete_user" method="post">
+    <div style="margin-bottom:20px">
+        <input class="easyui-textbox" name="user_pass" type="password" style="width:80%;height:40px;padding:12px"
+               data-options="label:'Password（密码）:',prompt:'Password',iconCls:'icon-lock',iconWidth:38,required:true" labelPosition="top">
+    </div>
+</form>
+</div>
+<div id="bb">
+    <a href="#" class="easyui-linkbutton" onclick=" \$('#delete').dialog('close')">Cancel（取消）</a>
+    <a href="#" class="easyui-linkbutton" onclick="deleteUser()">Conform（确认）</a>
+</div>
+<script>
+        function showDelete(){
+            \$('#delete').dialog('open');
+        }
+        function deleteUser(){
+            \$('#ff').form('submit');
+        }
+
+</script>
