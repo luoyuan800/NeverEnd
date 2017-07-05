@@ -52,13 +52,27 @@ public class ServerService {
         return postOnlineData(context.getHero().getId());
     }
 
+    public String postOnlineRange(NeverEnd context) throws IOException {
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection("/hero_range", RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            return server.connect(connection).toString();
+        } catch (Exception e) {
+            LogHelper.logException(e,"ServiceService->postOnlineRange");
+            if(e instanceof IOException){
+                throw e;
+            }
+        }
+        return StringUtils.EMPTY_STRING;
+    }
+
     public String postOnlineData(String id) throws IOException {
         try {
             HttpURLConnection connection = server.getHttpURLConnection("/pool_online_data_msg", RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, id);
             return server.connect(connection).toString();
         } catch (Exception e) {
-            LogHelper.logException(e,"ServiceService->60");
+            LogHelper.logException(e,"ServiceService->postOnlineData");
             if(e instanceof IOException){
                 throw e;
             }
@@ -98,6 +112,17 @@ public class ServerService {
             HttpURLConnection connection = server.getHttpURLConnection("/get_back_hero", RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, gameContext.getHero().getId());
             return (ServerData) server.connect(connection);
+        } catch (Exception e) {
+            LogHelper.logException(e,"ServiceService->98");
+        }
+        return null;
+    }
+
+    public Object openOnlineGift(NeverEnd context) {
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection("/online_gift_open", RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            return server.connect(connection);
         } catch (Exception e) {
             LogHelper.logException(e,"ServiceService->98");
         }

@@ -30,6 +30,9 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>) :
             tableCache.remove("npc");
         }
         for ((id, table) in tableCache) {
+            if(id == "npc"){
+                continue
+            }
             val hero = table.getHero(id, 0)
             val messager = Messager()
             val record = table.getRecord(id)
@@ -42,17 +45,18 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>) :
                     val ohero = otable.getHero(oid, 0)
                     if (ohero!!.currentHp > 0) {
                         val omaze = otable.getMaze(oid, 0)
-                        messager.addReceiver(otable.getRecord(oid))
+                        val otherReciod = otable.getRecord(oid)
+                        messager.addReceiver(otherReciod)
                         val bs = BattleService(hero, ohero, random, this)
                         bs.setBattleMessage(messager)
                         val awardMaterial = random.nextLong(maze.maxLevel + omaze.maxLevel) + 1
                         if (bs.battle(maze.level + omaze.level)) {
                             record.winCount ++
                             record.currentWin ++
-                            otable.getRecord(oid).lostCount ++
-                            otable.getRecord(oid).currentLostCount ++
-                            otable.getRecord(oid).dieCount++
-                            otable.getRecord(oid).dieTime = System.currentTimeMillis()
+                            otherReciod.lostCount ++
+                            otherReciod.currentLostCount ++
+                            otherReciod.dieCount++
+                            otherReciod.dieTime = System.currentTimeMillis()
                             messager.materialGet(hero.displayName, awardMaterial);
                             record.data!!.material += awardMaterial
                         } else {
@@ -61,9 +65,9 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>) :
                             record.dieTime = System.currentTimeMillis()
                             record.lostCount ++
                             record.currentLostCount++
-                            otable.getRecord(oid).winCount ++
-                            otable.getRecord(oid).currentWin ++
-                            otable.getRecord(oid).data!!.material += awardMaterial
+                            otherReciod.winCount ++
+                            otherReciod.currentWin ++
+                            otherReciod.data!!.material += awardMaterial
                         }
                         continue
                     }

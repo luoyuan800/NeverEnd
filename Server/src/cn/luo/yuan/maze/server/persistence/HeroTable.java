@@ -85,9 +85,8 @@ public class HeroTable {
             int t = record.getWinCount() + record.getLostCount();
             if(t<= 0) t++;
             return record.getData().hero.getDisplayName() + "<br>"
-                    + "当前排名：" + record.getRange() + "， 总胜率：" +  StringUtils.formatPercentage(record.getWinCount() * 100/(t))
-                    + "<br>当前胜利：" + StringUtils.formatNumber(record.getCurrentWin()) + "， "
-                    + "当前失败：" + StringUtils.formatNumber(record.getCurrentLostCount()) + "<br>";
+                    + "排名：" + record.getRange() + "， 胜率：" +  StringUtils.formatPercentage(record.getWinCount() * 100/(t))
+                    ;
         }
         return StringUtils.EMPTY_STRING;
     }
@@ -97,11 +96,11 @@ public class HeroTable {
         if(record.getMessages().size() > 50){
             count += 5;
         }
-        String s = "";
+        StringBuilder s = new StringBuilder();
         while (count-- > 0 && record.getMessages().size() > 0){
-            s += record.getMessages().poll() + (count > 0 ? "<br>" : "");
+            s.append(record.getMessages().poll()).append(count > 0 ? "<br>" : "");
         }
-        return s;
+        return s.toString();
     }
 
     public ServerData getBackHero(String id) throws IOException {

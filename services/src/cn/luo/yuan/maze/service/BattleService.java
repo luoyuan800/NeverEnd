@@ -173,7 +173,7 @@ public class BattleService {
                     if (harm > 0) {
                         monster.setHp(monster.getHp() - harm);
                         if(hero instanceof NameObject && monster instanceof NameObject){
-                            battleMessage.harm((NameObject)hero, (NameObject)monster, harm);
+                            battleMessage.harm(pet, (NameObject)monster, harm);
                         }
                     }
                 }

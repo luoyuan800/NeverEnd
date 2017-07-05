@@ -12,6 +12,7 @@ import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
 import cn.luo.yuan.maze.client.display.handler.OnlineActivityHandler;
+import cn.luo.yuan.maze.client.display.handler.OnlineActivityOnClickHandler;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.client.service.NeverEnd;
@@ -31,10 +32,11 @@ import java.util.concurrent.TimeUnit;
  * Created by luoyuan on 2017/6/24.
  */
 public class OnlineActivity extends Activity {
-    private ServerService service = new ServerService(getVersion());
+    public ServerService service = new ServerService(getVersion());
     private NeverEnd gameContext;
-    private ScheduledExecutorService executor;
-    private OnlineActivityHandler handler = new OnlineActivityHandler(this);
+    public ScheduledExecutorService executor;
+    public OnlineActivityHandler handler = new OnlineActivityHandler(this);
+    private OnlineActivityOnClickHandler onClickHandler;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         gameContext = (NeverEnd)getApplication();
@@ -44,6 +46,7 @@ public class OnlineActivity extends Activity {
         executor = Executors.newScheduledThreadPool(4);
         gameContext.setContext(this);
         initView();
+        onClickHandler = new OnlineActivityOnClickHandler(this,gameContext);
     }
 
     @Override
@@ -162,60 +165,10 @@ public class OnlineActivity extends Activity {
     }
 
     public void onClick(View view){
-        switch (view.getId()){
-            case R.id.action_button:
-                SimplerDialogBuilder.build("你确定退出战斗塔吗？", Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        Dialog sycDialog = SimplerDialogBuilder.build("正在同步服务器数据……", OnlineActivity.this, false);
-                        executor.execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                getBackHeroData(sycDialog);
-                            }
-                        });
-                    }
-                }, this);
-                break;
-        }
+        onClickHandler.onClick(view);
     }
 
-    private void getBackHeroData(Dialog progress) {
-        String award = service.queryAwardString(gameContext);
-        ServerData data = service.getBackHero(gameContext);
-        if(data!=null && StringUtils.isNotEmpty(award)) {
-            gameContext.getHero().setMaterial(gameContext.getHero().getMaterial() + data.material);
-            if (data.awardAccessories != null) {
-                for (Accessory accessory : data.accessories) {
-                    gameContext.getDataManager().saveAccessory(gameContext.covertAccessoryToLocal(accessory));
-                }
-            }
-            if (data.awardPets != null) {
-                for (Pet pet : data.pets) {
-                    gameContext.getDataManager().savePet(pet);
-                }
-            }
-            if(progress!=null){
-                progress.dismiss();
-            }
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    SimplerDialogBuilder.build("获得奖励<br>" + award, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            finish();
-                        }
-                    },OnlineActivity.this);
-                }
-            });
 
-        }else{
-            finish();
-        }
-    }
 
     private void startPost(){
         ((RollTextView)findViewById(R.id.online_battle_msg)).addMessage("等待中……");
@@ -225,11 +178,11 @@ public class OnlineActivity extends Activity {
             public void run() {
                 postBattleMsg();
             }
-        },10, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
+        },10, Data.REFRESH_SPEED * 5, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                postOnlineDataMsg();
+                postOnlineRange();
             }
         },10, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(new Runnable() {
@@ -257,14 +210,14 @@ public class OnlineActivity extends Activity {
             });
         }
     }
-    private void postOnlineDataMsg(){
+    private void postOnlineRange(){
         try {
-            String msg = service.postOnlineData(gameContext);
+            String msg = service.postOnlineRange(gameContext);
             if (StringUtils.isNotEmpty(msg)) {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        ((TextView) findViewById(R.id.online_data)).setText(Html.fromHtml(msg));
+                        ((TextView) findViewById(R.id.online_range)).setText(Html.fromHtml(msg));
                     }
                 });
             }
@@ -276,8 +229,25 @@ public class OnlineActivity extends Activity {
         }
     }
 
+
+
     private void postGroup(){
-        //TODO GROUP
+        try {
+            String msg = service.postOnlineData(gameContext);
+            if (StringUtils.isNotEmpty(msg)) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((TextView) findViewById(R.id.group_message)).setText(Html.fromHtml(msg));
+                    }
+                });
+            }
+        }catch (Exception e){
+            handler.sendEmptyMessage(0);//showErrorDialog();
+            if(!(e instanceof IOException)){
+                LogHelper.logException(e, "OnlineActivity -> 256");
+            }
+        }
     }
 
     private void postAward(){

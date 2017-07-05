@@ -23,7 +23,7 @@
                     android:text=""
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/online_data"
+                    android:id="@+id/online_range"
                     />
 
             <cn.luo.yuan.maze.client.display.view.RollTextView
@@ -66,6 +66,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/online_award"/>
+
+            <Button
+                    android:text="在线商店"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/online_shop"
+                    android:onClick="onClick"
+                    style="@android:style/Widget.Button.Small"/>
+
+            <Button
+                    android:text="在线礼包"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/online_gifts"
+                    android:onClick="onClick"
+                    style="@android:style/Widget.Button.Inset"/>
         </LinearLayout>
     </LinearLayout>
 

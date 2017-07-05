@@ -91,4 +91,8 @@ abstract class Goods : Serializable, IDModel, OwnedAble, Cloneable {
     override fun clone(): Any {
         return super.clone()
     }
+
+    override fun toString(): String {
+        return name + " * " + count
+    }
 }

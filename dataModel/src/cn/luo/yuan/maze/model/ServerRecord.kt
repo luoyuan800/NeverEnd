@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model
 
 import cn.luo.yuan.maze.utils.Field
+import cn.luo.yuan.maze.utils.StringUtils
 import java.io.Serializable
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -37,5 +38,11 @@ class ServerRecord : IDModel, Serializable {
 
     override fun setId(id: String) {
         this.id = id
+    }
+
+    fun winRate():String{
+        var t = winCount + lostCount
+        if (t <= 0) t++
+        return StringUtils.formatPercentage((winCount * 100 / t).toFloat())
     }
 }

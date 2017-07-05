@@ -18,6 +18,7 @@ import cn.luo.yuan.maze.model.effect.original.PetRateEffect;
 import cn.luo.yuan.maze.model.effect.original.SkillRateEffect;
 import cn.luo.yuan.maze.model.effect.original.StrEffect;
 import cn.luo.yuan.maze.model.goods.Goods;
+import cn.luo.yuan.maze.model.goods.types.Medallion;
 import cn.luo.yuan.maze.server.model.User;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
@@ -135,6 +136,13 @@ public class Server {
             userDb.save(user);
         }
 
+        post("online_gift_open", (request, response) -> {
+            String id = request.headers(Field.OWNER_ID_FIELD);
+            Medallion medallion = new Medallion();
+            medallion.setCount(1);
+            writeObject(response, medallion);
+            return RESPONSE_RESULT_OK;
+        });
         get("/hero_range", ((request, response) -> heroRange));
         post("hero_range", (request, response) -> heroRange);
         get("/", ((request, response) -> {
@@ -438,8 +446,9 @@ public class Server {
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                new HeroBattleService(initHeroTableCache(heroDir)).run();
-                heroRange = buildHeroRange(heroDir);
+                HashMap<String, HeroTable> tableCache = new HashMap<>(heroTableCache);
+                new HeroBattleService(tableCache).run();
+                heroRange = buildHeroRange(tableCache);
             }
         }, 0, 1, TimeUnit.MINUTES);
         LogHelper.info("started");
@@ -513,30 +522,35 @@ public class Server {
         return cache;
     }
 
-    public static String buildHeroRange(File heroDir) {
-        StringBuilder sb = new StringBuilder("<b>排行版</b><br>");
-        List<ServerRecord> records = new ArrayList<>();
-        for (String name : heroDir.list()) {
-            try {
-                HeroTable table = new HeroTable(new File(heroDir, name));
-                ServerRecord record = table.getRecord(name);
-                if (record.getData() != null) {
-                    records.add(record);
+    public static String buildHeroRange(Map<String, HeroTable> heroTableCache) {
+        StringBuilder sb = new StringBuilder("<b>排行榜</b><br>");
+        try {
+            List<ServerRecord> records = new ArrayList<>();
+            for (Map.Entry<String, HeroTable> entry : heroTableCache.entrySet()) {
+                try {
+                    HeroTable table = entry.getValue();
+                    String name = entry.getKey();
+                    ServerRecord record = table.getRecord(name);
+                    if (record.getData() != null && record.getData().hero!=null) {
+                        records.add(record);
+                    }
+                } catch (Exception e) {
+                    LogHelper.error(e);
                 }
-            } catch (Exception e) {
-                LogHelper.error(e);
             }
-        }
-        records.sort(new Comparator<ServerRecord>() {
-            @Override
-            public int compare(ServerRecord r1, ServerRecord r2) {
-                return Integer.compare(r1.getRange(), r2.getRange());
+            records.sort(new Comparator<ServerRecord>() {
+                @Override
+                public int compare(ServerRecord r1, ServerRecord r2) {
+                    return Integer.compare(r1.getRange(), r2.getRange());
+                }
+            });
+            for (int i = 0; i < records.size() && i < 5; i++) {
+                ServerData data = records.get(i).getData();
+                if (data != null)
+                    sb.append(data.hero.getDisplayName()).append("胜率：").append(records.get(i).winRate()).append("<br>");
             }
-        });
-        for (int i = 0; i < records.size() && i < 5; i++) {
-            ServerData data = records.get(i).getData();
-            if (data != null)
-                sb.append(data.hero.getDisplayName()).append("<br>");
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return sb.toString();
     }
