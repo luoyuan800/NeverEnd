@@ -18,7 +18,6 @@ import cn.luo.yuan.maze.model.effect.original.PetRateEffect;
 import cn.luo.yuan.maze.model.effect.original.SkillRateEffect;
 import cn.luo.yuan.maze.model.effect.original.StrEffect;
 import cn.luo.yuan.maze.model.goods.Goods;
-import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.server.model.User;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
@@ -32,8 +31,15 @@ import spark.Request;
 import spark.Response;
 import spark.Spark;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,43 +67,93 @@ public class Server {
     private ExchangeTable exchangeTable = new ExchangeTable(root);
     private ObjectTable<Task> taskTable = new ObjectTable<>(Task.class, root);
     private User user;
-    public static void main(String...args){
+    private String heroRange = StringUtils.EMPTY_STRING;
+
+    public static void main(String... args) {
         try {
             new Server().run();
         } catch (Exception e) {
             LogHelper.error(e);
         }
     }
+
+    private static Effect buildEffect(String effectName, String value) {
+        switch (effectName) {
+            case "SkillRateEffect":
+                SkillRateEffect skillRateEffect = new SkillRateEffect();
+                skillRateEffect.setSkillRate(Float.parseFloat(value));
+                return skillRateEffect;
+            case "AgiEffect":
+                AgiEffect agiEffect = new AgiEffect();
+                agiEffect.setAgi(Long.parseLong(value));
+                return agiEffect;
+            case "AtkEffect":
+                AtkEffect atkEffect = new AtkEffect();
+                atkEffect.setAtk(Long.parseLong(value));
+                return atkEffect;
+            case "DefEffect":
+                DefEffect defEffect = new DefEffect();
+                defEffect.setDef(Long.parseLong(value));
+                return defEffect;
+            case "HpEffect":
+                HpEffect hpEffect = new HpEffect();
+                hpEffect.setHp(Long.parseLong(value));
+                return hpEffect;
+            case "StrEffect":
+                StrEffect strEffect = new StrEffect();
+                strEffect.setStr(Long.parseLong(value));
+                return strEffect;
+            case "MeetRateEffect":
+                MeetRateEffect meetRateEffect = new MeetRateEffect();
+                meetRateEffect.setMeetRate(Float.parseFloat(value));
+                return meetRateEffect;
+            case "PetRateEffect":
+                PetRateEffect petRateEffect = new PetRateEffect();
+                petRateEffect.setPetRate(Float.parseFloat(value));
+                return petRateEffect;
+        }
+        return null;
+    }
+
+    //Only use for unit test
+    static void clear() throws IOException, ClassNotFoundException {
+        File root = new File("data");
+        root.delete();
+    }
+
     private void run() throws IOException, ClassNotFoundException {
         LogHelper.info("starting");
         port(4568);
-        executor.scheduleAtFixedRate(warehouseTable,0, 1, TimeUnit.DAYS);
+        executor.scheduleAtFixedRate(warehouseTable, 0, 1, TimeUnit.DAYS);
         staticFileLocation("/pages");
-        ObjectTable<User> userDb = new ObjectTable<>(User.class,root);
+        ObjectTable<User> userDb = new ObjectTable<>(User.class, root);
         user = userDb.loadObject("root");
-        if(user == null){
+        if (user == null) {
             user = new User();
             user.pass.setValue(111);
             user.name = "luo";
             userDb.save(user);
         }
+
+        get("/hero_range", ((request, response) -> heroRange));
+        post("hero_range", (request, response) -> heroRange);
         get("/", ((request, response) -> {
-            if(user.login){
+            if (user.login) {
                 return "";
-            }else{
+            } else {
                 response.redirect("/login.html");
                 return response;
             }
         }));
         post("/login", ((request, response) -> {
             String password = request.queryParams("user_pass");
-            if(password!=null && String.valueOf(user.pass.getValue()).equals(password)) {
+            if (password != null && String.valueOf(user.pass.getValue()).equals(password)) {
                 request.session().attribute("user_id", user.name);
                 request.session().attribute("login", true);
                 request.session().attribute("user_name", user.name);
                 user.login = true;
                 return RESPONSE_RESULT_OK;
-            }else{
+            } else {
                 return "Verify failed（校验失败！）";
             }
         }));
@@ -185,7 +241,7 @@ public class Server {
 
         post("get_back_exchange", ((request, response) -> {
             ExchangeObject exchangeMy = exchangeTable.loadObject(request.headers(EXCHANGE_ID_FIELD));
-            if(exchangeMy==null){
+            if (exchangeMy == null) {
                 response.header(RESPONSE_CODE, STATE_FAILED);
                 return "Could not found special exchange!";
             }
@@ -198,7 +254,7 @@ public class Server {
                 }
                 exchangeTable.removeObject(exchangeMy);
                 return RESPONSE_RESULT_SUCCESS;
-            }finally {
+            } finally {
                 exchangeMy.getLock().unlock();
             }
         }));
@@ -231,8 +287,8 @@ public class Server {
         post("retrieve_new_task", ((request, response) -> {
             int clientVersion = Integer.parseInt(request.headers(Field.LOCAL_TASK_VERSION));
             response.header(RESPONSE_CODE, STATE_SUCCESS);
-            if(clientVersion < taskTable.size()){
-                writeObject(response,taskTable.loadLimit(clientVersion, taskTable.size() - clientVersion, null, (o1, o2) -> o1.getId().compareTo(o2.getId())));
+            if (clientVersion < taskTable.size()) {
+                writeObject(response, taskTable.loadLimit(clientVersion, taskTable.size() - clientVersion, null, (o1, o2) -> o1.getId().compareTo(o2.getId())));
             }
             return RESPONSE_RESULT_SUCCESS;
         }));
@@ -260,7 +316,7 @@ public class Server {
                 //TODO Pet
                 taskTable.save(task, task.getId());
                 return RESPONSE_RESULT_SUCCESS;
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 return RESPONSE_RESULT_FAILED;
             }
@@ -268,7 +324,7 @@ public class Server {
 
         post("store_warehouse", ((request, response) -> {
             Object o = readObject(request);
-            if(o!=null){
+            if (o != null) {
                 warehouseTable.store(o);
             }
             return RESPONSE_RESULT_SUCCESS;
@@ -276,11 +332,11 @@ public class Server {
 
         post("retrieve_back_warehouse", ((request, response) -> {
             Object o = warehouseTable.retrieve(request.headers(WAREHOUSE_ID_FIELD), Integer.parseInt(request.headers(WAREHOUSE_TYPE_FIELD)));
-            if(o instanceof OwnedAble){
-                if(((OwnedAble) o).getKeeperId().equals(request.headers(OWNER_ID_FIELD))){
+            if (o instanceof OwnedAble) {
+                if (((OwnedAble) o).getKeeperId().equals(request.headers(OWNER_ID_FIELD))) {
                     writeObject(response, o);
                     warehouseTable.delete(o);
-                }else{
+                } else {
                     response.header(RESPONSE_CODE, NOT_YOUR_ITEM);
                     return RESPONSE_RESULT_FAILED;
                 }
@@ -288,35 +344,35 @@ public class Server {
             return RESPONSE_RESULT_SUCCESS;
         }));
 
-        post("retrieve_warehouse",((request, response) -> {
+        post("retrieve_warehouse", ((request, response) -> {
             writeObject(response, warehouseTable.retrieveAll(request.headers(OWNER_ID_FIELD)));
             return RESPONSE_RESULT_SUCCESS;
         }));
 
-        post("submit_hero", ((request, response) ->{
+        post("submit_hero", ((request, response) -> {
             ServerData data = readObject(request);
-            if(data!=null && data.hero!=null && data.maze!=null) {
+            if (data != null && data.hero != null && data.maze != null) {
                 data.maze.setId(data.hero.getId());
                 HeroTable table = heroTableCache.get(data.hero.getId());
-                if(table == null){
-                    table = new HeroTable(new File(heroDir,data.hero.getId()));
+                if (table == null) {
+                    table = new HeroTable(new File(heroDir, data.hero.getId()));
                     heroTableCache.put(data.hero.getId(), table);
                 }
                 table.submitHero(data);
                 return RESPONSE_RESULT_SUCCESS;
-            }else{
+            } else {
                 return RESPONSE_RESULT_FAILED;
             }
         }));
 
         post("get_back_hero", ((request, response) -> {
             String id = request.headers(Field.OWNER_ID_FIELD);
-            if(StringUtils.isNotEmpty(id)){
+            if (StringUtils.isNotEmpty(id)) {
                 HeroTable table = heroTableCache.get(id);
-                if(table!=null){
+                if (table != null) {
                     heroTableCache.remove(id);
                     ServerData data = table.getBackHero(id);
-                    writeObject(response,data);
+                    writeObject(response, data);
                     return Field.RESPONSE_RESULT_SUCCESS;
                 }
             }
@@ -325,11 +381,11 @@ public class Server {
 
         post("query_hero_data", ((request, response) -> {
             String id = request.headers(Field.OWNER_ID_FIELD);
-            if(StringUtils.isNotEmpty(id)){
+            if (StringUtils.isNotEmpty(id)) {
                 HeroTable table = heroTableCache.get(id);
-                if(table!=null){
+                if (table != null) {
                     ServerRecord record = table.getRecord(id);
-                    writeObject(response,record.getData());
+                    writeObject(response, record.getData());
                     return Field.RESPONSE_RESULT_SUCCESS;
                 }
             }
@@ -338,9 +394,9 @@ public class Server {
 
         post("query_battle_award", (request, response) -> {
             String id = request.headers(Field.OWNER_ID_FIELD);
-            if(StringUtils.isNotEmpty(id)){
+            if (StringUtils.isNotEmpty(id)) {
                 HeroTable table = heroTableCache.get(id);
-                if(table!=null){
+                if (table != null) {
                     return table.queryBattleAward(id);
                 }
             }
@@ -349,9 +405,9 @@ public class Server {
 
         post("pool_online_data_msg", (request, response) -> {
             String id = request.headers(Field.OWNER_ID_FIELD);
-            if(StringUtils.isNotEmpty(id)){
+            if (StringUtils.isNotEmpty(id)) {
                 HeroTable table = heroTableCache.get(id);
-                if(table!=null){
+                if (table != null) {
                     return table.queryDataString(id);
                 }
             }
@@ -361,78 +417,41 @@ public class Server {
         post("pool_battle_msg", (request, response) -> {
             String id = request.headers(Field.OWNER_ID_FIELD);
             int count = Integer.parseInt(request.headers(Field.COUNT));
-            if(StringUtils.isNotEmpty(id)){
+            if (StringUtils.isNotEmpty(id)) {
                 HeroTable table = heroTableCache.get(id);
-                if(table!=null){
+                if (table != null) {
                     return table.pollBattleMsg(id, count);
                 }
             }
             return StringUtils.EMPTY_STRING;
         });
 
-        get("/stop",((request, response) -> {
-            if("gavin.luo".equals(request.queryParams("pass"))){
+        get("/stop", ((request, response) -> {
+            if ("gavin.luo".equals(request.queryParams("pass"))) {
                 stop();
             }
             return RESPONSE_RESULT_OK;
         }));
 
-        get("/status",((request, response) -> heroTableCache.size()));
+        get("/status", ((request, response) -> heroTableCache.size()));
 
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 new HeroBattleService(initHeroTableCache(heroDir)).run();
+                heroRange = buildHeroRange(heroDir);
             }
-        },0, 1, TimeUnit.MINUTES);
+        }, 0, 1, TimeUnit.MINUTES);
         LogHelper.info("started");
     }
 
-    private String readEncodeHeader(Request request,String head) throws UnsupportedEncodingException {
+    private String readEncodeHeader(Request request, String head) throws UnsupportedEncodingException {
         String limit = request.headers(head);
-        limit = limit == null ? StringUtils.EMPTY_STRING : URLDecoder.decode(limit,"utf-8");
+        limit = limit == null ? StringUtils.EMPTY_STRING : URLDecoder.decode(limit, "utf-8");
         return limit;
     }
 
-    private static Effect buildEffect(String effectName, String value){
-        switch (effectName) {
-            case "SkillRateEffect":
-                SkillRateEffect skillRateEffect = new SkillRateEffect();
-                skillRateEffect.setSkillRate(Float.parseFloat(value));
-                return skillRateEffect;
-            case "AgiEffect":
-                AgiEffect agiEffect = new AgiEffect();
-                agiEffect.setAgi(Long.parseLong(value));
-                return agiEffect;
-            case "AtkEffect":
-                AtkEffect atkEffect = new AtkEffect();
-                atkEffect.setAtk(Long.parseLong(value));
-                return atkEffect;
-            case "DefEffect":
-                DefEffect defEffect = new DefEffect();
-                defEffect.setDef(Long.parseLong(value));
-                return defEffect;
-            case "HpEffect":
-                HpEffect hpEffect = new HpEffect();
-                hpEffect.setHp(Long.parseLong(value));
-                return hpEffect;
-            case "StrEffect":
-                StrEffect strEffect = new StrEffect();
-                strEffect.setStr(Long.parseLong(value));
-                return strEffect;
-            case "MeetRateEffect":
-                MeetRateEffect meetRateEffect = new MeetRateEffect();
-                meetRateEffect.setMeetRate(Float.parseFloat(value));
-                return meetRateEffect;
-            case "PetRateEffect":
-                PetRateEffect petRateEffect = new PetRateEffect();
-                petRateEffect.setPetRate(Float.parseFloat(value));
-                return petRateEffect;
-        }
-        return null;
-    }
-
-    private static void writeObject(Response response, Object exs) throws IOException {
+    private void writeObject(Response response, Object exs) throws IOException {
         ObjectOutputStream oos = new ObjectOutputStream(response.getOutputStream());
         oos.writeObject(exs);
         response.header(Field.RESPONSE_TYPE, RESPONSE_OBJECT_TYPE);
@@ -441,7 +460,7 @@ public class Server {
     }
 
     @NotNull
-    private static ExchangeObject createExchangeObject(String ownerId, Object objMy) throws Exception {
+    private ExchangeObject createExchangeObject(String ownerId, Object objMy) throws Exception {
         ExchangeObject exMy = new ExchangeObject((IDModel) objMy, ownerId);
         if (objMy instanceof Pet) {
             exMy.setType(1);
@@ -456,16 +475,16 @@ public class Server {
         return exMy;
     }
 
-    private static <T> T readObject(Request request) throws IOException, ClassNotFoundException {
+    private <T> T readObject(Request request) throws IOException, ClassNotFoundException {
         try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(request.bodyAsBytes()))) {
-            return (T)ois.readObject();
+            return (T) ois.readObject();
         }
     }
 
-     void stop() {
+    void stop() {
         LogHelper.info("shutDown");
         executor.shutdown();
-        for(HeroTable table : heroTableCache.values()){
+        for (HeroTable table : heroTableCache.values()) {
             try {
                 table.save();
             } catch (IOException e) {
@@ -475,15 +494,9 @@ public class Server {
         Spark.stop();
     }
 
-    //Only use for unit test
-    static void clear() throws IOException, ClassNotFoundException {
-        File root = new File("data");
-        root.delete();
-    }
-
-    private static Map<String, HeroTable> initHeroTableCache(File root){
+    private Map<String, HeroTable> initHeroTableCache(File root) {
         Map<String, HeroTable> cache = new HashMap<>();
-        if(root.exists()) {
+        if (root.exists()) {
             for (String name : root.list()) {
                 try {
                     HeroTable table = new HeroTable(new File(root, name));
@@ -494,9 +507,37 @@ public class Server {
                     LogHelper.error(e);
                 }
             }
-        }else{
+        } else {
             LogHelper.info("create root file " + root.getAbsolutePath() + ", result: " + root.mkdirs());
         }
         return cache;
+    }
+
+    public static String buildHeroRange(File heroDir) {
+        StringBuilder sb = new StringBuilder("<b>排行版</b><br>");
+        List<ServerRecord> records = new ArrayList<>();
+        for (String name : heroDir.list()) {
+            try {
+                HeroTable table = new HeroTable(new File(heroDir, name));
+                ServerRecord record = table.getRecord(name);
+                if (record.getData() != null) {
+                    records.add(record);
+                }
+            } catch (Exception e) {
+                LogHelper.error(e);
+            }
+        }
+        records.sort(new Comparator<ServerRecord>() {
+            @Override
+            public int compare(ServerRecord r1, ServerRecord r2) {
+                return Integer.compare(r1.getRange(), r2.getRange());
+            }
+        });
+        for (int i = 0; i < records.size() && i < 5; i++) {
+            ServerData data = records.get(i).getData();
+            if (data != null)
+                sb.append(data.hero.getDisplayName()).append("<br>");
+        }
+        return sb.toString();
     }
 }

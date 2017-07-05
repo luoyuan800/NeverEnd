@@ -12,76 +12,16 @@ import cn.luo.yuan.maze.utils.StringUtils
 /**
  * Created by gluo on 5/5/2017.
  */
-class Medallion() : Goods {
-    private var delete: Boolean = false
-    override fun isDelete(): Boolean {
-        return delete
-    }
-
-    override fun markDelete() {
-        delete = true
-    }
-    override fun setHeroIndex(index: Int) {
-        this.index = index
-    }
-
-    override fun getHeroIndex(): Int {
-        return index
-    }
-
-    var index = 0
-    override fun setKeeperName(name: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun setOwnerName(name: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun setKeeperId(id: String) {
-       keeper = id
-    }
-
-    override fun setOwnerId(id: String) {
-        keeper = id
-    }
-
-    var keeper = StringUtils.EMPTY_STRING;
-    override fun getOwnerId(): String {
-        return keeper
-    }
-
-    override fun getKeeperId(): String {
-        return keeper
-    }
-
-    companion object {
-        private const val serialVersionUID: Long = SERVER_VERSION
-    }
-
-    var medId: String = "";
-    override fun getId(): String {
-        return medId
-    }
-
-    override fun setId(id: String?) {
-        this.medId = id!!;
-    }
+class Medallion() : Goods() {
 
     override fun load(properties: GoodsProperties) {
         ListenerService.registerListener(MedallionListener)
     }
 
     override var price = 100000L
-    override var desc = ""
-    override var count = 0
-        set(count) {
-            this.count = count;
-            if (this.count > 0) {
+    override var desc = "拥有这个物品可以在被击败时不会掉到第一层，你和你宠物原地半血复活。"
 
-            }
-        }
-    override var name = "";
+    override var name = "免死金牌";
     override fun use(properties: GoodsProperties): Boolean {
         if (super.use(properties)) {
             properties.hero.hp = properties.hero.maxHp
@@ -96,7 +36,7 @@ class Medallion() : Goods {
 
     val MedallionListener = object : LostListener {
         override fun lost(loser: Hero?, winner: HarmAble?) {
-            var p = GoodsProperties(hero = loser!!);
+            val p = GoodsProperties(hero = loser!!);
             use(p)
         }
 

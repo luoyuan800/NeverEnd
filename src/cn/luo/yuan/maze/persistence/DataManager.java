@@ -3,9 +3,14 @@ package cn.luo.yuan.maze.persistence;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import cn.luo.yuan.maze.model.*;
+import cn.luo.yuan.maze.model.Accessory;
+import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.maze.model.Index;
+import cn.luo.yuan.maze.model.Maze;
+import cn.luo.yuan.maze.model.NeverEndConfig;
+import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.goods.Goods;
-import cn.luo.yuan.maze.model.goods.GoodsType;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
@@ -13,7 +18,6 @@ import cn.luo.yuan.maze.persistence.serialize.ObjectDB;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
 import cn.luo.yuan.maze.task.Task;
 import cn.luo.yuan.maze.utils.StringUtils;
-import cn.luo.yuan.maze.utils.annotation.StringValue;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InvalidClassException;
@@ -89,8 +93,8 @@ public class DataManager implements DataManagerInterface {
 
     public List<Accessory> loadMountedAccessory(Hero hero) {
         List<Accessory> accessories = new ArrayList<>();
-        for(Accessory accessory : accessoryLoader.loadAll()){
-            if(accessory.getHeroIndex() == index && accessory.isMounted()){
+        for (Accessory accessory : accessoryLoader.loadAll()) {
+            if (accessory.getHeroIndex() == index && accessory.isMounted()) {
                 accessories.add(accessory);
             }
         }
@@ -175,16 +179,16 @@ public class DataManager implements DataManagerInterface {
                 cursor.moveToNext();
             }
         }
-        try(Cursor cursor = database.excuseSOL("select id from hero where hero_index = " + index)){
-            while (!cursor.isAfterLast()){
+        try (Cursor cursor = database.excuseSOL("select id from hero where hero_index = " + index)) {
+            while (!cursor.isAfterLast()) {
                 heroLoader.delete(cursor.getString(cursor.getColumnIndex("id")));
                 cursor.moveToNext();
             }
         }
-        for(Pet pet : new ArrayList<>(petLoader.loadAll())){
+        for (Pet pet : new ArrayList<>(petLoader.loadAll())) {
             petLoader.delete(pet.getId());
         }
-        for(Accessory accessory : new ArrayList<>(accessoryLoader.loadAll())){
+        for (Accessory accessory : new ArrayList<>(accessoryLoader.loadAll())) {
             accessoryLoader.delete(accessory.getId());
         }
         database.excuseSQLWithoutResult("delete from maze where hero_index = " + index);
@@ -209,8 +213,9 @@ public class DataManager implements DataManagerInterface {
         petLoader.delete(pet.getId());
     }
 
-    public Goods loadGoods(GoodsType type) {
-        return goodsLoader.load(type.name() + "@" + index);
+    @Override
+    public Goods loadGoods(String name) {
+        return goodsLoader.load(buildIdWithIndex(name));
     }
 
     @Override
@@ -225,11 +230,21 @@ public class DataManager implements DataManagerInterface {
 
     public void saveGoods(Goods goods) {
         goods.setHeroIndex(index);
-        goodsLoader.save(goods, goods.getClass().getSimpleName() + "@" + index);
+        goodsLoader.save(goods, buildIdWithIndex(goods.getName()));
+    }
+
+    public void addGoods(Goods newGoods) {
+        Goods d = goodsLoader.load(String.valueOf(index));
+        if (d == null || d.isDelete()) {
+            saveGoods(newGoods);
+        } else {
+            d.setCount(d.getCount() + newGoods.getCount());
+            saveGoods(d);
+        }
     }
 
     public Skill loadSkill(String name) {
-        return skillLoader.load(name + "@" + index);
+        return skillLoader.load(buildIdWithIndex(name));
     }
 
     @Override
@@ -240,7 +255,7 @@ public class DataManager implements DataManagerInterface {
                 return accessory.getName().equals(name);
             }
         }, null);
-        if(!accessories.isEmpty()){
+        if (!accessories.isEmpty()) {
             return accessories.get(0);
         }
         return null;
@@ -258,14 +273,14 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void saveSkill(Skill skill) {
-        skill.setId(skill.getClass().getSimpleName() + "@" + index);
-        skillLoader.save(skill, skill.getClass().getSimpleName() + "@" + index);
+        skill.setId(buildIdWithIndex(skill.getClass().getSimpleName()));
+        skillLoader.save(skill, buildIdWithIndex(skill.getClass().getSimpleName()));
     }
 
     public List<Skill> loadAllSkill() {
         List<Skill> skills = new ArrayList<>();
-        for(Skill skill : skillLoader.loadAll()){
-            if(skill.getId().endsWith("@" + index)){
+        for (Skill skill : skillLoader.loadAll()) {
+            if (skill.getId().endsWith("@" + index)) {
                 skills.add(skill);
             }
         }
@@ -281,24 +296,24 @@ public class DataManager implements DataManagerInterface {
         }, order);
     }
 
-    public List<ClickSkill> loadClickSkill(){
+    public List<ClickSkill> loadClickSkill() {
         List<ClickSkill> clickSkills = clickSkillLoader.loadAll();
-        for(ClickSkill skill : new ArrayList<>(clickSkills)){
-            if(!skill.getId().endsWith("@" + index)){
+        for (ClickSkill skill : new ArrayList<>(clickSkills)) {
+            if (!skill.getId().endsWith("@" + index)) {
                 clickSkills.remove(skill);
             }
         }
         return clickSkills;
     }
 
-    public void saveClickSkill(ClickSkill clickSkill){
-        clickSkill.setId(clickSkill.getName() + "@" + index);
-        clickSkillLoader.save(clickSkill, clickSkill.getName() + "@" + index);
+    public void saveClickSkill(ClickSkill clickSkill) {
+        clickSkill.setId(buildIdWithIndex(clickSkill.getName()));
+        clickSkillLoader.save(clickSkill, buildIdWithIndex(clickSkill.getName()));
     }
 
-    public void deleteClickSkill(ClickSkill clickSkill){
+    public void deleteClickSkill(ClickSkill clickSkill) {
         clickSkill.markDelete();
-        clickSkillLoader.delete(clickSkill.getName() + "@" + index);
+        clickSkillLoader.delete(buildIdWithIndex(clickSkill.getName()));
     }
 
     public SerializeLoader<ClickSkill> getClickSkillLoader() {
@@ -315,8 +330,8 @@ public class DataManager implements DataManagerInterface {
 
     public List<Pet> loadMountPets() {
         List<Pet> pets = new ArrayList<>();
-        for(Pet pet : petLoader.loadAll()){
-            if(pet.getHeroIndex() == index && pet.isMounted()){
+        for (Pet pet : petLoader.loadAll()) {
+            if (pet.getHeroIndex() == index && pet.isMounted()) {
                 pets.add(pet);
             }
         }
@@ -324,16 +339,16 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void delete(Serializable object) {
-        if(object instanceof IDModel){
+        if (object instanceof IDModel) {
             ((IDModel) object).markDelete();
         }
-        if(object instanceof Pet){
-            deletePet((Pet)object);
-        } else if(object instanceof Accessory){
-            accessoryLoader.delete(((Accessory)object).getId());
-        } else if( object instanceof Goods){
-            ((Goods) object).setCount(((Goods) object).getCount()  - 1);
-        } else{
+        if (object instanceof Pet) {
+            deletePet((Pet) object);
+        } else if (object instanceof Accessory) {
+            accessoryLoader.delete(((Accessory) object).getId());
+        } else if (object instanceof Goods) {
+            ((Goods) object).setCount(((Goods) object).getCount() - 1);
+        } else {
             //TODO
         }
 
@@ -352,23 +367,51 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void addTask(Task task) {
-        taskLoader.save(task,task.getId());
+        taskLoader.save(task, task.getId());
     }
 
     public void save(IDModel object) {
-        if(object instanceof Pet){
+        if (object instanceof Pet) {
             savePet((Pet) object);
-        }else if(object instanceof Accessory){
+        } else if (object instanceof Accessory) {
             saveAccessory((Accessory) object);
-        } else if(object instanceof Goods){
+        } else if (object instanceof Goods) {
             saveGoods((Goods) object);
-        } else if(object instanceof NeverEndConfig){
+        } else if (object instanceof NeverEndConfig) {
             configDB.save((NeverEndConfig) object, object.getId());
         }
     }
 
-    public <T> List<T> loadAllGoods() {
+    public void add(IDModel object) {
+        if (object instanceof Goods) {
+            addGoods((Goods) object);
+        } else {
+            save(object);
+        }
+    }
+
+    public List<Goods> loadAllGoods() {
         return Collections.emptyList();
+    }
+
+    public NeverEndConfig getConfig() {
+        NeverEndConfig config = null;
+        try {
+            config = configDB.loadObject(String.valueOf(index));
+        } catch (InvalidClassException e) {
+            e.printStackTrace();
+        }
+        if (config == null) {
+            config = new NeverEndConfig();
+            config.setId(String.valueOf(index));
+            configDB.save(config);
+        }
+        return config;
+    }
+
+    @NotNull
+    private String buildIdWithIndex(String name) {
+        return name + "@" + index;
     }
 
     private Maze newMaze() {
@@ -377,20 +420,5 @@ public class DataManager implements DataManagerInterface {
         maze.setLevel(1);
         maze.setMeetRate(99.9f);
         return maze;
-    }
-
-    public NeverEndConfig getConfig(){
-        NeverEndConfig config = null;
-        try {
-            config = configDB.loadObject(String.valueOf(index));
-        } catch (InvalidClassException e) {
-            e.printStackTrace();
-        }
-        if(config == null){
-            config = new NeverEndConfig();
-            config.setId(String.valueOf(index));
-            configDB.save(config);
-        }
-        return config;
     }
 }

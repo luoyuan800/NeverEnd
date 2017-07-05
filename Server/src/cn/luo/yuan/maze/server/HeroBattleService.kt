@@ -48,7 +48,9 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>) :
                         val awardMaterial = random.nextLong(maze.maxLevel + omaze.maxLevel) + 1
                         if (bs.battle(maze.level + omaze.level)) {
                             record.winCount ++
+                            record.currentWin ++
                             otable.getRecord(oid).lostCount ++
+                            otable.getRecord(oid).currentLostCount ++
                             otable.getRecord(oid).dieCount++
                             otable.getRecord(oid).dieTime = System.currentTimeMillis()
                             messager.materialGet(hero.displayName, awardMaterial);
@@ -58,7 +60,9 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>) :
                             record.dieCount++
                             record.dieTime = System.currentTimeMillis()
                             record.lostCount ++
+                            record.currentLostCount++
                             otable.getRecord(oid).winCount ++
+                            otable.getRecord(oid).currentWin ++
                             otable.getRecord(oid).data!!.material += awardMaterial
                         }
                         continue
@@ -83,14 +87,14 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>) :
         for(table in tableCache.values){
             table.save()
         }
-        LogHelper.info("Finsihed battle!")
+        LogHelper.info("Finished battle!")
     }
 
     private fun range(){
         val sortedByDescending = tableCache.keys.sortedByDescending {
             val table = tableCache[it] as HeroTable
             val record = table.getRecord(it)
-            record.winCount
+            record.currentWin
         }
         for(id in sortedByDescending){
             tableCache[id]!!.getRecord(id).range = sortedByDescending.indexOf(id) + 1

@@ -7,7 +7,7 @@ import cn.luo.yuan.maze.utils.Random;
  * Created by luoyuan on 2017/3/28.
  */
 public class Data {
-    public static final int MAX_SELL_COUNT = 30;//商店最大的商品数量
+    public static final int MAX_SELL_COUNT = 5;//商店最大的商品数量
     public static final String BLUE_COLOR = "#0000FF";//蓝色（阶位）1
     public static final String RED_COLOR = "#FF0000";//红色（阶位）2
     public static final String DEFAULT_QUALITY_COLOR = "#556B2F";//绿色（默认阶位）0
@@ -58,19 +58,19 @@ public class Data {
     }
 
     public static float getColorReduce(String color) {
-        float colorReduce = 0.3f;
+        float colorReduce = 0.1f;
         switch (color) {
             case Data.BLUE_COLOR:
-                colorReduce = 0.5f;
+                colorReduce = 0.3f;
                 break;
             case Data.RED_COLOR:
-                colorReduce = 0.6f;
+                colorReduce = 0.5f;
                 break;
             case Data.ORANGE_COLOR:
-                colorReduce = 0.7f;
+                colorReduce = 0.65f;
                 break;
             case Data.DARKGOLD_COLOR:
-                colorReduce = 0.9f;
+                colorReduce = 0.8f;
                 break;
         }
         return colorReduce;

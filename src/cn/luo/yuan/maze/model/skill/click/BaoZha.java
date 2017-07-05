@@ -6,7 +6,6 @@ import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.Pet;
-import cn.luo.yuan.maze.model.goods.GoodsType;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 
 /**
@@ -16,21 +15,21 @@ public class BaoZha extends ClickSkill {
 
     @Override
     public int getImageResource() {
-        if(isUsable()) {
+        if (isUsable()) {
             return R.drawable.baoza;
-        }else{
+        } else {
             return R.drawable.baoza_d;
         }
     }
 
     @Override
     public void perform(Hero hero, HarmAble monster, InfoControlInterface context) {
-        if(!hero.getPets().isEmpty()){
+        if (!hero.getPets().isEmpty()) {
             Pet pet = hero.getPets().iterator().next();
             hero.getPets().remove(pet);
             //pet.releasePet(hero, context);
             long harm = (long) (monster.getMaxHp() * 0.9);
-            monster.setHp(monster.getHp()-harm);
+            monster.setHp(monster.getHp() - harm);
             context.addMessage("使用技能" + getName() + "损失了宠物" + pet.getDisplayName() + "， 对" + (monster instanceof NameObject ? ((NameObject) monster).getDisplayName() : "") + "造成了" + harm + "点伤害。");
             /* GoodsType grill = GoodsType.Grill;
            if(monster.getHp() <= 0){

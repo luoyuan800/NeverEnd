@@ -234,7 +234,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                     @Override
                     public void run() {
                         if (manager.requestExchange((Serializable) myItem, eo)) {
-                            context.getDataManager().save(eo.getExchange());
+                            context.getDataManager().add(eo.getExchange());
                             if (currentShowingDialog != null && currentShowingDialog.isShowing()) {
                                 currentShowingDialog.dismiss();
                             }
@@ -356,7 +356,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
             @Override
             public void onClick(View v) {
                 ExchangeObject eo = (ExchangeObject) v.getTag(R.string.item);
-                context.getDataManager().save(eo.getExchange());
+                context.getDataManager().add(eo.getExchange());
                 context.getExecutor().submit(new Runnable() {
                     @Override
                     public void run() {
@@ -373,7 +373,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                             model = manager.acknowledge(eo);
                         }
                         if (model != null) {
-                            context.getDataManager().save(model);
+                            context.getDataManager().add(model);
                         }
                         if (model instanceof NameObject) {
                             Toast.makeText(context.getContext(), "取回" + ((NameObject) model).getName(), Toast.LENGTH_SHORT).show();

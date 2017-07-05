@@ -8,11 +8,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.client.service.LocalShop;
+import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.goods.Goods;
-import cn.luo.yuan.maze.model.goods.GoodsType;
-import cn.luo.yuan.maze.client.service.NeverEnd;
-import cn.luo.yuan.maze.client.service.LocalShop;
 
 import java.util.List;
 
@@ -62,8 +61,8 @@ public class ItemAdapter extends BaseAdapter {
                     item.count--;
                     if (item.instance instanceof Accessory) {
                         context.getDataManager().saveAccessory((Accessory) item.instance);
-                    } else if (item.instance instanceof GoodsType) {
-                        Goods goods = ((GoodsType) item.instance).getInstance(context.getDataManager());
+                    } else if (item.instance instanceof Goods) {
+                        Goods goods = (Goods) item.instance;
                         goods.setCount(goods.getCount() + 1);
                     }
                     notifyDataSetChanged();

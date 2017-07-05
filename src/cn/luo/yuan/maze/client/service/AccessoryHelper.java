@@ -59,22 +59,27 @@ public class AccessoryHelper extends cn.luo.yuan.maze.service.AccessoryHelper {
         if (major.getName().equalsIgnoreCase(minor.getName()) && major.getType().equalsIgnoreCase(minor.getType())) {
             float colorReduce = Data.getColorReduce(major.getColor());
             if (random.nextLong(major.getLevel()) < Data.ACCESSORY_FLUSE_LIMIT) {
+                if(major.getColor().equals(Data.DARKGOLD_COLOR)){
+                    if(random.nextLong(major.getLevel()) > Data.DARKGOLD_RATE_REDUCE){
+                        return false;
+                    }
+                }
                 List<Effect> majorEffect = major.getEffects();
                 for (Effect effect : minor.getEffects()) {
                     boolean append = true;
                     for (Effect me : majorEffect) {
-                        if (me.getClass().getName().equalsIgnoreCase(effect.getClass().getName())) {
+                        if (me.getName().equalsIgnoreCase(effect.getName())) {
                             append = false;
                             if (me instanceof LongValueEffect) {
                                 long value = ((LongValueEffect) me).getValue();
-                                long v = (long) random.nextFloat(((LongValueEffect) effect).getValue() * colorReduce);
+                                long v = (long) random.randomRange(((LongValueEffect) effect).getValue().floatValue() * colorReduce, ((LongValueEffect) effect).getValue().floatValue());
                                 if (v + value >= 0) {
                                     ((LongValueEffect) me).setValue(value + v);
                                 }
                             } else if (me instanceof FloatValueEffect) {
-                                float v = random.nextFloat(((FloatValueEffect) effect).getValue() * colorReduce);
+                                float v = random.randomRange(((FloatValueEffect) effect).getValue() * colorReduce, ((FloatValueEffect) effect).getValue());
                                 float value = ((FloatValueEffect) me).getValue();
-                                //We need to check whether the rate larger too larger.
+                                //We need to check whether the rate too larger.
                                 if (value + v < Data.RATE_MAX && random.nextFloat(value) < random.nextFloat(Data.RATE_MAX / 2f)) {
                                     ((FloatValueEffect) me).setValue(value + v);
                                 }
@@ -92,7 +97,7 @@ public class AccessoryHelper extends cn.luo.yuan.maze.service.AccessoryHelper {
                     }
                 }
                 major.setLevel(major.getLevel() + 1);
-                if (!major.getColor().equals(Data.DARKGOLD_COLOR) && random.nextInt(100) < random.nextLong(major.getLevel())) {
+                if (!major.getColor().equals(Data.DARKGOLD_COLOR) && random.nextInt(1000) < random.nextLong(major.getLevel())) {
                     switch (major.getColor()) {
                         case Data.DEFAULT_QUALITY_COLOR:
                             major.setColor(Data.BLUE_COLOR);

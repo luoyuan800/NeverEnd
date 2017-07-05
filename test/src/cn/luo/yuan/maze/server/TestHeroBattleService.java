@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.server;
 
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
 import org.testng.annotations.Test;
 
@@ -31,5 +32,11 @@ public class TestHeroBattleService {
         }
         HeroBattleService hbs = new HeroBattleService(cache);
         hbs.run();
+        for(Map.Entry<String, HeroTable> entry : cache.entrySet()){
+            ServerRecord r = entry.getValue().getRecord(entry.getKey());
+            if(r.getData()!=null){
+                System.out.println(r.getMessages());
+            }
+        }
     }
 }

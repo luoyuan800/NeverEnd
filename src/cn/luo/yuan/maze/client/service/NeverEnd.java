@@ -6,11 +6,15 @@ import android.util.Log;
 import cn.luo.yuan.maze.client.display.handler.GameActivityViewHandler;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
 import cn.luo.yuan.maze.client.utils.LogHelper;
-import cn.luo.yuan.maze.model.*;
+import cn.luo.yuan.maze.model.Accessory;
+import cn.luo.yuan.maze.model.Data;
+import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.Maze;
+import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.gift.Gift;
+import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.GoodsProperties;
-import cn.luo.yuan.maze.model.goods.GoodsType;
 import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.persistence.DataManager;
@@ -43,13 +47,14 @@ public class NeverEnd extends Application implements InfoControlInterface {
     private PetMonsterHelper petMonsterHelper;
     private TaskManagerImp taskManager;
 
-    public ScheduledExecutorService getExecutor(){
+    public NeverEnd() {
+    }
+
+    public ScheduledExecutorService getExecutor() {
         return executor;
     }
 
-    public NeverEnd(){
-    }
-    public void setContext(Context context,DataManager dataManager){
+    public void setContext(Context context, DataManager dataManager) {
         this.context = context;
         executor = Executors.newScheduledThreadPool(5);
         petMonsterHelper = PetMonsterHelper.instance;
@@ -57,12 +62,10 @@ public class NeverEnd extends Application implements InfoControlInterface {
         accessoryHelper = AccessoryHelper.getOrCreate(this);
         petMonsterHelper.setRandom(random);
         petMonsterHelper.setMonsterLoader(PetMonsterLoder.getOrCreate(this));
-        taskManager= new TaskManagerImp(this);
+        taskManager = new TaskManagerImp(this);
         handlerData(dataManager);
     }
-    public void setContext(Context context){
-        this.context = context;
-    }
+
     public void addMessage(String msg) {
         textView.addMessage(msg);
     }
@@ -105,6 +108,11 @@ public class NeverEnd extends Application implements InfoControlInterface {
         return hero;
     }
 
+    void setHero(Hero hero) {
+        this.hero = hero;
+        random = new Random(hero.getBirthDay());
+    }
+
     public String getVersion() {
         try {
             String pkName = getContext().getPackageName();
@@ -124,18 +132,13 @@ public class NeverEnd extends Application implements InfoControlInterface {
         return petMonsterHelper;
     }
 
-    void setHero(Hero hero) {
-        this.hero = hero;
-        random = new Random(hero.getBirthDay());
-    }
-
     public void save() {
         Gift gift = hero.getGift();
         if (gift != null) {
             try {
                 gift.unHandler(this);
             } catch (Exception e) {
-                LogHelper.logException(e, "NeverEnd ->save->gift.un handler("+ gift+ ")");
+                LogHelper.logException(e, "NeverEnd ->save->gift.un handler(" + gift + ")");
             }
         }
         dataManager.saveHero(hero);
@@ -145,7 +148,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
             try {
                 gift.handler(this);
             } catch (Exception e) {
-                LogHelper.logException(e, "NeverEnd ->save->gift.handler("+ gift+ ")");
+                LogHelper.logException(e, "NeverEnd ->save->gift.handler(" + gift + ")");
             }
         }
     }
@@ -166,6 +169,10 @@ public class NeverEnd extends Application implements InfoControlInterface {
         return context;
     }
 
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
     public Maze getMaze() {
         return maze;
     }
@@ -178,25 +185,25 @@ public class NeverEnd extends Application implements InfoControlInterface {
         return dataManager;
     }
 
-    @Override
-    public TaskManagerImp getTaskManager() {
-        return taskManager;
-    }
-
     public void setDataManager(DataManager dataManager) {
         this.dataManager = dataManager;
         setHero(dataManager.loadHero());
         setMaze(dataManager.loadMaze());
     }
 
+    @Override
+    public TaskManagerImp getTaskManager() {
+        return taskManager;
+    }
+
     public void handlerData(DataManager dataManager) {
         //Gift handle
-        Gift gift =hero.getGift();
+        Gift gift = hero.getGift();
         if (gift != null) {
             try {
                 gift.handler(this);
             } catch (Exception e) {
-                LogHelper.logException(e, "NeverEnd ->handlerData->gift.handler("+ gift+ ")");
+                LogHelper.logException(e, "NeverEnd ->handlerData->gift.handler(" + gift + ")");
             }
         }
 
@@ -215,15 +222,13 @@ public class NeverEnd extends Application implements InfoControlInterface {
 
         //Goods handle
         GoodsProperties goodsProperties = new GoodsProperties(hero);
-        for (GoodsType type : GoodsType.values()) {
-            if (type.getNeedLoad()) {
-                dataManager.loadGoods(type).load(goodsProperties);
-            }
+        for (Goods goods : dataManager.loadAllGoods()) {
+            goods.load(goodsProperties);
         }
 
         //Pet Handler
-        for(Pet pet : dataManager.loadMountPets()){
-            if(pet.isMounted()){
+        for (Pet pet : dataManager.loadMountPets()) {
+            if (pet.isMounted()) {
                 hero.getPets().add(pet);
             }
         }
@@ -249,17 +254,17 @@ public class NeverEnd extends Application implements InfoControlInterface {
         return runningService.getTarget();
     }
 
-    public Accessory covertAccessoryToLocal(Accessory a){
+    public Accessory covertAccessoryToLocal(Accessory a) {
         List<Effect> effects = new ArrayList<>(a.getEffects());
         a.getEffects().clear();
-        for(Effect effect : effects){
+        for (Effect effect : effects) {
             a.getEffects().add(ClientEffectHandler.buildClientEffect(effect));
         }
         return a;
     }
 
     public Serializable convertToServerObject(Serializable object) {
-        if(object instanceof Accessory) {
+        if (object instanceof Accessory) {
             Accessory accessory = new Accessory();
             accessory.setName(((Accessory) object).getName());
             accessory.setId(((Accessory) object).getId());

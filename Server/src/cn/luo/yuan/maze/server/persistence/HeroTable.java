@@ -82,10 +82,12 @@ public class HeroTable {
     public String queryDataString(String id) {
         ServerRecord record = getRecord(id);
         if(record.getData()!=null) {
+            int t = record.getWinCount() + record.getLostCount();
+            if(t<= 0) t++;
             return record.getData().hero.getDisplayName() + "<br>"
-                    + "排名：" + record.getRange() + "， 胜率：" +  StringUtils.formatPercentage(record.getWinCount() * 100/(record.getWinCount() + record.getLostCount() + 1))
-                    + "<br>胜利：" + StringUtils.formatNumber(record.getWinCount()) + "， "
-                    + "失败：" + StringUtils.formatNumber(record.getLostCount()) + "<br>";
+                    + "当前排名：" + record.getRange() + "， 总胜率：" +  StringUtils.formatPercentage(record.getWinCount() * 100/(t))
+                    + "<br>当前胜利：" + StringUtils.formatNumber(record.getCurrentWin()) + "， "
+                    + "当前失败：" + StringUtils.formatNumber(record.getCurrentLostCount()) + "<br>";
         }
         return StringUtils.EMPTY_STRING;
     }
@@ -124,6 +126,10 @@ public class HeroTable {
         record.setData(data);
         save(record);
         LogHelper.info(record.getData().hero.getDisplayName() + " Submit!");
+    }
+
+    public Hero getHero(String name) throws IOException, ClassNotFoundException {
+        return loadHero(name);
     }
 
     private Hero loadHero(String id) throws IOException, ClassNotFoundException {

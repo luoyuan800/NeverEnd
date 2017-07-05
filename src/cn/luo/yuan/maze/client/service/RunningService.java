@@ -74,7 +74,7 @@ public class RunningService implements RunningServiceInterface {
                         if (((Egg) pet).step <= 0) {
                             Pet p = monsterHelper.eggToPet(pet, hero);
                             if (p != null) {
-                                dataManager.save(p);
+                                dataManager.add(p);
                                 hero.getPets().add(p);
                                 hero.getPets().remove(pet);
                                 dataManager.delete(pet);

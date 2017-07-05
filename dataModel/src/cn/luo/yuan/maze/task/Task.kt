@@ -3,7 +3,7 @@ package cn.luo.yuan.maze.task
 import cn.luo.yuan.maze.model.Accessory
 import cn.luo.yuan.maze.model.IDModel
 import cn.luo.yuan.maze.model.Pet
-import cn.luo.yuan.maze.model.goods.GoodsType
+import cn.luo.yuan.maze.model.goods.Goods
 import cn.luo.yuan.maze.service.InfoControlInterface
 import cn.luo.yuan.maze.utils.Field
 import java.io.Serializable
@@ -21,6 +21,7 @@ class Task(var name: String, var desc: String) : IDModel, Serializable {
     override fun markDelete() {
         delete = true
     }
+
     companion object {
         private const val serialVersionUID: Long = Field.SERVER_VERSION
     }
@@ -33,7 +34,7 @@ class Task(var name: String, var desc: String) : IDModel, Serializable {
     var start = false;
     var point = 0
     var material = 0
-    val goods = mutableMapOf<GoodsType, Int>()
+    val goodes = mutableListOf<Goods>()
     val accessories = mutableListOf<Accessory>()
     val pets = mutableListOf<Pet>()
 
@@ -61,7 +62,7 @@ class Task(var name: String, var desc: String) : IDModel, Serializable {
                     }
                 }
                 Field.GOODS_TYPE -> {
-                    val goods = context.dataManager.loadGoods(GoodsType.valueOf(key))
+                    val goods = context.dataManager.loadGoods(key)
                     if (goods == null || goods.count <= 0) {
                         return false
                     }
@@ -74,30 +75,29 @@ class Task(var name: String, var desc: String) : IDModel, Serializable {
         return true;
     }
 
-    fun start(){
+    fun start() {
         start = true
         startTime = System.currentTimeMillis()
     }
 
-    fun finished(context:InfoControlInterface){
+    fun finished(context: InfoControlInterface) {
         finished = true
         finishedTime = System.currentTimeMillis()
-        if(point>0){
+        if (point > 0) {
             context.hero.point = context.hero.point + point
         }
-        if(material > 0){
+        if (material > 0) {
             context.hero.material += material
         }
-        if(goods.isNotEmpty()){
-            for((K, V) in goods){
-                val loadGoods = context.dataManager.loadGoods(K)
-                loadGoods?.count = loadGoods?.count?.plus(V)!!
+        if (goodes.isNotEmpty()) {
+            for (goods in goodes) {
+                context.dataManager.add(goods)
             }
         }
-        for(accessory in accessories){
+        for (accessory in accessories) {
             context.dataManager.saveAccessory(accessory)
         }
-        for(pet in pets){
+        for (pet in pets) {
             context.dataManager.savePet(pet)
         }
     }

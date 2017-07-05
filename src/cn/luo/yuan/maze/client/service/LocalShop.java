@@ -9,7 +9,7 @@ import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.effect.Effect;
-import cn.luo.yuan.maze.model.goods.GoodsType;
+import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -38,6 +38,7 @@ public class LocalShop {
             }
         });
         List<Item> items = randomAccessory();
+        items.addAll(randomGoods());
         if (items.size() > 0) {
             LoadMoreListView list = new LoadMoreListView(context.getContext());
             ItemAdapter adapter = new ItemAdapter(context, items);
@@ -73,14 +74,16 @@ public class LocalShop {
 
     public List<Item> randomGoods() {
         List<Item> goods = new ArrayList<>();
-        for (GoodsType type : GoodsType.values()) {
-            if (type.getLocalSell() && random.nextBoolean()) {
+        for (Goods g : context.getDataManager().loadAllGoods()) {
+            Goods ng = (Goods) g.clone();
+            ng.setCount(1);
+            if (g.canLocalSell() && random.nextBoolean()) {
                 Item goodsItem = new Item();
-                goodsItem.name = type.getInstance().getName();
-                goodsItem.price = type.getInstance().getPrice();
-                goodsItem.desc = type.getInstance().getDesc();
+                goodsItem.name = g.getName();
+                goodsItem.price = g.getPrice();
+                goodsItem.desc = g.getDesc();
                 goodsItem.count = random.nextInt(Data.MAX_SELL_COUNT);
-                goodsItem.instance = type;
+                goodsItem.instance = ng;
                 goods.add(goodsItem);
             }
         }

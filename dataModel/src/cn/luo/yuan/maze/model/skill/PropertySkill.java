@@ -17,7 +17,7 @@ public abstract class PropertySkill implements Skill {
         this.enable = false;
     }
 
-    abstract void disable(SkillParameter parameter);
+    public abstract void disable(SkillParameter parameter);
 
     public boolean isEnable(){
         return enable;
