@@ -16,13 +16,15 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/linearLayout"
                 android:layout_toStartOf="@+id/linearLayout"
-                android:layout_alignEnd="@+id/hero_info">
+                android:layout_alignEnd="@+id/hero_info"
+            >
        <LinearLayout
                android:id="@+id/pets_root"
                android:layout_width="wrap_content"
                android:onClick="onClick"
                android:minHeight="50dp"
-               android:layout_height="wrap_content" android:orientation="vertical"/>
+               android:layout_height="wrap_content" android:orientation="vertical"
+               />
     </ScrollView>
     <cn.luo.yuan.maze.client.display.view.RollTextView
             android:layout_width="match_parent"
@@ -32,7 +34,8 @@
             android:layout_toEndOf="@+id/pets"
             android:layout_marginLeft="30dp"
             android:layout_below="@+id/switch_msg_view"
-            android:visibility="visible"/>
+            android:visibility="visible"
+            android:background="@android:drawable/spinner_background"/>
 
     <include
             layout="@layout/monster_book_view"
@@ -52,7 +55,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/linearLayout2"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true">
+            android:layout_centerHorizontal="true"
+            android:elevation="1dp">
         <Button
                 android:layout_width="50sp"
                 android:layout_height="50sp"
@@ -88,7 +92,9 @@
             android:id="@+id/hero_info"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/linearLayout2">
+            android:layout_toStartOf="@+id/linearLayout2"
+            android:background="@android:drawable/spinner_dropdown_background"
+            android:layout_alignBottom="@+id/linearLayout2">
 
             <TextView
                     android:layout_width="wrap_content"
@@ -305,7 +311,8 @@
             android:id="@+id/linearLayout3"
             android:layout_above="@+id/linearLayout4"
             android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/linearLayout2">
+            android:layout_toEndOf="@+id/linearLayout2"
+            android:background="@android:drawable/spinner_dropdown_background">
 
         <LinearLayout
                 android:layout_gravity="center"

@@ -330,4 +330,14 @@ public class MainProcess {
         }
         return StringUtils.EMPTY_STRING;
     }
+
+    public int getGiftCount(String id){
+        HeroTable table = heroTableCache.get(id);
+        ServerRecord record = table.getRecord(id);
+        if(record!=null){
+            return record.getGift();
+        }else{
+            return 0;
+        }
+    }
 }

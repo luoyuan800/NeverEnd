@@ -46,3 +46,4 @@ captures/
 /services/META-INF/
 /dataModel/META-INF/
 /Server/WebContent/
+/web_server/WebContent/WEB-INF/lib/

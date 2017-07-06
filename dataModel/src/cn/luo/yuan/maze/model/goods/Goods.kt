@@ -11,6 +11,7 @@ import java.io.Serializable
  */
 abstract class Goods : Serializable, IDModel, OwnedAble, Cloneable {
     private var delete: Boolean = false
+    var lock = false;
     var index = 0
     var medId: String = "";
     var count: Int = 0
@@ -66,9 +67,6 @@ abstract class Goods : Serializable, IDModel, OwnedAble, Cloneable {
         return keeper
     }
 
-    companion object {
-        private const val serialVersionUID: Long = Field.SERVER_VERSION
-    }
 
 
     open fun use(properties: GoodsProperties): Boolean {

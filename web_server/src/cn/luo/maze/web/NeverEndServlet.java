@@ -81,18 +81,25 @@ public class NeverEndServlet extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
         String path = getPathInfo(request);
         String ownerId = request.getHeader(Field.OWNER_ID_FIELD);
         String version = request.getHeader(Field.VERSION_FIELD);
         String sign = request.getHeader(Field.SIGN_FIELD);
         String limit = readEncodeHeader(request, Field.LIMIT_STRING);
-        PrintWriter writer = response.getWriter();
+        response.setCharacterEncoding("utf-8");
+        PrintWriter writer = null;
         Boolean success = null;
         switch (path) {
+            case GET_GIFT_COUNT:
+                writer = response.getWriter();
+                writer.write(String.valueOf(process.getGiftCount(ownerId)));
+                break;
             case GET_BACK_EXCHANGE:
                 String exchange_id = request.getHeader(Field.EXCHANGE_ID_FIELD);
                 Object backExchange = process.get_back_exchange(exchange_id);
                 if (backExchange == Integer.valueOf(1)) {
+                    writer = response.getWriter();
                     writer.write("Could not found special exchange!");
                 } else if (backExchange instanceof ExchangeObject) {
                     response.setHeader(Field.RESPONSE_CODE, Field.STATE_ACKNOWLEDGE);
@@ -105,6 +112,7 @@ public class NeverEndServlet extends HttpServlet {
                 if (process.acknowledge(exchange_id)) {
                     success = true;
                 } else {
+                    writer = response.getWriter();
                     writer.write("Error object could not found!");
                 }
                 break;
@@ -132,6 +140,7 @@ public class NeverEndServlet extends HttpServlet {
             case REQUEST_EXCHANGE:
                 Object objMy = readObject(request);
                 ExchangeObject exServer = process.exchangeTable.loadObject(request.getHeader(Field.EXCHANGE_ID_FIELD));
+                writer = response.getWriter();
                 if (objMy == null) {
                     writer.write("Exchange Object submit error!");
                 }
@@ -154,6 +163,7 @@ public class NeverEndServlet extends HttpServlet {
                 ExchangeObject eo = readObject(request);
                 limit = readEncodeHeader(request, Field.LIMIT_STRING);
                 int expectType = Integer.parseInt(request.getHeader(Field.EXPECT_TYPE));
+                writer = response.getWriter();
                 if (process.exchangeTable.addExchange(eo, ownerId, limit, expectType)) {
                     success = true;
                 } else {
@@ -165,6 +175,7 @@ public class NeverEndServlet extends HttpServlet {
                 if (obj != null) {
                     writeObject(response, obj);
                 } else {
+                    writer = response.getWriter();
                     writer.write(StringUtils.EMPTY_STRING);
                 }
                 break;
@@ -184,12 +195,20 @@ public class NeverEndServlet extends HttpServlet {
                 break;
             case POOL_BATTLE_MSG:
                 int count = request.getIntHeader(Field.COUNT);
+                writer = response.getWriter();
                 writer.write(process.queryBattleMessages(ownerId, count));
                 break;
             case POOL_ONLINE_DATA_MSG:
-                writer.write(process.queryHeroData(ownerId).toString());
+                ServerData sd = process.queryHeroData(ownerId);
+                writer = response.getWriter();
+                if(sd!=null){
+                    writer.write(sd.toString());
+                }else{
+                    writer.write(StringUtils.EMPTY_STRING);
+                }
                 break;
             case QUERY_BATTLE_AWARD:
+                writer = response.getWriter();
                 writer.write(process.queryBattleAward(ownerId));
                 break;
             case QUERY_HERO_DATA:
@@ -213,7 +232,7 @@ public class NeverEndServlet extends HttpServlet {
             default:
                 doGet(request,response);
         }
-        if (success != null) {
+        if (success != null && writer!=null) {
             if (success) {
                 response.setHeader(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
                 writer.write(Field.RESPONSE_RESULT_OK);
@@ -221,8 +240,10 @@ public class NeverEndServlet extends HttpServlet {
                 writer.write(Field.RESPONSE_RESULT_FAILED);
             }
         }
-        writer.flush();
-        writer.close();
+        if(writer!=null) {
+            writer.flush();
+            writer.close();
+        }
     }
 
     private void writeObject(HttpServletResponse response, Object exs) throws IOException {

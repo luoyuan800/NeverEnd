@@ -7,6 +7,7 @@ import cn.luo.yuan.maze.model.NameObject
 import cn.luo.yuan.maze.model.goods.Goods
 import cn.luo.yuan.maze.model.goods.GoodsProperties
 import cn.luo.yuan.maze.service.ListenerService
+import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.Field.Companion.SERVER_VERSION
 import cn.luo.yuan.maze.utils.StringUtils
 
@@ -14,6 +15,9 @@ import cn.luo.yuan.maze.utils.StringUtils
  * Created by gluo on 5/5/2017.
  */
 class Medallion() : Goods(){
+    companion object {
+        private const val serialVersionUID: Long = Field.SERVER_VERSION
+    }
 
     override fun load(properties: GoodsProperties) {
         ListenerService.registerListener(MedallionListener)

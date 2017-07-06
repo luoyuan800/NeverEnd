@@ -33,17 +33,18 @@ public class OnlineActivityOnClickHandler {
                             @Override
                             public void run() {
                                 if(o == null || o instanceof String){
-                                    SimplerDialogBuilder.build("谢谢惠顾！", activity,false);
+                                    SimplerDialogBuilder.build("谢谢惠顾！", Resource.getString(R.string.conform), null, activity);
                                 }else{
                                     if(o instanceof IDModel) {
                                         context.getDataManager().save((IDModel) o);
                                     }
                                     if(o instanceof NameObject){
-                                        SimplerDialogBuilder.build("获得了 " + ((NameObject) o).getDisplayName(), activity, false);
+                                        SimplerDialogBuilder.build("获得了 " + ((NameObject) o).getDisplayName(), Resource.getString(R.string.conform), null, activity);
                                     }else{
-                                        SimplerDialogBuilder.build("获得了 " + o, activity, false);
+                                        SimplerDialogBuilder.build("获得了 " + o,  Resource.getString(R.string.conform), null, activity);
                                     }
                                 }
+                                activity.postGiftCount();
                             }
                         });
                     }

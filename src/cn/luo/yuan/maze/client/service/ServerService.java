@@ -10,14 +10,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
-import static cn.luo.yuan.maze.Path.GET_BACK_HERO;
-import static cn.luo.yuan.maze.Path.HERO_RANGE;
-import static cn.luo.yuan.maze.Path.ONLINE_GIFT_OPEN;
-import static cn.luo.yuan.maze.Path.POOL_BATTLE_MSG;
-import static cn.luo.yuan.maze.Path.POOL_ONLINE_DATA_MSG;
-import static cn.luo.yuan.maze.Path.QUERY_BATTLE_AWARD;
-import static cn.luo.yuan.maze.Path.QUERY_HERO_DATA;
-import static cn.luo.yuan.maze.Path.SUBMIT_HERO;
+import static cn.luo.yuan.maze.Path.*;
 
 /**
  * Created by luoyuan on 2017/6/24.
@@ -134,6 +127,17 @@ public class ServerService {
             HttpURLConnection connection = server.getHttpURLConnection(ONLINE_GIFT_OPEN, RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
             return server.connect(connection);
+        } catch (Exception e) {
+            LogHelper.logException(e, "ServiceService->98");
+        }
+        return null;
+    }
+
+    public String postOnlineGiftCount(NeverEnd context){
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(GET_GIFT_COUNT, RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            return server.connect(connection).toString();
         } catch (Exception e) {
             LogHelper.logException(e, "ServiceService->98");
         }

@@ -26,18 +26,26 @@
                     android:id="@+id/online_range"
                     />
 
+            <ImageView
+                    android:src="@drawable/huoyan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView"/>
+
             <cn.luo.yuan.maze.client.display.view.RollTextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/online_battle_msg"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    />
         </LinearLayout>
 
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                >
 
             <TextView
                     android:text="队伍信息"
@@ -51,7 +59,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:id="@+id/group_message"/>
+                    android:id="@+id/group_message"
+                    android:background="@android:drawable/spinner_background"/>
 
             <TextView
                     android:text="已经获得的奖励"
@@ -65,7 +74,8 @@
                     android:text="加载中……"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/online_award"/>
+                    android:id="@+id/online_award"
+                    android:background="@android:drawable/spinner_background"/>
 
             <Button
                     android:text="在线商店"
@@ -73,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/online_shop"
                     android:onClick="onClick"
-                    style="@android:style/Widget.Button.Small"/>
+                    style="@android:style/Widget.Button.Inset"/>
 
             <Button
                     android:text="在线礼包"

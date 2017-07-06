@@ -26,4 +26,6 @@ public class Path {
     public static final String QUERY_BATTLE_AWARD = "query_battle_award";
     public static final String POOL_ONLINE_DATA_MSG = "pool_online_data_msg";
     public static final String POOL_BATTLE_MSG = "pool_battle_msg";
+    public static final String GET_GIFT_COUNT = "get_gift_count";
+
 }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.text.Html;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
@@ -197,6 +198,29 @@ public class OnlineActivity extends Activity {
                 postGroup();
             }
         }, 20, Data.REFRESH_SPEED * 10, TimeUnit.MILLISECONDS);
+        postGiftCount();
+    }
+
+    public void postGiftCount() {
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                String count = service.postOnlineGiftCount(gameContext);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Button button = (Button) findViewById(R.id.online_gifts);
+                        button.setText("礼包 X" + count);
+                        if(Integer.valueOf(count) <= 0){
+                            button.setEnabled(false);
+                        }else{
+                            button.setEnabled(true);
+                        }
+                    }
+                });
+            }
+        });
+
     }
 
     private void postBattleMsg(){

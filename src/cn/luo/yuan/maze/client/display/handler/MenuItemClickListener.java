@@ -11,6 +11,7 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.client.display.dialog.ExchangeDialog;
+import cn.luo.yuan.maze.client.display.dialog.GoodsDialog;
 import cn.luo.yuan.maze.client.display.dialog.PetDialog;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.LocalShop;
@@ -44,6 +45,9 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.goods:
+                new GoodsDialog().show(control);
+                break;
             case R.id.theme:
                 NeverEndConfig config = control.getDataManager().getConfig();
                 if(config.getTheme() == android.R.style.Theme_Holo){
