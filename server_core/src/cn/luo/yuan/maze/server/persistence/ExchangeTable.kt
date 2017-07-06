@@ -85,7 +85,7 @@ class ExchangeTable(root: File) {
                 }
             }
             if (exchange is NameObject) {
-                if ((exchange as NameObject).name.contains(limitWaord)) {
+                if (exchange.name.contains(limitWaord)) {
                     result.add(exchangeObject)
                 }
             } else {

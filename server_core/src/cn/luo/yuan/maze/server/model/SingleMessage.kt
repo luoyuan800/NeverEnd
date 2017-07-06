@@ -3,7 +3,6 @@ package cn.luo.yuan.maze.server.model
 import cn.luo.yuan.maze.model.IDModel
 import cn.luo.yuan.maze.utils.Field
 import java.io.Serializable
-import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
