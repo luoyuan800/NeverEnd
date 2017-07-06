@@ -1,9 +1,9 @@
 package cn.luo.yuan.maze.server;
 
+import cn.luo.yuan.maze.Path;
 import cn.luo.yuan.maze.model.ExchangeObject;
 import cn.luo.yuan.maze.model.OwnedAble;
 import cn.luo.yuan.maze.model.ServerData;
-import cn.luo.yuan.maze.server.persistence.HeroTable;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 import spark.Request;
@@ -18,13 +18,14 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
 
-import static cn.luo.yuan.maze.utils.Field.*;
+import static cn.luo.yuan.maze.Path.*;
 import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.SparkBase.port;
 import static spark.SparkBase.staticFileLocation;
 
 public class Server {
+
 
 
     /**
@@ -47,13 +48,13 @@ public class Server {
         port(4568);
         staticFileLocation("/pages");
 
-        post("online_gift_open", (request, response) -> {
+        post(ONLINE_GIFT_OPEN, (request, response) -> {
             String id = request.headers(Field.OWNER_ID_FIELD);
             writeObject(response, process.openOnlineGift(id));
-            return RESPONSE_RESULT_OK;
+            return Field.RESPONSE_RESULT_OK;
         });
-        get("/hero_range", ((request, response) -> process.heroRange));
-        post("hero_range", (request, response) -> process.heroRange);
+        get(HERO_RANGE, ((request, response) -> process.heroRange));
+        post(HERO_RANGE, (request, response) -> process.heroRange);
         get("/", ((request, response) -> {
             if (process.user.login) {
                 return "";
@@ -69,29 +70,29 @@ public class Server {
                 request.session().attribute("login", true);
                 request.session().attribute("user_name", process.user.name);
                 process.user.login = true;
-                return RESPONSE_RESULT_OK;
+                return Field.RESPONSE_RESULT_OK;
             } else {
                 return "Verify failed（校验失败！）";
             }
         }));
 
-        post("submit_exchange", (request, response) -> {
+        post(SUBMIT_EXCHANGE, (request, response) -> {
             Object ex = readObject(request);
             String ownerId = request.headers(Field.OWNER_ID_FIELD);
             String limit = readEncodeHeader(request, Field.LIMIT_STRING);
             int expectType = Integer.parseInt(request.headers(Field.EXPECT_TYPE));
             if (process.exchangeTable.addExchange(ex, ownerId, limit, expectType)) {
-                response.header(Field.RESPONSE_TYPE, RESPONSE_NONE_TYPE);
+                response.header(Field.RESPONSE_TYPE, Field.RESPONSE_NONE_TYPE);
                 response.header(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
                 return Field.RESPONSE_RESULT_SUCCESS;
             } else {
-                response.header(RESPONSE_TYPE, RESPONSE_STRING_TYPE);
-                response.header(RESPONSE_CODE, Field.STATE_FAILED.toString());
+                response.header(Field.RESPONSE_TYPE, Field.RESPONSE_STRING_TYPE);
+                response.header(Field.RESPONSE_CODE, Field.STATE_FAILED.toString());
                 return "Could not add exchange, maybe there already an exchange object has the same id existed!";
             }
         });
 
-        post("exchange_pet_list", (request, response) -> {
+        post(EXCHANGE_PET_LIST, (request, response) -> {
             String limit = readEncodeHeader(request, Field.LIMIT_STRING);
             String keeper = request.headers(Field.OWNER_ID_FIELD);
             List<ExchangeObject> pets = process.exchangeTable.loadAll(1, limit, keeper);
@@ -99,17 +100,17 @@ public class Server {
             return Field.RESPONSE_RESULT_OK;
         });
 
-        post("exchange_accessory_list", (request, response) -> {
+        post(EXCHANGE_ACCESSORY_LIST, (request, response) -> {
             String limit = readEncodeHeader(request, Field.LIMIT_STRING);
             String keeper = request.headers(Field.OWNER_ID_FIELD);
             List<ExchangeObject> accessories = process.exchangeTable.loadAll(2, limit, keeper);
-            response.header(RESPONSE_CODE, Field.STATE_SUCCESS);
+            response.header(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
             writeObject(response, accessories);
 
             return Field.RESPONSE_RESULT_OK;
         });
 
-        post("exchange_goods_list", (request, response) -> {
+        post(EXCHANGE_GOODS_LIST, (request, response) -> {
             String limit = readEncodeHeader(request, Field.LIMIT_STRING);
             String keeper = request.headers(Field.OWNER_ID_FIELD);
             List<ExchangeObject> goodses = process.exchangeTable.loadAll(3, limit, keeper);
@@ -119,18 +120,18 @@ public class Server {
             return Field.RESPONSE_RESULT_OK;
         });
 
-        post("query_my_exchange", (request, response) -> {
+        post(QUERY_MY_EXCHANGE, (request, response) -> {
             List<ExchangeObject> exs = process.exchangeTable.loadAll(request.headers("owner_id"));
             response.header(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
             writeObject(response, exs);
             return Field.RESPONSE_RESULT_OK;
         });
 
-        post("acknowledge_my_exchange", (request, response) -> {
-            String id = request.headers(EXCHANGE_ID_FIELD);
+        post(ACKNOWLEDGE_MY_EXCHANGE, (request, response) -> {
+            String id = request.headers(Field.EXCHANGE_ID_FIELD);
             if (process.acknowledge(id)) {
-                response.header(RESPONSE_TYPE, RESPONSE_NONE_TYPE);
-                response.header(RESPONSE_CODE, STATE_SUCCESS);
+                response.header(Field.RESPONSE_TYPE, Field.RESPONSE_NONE_TYPE);
+                response.header(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
                 return Field.RESPONSE_RESULT_OK;
             } else {
                 return "Error object could not found!";
@@ -138,14 +139,14 @@ public class Server {
         });
 
 
-        post("get_back_exchange", ((request, response) -> {
-            String id = request.headers(EXCHANGE_ID_FIELD);
+        post(GET_BACK_EXCHANGE, ((request, response) -> {
+            String id = request.headers(Field.EXCHANGE_ID_FIELD);
             Object backExchange = process.get_back_exchange(id);
             if (backExchange == Integer.valueOf(1)) {
-                response.header(RESPONSE_CODE, STATE_FAILED);
+                response.header(Field.RESPONSE_CODE, Field.STATE_FAILED);
                 return "Could not found special exchange!";
             } else if (backExchange instanceof ExchangeObject) {
-                response.header(RESPONSE_CODE, STATE_ACKNOWLEDGE);
+                response.header(Field.RESPONSE_CODE, Field.STATE_ACKNOWLEDGE);
                 writeObject(response, backExchange);
                 return "Exchange has been change, you need to acknowledge it!";
             } else {
@@ -153,34 +154,34 @@ public class Server {
             }
         }));
 
-        post("request_exchange", ((request, response) -> {
+        post(REQUEST_EXCHANGE, ((request, response) -> {
             Object objMy = readObject(request);
-            ExchangeObject exServer = process.exchangeTable.loadObject(request.headers(EXCHANGE_ID_FIELD));
+            ExchangeObject exServer = process.exchangeTable.loadObject(request.headers(Field.EXCHANGE_ID_FIELD));
             if (objMy == null) {
                 response.header(Field.RESPONSE_CODE, Field.STATE_FAILED);
                 return "Exchange Object submit error!";
             }
             if (exServer == null) {
-                response.header(RESPONSE_CODE, Field.STATE_FAILED);
+                response.header(Field.RESPONSE_CODE, Field.STATE_FAILED);
                 return "Could not find Object your request!";
             }
-            String id = request.headers(OWNER_ID_FIELD);
+            String id = request.headers(Field.OWNER_ID_FIELD);
             if (process.requestExchange(objMy, exServer, id)) return Field.RESPONSE_RESULT_OK;
             return "Could not do exchange because the target has been changed by other!";
         }));
 
-        post("task_version", ((request, response) -> process.taskTable.size()));
+        post(TASK_VERSION, ((request, response) -> process.taskTable.size()));
 
-        post("retrieve_new_task", ((request, response) -> {
+        post(RETRIEVE_NEW_TASK, ((request, response) -> {
             int clientVersion = Integer.parseInt(request.headers(Field.LOCAL_TASK_VERSION));
-            response.header(RESPONSE_CODE, STATE_SUCCESS);
+            response.header(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
             if (clientVersion < process.taskTable.size()) {
                 writeObject(response, process.taskTable.loadLimit(clientVersion, process.taskTable.size() - clientVersion, null, (o1, o2) -> o1.getId().compareTo(o2.getId())));
             }
-            return RESPONSE_RESULT_SUCCESS;
+            return Field.RESPONSE_RESULT_SUCCESS;
         }));
 
-        post("add_task", ((request, response) -> {
+        post(ADD_TASK, ((request, response) -> {
             try {
                 String name = request.queryParams("name");
                 String desc = request.queryParams("desc");
@@ -193,51 +194,51 @@ public class Server {
                 String accessory_type = request.queryParams("accessory_type");
                 String accessory_effects = request.queryParams("accessory_effects");
                 process.addTask(name, desc, material, accessory_name, point, accessory_color, accessory_level, accessory_element, accessory_type, accessory_effects);
-                return RESPONSE_RESULT_SUCCESS;
+                return Field.RESPONSE_RESULT_SUCCESS;
             } catch (Exception e) {
                 e.printStackTrace();
-                return RESPONSE_RESULT_FAILED;
+                return Field.RESPONSE_RESULT_FAILED;
             }
         }));
 
-        post("store_warehouse", ((request, response) -> {
+        post(STORE_WAREHOUSE, ((request, response) -> {
             Object o = readObject(request);
             if (o != null) {
                 process.warehouseTable.store(o);
             }
-            return RESPONSE_RESULT_SUCCESS;
+            return Field.RESPONSE_RESULT_SUCCESS;
         }));
 
-        post("retrieve_back_warehouse", ((request, response) -> {
-            Object o = process.warehouseTable.retrieve(request.headers(WAREHOUSE_ID_FIELD), Integer.parseInt(request.headers(WAREHOUSE_TYPE_FIELD)));
+        post(RETRIEVE_BACK_WAREHOUSE, ((request, response) -> {
+            Object o = process.warehouseTable.retrieve(request.headers(Field.WAREHOUSE_ID_FIELD), Integer.parseInt(request.headers(Field.WAREHOUSE_TYPE_FIELD)));
             if (o instanceof OwnedAble) {
-                if (((OwnedAble) o).getKeeperId().equals(request.headers(OWNER_ID_FIELD))) {
+                if (((OwnedAble) o).getKeeperId().equals(request.headers(Field.OWNER_ID_FIELD))) {
                     writeObject(response, o);
                     process.warehouseTable.delete(o);
                 } else {
-                    response.header(RESPONSE_CODE, NOT_YOUR_ITEM);
-                    return RESPONSE_RESULT_FAILED;
+                    response.header(Field.RESPONSE_CODE, Field.NOT_YOUR_ITEM);
+                    return Field.RESPONSE_RESULT_FAILED;
                 }
             }
-            return RESPONSE_RESULT_SUCCESS;
+            return Field.RESPONSE_RESULT_SUCCESS;
         }));
 
-        post("retrieve_warehouse", ((request, response) -> {
-            writeObject(response, process.warehouseTable.retrieveAll(request.headers(OWNER_ID_FIELD)));
-            return RESPONSE_RESULT_SUCCESS;
+        post(RETRIEVE_WAREHOUSE, ((request, response) -> {
+            writeObject(response, process.warehouseTable.retrieveAll(request.headers(Field.OWNER_ID_FIELD)));
+            return Field.RESPONSE_RESULT_SUCCESS;
         }));
 
-        post("submit_hero", ((request, response) -> {
+        post(SUBMIT_HERO, ((request, response) -> {
             ServerData data = readObject(request);
             if (data != null && data.hero != null && data.maze != null) {
                 process.submitHero(data);
-                return RESPONSE_RESULT_SUCCESS;
+                return Field.RESPONSE_RESULT_SUCCESS;
             } else {
-                return RESPONSE_RESULT_FAILED;
+                return Field.RESPONSE_RESULT_FAILED;
             }
         }));
 
-        post("get_back_hero", ((request, response) -> {
+        post(GET_BACK_HERO, ((request, response) -> {
             String id = request.headers(Field.OWNER_ID_FIELD);
             if (StringUtils.isNotEmpty(id)) {
                 ServerData data = process.getBackHero(id);
@@ -249,7 +250,7 @@ public class Server {
             return Field.RESPONSE_RESULT_FAILED;
         }));
 
-        post("query_hero_data", ((request, response) -> {
+        post(QUERY_HERO_DATA, ((request, response) -> {
             String id = request.headers(Field.OWNER_ID_FIELD);
             ServerData serverData = process.queryHeroData(id);
             if (serverData != null) {
@@ -259,17 +260,17 @@ public class Server {
             return Field.RESPONSE_RESULT_FAILED;
         }));
 
-        post("query_battle_award", (request, response) -> {
+        post(QUERY_BATTLE_AWARD, (request, response) -> {
             String id = request.headers(Field.OWNER_ID_FIELD);
             return process.queryBattleAward(id);
         });
 
-        post("pool_online_data_msg", (request, response) -> {
+        post(POOL_ONLINE_DATA_MSG, (request, response) -> {
             String id = request.headers(Field.OWNER_ID_FIELD);
             return process.queryHeroData(id).toString();
         });
 
-        post("pool_battle_msg", (request, response) -> {
+        post(POOL_BATTLE_MSG, (request, response) -> {
             String id = request.headers(Field.OWNER_ID_FIELD);
             int count = Integer.parseInt(request.headers(Field.COUNT));
             return process.queryBattleMessages(id, count);
@@ -279,7 +280,7 @@ public class Server {
             if ("gavin.luo".equals(request.queryParams("pass"))) {
                 stop();
             }
-            return RESPONSE_RESULT_OK;
+            return Field.RESPONSE_RESULT_OK;
         }));
 
         get("/status", ((request, response) -> process.heroTableCache.size()));
@@ -298,7 +299,7 @@ public class Server {
     private void writeObject(Response response, Object exs) throws IOException {
         ObjectOutputStream oos = new ObjectOutputStream(response.getOutputStream());
         oos.writeObject(exs);
-        response.header(Field.RESPONSE_TYPE, RESPONSE_OBJECT_TYPE);
+        response.header(Field.RESPONSE_TYPE, Field.RESPONSE_OBJECT_TYPE);
         oos.flush();
         oos.close();
     }

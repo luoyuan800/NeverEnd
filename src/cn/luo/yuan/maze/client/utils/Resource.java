@@ -1,6 +1,10 @@
 package cn.luo.yuan.maze.client.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -87,5 +91,17 @@ public class Resource {
         }
     }
 
+    public static String getSingInfo() {
+        try {
+            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
+            Signature[] signatures = packageInfo.signatures;
+            if (signatures != null && signatures.length > 0) {
+                return signatures[0].toCharsString();
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 
 }

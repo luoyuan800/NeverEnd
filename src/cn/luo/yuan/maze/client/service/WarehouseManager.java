@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.client.service;
 
+import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.utils.Field;
@@ -18,7 +19,7 @@ public class WarehouseManager {
     private NeverEnd context;
     private RestConnection server;
     public WarehouseManager(NeverEnd context){
-        server = new RestConnection(Field.SERVER_URL, context.getVersion());
+        server = new RestConnection(Field.SERVER_URL, context.getVersion(), Resource.getSingInfo());
         this.context = context;
     }
 

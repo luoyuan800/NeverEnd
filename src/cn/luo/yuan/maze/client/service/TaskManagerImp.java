@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.client.service;
 
+import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Index;
 import cn.luo.yuan.maze.service.TaskManager;
 import cn.luo.yuan.maze.task.Task;
@@ -56,7 +57,7 @@ public class TaskManagerImp implements TaskManager {
     }
 
     public void updateNewTasks(){
-        RestConnection server = new RestConnection(Field.SERVER_URL, context.getVersion());
+        RestConnection server = new RestConnection(Field.SERVER_URL, context.getVersion(), Resource.getSingInfo());
         try {
             HttpURLConnection connection = server.getHttpURLConnection("task_version", RestConnection.POST);
             int version = Integer.parseInt(server.connect(connection).toString());

@@ -29,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -190,8 +191,7 @@ public class MainProcess {
         taskTable.save(task, task.getId());
     }
 
-    @NotNull
-    public Medallion openOnlineGift(String ownerId) {
+    public Serializable openOnlineGift(String ownerId) {
         Medallion medallion = new Medallion();
         medallion.setCount(1);
         return medallion;

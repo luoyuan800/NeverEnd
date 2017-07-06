@@ -1,6 +1,5 @@
 package cn.luo.yuan.maze.client.utils;
 
-import android.os.Environment;
 import cn.luo.yuan.maze.utils.Field;
 
 import java.io.BufferedReader;
@@ -25,10 +24,12 @@ public class RestConnection {
     public final static Integer STATE_SUCCESS = 100, STATE_FAILED = 601;
     private String server;
     private String version;
+    private String Sing;
 
-    public RestConnection(String serverUrl, String version) {
+    public RestConnection(String serverUrl, String version, String sing) {
         this.server = serverUrl;
         this.version = version;
+        this.Sing = sing;
     }
 
     public Object connect(Serializable serializable, HttpURLConnection connection) throws IOException {
@@ -66,6 +67,7 @@ public class RestConnection {
         connection.setDoOutput(true);
         //connection.addRequestProperty("signe", MazeContents.getSingInfo(MainGameActivity.context));
         connection.addRequestProperty(Field.VERSION_FIELD, version);
+        connection.addRequestProperty(Field.SIGN_FIELD, Sing);
         return connection;
     }
 
