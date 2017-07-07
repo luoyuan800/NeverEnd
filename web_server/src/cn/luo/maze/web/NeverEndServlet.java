@@ -91,6 +91,12 @@ public class NeverEndServlet extends HttpServlet {
         PrintWriter writer = null;
         Boolean success = null;
         switch (path) {
+            case ADD_BOSS:
+                process.submitBoss(request.getParameter("name"), request.getParameter("element"),
+                        request.getParameter("race"),request.getParameter("atk"),request.getParameter("def"),
+                        request.getParameter("hp"),request.getParameter("grow"),request.getParameter("grow"),request.getParameter("grow"));
+                success = true;
+                break;
             case GET_GIFT_COUNT:
                 writer = response.getWriter();
                 writer.write(String.valueOf(process.getGiftCount(ownerId)));

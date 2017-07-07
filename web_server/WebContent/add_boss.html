@@ -11,40 +11,32 @@
 </head>
 <body>
 <center>
-<h2>添加任务</h2>
+<h2>添加Boss</h2>
 <div style="margin:20px 0;"></div>
 <div class="easyui-panel" title="New Topic" style="width:100%;max-width:400px;padding:30px 60px;">
-    <form id="ff" method="post" action="/add_task">
+    <form id="ff" method="post" action="/add_boss">
         <div style="margin-bottom:20px">
             <input class="easyui-textbox" name="name" style="width:100%" data-options="label:'名字:',required:true" labelPosition="top">
         </div>
         <div style="margin-bottom:20px">
-            <input class="easyui-textbox" name="desc" style="width:100%" data-options="label:'描述:',required:true" labelPosition="top">
+            <input class="easyui-textbox" name="race" style="width:100%" data-options="label:'种族:',required:true" labelPosition="top">
         </div>
         <div style="margin-bottom:20px">
-            <input class="easyui-textbox" name="material" style="width:100%" data-options="label:'锻造:',required:true" labelPosition="top">
+            <input class="easyui-textbox" name="element" style="width:100%" data-options="label:'五行:',required:true" labelPosition="top">
         </div>
         <div style="margin-bottom:20px">
-            <input class="easyui-textbox" name="point" style="width:100%" data-options="label:'能力:',required:true" labelPosition="top">
+            <input class="easyui-textbox" name="atk" style="width:100%" data-options="label:'基础攻击:',required:true" labelPosition="top">
         </div>
         <div style="margin-bottom:20px">
-            <input class="easyui-textbox" name="accessory_name" style="width:100%" data-options="label:'装备:',required:true" labelPosition="top">
+            <input class="easyui-textbox" name="def" style="width:100%" data-options="label:'基础防御:',required:true" labelPosition="top">
         </div>
         <div style="margin-bottom:20px">
-            <input class="easyui-textbox" name="accessory_color" style="width:100%" data-options="label:'装备颜色:',required:true" labelPosition="top">
+            <input class="easyui-textbox" name="hp" style="width:100%" data-options="label:'基础生命:',required:true" labelPosition="top">
         </div>
         <div style="margin-bottom:20px">
-            <input class="easyui-textbox" name="accessory_effects" style="width:100%" data-options="label:'装备属性:',required:true" labelPosition="top">
+            <input class="easyui-textbox" name="grow" style="width:100%" data-options="label:'成长:',required:true" labelPosition="top">
         </div>
-        <div style="margin-bottom:20px">
-            <input class="easyui-textbox" name="accessory_level" style="width:100%" data-options="label:'装备等级:',required:true" labelPosition="top">
-        </div>
-        <div style="margin-bottom:20px">
-            <input class="easyui-textbox" name="accessory_element" style="width:100%" data-options="label:'装备五行:',required:true" labelPosition="top">
-        </div>
-        <div style="margin-bottom:20px">
-            <input class="easyui-textbox" name="accessory_type" style="width:100%" data-options="label:'装备类型:',required:true" labelPosition="top">
-        </div>
+
         <!--
         <div style="margin-bottom:20px">
             <input class="easyui-textbox" name="message" style="width:100%" data-options="label:'Message:',multiline:true">
