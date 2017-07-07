@@ -9,6 +9,7 @@ import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.service.EffectHandler;
 import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Field;
+import cn.luo.yuan.maze.utils.Random;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -194,6 +195,23 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
         return getMaxHp() + EffectHandler.getEffectAdditionLongValue(EffectHandler.HP, getEffects()) + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects()) * getHpGrow();
     }
 
+    @Override
+    public boolean isDodge(Random random) {
+        return random.nextLong(100) + random.nextLong((long)(getAgi() * Data.DODGE_AGI_RATE)) > 97 + random.nextInt(100) + random.nextLong((long) (getStr() * Data.DODGE_STR_RATE));
+    }
+
+    @Override
+    public boolean isHit(Random random) {
+        return random.nextLong(100) + getStr()* Data.HIT_STR_RATE > 97
+                + random.nextInt(100) +
+                random.nextLong((long) (getAgi() * Data.HIT_AGI_RATE));
+    }
+
+    @Override
+    public boolean isParry(Random random) {
+        return random.nextLong(100) + getStr() * Data.PARRY_STR_RATE > 97 + random.nextInt(100) + random.nextLong((long) (getAgi() * Data.PARRY_AGI_RATE));
+    }
+
     public long getUpperAtk() {
         return getAtk() + EffectHandler.getEffectAdditionLongValue(EffectHandler.ATK, getEffects()) + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects()) * getAtkGrow();
     }
@@ -286,7 +304,7 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
         if (skills == null) {
             synchronized (this) {
                 if (skills == null)
-                    skills = new Skill[]{EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL};
+                    skills = new Skill[]{EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL,EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL};
             }
         }
         return skills;

@@ -138,14 +138,14 @@ public class OnlineActivity extends Activity {
 
     private void upload() {
         ServerData uploadData = new ServerData();
-        uploadData.hero = gameContext.getHero();
-        uploadData.accessories = new ArrayList<>(gameContext.getHero().getAccessories().size());
+        uploadData.setHero(gameContext.getHero());
+        uploadData.setAccessories(new ArrayList<>(gameContext.getHero().getAccessories().size()));
         for(Accessory accessory : gameContext.getHero().getAccessories()){
-                uploadData.accessories.add((Accessory) gameContext.convertToServerObject(accessory));
+                uploadData.getAccessories().add((Accessory) gameContext.convertToServerObject(accessory));
         }
-        uploadData.pets = new ArrayList<>(gameContext.getHero().getPets());
-        uploadData.skills = Arrays.asList(gameContext.getHero().getSkills());
-        uploadData.maze = gameContext.getMaze();
+        uploadData.setPets(new ArrayList<>(gameContext.getHero().getPets()));
+        uploadData.setSkills(Arrays.asList(gameContext.getHero().getSkills()));
+        uploadData.setMaze(gameContext.getMaze());
         AlertDialog uploadDialog = new AlertDialog.Builder(OnlineActivity.this).setMessage("上传中……").setCancelable(true).setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {

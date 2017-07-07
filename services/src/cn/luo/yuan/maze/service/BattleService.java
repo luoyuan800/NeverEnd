@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.service;
 import cn.luo.yuan.maze.listener.BattleEndListener;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Element;
+import cn.luo.yuan.maze.model.Group;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Monster;
@@ -50,10 +51,22 @@ public class BattleService {
                 hero.setHp(hero.getHp() / 2);
                 monster.setHp(monster.getHp() / 2);
             }
+            if(hero instanceof Group){
+                ((Group) hero).roll(random);
+            }
+            if(monster instanceof Group){
+                ((Group) monster).roll(random);
+            }
             if (heroAtk) {
                 atk(hero, monster, level);
             } else {
                 atk(monster, hero, level);
+            }
+            if(hero instanceof Group){
+                ((Group) hero).reset();
+            }
+            if(monster instanceof Group){
+                ((Group) monster).reset();
             }
             heroAtk = !heroAtk;
             round++;
@@ -111,27 +124,18 @@ public class BattleService {
             }
         }
 
-        boolean isDodge = false;
-        if(defender instanceof Hero) {
-            isDodge = random.nextLong(100) + ((Hero)defender).getAgi() * Data.DODGE_AGI_RATE > 97 + random.nextInt(100) + random.nextLong((long) (((Hero)defender).getStr() * Data.DODGE_STR_RATE));
-        }
-        if(!isDodge) {
-            long atk = atker instanceof Hero ? ((Hero) atker).getUpperAtk() : atker.getAtk();
+        if(!defender.isDodge(random)) {
+            long atk = atker.getUpperAtk();
             atk = atk / 3;
             atk = atk * 2 + random.nextLong(atk);
-            boolean isHit = random.nextLong(100) + (atker instanceof Hero ? ((Hero) atker).getStr() : 0) * Data.HIT_STR_RATE > 97
-                    + random.nextInt(100) +
-                    random.nextLong((long) ((atker instanceof Hero ? ((Hero) atker).getAgi() : 0) * Data.HIT_AGI_RATE));
+            boolean isHit = atker.isHit(random);
             if (isHit) {
                 if (atker instanceof NameObject)
                     battleMessage.hit((NameObject) atker);
                 atk *= 2;//暴击有效攻击力翻倍
             }
-            boolean isParry = false;
-            if(defender instanceof Hero) {
-                isParry = random.nextLong(100) + ((Hero)defender).getStr() * Data.PARRY_STR_RATE > 97 + random.nextInt(100) + random.nextLong((long) (((Hero)defender).getAgi() * Data.PARRY_AGI_RATE));
-            }
-            long defend = defender instanceof Hero ? ((Hero) defender).getUpperDef() : defender.getDef();
+            boolean isParry = defender.isParry(random);
+            long defend = defender.getUpperDef();
             defend = defend / 2;
             defend = defend + random.nextLong(defend);
             if (isParry) {

@@ -1,7 +1,8 @@
 package cn.luo.yuan.maze.client.utils;
 
-import android.app.Activity;
+import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -9,7 +10,11 @@ import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.ArrayMap;
+import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.client.display.activity.BaseActivity;
+import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.io.BufferedReader;
@@ -20,11 +25,11 @@ import java.io.InputStreamReader;
  * Created by luoyuan on 2017/3/18.
  */
 public class Resource {
-    private static Context context;
     private static final ArrayMap<Object, Drawable> drawableCache = new ArrayMap<>(10);
+    private static Context context;
 
-    private static void addToCache(Object key, Drawable drawable){
-        if(!drawableCache.containsKey(key)) {
+    private static void addToCache(Object key, Drawable drawable) {
+        if (!drawableCache.containsKey(key)) {
             synchronized (drawableCache) {
                 if (drawableCache.size() >= 10) {
                     drawableCache.removeAt(0);
@@ -39,18 +44,18 @@ public class Resource {
     }
 
     public static String getString(int id) {
-        if(context!=null) {
+        if (context != null) {
             return context.getString(id);
-        }else{
+        } else {
             return String.valueOf(id);
         }
     }
 
     public static Drawable loadImageFromAssets(String name) {
         Drawable drawable = drawableCache.get(name);
-        if(drawable == null) {
+        if (drawable == null) {
             try {
-                drawable =  new BitmapDrawable((Resources) null, BitmapFactory.decodeStream(context.getAssets().open(name)));
+                drawable = new BitmapDrawable((Resources) null, BitmapFactory.decodeStream(context.getAssets().open(name)));
                 addToCache(name, drawable);
             } catch (IOException e) {
                 //LogHelper.logException(e, "False to load image from assets: " + name);
@@ -83,7 +88,7 @@ public class Resource {
         return string.toString();
     }
 
-    public static String[] getFilesInAssets(String folder){
+    public static String[] getFilesInAssets(String folder) {
         try {
             return context.getAssets().list(folder);
         } catch (IOException e) {
@@ -102,6 +107,30 @@ public class Resource {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public static void askWritePermissions(BaseActivity.PermissionRequestListener listener) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context instanceof BaseActivity) {
+            if (context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (((BaseActivity) context).shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    SimplerDialogBuilder.build("我需要获取读写外部存储卡的权限用于读取头像图片和记录游戏运行时发生的异常，您是否同意？", getString(R.string.conform), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ((BaseActivity) context).listener = listener;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                ((BaseActivity) context).requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                            }
+                        }
+                    }, getString(R.string.close), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }, context);
+                }
+
+            }
+        }
     }
 
 }

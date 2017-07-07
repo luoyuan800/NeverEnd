@@ -391,7 +391,12 @@ public class DataManager implements DataManagerInterface {
     }
 
     public List<Goods> loadAllGoods() {
-        return Collections.emptyList();
+        return goodsLoader.loadLimit(0, -1, new Index<Goods>() {
+            @Override
+            public boolean match(Goods goods) {
+                return goods.getHeroIndex() == index;
+            }
+        }, null);
     }
 
     public NeverEndConfig getConfig() {

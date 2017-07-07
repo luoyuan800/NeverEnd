@@ -3,6 +3,8 @@ package cn.luo.yuan.maze.server;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.ExchangeObject;
+import cn.luo.yuan.maze.model.GroupHolder;
+import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.ServerData;
@@ -21,6 +23,7 @@ import cn.luo.yuan.maze.model.goods.types.Medallion;
 import cn.luo.yuan.maze.server.model.User;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
+import cn.luo.yuan.maze.server.persistence.NPCTable;
 import cn.luo.yuan.maze.server.persistence.WarehouseTable;
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
 import cn.luo.yuan.maze.task.Task;
@@ -54,7 +57,7 @@ public class MainProcess {
     public ObjectTable<Task> taskTable = new ObjectTable<>(Task.class, root);
     private File heroDir = new File(root, "hero");
     public Map<String, HeroTable> heroTableCache = initHeroTableCache(heroDir);
-
+    public List<GroupHolder> groups = new ArrayList<>();
     public MainProcess() {
         ObjectTable<User> userDb = new ObjectTable<>(User.class, root);
         user = userDb.loadObject("root");
@@ -80,7 +83,7 @@ public class MainProcess {
                     HeroTable table = entry.getValue();
                     String name = entry.getKey();
                     ServerRecord record = table.getRecord(name);
-                    if (record.getData() != null && record.getData().hero != null) {
+                    if (record.getData() != null && record.getData().getHero() != null) {
                         records.add(record);
                     }
                 } catch (Exception e) {
@@ -96,7 +99,7 @@ public class MainProcess {
             for (int i = 0; i < records.size() && i < 5; i++) {
                 ServerData data = records.get(i).getData();
                 if (data != null)
-                    sb.append(data.hero.getDisplayName()).append("胜率：").append(records.get(i).winRate()).append("<br>");
+                    sb.append(data.getHero().getDisplayName()).append("胜率：").append(records.get(i).winRate()).append("<br>");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -149,11 +152,11 @@ public class MainProcess {
     }
 
     public void submitHero(ServerData data) throws IOException, ClassNotFoundException {
-        data.maze.setId(data.hero.getId());
-        HeroTable table = heroTableCache.get(data.hero.getId());
+        data.getMaze().setId(data.getHero().getId());
+        HeroTable table = heroTableCache.get(data.getHero().getId());
         if (table == null) {
-            table = new HeroTable(new File(heroDir, data.hero.getId()));
-            heroTableCache.put(data.hero.getId(), table);
+            table = new HeroTable(new File(heroDir, data.getHero().getId()));
+            heroTableCache.put(data.getHero().getId(), table);
         }
         table.submitHero(data);
     }
@@ -257,7 +260,7 @@ public class MainProcess {
             @Override
             public void run() {
                 HashMap<String, HeroTable> tableCache = new HashMap<>(heroTableCache);
-                new HeroBattleService(tableCache).run();
+                new HeroBattleService(tableCache, new ArrayList<>(groups), MainProcess.this).run();
                 heroRange = buildHeroRange(tableCache);
             }
         }, 0, 1, TimeUnit.MINUTES);
@@ -338,6 +341,43 @@ public class MainProcess {
             return record.getGift();
         }else{
             return 0;
+        }
+    }
+
+    public void addGroup(String h1, String h2){
+        GroupHolder holder = new GroupHolder();
+        holder.getHeroIds().add(h1);
+        holder.getHeroIds().add(h2);
+        groups.add(holder);
+    }
+
+    public void removeGroup(String heroId){
+        for(GroupHolder holder : new ArrayList<>(groups)){
+            if(holder.isInGroup(heroId)){
+                groups.remove(holder);
+            }
+        }
+    }
+
+    public void submitBoss(String name, String element, String race, String atk, String def, String hp, String hpG, String atkG, String defG){
+        Hero hero = new Hero();
+        hero.setDef(Long.parseLong(def));
+        hero.setAtk(Long.parseLong(atk));
+        hero.setMaxHp(Long.parseLong(hp));
+        hero.setHp(hero.getMaxHp());
+        hero.setName(name);
+        hero.setRace(Integer.parseInt(race));
+        hero.setElement(Element.valueOf(element));
+        hero.setHpGrow(Integer.parseInt(hpG));
+        hero.setDefGrow(Integer.parseInt(defG));
+        hero.setAtkGrow(Integer.parseInt(atkG));
+        try {
+            NPCTable table = new NPCTable(new File("data/npc"));
+            table.save(hero);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }

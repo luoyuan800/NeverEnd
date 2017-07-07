@@ -1,11 +1,14 @@
 package cn.luo.yuan.maze.client.display.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.method.LinkMovementMethod;
@@ -36,7 +39,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 /**
  * Created by luoyuan on 2017/3/29.
  */
-public class GameActivity extends Activity {
+public class GameActivity extends BaseActivity {
     public DataManager dataManager;
     public NeverEnd control;
     private PopupMenu popupMenu;
@@ -57,9 +60,16 @@ public class GameActivity extends Activity {
         control.setViewHandler(new GameActivityViewHandler(this));
         control.setTextView((RollTextView) findViewById(R.id.info_view));
         initResources();
-        /*ProgressDialog progressDialog = new ProgressDialog(GameActivity.this);
-        progressDialog.setMessage(getString(R.string.loading));
-        progressDialog.show();*/
+        Resource.askWritePermissions(new PermissionRequestListener() {
+            @Override
+            public void result(int requestCode, String[] permissions, int[] grantResults) {
+                if(grantResults[0] + grantResults[1]  == 0){
+                    Toast.makeText(GameActivity.this, "已经获得记录数据的权限", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(GameActivity.this, "无法获得记录数据的权限", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         new Thread(new Runnable() {
             public void run() {
                 control.startGame();

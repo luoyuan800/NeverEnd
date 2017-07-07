@@ -1,6 +1,11 @@
 package cn.luo.yuan.maze.utils;
 
+import cn.luo.yuan.maze.model.Hero;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -125,10 +130,11 @@ public class Random extends java.util.Random {
         return number;
     }
 
-    public <T> T randomItem(ArrayList<T> ts) {
-        if(ts.size() <= 0){
+    @Nullable
+    public <T> T randomItem(@NotNull List<T> list) {
+        if(list.size() <= 0){
             return null;
         }
-        return ts.get(nextInt(ts.size()));
+        return list.get(nextInt(list.size()));
     }
 }

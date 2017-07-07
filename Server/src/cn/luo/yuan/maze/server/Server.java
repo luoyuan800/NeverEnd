@@ -230,7 +230,7 @@ public class Server {
 
         post(SUBMIT_HERO, ((request, response) -> {
             ServerData data = readObject(request);
-            if (data != null && data.hero != null && data.maze != null) {
+            if (data != null && data.getHero() != null && data.getMaze() != null) {
                 process.submitHero(data);
                 return Field.RESPONSE_RESULT_SUCCESS;
             } else {

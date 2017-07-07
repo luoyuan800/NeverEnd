@@ -67,7 +67,7 @@ public class HeroTable {
     }
 
     public Maze getMaze(String id, long level) throws IOException, ClassNotFoundException {
-        return getRecord(id).getData().maze;
+        return getRecord(id).getData().getMaze();
     }
 
     public ServerRecord getRecord(String id) {
@@ -83,7 +83,7 @@ public class HeroTable {
         if(record.getData()!=null) {
             int t = record.getWinCount() + record.getLostCount();
             if(t<= 0) t++;
-            return record.getData().hero.getDisplayName() + "<br>"
+            return record.getData().getHero().getDisplayName() + "<br>"
                     + "排名：" + record.getRange() + "， 胜率：" +  StringUtils.formatPercentage(record.getWinCount() * 100/(t))
                     ;
         }
@@ -104,7 +104,7 @@ public class HeroTable {
 
     public ServerData getBackHero(String id) throws IOException {
         ServerRecord record = getRecord(id);
-        LogHelper.info(record.getData().hero.getDisplayName() + " Get back!");
+        LogHelper.info(record.getData().getHero().getDisplayName() + " Get back!");
         ServerData data = new ServerData(record.getData());
         record.setData(null);
         record.setDieCount(0);
@@ -115,15 +115,15 @@ public class HeroTable {
     }
 
     public void submitHero(ServerData data) throws IOException {
-        ServerRecord record = getRecord(data.hero.getId());
+        ServerRecord record = getRecord(data.getHero().getId());
         if(record == null){
             record = new ServerRecord();
-            record.setId(data.hero.getId());
+            record.setId(data.getHero().getId());
         }
         record.setRange(Integer.MAX_VALUE);
         record.setData(data);
         save(record);
-        LogHelper.info(record.getData().hero.getDisplayName() + " Submit!");
+        LogHelper.info(record.getData().getHero().getDisplayName() + " Submit!");
     }
 
     public Hero getHero(String name) throws IOException, ClassNotFoundException {
@@ -134,14 +134,14 @@ public class HeroTable {
         ServerRecord record = getRecord(id);
         ServerData data = record.getData();
         if (data != null) {
-            Hero hero = data.hero;
-            if (data.accessories != null) {
-                for (Accessory accessory : data.accessories) {
+            Hero hero = data.getHero();
+            if (data.getAccessories() != null) {
+                for (Accessory accessory : data.getAccessories()) {
                     AccessoryHelper.mountAccessory(accessory, hero);
                 }
             }
-            if (data.pets != null) {
-                for (Pet pet : data.pets) {
+            if (data.getPets() != null) {
+                for (Pet pet : data.getPets()) {
                     hero.getPets().add(pet);
                 }
             }

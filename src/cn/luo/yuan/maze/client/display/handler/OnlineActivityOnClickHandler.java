@@ -72,14 +72,14 @@ public class OnlineActivityOnClickHandler {
         String award = activity.service.queryAwardString(context);
         ServerData data = activity.service.getBackHero(context);
         if(data!=null && StringUtils.isNotEmpty(award)) {
-            context.getHero().setMaterial(context.getHero().getMaterial() + data.material);
-            if (data.awardAccessories != null) {
-                for (Accessory accessory : data.accessories) {
+            context.getHero().setMaterial(context.getHero().getMaterial() + data.getMaterial());
+            if (data.getAwardAccessories() != null) {
+                for (Accessory accessory : data.getAccessories()) {
                     context.getDataManager().saveAccessory(context.covertAccessoryToLocal(accessory));
                 }
             }
-            if (data.awardPets != null) {
-                for (Pet pet : data.pets) {
+            if (data.getAwardPets() != null) {
+                for (Pet pet : data.getPets()) {
                     context.getDataManager().savePet(pet);
                 }
             }

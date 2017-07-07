@@ -215,9 +215,9 @@ public class TestServer {
         pet.setOwnerId("101");
         hero.getPets().add(pet);
         ServerData upload = new ServerData();
-        upload.hero = hero;
-        upload.maze = maze;
-        upload.pets = new ArrayList<>(hero.getPets());
+        upload.setHero(hero);
+        upload.setMaze(maze);
+        upload.setPets(new ArrayList<>(hero.getPets()));
         ServerService serverService = new ServerService("http://localhost:4567","test");
         serverService.uploadHero(upload);
         assertTrue(new File("data/hero/" + hero.getId()).exists());
@@ -237,8 +237,8 @@ public class TestServer {
         hero.setId(UUID.randomUUID().toString());
         Maze maze = new Maze();
         ServerData upload = new ServerData();
-        upload.hero = hero;
-        upload.maze = maze;
+        upload.setHero(hero);
+        upload.setMaze(maze);
         ServerService serverService = new ServerService("http://localhost:4567","test");
         serverService.uploadHero(upload);
         assertTrue(new File("data/hero/" + hero.getId()).exists());
