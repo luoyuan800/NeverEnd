@@ -48,6 +48,7 @@ import static cn.luo.yuan.maze.utils.Field.RESPONSE_RESULT_SUCCESS;
  * Created by gluo on 7/6/2017.
  */
 public class MainProcess {
+    public String sing = StringUtils.EMPTY_STRING;
     public ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
     public User user;
     public String heroRange = StringUtils.EMPTY_STRING;
@@ -58,13 +59,13 @@ public class MainProcess {
     private File heroDir = new File(root, "hero");
     public Map<String, HeroTable> heroTableCache = initHeroTableCache(heroDir);
     public List<GroupHolder> groups = new ArrayList<>();
+    ObjectTable<User> userDb = new ObjectTable<>(User.class, root);
     public MainProcess() {
-        ObjectTable<User> userDb = new ObjectTable<>(User.class, root);
         user = userDb.loadObject("root");
         if (user == null) {
             user = new User();
-            user.pass.setValue(111);
-            user.name = "luo";
+            user.setPass(111);
+            user.setName("luo");
             try {
                 userDb.save(user);
             } catch (IOException e) {
@@ -72,6 +73,18 @@ public class MainProcess {
             }
         }
 
+    }
+
+    public boolean login(int pass){
+        if(user.getLogin()){
+           return true;
+        }else{
+            if(user.getPass() == pass){
+                user.setLogin(true);
+                return true;
+            }
+        }
+        return false;
     }
 
     public static String buildHeroRange(Map<String, HeroTable> heroTableCache) {
@@ -99,7 +112,7 @@ public class MainProcess {
             for (int i = 0; i < records.size() && i < 5; i++) {
                 ServerData data = records.get(i).getData();
                 if (data != null)
-                    sb.append(data.getHero().getDisplayName()).append("胜率：").append(records.get(i).winRate()).append("<br>");
+                    sb.append(data.getHero().getDisplayName()).append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(records.get(i).winRate()).append("<br>");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -263,7 +276,7 @@ public class MainProcess {
                 new HeroBattleService(tableCache, new ArrayList<>(groups), MainProcess.this).run();
                 heroRange = buildHeroRange(tableCache);
             }
-        }, 0, 1, TimeUnit.MINUTES);
+        }, 0, user.getBattleInterval(), TimeUnit.MINUTES);
         executor.scheduleAtFixedRate(warehouseTable, 0, 1, TimeUnit.DAYS);
     }
 
@@ -378,6 +391,20 @@ public class MainProcess {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void saveUserConfig(String name, int pass, String sing, int battlInterval){
+        if(user!=null){
+            user.setName(name);
+            user.setPass(pass);
+            user.setSing(sing);
+            user.setBattleInterval(battlInterval);
+            try {
+                userDb.save(user);
+            } catch (IOException e) {
+                LogHelper.error(e);
+            }
         }
     }
 }

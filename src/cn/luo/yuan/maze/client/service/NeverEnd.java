@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.client.service;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 import cn.luo.yuan.maze.client.display.handler.GameActivityViewHandler;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
 import cn.luo.yuan.maze.client.utils.LogHelper;
@@ -67,7 +68,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
     }
 
     public void addMessage(String msg) {
-        textView.addMessage(msg);
+            textView.addMessage(msg);
     }
 
     @Override

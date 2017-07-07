@@ -56,7 +56,7 @@ public class Server {
         get(HERO_RANGE, ((request, response) -> process.heroRange));
         post(HERO_RANGE, (request, response) -> process.heroRange);
         get("/", ((request, response) -> {
-            if (process.user.login) {
+            if (process.user.getLogin()) {
                 return "";
             } else {
                 response.redirect("/login.html");
@@ -65,11 +65,11 @@ public class Server {
         }));
         post("/login", ((request, response) -> {
             String password = request.queryParams("user_pass");
-            if (password != null && String.valueOf(process.user.pass.getValue()).equals(password)) {
-                request.session().attribute("user_id", process.user.name);
+            if (password != null && String.valueOf(process.user.getPass().getValue()).equals(password)) {
+                request.session().attribute("user_id", process.user.getName());
                 request.session().attribute("login", true);
-                request.session().attribute("user_name", process.user.name);
-                process.user.login = true;
+                request.session().attribute("user_name", process.user.getName());
+                process.user.setLogin(true);
                 return Field.RESPONSE_RESULT_OK;
             } else {
                 return "Verify failed（校验失败！）";

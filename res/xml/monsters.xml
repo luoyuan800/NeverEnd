@@ -342,4 +342,94 @@
         <rank>4</rank>
         <evolution></evolution>
     </monster>
+    <monster>
+        <index>7</index>
+        <meet meet_rate="45" min_level="15"/>
+        <name>嗜血蚁</name>
+        <desc>嗜血蚁是一种昆虫。属节肢动物门，昆虫纲，膜翅目，蚁科。它们随时都处于嗜血的状态，只要被看到就会疯狂的进行攻击。
+        </desc>
+        <atk>99</atk>
+        <def>112</def>
+        <hp>200</hp>
+        <hit>5</hit>
+        <silent>1</silent>
+        <egg_rate>30</egg_rate>
+        <pet_rate>50</pet_rate>
+        <sex>-1</sex>
+        <race>Orger</race>
+        <rank>1</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>7</index>
+        <meet meet_rate="45" min_level="15"/>
+        <name>嗜血蚁</name>
+        <desc>嗜血蚁是一种昆虫。属节肢动物门，昆虫纲，膜翅目，蚁科。它们随时都处于嗜血的状态，只要被看到就会疯狂的进行攻击。
+        </desc>
+        <atk>99</atk>
+        <def>112</def>
+        <hp>200</hp>
+        <hit>5</hit>
+        <silent>1</silent>
+        <egg_rate>30</egg_rate>
+        <pet_rate>50</pet_rate>
+        <sex>-1</sex>
+        <race>Orger</race>
+        <rank>1</rank>
+        <evolution>8</evolution>
+    </monster>
+    <monster>
+        <index>8</index>
+        <meet meet_rate="45" min_level="15"/>
+        <name>装甲蚁</name>
+        <desc>嗜血蚁的变种，似乎是个瞎子。
+        </desc>
+        <atk>200</atk>
+        <def>99</def>
+        <hp>100</hp>
+        <hit>10</hit>
+        <silent>1</silent>
+        <egg_rate>30</egg_rate>
+        <pet_rate>10</pet_rate>
+        <sex>-1</sex>
+        <race>Orger</race>
+        <rank>1</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>14</index>
+        <meet meet_rate="55" min_level="25"/>
+        <name>食人鸟</name>
+        <desc>一种可爱又小巧的鸟类，红色的嘴巴表示它们具有强烈的主动攻击性。
+        </desc>
+        <atk>60</atk>
+        <def>200</def>
+        <hp>80</hp>
+        <hit>10</hit>
+        <silent>1</silent>
+        <egg_rate>10</egg_rate>
+        <pet_rate>20</pet_rate>
+        <sex>-1</sex>
+        <race>Eviler</race>
+        <rank>1</rank>
+        <evolution>86</evolution>
+    </monster>
+    <monster>
+        <index>86</index>
+        <meet meet_rate="15" min_level="225"/>
+        <name>凤凰</name>
+        <desc>传说中的生物，据说食人鸟捕食了人类后变异而成。
+        </desc>
+        <atk>140</atk>
+        <def>176</def>
+        <hp>160</hp>
+        <hit>20</hit>
+        <silent>16</silent>
+        <egg_rate>3</egg_rate>
+        <pet_rate>5</pet_rate>
+        <sex>-1</sex>
+        <race>Elyosr</race>
+        <rank>3</rank>
+        <evolution></evolution>
+    </monster>
 </monsters>

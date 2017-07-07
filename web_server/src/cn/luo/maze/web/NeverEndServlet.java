@@ -48,7 +48,6 @@ public class NeverEndServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        process.start();
     }
 
     /**
@@ -59,6 +58,12 @@ public class NeverEndServlet extends HttpServlet {
         String ownerId = request.getHeader(Field.OWNER_ID_FIELD);
         PrintWriter writer = response.getWriter();
         switch (path) {
+            case STOP:
+                process.stop();
+                break;
+            case START:
+                process.start();
+                break;
             case HERO_RANGE:
                 writer.write(process.heroRange);
                 break;

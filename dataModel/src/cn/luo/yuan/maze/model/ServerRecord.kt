@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model
 
 import cn.luo.yuan.maze.utils.Field
+import cn.luo.yuan.maze.utils.LimitConcurrentLinkedQueue
 import cn.luo.yuan.maze.utils.StringUtils
 import java.io.Serializable
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -26,7 +27,7 @@ class ServerRecord : IDModel, Serializable {
     var lostCount = 0
     var currentLostCount = 0
     var range = Int.MAX_VALUE
-    val messages = ConcurrentLinkedQueue<String>()
+    val messages = LimitConcurrentLinkedQueue<String>()
     var data:ServerData? = ServerData()
     var dieTime = 0L
     var dieCount = 0L

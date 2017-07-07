@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Basic Form - jQuery EasyUI Demo</title>
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5.1/themes/metro/easyui.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5.1/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5.1/project.css">
+    <script type="text/javascript" src="jquery-easyui-1.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
+</head>
+<body>
+<center>
+<h2>面板</h2>
+<div style="margin:20px 0;"></div>
+<div class="easyui-panel" title="New Topic" style="width:100%;max-width:400px;padding:30px 60px;">
+
+    <div style="text-align:center;padding:5px 0">
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="range()" style="width:80px">查看排行榜</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()" style="width:80px">Start</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()" style="width:80px">Stop</a>
+    </div>
+</div>
+
+</center>
+<script>
+            function range(){
+                $('#ff').form({
+                    success:function(data){
+                        if(data == 'success'){
+                            clearForm();
+                        }else{
+                            if(data == 'Duplicate'){
+                                $.messager.alert('Result（结果）', 'Please use another user ID（用户名重复，请重新输入）', 'error');
+                            }else{
+                                $.messager.alert('Result（结果）', data, 'error');
+                            }
+                        }
+                    }
+                });
+                $('#ff').form('submit');
+            }
+            function clearForm(){
+                $('#ff').form('clear');
+            }
+        </script>
+</body>
+</html>
