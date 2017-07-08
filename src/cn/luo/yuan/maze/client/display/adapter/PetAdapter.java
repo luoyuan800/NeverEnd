@@ -9,10 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
+import cn.luo.yuan.maze.client.service.PetMonsterLoder;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.persistence.DataManager;
-import cn.luo.yuan.maze.client.service.PetMonsterLoder;
 
 import java.util.Comparator;
 import java.util.List;
@@ -26,7 +26,6 @@ public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefres
     private DataManager dataManager;
     private Context context;
     private boolean sortOderRevert;
-    private int sortType;
     private final Comparator<Pet> indexCompare = new Comparator<Pet>() {
         @Override
         public int compare(Pet lhs, Pet rhs) {
@@ -53,38 +52,46 @@ public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefres
         public int compare(Pet lhs, Pet rhs) {
             if (lhs.getColor().equalsIgnoreCase(rhs.getColor()))
                 return 0;
-            if(lhs.getColor().equalsIgnoreCase(Data.DEFAULT_QUALITY_COLOR)){
+            if (lhs.getColor().equalsIgnoreCase(Data.DEFAULT_QUALITY_COLOR)) {
                 return sortOderRevert ? 1 : -1;
             }
-            if(lhs.getColor().equalsIgnoreCase(Data.BLUE_COLOR) && !rhs.getColor().equalsIgnoreCase(Data.DEFAULT_QUALITY_COLOR)){
+            if (lhs.getColor().equalsIgnoreCase(Data.BLUE_COLOR) && !rhs.getColor().equalsIgnoreCase(Data.DEFAULT_QUALITY_COLOR)) {
                 return sortOderRevert ? 1 : -1;
             }
-            if(lhs.getColor().equalsIgnoreCase(Data.RED_COLOR) && !rhs.getColor().equalsIgnoreCase(Data.DEFAULT_QUALITY_COLOR) && !rhs.getColor().equalsIgnoreCase(Data.BLUE_COLOR)){
+            if (lhs.getColor().equalsIgnoreCase(Data.RED_COLOR) && !rhs.getColor().equalsIgnoreCase(Data.DEFAULT_QUALITY_COLOR) && !rhs.getColor().equalsIgnoreCase(Data.BLUE_COLOR)) {
                 return sortOderRevert ? 1 : -1;
             }
-            if(lhs.getColor().equalsIgnoreCase(Data.ORANGE_COLOR) &&
+            if (lhs.getColor().equalsIgnoreCase(Data.ORANGE_COLOR) &&
                     !rhs.getColor().equalsIgnoreCase(Data.DEFAULT_QUALITY_COLOR) &&
                     !rhs.getColor().equalsIgnoreCase(Data.BLUE_COLOR) &&
-                    !rhs.getColor().equalsIgnoreCase(Data.RED_COLOR)){
+                    !rhs.getColor().equalsIgnoreCase(Data.RED_COLOR)) {
                 return sortOderRevert ? 1 : -1;
             }
-            if(lhs.getColor().equalsIgnoreCase(Data.DARKGOLD_COLOR) &&
+            if (lhs.getColor().equalsIgnoreCase(Data.DARKGOLD_COLOR) &&
                     !rhs.getColor().equalsIgnoreCase(Data.DEFAULT_QUALITY_COLOR) &&
                     !rhs.getColor().equalsIgnoreCase(Data.BLUE_COLOR) &&
                     !rhs.getColor().equalsIgnoreCase(Data.ORANGE_COLOR) &&
-                    !rhs.getColor().equalsIgnoreCase(Data.RED_COLOR)){
+                    !rhs.getColor().equalsIgnoreCase(Data.RED_COLOR)) {
                 return sortOderRevert ? 1 : -1;
             }
             return sortOderRevert ? -1 : 1;
         }
     };
+    private int sortType;
     private String limitKeyWord;
-
     public PetAdapter(Context context, DataManager dataManager, String limitKeyWord) {
         this.context = context;
         this.dataManager = dataManager;
         this.limitKeyWord = limitKeyWord;
         loadPetsData();
+    }
+
+    public void addPets(List<Pet> pets) {
+        for (Pet pet : pets) {
+            if (!pets.contains(pet)) {
+                pets.add(pet);
+            }
+        }
     }
 
     @Override
@@ -125,7 +132,7 @@ public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefres
         if (loadPets.size() == 0) {
             loadMoreListView.onLoadMoreComplete(true);
         } else {
-            pets.addAll(loadPets);
+            addPets(loadPets);
             loadMoreListView.onLoadMoreComplete(false);
         }
     }
@@ -156,24 +163,24 @@ public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefres
         pets.remove(pet);
     }
 
-    private void loadPetsData() {
-        pets = dataManager.loadPets(0, 20, limitKeyWord, getSort());
-        notifyDataSetChanged();
+    public int getSortType() {
+        return sortType;
     }
 
-    public void setSortType(int type){
-        if(type == sortType){
+    public void setSortType(int type) {
+        if (type == sortType) {
             sortOderRevert = !sortOderRevert;
         }
         this.sortType = type;
         loadPetsData();
     }
 
-    public int getSortType(){
-        return sortType;
+    public boolean getSortOrderRevert() {
+        return sortOderRevert;
     }
 
-    public boolean getSortOrderRevert(){
-        return sortOderRevert;
+    private void loadPetsData() {
+        pets = dataManager.loadPets(0, 20, limitKeyWord, getSort());
+        notifyDataSetChanged();
     }
 }

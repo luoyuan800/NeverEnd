@@ -21,6 +21,8 @@ import cn.luo.yuan.maze.client.service.PetMonsterLoder;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
+import java.util.List;
+
 /**
  * Created by gluo on 5/15/2017.
  */
@@ -32,6 +34,7 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
     private Pet currentPet;
     private LoadMoreListView loadMoreListView;
     private AlertDialog dialog;
+
 
     public PetDialog(NeverEnd control, PetAdapter adapter) {
         setAdapter(adapter);
@@ -132,6 +135,27 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
     public void onClick(View v) {
         PetMonsterHelper helper = control.getPetMonsterHelper();
         switch (v.getId()) {
+            case R.id.batch_drop:
+                EditText text = new EditText(control.getContext());
+                text.setHint("在此输入关键字，点击确定后名字中包含的该关键字的宠物会被丢弃。出战中或者有备注的宠物不会被丢弃。");
+                SimplerDialogBuilder.build(text, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int count = 0;
+                        if(StringUtils.isNotEmpty(text.getText().toString())){
+                            for(Pet pet : control.getDataManager().loadPets(0, -1,text.getText().toString(), null)){
+                                if(!pet.isMounted() && StringUtils.isEmpty(pet.getTag())){
+                                    control.getDataManager().deletePet(pet);
+                                    adapter.removePet(pet);
+                                    count ++;
+                                }
+                            }
+                        }
+                        Toast.makeText(control.getContext(),"丢弃了" + count + "个宠物（蛋）",Toast.LENGTH_SHORT).show();
+                        adapter.notifyDataSetChanged();
+                    }
+                }, Resource.getString(R.string.close), null, control.getContext());
+                break;
             case R.id.sort_intimacy:
                 adapter.setSortType(PetAdapter.SORT_INTIMACY);
                 adapter.notifyDataSetChanged();

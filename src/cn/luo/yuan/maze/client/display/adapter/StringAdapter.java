@@ -22,7 +22,11 @@ public class StringAdapter <T> extends BaseAdapter {
     }
 
     public void addAll(List<T> list){
-        data.addAll(list);
+        for(T t : list){
+            if(!data.contains(t)){
+                data.add(t);
+            }
+        }
         notifyDataSetChanged();
     }
 

@@ -52,6 +52,14 @@
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:id="@+id/pet_simple_list"/>
+
+        <Button
+                android:text="一键丢宠"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/batch_drop"
+                style="@android:style/Widget.Button.Inset"/>
+
         <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

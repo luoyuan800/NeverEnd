@@ -146,9 +146,9 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
 
     @Override
     public void onLoadMore(LoadMoreListView loadMoreListView) {
-        List<Accessory> accessories = context.getDataManager().loadAccessories(this.accessories.size(), 10, key, order);
+        List<Accessory> accessories = context.getDataManager().loadAccessories(accessoryAdapter.getCount(), 10, key, order);
         if (accessories.size() > 0) {
-            this.accessories.addAll(accessories);
+            accessoryAdapter.addAll(accessories);
             loadMoreListView.onLoadMoreComplete(false);
             accessoryAdapter.notifyDataSetChanged();
         } else {
