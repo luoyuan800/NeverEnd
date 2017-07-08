@@ -29,7 +29,7 @@
                 style="@android:style/Widget.Button.Inset"/>
     </LinearLayout>
     <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:id="@+id/linearLayout" android:layout_weight="1" android:layout_gravity="center_vertical">
+                  android:id="@+id/skill_layout_2" android:layout_weight="1" android:layout_gravity="center_vertical">
         <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="守财奴"
                 android:id="@+id/Searcher" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
@@ -41,7 +41,7 @@
                 style="@android:style/Widget.Button.Inset"/>
     </LinearLayout>
     <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:id="@+id/linearLayout2" android:layout_weight="1" android:layout_gravity="center_vertical">
+                  android:id="@+id/empty_layout" android:layout_weight="1" android:layout_gravity="center_vertical">
         <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="神奇宝贝"
                 android:id="@+id/Pokemon" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
@@ -53,7 +53,7 @@
                 style="@android:style/Widget.Button.Inset"/>
     </LinearLayout>
     <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:id="@+id/linearLayout3" android:layout_weight="1" android:layout_gravity="center_vertical">
+                  android:id="@+id/hero_inf_layout_2" android:layout_weight="1" android:layout_gravity="center_vertical">
         <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="冒险之心"
                 android:id="@+id/RandomMaster" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
