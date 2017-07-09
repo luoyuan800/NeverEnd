@@ -93,6 +93,19 @@
         </properties>
     </accessory>
     <accessory local="true">
+        <name value = "天使甲"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="55000"/>
+        <type value="防具"/>
+        <properties>
+            <effect name="DefEffect" min="165" max="3195" rate="100" element="false"/>
+            <effect name="StrEffect" min="-10" max="-60" rate="100" element="false"/>
+            <effect name="HpEffect" min="300" max="3000" rate="50" element="true"/>
+        </properties>
+    </accessory>
+    <accessory local="true">
         <name value = "金甲"/>
         <description value=""/>
         <color value="#556B2F"/>
@@ -116,6 +129,45 @@
             <effect name="AtkEffect" min="70" max="175" rate="100" element="false"/>
             <effect name="AgiEffect" min="10" max="75" rate="100" element="false"/>
             <effect name="StrEffect" min="20" max="100" rate="50" element="true"/>
+        </properties>
+    </accessory>
+    <accessory local="true">
+        <name value = "金剑"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="15000"/>
+        <type value="武器"/>
+        <properties>
+            <effect name="AtkEffect" min="50" max="105" rate="100" element="false"/>
+            <effect name="AgiEffect" min="150" max="80" rate="100" element="false"/>
+            <effect name="StrEffect" min="10" max="200" rate="50" element="true"/>
+        </properties>
+    </accessory>
+    <accessory local="true">
+        <name value = "银剑"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="15000"/>
+        <type value="武器"/>
+        <properties>
+            <effect name="AtkEffect" min="150" max="205" rate="100" element="false"/>
+            <effect name="StrEffect" min="10" max="80" rate="100" element="false"/>
+            <effect name="AgiEffect" min="20" max="200" rate="50" element="true"/>
+        </properties>
+    </accessory>
+    <accessory local="true">
+        <name value = "鱼肠剑"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="18000"/>
+        <type value="武器"/>
+        <properties>
+            <effect name="AtkEffect" min="550" max="1205" rate="100" element="false"/>
+            <effect name="HpEffect" min="100" max="2000" rate="100" element="false"/>
+            <effect name="AgiEffect" min="20" max="300" rate="50" element="true"/>
         </properties>
     </accessory>
     <accessory local="true">

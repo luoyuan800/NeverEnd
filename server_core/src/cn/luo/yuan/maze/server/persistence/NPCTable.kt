@@ -28,7 +28,11 @@ constructor(root: File) : HeroTable(root) {
             if (hero != null) {
                 hero.name = random.randomItem(major) + "☆" + hero.name
                 hero.agi = 100 * level
+                hero.def += hero.defGrow * hero.agi
                 hero.str = 100 * level
+                hero.maxHp += hero.hpGrow * hero.str
+                hero.hp = hero.maxHp
+                hero.atk += hero.atkGrow * hero.str
                 return hero;
             }
         }
@@ -43,8 +47,12 @@ constructor(root: File) : HeroTable(root) {
         hero.atkGrow = 10;
         hero.defGrow = 10;
         hero.hpGrow = 10;
-        hero.agi = 10 * level
-        hero.str = 10 * level
+        hero.agi = 100 * level
+        hero.def += hero.defGrow * hero.agi
+        hero.str = 100 * level
+        hero.maxHp += hero.hpGrow * hero.str
+        hero.hp = hero.maxHp
+        hero.atk += hero.atkGrow * hero.str
         return hero
     }
 
