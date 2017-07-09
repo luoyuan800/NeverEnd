@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
+import cn.luo.yuan.maze.client.display.dialog.ClickSkillDialog;
 import cn.luo.yuan.maze.client.display.dialog.GiftDialog;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.persistence.DataManager;
@@ -72,6 +73,7 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
                         }).show();
                     }
                 });
+
                 dialog.findViewById(R.id.init_hero).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

@@ -149,6 +149,73 @@
                 android:layout_gravity="center_vertical" />
 
         </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView13"
+                android:src="@drawable/xvwu"
+                android:layout_gravity="center_vertical" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="点金"
+                    android:id="@+id/textView31" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="已使用"
+                        android:id="@+id/textView32" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="1000W"
+                        android:id="@+id/material_click_count"
+                        android:textColor="@color/active" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="点击可以获得锻造点，基础是一点。可以通过装备属性增加获得的数量。"
+                    android:id="@+id/textView34"
+                    android:textColor="#1302fa"
+                    android:layout_marginRight="10dp" />
+
+            </LinearLayout>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="装备"
+                android:id="@+id/set_material_button"
+                android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
 
     </LinearLayout>
     </ScrollView>

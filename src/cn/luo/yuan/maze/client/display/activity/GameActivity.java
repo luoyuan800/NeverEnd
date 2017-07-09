@@ -20,10 +20,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
-import cn.luo.yuan.maze.client.display.dialog.AccessoriesDialog;
-import cn.luo.yuan.maze.client.display.dialog.PetDialog;
-import cn.luo.yuan.maze.client.display.dialog.RangePointDialog;
-import cn.luo.yuan.maze.client.display.dialog.SkillDialog;
+import cn.luo.yuan.maze.client.display.dialog.*;
 import cn.luo.yuan.maze.client.display.handler.GameActivityViewHandler;
 import cn.luo.yuan.maze.client.display.handler.MenuItemClickListener;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
@@ -77,6 +74,9 @@ public class GameActivity extends BaseActivity {
 
             }
         }).start();
+        if(control.getHero().getClickSkills().isEmpty()){
+            new ClickSkillDialog(control).show(control.getIndex(), false);
+        }
     }
 
     private void initResources() {

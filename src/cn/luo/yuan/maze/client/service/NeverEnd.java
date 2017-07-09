@@ -109,6 +109,10 @@ public class NeverEnd extends Application implements InfoControlInterface {
         return hero;
     }
 
+    public int getIndex() {
+        return dataManager.getIndex();
+    }
+
     void setHero(Hero hero) {
         this.hero = hero;
         random = new Random(hero.getBirthDay());

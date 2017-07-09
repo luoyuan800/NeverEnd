@@ -21,6 +21,7 @@ public class ClickSkillDialog implements View.OnClickListener {
     private int index = 0;
     private NeverEnd context;
     public ClickSkillDialog(NeverEnd context){
+        this.context =context;
         dialog = new AlertDialog.Builder(context.getContext()).create();
         view = View.inflate(context.getContext(), R.layout.click_skill_list, null);
         dialog.setView(view);
@@ -72,11 +73,16 @@ public class ClickSkillDialog implements View.OnClickListener {
                 YiJi yiJi = new YiJi();
                 setClickSkill(yiJi);
                 break;
+            case R.id.set_material_button:
+                Material material = new Material();
+                setClickSkill(material);
+                break;
         }
     }
 
     public void setClickSkill(ClickSkill clickSkill){
         context.getHero().getClickSkills().add(clickSkill);
+        context.getDataManager().saveClickSkill(clickSkill);
         dialog.dismiss();
     }
 }

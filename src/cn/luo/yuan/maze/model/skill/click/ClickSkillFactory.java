@@ -11,6 +11,8 @@ public class ClickSkillFactory {
             return new BaoZha();
         } else if ("一击".equalsIgnoreCase(name)) {
             return new YiJi();
+        }  else if ("点金".equalsIgnoreCase(name)) {
+            return new Material();
         } else {
             return null;
         }

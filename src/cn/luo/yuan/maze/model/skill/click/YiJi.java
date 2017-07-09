@@ -11,6 +11,9 @@ import cn.luo.yuan.maze.service.InfoControlInterface;
  */
 public class YiJi extends ClickSkill {
 
+    public YiJi(){
+        setDuration(5 * 60 * 1000);
+    }
     @Override
     public int getImageResource() {
         if(isUsable()) {

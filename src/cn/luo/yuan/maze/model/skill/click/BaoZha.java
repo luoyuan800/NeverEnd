@@ -13,6 +13,10 @@ import cn.luo.yuan.maze.service.InfoControlInterface;
  */
 public class BaoZha extends ClickSkill {
 
+    public BaoZha(){
+        setDuration(5 * 60 * 1000);
+    }
+
     @Override
     public int getImageResource() {
         if (isUsable()) {

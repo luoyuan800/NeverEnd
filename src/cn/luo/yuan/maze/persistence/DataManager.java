@@ -54,6 +54,10 @@ public class DataManager implements DataManagerInterface {
     private Sqlite database;
     private Context context;
 
+    public int getIndex(){
+        return index;
+    }
+
     public DataManager(int index, Context context) {
         this.index = index;
         this.database = Sqlite.getSqlite(context);
