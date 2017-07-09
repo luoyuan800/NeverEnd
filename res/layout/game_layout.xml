@@ -106,9 +106,9 @@
 
             <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="120dp"
                     android:id="@+id/hero_pic"
-                    android:src="@drawable/chenglong"
+                    android:src="@drawable/baizee"
                     android:onClick="onClick"
                     android:layout_gravity="center"
                     />
@@ -497,16 +497,6 @@
             android:onClick="onClick"
     />
 
-    <ImageButton
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@android:drawable/ic_dialog_dialer"
-            android:id="@+id/fab"
-            android:elevation="1dp"
-            android:background="@color/active"
-            android:onClick="showButtons"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"/>
 
     <LinearLayout
             android:orientation="horizontal"
@@ -549,5 +539,15 @@
                 android:layout_marginStart="10dp"
                 />
     </LinearLayout>
+    <ImageButton
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@android:drawable/ic_dialog_dialer"
+            android:id="@+id/fab"
+            android:elevation="1dp"
+            android:background="@color/active"
+            android:onClick="showButtons"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>

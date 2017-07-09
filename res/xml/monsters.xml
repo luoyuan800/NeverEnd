@@ -160,7 +160,7 @@
         <sex>-1</sex>
         <race>Eviler</race>
         <rank>5</rank>
-        <evolution></evolution>
+        <evolution>141</evolution>
     </monster>
     <monster>
         <index>141</index>
@@ -232,7 +232,7 @@
         <sex>-1</sex>
         <race>Eviler</race>
         <rank>1</rank>
-        <evolution></evolution>
+        <evolution>150</evolution>
     </monster>
     <monster>
         <index>88</index>
@@ -466,6 +466,204 @@
         <sex>-1</sex>
         <race>Elyosr</race>
         <rank>3</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>139</index>
+        <meet meet_rate="5" min_level="1225"/>
+        <name>子鼠</name>
+        <desc>甲乙科名佳话在，子孙孝友古风存。限定无法捕获，并且只有生肖相同的玩家才能通过进化获取。画师：Youhuxiaolang
+        </desc>
+        <atk>100</atk>
+        <def>199</def>
+        <hp>220</hp>
+        <hit>20</hit>
+        <silent>36</silent>
+        <egg_rate>0</egg_rate>
+        <pet_rate>0</pet_rate>
+        <sex>1</sex>
+        <race>Wizardsr</race>
+        <rank>6</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>140</index>
+        <meet meet_rate="5" min_level="1225"/>
+        <name>丑牛</name>
+        <desc>曾驮李耳离函谷，又助田单破邵青。限定无法捕获，并且只有生肖相同的玩家才能通过进化获取。画师：Youhuxiaolan
+        </desc>
+        <atk>120</atk>
+        <def>213</def>
+        <hp>230</hp>
+        <hit>50</hit>
+        <silent>56</silent>
+        <egg_rate>0</egg_rate>
+        <pet_rate>0</pet_rate>
+        <sex>1</sex>
+        <race>Wizardsr</race>
+        <rank>6</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>142</index>
+        <meet meet_rate="5" min_level="1225"/>
+        <name>卯兔</name>
+        <desc>雪消狮子瘦，月满兔儿肥。限定无法捕获，并且只有生肖相同的玩家才能通过进化获取。画师：Youhuxiaolan
+        </desc>
+        <atk>55</atk>
+        <def>205</def>
+        <hp>190</hp>
+        <hit>55</hit>
+        <silent>16</silent>
+        <egg_rate>0</egg_rate>
+        <pet_rate>0</pet_rate>
+        <sex>1</sex>
+        <race>Wizardsr</race>
+        <rank>6</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>143</index>
+        <meet meet_rate="5" min_level="1225"/>
+        <name>辰龙</name>
+        <desc>能吸风云兴瀚海，偏敷霖雨惠苍生。限定无法捕获，并且只有生肖相同的玩家才能通过进化获取。画师：Youhuxiaolan
+        </desc>
+        <atk>255</atk>
+        <def>205</def>
+        <hp>190</hp>
+        <hit>15</hit>
+        <silent>66</silent>
+        <egg_rate>0</egg_rate>
+        <pet_rate>0</pet_rate>
+        <sex>1</sex>
+        <race>Wizardsr</race>
+        <rank>6</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>144</index>
+        <meet meet_rate="5" min_level="1225"/>
+        <name>巳蛇</name>
+        <desc>舌纵成双从不花言巧语，肢虽无一却能电掣风行。限定无法捕获，并且只有生肖相同的玩家才能通过进化获取。画师：Youhuxiaolan
+        </desc>
+        <atk>255</atk>
+        <def>55</def>
+        <hp>195</hp>
+        <hit>25</hit>
+        <silent>16</silent>
+        <egg_rate>0</egg_rate>
+        <pet_rate>0</pet_rate>
+        <sex>1</sex>
+        <race>Wizardsr</race>
+        <rank>6</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>145</index>
+        <meet meet_rate="5" min_level="1225"/>
+        <name>午马</name>
+        <desc>引颈三嘶抒壮志，飞蹄万里奋长征。限定无法捕获，并且只有生肖相同的玩家才能通过进化获取。画师：Youhuxiaolan
+        </desc>
+        <atk>55</atk>
+        <def>155</def>
+        <hp>219</hp>
+        <hit>75</hit>
+        <silent>16</silent>
+        <egg_rate>0</egg_rate>
+        <pet_rate>0</pet_rate>
+        <sex>1</sex>
+        <race>Wizardsr</race>
+        <rank>6</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>146</index>
+        <meet meet_rate="5" min_level="1225"/>
+        <name>未羊</name>
+        <desc>皮莫让他披，须防恶客充良善。限定无法捕获，只能在对应生肖的玩家在生日当天可以遇见并且有几率捕获。画师：Youhuxiaolan
+        </desc>
+        <atk>255</atk>
+        <def>255</def>
+        <hp>109</hp>
+        <hit>5</hit>
+        <silent>6</silent>
+        <egg_rate>0</egg_rate>
+        <pet_rate>0</pet_rate>
+        <sex>1</sex>
+        <race>Wizardsr</race>
+        <rank>6</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>147</index>
+        <meet meet_rate="5" min_level="1225"/>
+        <name>申猴</name>
+        <desc>锣鼓登场，一片欢腾热闹；衣冠扮相，三分文雅风流。限定无法捕获，并且只有生肖相同的玩家才能通过进化获取。画师：Youhuxiaolan
+        </desc>
+        <atk>205</atk>
+        <def>143</def>
+        <hp>109</hp>
+        <hit>15</hit>
+        <silent>16</silent>
+        <egg_rate>0</egg_rate>
+        <pet_rate>0</pet_rate>
+        <sex>1</sex>
+        <race>Wizardsr</race>
+        <rank>6</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>148</index>
+        <meet meet_rate="5" min_level="1225"/>
+        <name>酉鸡</name>
+        <desc>肉蛋皆称美味，啼鸣总是佳音。限定无法捕获，只能在对应生肖的玩家生日当天有几率捕获。画师：Youhuxiaolan
+        </desc>
+        <atk>105</atk>
+        <def>103</def>
+        <hp>109</hp>
+        <hit>55</hit>
+        <silent>6</silent>
+        <egg_rate>0</egg_rate>
+        <pet_rate>0</pet_rate>
+        <sex>1</sex>
+        <race>Wizardsr</race>
+        <rank>6</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>149</index>
+        <meet meet_rate="5" min_level="1225"/>
+        <name>戌狗</name>
+        <desc>鸡鸣知日上，犬吠报春来。限定无法捕获，并且只有生肖相同的玩家才能通过进化获取。画师：Youhuxiaolan
+        </desc>
+        <atk>225</atk>
+        <def>13</def>
+        <hp>209</hp>
+        <hit>5</hit>
+        <silent>46</silent>
+        <egg_rate>0</egg_rate>
+        <pet_rate>0</pet_rate>
+        <sex>1</sex>
+        <race>Wizardsr</race>
+        <rank>6</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>150</index>
+        <meet meet_rate="5" min_level="1225"/>
+        <name>亥猪</name>
+        <desc>惹事生非从不齿；吹牛拍马总无心。限定无法捕获，并且只有生肖相同的玩家才能通过进化获取。画师：Youhuxiaolan
+        </desc>
+        <atk>525</atk>
+        <def>255</def>
+        <hp>209</hp>
+        <hit>5</hit>
+        <silent>76</silent>
+        <egg_rate>0</egg_rate>
+        <pet_rate>0</pet_rate>
+        <sex>1</sex>
+        <race>Wizardsr</race>
+        <rank>6</rank>
         <evolution></evolution>
     </monster>
 </monsters>
