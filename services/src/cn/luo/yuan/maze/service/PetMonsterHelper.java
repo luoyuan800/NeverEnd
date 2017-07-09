@@ -5,8 +5,10 @@ import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.lang.reflect.Method;
+import java.util.Calendar;
 
 /**
  * Created by luoyuan on 2017/5/13.
@@ -111,13 +113,229 @@ public class PetMonsterHelper implements PetMonsterHelperInterface {
         return false;
     }
 
-    public boolean evolution(Pet pet) {
+    public boolean evolution(Pet pet, Hero hero) {
         if(pet.getIntimacy() > 100) {
             int eveIndex = monsterLoader.getEvolutionIndex(pet.getIndex());
+            eveIndex = shiershengiaoDetect(eveIndex, hero);
             return evolution(pet, eveIndex);
         }else{
             return false;
         }
+    }
+
+    private int shiershengiaoDetect(int next, Hero hero) {
+        if (next >= 139 && next <= 150) {
+            Calendar date = Calendar.getInstance();
+            date.setTimeInMillis(hero.getBirthDay());
+            if (StringUtils.getYear(date.get(Calendar.YEAR)).getIndex() != next) {
+                next = 0;
+            }
+        }
+        return next;
+    }
+
+    private int geThreeGodIndex(Pet pet, Hero hero) {
+        Pet hit98 = null;
+        Pet hit97 = null;
+        Pet hit99 = null;
+        int next = 0;
+        switch (pet.getIndex()) {
+            case 97:
+                hit97 = pet;
+                break;
+            case 98:
+                hit98 = pet;
+                break;
+            case 99:
+                hit99 = pet;
+                break;
+        }
+        for (Pet hpet : hero.getPets()) {
+            if (hit98 == null && hpet.getIndex() == 98 && hpet.getIntimacy() >= 240) {
+                hit98 = hpet;
+            } else if (hit99 == null && hpet.getIndex() == 99 && hpet.getIntimacy() >= 240) {
+                hit99 = hpet;
+            } else if (hit97 == null && hpet.getIndex() == 97 && hpet.getIntimacy() >= 240) {
+                hit97 = hpet;
+            }
+        }
+        if (hit97 != null && hit98 != null && hit99 != null) {
+            next = 100;
+            if (hit97 != pet) {
+                hit97.markDelete();
+            }
+            if (hit98 != pet) {
+                hit98.markDelete();
+            }
+            if (hit99 != pet) {
+                hit99.markDelete();
+            }
+        }
+        Calendar calendar = Calendar.getInstance();
+        if (next == 0 && (calendar.get(Calendar.HOUR_OF_DAY) > 18 || calendar.get(Calendar.HOUR_OF_DAY) < 6)) {
+            switch (pet.getIndex()) {
+                case 97:
+                    next = 136;
+                    break;
+                case 98:
+                    next = 137;
+                    break;
+                case 99:
+                    next = 138;
+                    break;
+            }
+        }
+        return next;
+    }
+
+    private int evoZL(int next) {
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        int due = hour / 4;
+        switch (due) {
+            case 0:
+                if (getRandom().nextBoolean()) {
+                    next = 54;
+                } else {
+                    next = 48;
+                }
+                break;
+            case 1:
+                next = 53;
+                break;
+            case 2:
+                next = 52;
+                break;
+            case 3:
+                next = 51;
+                break;
+            case 4:
+                next = 50;
+                break;
+            case 5:
+                next = 49;
+                break;
+        }
+        return next;
+    }
+
+    private int getEvoevoIndex(Pet pet, Hero hero) {
+        return 0;
+       /* GoodsType evolution = GoodsType.Evolution;
+        evolution.load();
+        Calendar calendar = Calendar.getInstance();
+        if (getIntimacy() >= 240 && getHp() <= 0) {//Ghost
+            switch (getRandom().nextInt(3)) {
+                case 0:
+                    next = 102;
+                    break;
+                case 1:
+                    next = 129;
+                    break;
+                case 2:
+                    next = 130;
+                    break;
+            }
+        } else if (getIntimacy() < 10 && getHp() <= 0 && evolution.getCount() > 0) {//Dark
+            switch (getRandom().nextInt(2)) {
+                case 0:
+                    next = 106;
+                    break;
+                case 1:
+                    next = 131;
+                    break;
+            }
+            evolution.setCount(evolution.getCount() - 1);
+        } else if (getIntimacy() <= 5 && evolution.getCount() > 0) {
+            next = 103;
+            evolution.setCount(evolution.getCount() - 1);
+        } else if (getIntimacy() > 5 && getIntimacy() < 20 && evolution.getCount() > 0) {
+            next = 104;
+            evolution.setCount(evolution.getCount() - 1);
+        } else if (getIntimacy() >= 20 && getIntimacy() < 50 && evolution.getCount() > 0) {
+            next = 105;
+            evolution.setCount(evolution.getCount() - 1);
+        } else if (getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
+            next = 125;
+        } else if (getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY) {
+            boolean hasLong = false;
+            for (Pet pet : MazeContents.hero.getPets()) {
+                if (pet.getType().contains("龙")) {
+                    hasLong = true;
+                    break;
+                }
+            }
+            if (hasLong) {
+                next = 108;
+            } else {
+                next = 110;
+            }
+        } else if (getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY) {
+            next = 109;
+        } else if (getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY) {
+            next = 110;
+        } else if (getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) {
+            next = 111;
+        } else if (getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            next = 113;
+        } else if (getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+            next = 112;
+        } else if (getIntimacy() >= 50 && getIntimacy() < 90 && evolution.getCount() > 0) {
+            next = 114;
+            evolution.setCount(evolution.getCount() - 1);
+        } else if (getIntimacy() >= 90 && getIntimacy() < 120 && evolution.getCount() > 0) {
+            next = 115;
+            evolution.setCount(evolution.getCount() - 1);
+        } else if (getIntimacy() >= 120 && getIntimacy() < 210 && evolution.getCount() > 0) {
+            next = 116;
+            evolution.setCount(evolution.getCount() - 1);
+        } else if (getIntimacy() >= 210 && getIntimacy() < 240 && evolution.getCount() > 0) {
+            evolution.setCount(evolution.getCount() - 1);
+            if (calendar.get(Calendar.HOUR_OF_DAY) > 6 && calendar.get(Calendar.HOUR_OF_DAY) < 18) {//Day
+                switch (MazeContents.hero.getElement()) {
+                    case 金:
+                        next = 117;
+                        break;
+                    case 木:
+                        next = 118;
+                        break;
+                    case 水:
+                        next = 119;
+                        break;
+                    case 火:
+                        next = 120;
+                        break;
+                    case 土:
+                        next = 121;
+                        break;
+                    case 无:
+                        next = 122;
+                        break;
+                }
+            } else {//Night
+                switch (MazeContents.hero.getElement()) {
+                    case 金:
+                        next = 123;
+                        break;
+                    case 木:
+                        next = 124;
+                        break;
+                    case 水:
+                        next = 107;
+                        break;
+                    case 火:
+                        next = 126;
+                        break;
+                    case 土:
+                        next = 127;
+                        break;
+                    case 无:
+                        next = 128;
+                        break;
+                }
+            }
+        }
+        evolution.save();
+        return next;*/
     }
 
     public boolean evolution(Pet pet, int eveIndex) {

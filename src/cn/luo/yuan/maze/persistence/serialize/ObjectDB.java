@@ -12,6 +12,8 @@ import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,15 +22,17 @@ import java.util.UUID;
 /**
  * Created by gluo on 11/28/2016.
  */
-public class ObjectDB<T extends Serializable> {
+public class ObjectDB<T extends Serializable> implements Runnable {
     private Context context;
     private Class<T> type;
     private ArrayMap<String, SoftReference<T>> cache;
+    private ReferenceQueue<T> queue;
 
     public ObjectDB(Class<T> type, Context context) {
         this.context = context;
         this.type = type;
         cache = new ArrayMap<>();
+        queue = new ReferenceQueue<T>();
     }
 
     public synchronized String save(T object, String id) {
@@ -90,7 +94,7 @@ public class ObjectDB<T extends Serializable> {
                         }
                     }
                     T o = load(file);
-                    cache.put(id, new SoftReference<T>(o));
+                    cache.put(id, new SoftReference<T>(o, queue));
                     list.add(o);
                 }
             }
@@ -135,9 +139,7 @@ public class ObjectDB<T extends Serializable> {
         for(SoftReference<T> ref : cache.values()){
             T t = ref.get();
             if(ref!=null && t !=null){
-                if(t instanceof IDModel && !((IDModel) t).isDelete()){
-                    save(t,((IDModel) t).getId());
-                }
+                saveInten(t);
             }
         }
     }
@@ -157,6 +159,24 @@ public class ObjectDB<T extends Serializable> {
             LogHelper.logException(e,"Sqlite->load{" + name + "}");
         }
         return null;
+    }
+
+    public void run(){
+        Reference<? extends T> ref = null;
+        while ((ref = queue.poll())!=null){
+            T t = ref.get();
+            saveInten(t);
+        }
+    }
+
+    private void saveInten(T t) {
+        if(t instanceof IDModel && !((IDModel) t).isDelete()){
+            save(t,((IDModel) t).getId());
+        } else{
+            if(t instanceof IDModel && ((IDModel) t).isDelete()){
+                delete(((IDModel) t).getId());
+            }
+        }
     }
 
 }

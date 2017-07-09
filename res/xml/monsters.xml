@@ -415,6 +415,42 @@
         <evolution>86</evolution>
     </monster>
     <monster>
+        <index>15</index>
+        <meet meet_rate="55" min_level="25"/>
+        <name>丑蝙蝠</name>
+        <desc>黑暗中生活的动物，蝙蝠本来就很丑了，更何况丑蝙蝠。
+        </desc>
+        <atk>150</atk>
+        <def>124</def>
+        <hp>20</hp>
+        <hit>1</hit>
+        <silent>1</silent>
+        <egg_rate>25</egg_rate>
+        <pet_rate>45</pet_rate>
+        <sex>-1</sex>
+        <race>Eviler</race>
+        <rank>1</rank>
+        <evolution>15</evolution>
+    </monster>
+    <monster>
+        <index>16</index>
+        <meet meet_rate="55" min_level="25"/>
+        <name>绿蝙蝠</name>
+        <desc>黑暗中生活的动物，蝙蝠本来就很丑了，但是绿色的似乎可以原谅它……
+        </desc>
+        <atk>250</atk>
+        <def>24</def>
+        <hp>200</hp>
+        <hit>1</hit>
+        <silent>1</silent>
+        <egg_rate>25</egg_rate>
+        <pet_rate>45</pet_rate>
+        <sex>-1</sex>
+        <race>Eviler</race>
+        <rank>1</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
         <index>86</index>
         <meet meet_rate="15" min_level="225"/>
         <name>凤凰</name>

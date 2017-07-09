@@ -26,6 +26,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by luoyuan on 2017/3/19.
@@ -53,7 +57,7 @@ public class DataManager implements DataManagerInterface {
 
     private Sqlite database;
     private Context context;
-
+    private ScheduledExecutorService e = Executors.newSingleThreadScheduledExecutor();
     public int getIndex(){
         return index;
     }
@@ -72,6 +76,12 @@ public class DataManager implements DataManagerInterface {
         taskLoader = new SerializeLoader<Task>(Task.class, context, index);
         configDB = new ObjectDB<>(NeverEndConfig.class, context);
         this.context = context;
+        e.scheduleAtFixedRate(accessoryLoader.getDb(),1000, 500, TimeUnit.MILLISECONDS);
+        e.scheduleAtFixedRate(petLoader.getDb(),1000, 500, TimeUnit.MILLISECONDS);
+        e.scheduleAtFixedRate(goodsLoader.getDb(),1000, 500, TimeUnit.MILLISECONDS);
+        e.scheduleAtFixedRate(skillLoader.getDb(),1000, 500, TimeUnit.MILLISECONDS);
+        e.scheduleAtFixedRate(clickSkillLoader.getDb(),1000, 500, TimeUnit.MILLISECONDS);
+        e.scheduleAtFixedRate(configDB,1000, 500, TimeUnit.MILLISECONDS);
     }
 
     public Hero loadHero() {

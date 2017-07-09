@@ -178,7 +178,7 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                 break;
             case R.id.pet_evolution:
                 if (currentPet != null) {
-                    if (helper.evolution(currentPet)) {
+                    if (helper.evolution(currentPet, control.getHero())) {
                         control.getDataManager().savePet(currentPet);
                         refreshDetailView(dialog.findViewById(R.id.pet_detail_view));
                         adapter.notifyDataSetChanged();

@@ -21,6 +21,10 @@ public class SerializeLoader<T extends Serializable> {
     private Context context;
     private int index;
 
+    public ObjectDB<T> getDb(){
+        return db;
+    }
+
     public SerializeLoader(Class<T> type, Context context, int heroIndex) {
         db = new ObjectDB<T>(type, context);
         clazz = type;

@@ -196,4 +196,43 @@ public class StringUtils {
         }
         return timeInstance.format(new Date(System.currentTimeMillis()));
     }
+
+
+    public static Shengxiao getYear(Integer year) {
+        if (year < 1900) {
+            return Shengxiao.Unknown;
+        }
+        Integer start = 1900;
+        String[] years = new String[]{
+                "鼠", "牛", "虎", "兔",
+                "龙", "蛇", "马", "羊",
+                "猴", "鸡", "狗", "猪"
+        };
+        return Shengxiao.valueOf(years[(year - start) % years.length]);
+    }
+
+    public static enum Shengxiao {
+        鼠(139),
+        牛(140),
+        虎(141),
+        兔(142),
+        龙(143),
+        蛇(144),
+        马(145),
+        羊(146),
+        猴(147),
+        鸡(148),
+        狗(149),
+        猪(150),
+        Unknown(0);
+        int index;
+
+        Shengxiao(int index) {
+            this.index = index;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+    }
 }
