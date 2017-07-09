@@ -7,11 +7,7 @@ import android.view.View;
 import cn.luo.yuan.maze.client.display.handler.GameActivityViewHandler;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
 import cn.luo.yuan.maze.client.utils.LogHelper;
-import cn.luo.yuan.maze.model.Accessory;
-import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.model.Maze;
-import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.gift.Gift;
 import cn.luo.yuan.maze.model.goods.Goods;
@@ -255,7 +251,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
         dataManager.saveAccessory(accessory);
     }
 
-    public Object getCurrentBattleTarget() {
+    public HarmAble getCurrentBattleTarget() {
         return runningService.getTarget();
     }
 

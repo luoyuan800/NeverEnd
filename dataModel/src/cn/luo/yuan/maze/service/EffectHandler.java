@@ -1,14 +1,7 @@
 package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.model.effect.*;
-import cn.luo.yuan.maze.model.effect.original.AgiEffect;
-import cn.luo.yuan.maze.model.effect.original.AtkEffect;
-import cn.luo.yuan.maze.model.effect.original.DefEffect;
-import cn.luo.yuan.maze.model.effect.original.HpEffect;
-import cn.luo.yuan.maze.model.effect.original.MeetRateEffect;
-import cn.luo.yuan.maze.model.effect.original.PetRateEffect;
-import cn.luo.yuan.maze.model.effect.original.SkillRateEffect;
-import cn.luo.yuan.maze.model.effect.original.StrEffect;
+import cn.luo.yuan.maze.model.effect.original.*;
 
 import java.util.Collection;
 
@@ -23,15 +16,17 @@ public class EffectHandler {
 
     public static long getEffectAdditionLongValue(String property, Collection<Effect> effects){
         switch (property){
-            case "str":
+            case CLICK_MATERIAL:
+                return getEffectAdditionMate(effects);
+            case STR:
                 return getEffectAdditionStr(effects);
-            case "agi":
+            case AGI:
                 return getEffectAdditionAgi(effects);
-            case "hp":
+            case HP:
                 return getEffectAdditionHP(effects);
-            case "atk":
+            case ATK:
                 return getEffectAdditionAtk(effects);
-            case "def":
+            case DEF:
                 return getEffectAdditionDef(effects);
         }
         return 0;
@@ -40,6 +35,13 @@ public class EffectHandler {
     public static float getEffectAdditionFloatValue(String property, Collection<Effect> effects){
         float value = 0.0f;
         switch (property){
+            case EGG:
+                for(Effect effect : effects){
+                    if(effect instanceof EggRateEffect){
+                        value += ((EggRateEffect) effect).getEggRate();
+                    }
+                }
+                break;
             case MEET_RATE:
                 for(Effect effect : effects){
                     if(effect instanceof MeetRateEffect){
@@ -107,6 +109,15 @@ public class EffectHandler {
         for(Effect effect : effects){
             if(effect.isEnable() && effect instanceof StrEffect) {
                 value += ((StrEffect) effect).getStr();
+            }
+        }
+        return value;
+    }
+    private static long getEffectAdditionMate(Collection<Effect> effects){
+        long value = 0;
+        for(Effect effect : effects){
+            if(effect.isEnable() && effect instanceof ClickMaterialEffect) {
+                value += ((ClickMaterialEffect) effect).getValue();
             }
         }
         return value;

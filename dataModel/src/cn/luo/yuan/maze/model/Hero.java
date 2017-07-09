@@ -12,6 +12,7 @@ import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.Random;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -47,7 +48,7 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     transient private HashSet<Accessory> accessories = new HashSet<>(3);//装备
     transient private Skill[] skills = {EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL};//装备
     transient private ConcurrentLinkedDeque<Pet> pets = new ConcurrentLinkedDeque<>();
-    transient private HashSet<ClickSkill> clickSkills = new HashSet<>(3);
+    transient private ArrayList<ClickSkill> clickSkills = new ArrayList<>(3);
     private Element element;//五行元素
     private String id;
     private EncodeLong point = new EncodeLong(0);
@@ -323,17 +324,17 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
         this.race = Race.getByIndex(race);
     }
 
-    public HashSet<ClickSkill> getClickSkills() {
+    public ArrayList<ClickSkill> getClickSkills() {
         if (clickSkills == null) {
             synchronized (this) {
                 if (clickSkills == null)
-                    clickSkills = new HashSet<ClickSkill>(3);
+                    clickSkills = new ArrayList<>(3);
             }
         }
         return clickSkills;
     }
 
-    public void setClickSkills(HashSet<ClickSkill> clickSkills) {
+    public void setClickSkills(ArrayList<ClickSkill> clickSkills) {
         this.clickSkills = clickSkills;
     }
 }

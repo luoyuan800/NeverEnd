@@ -26,12 +26,15 @@ import cn.luo.yuan.maze.client.display.handler.MenuItemClickListener;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.NeverEndConfig;
+import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.PetMonsterLoder;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
+
+import java.util.ArrayList;
 
 /**
  * Created by luoyuan on 2017/3/29.
@@ -103,6 +106,7 @@ public class GameActivity extends BaseActivity {
     }
 
     public void onClick(View v) {
+        control.getHero().setClick(control.getHero().getClick() + 1);
         switch (v.getId()) {
             case R.id.switch_msg_view:
                 if (findViewById(R.id.info_view).getVisibility() == View.VISIBLE) {
@@ -168,11 +172,22 @@ public class GameActivity extends BaseActivity {
                 new SkillDialog(control).show();
                 break;
             case R.id.first_click_skill:
-
+                if(control.getHero().getClickSkills().size() >= 1) {
+                    ClickSkill ck = control.getHero().getClickSkills().get(0);
+                    ck.perform(control.getHero(),control.getCurrentBattleTarget(), control);
+                }
                 break;
             case R.id.second_click_skill:
+                if(control.getHero().getClickSkills().size() >= 2) {
+                    ClickSkill ck = control.getHero().getClickSkills().get(1);
+                    ck.perform(control.getHero(),control.getCurrentBattleTarget(), control);
+                }
                 break;
             case R.id.third_click_skill:
+                if(control.getHero().getClickSkills().size() >= 3) {
+                    ClickSkill ck = control.getHero().getClickSkills().get(2);
+                    ck.perform(control.getHero(),control.getCurrentBattleTarget(), control);
+                }
                 break;
             case R.id.range_point:
                 if (control.getHero().getPoint() > 0) {
