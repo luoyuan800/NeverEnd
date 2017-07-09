@@ -17,31 +17,20 @@
 
     <div style="text-align:center;padding:5px 0">
         <a href="javascript:void(0)" class="easyui-linkbutton" onclick="range()" style="width:80px">查看排行榜</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()" style="width:80px">Start</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()" style="width:80px">Stop</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="start()" style="width:80px">Start</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="stop()" style="width:80px">Stop</a>
     </div>
 </div>
 
 </center>
 <script>
             function range(){
-                $('#ff').form({
-                    success:function(data){
-                        if(data == 'success'){
-                            clearForm();
-                        }else{
-                            if(data == 'Duplicate'){
-                                $.messager.alert('Result（结果）', 'Please use another user ID（用户名重复，请重新输入）', 'error');
-                            }else{
-                                $.messager.alert('Result（结果）', data, 'error');
-                            }
-                        }
-                    }
-                });
-                $('#ff').form('submit');
+
             }
-            function clearForm(){
-                $('#ff').form('clear');
+            function start(){
+
+            }
+            function stop(){
             }
         </script>
 </body>

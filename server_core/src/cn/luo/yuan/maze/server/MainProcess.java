@@ -48,6 +48,7 @@ import static cn.luo.yuan.maze.utils.Field.RESPONSE_RESULT_SUCCESS;
  * Created by gluo on 7/6/2017.
  */
 public class MainProcess {
+    public static MainProcess process;
     public String sing = StringUtils.EMPTY_STRING;
     public ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
     public User user;
@@ -61,6 +62,7 @@ public class MainProcess {
     public List<GroupHolder> groups = new ArrayList<>();
     ObjectTable<User> userDb = new ObjectTable<>(User.class, root);
     public MainProcess() {
+        process = this;
         user = userDb.loadObject("root");
         if (user == null) {
             user = new User();
@@ -406,5 +408,33 @@ public class MainProcess {
                 LogHelper.error(e);
             }
         }
+    }
+
+    public List<ServerRecord> queryRecords(int start, int row, String key){
+        List<ServerRecord> srs = new ArrayList<>();
+        ArrayList<Map.Entry<String, HeroTable>> tables = new ArrayList<>(heroTableCache.entrySet());
+        for(int i = start; i< tables.size() && srs.size() < row; i++){
+            HeroTable table = tables.get(i).getValue();
+            String id = tables.get(i).getKey();
+            srs.add(table.getRecord(id));
+        }
+        return srs;
+    }
+
+    public boolean updateRecorss(ServerRecord record){
+        ServerData data = record.getData();
+        if(data!=null){
+            HeroTable table = heroTableCache.get(data.getHero().getId());
+            if(table != null){
+                try {
+                    table.save(record);
+                    return true;
+                } catch (IOException e) {
+                    LogHelper.error(e);
+
+                }
+            }
+        }
+        return false;
     }
 }
