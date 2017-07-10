@@ -96,16 +96,22 @@ public class RandomEventService {
                                     }*/
                     break;
                 case 5:
-                    ArrayList<Pet> pets = new ArrayList<>(gameControl.getHero().getPets());
-                    for(Pet p1 : pets){
-                        for(Pet p2 : pets){
-                            Egg egg = gameControl.getPetMonsterHelper().buildEgg(p1, p2, gameControl);
-                            if(egg!=null){
-                                gameControl.addMessage(p1.getDisplayName() + "和" + p2.getDisplayName() + "生了一个蛋");
-                                gameControl.getDataManager().savePet(egg);
+                    gameControl.getExecutor().submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            ArrayList<Pet> pets = new ArrayList<>(gameControl.getHero().getPets());
+                            for(Pet p1 : pets){
+                                for(Pet p2 : pets){
+                                    Egg egg = gameControl.getPetMonsterHelper().buildEgg(p1, p2, gameControl);
+                                    if(egg!=null){
+                                        gameControl.addMessage(p1.getDisplayName() + "和" + p2.getDisplayName() + "生了一个蛋");
+                                        gameControl.getDataManager().savePet(egg);
+                                    }
+                                }
                             }
                         }
-                    }
+                    });
+
                     break;
             }
         }

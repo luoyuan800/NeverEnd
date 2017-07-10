@@ -5,6 +5,8 @@ import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.persistence.DataManagerInterface;
 import cn.luo.yuan.maze.utils.Random;
 
+import java.util.concurrent.ScheduledExecutorService;
+
 
 /**
  * Created by gluo on 5/12/2017.
@@ -23,4 +25,6 @@ public interface InfoControlInterface {
     DataManagerInterface getDataManager();
     TaskManager getTaskManager();
     PetMonsterHelperInterface getPetMonsterHelper();
+
+    ScheduledExecutorService getExecutor();
 }

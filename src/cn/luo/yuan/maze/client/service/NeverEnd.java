@@ -94,8 +94,12 @@ public class NeverEnd extends Application implements InfoControlInterface {
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                if (!runningService.getPause())
-                    viewHandler.refreshFreqProperties();
+                try {
+                    if (!runningService.getPause())
+                        viewHandler.refreshFreqProperties();
+                }catch (Exception e){
+                    LogHelper.logException(e, "refreshfreqProperties_runnable");
+                }
             }
         }, 0, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
         Log.i("maze", "Game started");

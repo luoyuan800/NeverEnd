@@ -24,6 +24,7 @@ import cn.luo.yuan.maze.client.display.dialog.*;
 import cn.luo.yuan.maze.client.display.handler.GameActivityViewHandler;
 import cn.luo.yuan.maze.client.display.handler.MenuItemClickListener;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
+import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
@@ -107,6 +108,7 @@ public class GameActivity extends BaseActivity {
 
     public void onClick(View v) {
         control.getHero().setClick(control.getHero().getClick() + 1);
+        HarmAble currentBattleTarget = control.getCurrentBattleTarget();
         switch (v.getId()) {
             case R.id.switch_msg_view:
                 if (findViewById(R.id.info_view).getVisibility() == View.VISIBLE) {
@@ -173,20 +175,22 @@ public class GameActivity extends BaseActivity {
                 break;
             case R.id.first_click_skill:
                 if(control.getHero().getClickSkills().size() >= 1) {
-                    ClickSkill ck = control.getHero().getClickSkills().get(0);
-                    ck.perform(control.getHero(),control.getCurrentBattleTarget(), control);
+                    if(currentBattleTarget !=null) {
+                        ClickSkill ck = control.getHero().getClickSkills().get(0);
+                        ck.perform(control.getHero(), currentBattleTarget, control);
+                    }
                 }
                 break;
             case R.id.second_click_skill:
                 if(control.getHero().getClickSkills().size() >= 2) {
                     ClickSkill ck = control.getHero().getClickSkills().get(1);
-                    ck.perform(control.getHero(),control.getCurrentBattleTarget(), control);
+                    ck.perform(control.getHero(), currentBattleTarget, control);
                 }
                 break;
             case R.id.third_click_skill:
                 if(control.getHero().getClickSkills().size() >= 3) {
                     ClickSkill ck = control.getHero().getClickSkills().get(2);
-                    ck.perform(control.getHero(),control.getCurrentBattleTarget(), control);
+                    ck.perform(control.getHero(), currentBattleTarget, control);
                 }
                 break;
             case R.id.range_point:

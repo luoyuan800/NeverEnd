@@ -162,10 +162,14 @@ public class ObjectDB<T extends Serializable> implements Runnable {
     }
 
     public void run(){
-        Reference<? extends T> ref = null;
-        while ((ref = queue.poll())!=null){
-            T t = ref.get();
-            saveInten(t);
+        try {
+            Reference<? extends T> ref = null;
+            while ((ref = queue.poll()) != null) {
+                T t = ref.get();
+                saveInten(t);
+            }
+        }catch (Exception e){
+            LogHelper.logException(e, "DB-clear");
         }
     }
 
