@@ -2,19 +2,27 @@ package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.listener.BattleEndListener;
 import cn.luo.yuan.maze.model.Element;
+import cn.luo.yuan.maze.model.Group;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Monster;
+import cn.luo.yuan.maze.model.Race;
+import cn.luo.yuan.maze.model.names.FirstName;
+import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.model.skill.hero.HeroHit;
 import cn.luo.yuan.maze.utils.Random;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.testng.annotations.Test;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -116,6 +124,44 @@ public class TestBattleService {
         battleService.battle(1);
         verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
         assertTrue(monster.getHp() <= 0, "End battle!");
+    }
+
+    @Test
+    public void testGroupBattle(){
+        Hero hero = new Hero();
+        hero.setMaxHp(1000);
+        hero.setHp(1000);
+        hero.setAtk(10);
+        hero.setDef(5);
+        hero.setRace(Race.Elyosr.ordinal());
+        hero.setElement(Element.WOOD);
+        Hero hero1 = new Hero();
+        hero1.setMaxHp(1000);
+        hero1.setHp(1000);
+        hero1.setAtk(10);
+        hero1.setDef(5);
+        hero1.setRace(Race.Eviler.ordinal());
+        hero1.setElement(Element.WOOD);
+        Group group = new Group();
+        group.getHeroes().add(hero);
+        group.getHeroes().add(hero1);
+        Monster monster = new Monster();
+        monster.setHp(200);
+        monster.setMaxHp(200);
+        monster.setAtk(6);
+        monster.setDef(1);
+        monster.setFirstName(FirstName.angry);
+        monster.setSecondName(SecondName.blue);
+        monster.setElement(Element.FIRE);
+        monster.setRace(Race.Elyosr);
+        monster.setElement(Element.FIRE);
+        Random random = new Random(System.currentTimeMillis());
+        BattleMessage battleMessage = mock(BattleMessage.class);
+        BattleService battleService = new BattleService(hero1,monster,random, null);
+        battleService.setBattleMessage(battleMessage);
+        battleService.battle(1);
+        verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
+        //assertTrue(monster.getHp() <= 0, "End battle!");
     }
 
     @Test
