@@ -134,20 +134,22 @@ public class HeroTable {
 
     private Hero loadHero(String id) throws IOException, ClassNotFoundException {
         ServerRecord record = getRecord(id);
-        ServerData data = record.getData();
-        if (data != null) {
-            Hero hero = data.getHero();
-            if (data.getAccessories() != null) {
-                for (Accessory accessory : data.getAccessories()) {
-                    AccessoryHelper.mountAccessory(accessory, hero);
+        if(record!=null) {
+            ServerData data = record.getData();
+            if (data != null) {
+                Hero hero = data.getHero();
+                if (data.getAccessories() != null) {
+                    for (Accessory accessory : data.getAccessories()) {
+                        AccessoryHelper.mountAccessory(accessory, hero);
+                    }
                 }
-            }
-            if (data.getPets() != null) {
-                for (Pet pet : data.getPets()) {
-                    hero.getPets().add(pet);
+                if (data.getPets() != null) {
+                    for (Pet pet : data.getPets()) {
+                        hero.getPets().add(pet);
+                    }
                 }
+                return hero;
             }
-            return hero;
         }
         return null;
     }

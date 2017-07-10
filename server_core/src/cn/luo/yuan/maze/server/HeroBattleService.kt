@@ -51,8 +51,9 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>, v
                         val omaze = otable.getMaze(oid, 0)
                         val otherReciod = otable.getRecord(oid)
                         registerMessageReceiver(messager,oid)
-                        if(group==null && ogroup==null && random.nextInt(hero.displayName.length) == random.nextInt(ohero.displayName.length)){
+                        if(group==null && ogroup==null && random.nextInt(hero.displayName.length) <= random.nextInt(ohero.displayName.length)){
                             main.addGroup(id,oid);
+                            messager.buildGroup(hero.displayName, ohero.displayName)
                             if (StringUtils.isNotEmpty(record.data!!.helloMsg["group"])) {
                                 messager.speak(hero.displayName, record.data!!.helloMsg["group"]);
                             }
@@ -142,10 +143,14 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>, v
     }
 
     private fun getGroup(id: String): Group? {
-        var inGroup = true
+        if(id == "npc"){
+            return null;
+        }
+        var inGroup = false
         var group = Group()
         loop@ for (holder in groups) {
             if (holder.isInGroup(id)) {
+                inGroup = true;
                 for (hid in holder.heroIds) {
                     val table = tableCache[hid]
                     if (table != null) {

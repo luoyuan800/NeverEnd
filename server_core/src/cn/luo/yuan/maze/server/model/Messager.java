@@ -122,4 +122,8 @@ public class Messager implements BattleMessage {
     public void speak(@Nullable String name, @Nullable String msg) {
         notification(name + ": " + msg);
     }
+
+    public void buildGroup(@Nullable String hero_1, @NotNull String hero_2) {
+
+    }
 }

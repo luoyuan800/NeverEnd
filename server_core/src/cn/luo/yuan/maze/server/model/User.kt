@@ -20,7 +20,7 @@ class User : Serializable {
         }
 
     fun setPass(pass:Int){
-        this.pass.value = pass as Long
+        this.pass.value = pass.toLong()
     }
     var name: String? = null
     var login: Boolean = false
