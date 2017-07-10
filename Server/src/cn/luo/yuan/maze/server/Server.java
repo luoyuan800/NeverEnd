@@ -65,7 +65,7 @@ public class Server {
         }));
         post("/login", ((request, response) -> {
             String password = request.queryParams("user_pass");
-            if (password != null && String.valueOf(process.user.getPass().getValue()).equals(password)) {
+            if (password != null && String.valueOf(process.user.getPass()).equals(password)) {
                 request.session().attribute("user_id", process.user.getName());
                 request.session().attribute("login", true);
                 request.session().attribute("user_name", process.user.getName());

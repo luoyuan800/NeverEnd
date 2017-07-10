@@ -4,6 +4,7 @@ package cn.luo.yuan.maze;
  * Created by gluo on 7/6/2017.
  */
 public class Path {
+    public static final String ADD_LIMIT = "add_restore_Limit";
     public static final String STOP = "stop";
     public static final String START = "start";
     public static final String ONLINE_GIFT_OPEN = "online_gift_open";

@@ -109,7 +109,9 @@ public class HeroTable {
         record.setData(null);
         record.setDieCount(0);
         record.setDieTime(0);
+        record.setCurrentWin(0);
         record.getMessages().clear();
+        record.setRange(Integer.MAX_VALUE);
         save();
         return data;
     }

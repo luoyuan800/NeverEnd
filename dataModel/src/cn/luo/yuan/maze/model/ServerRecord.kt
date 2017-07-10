@@ -25,7 +25,6 @@ class ServerRecord : IDModel, Serializable {
     var winCount = 0
     var currentWin = 0
     var lostCount = 0
-    var currentLostCount = 0
     var range = Int.MAX_VALUE
     val messages = LimitConcurrentLinkedQueue<String>()
     var data:ServerData? = ServerData()

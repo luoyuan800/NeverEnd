@@ -416,12 +416,19 @@ public class MainProcess {
         for(int i = start; i< tables.size() && srs.size() < row; i++){
             HeroTable table = tables.get(i).getValue();
             String id = tables.get(i).getKey();
-            srs.add(table.getRecord(id));
+            ServerRecord record = table.getRecord(id);
+            if(record.getData()!=null) {
+                if(record.getData().getHero()!=null){
+                    if(record.getData().getHero().getDisplayName().contains(key) || record.getData().getHero().getId().contains(key)){
+                        srs.add(record);
+                    }
+                }
+            }
         }
         return srs;
     }
 
-    public boolean updateRecorss(ServerRecord record){
+    public boolean updateRecord(ServerRecord record){
         ServerData data = record.getData();
         if(data!=null){
             HeroTable table = heroTableCache.get(data.getHero().getId());

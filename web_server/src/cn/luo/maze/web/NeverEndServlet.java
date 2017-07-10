@@ -2,8 +2,10 @@ package cn.luo.maze.web;
 
 import cn.luo.yuan.maze.model.ExchangeObject;
 import cn.luo.yuan.maze.model.ServerData;
+import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.server.LogHelper;
 import cn.luo.yuan.maze.server.MainProcess;
+import cn.luo.yuan.maze.server.persistence.HeroTable;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -58,6 +60,17 @@ public class NeverEndServlet extends HttpServlet {
         String ownerId = request.getHeader(Field.OWNER_ID_FIELD);
         PrintWriter writer = response.getWriter();
         switch (path) {
+            case ADD_LIMIT:
+                String id = request.getParameter("id");
+                HeroTable table = process.heroTableCache.get(id);
+                if(table!=null){
+                    ServerRecord record = table.getRecord(id);
+                    if(record!=null){
+                        record.setRestoreLimit(record.getRestoreLimit() + Integer.parseInt(request.getParameter("r_l_c")));
+                        process.updateRecord(record);
+                    }
+                }
+                break;
             case STOP:
                 process.stop();
                 break;
@@ -96,6 +109,7 @@ public class NeverEndServlet extends HttpServlet {
         PrintWriter writer = null;
         Boolean success = null;
         switch (path) {
+
             case ADD_BOSS:
                 process.submitBoss(request.getParameter("name"), request.getParameter("element"),
                         request.getParameter("race"),request.getParameter("atk"),request.getParameter("def"),

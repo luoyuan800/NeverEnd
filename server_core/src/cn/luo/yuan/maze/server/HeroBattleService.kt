@@ -119,7 +119,6 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>, v
 
     private fun lost(otherReciod: ServerRecord) {
         otherReciod.lostCount++
-        otherReciod.currentLostCount++
         otherReciod.dieCount++
         otherReciod.dieTime = System.currentTimeMillis()
     }

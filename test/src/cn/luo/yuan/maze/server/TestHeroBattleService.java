@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNotSame;
 
 /**
  * Created by gluo on 6/27/2017.
@@ -30,7 +31,8 @@ public class TestHeroBattleService {
                 e.printStackTrace();
             }
         }
-        HeroBattleService hbs = new HeroBattleService(cache);
+        MainProcess process = new MainProcess();
+        HeroBattleService hbs = new HeroBattleService(cache, process.groups, process);
         hbs.run();
         for(Map.Entry<String, HeroTable> entry : cache.entrySet()){
             ServerRecord r = entry.getValue().getRecord(entry.getKey());
