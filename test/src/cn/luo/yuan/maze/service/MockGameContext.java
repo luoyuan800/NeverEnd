@@ -2,8 +2,12 @@ package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
+import cn.luo.yuan.maze.model.skill.SkillParameter;
 import cn.luo.yuan.maze.persistence.DataManagerInterface;
 import cn.luo.yuan.maze.utils.Random;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Created by gluo on 6/30/2017.
@@ -49,5 +53,15 @@ public class MockGameContext implements InfoControlInterface {
     @Override
     public PetMonsterHelperInterface getPetMonsterHelper() {
         return null;
+    }
+
+    @Override
+    public ScheduledExecutorService getExecutor() {
+        return null;
+    }
+
+    @Override
+    public long resetSkill(@NotNull SkillParameter sp) {
+        return 0;
     }
 }

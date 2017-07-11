@@ -244,7 +244,6 @@ public class NeverEndServlet extends HttpServlet {
                 data = process.queryHeroData(ownerId);
                 if (data != null) {
                     writeObject(response, data);
-                    success = true;
                 } else {
                     success = false;
                 }
@@ -261,7 +260,8 @@ public class NeverEndServlet extends HttpServlet {
             default:
                 doGet(request,response);
         }
-        if (success != null && writer!=null) {
+        if (success != null && writer==null) {
+            writer = response.getWriter();
             if (success) {
                 response.setHeader(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
                 writer.write(Field.RESPONSE_RESULT_OK);

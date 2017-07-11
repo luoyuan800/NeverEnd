@@ -217,15 +217,18 @@ public class ObjectTable<T extends Serializable> implements Runnable{
     public List<T> removeExpire(long deathTime){
         List<T> deleted = new ArrayList<T>();
         try {
-            for (File file : root.listFiles()) {
-                BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-                if(System.currentTimeMillis() - attr.creationTime().toMillis() > deathTime){
-                    T e = loadEntry(file);
-                    deleted.add(e);
-                    if(e instanceof IDModel){
-                        cache.remove(((IDModel) e).getId());
+            File[] files = root.listFiles();
+            if(files!=null) {
+                for (File file : files) {
+                    BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+                    if (System.currentTimeMillis() - attr.creationTime().toMillis() > deathTime) {
+                        T e = loadEntry(file);
+                        deleted.add(e);
+                        if (e instanceof IDModel) {
+                            cache.remove(((IDModel) e).getId());
+                        }
+                        file.delete();
                     }
-                    file.delete();
                 }
             }
         }catch (Exception e){

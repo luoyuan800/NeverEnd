@@ -171,7 +171,7 @@ public class MainProcess {
         data.getMaze().setId(data.getHero().getId());
         HeroTable table = heroTableCache.get(data.getHero().getId());
         if (table == null) {
-            table = new HeroTable(new File(heroDir, data.getHero().getId()));
+            table = new HeroTable(heroDir);
             heroTableCache.put(data.getHero().getId(), table);
         }
         table.submitHero(data);
@@ -311,7 +311,7 @@ public class MainProcess {
         if (root.exists()) {
             for (String name : root.list()) {
                 try {
-                    HeroTable table = new HeroTable(new File(root, name));
+                    HeroTable table = new HeroTable(root);
                     if (table.getHero(name, 0) != null) {
                         cache.put(name, table);
                     }
@@ -352,12 +352,14 @@ public class MainProcess {
 
     public int getGiftCount(String id){
         HeroTable table = heroTableCache.get(id);
-        ServerRecord record = table.getRecord(id);
-        if(record!=null){
-            return record.getGift();
-        }else{
-            return 0;
-        }
+        if(table!=null) {
+            ServerRecord record = table.getRecord(id);
+            if (record != null) {
+                return record.getGift();
+            } else {
+                return 0;
+            }
+        }return 0;
     }
 
     public void addGroup(String h1, String h2){
@@ -457,12 +459,27 @@ public class MainProcess {
         if(holder!=null){
             StringBuilder builder = new StringBuilder();
             for(String hid : holder.getHeroIds()){
-                builder.append(queryHeroData(hid)).append("<br>");
+                ServerRecord record = queryRecord(hid);
+                if(record!=null && record.getData()!=null && record.getData().getHero()!=null) {
+                        builder.append(record.getData().getHero().getDisplayName()).append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(record.winRate()).append("<br>");
+                }
             }
             return builder.toString();
         }else {
-            return queryHeroData(id).toString();
+            ServerRecord record = queryRecord(id);
+            if(record!=null && record.getData()!=null && record.getData().getHero()!=null) {
+                return record.getData().getHero().getDisplayName()+ "<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：" + record.winRate();
+            }
         }
+        return StringUtils.EMPTY_STRING;
+    }
+
+    public ServerRecord queryRecord(String id){
+        HeroTable table = heroTableCache.get(id);
+        if(table!=null){
+            return table.getRecord(id);
+        }
+        return null;
     }
 
 

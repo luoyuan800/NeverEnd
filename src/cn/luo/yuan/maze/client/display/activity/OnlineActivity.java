@@ -204,7 +204,7 @@ public class OnlineActivity extends Activity {
             public void run() {
                 postDefender();
             }
-        }, 30, Data.REFRESH_SPEED * 3, TimeUnit.MILLISECONDS);
+        }, 30, Data.REFRESH_SPEED * 20, TimeUnit.MILLISECONDS);
     }
 
     private void postDefender() {
@@ -220,18 +220,20 @@ public class OnlineActivity extends Activity {
             @Override
             public void run() {
                 String count = service.postOnlineGiftCount(gameContext);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Button button = (Button) findViewById(R.id.online_gifts);
-                        button.setText("礼包 X" + count);
-                        if(Integer.valueOf(count) <= 0){
-                            button.setEnabled(false);
-                        }else{
-                            button.setEnabled(true);
+                if(StringUtils.isNotEmpty(count)) {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Button button = (Button) findViewById(R.id.online_gifts);
+                            button.setText("礼包 X" + count);
+                            if (Integer.valueOf(count) <= 0) {
+                                button.setEnabled(false);
+                            } else {
+                                button.setEnabled(true);
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         });
 

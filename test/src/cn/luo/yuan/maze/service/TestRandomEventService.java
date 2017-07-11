@@ -5,9 +5,13 @@ import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.gift.Gift;
+import cn.luo.yuan.maze.model.skill.SkillParameter;
 import cn.luo.yuan.maze.persistence.DataManagerInterface;
 import cn.luo.yuan.maze.utils.Random;
+import org.jetbrains.annotations.NotNull;
 import org.testng.annotations.Test;
+
+import java.util.concurrent.ScheduledExecutorService;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -71,6 +75,16 @@ public class TestRandomEventService {
             @Override
             public PetMonsterHelperInterface getPetMonsterHelper() {
                 return null;
+            }
+
+            @Override
+            public ScheduledExecutorService getExecutor() {
+                return null;
+            }
+
+            @Override
+            public long resetSkill(@NotNull SkillParameter sp) {
+                return 0;
             }
         };
         RandomEventService service = spy(new RandomEventService(gameContext));

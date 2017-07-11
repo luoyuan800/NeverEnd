@@ -156,7 +156,7 @@ public class ObjectDB<T extends Serializable> implements Runnable {
         } catch (InvalidClassException ice){
             throw ice;
         }catch (IOException | ClassNotFoundException e) {
-            LogHelper.logException(e,"Sqlite->load{" + name + "}");
+            //LogHelper.logException(e,"Sqlite->load{" + name + "}");
         }
         return null;
     }

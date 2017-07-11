@@ -25,5 +25,5 @@ class User : Serializable {
     var name: String? = null
     var login: Boolean = false
     var sing = StringUtils.EMPTY_STRING
-    var battleInterval = 5
+    var battleInterval = 1
 }

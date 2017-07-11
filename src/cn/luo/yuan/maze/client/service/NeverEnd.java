@@ -299,7 +299,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
     }
 
     public long reincarnate(){
-        long mate = hero.getReincarnate() * Data.REINCARNATE_COST;
+        long mate = (hero.getReincarnate()+1) * Data.REINCARNATE_COST;
         if(hero.getMaterial() < mate){
             Toast.makeText(context, Resource.getString(R.string.need_mate, mate), Toast.LENGTH_SHORT).show();
             return hero.getReincarnate();
