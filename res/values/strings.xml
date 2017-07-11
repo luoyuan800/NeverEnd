@@ -93,4 +93,6 @@
     <string name="acc_type">装备</string>
     <string name="goods_type">物品</string>
     <string name="exchange_label">交换</string>
+    <string name="need_mate">需要锻造 %1$s</string>
+    <string name="need_level">需要层数 %1$s</string>
 </resources>

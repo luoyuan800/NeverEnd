@@ -1,6 +1,7 @@
 package cn.luo.maze.web;
 
 import cn.luo.yuan.maze.model.ExchangeObject;
+import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.server.LogHelper;
@@ -109,7 +110,14 @@ public class NeverEndServlet extends HttpServlet {
         PrintWriter writer = null;
         Boolean success = null;
         switch (path) {
-
+            case POST_DEFENDER:
+                Hero hero = process.postHeroByLevel(request.getIntHeader(Field.LEVEL));
+                if(hero!=null){
+                    writeObject(response, hero);
+                }else{
+                    success = false;
+                }
+                break;
             case ADD_BOSS:
                 process.submitBoss(request.getParameter("name"), request.getParameter("element"),
                         request.getParameter("race"),request.getParameter("atk"),request.getParameter("def"),
@@ -224,13 +232,9 @@ public class NeverEndServlet extends HttpServlet {
                 writer.write(process.queryBattleMessages(ownerId, count));
                 break;
             case POOL_ONLINE_DATA_MSG:
-                ServerData sd = process.queryHeroData(ownerId);
+                String sd = process.getGroupMessage(ownerId);
                 writer = response.getWriter();
-                if(sd!=null){
-                    writer.write(sd.toString());
-                }else{
-                    writer.write(StringUtils.EMPTY_STRING);
-                }
+                writer.write(sd);
                 break;
             case QUERY_BATTLE_AWARD:
                 writer = response.getWriter();

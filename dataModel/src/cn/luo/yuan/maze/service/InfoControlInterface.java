@@ -2,8 +2,10 @@ package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
+import cn.luo.yuan.maze.model.skill.SkillParameter;
 import cn.luo.yuan.maze.persistence.DataManagerInterface;
 import cn.luo.yuan.maze.utils.Random;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -27,4 +29,6 @@ public interface InfoControlInterface {
     PetMonsterHelperInterface getPetMonsterHelper();
 
     ScheduledExecutorService getExecutor();
+
+    long resetSkill(@NotNull SkillParameter sp);
 }

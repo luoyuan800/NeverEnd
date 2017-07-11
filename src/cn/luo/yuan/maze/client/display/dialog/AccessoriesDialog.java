@@ -8,9 +8,11 @@ import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
+import cn.luo.yuan.maze.exception.MountLimitException;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.client.service.NeverEnd;
@@ -66,7 +68,11 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
                                                 if (main.isMounted()) {
                                                     context.getAccessoryHelper().unMountAccessory(main, context.getHero());
                                                 } else {
-                                                    context.getAccessoryHelper().mountAccessory(main, context.getHero());
+                                                    try {
+                                                        context.mountAccessory(main);
+                                                    } catch (MountLimitException e) {
+                                                        Toast.makeText(context.getContext(),e.word, Toast.LENGTH_SHORT).show();
+                                                    }
                                                 }
                                                 accessoryAdapter.notifyDataSetChanged();
                                                 context.getViewHandler().refreshAccessory(context.getHero());

@@ -15,7 +15,7 @@ public class SkillHelper {
         int index = -1;
 
         for (int i = 0; i < hero.getSkills().length; i++) {
-            if (hero.getSkills()[i] instanceof EmptySkill) {
+            if (hero.getSkills()[i] == null || hero.getSkills()[i] instanceof EmptySkill) {
                 index = i;
                 break;
             }
@@ -25,7 +25,7 @@ public class SkillHelper {
 
     public static boolean mountSkill(Skill skill, Hero hero) {
         int index = mountSkillIndex(hero);
-        if (index >= 0) {
+        if (index >= 0 && index < hero.getSkills().length) {
             return mountSkill(skill, hero, index);
         }
         return false;

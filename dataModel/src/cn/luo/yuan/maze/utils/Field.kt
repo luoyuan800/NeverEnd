@@ -6,6 +6,7 @@ package cn.luo.yuan.maze.utils
 class Field {
     //Use static file should define companion object
     companion object {
+        const val LEVEL: String = "level"
         const val SIGN_FIELD: String = "sign"
         const val LIMIT_STRING: String = "limit"
         const val EXPECT_TYPE: String = "expectType"

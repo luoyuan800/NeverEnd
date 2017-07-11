@@ -22,6 +22,7 @@ class ServerRecord : IDModel, Serializable {
         delete = true
     }
     private var id: String? = null
+    var submitDate = 0L
     var winCount = 0
     var currentWin = 0
     var lostCount = 0

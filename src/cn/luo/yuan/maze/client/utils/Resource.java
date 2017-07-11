@@ -50,6 +50,9 @@ public class Resource {
             return String.valueOf(id);
         }
     }
+    public static String getString(int id, Object...args) {
+        return String.format(getString(id), (Object[]) args);
+    }
 
     public static Drawable loadImageFromAssets(String name) {
         Drawable drawable = drawableCache.get(name);

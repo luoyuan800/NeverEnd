@@ -3,9 +3,11 @@ package cn.luo.yuan.maze.client.service;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.client.utils.RestConnection;
+import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
+import cn.luo.yuan.maze.utils.annotation.StringValue;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -95,7 +97,7 @@ public class ServerService {
             connection.addRequestProperty(Field.COUNT, String.valueOf(count));
             return server.connect(connection).toString();
         } catch (Exception e) {
-            LogHelper.logException(e, "ServiceService->76");
+            LogHelper.logException(e, "ServiceService->postBattleMsg");
         }
         return StringUtils.EMPTY_STRING;
     }
@@ -106,7 +108,7 @@ public class ServerService {
             connection.addRequestProperty(Field.OWNER_ID_FIELD, gameContext.getHero().getId());
             return server.connect(connection).toString();
         } catch (Exception e) {
-            LogHelper.logException(e, "ServiceService->88");
+            LogHelper.logException(e, "ServiceService->queryAwardString");
         }
         return StringUtils.EMPTY_STRING;
     }
@@ -117,7 +119,7 @@ public class ServerService {
             connection.addRequestProperty(Field.OWNER_ID_FIELD, gameContext.getHero().getId());
             return (ServerData) server.connect(connection);
         } catch (Exception e) {
-            LogHelper.logException(e, "ServiceService->98");
+            LogHelper.logException(e, "ServiceService->getBackHero");
         }
         return null;
     }
@@ -128,7 +130,7 @@ public class ServerService {
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
             return server.connect(connection);
         } catch (Exception e) {
-            LogHelper.logException(e, "ServiceService->98");
+            LogHelper.logException(e, "ServiceService->openOnlineGift");
         }
         return null;
     }
@@ -139,7 +141,21 @@ public class ServerService {
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
             return server.connect(connection).toString();
         } catch (Exception e) {
-            LogHelper.logException(e, "ServiceService->98");
+            LogHelper.logException(e, "ServiceService->postOnlineGiftCount");
+        }
+        return null;
+    }
+
+    public Hero postDefender(long level) {
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(POST_DEFENDER, RestConnection.POST);
+            connection.addRequestProperty(Field.LEVEL, String.valueOf(level));
+            Object o = server.connect(connection);
+            if(o instanceof Hero){
+                return (Hero) o;
+            }
+        } catch (Exception e) {
+            LogHelper.logException(e, "ServiceService->postDefender");
         }
         return null;
     }

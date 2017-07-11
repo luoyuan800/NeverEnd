@@ -3,7 +3,10 @@ package cn.luo.yuan.maze.client.service;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.util.ArrayMap;
+import android.util.Log;
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.client.utils.LogHelper;
+import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Monster;
@@ -11,9 +14,7 @@ import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.service.MonsterLoader;
-import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.utils.Random;
-import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -63,21 +64,21 @@ public class PetMonsterLoder implements MonsterLoader {
 
     public synchronized Monster randomMonster(long level, boolean addKey) {
         if (getMonsterCache().size() == 0) {
+            Log.d("maze", "Init monster index");
             init();
         }
         Monster clone = null;
         ArrayList<MonsterKey> keys = getAvaiableMonsterKey(level, addKey);
-        int keyIndex = getRandom().nextInt(addKey ? (keys.size() + 1) : keys.size());
-        if (keyIndex < keys.size()) {
-            MonsterKey key = keys.get(keyIndex);
-            while (keyIndex < keys.size() && getRandom().nextInt(100 + key.count) >= key.meet_rate) {
-                if (addKey) {
-                    key.count--;
-                }
-                key = getRandom().randomItem(keys);
+        MonsterKey key = getRandom().randomItem(keys);
+        int reTry = 0;
+        while (reTry++ < 3 && (key == null || getRandom().nextInt(100 + key.count) >= key.meet_rate)) {
+            if (addKey) {
+                if (key != null) key.count--;
             }
+            key = getRandom().randomItem(keys);
+        }
+        if (key != null) {
             Monster monster = getMonsterCache().get(key).get();
-
             if (monster == null) {
                 monster = loadMonsterByIndex(key.index);
             }
@@ -103,7 +104,6 @@ public class PetMonsterLoder implements MonsterLoader {
                     }
                 }
             }
-
         }
         return clone;
     }

@@ -4,24 +4,33 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.handler.GameActivityViewHandler;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
 import cn.luo.yuan.maze.client.utils.LogHelper;
+import cn.luo.yuan.maze.client.utils.Resource;
+import cn.luo.yuan.maze.exception.MountLimitException;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.gift.Gift;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.GoodsProperties;
 import cn.luo.yuan.maze.model.skill.MountAble;
+import cn.luo.yuan.maze.model.skill.PropertySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.model.skill.SkillParameter;
+import cn.luo.yuan.maze.model.skill.UpgradeAble;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.service.PetMonsterHelper;
 import cn.luo.yuan.maze.service.SkillHelper;
 import cn.luo.yuan.maze.utils.Random;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -214,7 +223,11 @@ public class NeverEnd extends Application implements InfoControlInterface {
 
         //Accessory handle
         for (Accessory accessory : dataManager.loadMountedAccessory(hero)) {
-            mountAccessory(accessory);
+            try {
+                mountAccessory(accessory);
+            } catch (MountLimitException e) {
+                LogHelper.logException(e, "NeverEnd->handler accessory");
+            }
         }
 
         //Skill handle
@@ -247,7 +260,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
         this.viewHandler = viewHandler;
     }
 
-    public void mountAccessory(Accessory accessory) {
+    public void mountAccessory(Accessory accessory) throws MountLimitException {
         Accessory uMount = accessoryHelper.mountAccessory(accessory, hero);
         if (uMount != null) {
             dataManager.saveAccessory(uMount);
@@ -283,5 +296,70 @@ public class NeverEnd extends Application implements InfoControlInterface {
             object = accessory;
         }
         return object;
+    }
+
+    public long reincarnate(){
+        long mate = hero.getReincarnate() * Data.REINCARNATE_COST;
+        if(hero.getMaterial() < mate){
+            Toast.makeText(context, Resource.getString(R.string.need_mate, mate), Toast.LENGTH_SHORT).show();
+            return hero.getReincarnate();
+        }
+        long level = Data.REINCARNATE_LEVEL + hero.getReincarnate() * Data.REINCARNATE_LEVEL;
+        if(maze.getMaxLevel() < level){
+            Toast.makeText(context, Resource.getString(R.string.need_level, level), Toast.LENGTH_SHORT).show();
+            return hero.getReincarnate();
+        }
+        hero.setMaterial(hero.getMaterial() - mate);
+        hero.setReincarnate(hero.getReincarnate() + 1);
+        switch ((int)hero.getReincarnate()){
+            case 2:
+                hero.setSkills(Arrays.copyOf(hero.getSkills(),hero.getSkills().length + 1));
+                break;
+            case 4:
+                hero.setSkills(Arrays.copyOf(hero.getSkills(),hero.getSkills().length + 1));
+                break;
+            case 8:
+                hero.setSkills(Arrays.copyOf(hero.getSkills(),hero.getSkills().length + 1));
+                break;
+        }
+        SkillParameter sp = new SkillParameter(hero);
+        long totalPoint = resetSkill(sp);
+        hero.setHpGrow(hero.getReincarnate()*Data.GROW_INCRESE  + hero.getHpGrow());
+        hero.setDefGrow(hero.getReincarnate()*Data.GROW_INCRESE  + hero.getDefGrow());
+        hero.setHpGrow(hero.getReincarnate()*Data.GROW_INCRESE  + hero.getHpGrow());
+        hero.setMaxHp(hero.getReincarnate() * 20);
+        hero.setHp(hero.getMaxHp());
+        hero.setDef(hero.getReincarnate() * 5);
+        hero.setAtk(hero.getReincarnate() * 15);
+        hero.setAgi(0);
+        hero.setStr(0);
+        hero.setPoint(totalPoint);
+        maze.setLevel(1);
+        maze.setMaxLevel(1);
+        return hero.getReincarnate();
+    }
+
+    public long resetSkill(@NotNull SkillParameter sp) {
+        long totalPoint = 0L;
+        for( Skill skill : dataManager.loadAllSkill()){
+            if(skill instanceof MountAble){
+                if(((MountAble) skill).isMounted()){
+                    SkillHelper.unMountSkill((MountAble) skill, hero);
+                }
+            }
+            if(skill.isEnable()){
+                if(skill instanceof UpgradeAble){
+                    totalPoint += ((UpgradeAble) skill).getLevel() * Data.SKILL_ENABLE_COST;
+                }else{
+                    totalPoint += Data.SKILL_ENABLE_COST;
+                }
+                if(skill instanceof PropertySkill){
+                    ((PropertySkill)skill).disable(sp);
+                }else {
+                    skill.disable();
+                }
+            }
+        }
+        return totalPoint;
     }
 }

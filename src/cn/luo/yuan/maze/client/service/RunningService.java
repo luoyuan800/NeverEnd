@@ -136,41 +136,47 @@ public class RunningService implements RunningServiceInterface {
                     } else {
                         boolean meet = false;
                         if (random.nextFloat(100f) < Data.MONSTER_MEET_RATE) {
+                            HarmAble monster = null;
                             if (maze.getStep() > 10 && random.nextInt(100) < 35) {
-                                //Defender
+                                Log.d("maze", "Find defender");
+                                monster = dataManager.loadDefender(maze.getLevel());
+                            }else {
+                                Log.d("maze", "Try to find target battle");
+                                monster = monsterHelper.randomMonster(maze.getLevel());
                             }
-                            Log.d("maze", "Try to find target battle");
-                            Monster monster = monsterHelper.randomMonster(maze.getLevel());
                             this.target = monster;
                             if (monster != null) {
                                 meet = true;
-                                gameContext.addMessage("遇见了 " + monster.getDisplayName());
+                                gameContext.addMessage("遇见了 " + ((NameObject)monster).getDisplayName());
                                 BattleService battleService = new BattleService(hero, monster, gameContext.getRandom(), this);
                                 BattleMessage battleMessage = new BattleMessageImp(gameContext);
                                 battleService.setBattleMessage(battleMessage);
+                                long material = monster instanceof Monster ? ((Monster)monster).getMaterial() : maze.getLevel();
                                 if (battleService.battle(gameContext.getMaze().getLevel())) {
-                                    Log.d("maze", "Battle win " + monster.getDisplayName());
+                                    Log.d("maze", "Battle win " + ((NameObject)monster).getDisplayName());
                                     maze.setStreaking(maze.getStreaking() + 1);
-                                    hero.setMaterial(hero.getMaterial() + monster.getMaterial());
-                                    gameContext.addMessage(String.format(gameContext.getContext().getString(R.string.add_mate), StringUtils.formatNumber(monster.getMaterial())));
-                                    Pet pet = tryCatch(monster, dataManager.getPetCount(), maze.getLevel());
-                                    if (pet != null) {
-                                        gameContext.addMessage(String.format(Resource.getString(R.string.pet_catch), pet.getDisplayName()));
-                                        dataManager.savePet(pet);
-                                        for (PetCatchListener listener : petCatchListeners.values()) {
-                                            listener.catchPet(pet);
-                                        }
-                                        if (hero.getPets().size() < 1) {
-                                            hero.getPets().add(pet);
-                                            pet.setMounted(true);
-                                            gameContext.getViewHandler().refreshPets(hero);
+                                    hero.setMaterial(hero.getMaterial() + material);
+                                    gameContext.addMessage(String.format(gameContext.getContext().getString(R.string.add_mate), StringUtils.formatNumber(material)));
+                                    if(monster instanceof Monster) {
+                                        Pet pet = tryCatch((Monster) monster, dataManager.getPetCount(), maze.getLevel());
+                                        if (pet != null) {
+                                            gameContext.addMessage(String.format(Resource.getString(R.string.pet_catch), pet.getDisplayName()));
+                                            dataManager.savePet(pet);
+                                            for (PetCatchListener listener : petCatchListeners.values()) {
+                                                listener.catchPet(pet);
+                                            }
+                                            if (hero.getPets().size() < 1) {
+                                                hero.getPets().add(pet);
+                                                pet.setMounted(true);
+                                                gameContext.getViewHandler().refreshPets(hero);
+                                            }
                                         }
                                     }
                                     for (WinListener listener : winListeners.values()) {
                                         listener.win(hero, monster);
                                     }
                                 } else {
-                                    Log.d("maze", "Battle failed with " + monster.getDisplayName());
+                                    Log.d("maze", "Battle failed with " + ((NameObject)monster).getDisplayName());
                                     maze.setStreaking(0);
                                     for (LostListener lostListener : lostListeners.values()) {
                                         lostListener.lost(hero, monster);
@@ -190,6 +196,7 @@ public class RunningService implements RunningServiceInterface {
                             target = null;
                         }
                         if (!meet) {
+                            Log.d("maze", "Process random events");
                             randomEventService.random();
                         }
                     }

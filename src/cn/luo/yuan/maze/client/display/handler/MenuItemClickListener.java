@@ -13,8 +13,10 @@ import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.client.display.dialog.ExchangeDialog;
 import cn.luo.yuan.maze.client.display.dialog.GoodsDialog;
 import cn.luo.yuan.maze.client.display.dialog.PetDialog;
+import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.LocalShop;
+import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.NeverEndConfig;
 
 public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
@@ -45,6 +47,15 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.reincarnation:
+                SimplerDialogBuilder.build("转生，重新开始，保留宠物和装备。",
+                        Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                control.reincarnate();
+                            }
+                        }, Resource.getString(R.string.close), null, context);
+                break;
             case R.id.goods:
                 new GoodsDialog().show(control);
                 break;

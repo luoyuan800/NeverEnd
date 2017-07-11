@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.persistence;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.IDModel;
@@ -54,6 +55,7 @@ public class DataManager implements DataManagerInterface {
     private SerializeLoader<ClickSkill> clickSkillLoader;
     private SerializeLoader<Task> taskLoader;
     private ObjectDB<NeverEndConfig> configDB;
+    private ObjectDB<Hero> defenderDB;
 
     private Sqlite database;
     private Context context;
@@ -75,6 +77,7 @@ public class DataManager implements DataManagerInterface {
         clickSkillLoader = new SerializeLoader<>(ClickSkill.class, context, index);
         taskLoader = new SerializeLoader<Task>(Task.class, context, index);
         configDB = new ObjectDB<>(NeverEndConfig.class, context);
+        defenderDB = new ObjectDB<>(Hero.class, context);
         this.context = context;
         e.scheduleAtFixedRate(accessoryLoader.getDb(),1000, 500, TimeUnit.MILLISECONDS);
         e.scheduleAtFixedRate(petLoader.getDb(),1000, 500, TimeUnit.MILLISECONDS);
@@ -82,6 +85,7 @@ public class DataManager implements DataManagerInterface {
         e.scheduleAtFixedRate(skillLoader.getDb(),1000, 500, TimeUnit.MILLISECONDS);
         e.scheduleAtFixedRate(clickSkillLoader.getDb(),1000, 500, TimeUnit.MILLISECONDS);
         e.scheduleAtFixedRate(configDB,1000, 500, TimeUnit.MILLISECONDS);
+        e.scheduleAtFixedRate(defenderDB,1000, 500, TimeUnit.MILLISECONDS);
     }
 
     public Hero loadHero() {
@@ -426,6 +430,19 @@ public class DataManager implements DataManagerInterface {
             configDB.save(config);
         }
         return config;
+    }
+
+    public Hero loadDefender(long level) {
+        try {
+            return defenderDB.loadObject(String.valueOf(level));
+        } catch (Exception e) {
+            LogHelper.logException(e, "DataManager->loadDefender");
+        }
+        return null;
+    }
+
+    public void addDefender(Hero hero, long level){
+        defenderDB.save(hero, String.valueOf(level));
     }
 
     @NotNull

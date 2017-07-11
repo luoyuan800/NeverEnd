@@ -28,22 +28,8 @@ class ResetSkill : UsableGoods() {
     override fun use(properties: GoodsProperties): Boolean {
         if(count > 0){
             val context = properties["context"] as InfoControlInterface
-            var totalPoint = 0L;
             val sp = SkillParameter(properties.hero)
-            for( skill in context.dataManager.loadAllSkill()){
-                if(skill.isEnable){
-                    if(skill is UpgradeAble){
-                        totalPoint += skill.level * Data.SKILL_ENABLE_COST
-                    }else{
-                        totalPoint += Data.SKILL_ENABLE_COST
-                    }
-                }
-                if(skill is PropertySkill){
-                    skill.disable(sp)
-                }else {
-                    skill.disable()
-                }
-            }
+            var totalPoint = context.resetSkill(sp)
         }
         return super.use(properties)
     }

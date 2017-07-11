@@ -238,6 +238,9 @@ public class AccessoryHelper extends cn.luo.yuan.maze.service.AccessoryHelper {
                         accessories.add(accessory);
                     }
                 }
+                if(accessories.size() > 20){
+                    break;
+                }
             }
         }
         return accessories;

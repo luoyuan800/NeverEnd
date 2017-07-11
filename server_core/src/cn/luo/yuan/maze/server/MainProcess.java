@@ -6,6 +6,7 @@ import cn.luo.yuan.maze.model.ExchangeObject;
 import cn.luo.yuan.maze.model.GroupHolder;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
@@ -443,5 +444,44 @@ public class MainProcess {
             }
         }
         return false;
+    }
+
+    public String getGroupMessage(String id){
+        GroupHolder holder = null;
+        for(GroupHolder holder1 : groups){
+            if(holder1.isInGroup(id)){
+                holder = holder1;
+                break;
+            }
+        }
+        if(holder!=null){
+            StringBuilder builder = new StringBuilder();
+            for(String hid : holder.getHeroIds()){
+                builder.append(queryHeroData(hid)).append("<br>");
+            }
+            return builder.toString();
+        }else {
+            return queryHeroData(id).toString();
+        }
+    }
+
+
+    public Hero postHeroByLevel(long level){
+        for(Map.Entry<String, HeroTable> entry : heroTableCache.entrySet()){
+            try {
+                Hero hero = entry.getValue().getHero(entry.getKey());
+                if(hero!=null){
+                    Maze maze = entry.getValue().getMaze(entry.getKey(), level);
+                    if(maze!=null){
+                        if(Math.abs(maze.getMaxLevel() - level) < 50){
+                            return hero;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                LogHelper.error(e);
+            }
+        }
+        return null;
     }
 }

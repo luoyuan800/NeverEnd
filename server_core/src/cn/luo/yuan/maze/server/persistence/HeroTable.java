@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.server.persistence;
 
+import cn.luo.yuan.maze.exception.MountLimitException;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
@@ -67,7 +68,13 @@ public class HeroTable {
     }
 
     public Maze getMaze(String id, long level) throws IOException, ClassNotFoundException {
-        return getRecord(id).getData().getMaze();
+        ServerRecord record = getRecord(id);
+        if (record != null) {
+            ServerData data = record.getData();
+            if (data != null)
+                return data.getMaze();
+        }
+        return null;
     }
 
     public ServerRecord getRecord(String id) {
@@ -80,11 +87,11 @@ public class HeroTable {
 
     public String queryDataString(String id) {
         ServerRecord record = getRecord(id);
-        if(record.getData()!=null) {
+        if (record.getData() != null) {
             int t = record.getWinCount() + record.getLostCount();
-            if(t<= 0) t++;
+            if (t <= 0) t++;
             return record.getData().getHero().getDisplayName() + "<br>"
-                    + "排名：" + record.getRange() + "， 胜率：" +  StringUtils.formatPercentage(record.getWinCount() * 100/(t))
+                    + "排名：" + record.getRange() + "， 胜率：" + StringUtils.formatPercentage(record.getWinCount() * 100 / (t))
                     ;
         }
         return StringUtils.EMPTY_STRING;
@@ -92,11 +99,11 @@ public class HeroTable {
 
     public String pollBattleMsg(String id, int count) {
         ServerRecord record = getRecord(id);
-        if(record.getMessages().size() > 50){
+        if (record.getMessages().size() > 50) {
             count += 5;
         }
         StringBuilder s = new StringBuilder();
-        while (count-- > 0 && record.getMessages().size() > 0){
+        while (count-- > 0 && record.getMessages().size() > 0) {
             s.append(record.getMessages().poll()).append(count > 0 ? "<br>" : "");
         }
         return s.toString();
@@ -118,10 +125,11 @@ public class HeroTable {
 
     public void submitHero(ServerData data) throws IOException {
         ServerRecord record = getRecord(data.getHero().getId());
-        if(record == null){
+        if (record == null) {
             record = new ServerRecord();
             record.setId(data.getHero().getId());
         }
+        record.setSubmitDate(System.currentTimeMillis());
         record.setRange(Integer.MAX_VALUE);
         record.setData(data);
         save(record);
@@ -134,13 +142,17 @@ public class HeroTable {
 
     private Hero loadHero(String id) throws IOException, ClassNotFoundException {
         ServerRecord record = getRecord(id);
-        if(record!=null) {
+        if (record != null) {
             ServerData data = record.getData();
             if (data != null) {
                 Hero hero = data.getHero();
                 if (data.getAccessories() != null) {
                     for (Accessory accessory : data.getAccessories()) {
-                        AccessoryHelper.mountAccessory(accessory, hero);
+                        try {
+                            AccessoryHelper.mountAccessory(accessory, hero);
+                        } catch (MountLimitException e) {
+                            LogHelper.error(e);
+                        }
                     }
                 }
                 if (data.getPets() != null) {
