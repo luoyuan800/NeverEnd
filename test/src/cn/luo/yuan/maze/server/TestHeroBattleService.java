@@ -22,7 +22,7 @@ import java.util.UUID;
  */
 public class TestHeroBattleService {
     @Test
-    public void testBattle() {
+    public void testBattle() throws IOException, ClassNotFoundException {
         MainProcess process = new MainProcess("data");
         Hero hero = new Hero();
         hero.setName("骑士☆某鸟");
@@ -66,11 +66,10 @@ public class TestHeroBattleService {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }*/
-        Map<String, HeroTable> cache = process.heroTableCache;
-        HeroBattleService hbs = new HeroBattleService(cache, process.groups, process);
+        HeroBattleService hbs = new HeroBattleService(process.heroTable, process.groups, process);
         hbs.run();
-        for (Map.Entry<String, HeroTable> entry : cache.entrySet()) {
-            ServerRecord r = entry.getValue().getRecord(entry.getKey());
+        for (String id : process.heroTable.getAllHeroIds()) {
+            ServerRecord r = process.heroTable.getRecord(id);
             if (r.getData() != null) {
                 System.out.println(r.getMessages());
             }

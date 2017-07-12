@@ -88,8 +88,8 @@ public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefres
 
     public void addPets(List<Pet> pets) {
         for (Pet pet : pets) {
-            if (!pets.contains(pet)) {
-                pets.add(pet);
+            if (!this.pets.contains(pet)) {
+                this.pets.add(pet);
             }
         }
     }
@@ -135,6 +135,7 @@ public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefres
             addPets(loadPets);
             loadMoreListView.onLoadMoreComplete(false);
         }
+        notifyDataSetChanged();
     }
 
     public Comparator<Pet> getSort() {

@@ -1,24 +1,8 @@
 package cn.luo.yuan.maze.server;
 
-import cn.luo.yuan.maze.model.Accessory;
-import cn.luo.yuan.maze.model.Element;
-import cn.luo.yuan.maze.model.ExchangeObject;
-import cn.luo.yuan.maze.model.GroupHolder;
-import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.model.IDModel;
-import cn.luo.yuan.maze.model.Maze;
-import cn.luo.yuan.maze.model.Pet;
-import cn.luo.yuan.maze.model.ServerData;
-import cn.luo.yuan.maze.model.ServerRecord;
+import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.effect.Effect;
-import cn.luo.yuan.maze.model.effect.original.AgiEffect;
-import cn.luo.yuan.maze.model.effect.original.AtkEffect;
-import cn.luo.yuan.maze.model.effect.original.DefEffect;
-import cn.luo.yuan.maze.model.effect.original.HpEffect;
-import cn.luo.yuan.maze.model.effect.original.MeetRateEffect;
-import cn.luo.yuan.maze.model.effect.original.PetRateEffect;
-import cn.luo.yuan.maze.model.effect.original.SkillRateEffect;
-import cn.luo.yuan.maze.model.effect.original.StrEffect;
+import cn.luo.yuan.maze.model.effect.original.*;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.types.Medallion;
 import cn.luo.yuan.maze.server.model.User;
@@ -34,11 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -57,19 +37,19 @@ public class MainProcess {
     public WarehouseTable warehouseTable;
     public ExchangeTable exchangeTable;
     public ObjectTable<Task> taskTable;
-    public Map<String, HeroTable> heroTableCache;
     public List<GroupHolder> groups = new ArrayList<>();
+    public HeroTable heroTable;
     private ObjectTable<User> userDb;
     private File root;
     private File heroDir;
 
-    public MainProcess(String root) {
+    public MainProcess(String root) throws IOException, ClassNotFoundException {
         this.root = new File(root);
         this.heroDir = new File(root, "hero");
         warehouseTable = new WarehouseTable(this.root);
         exchangeTable = new ExchangeTable(this.root);
         taskTable = new ObjectTable<>(Task.class, this.root);
-        heroTableCache = initHeroTableCache(heroDir);
+        heroTable = new HeroTable(heroDir);
         userDb = new ObjectTable<User>(User.class, this.root);
         process = this;
         user = userDb.loadObject("root");
@@ -86,15 +66,13 @@ public class MainProcess {
 
     }
 
-    public static String buildHeroRange(Map<String, HeroTable> heroTableCache) {
+    public String buildHeroRange() {
         StringBuilder sb = new StringBuilder("<b>排行榜</b><br>");
         try {
             List<ServerRecord> records = new ArrayList<>();
-            for (Map.Entry<String, HeroTable> entry : heroTableCache.entrySet()) {
+            for (String heroId : heroTable.getAllHeroIds()) {
                 try {
-                    HeroTable table = entry.getValue();
-                    String name = entry.getKey();
-                    ServerRecord record = table.getRecord(name);
+                    ServerRecord record = heroTable.getRecord(heroId);
                     if (record.getData() != null && record.getData().getHero() != null) {
                         records.add(record);
                     }
@@ -110,57 +88,15 @@ public class MainProcess {
             });
             for (int i = 0; i < records.size() && i < 5; i++) {
                 ServerData data = records.get(i).getData();
-                if (data != null && data.getHero()!=null)
-                    sb.append(data.getHero().getDisplayName()).append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(records.get(i).winRate()).append("<br>");
+                if (data != null && data.getHero() != null)
+                    sb.append(data.getHero().getDisplayName())
+                            .append(data.getMaze()!=null ? ( " 层：" + StringUtils.formatNumber(data.getMaze().getMaxLevel())) : "")
+                            .append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(records.get(i).winRate()).append("<br>");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return sb.toString();
-    }
-
-    private static Effect buildEffect(String effectName, String value) {
-        switch (effectName) {
-            case "SkillRateEffect":
-                SkillRateEffect skillRateEffect = new SkillRateEffect();
-                skillRateEffect.setSkillRate(Float.parseFloat(value));
-                return skillRateEffect;
-            case "AgiEffect":
-                AgiEffect agiEffect = new AgiEffect();
-                agiEffect.setAgi(Long.parseLong(value));
-                return agiEffect;
-            case "AtkEffect":
-                AtkEffect atkEffect = new AtkEffect();
-                atkEffect.setAtk(Long.parseLong(value));
-                return atkEffect;
-            case "DefEffect":
-                DefEffect defEffect = new DefEffect();
-                defEffect.setDef(Long.parseLong(value));
-                return defEffect;
-            case "HpEffect":
-                HpEffect hpEffect = new HpEffect();
-                hpEffect.setHp(Long.parseLong(value));
-                return hpEffect;
-            case "StrEffect":
-                StrEffect strEffect = new StrEffect();
-                strEffect.setStr(Long.parseLong(value));
-                return strEffect;
-            case "MeetRateEffect":
-                MeetRateEffect meetRateEffect = new MeetRateEffect();
-                meetRateEffect.setMeetRate(Float.parseFloat(value));
-                return meetRateEffect;
-            case "PetRateEffect":
-                PetRateEffect petRateEffect = new PetRateEffect();
-                petRateEffect.setPetRate(Float.parseFloat(value));
-                return petRateEffect;
-        }
-        return null;
-    }
-
-    //Only use for unit test
-    static void clear() throws IOException, ClassNotFoundException {
-        File root = new File("data");
-        root.delete();
     }
 
     public boolean login(int pass) {
@@ -177,22 +113,11 @@ public class MainProcess {
 
     public void submitHero(ServerData data) throws IOException, ClassNotFoundException {
         data.getMaze().setId(data.getHero().getId());
-        HeroTable table = heroTableCache.get(data.getHero().getId());
-        if (table == null) {
-            table = new HeroTable(heroDir);
-            heroTableCache.put(data.getHero().getId(), table);
-        }
-        table.submitHero(data);
+        heroTable.submitHero(data);
     }
 
     public ServerData getBackHero(String id) throws IOException {
-        HeroTable table = heroTableCache.get(id);
-        if (table != null) {
-            heroTableCache.remove(id);
-            return table.getBackHero(id);
-        } else {
-            return null;
-        }
+        return heroTable.getBackHero(id);
     }
 
     public void addTask(String name, String desc, String material, String accessory_name, String point, String accessory_color, String accessory_level, String accessory_element, String accessory_type, String accessory_effects) throws IOException {
@@ -219,9 +144,15 @@ public class MainProcess {
     }
 
     public Serializable openOnlineGift(String ownerId) {
-        Medallion medallion = new Medallion();
-        medallion.setCount(1);
-        return medallion;
+        ServerRecord record = heroTable.getRecord(ownerId);
+        if(record!=null && record.getGift() > 0) {
+            Medallion medallion = new Medallion();
+            medallion.setCount(1);
+            record.setGift(record.getGift() - 1);
+            return medallion;
+        }else{
+            return null;
+        }
     }
 
     public boolean requestExchange(Object objMy, ExchangeObject exServer, String id) throws Exception {
@@ -270,12 +201,10 @@ public class MainProcess {
 
     public void stop() {
         executor.shutdown();
-        for (HeroTable table : heroTableCache.values()) {
-            try {
-                table.save();
-            } catch (IOException e) {
-                LogHelper.error(e);
-            }
+        try {
+            heroTable.save();
+        } catch (IOException e) {
+            LogHelper.error(e);
         }
     }
 
@@ -284,10 +213,9 @@ public class MainProcess {
             @Override
             public void run() {
                 LogHelper.info("Preparing battle info");
-                HashMap<String, HeroTable> tableCache = new HashMap<>(heroTableCache);
-                new HeroBattleService(tableCache, new ArrayList<>(groups), MainProcess.this).run();
+                new HeroBattleService(heroTable, new ArrayList<>(groups), MainProcess.this).run();
                 LogHelper.info("updating range message");
-                heroRange = buildHeroRange(tableCache);
+                heroRange = buildHeroRange();
                 LogHelper.info("updated range message");
             }
         }, 0, user.getBattleInterval(), TimeUnit.MINUTES);
@@ -296,12 +224,9 @@ public class MainProcess {
 
     public ServerData queryHeroData(String id) {
         if (StringUtils.isNotEmpty(id)) {
-            HeroTable table = heroTableCache.get(id);
-            if (table != null) {
-                ServerRecord record = table.getRecord(id);
-                if (record != null && record.getData() != null) {
-                    return record.getData();
-                }
+            ServerRecord record = heroTable.getRecord(id);
+            if (record != null && record.getData() != null) {
+                return record.getData();
             }
         }
         return null;
@@ -309,35 +234,28 @@ public class MainProcess {
 
     public String queryBattleMessages(String id, int count) {
         if (StringUtils.isNotEmpty(id)) {
-            HeroTable table = heroTableCache.get(id);
-            if (table != null) {
-                return table.pollBattleMsg(id, count);
-            }
+            return heroTable.pollBattleMsg(id, count);
         }
         return StringUtils.EMPTY_STRING;
     }
+
 
     public String queryBattleAward(String id) {
         if (StringUtils.isNotEmpty(id)) {
-            HeroTable table = heroTableCache.get(id);
-            if (table != null) {
-                return table.queryBattleAward(id);
-            }
+            return heroTable.queryBattleAward(id);
+        } else {
+            return StringUtils.EMPTY_STRING;
         }
-        return StringUtils.EMPTY_STRING;
     }
 
+
     public int getGiftCount(String id) {
-        HeroTable table = heroTableCache.get(id);
-        if (table != null) {
-            ServerRecord record = table.getRecord(id);
-            if (record != null) {
-                return record.getGift();
-            } else {
-                return 0;
-            }
+        ServerRecord record = heroTable.getRecord(id);
+        if (record != null) {
+            return record.getGift();
+        } else {
+            return 0;
         }
-        return 0;
     }
 
     public void addGroup(String h1, String h2) {
@@ -393,7 +311,7 @@ public class MainProcess {
 
     public List<ServerRecord> queryRecords(int start, int row, String key) {
         List<ServerRecord> srs = new ArrayList<>();
-        ArrayList<Map.Entry<String, HeroTable>> tables = new ArrayList<>(heroTableCache.entrySet());
+        /*ArrayList<Map.Entry<String, HeroTable>> tables = new ArrayList<>(heroTableCache.entrySet());
         for (int i = start; i < tables.size() && srs.size() < row; i++) {
             HeroTable table = tables.get(i).getValue();
             String id = tables.get(i).getKey();
@@ -405,13 +323,13 @@ public class MainProcess {
                     }
                 }
             }
-        }
+        }*/
         return srs;
     }
 
     public boolean updateRecord(ServerRecord record) {
         ServerData data = record.getData();
-        if (data != null) {
+        /*if (data != null) {
             HeroTable table = heroTableCache.get(data.getHero().getId());
             if (table != null) {
                 try {
@@ -422,7 +340,7 @@ public class MainProcess {
 
                 }
             }
-        }
+        }*/
         return false;
     }
 
@@ -439,7 +357,8 @@ public class MainProcess {
             for (String hid : holder.getHeroIds()) {
                 ServerRecord record = queryRecord(hid);
                 if (record != null && record.getData() != null && record.getData().getHero() != null) {
-                    builder.append(record.getData().getHero().getDisplayName()).append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(record.winRate()).append("<br>");
+                    builder.append(record.getData().getHero().getDisplayName())
+                            .append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(record.winRate()).append("<br>");
                 }
             }
             return builder.toString();
@@ -453,19 +372,16 @@ public class MainProcess {
     }
 
     public ServerRecord queryRecord(String id) {
-        HeroTable table = heroTableCache.get(id);
-        if (table != null) {
-            return table.getRecord(id);
-        }
-        return null;
+        return heroTable.getRecord(id);
+
     }
 
     public Hero postHeroByLevel(long level) {
-        for (Map.Entry<String, HeroTable> entry : heroTableCache.entrySet()) {
+        for (String heroId : heroTable.getAllHeroIds()) {
             try {
-                Hero hero = entry.getValue().getHero(entry.getKey());
+                Hero hero = heroTable.getHero(heroId);
                 if (hero != null) {
-                    Maze maze = entry.getValue().getMaze(entry.getKey(), level);
+                    Maze maze = heroTable.getMaze(heroId, level);
                     if (maze != null) {
                         if (Math.abs(maze.getMaxLevel() - level) < 50) {
                             return hero;
@@ -477,6 +393,50 @@ public class MainProcess {
             }
         }
         return null;
+    }
+
+    private static Effect buildEffect(String effectName, String value) {
+        switch (effectName) {
+            case "SkillRateEffect":
+                SkillRateEffect skillRateEffect = new SkillRateEffect();
+                skillRateEffect.setSkillRate(Float.parseFloat(value));
+                return skillRateEffect;
+            case "AgiEffect":
+                AgiEffect agiEffect = new AgiEffect();
+                agiEffect.setAgi(Long.parseLong(value));
+                return agiEffect;
+            case "AtkEffect":
+                AtkEffect atkEffect = new AtkEffect();
+                atkEffect.setAtk(Long.parseLong(value));
+                return atkEffect;
+            case "DefEffect":
+                DefEffect defEffect = new DefEffect();
+                defEffect.setDef(Long.parseLong(value));
+                return defEffect;
+            case "HpEffect":
+                HpEffect hpEffect = new HpEffect();
+                hpEffect.setHp(Long.parseLong(value));
+                return hpEffect;
+            case "StrEffect":
+                StrEffect strEffect = new StrEffect();
+                strEffect.setStr(Long.parseLong(value));
+                return strEffect;
+            case "MeetRateEffect":
+                MeetRateEffect meetRateEffect = new MeetRateEffect();
+                meetRateEffect.setMeetRate(Float.parseFloat(value));
+                return meetRateEffect;
+            case "PetRateEffect":
+                PetRateEffect petRateEffect = new PetRateEffect();
+                petRateEffect.setPetRate(Float.parseFloat(value));
+                return petRateEffect;
+        }
+        return null;
+    }
+
+    //Only use for unit test
+    static void clear() throws IOException, ClassNotFoundException {
+        File root = new File("data");
+        root.delete();
     }
 
     private Map<String, HeroTable> initHeroTableCache(File root) {

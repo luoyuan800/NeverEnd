@@ -19,44 +19,59 @@ import java.util.Iterator;
 public class AccessoryHelper {
     /**
      * @param accessory mounted
+     * @param check
      * @return Accessory that un mount
      */
-    public static Accessory mountAccessory(Accessory accessory, Hero hero) throws MountLimitException {
+    public static Accessory mountAccessory(Accessory accessory, Hero hero, boolean check) throws MountLimitException {
         Accessory uMount = null;
         String needEffect = null;
         long needEffectValue = 0;
-        for(Effect effect : accessory.getEffects()){
-            if(effect instanceof AgiEffect && effect.getValue().longValue() > hero.getStr()/2){
-                needEffect = "力量";
-                needEffectValue = effect.getValue().longValue() * 2;
-                break;
-            }
-            if(effect instanceof StrEffect && effect.getValue().longValue() > hero.getAgi()/2){
-                needEffect = "敏捷";
-                needEffectValue = effect.getValue().longValue() * 2;
-                break;
-            }
-            long value = effect.getValue().longValue() / hero.getHpGrow();
-            if(effect instanceof HpEffect && value > hero.getStr()/2){
-                needEffect = "力量";
-                needEffectValue = value * 2;
-                break;
-            }
-            value = effect.getValue().longValue() / hero.getDefGrow();
-            if(effect instanceof DefEffect && value > hero.getAgi()/2){
-                needEffect = "敏捷";
-                needEffectValue = value * 2;
-                break;
-            }
-            value = effect.getValue().longValue() / hero.getAtkGrow();
-            if(effect instanceof AtkEffect && value > hero.getStr()/2){
-                needEffect = "力量";
-                needEffectValue = value * 2;
-                break;
+        if(check) {
+            for (Effect effect : accessory.getEffects()) {
+                long count = effect.getValue().longValue() * 2;
+                if (effect instanceof AgiEffect && count > needEffectValue) {
+                    needEffect = "力量";
+                    needEffectValue = count;
+                    break;
+                }
+                if (effect instanceof StrEffect && count > needEffectValue) {
+                    needEffect = "敏捷";
+                    needEffectValue = count;
+                    break;
+                }
+                long value = count / hero.getHpGrow();
+                if (effect instanceof HpEffect && value > needEffectValue) {
+                    needEffect = "力量";
+                    needEffectValue = value * 2;
+                    break;
+                }
+                value = count / hero.getDefGrow();
+                if (effect instanceof DefEffect && value > needEffectValue) {
+                    needEffect = "敏捷";
+                    needEffectValue = value;
+                    break;
+                }
+                value = count / hero.getAtkGrow();
+                if (effect instanceof AtkEffect && value > needEffectValue) {
+                    needEffect = "力量";
+                    needEffectValue = value;
+                    break;
+                }
             }
         }
         if(needEffect!=null && needEffectValue > 0){
-            throw new MountLimitException("需要" + needEffect + "大于" + StringUtils.formatNumber(needEffectValue));
+            switch (needEffect){
+                case "力量":
+                    if(hero.getMaxStr() < needEffectValue){
+                        throw new MountLimitException("需要" + needEffect + "大于" + StringUtils.formatNumber(needEffectValue));
+                    }
+                    break;
+                case "敏捷":
+                    if(hero.getMaxAgi() < needEffectValue){
+                        throw new MountLimitException("需要" + needEffect + "大于" + StringUtils.formatNumber(needEffectValue));
+                    }
+                    break;
+            }
         }
         Iterator<Accessory> iterator = hero.getAccessories().iterator();
         while (iterator.hasNext()) {

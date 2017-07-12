@@ -43,7 +43,7 @@ public class Server {
         }
     }
 
-    private Server(){
+    private Server() throws IOException, ClassNotFoundException {
         process = new MainProcess("data");
     }
 
@@ -301,7 +301,7 @@ public class Server {
             return Field.RESPONSE_RESULT_OK;
         }));
 
-        get("/status", ((request, response) -> process.heroTableCache.size()));
+        get("/status", ((request, response) -> process.heroTable.size()));
 
         get("/start", (request, response) -> {
             process.start();

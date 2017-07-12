@@ -3,7 +3,6 @@ package cn.luo.yuan.maze.client.service;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.handler.GameActivityViewHandler;
@@ -111,6 +110,17 @@ public class NeverEnd extends Application implements InfoControlInterface {
                 }
             }
         }, 0, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (!runningService.getPause())
+                        viewHandler.refreshClickSkill();
+                }catch (Exception e){
+                    LogHelper.logException(e, "refreshfreqProperties_runnable");
+                }
+            }
+        }, 0, Data.REFRESH_SPEED * 2, TimeUnit.MILLISECONDS);
         Log.i("maze", "Game started");
     }
 
@@ -224,9 +234,9 @@ public class NeverEnd extends Application implements InfoControlInterface {
         //Accessory handle
         for (Accessory accessory : dataManager.loadMountedAccessory(hero)) {
             try {
-                mountAccessory(accessory);
+                mountAccessory(accessory, false);
             } catch (MountLimitException e) {
-                LogHelper.logException(e, "NeverEnd->handler accessory");
+                //LogHelper.logException(e, "NeverEnd->handler accessory");
             }
         }
 
@@ -260,8 +270,8 @@ public class NeverEnd extends Application implements InfoControlInterface {
         this.viewHandler = viewHandler;
     }
 
-    public void mountAccessory(Accessory accessory) throws MountLimitException {
-        Accessory uMount = accessoryHelper.mountAccessory(accessory, hero);
+    public void mountAccessory(Accessory accessory, boolean check) throws MountLimitException {
+        Accessory uMount = cn.luo.yuan.maze.service.AccessoryHelper.mountAccessory(accessory, hero, check);
         if (uMount != null) {
             dataManager.saveAccessory(uMount);
         }
@@ -322,6 +332,9 @@ public class NeverEnd extends Application implements InfoControlInterface {
                 hero.setSkills(Arrays.copyOf(hero.getSkills(),hero.getSkills().length + 1));
                 break;
         }
+        for(Accessory accessory : new ArrayList<>(hero.getAccessories())){
+            AccessoryHelper.unMountAccessory(accessory, hero);
+        }
         SkillParameter sp = new SkillParameter(hero);
         long totalPoint = resetSkill(sp);
         hero.setHpGrow(hero.getReincarnate()*Data.GROW_INCRESE  + hero.getHpGrow());
@@ -336,6 +349,10 @@ public class NeverEnd extends Application implements InfoControlInterface {
         hero.setPoint(totalPoint);
         maze.setLevel(1);
         maze.setMaxLevel(1);
+        viewHandler.refreshProperties(hero);
+        viewHandler.refreshSkill(hero);
+        viewHandler.refreshAccessory(hero);
+        save();
         return hero.getReincarnate();
     }
 

@@ -42,7 +42,7 @@ public class NeverEndServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public NeverEndServlet() {
+    public NeverEndServlet() throws IOException, ClassNotFoundException {
         super();
         LogHelper.init(root);
     }
@@ -89,7 +89,7 @@ public class NeverEndServlet extends HttpServlet {
                 break;
             case ADD_LIMIT:
                 String id = request.getParameter("id");
-                HeroTable table = process.heroTableCache.get(id);
+                HeroTable table = process.heroTable;
                 if(table!=null){
                     ServerRecord record = table.getRecord(id);
                     if(record!=null){

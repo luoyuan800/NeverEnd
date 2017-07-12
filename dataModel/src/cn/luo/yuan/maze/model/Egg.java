@@ -12,6 +12,9 @@ public class Egg extends Pet {
     public String getDisplayName(){
         return "蛋";
     }
+    public String getDisplayNameWithLevel(){
+        return getDisplayName();
+    }
     public String getName(){
         return "蛋";
     }

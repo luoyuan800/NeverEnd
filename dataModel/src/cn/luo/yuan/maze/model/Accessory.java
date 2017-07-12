@@ -4,7 +4,6 @@ import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
-import sun.rmi.log.LogHandler;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,15 +13,8 @@ import java.util.List;
  * Created by luoyuan on 2017/3/18.
  */
 public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, Cloneable {
-    private boolean delete;
-    @Override
-    public boolean isDelete() {
-        return delete;
-    }
-    public void markDelete(){
-        delete = true;
-    }
     private static final long serialVersionUID = Field.SERVER_VERSION;
+    private boolean delete;
     private int heroIndex;
     private String name;
     private String id;
@@ -40,17 +32,27 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, 
     private String keeperId = StringUtils.EMPTY_STRING;
     private String keeperName = StringUtils.EMPTY_STRING;
 
-    public List<Effect> getEffects(){
+    @Override
+    public boolean isDelete() {
+        return delete;
+    }
+
+    public void markDelete() {
+        delete = true;
+    }
+
+    public List<Effect> getEffects() {
         return effects;
     }
 
-    public String getDisplayName(){
-        return "<font color='" + color + "'>" + name + "</font>" + "(" + type + ") "  + element.getCn() + (level.getValue()>0?(" + " + level):"") + (isMounted() ? "√" : "");
+    public String getDisplayName() {
+        return "<font color='" + color + "'>" + name + "</font>" + "(" + type + ") " + element.getCn() + (level.getValue() > 0 ? (" + " + level) : "") + (isMounted() ? "√" : "");
     }
 
-    public String toString(){
-        return "<font color='" + color + "'>" + name + "</font>("  + element.getCn() + (level.getValue()>0?(") + " + level):")");
+    public String toString() {
+        return "<font color='" + color + "'>" + name + "</font>(" + element.getCn() + (level.getValue() > 0 ? (") + " + level) : ")");
     }
+
     public String getName() {
         return name;
     }
@@ -58,7 +60,6 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, 
     public void setName(String name) {
         this.name = name;
     }
-
 
 
     public String getId() {
@@ -69,25 +70,25 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, 
         this.id = id;
     }
 
-    public int hashCode(){
+    public int hashCode() {
         return (id + type).hashCode();
     }
 
-    public boolean equals(Object other){
-        if(other == this){
+    public boolean equals(Object other) {
+        if (other == this) {
             return true;
         }
-        if(other instanceof Accessory){
+        if (other instanceof Accessory) {
             return ((Accessory) other).getId().equals(id);
         }
         return false;
     }
 
-    public String getType(){
+    public String getType() {
         return type;
     }
 
-    public void setType(String type){
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -123,20 +124,20 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, 
         this.color = color;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
     public String getAuthor() {
         return author;
     }
 
-    public void setPrice(long price) {
-        this.price = price;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public long getPrice() {
         return price;
+    }
+
+    public void setPrice(long price) {
+        this.price = price;
     }
 
     public Element getElement() {
@@ -147,17 +148,17 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, 
         this.element = element;
     }
 
-    public void resetElementEffectEnable(){
-        for(Effect effect : getEffects()){
-            if(effect.isElementControl()) {
+    public void resetElementEffectEnable() {
+        for (Effect effect : getEffects()) {
+            if (effect.isElementControl()) {
                 effect.setEnable(false);
             }
         }
     }
 
-    public void elementEffectEnable(){
-        for(Effect effect : getEffects()){
-            if(effect.isElementControl()) {
+    public void elementEffectEnable() {
+        for (Effect effect : getEffects()) {
+            if (effect.isElementControl()) {
                 effect.setEnable(true);
             }
         }
@@ -195,13 +196,14 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, 
         this.keeperName = keeperName;
     }
 
-    public Accessory clone(){
+    public Accessory clone() {
         try {
             Accessory a = (Accessory) super.clone();
             List<Effect> effects = new ArrayList<>(a.getEffects());
             a.getEffects().clear();
-            for(Effect e : effects){
-                a.getEffects().add(e.clone());
+            for (Effect e : effects) {
+                if (e != null)
+                    a.getEffects().add(e.clone());
             }
             return a;
         } catch (CloneNotSupportedException e) {

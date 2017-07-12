@@ -58,7 +58,7 @@ public class GameActivity extends BaseActivity {
 
         control = (NeverEnd)getApplication();
         control.setContext(this, dataManager);
-        control.setViewHandler(new GameActivityViewHandler(this));
+        control.setViewHandler(new GameActivityViewHandler(this, control));
         control.setTextView((RollTextView) findViewById(R.id.info_view));
         initResources();
         Resource.askWritePermissions(new PermissionRequestListener() {
@@ -177,20 +177,20 @@ public class GameActivity extends BaseActivity {
                 if(control.getHero().getClickSkills().size() >= 1) {
                     if(currentBattleTarget !=null) {
                         ClickSkill ck = control.getHero().getClickSkills().get(0);
-                        ck.perform(control.getHero(), currentBattleTarget, control);
+                        ck.use(control.getHero(), currentBattleTarget, control);
                     }
                 }
                 break;
             case R.id.second_click_skill:
                 if(control.getHero().getClickSkills().size() >= 2) {
                     ClickSkill ck = control.getHero().getClickSkills().get(1);
-                    ck.perform(control.getHero(), currentBattleTarget, control);
+                    ck.use(control.getHero(), currentBattleTarget, control);
                 }
                 break;
             case R.id.third_click_skill:
                 if(control.getHero().getClickSkills().size() >= 3) {
                     ClickSkill ck = control.getHero().getClickSkills().get(2);
-                    ck.perform(control.getHero(), currentBattleTarget, control);
+                    ck.use(control.getHero(), currentBattleTarget, control);
                 }
                 break;
             case R.id.range_point:

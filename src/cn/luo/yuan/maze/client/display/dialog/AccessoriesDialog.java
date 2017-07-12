@@ -69,7 +69,7 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
                                                     context.getAccessoryHelper().unMountAccessory(main, context.getHero());
                                                 } else {
                                                     try {
-                                                        context.mountAccessory(main);
+                                                        context.mountAccessory(main, true);
                                                     } catch (MountLimitException e) {
                                                         Toast.makeText(context.getContext(),e.word, Toast.LENGTH_SHORT).show();
                                                     }

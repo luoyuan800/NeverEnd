@@ -1,22 +1,15 @@
 package cn.luo.yuan.maze.model;
 
 import cn.luo.yuan.maze.utils.EncodeLong;
-import cn.luo.yuan.maze.utils.StringUtils;
 import cn.luo.yuan.maze.utils.Field;
+import cn.luo.yuan.maze.utils.StringUtils;
 
 /**
  * Created by gluo on 4/25/2017.
  */
 public class Pet extends Monster implements IDModel, OwnedAble {
-    private boolean delete;
-    @Override
-    public boolean isDelete() {
-        return delete;
-    }
-    public void markDelete(){
-        delete = true;
-    }
     private static final long serialVersionUID = Field.SERVER_VERSION;
+    private boolean delete;
     private EncodeLong level = new EncodeLong(0);
     private String id = StringUtils.EMPTY_STRING;
     private String tag = StringUtils.EMPTY_STRING;
@@ -29,6 +22,15 @@ public class Pet extends Monster implements IDModel, OwnedAble {
     private String keeperName = StringUtils.EMPTY_STRING;
     private String mother = StringUtils.EMPTY_STRING;
     private String farther = StringUtils.EMPTY_STRING;
+
+    @Override
+    public boolean isDelete() {
+        return delete;
+    }
+
+    public void markDelete() {
+        delete = true;
+    }
 
     @Override
     public String getId() {
@@ -106,7 +108,7 @@ public class Pet extends Monster implements IDModel, OwnedAble {
     }
 
     public String getDisplayNameWithLevel() {
-        return (getHp() <= 0 ? "<font color='#b4a6b0'>" : "") + getDisplayName() + " X" + getLevel() + (getHp() <= 0 ? "</font>" : "") + "[" + getRace() + "]";
+        return (getHp() <= 0 ? "<font color='#b4a6b0'>" : "") + getDisplayName() + (getLevel() > 0 ? (" X" + getLevel()) : "") + (getHp() <= 0 ? "</font>" : "") + "[" + getRace() + "]";
     }
 
     @Override

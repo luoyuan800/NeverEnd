@@ -9,6 +9,7 @@ import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.*;
+import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 /**
@@ -36,7 +37,7 @@ public class OnlineActivityOnClickHandler {
                                     SimplerDialogBuilder.build("谢谢惠顾！", Resource.getString(R.string.conform), null, activity);
                                 }else{
                                     if(o instanceof IDModel) {
-                                        context.getDataManager().save((IDModel) o);
+                                        context.getDataManager().add((IDModel) o);
                                     }
                                     if(o instanceof NameObject){
                                         SimplerDialogBuilder.build("获得了 " + ((NameObject) o).getDisplayName(), Resource.getString(R.string.conform), null, activity);

@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
  */
 public class TestMainProcess {
     @Test
-    public void testBuildRange() {
+    public void testBuildRange() throws IOException, ClassNotFoundException {
         MainProcess process = new MainProcess("data");
         Hero hero = new Hero();
         hero.setName("骑士☆某鸟");
@@ -63,7 +63,7 @@ public class TestMainProcess {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        System.out.println(MainProcess.buildHeroRange(process.heroTableCache));
+        System.out.println(process.buildHeroRange());
     }
 
 }

@@ -204,10 +204,14 @@ public class DataManager implements DataManagerInterface {
             }
         }
         for (Pet pet : new ArrayList<>(petLoader.loadAll())) {
-            petLoader.delete(pet.getId());
+            if(pet.getHeroIndex() == index) {
+                petLoader.delete(pet.getId());
+            }
         }
         for (Accessory accessory : new ArrayList<>(accessoryLoader.loadAll())) {
-            accessoryLoader.delete(accessory.getId());
+            if(accessory.getHeroIndex() == index) {
+                accessoryLoader.delete(accessory.getId());
+            }
         }
         database.excuseSQLWithoutResult("delete from maze where hero_index = " + index);
         database.excuseSQLWithoutResult("delete from hero where hero_index = " + index);

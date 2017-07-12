@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.client.display.handler;
 import android.os.Handler;
 import android.text.Html;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -10,13 +11,15 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.GameActivity;
 import cn.luo.yuan.maze.client.display.view.PetTextView;
 import cn.luo.yuan.maze.client.display.view.RevealTextView;
+import cn.luo.yuan.maze.client.service.NeverEnd;
+import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.utils.Field;
-import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -27,12 +30,67 @@ import java.util.ArrayList;
 public class GameActivityViewHandler extends Handler {
     private GameActivity context;
 
-    public GameActivityViewHandler(GameActivity activity) {
+    private Runnable refreshClickSkillTask  = new Runnable() {
+        @Override
+        public void run() {
+            Hero hero = neverEnd.getHero();
+            ArrayList<ClickSkill> skills = hero.getClickSkills();
+            Button first = (Button) context.findViewById(R.id.first_click_skill);
+            first.setEnabled(false);
+            Button second = (Button) context.findViewById(R.id.second_click_skill);
+            second.setEnabled(false);
+            Button third = (Button) context.findViewById(R.id.third_click_skill);
+            third.setEnabled(false);
+            if (skills.size() > 0) {
+                first.setBackgroundResource(skills.get(0).getImageResource());
+                first.setText(skills.get(0).getName());
+                if (skills.get(0).isUsable()) {
+                    first.setEnabled(true);
+                }
+            }
+            if (skills.size() > 1) {
+                second.setBackgroundResource(skills.get(1).getImageResource());
+                second.setText(skills.get(1).getName());
+                if (skills.get(1).isUsable()) {
+                    second.setEnabled(true);
+                }
+            }
+            if (skills.size() > 2) {
+                third.setBackgroundResource(skills.get(2).getImageResource());
+                third.setText(skills.get(2).getName());
+                if (skills.get(2).isUsable()) {
+                    third.setEnabled(true);
+                }
+            }
+        }
+    };
+    private NeverEnd neverEnd;
+    private Runnable refreshFreqPreperties = new Runnable() {
+        @Override
+        public void run() {
+            //Hero properties
+            ((TextView) context.findViewById(R.id.hero_level)).setText(StringUtils.formatNumber(context.control.getMaze().getLevel()));
+            ((TextView) context.findViewById(R.id.hero_level_max)).setText(StringUtils.formatNumber(context.control.getMaze().getMaxLevel()));
+            ((TextView) context.findViewById(R.id.hero_mate)).setText(StringUtils.formatNumber(context.control.getHero().getMaterial()));
+            ((TextView) context.findViewById(R.id.hero_point)).setText(StringUtils.formatNumber(context.control.getHero().getPoint()));
+            ((TextView) context.findViewById(R.id.hero_click)).setText(StringUtils.formatNumber(context.control.getHero().getClick()));
+            ((TextView) context.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(context.control.getHero().getCurrentHp()));
+            ((TextView) context.findViewById(R.id.hero_max_hp)).setText(StringUtils.formatNumber(context.control.getHero().getCurrentMaxHp()));
+
+        }
+    };
+
+    public GameActivityViewHandler(GameActivity activity, NeverEnd context) {
         this.context = activity;
+        this.neverEnd = context;
     }
 
     public void refreshHeadImage(Hero hero, Object target) {
         ImageView heroHead = (ImageView) context.findViewById(R.id.hero_pic);
+    }
+
+    public void refreshClickSkill() {
+        post(refreshClickSkillTask);
     }
 
     //刷新比较固定的属性值
@@ -52,20 +110,7 @@ public class GameActivityViewHandler extends Handler {
 
     //刷新变化频繁的属性
     public void refreshFreqProperties() {
-        post(new Runnable() {
-            @Override
-            public void run() {
-                //Hero properties
-                ((TextView) context.findViewById(R.id.hero_level)).setText(StringUtils.formatNumber(context.control.getMaze().getLevel()));
-                ((TextView) context.findViewById(R.id.hero_level_max)).setText(StringUtils.formatNumber(context.control.getMaze().getMaxLevel()));
-                ((TextView) context.findViewById(R.id.hero_mate)).setText(StringUtils.formatNumber(context.control.getHero().getMaterial()));
-                ((TextView) context.findViewById(R.id.hero_point)).setText(StringUtils.formatNumber(context.control.getHero().getPoint()));
-                ((TextView) context.findViewById(R.id.hero_click)).setText(StringUtils.formatNumber(context.control.getHero().getClick()));
-                ((TextView) context.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(context.control.getHero().getCurrentHp()));
-                ((TextView) context.findViewById(R.id.hero_max_hp)).setText(StringUtils.formatNumber(context.control.getHero().getCurrentMaxHp()));
-
-            }
-        });
+        post(refreshFreqPreperties);
 
     }
 

@@ -11,9 +11,11 @@ import cn.luo.yuan.maze.server.LogHelper;
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
 import cn.luo.yuan.maze.service.AccessoryHelper;
 import cn.luo.yuan.maze.utils.StringUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by gluo on 5/22/2017.
@@ -140,22 +142,27 @@ public class HeroTable {
         return loadHero(name);
     }
 
+    @Nullable
+    public Object size() {
+        return recordDb.size();
+    }
+
     private Hero loadHero(String id) throws IOException, ClassNotFoundException {
         ServerRecord record = getRecord(id);
         if (record != null) {
             ServerData data = record.getData();
             if (data != null) {
                 Hero hero = data.getHero();
-                if (data.getAccessories() != null) {
+                if (data.getAccessories() != null && hero.getAccessories().isEmpty()) {
                     for (Accessory accessory : data.getAccessories()) {
                         try {
-                            AccessoryHelper.mountAccessory(accessory, hero);
+                            AccessoryHelper.mountAccessory(accessory, hero, false);
                         } catch (MountLimitException e) {
                             LogHelper.error(e);
                         }
                     }
                 }
-                if (data.getPets() != null) {
+                if (data.getPets() != null && hero.getPets().isEmpty()) {
                     for (Pet pet : data.getPets()) {
                         hero.getPets().add(pet);
                     }
@@ -164,6 +171,10 @@ public class HeroTable {
             }
         }
         return null;
+    }
+
+    public List<String> getAllHeroIds(){
+        return recordDb.loadIds();
     }
 
 }
