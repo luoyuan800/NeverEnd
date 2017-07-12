@@ -51,18 +51,26 @@ import static cn.luo.yuan.maze.utils.Field.RESPONSE_RESULT_SUCCESS;
 public class MainProcess {
     public static MainProcess process;
     public String sing = StringUtils.EMPTY_STRING;
-    public ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
+    public ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
     public User user;
     public String heroRange = StringUtils.EMPTY_STRING;
-    private File root = new File("data");
-    public WarehouseTable warehouseTable = new WarehouseTable(root);
-    public ExchangeTable exchangeTable = new ExchangeTable(root);
-    public ObjectTable<Task> taskTable = new ObjectTable<>(Task.class, root);
-    private File heroDir = new File(root, "hero");
-    public Map<String, HeroTable> heroTableCache = initHeroTableCache(heroDir);
+    public WarehouseTable warehouseTable;
+    public ExchangeTable exchangeTable;
+    public ObjectTable<Task> taskTable;
+    public Map<String, HeroTable> heroTableCache;
     public List<GroupHolder> groups = new ArrayList<>();
-    ObjectTable<User> userDb = new ObjectTable<>(User.class, root);
-    public MainProcess() {
+    private ObjectTable<User> userDb;
+    private File root;
+    private File heroDir;
+
+    public MainProcess(String root) {
+        this.root = new File(root);
+        this.heroDir = new File(root, "hero");
+        warehouseTable = new WarehouseTable(this.root);
+        exchangeTable = new ExchangeTable(this.root);
+        taskTable = new ObjectTable<>(Task.class, this.root);
+        heroTableCache = initHeroTableCache(heroDir);
+        userDb = new ObjectTable<User>(User.class, this.root);
         process = this;
         user = userDb.loadObject("root");
         if (user == null) {
@@ -70,24 +78,12 @@ public class MainProcess {
             user.setPass(111);
             user.setName("luo");
             try {
-                userDb.save(user);
+                userDb.save(user, "root");
             } catch (IOException e) {
                 LogHelper.error(e);
             }
         }
 
-    }
-
-    public boolean login(int pass){
-        if(user.getLogin()){
-           return true;
-        }else{
-            if(user.getPass() == pass){
-                user.setLogin(true);
-                return true;
-            }
-        }
-        return false;
     }
 
     public static String buildHeroRange(Map<String, HeroTable> heroTableCache) {
@@ -114,7 +110,7 @@ public class MainProcess {
             });
             for (int i = 0; i < records.size() && i < 5; i++) {
                 ServerData data = records.get(i).getData();
-                if (data != null)
+                if (data != null && data.getHero()!=null)
                     sb.append(data.getHero().getDisplayName()).append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(records.get(i).winRate()).append("<br>");
             }
         } catch (Exception e) {
@@ -165,6 +161,18 @@ public class MainProcess {
     static void clear() throws IOException, ClassNotFoundException {
         File root = new File("data");
         root.delete();
+    }
+
+    public boolean login(int pass) {
+        if (user.getLogin()) {
+            return true;
+        } else {
+            if (user.getPass() == pass) {
+                user.setLogin(true);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void submitHero(ServerData data) throws IOException, ClassNotFoundException {
@@ -275,12 +283,15 @@ public class MainProcess {
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
+                LogHelper.info("Preparing battle info");
                 HashMap<String, HeroTable> tableCache = new HashMap<>(heroTableCache);
                 new HeroBattleService(tableCache, new ArrayList<>(groups), MainProcess.this).run();
+                LogHelper.info("updating range message");
                 heroRange = buildHeroRange(tableCache);
+                LogHelper.info("updated range message");
             }
         }, 0, user.getBattleInterval(), TimeUnit.MINUTES);
-        executor.scheduleAtFixedRate(warehouseTable, 0, 1, TimeUnit.DAYS);
+        executor.scheduleAtFixedRate(warehouseTable, 1, 1, TimeUnit.DAYS);
     }
 
     public ServerData queryHeroData(String id) {
@@ -296,7 +307,7 @@ public class MainProcess {
         return null;
     }
 
-    public String queryBattleMessages(String id, int count){
+    public String queryBattleMessages(String id, int count) {
         if (StringUtils.isNotEmpty(id)) {
             HeroTable table = heroTableCache.get(id);
             if (table != null) {
@@ -304,6 +315,168 @@ public class MainProcess {
             }
         }
         return StringUtils.EMPTY_STRING;
+    }
+
+    public String queryBattleAward(String id) {
+        if (StringUtils.isNotEmpty(id)) {
+            HeroTable table = heroTableCache.get(id);
+            if (table != null) {
+                return table.queryBattleAward(id);
+            }
+        }
+        return StringUtils.EMPTY_STRING;
+    }
+
+    public int getGiftCount(String id) {
+        HeroTable table = heroTableCache.get(id);
+        if (table != null) {
+            ServerRecord record = table.getRecord(id);
+            if (record != null) {
+                return record.getGift();
+            } else {
+                return 0;
+            }
+        }
+        return 0;
+    }
+
+    public void addGroup(String h1, String h2) {
+        GroupHolder holder = new GroupHolder();
+        holder.getHeroIds().add(h1);
+        holder.getHeroIds().add(h2);
+        groups.add(holder);
+    }
+
+    public void removeGroup(String heroId) {
+        for (GroupHolder holder : new ArrayList<>(groups)) {
+            if (holder.isInGroup(heroId)) {
+                groups.remove(holder);
+            }
+        }
+    }
+
+    public void submitBoss(String name, String element, String race, String atk, String def, String hp, String hpG, String atkG, String defG) {
+        Hero hero = new Hero();
+        hero.setDef(Long.parseLong(def));
+        hero.setAtk(Long.parseLong(atk));
+        hero.setMaxHp(Long.parseLong(hp));
+        hero.setHp(hero.getMaxHp());
+        hero.setName(name);
+        hero.setRace(Integer.parseInt(race));
+        hero.setElement(Element.valueOf(element));
+        hero.setHpGrow(Integer.parseInt(hpG));
+        hero.setDefGrow(Integer.parseInt(defG));
+        hero.setAtkGrow(Integer.parseInt(atkG));
+        try {
+            NPCTable table = new NPCTable(new File("data/npc"));
+            table.save(hero);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveUserConfig(String name, int pass, String sing, int battlInterval) {
+        if (user != null) {
+            user.setName(name);
+            user.setPass(pass);
+            user.setSing(sing);
+            user.setBattleInterval(battlInterval);
+            try {
+                userDb.save(user);
+            } catch (IOException e) {
+                LogHelper.error(e);
+            }
+        }
+    }
+
+    public List<ServerRecord> queryRecords(int start, int row, String key) {
+        List<ServerRecord> srs = new ArrayList<>();
+        ArrayList<Map.Entry<String, HeroTable>> tables = new ArrayList<>(heroTableCache.entrySet());
+        for (int i = start; i < tables.size() && srs.size() < row; i++) {
+            HeroTable table = tables.get(i).getValue();
+            String id = tables.get(i).getKey();
+            ServerRecord record = table.getRecord(id);
+            if (record.getData() != null) {
+                if (record.getData().getHero() != null) {
+                    if (record.getData().getHero().getDisplayName().contains(key) || record.getData().getHero().getId().contains(key)) {
+                        srs.add(record);
+                    }
+                }
+            }
+        }
+        return srs;
+    }
+
+    public boolean updateRecord(ServerRecord record) {
+        ServerData data = record.getData();
+        if (data != null) {
+            HeroTable table = heroTableCache.get(data.getHero().getId());
+            if (table != null) {
+                try {
+                    table.save(record);
+                    return true;
+                } catch (IOException e) {
+                    LogHelper.error(e);
+
+                }
+            }
+        }
+        return false;
+    }
+
+    public String getGroupMessage(String id) {
+        GroupHolder holder = null;
+        for (GroupHolder holder1 : groups) {
+            if (holder1.isInGroup(id)) {
+                holder = holder1;
+                break;
+            }
+        }
+        if (holder != null) {
+            StringBuilder builder = new StringBuilder();
+            for (String hid : holder.getHeroIds()) {
+                ServerRecord record = queryRecord(hid);
+                if (record != null && record.getData() != null && record.getData().getHero() != null) {
+                    builder.append(record.getData().getHero().getDisplayName()).append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(record.winRate()).append("<br>");
+                }
+            }
+            return builder.toString();
+        } else {
+            ServerRecord record = queryRecord(id);
+            if (record != null && record.getData() != null && record.getData().getHero() != null) {
+                return record.getData().getHero().getDisplayName() + "<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：" + record.winRate();
+            }
+        }
+        return StringUtils.EMPTY_STRING;
+    }
+
+    public ServerRecord queryRecord(String id) {
+        HeroTable table = heroTableCache.get(id);
+        if (table != null) {
+            return table.getRecord(id);
+        }
+        return null;
+    }
+
+    public Hero postHeroByLevel(long level) {
+        for (Map.Entry<String, HeroTable> entry : heroTableCache.entrySet()) {
+            try {
+                Hero hero = entry.getValue().getHero(entry.getKey());
+                if (hero != null) {
+                    Maze maze = entry.getValue().getMaze(entry.getKey(), level);
+                    if (maze != null) {
+                        if (Math.abs(maze.getMaxLevel() - level) < 50) {
+                            return hero;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                LogHelper.error(e);
+            }
+        }
+        return null;
     }
 
     private Map<String, HeroTable> initHeroTableCache(File root) {
@@ -339,166 +512,5 @@ public class MainProcess {
         }
         exMy.setSubmitTime(System.currentTimeMillis());
         return exMy;
-    }
-    public String queryBattleAward(String id){
-        if (StringUtils.isNotEmpty(id)) {
-            HeroTable table = heroTableCache.get(id);
-            if (table != null) {
-                return table.queryBattleAward(id);
-            }
-        }
-        return StringUtils.EMPTY_STRING;
-    }
-
-    public int getGiftCount(String id){
-        HeroTable table = heroTableCache.get(id);
-        if(table!=null) {
-            ServerRecord record = table.getRecord(id);
-            if (record != null) {
-                return record.getGift();
-            } else {
-                return 0;
-            }
-        }return 0;
-    }
-
-    public void addGroup(String h1, String h2){
-        GroupHolder holder = new GroupHolder();
-        holder.getHeroIds().add(h1);
-        holder.getHeroIds().add(h2);
-        groups.add(holder);
-    }
-
-    public void removeGroup(String heroId){
-        for(GroupHolder holder : new ArrayList<>(groups)){
-            if(holder.isInGroup(heroId)){
-                groups.remove(holder);
-            }
-        }
-    }
-
-    public void submitBoss(String name, String element, String race, String atk, String def, String hp, String hpG, String atkG, String defG){
-        Hero hero = new Hero();
-        hero.setDef(Long.parseLong(def));
-        hero.setAtk(Long.parseLong(atk));
-        hero.setMaxHp(Long.parseLong(hp));
-        hero.setHp(hero.getMaxHp());
-        hero.setName(name);
-        hero.setRace(Integer.parseInt(race));
-        hero.setElement(Element.valueOf(element));
-        hero.setHpGrow(Integer.parseInt(hpG));
-        hero.setDefGrow(Integer.parseInt(defG));
-        hero.setAtkGrow(Integer.parseInt(atkG));
-        try {
-            NPCTable table = new NPCTable(new File("data/npc"));
-            table.save(hero);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void saveUserConfig(String name, int pass, String sing, int battlInterval){
-        if(user!=null){
-            user.setName(name);
-            user.setPass(pass);
-            user.setSing(sing);
-            user.setBattleInterval(battlInterval);
-            try {
-                userDb.save(user);
-            } catch (IOException e) {
-                LogHelper.error(e);
-            }
-        }
-    }
-
-    public List<ServerRecord> queryRecords(int start, int row, String key){
-        List<ServerRecord> srs = new ArrayList<>();
-        ArrayList<Map.Entry<String, HeroTable>> tables = new ArrayList<>(heroTableCache.entrySet());
-        for(int i = start; i< tables.size() && srs.size() < row; i++){
-            HeroTable table = tables.get(i).getValue();
-            String id = tables.get(i).getKey();
-            ServerRecord record = table.getRecord(id);
-            if(record.getData()!=null) {
-                if(record.getData().getHero()!=null){
-                    if(record.getData().getHero().getDisplayName().contains(key) || record.getData().getHero().getId().contains(key)){
-                        srs.add(record);
-                    }
-                }
-            }
-        }
-        return srs;
-    }
-
-    public boolean updateRecord(ServerRecord record){
-        ServerData data = record.getData();
-        if(data!=null){
-            HeroTable table = heroTableCache.get(data.getHero().getId());
-            if(table != null){
-                try {
-                    table.save(record);
-                    return true;
-                } catch (IOException e) {
-                    LogHelper.error(e);
-
-                }
-            }
-        }
-        return false;
-    }
-
-    public String getGroupMessage(String id){
-        GroupHolder holder = null;
-        for(GroupHolder holder1 : groups){
-            if(holder1.isInGroup(id)){
-                holder = holder1;
-                break;
-            }
-        }
-        if(holder!=null){
-            StringBuilder builder = new StringBuilder();
-            for(String hid : holder.getHeroIds()){
-                ServerRecord record = queryRecord(hid);
-                if(record!=null && record.getData()!=null && record.getData().getHero()!=null) {
-                        builder.append(record.getData().getHero().getDisplayName()).append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(record.winRate()).append("<br>");
-                }
-            }
-            return builder.toString();
-        }else {
-            ServerRecord record = queryRecord(id);
-            if(record!=null && record.getData()!=null && record.getData().getHero()!=null) {
-                return record.getData().getHero().getDisplayName()+ "<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：" + record.winRate();
-            }
-        }
-        return StringUtils.EMPTY_STRING;
-    }
-
-    public ServerRecord queryRecord(String id){
-        HeroTable table = heroTableCache.get(id);
-        if(table!=null){
-            return table.getRecord(id);
-        }
-        return null;
-    }
-
-
-    public Hero postHeroByLevel(long level){
-        for(Map.Entry<String, HeroTable> entry : heroTableCache.entrySet()){
-            try {
-                Hero hero = entry.getValue().getHero(entry.getKey());
-                if(hero!=null){
-                    Maze maze = entry.getValue().getMaze(entry.getKey(), level);
-                    if(maze!=null){
-                        if(Math.abs(maze.getMaxLevel() - level) < 50){
-                            return hero;
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                LogHelper.error(e);
-            }
-        }
-        return null;
     }
 }

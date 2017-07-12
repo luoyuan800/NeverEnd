@@ -15,6 +15,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -32,14 +36,15 @@ import static cn.luo.yuan.maze.Path.*;
 @WebServlet("/app/*")
 public class NeverEndServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private MainProcess process = new MainProcess();
+    private final String root = "E:\\www1\\luoyuan800-0b44449e5d24473a015d30fddbd602dd\\webapp\\data";
+    private MainProcess process = new MainProcess(root);
 
     /**
      * @see HttpServlet#HttpServlet()
      */
     public NeverEndServlet() {
         super();
-        // TODO Auto-generated constructor stub
+        LogHelper.init(root);
     }
 
     @Override
@@ -60,7 +65,28 @@ public class NeverEndServlet extends HttpServlet {
         String path = getPathInfo(request);
         String ownerId = request.getHeader(Field.OWNER_ID_FIELD);
         PrintWriter writer = response.getWriter();
+
         switch (path) {
+            case "add_file":
+                String file = request.getParameter("file");
+                File f = new File(root + "\\" + file);
+
+                try {
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+                    bw.write(request.getRemoteAddr());
+                    bw.write("\n");
+                    bw.write(request.getRemoteHost());
+                    bw.flush();
+                    bw.close();
+                }catch (Exception e){
+                    writer.write("\n error:\n");
+                    writer.write(e.getMessage());
+                    LogHelper.error(e);
+                    if(!f.exists()){
+                        writer.write("File (" + f.getAbsolutePath() + ") create result: " + f.createNewFile());
+                    }
+                }
+                break;
             case ADD_LIMIT:
                 String id = request.getParameter("id");
                 HeroTable table = process.heroTableCache.get(id);
@@ -74,9 +100,11 @@ public class NeverEndServlet extends HttpServlet {
                 break;
             case STOP:
                 process.stop();
+                writer.write(Field.RESPONSE_RESULT_OK);
                 break;
             case START:
                 process.start();
+                writer.write(Field.RESPONSE_RESULT_OK);
                 break;
             case HERO_RANGE:
                 writer.write(process.heroRange);

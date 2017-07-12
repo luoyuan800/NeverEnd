@@ -10,6 +10,7 @@ import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.model.skill.hero.HeroHit;
+import cn.luo.yuan.maze.server.model.Messager;
 import cn.luo.yuan.maze.utils.Random;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -21,6 +22,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertTrue;
@@ -129,14 +131,16 @@ public class TestBattleService {
     @Test
     public void testGroupBattle(){
         Hero hero = new Hero();
+        hero.setName("QA_1");
         hero.setMaxHp(1000);
         hero.setHp(1000);
-        hero.setAtk(10);
+        hero.setAtk(1000);
         hero.setDef(5);
         hero.setRace(Race.Elyosr.ordinal());
         hero.setElement(Element.WOOD);
         Hero hero1 = new Hero();
         hero1.setMaxHp(1000);
+        hero1.setName("QA_2");
         hero1.setHp(1000);
         hero1.setAtk(10);
         hero1.setDef(5);
@@ -148,19 +152,24 @@ public class TestBattleService {
         Monster monster = new Monster();
         monster.setHp(200);
         monster.setMaxHp(200);
-        monster.setAtk(6);
+        monster.setAtk(60);
         monster.setDef(1);
         monster.setFirstName(FirstName.angry);
         monster.setSecondName(SecondName.blue);
+        monster.setType("diren");
         monster.setElement(Element.FIRE);
         monster.setRace(Race.Elyosr);
         monster.setElement(Element.FIRE);
         Random random = new Random(System.currentTimeMillis());
-        BattleMessage battleMessage = mock(BattleMessage.class);
-        BattleService battleService = new BattleService(hero1,monster,random, null);
+        BattleMessage battleMessage = new Messager() {
+            public void notification(String msg) {
+                System.out.println(msg);
+            }
+        };
+        BattleService battleService = spy(new BattleService(group,monster,random, null));
         battleService.setBattleMessage(battleMessage);
-        battleService.battle(1);
-        verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
+        battleService.battle(100);
+        //verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
         //assertTrue(monster.getHp() <= 0, "End battle!");
     }
 

@@ -178,6 +178,7 @@ class HeroBattleService(private val tableCache: MutableMap<String, HeroTable>, v
     }
 
     private fun range() {
+        LogHelper.info("Ranging heroes")
         val sortedByDescending = tableCache.keys.sortedByDescending {
             val table = tableCache[it] as HeroTable
             val record = table.getRecord(it)

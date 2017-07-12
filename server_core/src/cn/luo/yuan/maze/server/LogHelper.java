@@ -12,13 +12,13 @@ import java.util.logging.SimpleFormatter;
  */
 public class LogHelper {
     public static final Logger logger = Logger.getLogger("NeverEndServer");
-    static{
+    public static void init(String root){
         try {
-            File file = new File("logs");
+            File file = new File(root + "/logs");
             if(!file.exists() || !file.isDirectory()){
                 file.mkdirs();
             }
-            FileHandler handler = new FileHandler("logs/log.maze", 40240000, 30, true);
+            FileHandler handler = new FileHandler(root + "/logs/log.maze", 40240000, 30, true);
             handler.setFormatter(new SimpleFormatter());
             logger.addHandler(handler);
         } catch (IOException e) {

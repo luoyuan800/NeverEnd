@@ -30,13 +30,13 @@ class Group : HarmAble, SkillAbleObject, NameObject, PetOwner, Serializable {
 
     fun groupName(): String {
         return heroes.joinToString {
-            "-" + it.name + "-"
+            it.name
         }
     }
 
     fun groupDisplayName(): String {
         return heroes.joinToString {
-            "-" + it.displayName + "-"
+            it.displayName
         }
     }
 

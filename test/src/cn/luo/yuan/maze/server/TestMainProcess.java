@@ -3,10 +3,10 @@ package cn.luo.yuan.maze.server;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
+import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.model.ServerData;
-import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
@@ -17,12 +17,17 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
 /**
- * Created by gluo on 6/27/2017.
+ * Created by gluo on 5/26/2017.
  */
-public class TestHeroBattleService {
+public class TestMainProcess {
     @Test
-    public void testBattle() {
+    public void testBuildRange() {
         MainProcess process = new MainProcess("data");
         Hero hero = new Hero();
         hero.setName("骑士☆某鸟");
@@ -58,22 +63,7 @@ public class TestHeroBattleService {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        /*hero.setId("QA" + UUID.randomUUID().toString());
-        try {
-            process.submitHero(upload);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }*/
-        Map<String, HeroTable> cache = process.heroTableCache;
-        HeroBattleService hbs = new HeroBattleService(cache, process.groups, process);
-        hbs.run();
-        for (Map.Entry<String, HeroTable> entry : cache.entrySet()) {
-            ServerRecord r = entry.getValue().getRecord(entry.getKey());
-            if (r.getData() != null) {
-                System.out.println(r.getMessages());
-            }
-        }
+        System.out.println(MainProcess.buildHeroRange(process.heroTableCache));
     }
+
 }

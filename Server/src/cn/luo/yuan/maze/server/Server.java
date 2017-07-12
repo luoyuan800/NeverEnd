@@ -1,7 +1,7 @@
 package cn.luo.yuan.maze.server;
 
-import cn.luo.yuan.maze.Path;
 import cn.luo.yuan.maze.model.ExchangeObject;
+import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.OwnedAble;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.utils.Field;
@@ -27,19 +27,24 @@ import static spark.SparkBase.staticFileLocation;
 public class Server {
 
 
-
     /**
      * Created by gluo on 6/1/2017.
      */
 
-    private MainProcess process = new MainProcess();
+    private MainProcess process;
 
     public static void main(String... args) {
         try {
+            LogHelper.init("data");
             new Server().run();
+
         } catch (Exception e) {
             LogHelper.error(e);
         }
+    }
+
+    private Server(){
+        process = new MainProcess("data");
     }
 
 
@@ -47,6 +52,19 @@ public class Server {
         LogHelper.info("starting");
         port(4568);
         staticFileLocation("/pages");
+        post(POST_DEFENDER, (request, response) -> {
+            Hero hero = process.postHeroByLevel(Integer.parseInt(request.headers(Field.LEVEL)));
+            if (hero != null) {
+                writeObject(response, hero);
+                return Field.RESPONSE_RESULT_OK;
+            } else {
+                return Field.RESPONSE_RESULT_FAILED;
+            }
+        });
+        post(GET_GIFT_COUNT, (request, response) -> {
+            String ownerId = request.headers(Field.OWNER_ID_FIELD);
+            return process.getGiftCount(ownerId);
+        });
 
         post(ONLINE_GIFT_OPEN, (request, response) -> {
             String id = request.headers(Field.OWNER_ID_FIELD);
@@ -267,7 +285,7 @@ public class Server {
 
         post(POOL_ONLINE_DATA_MSG, (request, response) -> {
             String id = request.headers(Field.OWNER_ID_FIELD);
-            return process.queryHeroData(id).toString();
+            return process.getGroupMessage(id);
         });
 
         post(POOL_BATTLE_MSG, (request, response) -> {
@@ -285,7 +303,10 @@ public class Server {
 
         get("/status", ((request, response) -> process.heroTableCache.size()));
 
-
+        get("/start", (request, response) -> {
+            process.start();
+            return "start";
+        });
         LogHelper.info("started");
     }
 
