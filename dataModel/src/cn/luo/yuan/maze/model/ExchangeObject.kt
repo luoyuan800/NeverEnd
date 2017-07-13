@@ -67,4 +67,12 @@ class ExchangeObject(val exchange: IDModel, val ownerId: String) : Serializable,
         }
         return false
     }
+
+    override fun toString(): String {
+        if(exchange is NameObject){
+            return exchange.displayName
+        }else{
+            return super.toString()
+        }
+    }
 }

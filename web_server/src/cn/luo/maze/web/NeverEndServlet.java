@@ -225,7 +225,7 @@ public class NeverEndServlet extends HttpServlet {
                 limit = readEncodeHeader(request, Field.LIMIT_STRING);
                 int expectType = Integer.parseInt(request.getHeader(Field.EXPECT_TYPE));
                 writer = response.getWriter();
-                if (process.exchangeTable.addExchange(eo, ownerId, limit, expectType)) {
+                if (process.submitExchange(ownerId, limit, eo, expectType)) {
                     success = true;
                 } else {
                    writer.write("Could not add exchange, maybe there already an exchange object has the same id existed!");

@@ -52,7 +52,10 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                         Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                control.reincarnate();
+                                long orein = control.getHero().getReincarnate();
+                                if(control.reincarnate() > orein){
+                                    control.getViewHandler().showGiftChoose();
+                                }
                             }
                         }, Resource.getString(R.string.close), null, context);
                 break;

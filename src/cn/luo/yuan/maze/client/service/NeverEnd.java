@@ -321,6 +321,13 @@ public class NeverEnd extends Application implements InfoControlInterface {
         }
         hero.setMaterial(hero.getMaterial() - mate);
         hero.setReincarnate(hero.getReincarnate() + 1);
+        if(hero.getGift()!=null){
+            try {
+                hero.getGift().unHandler(this);
+            } catch (Exception e) {
+                LogHelper.logException(e, "NeverEnd -> reincarnate -> unHandler");
+            }
+        }
         switch ((int)hero.getReincarnate()){
             case 2:
                 hero.setSkills(Arrays.copyOf(hero.getSkills(),hero.getSkills().length + 1));

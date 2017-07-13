@@ -102,6 +102,7 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
         dialog.findViewById(R.id.sort_color).setOnClickListener(this);
         dialog.findViewById(R.id.close).setOnClickListener(this);
         dialog.findViewById(R.id.pet_evolution).setOnClickListener(this);
+        dialog.findViewById(R.id.batch_drop).setOnClickListener(this);
     }
 
     public void refreshDetailView(View detailView) {

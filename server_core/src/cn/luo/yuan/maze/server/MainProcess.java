@@ -73,7 +73,7 @@ public class MainProcess {
             for (String heroId : heroTable.getAllHeroIds()) {
                 try {
                     ServerRecord record = heroTable.getRecord(heroId);
-                    if (record.getData() != null && record.getData().getHero() != null) {
+                    if (record!=null && record.getData() != null && record.getData().getHero() != null) {
                         records.add(record);
                     }
                 } catch (Exception e) {
@@ -90,7 +90,7 @@ public class MainProcess {
                 ServerData data = records.get(i).getData();
                 if (data != null && data.getHero() != null)
                     sb.append(data.getHero().getDisplayName())
-                            .append(data.getMaze()!=null ? ( " 层：" + StringUtils.formatNumber(data.getMaze().getMaxLevel())) : "")
+                            .append(data.getMaze()!=null ? ( "&nbsp;" + StringUtils.formatNumber(data.getMaze().getMaxLevel()) + "层") : "")
                             .append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(records.get(i).winRate()).append("<br>");
             }
         } catch (Exception e) {
@@ -185,7 +185,6 @@ public class MainProcess {
         }
     }
 
-    @NotNull
     public boolean acknowledge(String id) {
         ExchangeObject exchangeMy = exchangeTable.loadObject(id);
         if (exchangeMy != null) {
@@ -306,6 +305,15 @@ public class MainProcess {
             } catch (IOException e) {
                 LogHelper.error(e);
             }
+        }
+    }
+
+    public boolean submitExchange(String ownerId, String limit, ExchangeObject eo, int expectType) {
+        if(process.exchangeTable.addExchange(eo, ownerId, limit, expectType)){
+            LogHelper.info(eo + " submitted!");
+            return true;
+        }else{
+            return false;
         }
     }
 

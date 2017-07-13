@@ -29,91 +29,93 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
                 if (id == "npc") {
                     continue
                 }
-                val hero = table.getHero(id, 0)
-                val messager = Messager()
                 val record = table.getRecord(id)
-                if (random.nextBoolean()) {
-                    record.gift++
-                }
-                val group = getGroup(id)
-                registerMessageReceiver(messager, id)
-                if (hero.currentHp > 0) {
-                    val maze = table.getMaze(id, 0)
-                    var oid = filterMatch(id, maze.maxLevel)
-                    var ohero: Hero
-                    var ogroup: Group? = null
-                    var omaze: Maze
-                    var otherRecord:ServerRecord
-                    if (oid != null) {
-                        ohero = table.getHero(oid, 0)
-                        ogroup = getGroup(oid)
-                        omaze = table.getMaze(oid, 0)
-                        otherRecord = table.getRecord(oid)
-                    } else {
-                        oid = "npc"
-                        ohero = npc.getHero(oid, 0)
-                        omaze = npc.getMaze(oid, maze.maxLevel)
-                        otherRecord = npc.getRecord(oid)
+                val hero = table.getHero(id, 0)
+                if (record != null && hero != null) {
+                    val messager = Messager()
+                    if (random.nextBoolean()) {
+                        record.gift++
                     }
-                    if (ohero!!.currentHp > 0) {
-                        if(oid!="npc") {
-                            registerMessageReceiver(messager, oid)
+                    val group = getGroup(id)
+                    registerMessageReceiver(messager, id)
+                    if (hero.currentHp > 0) {
+                        val maze = table.getMaze(id, 0)
+                        var oid = filterMatch(id, maze.maxLevel)
+                        var ohero: Hero
+                        var ogroup: Group? = null
+                        var omaze: Maze
+                        var otherRecord: ServerRecord
+                        if (oid != null) {
+                            ohero = table.getHero(oid, 0)
+                            ogroup = getGroup(oid)
+                            omaze = table.getMaze(oid, 0)
+                            otherRecord = table.getRecord(oid)
+                        } else {
+                            oid = "npc"
+                            ohero = npc.getHero(oid, 0)
+                            omaze = npc.getMaze(oid, maze.maxLevel)
+                            otherRecord = npc.getRecord(oid)
                         }
-                        if (group == null && ogroup == null && random.nextInt(hero.displayName.length) == random.nextInt(ohero.displayName.length)) {
-                            main.addGroup(id, oid)
-                            messager.buildGroup(hero.displayName, ohero.displayName)
-                            if (StringUtils.isNotEmpty(record.data!!.helloMsg["group"])) {
-                                messager.speak(hero.displayName, record.data!!.helloMsg["group"])
+                        if (ohero!!.currentHp > 0) {
+                            if (oid != "npc") {
+                                registerMessageReceiver(messager, oid)
                             }
-                            if (StringUtils.isNotEmpty(otherRecord.data!!.helloMsg["group"])) {
-                                messager.speak(ohero.displayName, otherRecord.data!!.helloMsg["group"])
+                            if (group == null && ogroup == null && random.nextInt(hero.displayName.length) >= random.nextInt(ohero.displayName.length)) {
+                                main.addGroup(id, oid)
+                                messager.buildGroup(hero.displayName, ohero.displayName)
+                                if (StringUtils.isNotEmpty(record.data!!.helloMsg["group"])) {
+                                    messager.speak(hero.displayName, record.data!!.helloMsg["group"])
+                                }
+                                if (StringUtils.isNotEmpty(otherRecord.data!!.helloMsg["group"])) {
+                                    messager.speak(ohero.displayName, otherRecord.data!!.helloMsg["group"])
+                                }
+                                continue
+                            }
+                            val bs = BattleService(group ?: hero, ogroup ?: ohero, random, this)
+                            bs.setBattleMessage(messager)
+                            if (StringUtils.isNotEmpty(record.data!!.helloMsg["meet"])) {
+                                messager.speak(hero.displayName, record.data!!.helloMsg["meet"])
+                            }
+                            if (StringUtils.isNotEmpty(otherRecord.data!!.helloMsg["meet"])) {
+                                messager.speak(ohero.displayName, otherRecord.data!!.helloMsg["meet"])
+                            }
+                            val awardMaterial = random.nextLong(maze.maxLevel + omaze.maxLevel) + 1
+                            if (bs.battle(maze.maxLevel + omaze.maxLevel)) {
+                                if (StringUtils.isNotEmpty(record.data!!.helloMsg["win"])) {
+                                    messager.speak(hero.displayName, record.data!!.helloMsg["win"])
+                                }
+                                if (StringUtils.isNotEmpty(otherRecord.data!!.helloMsg["lost"])) {
+                                    messager.speak(ohero.displayName, otherRecord.data!!.helloMsg["lost"])
+                                }
+                                win(awardMaterial, hero, messager, record)
+                                lost(otherRecord)
+                            } else {
+                                if (StringUtils.isNotEmpty(record.data!!.helloMsg["lost"])) {
+                                    messager.speak(hero.displayName, record.data!!.helloMsg["lost"])
+                                }
+                                if (StringUtils.isNotEmpty(otherRecord.data!!.helloMsg["win"])) {
+                                    messager.speak(ohero.displayName, otherRecord.data!!.helloMsg["win"])
+                                }
+                                messager.materialGet(ohero.displayName, awardMaterial)
+                                lost(record)
+                                win(awardMaterial, ohero, messager, otherRecord)
+
                             }
                             continue
                         }
-                        val bs = BattleService(group ?: hero, ogroup ?: ohero, random, this)
-                        bs.setBattleMessage(messager)
-                        if (StringUtils.isNotEmpty(record.data!!.helloMsg["meet"])) {
-                            messager.speak(hero.displayName, record.data!!.helloMsg["meet"])
-                        }
-                        if (StringUtils.isNotEmpty(otherRecord.data!!.helloMsg["meet"])) {
-                            messager.speak(ohero.displayName, otherRecord.data!!.helloMsg["meet"])
-                        }
-                        val awardMaterial = random.nextLong(maze.maxLevel + omaze.maxLevel) + 1
-                        if (bs.battle(maze.maxLevel + omaze.maxLevel)) {
-                            if (StringUtils.isNotEmpty(record.data!!.helloMsg["win"])) {
-                                messager.speak(hero.displayName, record.data!!.helloMsg["win"])
-                            }
-                            if (StringUtils.isNotEmpty(otherRecord.data!!.helloMsg["lost"])) {
-                                messager.speak(ohero.displayName, otherRecord.data!!.helloMsg["lost"])
-                            }
-                            win(awardMaterial, hero, messager, record)
-                            lost(otherRecord)
-                        } else {
-                            if (StringUtils.isNotEmpty(record.data!!.helloMsg["lost"])) {
-                                messager.speak(hero.displayName, record.data!!.helloMsg["lost"])
-                            }
-                            if (StringUtils.isNotEmpty(otherRecord.data!!.helloMsg["win"])) {
-                                messager.speak(ohero.displayName, otherRecord.data!!.helloMsg["win"])
-                            }
-                            messager.materialGet(ohero.displayName, awardMaterial)
-                            lost(record)
-                            win(awardMaterial, ohero, messager, otherRecord)
-
-                        }
-                        continue
-                    }
-                    //TODO Random events
-                } else {
-                    if (record.dieCount > record.restoreLimit) {
-                        messager.restoreLimit(hero.displayName)
+                        //TODO Random events
                     } else {
-                        val period = Data.RESTOREPERIOD - (System.currentTimeMillis() - record.dieTime)
-                        if (period <= 0) {
-                            hero.hp = hero.maxHp
-                            messager.restore(hero.displayName)
-                            main.removeGroup(id)
+                        if (record.dieCount > record.restoreLimit) {
+                            messager.restoreLimit(hero.displayName)
                         } else {
-                            messager.waitingForRestore(hero.displayName, period)
+                            val period = Data.RESTOREPERIOD - (System.currentTimeMillis() - record.dieTime)
+                            if (period <= 0) {
+                                hero.hp = hero.maxHp
+                                messager.restore(hero.displayName)
+                                main.removeGroup(id)
+                            } else {
+                                messager.waitingForRestore(hero.displayName, period)
+                            }
                         }
                     }
                 }
@@ -121,7 +123,7 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
             range()
             table.save()
             LogHelper.info("Finished battle!")
-        }catch (exp:Exception){
+        } catch (exp: Exception) {
             LogHelper.error(exp)
         }
     }
@@ -199,7 +201,8 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
             val hero = table.getHero(it, 0)
             it == "npc" || (hero != null && maze != null && hero.currentHp > 0 && it != id && Math.abs(maze.maxLevel - level) < 100)
         })
-
-        return random.randomItem(items)
+        items.add("npc")
+        val oid = random.randomItem(items)
+        return if(oid == "npc") null else oid
     }
 }

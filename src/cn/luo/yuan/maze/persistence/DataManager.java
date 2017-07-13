@@ -210,8 +210,18 @@ public class DataManager implements DataManagerInterface {
         }
         for (Accessory accessory : new ArrayList<>(accessoryLoader.loadAll())) {
             if(accessory.getHeroIndex() == index) {
-                accessoryLoader.delete(accessory.getId());
+               delete(accessory.getId());
             }
+        }
+        for(Skill skill : loadAllSkill()){
+            delete(skill);
+        }
+        for(Goods goods : loadAllGoods()){
+            goods.markDelete();
+            goodsLoader.delete(goods.getId());
+        }
+        for(ClickSkill clickSkill : loadClickSkill()){
+            deleteClickSkill(clickSkill);
         }
         database.excuseSQLWithoutResult("delete from maze where hero_index = " + index);
         database.excuseSQLWithoutResult("delete from hero where hero_index = " + index);
@@ -256,7 +266,7 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void addGoods(Goods newGoods) {
-        Goods d = goodsLoader.load(String.valueOf(index));
+        Goods d = goodsLoader.load(buildIdWithIndex(newGoods.getName()));
         if (d == null || d.isDelete()) {
             saveGoods(newGoods);
         } else {
@@ -370,8 +380,10 @@ public class DataManager implements DataManagerInterface {
             accessoryLoader.delete(((Accessory) object).getId());
         } else if (object instanceof Goods) {
             ((Goods) object).setCount(((Goods) object).getCount() - 1);
-        } else {
-            //TODO
+        } else if(object instanceof Skill){
+            skillLoader.delete(((Skill) object).getId());
+        } else if(object instanceof ClickSkill){
+            deleteClickSkill((ClickSkill) object);
         }
 
     }

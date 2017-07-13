@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.client.display.handler;
 
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.text.Html;
 import android.view.View;
@@ -9,9 +10,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.GameActivity;
+import cn.luo.yuan.maze.client.display.dialog.GiftDialog;
 import cn.luo.yuan.maze.client.display.view.PetTextView;
 import cn.luo.yuan.maze.client.display.view.RevealTextView;
 import cn.luo.yuan.maze.client.service.NeverEnd;
+import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
@@ -279,6 +282,27 @@ public class GameActivityViewHandler extends Handler {
             @Override
             public void run() {
                 context.recreate();
+            }
+        });
+    }
+
+    public void showGiftChoose() {
+        post(new Runnable() {
+            @Override
+            public void run() {
+               new GiftDialog(context, neverEnd.getHero(), new DialogInterface.OnDismissListener() {
+                   @Override
+                   public void onDismiss(DialogInterface dialog) {
+                       if(neverEnd.getHero().getGift()!=null){
+                           try {
+                               neverEnd.getHero().getGift().handler(neverEnd);
+                           } catch (Exception e) {
+                               LogHelper.logException(e, "GameActivityViewHandler -> chooseGift -> ");
+                           }
+                       }
+                       refreshProperties(neverEnd.getHero());
+                   }
+               });
             }
         });
     }

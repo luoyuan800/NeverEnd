@@ -10,6 +10,7 @@ import cn.luo.yuan.maze.service.EffectHandler;
 import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.Random;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -59,6 +60,7 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     public Hero() {
     }
 
+    @NotNull
     public HashSet<Accessory> getAccessories() {
         synchronized (this) {
             if (accessories == null) {
@@ -291,7 +293,8 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
         this.click.setValue(click);
     }
 
-    public Collection<Pet> getPets() {
+
+    public @NotNull Collection<Pet> getPets() {
         if (pets == null) {
             synchronized (this) {
                 if (pets == null)

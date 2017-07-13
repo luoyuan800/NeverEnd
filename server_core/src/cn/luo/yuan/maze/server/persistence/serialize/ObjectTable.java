@@ -210,7 +210,10 @@ public class ObjectTable<T extends Serializable> implements Runnable{
 
     public List<String> loadIds(){
         List<String> ids = new ArrayList<>();
-        Collections.addAll(ids, root.list());
+        String[] list = root.list();
+        if(list!=null) {
+            Collections.addAll(ids, list);
+        }
         return ids;
     }
 

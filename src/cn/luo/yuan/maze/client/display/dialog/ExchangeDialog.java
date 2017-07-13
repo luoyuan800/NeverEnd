@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.client.display.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
@@ -41,26 +42,33 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                 progress.dismiss();
             }
             switch (msg.what) {
+                case 9:
+                    break;
+                case 8:
+                    if(progress == null){
+                        progress = new ProgressDialog(context.getContext());
+                        progress.setMessage(Resource.getString(R.string.syn_server));
+                    }
+                    if(!progress.isShowing()){
+                        progress.show();
+                    }
+                    break;
                 case 7:
-
                     Object[] objs = (Object[]) msg.obj;
                     refreshList((List<ExchangeObject>)objs[0], (LoadMoreListView) objs[1]);
                     break;
                 case 6:
-
                     ExchangeObject eo = (ExchangeObject) msg.obj;
                     showSelectExchangeDialog(eo);
                     break;
                 case 5:
-
                     SimplerDialogBuilder.build("网络异常，请稍后再试", Resource.getString(R.string.close), (DialogInterface.OnClickListener) null, context.getContext());
+                    break;
                 case 4:
-
                     Object item = msg.obj;
                     Toast.makeText(context.getContext(), Html.fromHtml(item.toString()), Toast.LENGTH_SHORT).show();
                     break;
                 case 3:
-
                     showSelectSubmitDialog();
                     break;
                 case 1:
@@ -71,6 +79,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                     break;
                 case 2:
                     showOtherSubmitedDialog();
+                    break;
             }
         }
     };
@@ -138,7 +147,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
             Dialog dialog = SimplerDialogBuilder.build(root, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    progress.show();
+                    handler.sendEmptyMessage(8);
                     context.getExecutor().submit(new Runnable() {
                         @Override
                         public void run() {
@@ -229,7 +238,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Object myItem = parent.getAdapter().getItem(position);
                 selectDialog.dismiss();
-                progress.show();
+                handler.sendEmptyMessage(8);
                 context.getExecutor().submit(new Runnable() {
                     @Override
                     public void run() {
@@ -261,7 +270,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
         Runnable updateTask = new Runnable() {
             @Override
             public void run() {
-                progress.show();
+                handler.sendEmptyMessage(8);
                 List<ExchangeObject> exchangeObjects =
                         manager.queryAvailableExchanges(petR.isChecked() ? Field.PET_TYPE :
                                 accessoryR.isChecked() ? Field.ACCESSORY_TYPE : Field.GOODS_TYPE, key.getText().toString());
@@ -293,7 +302,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                 if (isChecked) {
                     accessoryR.setChecked(false);
                     goodsR.setChecked(false);
-                    progress.show();
+                    handler.sendEmptyMessage(8);
                     context.getExecutor().submit(updateTask);
                 }
             }
@@ -306,7 +315,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                 if (isChecked) {
                     petR.setChecked(false);
                     goodsR.setChecked(false);
-                    progress.show();
+                    handler.sendEmptyMessage(8);
                     context.getExecutor().submit(updateTask);
                 }
             }
@@ -318,7 +327,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                 if (isChecked) {
                     accessoryR.setChecked(false);
                     petR.setChecked(false);
-                    progress.show();
+                    handler.sendEmptyMessage(8);
                     context.getExecutor().submit(updateTask);
                 }
             }
@@ -328,9 +337,8 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
     }
 
     private void refreshList(List<ExchangeObject> exchangeObjects, LoadMoreListView list) {
-        if (progress.isShowing()) {
-            progress.dismiss();
-        }
+        handler.sendEmptyMessage(9);
+
         ExchangeAdapter adapter = buildExchangeAdapter(exchangeObjects);
         adapter.setButtonString(Resource.getString(R.string.exchange_label));
         list.setAdapter(adapter);
@@ -387,7 +395,8 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
         });
         ListView list = new ListView(context.getContext());
         list.setAdapter(es);
-        progress.dismiss();
+        handler.sendEmptyMessage(9);
+
         SimplerDialogBuilder.build(list, Resource.getString(R.string.close), null, context.getContext());
     }
 
@@ -469,7 +478,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
     }
 
     private void showMyExchange() {
-        progress.show();
+        handler.sendEmptyMessage(8);
         context.getExecutor().submit(new Runnable() {
             @Override
             public void run() {
@@ -483,7 +492,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
     }
 
     private void showExchanges() {
-        progress.show();
+        handler.sendEmptyMessage(8);
         context.getExecutor().submit(new Runnable() {
             @Override
             public void run() {
