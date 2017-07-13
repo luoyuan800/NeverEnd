@@ -10,6 +10,7 @@ import cn.luo.yuan.maze.model.effect.original.DefEffect;
 import cn.luo.yuan.maze.model.effect.original.HpEffect;
 import cn.luo.yuan.maze.model.effect.original.StrEffect;
 import cn.luo.yuan.maze.utils.StringUtils;
+import sun.rmi.log.LogHandler;
 
 import java.util.Iterator;
 
@@ -26,38 +27,44 @@ public class AccessoryHelper {
         Accessory uMount = null;
         String needEffect = null;
         long needEffectValue = 0;
-        if(check) {
-            for (Effect effect : accessory.getEffects()) {
-                long count = effect.getValue().longValue() * 2;
-                if (effect instanceof AgiEffect && count > needEffectValue) {
-                    needEffect = "力量";
-                    needEffectValue = count;
-                    break;
-                }
-                if (effect instanceof StrEffect && count > needEffectValue) {
-                    needEffect = "敏捷";
-                    needEffectValue = count;
-                    break;
-                }
-                long value = count / hero.getHpGrow();
-                if (effect instanceof HpEffect && value > needEffectValue) {
-                    needEffect = "力量";
-                    needEffectValue = value * 2;
-                    break;
-                }
-                value = count / hero.getDefGrow();
-                if (effect instanceof DefEffect && value > needEffectValue) {
-                    needEffect = "敏捷";
-                    needEffectValue = value;
-                    break;
-                }
-                value = count / hero.getAtkGrow();
-                if (effect instanceof AtkEffect && value > needEffectValue) {
-                    needEffect = "力量";
-                    needEffectValue = value;
-                    break;
+        try {
+            if (check) {
+                for (Effect effect : accessory.getEffects()) {
+                    if (effect != null) {
+                        long count = effect.getValue().longValue() * 2;
+                        if (effect instanceof AgiEffect && count > needEffectValue) {
+                            needEffect = "力量";
+                            needEffectValue = count;
+                            break;
+                        }
+                        if (effect instanceof StrEffect && count > needEffectValue) {
+                            needEffect = "敏捷";
+                            needEffectValue = count;
+                            break;
+                        }
+                        long value = count / hero.getHpGrow();
+                        if (effect instanceof HpEffect && value > needEffectValue) {
+                            needEffect = "力量";
+                            needEffectValue = value * 2;
+                            break;
+                        }
+                        value = count / hero.getDefGrow();
+                        if (effect instanceof DefEffect && value > needEffectValue) {
+                            needEffect = "敏捷";
+                            needEffectValue = value;
+                            break;
+                        }
+                        value = count / hero.getAtkGrow();
+                        if (effect instanceof AtkEffect && value > needEffectValue) {
+                            needEffect = "力量";
+                            needEffectValue = value;
+                            break;
+                        }
+                    }
                 }
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         if(needEffect!=null && needEffectValue > 0){
             switch (needEffect){

@@ -95,4 +95,6 @@
     <string name="exchange_label">交换</string>
     <string name="need_mate">需要锻造 %1$s</string>
     <string name="need_level">需要层数 %1$s</string>
+    <string name="gdtslogan">GDTslogan</string>
+    <string name="click_to_skip">点击跳过</string>
 </resources>
