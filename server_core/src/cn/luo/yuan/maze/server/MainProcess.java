@@ -206,7 +206,12 @@ public class MainProcess {
     }
 
     public void stop() {
+        save();
         executor.shutdown();
+
+    }
+
+    public void save(){
         try {
             heroTable.save();
         } catch (IOException e) {
@@ -229,6 +234,12 @@ public class MainProcess {
             }
         }, 0, user.getBattleInterval(), TimeUnit.MINUTES);
         executor.scheduleAtFixedRate(warehouseTable, 1, 1, TimeUnit.DAYS);
+        executor.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                save();
+            }
+        }, 4, 4, TimeUnit.HOURS);
     }
 
     public ServerData queryHeroData(String id) {
