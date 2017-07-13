@@ -28,8 +28,8 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
             statement = connection.createStatement()
             statement.execute("create table IF NOT EXISTS shop(id varchar(100) NOT NULL, " +
                     "type varchar(100) NOT NULL, cost INT default 0, count INT default 0, " +
-                    "sold INT default 0 ), on_sell TINYINT default 0, ref varchar(255), special TINYINT default 0" +
-                    "primary key (id)")
+                    "sold INT default 0 , on_sell TINYINT default 0, ref varchar(255), special TINYINT default 0, " +
+                    "primary key (id))")
         } catch (e: Exception) {
             LogHelper.error(e)
         } finally {
