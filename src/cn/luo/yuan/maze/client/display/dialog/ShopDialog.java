@@ -1,48 +1,70 @@
-package cn.luo.yuan.maze.client.service;
+package cn.luo.yuan.maze.client.display.dialog;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
-import cn.luo.yuan.maze.client.display.adapter.ItemAdapter;
+import cn.luo.yuan.maze.client.display.adapter.SellItemAdapter;
 import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
+import cn.luo.yuan.maze.client.service.AccessoryHelper;
+import cn.luo.yuan.maze.client.service.NeverEnd;
+import cn.luo.yuan.maze.client.service.ServerService;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.effect.Effect;
+import cn.luo.yuan.maze.model.SellItem;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.utils.Random;
-import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by gluo on 5/9/2017.
+ * Copyright @Luo
+ * Created by Gavin Luo on 7/13/2017.
  */
-public class LocalShop {
+public class ShopDialog {
     private NeverEnd context;
     private Random random;
 
-    public LocalShop(NeverEnd context) {
+
+    public ShopDialog(NeverEnd context) {
         this.context = context;
         this.random = context.getRandom();
     }
 
-    public void show() {
+    public void showOnlineShop(){
+        ServerService ss = new ServerService(context);
+        show("在线商店", ss.getOnlineSellItems(), new SellItemAdapter.AfterSell() {
+            @Override
+            public void sell(String id, int count) {
+                context.getExecutor().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        ss.buyOnlineItem(id, count);
+                    }
+                });
+            }
+        });
+    }
+
+    public void showLocalShop(){
+        List<SellItem> items = randomAccessory();
+        items.addAll(randomGoods());
+        show("本地商店", items, null);
+    }
+
+    public void show(String title, List<SellItem> items, SellItemAdapter.AfterSell listener) {
         AlertDialog shopDialog = new AlertDialog.Builder(context.getContext()).create();
-        shopDialog.setTitle("本地商店");
+        shopDialog.setTitle(title);
         shopDialog.setButton(DialogInterface.BUTTON_POSITIVE, "退出", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
             }
         });
-        List<Item> items = randomAccessory();
-        items.addAll(randomGoods());
-        if (items.size() > 0) {
+        if(items.size() > 0){
             LoadMoreListView list = new LoadMoreListView(context.getContext());
-            ItemAdapter adapter = new ItemAdapter(context, items);
-            list.setAdapter(adapter);
+            list.setAdapter(new SellItemAdapter(context,items, listener));
             list.onLoadMoreComplete(true);
             shopDialog.setView(list);
         } else {
@@ -53,11 +75,11 @@ public class LocalShop {
         shopDialog.show();
     }
 
-    public List<Item> randomAccessory() {
-        List<Item> acces = new ArrayList<>();
+    public List<SellItem> randomAccessory() {
+        List<SellItem> acces = new ArrayList<>();
         AccessoryHelper accessoryHelper = AccessoryHelper.getOrCreate(context);
         for (Accessory accessory : accessoryHelper.getRandomAccessories(random.nextInt(5))) {
-            Item item = new Item();
+            SellItem item = new SellItem();
             item.name = accessory.getName();
             item.color = accessory.getColor();
             item.count = 1;
@@ -72,13 +94,13 @@ public class LocalShop {
         return acces;
     }
 
-    public List<Item> randomGoods() {
-        List<Item> goods = new ArrayList<>();
+    public List<SellItem> randomGoods() {
+        List<SellItem> goods = new ArrayList<>();
         for (Goods g : context.getDataManager().loadAllGoods()) {
             Goods ng = (Goods) g.clone();
             ng.setCount(1);
             if (g.canLocalSell() && random.nextBoolean()) {
-                Item goodsItem = new Item();
+                SellItem goodsItem = new SellItem();
                 goodsItem.name = g.getName();
                 goodsItem.price = g.getPrice();
                 goodsItem.desc = g.getDesc();
@@ -90,32 +112,4 @@ public class LocalShop {
         return goods;
     }
 
-    public List<Item> getSellItems() {
-        List<Item> items = randomGoods();
-        items.addAll(randomAccessory());
-        return items;
-    }
-
-    public static class Item {
-        public String author;
-        public String name;
-        public int count;
-        public long price;
-        public Object instance;
-        public boolean special;
-        String type;
-        List<Effect> effects;
-        String desc;
-        String color;
-
-        public String toString() {
-            if (effects == null)
-                return name + " * " + count + (special ? " 特价" : " 价格") + " : " + StringUtils.formatNumber(price) + "<br>" + desc;
-            return "<font color='" + color + "'>" + name + "</font>(" + type + ")" + " * "
-                    + count + (special ? " 特价" : " 价格") + " : " + StringUtils.formatNumber(price)
-                    + (StringUtils.isNotEmpty(author) ? "<br>" + author : "")
-                    + (StringUtils.isNotEmpty(desc) ? "<br>" + desc : "")
-                    + "<br>" + StringUtils.formatEffectsAsHtml(effects);
-        }
-    }
 }

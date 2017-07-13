@@ -27,9 +27,9 @@ constructor(root: File) : HeroTable(root) {
             val hero = heroDb.loadObject(id);
             if (hero != null) {
                 hero.name = random.randomItem(major) + "☆" + hero.name
-                hero.agi = 100 * level
+                hero.agi = random.randomRange(100, 1000) * level
                 hero.def += hero.defGrow * hero.agi
-                hero.str = 100 * level
+                hero.str = random.randomRange(100, 1000) * level
                 hero.maxHp += hero.hpGrow * hero.str
                 hero.hp = hero.maxHp
                 hero.atk += hero.atkGrow * hero.str

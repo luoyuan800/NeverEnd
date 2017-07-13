@@ -40,8 +40,8 @@ class Medallion() : Goods(){
     }
 
     val MedallionListener = object : LostListener {
-        override fun lost(loser: Hero?, winner: HarmAble?) {
-            val p = GoodsProperties(hero = loser!!);
+        override fun lost(loser: Hero, winner: HarmAble?) {
+            val p = GoodsProperties(loser);
             use(p)
         }
 

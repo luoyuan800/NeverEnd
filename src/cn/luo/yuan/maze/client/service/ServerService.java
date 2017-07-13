@@ -4,6 +4,7 @@ import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.client.utils.RestConnection;
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.SellItem;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -11,6 +12,9 @@ import cn.luo.yuan.maze.utils.annotation.StringValue;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static cn.luo.yuan.maze.Path.*;
 
@@ -158,5 +162,29 @@ public class ServerService {
             LogHelper.logException(e, "ServiceService->postDefender");
         }
         return null;
+    }
+
+    public List<SellItem> getOnlineSellItems() {
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(ONLINE_SHOP, RestConnection.POST);
+            Object o = server.connect(connection);
+            if(o instanceof ArrayList){
+                return (ArrayList<SellItem>)o;
+            }
+        } catch (Exception e) {
+            LogHelper.logException(e, "ServiceService->getOnlineSellItems");
+        }
+        return Collections.emptyList();
+    }
+
+    public void buyOnlineItem(String id, int count) {
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(BUY_ONLINE, RestConnection.POST);
+            connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
+            connection.addRequestProperty(Field.COUNT, String.valueOf(count));
+            server.connect(connection);
+        } catch (Exception e) {
+            LogHelper.logException(e, "ServiceService->buyOnlineItem");
+        }
     }
 }

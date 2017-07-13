@@ -8,6 +8,7 @@ import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.server.LogHelper;
+import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection;
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
 import cn.luo.yuan.maze.service.AccessoryHelper;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -28,7 +29,6 @@ public class HeroTable {
     public HeroTable(File root) throws IOException, ClassNotFoundException {
         this.root = root;
         recordDb = new ObjectTable<>(ServerRecord.class, root);
-
     }
 
     public String queryBattleAward(String id) {

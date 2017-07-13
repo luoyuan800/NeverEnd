@@ -13,9 +13,9 @@ import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.client.display.dialog.ExchangeDialog;
 import cn.luo.yuan.maze.client.display.dialog.GoodsDialog;
 import cn.luo.yuan.maze.client.display.dialog.PetDialog;
+import cn.luo.yuan.maze.client.display.dialog.ShopDialog;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
 import cn.luo.yuan.maze.client.service.NeverEnd;
-import cn.luo.yuan.maze.client.service.LocalShop;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.NeverEndConfig;
 
@@ -81,7 +81,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 new ExchangeDialog(control).show();
                 break;
             case R.id.local_shop:
-                new LocalShop(control).show();
+                new ShopDialog(control).showLocalShop();
                 break;
             case R.id.pets:
                 new PetDialog(control, new PetAdapter(context, control.getDataManager(), "")).show();

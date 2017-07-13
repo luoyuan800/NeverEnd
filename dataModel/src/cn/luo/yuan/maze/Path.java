@@ -32,5 +32,7 @@ public class Path {
     public static final String POOL_BATTLE_MSG = "pool_battle_msg";
     public static final String GET_GIFT_COUNT = "get_gift_count";
     public static final String ADD_BOSS = "add_boss";
+    public static final String ONLINE_SHOP = "shop";
+    public static final String BUY_ONLINE = "buy";
 
 }

@@ -146,7 +146,7 @@ public class Server {
         });
 
         post(ACKNOWLEDGE_MY_EXCHANGE, (request, response) -> {
-            String id = request.headers(Field.EXCHANGE_ID_FIELD);
+            String id = request.headers(Field.ITEM_ID_FIELD);
             if (process.acknowledge(id)) {
                 response.header(Field.RESPONSE_TYPE, Field.RESPONSE_NONE_TYPE);
                 response.header(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
@@ -158,7 +158,7 @@ public class Server {
 
 
         post(GET_BACK_EXCHANGE, ((request, response) -> {
-            String id = request.headers(Field.EXCHANGE_ID_FIELD);
+            String id = request.headers(Field.ITEM_ID_FIELD);
             Object backExchange = process.get_back_exchange(id);
             if (backExchange == Integer.valueOf(1)) {
                 response.header(Field.RESPONSE_CODE, Field.STATE_FAILED);
@@ -174,7 +174,7 @@ public class Server {
 
         post(REQUEST_EXCHANGE, ((request, response) -> {
             Object objMy = readObject(request);
-            ExchangeObject exServer = process.exchangeTable.loadObject(request.headers(Field.EXCHANGE_ID_FIELD));
+            ExchangeObject exServer = process.exchangeTable.loadObject(request.headers(Field.ITEM_ID_FIELD));
             if (objMy == null) {
                 response.header(Field.RESPONSE_CODE, Field.STATE_FAILED);
                 return "Exchange Object submit error!";

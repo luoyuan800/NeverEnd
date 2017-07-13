@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.view.View;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
+import cn.luo.yuan.maze.client.display.dialog.ShopDialog;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.Resource;
@@ -25,6 +26,9 @@ public class OnlineActivityOnClickHandler {
 
     public void onClick(View view){
         switch (view.getId()){
+            case R.id.online_shop:
+                new ShopDialog(context).showOnlineShop();
+                break;
             case R.id.online_gifts:
                 activity.executor.execute(new Runnable() {
                     @Override

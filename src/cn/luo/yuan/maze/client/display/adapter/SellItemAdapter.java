@@ -8,9 +8,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.luo.yuan.maze.R;
-import cn.luo.yuan.maze.client.service.LocalShop;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.model.Accessory;
+import cn.luo.yuan.maze.model.SellItem;
 import cn.luo.yuan.maze.model.goods.Goods;
 
 import java.util.List;
@@ -20,14 +20,19 @@ import java.util.List;
  * ALL RIGHTS RESERVED
  * Created by luoyuan on 12/6/15.
  */
-public class ItemAdapter extends BaseAdapter {
+public class SellItemAdapter extends BaseAdapter {
+    public static interface AfterSell{
+        void sell(String id, int count);
+    }
     private int iteViewId;
-    private List<LocalShop.Item> items;
+    private List<SellItem> items;
     private NeverEnd context;
+    private AfterSell sellListener;
 
-    public ItemAdapter(NeverEnd context, List<LocalShop.Item> items) {
+    public SellItemAdapter(NeverEnd context, List<SellItem> items, AfterSell listener) {
         this.items = items;
         this.context = context;
+        this.sellListener = listener;
     }
 
     @Override
@@ -36,7 +41,7 @@ public class ItemAdapter extends BaseAdapter {
     }
 
     @Override
-    public LocalShop.Item getItem(int i) {
+    public SellItem getItem(int i) {
         return items.get(i);
     }
 
@@ -51,7 +56,7 @@ public class ItemAdapter extends BaseAdapter {
             view = View.inflate(context.getContext(), R.layout.shop_item, (ViewGroup) null);
         }
         Button button = (Button) view.findViewById(R.id.buy_button);
-        final LocalShop.Item item = getItem(i);
+        final SellItem item = getItem(i);
         if (button != null) {
             button.setEnabled(item.count > 0 && context.getHero().getMaterial() > item.price);
             button.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +72,9 @@ public class ItemAdapter extends BaseAdapter {
                     }
                     notifyDataSetChanged();
                     Toast.makeText(context.getContext(), "成功购买" + item.name, Toast.LENGTH_SHORT).show();
+                    if(sellListener!=null){
+                        sellListener.sell(item.id,1);
+                    }
                 }
             });
         }

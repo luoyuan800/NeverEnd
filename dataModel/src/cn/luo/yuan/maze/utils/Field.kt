@@ -23,7 +23,7 @@ class Field {
         const val RESPONSE_RESULT_SUCCESS = "success"
         const val RESPONSE_RESULT_FAILED = "failed"
         const val RESPONSE_RESULT_OK= RESPONSE_RESULT_SUCCESS
-        const val EXCHANGE_ID_FIELD = "ex_i`d"
+        const val ITEM_ID_FIELD = "ex_i`d"
         const val RESPONSE_OBJECT_TYPE = "object"
         const val RESPONSE_STRING_TYPE = "string"
         const val RESPONSE_NONE_TYPE = "none"

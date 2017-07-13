@@ -9,7 +9,9 @@ import cn.luo.yuan.maze.server.model.User;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
 import cn.luo.yuan.maze.server.persistence.NPCTable;
+import cn.luo.yuan.maze.server.persistence.ShopTable;
 import cn.luo.yuan.maze.server.persistence.WarehouseTable;
+import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection;
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
 import cn.luo.yuan.maze.task.Task;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -18,6 +20,9 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -42,6 +47,8 @@ public class MainProcess {
     private ObjectTable<User> userDb;
     private File root;
     private File heroDir;
+    private DatabaseConnection database;
+    private ShopTable shop;
 
     public MainProcess(String root) throws IOException, ClassNotFoundException {
         this.root = new File(root);
@@ -208,6 +215,9 @@ public class MainProcess {
     }
 
     public void start() {
+        if(database!=null){
+            shop = new ShopTable(database,root);
+        }
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -447,6 +457,14 @@ public class MainProcess {
         root.delete();
     }
 
+    public DatabaseConnection getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(DatabaseConnection database) {
+        this.database = database;
+    }
+
     private Map<String, HeroTable> initHeroTableCache(File root) {
         Map<String, HeroTable> cache = new HashMap<>();
         if (root.exists()) {
@@ -480,5 +498,22 @@ public class MainProcess {
         }
         exMy.setSubmitTime(System.currentTimeMillis());
         return exMy;
+    }
+
+    public List<SellItem> getOnlineSell(){
+        if(shop!=null){
+            return shop.getAllSelling();
+        }else{
+            return Collections.emptyList();
+        }
+    }
+
+    public void buy(String id, int count){
+        if(shop!=null){
+            SellItem item = new SellItem();
+            item.id = id;
+            item.count = count;
+            shop.sell(item);
+        }
     }
 }

@@ -12,6 +12,7 @@ import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.goods.Goods;
+import cn.luo.yuan.maze.model.goods.GoodsProperties;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
@@ -267,12 +268,23 @@ public class DataManager implements DataManagerInterface {
 
     public void addGoods(Goods newGoods) {
         Goods d = goodsLoader.load(buildIdWithIndex(newGoods.getName()));
+        boolean load = false;
         if (d == null || d.isDelete()) {
             saveGoods(newGoods);
+            d = newGoods;
+            load = true;
         } else {
+            long org = d.getCount();
             d.setCount(d.getCount() + newGoods.getCount());
             saveGoods(d);
+            if(org <= 0 && d.getCount() > 0){
+                load = true;
+            }
         }
+        if(load){
+            d.load(new GoodsProperties(loadHero()));
+        }
+
     }
 
     public Skill loadSkill(String name) {

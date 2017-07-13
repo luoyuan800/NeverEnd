@@ -1,6 +1,5 @@
 package cn.luo.yuan.maze.client.service;
 
-import android.app.Activity;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.client.utils.RestConnection;
@@ -96,7 +95,7 @@ public class ExchangeManager {
     public Object getBackMyExchange(String id) {
         try {
             HttpURLConnection connection = server.getHttpURLConnection(GET_BACK_EXCHANGE, RestConnection.POST);
-            connection.addRequestProperty(Field.EXCHANGE_ID_FIELD, id);
+            connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
             Object object = server.connect(connection);
 
             return object;
@@ -137,7 +136,7 @@ public class ExchangeManager {
         try {
             HttpURLConnection conn = server.getHttpURLConnection(REQUEST_EXCHANGE, RestConnection.POST);
             conn.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
-            conn.addRequestProperty(Field.EXCHANGE_ID_FIELD, targetExchange.getId());
+            conn.addRequestProperty(Field.ITEM_ID_FIELD, targetExchange.getId());
             server.connect(myObject, conn);
             if (conn.getHeaderField(Field.RESPONSE_CODE).equals(Field.STATE_SUCCESS)) {
                 Object obj = targetExchange.getExchange();
@@ -160,7 +159,7 @@ public class ExchangeManager {
     public <T> T acknowledge(ExchangeObject eo) {
         try {
             HttpURLConnection connection = server.getHttpURLConnection(ACKNOWLEDGE_MY_EXCHANGE, RestConnection.POST);
-            connection.addRequestProperty(Field.EXCHANGE_ID_FIELD, eo.getId());
+            connection.addRequestProperty(Field.ITEM_ID_FIELD, eo.getId());
             if (Field.RESPONSE_RESULT_OK.equals(server.connect(connection))) {
                 return unBox(eo.getChanged());
             }

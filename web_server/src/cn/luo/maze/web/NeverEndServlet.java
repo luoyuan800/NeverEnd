@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -45,6 +44,7 @@ public class NeverEndServlet extends HttpServlet {
     public NeverEndServlet() throws IOException, ClassNotFoundException {
         super();
         LogHelper.init(root);
+        process.setDatabase(new MysqlConnection());
     }
 
     @Override
@@ -138,6 +138,15 @@ public class NeverEndServlet extends HttpServlet {
         PrintWriter writer = null;
         Boolean success = null;
         switch (path) {
+            case BUY_ONLINE:
+                int buyCount = request.getIntHeader(Field.COUNT);
+                String itemId = request.getHeader(Field.ITEM_ID_FIELD);
+                process.buy(itemId, buyCount);
+                success = true;
+                break;
+            case ONLINE_SHOP:
+                writeObject(response,process.getOnlineSell());
+                break;
             case POST_DEFENDER:
                 Hero hero = process.postHeroByLevel(request.getIntHeader(Field.LEVEL));
                 if(hero!=null){
@@ -157,7 +166,7 @@ public class NeverEndServlet extends HttpServlet {
                 writer.write(String.valueOf(process.getGiftCount(ownerId)));
                 break;
             case GET_BACK_EXCHANGE:
-                String exchange_id = request.getHeader(Field.EXCHANGE_ID_FIELD);
+                String exchange_id = request.getHeader(Field.ITEM_ID_FIELD);
                 Object backExchange = process.get_back_exchange(exchange_id);
                 if (backExchange == Integer.valueOf(1)) {
                     writer = response.getWriter();
@@ -169,7 +178,7 @@ public class NeverEndServlet extends HttpServlet {
                     writeObject(response,backExchange);
                 }
             case ACKNOWLEDGE_MY_EXCHANGE:
-                exchange_id = request.getHeader(Field.EXCHANGE_ID_FIELD);
+                exchange_id = request.getHeader(Field.ITEM_ID_FIELD);
                 if (process.acknowledge(exchange_id)) {
                     success = true;
                 } else {
@@ -200,7 +209,7 @@ public class NeverEndServlet extends HttpServlet {
                 break;
             case REQUEST_EXCHANGE:
                 Object objMy = readObject(request);
-                ExchangeObject exServer = process.exchangeTable.loadObject(request.getHeader(Field.EXCHANGE_ID_FIELD));
+                ExchangeObject exServer = process.exchangeTable.loadObject(request.getHeader(Field.ITEM_ID_FIELD));
                 writer = response.getWriter();
                 if (objMy == null) {
                     writer.write("Exchange Object submit error!");
