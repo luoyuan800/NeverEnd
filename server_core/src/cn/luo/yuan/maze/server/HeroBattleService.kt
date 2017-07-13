@@ -196,13 +196,23 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
     }
 
     private fun filterMatch(id: String, level: Long): String? {
+        val group = getGroupHolder(id);
         val items = ArrayList<String>(table.allHeroIds.filter {
             val maze = table.getMaze(it, 0)
             val hero = table.getHero(it, 0)
-            it == "npc" || (hero != null && maze != null && hero.currentHp > 0 && it != id && Math.abs(maze.maxLevel - level) < 100)
+            it == "npc" || ((group?.isInGroup(hero.id) ?: true) && hero != null && maze != null && hero.currentHp > 0 && it != id && Math.abs(maze.maxLevel - level) < 100)
         })
         items.add("npc")
         val oid = random.randomItem(items)
         return if(oid == "npc") null else oid
+    }
+
+    private fun getGroupHolder(id: String): GroupHolder? {
+        for(holder in main.groups){
+            if(holder.isInGroup(id)){
+                return holder;
+            }
+        }
+        return null
     }
 }
