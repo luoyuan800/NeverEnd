@@ -71,7 +71,7 @@ public class EffectHandler {
     private static long getEffectAdditionHP(Collection<Effect> effects){
         long hp = 0;
         for(Effect effect : effects){
-            if(effect.isEnable() && effect instanceof HpEffect) {
+            if(effect instanceof HpEffect && effect.isEnable()) {
                 hp += ((HpEffect) effect).getHp();
             }
         }
@@ -89,7 +89,7 @@ public class EffectHandler {
     private static long getEffectAdditionDef(Collection<Effect> effects){
         long value = 0;
         for(Effect effect : effects){
-            if(effect.isEnable() && effect instanceof DefEffect) {
+            if(effect instanceof DefEffect && effect.isEnable()) {
                 value += ((DefEffect) effect).getDef();
             }
         }
@@ -98,7 +98,7 @@ public class EffectHandler {
     private static long getEffectAdditionAgi(Collection<Effect> effects){
         long value = 0;
         for(Effect effect : effects){
-            if(effect.isEnable() && effect instanceof AgiEffect) {
+            if(effect instanceof AgiEffect && effect.isEnable()) {
                 value += ((AgiEffect) effect).getAgi();
             }
         }
@@ -107,7 +107,7 @@ public class EffectHandler {
     private static long getEffectAdditionStr(Collection<Effect> effects){
         long value = 0;
         for(Effect effect : effects){
-            if(effect.isEnable() && effect instanceof StrEffect) {
+            if(effect instanceof StrEffect && effect.isEnable()) {
                 value += ((StrEffect) effect).getStr();
             }
         }
@@ -116,7 +116,7 @@ public class EffectHandler {
     private static long getEffectAdditionMate(Collection<Effect> effects){
         long value = 0;
         for(Effect effect : effects){
-            if(effect.isEnable() && effect instanceof ClickMaterialEffect) {
+            if(effect instanceof ClickMaterialEffect && effect.isEnable()) {
                 value += ((ClickMaterialEffect) effect).getValue();
             }
         }

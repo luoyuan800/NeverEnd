@@ -18,7 +18,7 @@ public class Data {
     public static final float RATE_MAX = 90f;//最高的概率，超过会强制设置为这个值
     public static final int DARKGOLD_RATE_REDUCE = 10;//橙色阶位的二次限制
     public static final String DISABLE_COLOR = "#C0C0C0";
-    public static final String ENABLE_COLOR = "#800080";
+    public static final String ENABLE_COLOR = "#33038C";
     public static final int MAX_PET_COUNT = 100;//最多背包宠物个数
     public static final long FUSE_COST = 2000; //装备升级消耗的锻造
     public static final long BASE_PET_COUNT = 3;

@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.client.display.dialog;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;

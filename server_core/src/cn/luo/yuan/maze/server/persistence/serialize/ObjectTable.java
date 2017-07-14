@@ -76,15 +76,17 @@ public class ObjectTable<T extends Serializable> implements Runnable{
 
     public synchronized T loadObject(String id) {
         T object = null;
-        SoftReference<T> ref = cache.get(id);
-        if (ref != null) {
-            object = ref.get();
-        }
-        if (object == null) {
-            String name = getName(id);
-            object = load(name);
-            if(object instanceof IDModel){
-                cache.put(((IDModel) object).getId(), new SoftReference<T>(object));
+        if(id!=null) {
+            SoftReference<T> ref = cache.get(id);
+            if (ref != null) {
+                object = ref.get();
+            }
+            if (object == null) {
+                String name = getName(id);
+                object = load(name);
+                if (object instanceof IDModel) {
+                    cache.put(((IDModel) object).getId(), new SoftReference<T>(object));
+                }
             }
         }
         return object;

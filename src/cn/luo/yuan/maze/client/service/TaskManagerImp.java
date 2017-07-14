@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by gluo on 6/13/2017.
  */
-public class TaskManagerImp implements TaskManager {
+public class TaskManagerImp implements TaskManager, Runnable {
     private NeverEnd context;
 
     public TaskManagerImp(NeverEnd context) {
@@ -32,6 +32,15 @@ public class TaskManagerImp implements TaskManager {
             @Override
             public boolean match(Task t) {
                 return !t.getFinished() && !t.getStart() && t.canStart(context);
+            }
+        }, null);
+    }
+    public List<Task> canFinishTasks() {
+        return context.getDataManager().loadTask(0, -1, new Index<Task>() {
+
+            @Override
+            public boolean match(Task t) {
+                return !t.getFinished() && t.getStart() && t.getCanFinish();
             }
         }, null);
     }
@@ -76,4 +85,12 @@ public class TaskManagerImp implements TaskManager {
         }
     }
 
+    @Override
+    public void run() {
+        for(Task task : startedTasks()){
+            if(task.canFinished(context)){
+                task.setCanFinish(true);
+            }
+        }
+    }
 }

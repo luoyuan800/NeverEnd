@@ -83,12 +83,17 @@ public class AccessoryHelper {
         Iterator<Accessory> iterator = hero.getAccessories().iterator();
         while (iterator.hasNext()) {
             uMount = iterator.next();
-            if (uMount.getType().equals(accessory.getType())) {
+            if (uMount!=null && uMount.getType().equals(accessory.getType())) {
                 iterator.remove();
-                hero.getEffects().removeAll(uMount.getEffects());
+                for(Effect effect : uMount.getEffects()){
+                    if(effect!=null){
+                        hero.getEffects().remove(effect);
+                    }
+                }
                 uMount.setMounted(false);
                 break;
             }
+            uMount = null;
         }
         if (hero.getAccessories().add(accessory)) {
             hero.getEffects().addAll(accessory.getEffects());

@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.client.display.handler;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.os.Message;
 import android.view.View;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
@@ -27,7 +28,17 @@ public class OnlineActivityOnClickHandler {
     public void onClick(View view){
         switch (view.getId()){
             case R.id.online_shop:
-                new ShopDialog(context).showOnlineShop();
+                Message message = new Message();
+                message.what = 3;
+                message.obj = "正在开启";
+                activity.handler.sendMessage(message);
+                activity.executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        new ShopDialog(context).showOnlineShop();
+                        activity.handler.sendEmptyMessage(4);
+                    }
+                });
                 break;
             case R.id.online_gifts:
                 activity.executor.execute(new Runnable() {

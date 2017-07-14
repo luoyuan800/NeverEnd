@@ -26,15 +26,18 @@ class Task(var name: String, var desc: String) : IDModel, Serializable {
         private const val serialVersionUID: Long = Field.SERVER_VERSION
     }
 
+    var canFinish:Boolean = false
     val preconditionTaskIds = mutableSetOf<String>()
     val preconditionNames = mutableMapOf<String, Int>()
+    val finishedCondition = mutableMapOf<String, Int>()
+    val finishedLost = mutableMapOf<String, Int>()
     var startTime = 0L
     var finished = false
     var finishedTime = 0L
     var start = false;
     var point = 0
     var material = 0
-    val goodes = mutableListOf<Goods>()
+    val goodses = mutableListOf<Goods>()
     val accessories = mutableListOf<Accessory>()
     val pets = mutableListOf<Pet>()
 
@@ -89,8 +92,8 @@ class Task(var name: String, var desc: String) : IDModel, Serializable {
         if (material > 0) {
             context.hero.material += material
         }
-        if (goodes.isNotEmpty()) {
-            for (goods in goodes) {
+        if (goodses.isNotEmpty()) {
+            for (goods in goodses) {
                 context.dataManager.add(goods)
             }
         }
@@ -100,6 +103,28 @@ class Task(var name: String, var desc: String) : IDModel, Serializable {
         for (pet in pets) {
             context.dataManager.savePet(pet)
         }
+    }
+
+    fun canFinished(context: InfoControlInterface):Boolean{
+        for ((key, value) in preconditionNames) {
+            when (value) {
+                Field.PET_TYPE -> {
+                    if (context.dataManager.findPetByType(key).isEmpty()) {
+                        return false
+                    }
+                }
+                Field.GOODS_TYPE -> {
+                    val goods = context.dataManager.loadGoods(key)
+                    if (goods == null || goods.count <= 0) {
+                        return false
+                    }
+                }
+                Field.ACCESSORY_TYPE -> {
+                    context.dataManager.findAccessoryByName(key) ?: return false
+                }
+            }
+        }
+        return true;
     }
 }
 
