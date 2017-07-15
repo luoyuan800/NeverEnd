@@ -37,9 +37,11 @@ public class ClickSkillDialog implements View.OnClickListener {
         dialog.show();
         view.findViewById(R.id.set_baoza_button).setOnClickListener(this);
         view.findViewById(R.id.set_yiji_button).setOnClickListener(this);
+        view.findViewById(R.id.set_material_button).setOnClickListener(this);
         if(help){
             view.findViewById(R.id.set_baoza_button).setVisibility(View.GONE);
             view.findViewById(R.id.set_yiji_button).setVisibility(View.GONE);
+            view.findViewById(R.id.set_material_button).setVisibility(View.GONE);
         }else{
             this.index = index;
             Hero hero = context.getHero();
@@ -58,6 +60,8 @@ public class ClickSkillDialog implements View.OnClickListener {
                     view.findViewById(R.id.set_baoza_button).setVisibility(View.GONE);
                 if(names.contains("一击"))
                     view.findViewById(R.id.set_yiji_button).setVisibility(View.GONE);
+                if(names.contains("点金"))
+                    view.findViewById(R.id.set_material_button).setVisibility(View.GONE);
             }
         }
     }
