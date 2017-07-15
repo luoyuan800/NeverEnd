@@ -5,6 +5,8 @@ import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.skill.*;
 import cn.luo.yuan.maze.utils.Random;
 
+import java.util.Arrays;
+
 import static cn.luo.yuan.maze.service.EffectHandler.*;
 
 /**
@@ -41,6 +43,20 @@ public class SkillHelper {
         hero.getSkills()[index] = skill;
         ((MountAble) skill).mount();
         return true;
+    }
+
+    public static void detectSkillCount(Hero hero){
+        switch ((int)hero.getReincarnate()){
+            case 2:
+                hero.setSkills(Arrays.copyOf(hero.getSkills(),hero.getSkills().length + 1));
+                break;
+            case 4:
+                hero.setSkills(Arrays.copyOf(hero.getSkills(),hero.getSkills().length + 1));
+                break;
+            case 8:
+                hero.setSkills(Arrays.copyOf(hero.getSkills(),hero.getSkills().length + 1));
+                break;
+        }
     }
 
     public static void unMountSkill(MountAble skill, Hero hero) {
