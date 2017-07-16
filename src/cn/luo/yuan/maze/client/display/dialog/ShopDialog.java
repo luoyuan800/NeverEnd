@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.client.display.dialog;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.Handler;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.SellItemAdapter;
@@ -33,19 +34,26 @@ public class ShopDialog {
         this.random = context.getRandom();
     }
 
-    public void showOnlineShop(){
+    public void showOnlineShop(Handler handler){
         ServerService ss = new ServerService(context);
-        show("在线商店", ss.getOnlineSellItems(), new SellItemAdapter.AfterSell() {
+        List<SellItem> sellItems = ss.getOnlineSellItems();
+        handler.post(new Runnable() {
             @Override
-            public void sell(String id, int count) {
-                context.getExecutor().execute(new Runnable() {
+            public void run() {
+                show("在线商店", sellItems, new SellItemAdapter.AfterSell() {
                     @Override
-                    public void run() {
-                        ss.buyOnlineItem(id, count);
+                    public void sell(String id, int count) {
+                        context.getExecutor().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                ss.buyOnlineItem(id, count);
+                            }
+                        });
                     }
                 });
             }
         });
+
     }
 
     public void showLocalShop(){

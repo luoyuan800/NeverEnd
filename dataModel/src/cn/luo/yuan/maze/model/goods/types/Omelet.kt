@@ -3,12 +3,16 @@ package cn.luo.yuan.maze.model.goods.types
 import cn.luo.yuan.maze.model.goods.GoodsProperties
 import cn.luo.yuan.maze.model.goods.UsableGoods
 import cn.luo.yuan.maze.service.InfoControlInterface
+import cn.luo.yuan.maze.utils.Field
 
 /**
  *
  * Created by luoyuan on 2017/7/16.
  */
 class Omelet() : UsableGoods() {
+    companion object {
+        private const val serialVersionUID: Long = Field.SERVER_VERSION
+    }
     override fun perform(properties: GoodsProperties): Boolean {
         val context = properties["context"] as InfoControlInterface
         val hero = properties.hero

@@ -10,6 +10,9 @@ import java.io.Serializable
  * Created by gluo on 5/5/2017.
  */
 abstract class Goods : Serializable, IDModel, OwnedAble, Cloneable {
+    companion object {
+        private const val serialVersionUID: Long = Field.SERVER_VERSION
+    }
     private var delete: Boolean = false
     var lock = false;
     var index = 0

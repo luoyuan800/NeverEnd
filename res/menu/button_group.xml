@@ -31,10 +31,6 @@
             android:enabled="false"
             android:title="---联网功能---"/>
     <item
-            android:id="@+id/net_shop"
-            android:icon="@android:drawable/ic_menu_agenda"
-            android:title="在线商店"/>
-    <item
             android:id="@+id/warehouse"
             android:icon="@android:drawable/ic_menu_agenda"
             android:title="仓库"/>

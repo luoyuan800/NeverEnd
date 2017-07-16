@@ -187,7 +187,7 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
         LogHelper.info("Ranging heroes")
         val sortedByDescending = table.allHeroIds.sortedByDescending {
             val record = table.getRecord(it)
-            val maze = record.data!!.maze
+            val maze = record?.data!!.maze
             maze?.maxLevel ?: 0L
         }
         for (id in sortedByDescending) {

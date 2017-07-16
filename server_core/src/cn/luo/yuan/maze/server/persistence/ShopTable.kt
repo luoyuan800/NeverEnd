@@ -53,6 +53,7 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
                     sellItem.instance = ins
                     sellItem.desc = ins.desc
                     sellItem.type = "物品"
+                    sellItem.name = ins.name
                 }
                 "accessory" -> {
                     val acc = accessoryDb!!.loadObject(rs.getString("ref"))

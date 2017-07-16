@@ -35,7 +35,7 @@ public class OnlineActivityOnClickHandler {
                 activity.executor.execute(new Runnable() {
                     @Override
                     public void run() {
-                        new ShopDialog(context).showOnlineShop();
+                        new ShopDialog(context).showOnlineShop(activity.handler);
                         activity.handler.sendEmptyMessage(4);
                     }
                 });

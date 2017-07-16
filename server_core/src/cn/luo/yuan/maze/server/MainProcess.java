@@ -4,25 +4,22 @@ import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.original.*;
 import cn.luo.yuan.maze.model.goods.Goods;
+import cn.luo.yuan.maze.model.goods.types.Grill;
 import cn.luo.yuan.maze.model.goods.types.Medallion;
+import cn.luo.yuan.maze.model.goods.types.Omelet;
+import cn.luo.yuan.maze.model.goods.types.ResetSkill;
 import cn.luo.yuan.maze.server.model.User;
-import cn.luo.yuan.maze.server.persistence.ExchangeTable;
-import cn.luo.yuan.maze.server.persistence.HeroTable;
-import cn.luo.yuan.maze.server.persistence.NPCTable;
-import cn.luo.yuan.maze.server.persistence.ShopTable;
-import cn.luo.yuan.maze.server.persistence.WarehouseTable;
+import cn.luo.yuan.maze.server.persistence.*;
 import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection;
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
 import cn.luo.yuan.maze.task.Task;
+import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -49,6 +46,7 @@ public class MainProcess {
     private File heroDir;
     private DatabaseConnection database;
     private ShopTable shop;
+    private cn.luo.yuan.maze.utils.Random random = new Random(System.currentTimeMillis());
 
     public MainProcess(String root) throws IOException, ClassNotFoundException {
         this.root = new File(root);
@@ -80,7 +78,7 @@ public class MainProcess {
             for (String heroId : heroTable.getAllHeroIds()) {
                 try {
                     ServerRecord record = heroTable.getRecord(heroId);
-                    if (record!=null && record.getData() != null && record.getData().getHero() != null) {
+                    if (record != null && record.getData() != null && record.getData().getHero() != null) {
                         records.add(record);
                     }
                 } catch (Exception e) {
@@ -97,7 +95,7 @@ public class MainProcess {
                 ServerData data = records.get(i).getData();
                 if (data != null && data.getHero() != null)
                     sb.append(data.getHero().getDisplayName())
-                            .append(data.getMaze()!=null ? ( "&nbsp;" + StringUtils.formatNumber(data.getMaze().getMaxLevel()) + "层") : "")
+                            .append(data.getMaze() != null ? ("&nbsp;" + StringUtils.formatNumber(data.getMaze().getMaxLevel()) + "层") : "")
                             .append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(records.get(i).winRate()).append("<br>");
             }
         } catch (Exception e) {
@@ -152,12 +150,32 @@ public class MainProcess {
 
     public Serializable openOnlineGift(String ownerId) {
         ServerRecord record = heroTable.getRecord(ownerId);
-        if(record!=null && record.getGift() > 0) {
-            Medallion medallion = new Medallion();
-            medallion.setCount(1);
-            record.setGift(record.getGift() - 1);
-            return medallion;
-        }else{
+        if (record != null && record.getGift() > 0) {
+            try {
+                switch (random.nextInt(5)) {
+                    case 0:
+                        Medallion medallion = new Medallion();
+                        medallion.setCount(1);
+                        return medallion;
+                    case 1:
+                        ResetSkill resetSkill = new ResetSkill();
+                        resetSkill.setCount(1);
+                        return resetSkill;
+                    case 2:
+                        Grill grill = new Grill();
+                        grill.setCount(1);
+                        return grill;
+                    case 3:
+                        Omelet omelet = new Omelet();
+                        omelet.setCount(1);
+                        return omelet;
+                    default:
+                        return null;
+                }
+            } finally {
+                record.setGift(record.getGift() - 1);
+            }
+        } else {
             return null;
         }
     }
@@ -211,7 +229,7 @@ public class MainProcess {
 
     }
 
-    public void save(){
+    public void save() {
         try {
             heroTable.save();
         } catch (IOException e) {
@@ -220,8 +238,8 @@ public class MainProcess {
     }
 
     public void start() {
-        if(database!=null){
-            shop = new ShopTable(database,root);
+        if (database != null) {
+            shop = new ShopTable(database, root);
         }
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
@@ -330,10 +348,10 @@ public class MainProcess {
     }
 
     public boolean submitExchange(String ownerId, String limit, ExchangeObject eo, int expectType) {
-        if(process.exchangeTable.addExchange(eo, ownerId, limit, expectType)){
+        if (process.exchangeTable.addExchange(eo, ownerId, limit, expectType)) {
             LogHelper.info(eo + " submitted!");
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -424,6 +442,31 @@ public class MainProcess {
         return null;
     }
 
+    public DatabaseConnection getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(DatabaseConnection database) {
+        this.database = database;
+    }
+
+    public List<SellItem> getOnlineSell() {
+        if (shop != null) {
+            return shop.getAllSelling();
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    public void buy(String id, int count) {
+        if (shop != null) {
+            SellItem item = new SellItem();
+            item.id = id;
+            item.count = count;
+            shop.sell(item);
+        }
+    }
+
     private static Effect buildEffect(String effectName, String value) {
         switch (effectName) {
             case "SkillRateEffect":
@@ -468,33 +511,6 @@ public class MainProcess {
         root.delete();
     }
 
-    public DatabaseConnection getDatabase() {
-        return database;
-    }
-
-    public void setDatabase(DatabaseConnection database) {
-        this.database = database;
-    }
-
-    private Map<String, HeroTable> initHeroTableCache(File root) {
-        Map<String, HeroTable> cache = new HashMap<>();
-        if (root.exists()) {
-            for (String name : root.list()) {
-                try {
-                    HeroTable table = new HeroTable(root);
-                    if (table.getHero(name, 0) != null) {
-                        cache.put(name, table);
-                    }
-                } catch (Exception e) {
-                    LogHelper.error(e);
-                }
-            }
-        } else {
-            LogHelper.info("create root file " + root.getAbsolutePath() + ", result: " + root.mkdirs());
-        }
-        return cache;
-    }
-
     @NotNull
     private ExchangeObject createExchangeObject(String ownerId, Object objMy) throws Exception {
         ExchangeObject exMy = new ExchangeObject((IDModel) objMy, ownerId);
@@ -509,22 +525,5 @@ public class MainProcess {
         }
         exMy.setSubmitTime(System.currentTimeMillis());
         return exMy;
-    }
-
-    public List<SellItem> getOnlineSell(){
-        if(shop!=null){
-            return shop.getAllSelling();
-        }else{
-            return Collections.emptyList();
-        }
-    }
-
-    public void buy(String id, int count){
-        if(shop!=null){
-            SellItem item = new SellItem();
-            item.id = id;
-            item.count = count;
-            shop.sell(item);
-        }
     }
 }
