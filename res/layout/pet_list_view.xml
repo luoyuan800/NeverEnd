@@ -29,5 +29,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/pet_tag"
                 />
+
     </LinearLayout>
 </LinearLayout>

@@ -256,7 +256,7 @@ public class DataManager implements DataManagerInterface {
         return petLoader.loadLimit(start, rows, new Index<Pet>() {
             @Override
             public boolean match(Pet pet) {
-                return pet.getHeroIndex() == index && (pet.getName().contains(keyWord) || pet.getTag().contains(keyWord));
+                return pet.getHeroIndex() == index && (pet.getName().contains(keyWord) || (StringUtils.isNotEmpty(pet.getTag()) && pet.getTag().contains(keyWord)));
             }
         }, comparator);
     }

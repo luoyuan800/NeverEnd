@@ -9,37 +9,18 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.utils.StringUtils;
 
 public class LoadMoreListView extends ListView implements OnScrollListener,
         OnClickListener {
-    // 点击加载更多枚举所有状态
-    private enum DListViewLoadingMore {
-        LV_LOADING, // 普通状态
-        LV_NORMAL, // 加载状态
-        LV_OVER // 结束状态
-    }
-
-    /**
-     * 自定义接口
-     */
-    public interface OnRefreshLoadingMoreListener {
-        /**
-         * 点击加载更多
-         */
-        void onLoadMore(LoadMoreListView loadMoreListView);
-
-    }
-
-
     private DListViewLoadingMore loadingMoreState = DListViewLoadingMore.LV_NORMAL;// 加载更多默认状态.
-
     private View mLoadingView;// 加载中...View(mFootView)
-
     private TextView mLoadMoreTextView;// 加载更多.(mFootView)
-
     private OnRefreshLoadingMoreListener onRefreshLoadingMoreListener;// 下拉刷新接口（自定义）
+    private SearchView queryView;
 
     public LoadMoreListView(Context context) {
         super(context, null);
@@ -56,30 +37,34 @@ public class LoadMoreListView extends ListView implements OnScrollListener,
      */
     public void initDragListView(Context context) {
         initLoadMoreView(context);// 初始化footer
-
+        queryView = new SearchView(context);
+        queryView.setVisibility(View.GONE);
+        addHeaderView(queryView);
         setOnScrollListener(this);// ListView滚动监听
     }
 
+    public void initQuery(OnQueryChange onQueryChange){
+        queryView.setVisibility(View.VISIBLE);
+        queryView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if(onQueryChange!=null){
+                    onQueryChange.onQueryChange(query);
+                    return true;
+                }
+                return false;
+            }
 
-    /**
-     * 初始化底部加载更多控件
-     */
-    private void initLoadMoreView(Context context) {
-        View mFootView = LayoutInflater.from(context).inflate(R.layout.footer, (ViewGroup) this.findViewById(R.id.load_more_view));
-
-        View mLoadMoreView = mFootView.findViewById(R.id.load_more_view);
-
-        mLoadMoreTextView = (TextView) mFootView
-                .findViewById(R.id.load_more_tv);
-
-        mLoadingView = mFootView
-                .findViewById(R.id.loading_layout);
-
-        mLoadMoreView.setOnClickListener(this);
-
-        addFooterView(mFootView);
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(StringUtils.isEmpty(newText)){
+                    onQueryChange.onQueryChange(StringUtils.EMPTY_STRING);
+                    return true;
+                }
+                return false;
+            }
+        });
     }
-
 
     /**
      * 底部点击事件
@@ -122,6 +107,51 @@ public class LoadMoreListView extends ListView implements OnScrollListener,
 
     }
 
+    public void setOnLoadListener(OnRefreshLoadingMoreListener loadListener) {
+        this.onRefreshLoadingMoreListener = loadListener;
+    }
+
+    // 点击加载更多枚举所有状态
+    private enum DListViewLoadingMore {
+        LV_LOADING, // 普通状态
+        LV_NORMAL, // 加载状态
+        LV_OVER // 结束状态
+    }
+
+    /**
+     * 自定义接口
+     */
+    public interface OnRefreshLoadingMoreListener {
+        /**
+         * 点击加载更多
+         */
+        void onLoadMore(LoadMoreListView loadMoreListView);
+
+    }
+
+    public interface OnQueryChange {
+        void onQueryChange(String query);
+    }
+
+    /**
+     * 初始化底部加载更多控件
+     */
+    private void initLoadMoreView(Context context) {
+        View mFootView = LayoutInflater.from(context).inflate(R.layout.footer, (ViewGroup) this.findViewById(R.id.load_more_view));
+
+        View mLoadMoreView = mFootView.findViewById(R.id.load_more_view);
+
+        mLoadMoreTextView = (TextView) mFootView
+                .findViewById(R.id.load_more_tv);
+
+        mLoadingView = mFootView
+                .findViewById(R.id.loading_layout);
+
+        mLoadMoreView.setOnClickListener(this);
+
+        addFooterView(mFootView);
+    }
+
     // 更新Footview视图
     private void switchFooterViewState(DListViewLoadingMore state) {
         switch (state) {
@@ -146,10 +176,5 @@ public class LoadMoreListView extends ListView implements OnScrollListener,
                 break;
         }
         loadingMoreState = state;
-    }
-
-
-    public void setOnLoadListener(OnRefreshLoadingMoreListener loadListener){
-        this.onRefreshLoadingMoreListener = loadListener;
     }
 }

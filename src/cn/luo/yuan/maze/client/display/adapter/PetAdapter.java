@@ -13,7 +13,9 @@ import cn.luo.yuan.maze.client.service.PetMonsterLoder;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.persistence.DataManager;
+import cn.luo.yuan.maze.utils.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -128,7 +130,7 @@ public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefres
 
     @Override
     public void onLoadMore(LoadMoreListView loadMoreListView) {
-        List<Pet> loadPets = dataManager.loadPets(pets.size(), 20, "", getSort());
+        List<Pet> loadPets = dataManager.loadPets(pets.size(), 20, limitKeyWord, getSort());
         if (loadPets.size() == 0) {
             loadMoreListView.onLoadMoreComplete(true);
         } else {
@@ -157,7 +159,16 @@ public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefres
 
     public void setLimitKeyWord(String limitKeyWord) {
         this.limitKeyWord = limitKeyWord;
-        loadPetsData();
+        ArrayList<Pet> pets = new ArrayList<>(this.pets);
+        for(Pet pet : pets){
+            if(!pet.getName().contains(limitKeyWord) && !(StringUtils.isNotEmpty(pet.getTag()) && pet.getTag().contains(limitKeyWord))){
+                this.pets.remove(pet);
+            }
+        }
+        if(pets.size() == 0){
+            loadPetsData();
+        }
+        notifyDataSetChanged();
     }
 
     public void removePet(Pet pet) {

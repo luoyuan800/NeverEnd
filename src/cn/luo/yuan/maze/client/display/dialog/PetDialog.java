@@ -79,21 +79,10 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                 });
             }
         });
-        tag.addTextChangedListener(new TextWatcher() {
+        loadMoreListView.initQuery(new LoadMoreListView.OnQueryChange() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                currentPet.setTag(s.toString());
-                control.getDataManager().savePet(currentPet);
+            public void onQueryChange(String query) {
+                adapter.setLimitKeyWord(query);
             }
         });
         dialog.findViewById(R.id.sort_intimacy).setOnClickListener(this);

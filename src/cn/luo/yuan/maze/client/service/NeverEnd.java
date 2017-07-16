@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
 import cn.luo.yuan.maze.client.display.handler.GameActivityViewHandler;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
 import cn.luo.yuan.maze.client.utils.LogHelper;
@@ -334,7 +335,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
         }
         SkillParameter sp = new SkillParameter(hero);
         long totalPoint = resetSkill(sp);
-        hero.setHpGrow(hero.getReincarnate()*Data.GROW_INCRESE  + hero.getHpGrow());
+        hero.setAtkGrow(hero.getReincarnate()*Data.GROW_INCRESE  + hero.getAtkGrow());
         hero.setDefGrow(hero.getReincarnate()*Data.GROW_INCRESE  + hero.getDefGrow());
         hero.setHpGrow(hero.getReincarnate()*Data.GROW_INCRESE  + hero.getHpGrow());
         hero.setMaxHp(hero.getReincarnate() * 20);
@@ -351,6 +352,10 @@ public class NeverEnd extends Application implements InfoControlInterface {
         viewHandler.refreshAccessory(hero);
         save();
         return hero.getReincarnate();
+    }
+
+    public void showPopup(String msg){
+        SimplerDialogBuilder.build(msg, Resource.getString(R.string.close), null, context);
     }
 
     public long resetSkill(@NotNull SkillParameter sp) {

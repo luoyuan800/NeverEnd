@@ -31,4 +31,6 @@ public interface InfoControlInterface {
     ScheduledExecutorService getExecutor();
 
     long resetSkill(@NotNull SkillParameter sp);
+
+    void showPopup(String msg);
 }

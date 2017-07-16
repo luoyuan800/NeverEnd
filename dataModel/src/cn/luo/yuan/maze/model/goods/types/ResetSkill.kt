@@ -25,13 +25,15 @@ class ResetSkill : UsableGoods() {
     override var price: Long = 100000L
 
 
-    override fun use(properties: GoodsProperties): Boolean {
+    override fun perform(properties: GoodsProperties): Boolean {
         if(count > 0){
             val context = properties["context"] as InfoControlInterface
             val sp = SkillParameter(properties.hero)
-            var totalPoint = context.resetSkill(sp)
+            val totalPoint = context.resetSkill(sp)
+            properties.hero.point += totalPoint
+            return true
         }
-        return super.use(properties)
+        return false
     }
 
 }
