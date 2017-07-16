@@ -64,4 +64,9 @@ public class MockGameContext implements InfoControlInterface {
     public long resetSkill(@NotNull SkillParameter sp) {
         return 0;
     }
+
+    @Override
+    public void showPopup(String msg) {
+
+    }
 }

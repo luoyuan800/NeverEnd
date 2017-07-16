@@ -86,6 +86,11 @@ public class TestRandomEventService {
             public long resetSkill(@NotNull SkillParameter sp) {
                 return 0;
             }
+
+            @Override
+            public void showPopup(String msg) {
+
+            }
         };
         RandomEventService service = spy(new RandomEventService(gameContext));
         int i = 100;

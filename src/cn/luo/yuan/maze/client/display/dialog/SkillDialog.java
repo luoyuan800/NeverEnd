@@ -14,6 +14,8 @@ import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.service.SkillHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 
+import java.util.ArrayList;
+
 /**
  * Created by luoyuan on 2017/5/28.
  */
@@ -41,13 +43,23 @@ public class SkillDialog implements View.OnClickListener {
         tabHost.setup();
         //Hero Skills
         tabHost.addTab(tabHost.newTabSpec("hero_skill").setIndicator(Resource.getString(R.string.hero_skill)).setContent(R.id.hero_skill));
-        Button heroHit = (Button) dialog.findViewById(R.id.hero_hit);
-        heroHit.setOnClickListener(this);
+        initSkillButton((Button) dialog.findViewById(R.id.hero_hit)
+                , (Button) dialog.findViewById(R.id.fight_back), (Button)dialog.findViewById(R.id.dodge));
 
         //Evil skills
         tabHost.addTab(tabHost.newTabSpec("evil_skill").setIndicator(Resource.getString(R.string.evil_skill)).setContent(R.id.evil_skill));
-        Button evilTalent = (Button) dialog.findViewById(R.id.evil_talent);
-        evilTalent.setOnClickListener(this);
+        initSkillButton((Button) dialog.findViewById(R.id.evil_talent));
+    }
+
+    private void initSkillButton(Button ... skillButtons) {
+        Skill skill;
+        for(Button b : skillButtons) {
+            b.setOnClickListener(this);
+            skill = SkillFactory.geSkillByName(b.getTag().toString(), context.getDataManager());
+            if (skill != null) {
+                b.setText(Html.fromHtml(skill.getSkillName()));
+            }
+        }
     }
 
     public void onClick(View view) {

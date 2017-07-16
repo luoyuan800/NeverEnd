@@ -16,7 +16,7 @@ class Grill() : UsableGoods() {
             val random = context.random
             val hero = properties.hero
             val index = random.nextInt(10)
-                var value = 0L
+                var value : Long
                 when (index) {
                     0 -> {
                         value = random.nextLong(hero.str / 50000) + 1
@@ -41,7 +41,7 @@ class Grill() : UsableGoods() {
         return false
     }
 
-    override var desc: String = "烤肉"
-    override var name: String = "一团黑乎乎的烤肉，不知道是什么味道。"
+    override var desc: String = "一团黑乎乎的烤肉，不知道是什么味道。"
+    override var name: String = "烤肉"
     override var price = 1000L
 }

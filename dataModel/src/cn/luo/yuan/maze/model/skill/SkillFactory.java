@@ -1,6 +1,8 @@
 package cn.luo.yuan.maze.model.skill;
 
 import cn.luo.yuan.maze.model.skill.evil.EvilTalent;
+import cn.luo.yuan.maze.model.skill.hero.Dodge;
+import cn.luo.yuan.maze.model.skill.hero.FightBack;
 import cn.luo.yuan.maze.model.skill.hero.HeroHit;
 import cn.luo.yuan.maze.persistence.DataManagerInterface;
 
@@ -17,6 +19,12 @@ public class SkillFactory {
                     break;
                 case "EvilTalent":
                     skill = new EvilTalent();
+                    break;
+                case "FightBack":
+                    skill = new FightBack();
+                    break;
+                case "Dodge":
+                    skill = new Dodge();
                     break;
             }
         }

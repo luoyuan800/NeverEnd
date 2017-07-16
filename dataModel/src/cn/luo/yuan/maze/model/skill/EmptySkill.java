@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model.skill;
 
 import cn.luo.yuan.maze.model.skill.result.SkillResult;
+import cn.luo.yuan.maze.utils.StringUtils;
 
 /**
  * Created by gluo on 4/27/2017.
@@ -38,6 +39,11 @@ public class EmptySkill implements Skill {
     @Override
     public void disable() {
 
+    }
+
+    @Override
+    public String getSkillName() {
+        return StringUtils.EMPTY_STRING;
     }
 
     @Override

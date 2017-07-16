@@ -19,25 +19,15 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
     private long minHarm = 50;
     private long maxHarm = 300;
     private long level = 1;
+    private HeroModel model = new HeroModel(this);
+
     @Override
     public boolean canMount(SkillParameter parameter) {
-        InfoControlInterface context = parameter.get("context");
-        Skill skill = SkillFactory.geSkillByName("EvilTalent",context.getDataManager());
-        if(skill!=null && skill.isEnable()){
-            return false;
-        }else {
-            return isEnable();
-        }
+        return model.canMount(parameter);
     }
 
     public boolean canEnable(SkillParameter parameter){
-        InfoControlInterface context = parameter.get("context");
-        Skill skill = SkillFactory.geSkillByName("EvilTalent",context.getDataManager());
-        if(skill!=null && skill.isEnable()){
-            return false;
-        }else {
-            return isEnablePointEnough(parameter);
-        }
+        return model.canEnable(parameter);
     }
 
     @Override
@@ -47,7 +37,8 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
             random = new Random(System.currentTimeMillis());
         }
         long harm = minHarm + random.nextLong(maxHarm - minHarm);
-        HarmAble target = parameter.get("target");
+
+        HarmAble target = parameter.get(SkillParameter.TARGET);
         if(target!=null){
             harm -= target.getDef();
             if(harm <= 0){
@@ -100,6 +91,10 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
     @Override
     public String getName() {
         return "勇者之击 X " + getLevel();
+    }
+
+    public String getSkillName(){
+        return model.getSkillName();
     }
 
     @Override

@@ -247,8 +247,8 @@ public class DataManager implements DataManagerInterface {
     }
 
     @Override
-    public Goods loadGoods(String name) {
-        return goodsLoader.load(buildIdWithIndex(name));
+    public Goods loadGoods(String classSimpleName) {
+        return goodsLoader.load(buildIdWithIndex(classSimpleName));
     }
 
     @Override
@@ -263,11 +263,11 @@ public class DataManager implements DataManagerInterface {
 
     public void saveGoods(Goods goods) {
         goods.setHeroIndex(index);
-        goodsLoader.save(goods, buildIdWithIndex(goods.getName()));
+        goodsLoader.save(goods, buildIdWithIndex(goods.getClass().getSimpleName()));
     }
 
     public void addGoods(Goods newGoods) {
-        Goods d = goodsLoader.load(buildIdWithIndex(newGoods.getName()));
+        Goods d = goodsLoader.load(buildIdWithIndex(newGoods.getClass().getSimpleName()));
         boolean load = false;
         if (d == null || d.isDelete()) {
             saveGoods(newGoods);

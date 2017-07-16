@@ -6,6 +6,8 @@ import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.goods.Goods;
+import cn.luo.yuan.maze.model.goods.types.Grill;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 
 /**
@@ -35,7 +37,7 @@ public class BaoZha extends ClickSkill {
             long harm = (long) (monster.getMaxHp() * 0.9);
             monster.setHp(monster.getHp() - harm);
             context.addMessage("使用技能" + getName() + "损失了宠物" + pet.getDisplayName() + "， 对" + (monster instanceof NameObject ? ((NameObject) monster).getDisplayName() : "") + "造成了" + harm + "点伤害。");
-            /* GoodsType grill = GoodsType.Grill;
+            Goods grill = context.getDataManager().loadGoods(Grill.class.getSimpleName());
            if(monster.getHp() <= 0){
                 grill.setCount(grill.getCount() + 2);
                 context.addMessage("获得了两块烤肉");
@@ -43,8 +45,6 @@ public class BaoZha extends ClickSkill {
                 grill.setCount(grill.getCount() + 1);
                 context.addMessage("获得了一块烤肉");
             }
-            grill.save();
-            context.getHandler().sendEmptyMessage(152);*/
         }
     }
 

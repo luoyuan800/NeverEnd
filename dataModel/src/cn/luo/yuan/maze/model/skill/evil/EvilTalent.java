@@ -13,6 +13,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
  */
 public class EvilTalent extends DefSkill implements UpgradeAble {
     private long level = 1;
+    private EvilModel model = new EvilModel(this);
 
     @Override
     public String getName() {
@@ -29,23 +30,11 @@ public class EvilTalent extends DefSkill implements UpgradeAble {
 
     @Override
     public boolean canMount(SkillParameter parameter) {
-        InfoControlInterface context = parameter.get("context");
-        Skill skill = SkillFactory.geSkillByName("HeroHit", context.getDataManager());
-        if (skill != null && skill.isEnable()) {
-            return false;
-        } else {
-            return isEnable();
-        }
+        return model.canEnable(parameter);
     }
 
     public boolean canEnable(SkillParameter parameter){
-        InfoControlInterface context = parameter.get("context");
-        Skill skill = SkillFactory.geSkillByName("HeroHit", context.getDataManager());
-        if(skill!=null && skill.isEnable()){
-            return false;
-        }else {
-            return isEnablePointEnough(parameter);
-        }
+        return model.canEnable(parameter);
     }
 
     @Override
@@ -91,5 +80,9 @@ public class EvilTalent extends DefSkill implements UpgradeAble {
     public boolean
     canUpgrade(SkillParameter parameter) {
         return isEnable() && getRate() < 15f && isUpgradePointEnough(parameter);
+    }
+
+    public String getSkillName(){
+        return model.getSkillName();
     }
 }

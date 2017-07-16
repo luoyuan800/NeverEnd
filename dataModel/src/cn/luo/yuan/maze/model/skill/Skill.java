@@ -16,7 +16,9 @@ public interface Skill extends Serializable, NameObject, IDModel {
     long serialVersionUID = Field.SERVER_VERSION;
 
     SkillResult invoke(SkillParameter parameter);
+
     void enable(SkillParameter parameter);
+
     default boolean canEnable(SkillParameter parameter) {
         return isEnablePointEnough(parameter);
     }
@@ -26,5 +28,7 @@ public interface Skill extends Serializable, NameObject, IDModel {
     }
 
     boolean isEnable();
+
     void disable();
+    String getSkillName();
 }

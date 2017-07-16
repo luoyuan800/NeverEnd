@@ -2,7 +2,6 @@ package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.listener.BattleEndListener;
 import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Group;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Hero;
@@ -24,7 +23,7 @@ import static cn.luo.yuan.maze.service.ListenerService.battleEndListeners;
 /**
  * Created by luoyuan on 2017/4/2.
  */
-public class BattleService {
+public class BattleService{
     private HarmAble monster;
     private HarmAble hero;
     private Random random;
@@ -114,40 +113,18 @@ public class BattleService {
             }
         }
         if(atker instanceof SkillAbleObject) {
-            if (releaseSkill((SkillAbleObject)atker, defender, random)) {
+            if (releaseSkill((SkillAbleObject)atker, defender, random, minHarm)) {
                 return;
             }
         }
         if(defender instanceof SkillAbleObject){
-            if(releaseSkill((SkillAbleObject) defender, atker, random)){
+            if(releaseSkill((SkillAbleObject) defender, atker, random, minHarm)){
                 return;
             }
         }
 
         if(!defender.isDodge(random)) {
-            long atk = atker.getUpperAtk();
-            atk = atk / 3;
-            atk = atk * 2 + random.nextLong(atk);
-            boolean isHit = atker.isHit(random);
-            if (isHit) {
-                if (atker instanceof NameObject)
-                    battleMessage.hit((NameObject) atker);
-                atk *= 2;//暴击有效攻击力翻倍
-            }
-            boolean isParry = defender.isParry(random);
-            long defend = defender.getUpperDef();
-            defend = defend / 2;
-            defend = defend + random.nextLong(defend);
-            if (isParry) {
-                battleMessage.parry((NameObject)defender);
-                //格挡，生效防御力三倍
-                defend *= 3;
-            }
-            long harm = atk - defend;
-            if (harm <= 0) {
-                harm = random.nextLong(minHarm);
-            }
-            harm = elementAffectHarm(atker.getElement(), defender.getElement(), harm);
+            long harm = BattleServiceBase.getHarm(atker, defender, minHarm, random, battleMessage);
             defender.setHp(defender.getHp() - harm);
             if (atker instanceof NameObject && defender instanceof NameObject)
                 battleMessage.harm((NameObject) atker, (NameObject) defender, harm);
@@ -158,14 +135,6 @@ public class BattleService {
         }
     }
 
-    private long elementAffectHarm(Element atker, Element defer, long baseHarm) {
-        if (atker.restriction(defer) || (defer == Element.NONE && atker != Element.NONE)) {
-            baseHarm *= 1.5;
-        } else if (defer.restriction(atker) || (atker == Element.NONE && defer != Element.NONE)) {
-            baseHarm *= 0.5;
-        }
-        return baseHarm;
-    }
 
     private void petActionOnAtk(PetOwner hero, HarmAble monster) {
         for (Pet pet : hero.getPets()) {
@@ -213,13 +182,12 @@ public class BattleService {
         return pet.getHp() > 0 && 100 + random.nextInt(100) < random.nextLong(pet.getIntimacy());
     }
 
-    private boolean releaseSkill(SkillAbleObject atker, HarmAble target, Random random) {
+    private boolean releaseSkill(SkillAbleObject atker, HarmAble target, Random random, long level) {
         AtkSkill atkSkill = null;
-        SkillParameter atkPara = new SkillParameter(atker);
-        atkPara.set("random", random);
-        atkPara.set("target", target);
+        SkillParameter skillPara = getSkillParameter(atker, target, random, level);
+
         for (Skill skill : atker.getSkills()) {
-            if (skill instanceof AtkSkill && ((AtkSkill) skill).invokeAble(atkPara)) {
+            if (skill instanceof AtkSkill && ((AtkSkill) skill).invokeAble(skillPara)) {
                 atkSkill = (AtkSkill) skill;
                 break;
             }
@@ -234,17 +202,14 @@ public class BattleService {
             }
             if (target instanceof SkillAbleObject) {
                 DefSkill defSkill = null;
-                SkillParameter defPara = new SkillParameter(atker);
-                defPara.set("random", random);
-                defPara.set("target", atker);
                 for (Skill skill : ((SkillAbleObject) target).getSkills()) {
-                    if (skill instanceof DefSkill && ((DefSkill) skill).invokeAble(defPara)) {
+                    if (skill instanceof DefSkill && ((DefSkill) skill).invokeAble(skillPara)) {
                         defSkill = (DefSkill) skill;
                         break;
                     }
                 }
                 if(defSkill!=null){
-                    SkillResult result = defSkill.invoke(defPara);
+                    SkillResult result = defSkill.invoke(skillPara);
                     battleMessage.releaseSkill(target,defSkill );
                     if(result instanceof HasMessageResult){
                         for(String msg : result.getMessages()){
@@ -253,7 +218,7 @@ public class BattleService {
                     }
                 }
             }
-            SkillResult result = atkSkill.invoke(atkPara);
+            SkillResult result = atkSkill.invoke(skillPara);
             battleMessage.releaseSkill((HarmAble)atker, atkSkill);
             if(result instanceof HasMessageResult){
                 for(String msg : result.getMessages()){
@@ -275,5 +240,14 @@ public class BattleService {
             return true;
         }
         return false;
+    }
+
+    private SkillParameter getSkillParameter(SkillAbleObject atker, HarmAble target, Random random, long level) {
+        SkillParameter atkPara = new SkillParameter(atker);
+        atkPara.set(SkillParameter.RANDOM, random);
+        atkPara.set(SkillParameter.TARGET, target);
+        atkPara.set(SkillParameter.MINHARM, level);
+        atkPara.set(SkillParameter.MESSAGE, battleMessage);
+        return atkPara;
     }
 }
