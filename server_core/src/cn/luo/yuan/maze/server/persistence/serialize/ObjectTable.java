@@ -153,7 +153,6 @@ public class ObjectTable<T extends Serializable> implements Runnable{
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(entry))){
             oos.writeObject(object);
             oos.flush();
-            oos.close();
         }
     }
 
@@ -169,10 +168,9 @@ public class ObjectTable<T extends Serializable> implements Runnable{
     private T loadEntry(File entry){
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(entry))) {
             Object o = ois.readObject();
-            ois.close();
             return table.cast(o);
         } catch (Exception e) {
-            //ignore e.printStackTrace();
+            LogHelper.info("Couldn't load " + entry + ", because: " + e.getMessage());
             return null;
         }
     }

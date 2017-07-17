@@ -45,7 +45,7 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
                         var ogroup: Group? = null
                         var omaze: Maze
                         var otherRecord: ServerRecord
-                        if (oid != null) {
+                        if (oid != null && oid!="npc") {
                             ohero = table.getHero(oid, 0)
                             ogroup = getGroup(oid)
                             omaze = table.getMaze(oid, 0)
@@ -187,11 +187,14 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
         LogHelper.info("Ranging heroes")
         val sortedByDescending = table.allHeroIds.sortedByDescending {
             val record = table.getRecord(it)
-            val maze = record?.data!!.maze
+            val maze = record?.data?.maze
             maze?.maxLevel ?: 0L
         }
         for (id in sortedByDescending) {
-            table.getRecord(id).range = sortedByDescending.indexOf(id) + 1
+            val record = table.getRecord(id)
+            if(record!=null) {
+                record.range = sortedByDescending.indexOf(id) + 1
+            }
         }
     }
 

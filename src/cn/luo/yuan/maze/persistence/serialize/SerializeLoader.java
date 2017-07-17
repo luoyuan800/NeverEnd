@@ -43,6 +43,7 @@ public class SerializeLoader<T extends Serializable> {
 
     public void update(T object) {
         if (object instanceof IDModel) {
+            db.delete(((IDModel) object).getId());
             db.save(object, ((IDModel) object).getId());
         } else {
             db.save(object);

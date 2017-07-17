@@ -334,6 +334,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
             AccessoryHelper.unMountAccessory(accessory, hero);
         }
         SkillParameter sp = new SkillParameter(hero);
+        sp.set(SkillParameter.CONTEXT, this);
         long totalPoint = resetSkill(sp);
         hero.setAtkGrow(hero.getReincarnate()*Data.GROW_INCRESE  + hero.getAtkGrow());
         hero.setDefGrow(hero.getReincarnate()*Data.GROW_INCRESE  + hero.getDefGrow());
@@ -360,6 +361,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
 
     public long resetSkill(@NotNull SkillParameter sp) {
         long totalPoint = 0L;
+        sp.set(SkillParameter.CONTEXT, this);
         for( Skill skill : dataManager.loadAllSkill()){
             if(skill instanceof MountAble){
                 if(((MountAble) skill).isMounted()){

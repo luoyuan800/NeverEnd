@@ -22,15 +22,8 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  * Created by luoyuan on 2017/3/18.
  */
 public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, NameObject, PetOwner {
-    private boolean delete;
-    @Override
-    public boolean isDelete() {
-        return delete;
-    }
-    public void markDelete(){
-        delete = true;
-    }
     private static final long serialVersionUID = Field.SERVER_VERSION;
+    private boolean delete;
     private int index;//存档编号
     private String name;//名字
     private EncodeLong maxHp = new EncodeLong(20);//血上限
@@ -56,8 +49,16 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     private Gift gift;
     private EncodeLong click = new EncodeLong(0);
     private Race race;
-
     public Hero() {
+    }
+
+    @Override
+    public boolean isDelete() {
+        return delete;
+    }
+
+    public void markDelete() {
+        delete = true;
     }
 
     @NotNull
@@ -113,23 +114,25 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     public long getAgi() {
         return agi.getValue();
     }
-    public long getMaxAgi() {
-        return agi.getValue() + EffectHandler.getEffectAdditionLongValue(EffectHandler.AGI, getEffects());
-    }
 
     public void setAgi(long agi) {
         this.agi.setValue(agi);
     }
 
+    public long getMaxAgi() {
+        return agi.getValue() + EffectHandler.getEffectAdditionLongValue(EffectHandler.AGI, getEffects());
+    }
+
     public long getStr() {
         return str.getValue();
-    }
-    public long getMaxStr() {
-        return str.getValue() + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects());
     }
 
     public void setStr(long str) {
         this.str.setValue(str);
+    }
+
+    public long getMaxStr() {
+        return str.getValue() + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects());
     }
 
     public String getName() {
@@ -162,7 +165,7 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     }
 
     public void setHp(long hp) {
-        if(hp > maxHp.getValue()){
+        if (hp > maxHp.getValue()) {
             hp = maxHp.getValue();
         }
         this.hp.setValue(hp);
@@ -200,12 +203,12 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
 
     @Override
     public boolean isDodge(Random random) {
-        return random.nextLong(100) + random.nextLong((long)(getAgi() * Data.DODGE_AGI_RATE)) > 97 + random.nextInt(100) + random.nextLong((long) (getStr() * Data.DODGE_STR_RATE));
+        return random.nextLong(100) + random.nextLong((long) (getAgi() * Data.DODGE_AGI_RATE)) > 97 + random.nextInt(100) + random.nextLong((long) (getStr() * Data.DODGE_STR_RATE));
     }
 
     @Override
     public boolean isHit(Random random) {
-        return random.nextLong(100) + getStr()* Data.HIT_STR_RATE > 97
+        return random.nextLong(100) + getStr() * Data.HIT_STR_RATE > 97
                 + random.nextInt(100) +
                 random.nextLong((long) (getAgi() * Data.HIT_AGI_RATE));
     }
@@ -222,7 +225,6 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     public long getUpperDef() {
         return getDef() + EffectHandler.getEffectAdditionLongValue(EffectHandler.DEF, getEffects()) + EffectHandler.getEffectAdditionLongValue(EffectHandler.AGI, getEffects()) * getDefGrow();
     }
-
 
 
     public int getIndex() {
@@ -266,7 +268,7 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     }
 
     public String getDisplayName() {
-        return "<font color=\"" + race.getColor() + "\">" + "[" + getRace() + "]" + getName() + "(" + getElement() + ")"+ "</font> " + (getReincarnate() > 0 ? (" + " + getReincarnate()) : "");
+        return "<font color=\"" + race.getColor() + "\">" + "[" + getRace() + "]" + getName() + "(" + getElement() + ")" + "</font> " + (getReincarnate() > 0 ? (" + " + getReincarnate()) : "");
     }
 
     public long getPoint() {
@@ -294,7 +296,9 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     }
 
 
-    public @NotNull Collection<Pet> getPets() {
+    public
+    @NotNull
+    Collection<Pet> getPets() {
         if (pets == null) {
             synchronized (this) {
                 if (pets == null)

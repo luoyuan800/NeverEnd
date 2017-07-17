@@ -264,7 +264,7 @@ public class OnlineActivity extends Activity {
         }catch (Exception e){
             handler.sendEmptyMessage(0);//showErrorDialog();
             if(!(e instanceof IOException)){
-                LogHelper.logException(e, "OnlineActivity -> 256");
+                LogHelper.logException(e, "OnlineActivity -> postOnlineRange");
             }
         }
     }
@@ -285,7 +285,7 @@ public class OnlineActivity extends Activity {
         }catch (Exception e){
             handler.sendEmptyMessage(0);//showErrorDialog();
             if(!(e instanceof IOException)){
-                LogHelper.logException(e, "OnlineActivity -> 256");
+                LogHelper.logException(e, "OnlineActivity -> postGroup");
             }
         }
     }

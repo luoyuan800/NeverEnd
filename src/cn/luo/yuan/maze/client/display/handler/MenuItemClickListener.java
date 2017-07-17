@@ -8,8 +8,6 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import cn.luo.yuan.maze.R;
-import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
-import cn.luo.yuan.maze.client.display.activity.ad.SplashActivity;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.client.display.dialog.ExchangeDialog;
 import cn.luo.yuan.maze.client.display.dialog.GoodsDialog;

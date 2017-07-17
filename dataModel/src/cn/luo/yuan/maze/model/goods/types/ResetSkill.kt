@@ -27,8 +27,9 @@ class ResetSkill : UsableGoods() {
 
     override fun perform(properties: GoodsProperties): Boolean {
         if(count > 0){
-            val context = properties["context"] as InfoControlInterface
+            val context = properties[SkillParameter.CONTEXT] as InfoControlInterface
             val sp = SkillParameter(properties.hero)
+            sp.set(SkillParameter.CONTEXT, context)
             val totalPoint = context.resetSkill(sp)
             properties.hero.point += totalPoint
             return true

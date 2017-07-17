@@ -81,6 +81,6 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
     fun sell(item: SellItem) {
         val conn = database.getConnection()
         val stat = conn.createStatement()
-        stat.execute("update shop set count = count - " + item.count + ", sold = sold + " + item.count + " where id = '" + item.id)
+        stat.execute("update shop set count = count - " + item.count + ", sold = sold + " + item.count + " where id = '" + item.id + "'")
     }
 }

@@ -17,6 +17,7 @@ import cn.luo.yuan.maze.model.goods.BatchUseGoods;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.GoodsProperties;
 import cn.luo.yuan.maze.model.goods.UsableGoods;
+import cn.luo.yuan.maze.model.skill.SkillParameter;
 
 import java.util.List;
 
@@ -85,7 +86,7 @@ public class GoodsAdapter extends BaseAdapter {
                             public void onClick(DialogInterface dialog, int which) {
                                 int count = totalPicker.getValue();
                                 GoodsProperties gp = new GoodsProperties(context.getHero());
-                                gp.put("count", count);
+                                gp.put(SkillParameter.CONTEXT, count);
                                 type.use(gp);
                                 notifyDataSetChanged();
                             }

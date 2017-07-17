@@ -9,7 +9,7 @@ public class LimitConcurrentLinkedQueue<T> extends ConcurrentLinkedQueue<T> {
     private T last;
     @Override
     public boolean add(T e) {
-        if(size() > 100){
+        if(size() > 50){
             poll();
         }
         if(last!=null && last.equals(e)){

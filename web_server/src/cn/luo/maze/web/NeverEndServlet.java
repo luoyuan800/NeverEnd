@@ -35,7 +35,7 @@ import static cn.luo.yuan.maze.Path.*;
 @WebServlet("/app/*")
 public class NeverEndServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private final String root = "D:\\www1\\luoyuan800-0b44449e5d24473a015d30fddbd602dd\\webapp\\data";
+    private final String root = "E:\\www1\\luoyuan800-0b44449e5d24473a015d30fddbd602dd\\webapp\\data";
     private MainProcess process = new MainProcess(root);
 
     /**
@@ -44,7 +44,7 @@ public class NeverEndServlet extends HttpServlet {
     public NeverEndServlet() throws IOException, ClassNotFoundException {
         super();
         LogHelper.init(root);
-//        process.setDatabase(new MysqlConnection());
+        process.setDatabase(new MysqlConnection());
     }
 
     @Override

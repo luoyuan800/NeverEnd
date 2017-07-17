@@ -28,7 +28,6 @@
         </activity>
         <activity android:name=".client.display.activity.GameActivity"/>
         <activity android:name=".client.display.activity.OnlineActivity"/>
-        <activity android:name=".client.display.activity.ad.SplashActivity"/>
         <service android:name="com.qq.e.comm.DownloadService" android:exported="false" />
         <activity android:name="com.qq.e.ads.ADActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
     </application>

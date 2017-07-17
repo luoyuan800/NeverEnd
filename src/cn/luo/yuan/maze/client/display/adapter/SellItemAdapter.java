@@ -21,7 +21,7 @@ import java.util.List;
  * Created by luoyuan on 12/6/15.
  */
 public class SellItemAdapter extends BaseAdapter {
-    public static interface AfterSell{
+    public interface AfterSell{
         void sell(String id, int count);
     }
     private int iteViewId;

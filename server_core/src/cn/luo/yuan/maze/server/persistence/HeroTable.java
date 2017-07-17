@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.server.persistence;
 
 import cn.luo.yuan.maze.exception.MountLimitException;
 import cn.luo.yuan.maze.model.Accessory;
+import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Pet;
@@ -101,8 +102,8 @@ public class HeroTable {
 
     public String pollBattleMsg(String id, int count) {
         ServerRecord record = getRecord(id);
-        if (record.getMessages().size() > 50) {
-            count += 5;
+        if (record.getMessages().size() > 20) {
+            count += 10;
         }
         StringBuilder s = new StringBuilder();
         while (count-- > 0 && record.getMessages().size() > 0) {
@@ -121,6 +122,7 @@ public class HeroTable {
         record.setCurrentWin(0);
         record.getMessages().clear();
         record.setRange(Integer.MAX_VALUE);
+        record.setRestoreLimit(Data.RESTORE_LIMIT);
         save();
         return data;
     }
