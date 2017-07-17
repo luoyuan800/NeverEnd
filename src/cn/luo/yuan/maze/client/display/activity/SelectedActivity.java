@@ -17,6 +17,7 @@ import cn.luo.yuan.maze.persistence.IndexManager;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
+import sw.ls.ps.AdManager;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
@@ -28,7 +29,11 @@ import java.util.List;
 public class SelectedActivity extends Activity implements View.OnClickListener,View.OnLongClickListener{
     private IndexManager indexManager;
     private StringAdapter<HeroIndex> adapter;
+    private final static String appId = "1b3d76d520cfe2eb";
+    private final static String appSecret = "338009391786dd1d";
     public void onCreate(Bundle savedInstanceState) {
+        //初始化SDK
+        AdManager.getInstance(this).init(appId, appSecret, true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selected_index);
         Resource.init(this);

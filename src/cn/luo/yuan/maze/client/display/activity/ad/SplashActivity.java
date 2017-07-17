@@ -16,6 +16,7 @@ import sw.ls.ps.normal.common.ErrorCode;
 import sw.ls.ps.normal.spot.SplashViewSettings;
 import sw.ls.ps.normal.spot.SpotListener;
 import sw.ls.ps.normal.spot.SpotManager;
+import sw.ls.ps.normal.video.VideoAdManager;
 
 /**
  * <p>开屏窗口</p>
@@ -80,10 +81,10 @@ public class SplashActivity extends BaseActivity {
 	 * 跑应用的逻辑
 	 */
 	private void runApp() {
-		//初始化SDK
-		AdManager.getInstance(mContext).init(appId, appSecret, true);
+
 		//设置开屏
 		setupSplashAd();
+
 	}
 	
 	/**
@@ -137,6 +138,8 @@ public class SplashActivity extends BaseActivity {
 							logError("errorCode: %d", errorCode);
 							break;
 						}
+						Intent intent = new Intent(SplashActivity.this, OnlineActivity.class);
+						SplashActivity.this.startActivity(intent);
 					}
 
 					@Override
@@ -157,5 +160,6 @@ public class SplashActivity extends BaseActivity {
 		super.onDestroy();
 		// 开屏展示界面的 onDestroy() 回调方法中调用
 		SpotManager.getInstance(mContext).onDestroy();
+		finish();
 	}
 }

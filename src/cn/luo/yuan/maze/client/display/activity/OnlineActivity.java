@@ -54,6 +54,7 @@ public class OnlineActivity extends Activity {
     protected void onDestroy() {
         executor.shutdown();
         super.onDestroy();
+
     }
 
     public NeverEnd getContext() {

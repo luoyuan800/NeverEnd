@@ -78,6 +78,14 @@
                     android:background="@android:drawable/spinner_background"/>
 
             <Button
+                    android:text="观看奖励广告"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ad_show"
+                    android:onClick="onClick"
+                    style="@android:style/Widget.Button.Inset"/>
+
+            <Button
                     android:text="在线商店"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
