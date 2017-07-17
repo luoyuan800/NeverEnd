@@ -18,6 +18,7 @@ import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 import sw.ls.ps.AdManager;
+import sw.ls.ps.normal.spot.SpotManager;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;

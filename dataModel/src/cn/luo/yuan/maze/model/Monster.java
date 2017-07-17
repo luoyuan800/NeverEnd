@@ -34,6 +34,9 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
     private Skill skill;
     private int rank;
 
+    public long getUpperAtk(){
+        return getAtk();
+    }
 
     public FirstName getFirstName() {
         return firstName;

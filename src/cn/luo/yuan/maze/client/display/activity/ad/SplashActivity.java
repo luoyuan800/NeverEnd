@@ -11,12 +11,10 @@ import android.widget.RelativeLayout;
 
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
-import sw.ls.ps.AdManager;
 import sw.ls.ps.normal.common.ErrorCode;
 import sw.ls.ps.normal.spot.SplashViewSettings;
 import sw.ls.ps.normal.spot.SpotListener;
 import sw.ls.ps.normal.spot.SpotManager;
-import sw.ls.ps.normal.video.VideoAdManager;
 
 /**
  * <p>开屏窗口</p>
@@ -24,13 +22,10 @@ import sw.ls.ps.normal.video.VideoAdManager;
  */
 public class SplashActivity extends BaseActivity {
 
-	private final static String appId = "1b3d76d520cfe2eb";
-	private final static String appSecret = "338009391786dd1d";
 	private PermissionHelper mPermissionHelper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
 		super.onCreate(savedInstanceState);
 		mContext = this;
 		// 设置全屏
@@ -81,7 +76,7 @@ public class SplashActivity extends BaseActivity {
 	 * 跑应用的逻辑
 	 */
 	private void runApp() {
-
+		if(!canJump)
 		//设置开屏
 		setupSplashAd();
 
@@ -113,6 +108,13 @@ public class SplashActivity extends BaseActivity {
 					@Override
 					public void onShowSuccess() {
 						logInfo("开屏展示成功");
+						if(canJump) {
+							previous();
+						}else {
+							Intent intent = new Intent(SplashActivity.this, OnlineActivity.class);
+							SplashActivity.this.startActivity(intent);
+							canJump = true;
+						}
 					}
 
 					@Override
@@ -138,12 +140,18 @@ public class SplashActivity extends BaseActivity {
 							logError("errorCode: %d", errorCode);
 							break;
 						}
-						Intent intent = new Intent(SplashActivity.this, OnlineActivity.class);
-						SplashActivity.this.startActivity(intent);
+						if(canJump) {
+							previous();
+						}else {
+							Intent intent = new Intent(SplashActivity.this, OnlineActivity.class);
+							SplashActivity.this.startActivity(intent);
+							canJump = true;
+						}
 					}
 
 					@Override
 					public void onSpotClosed() {
+						canJump = true;
 						logDebug("开屏被关闭");
 					}
 
@@ -151,6 +159,7 @@ public class SplashActivity extends BaseActivity {
 					public void onSpotClicked(boolean isWebPage) {
 						logDebug("开屏被点击");
 						logInfo("是否是网页广告？%s", isWebPage ? "是" : "不是");
+						canJump = true;
 					}
 				});
 	}
@@ -161,5 +170,21 @@ public class SplashActivity extends BaseActivity {
 		// 开屏展示界面的 onDestroy() 回调方法中调用
 		SpotManager.getInstance(mContext).onDestroy();
 		finish();
+	}
+
+	private boolean canJump = false;
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (canJump) {
+			previous();
+		}
+	}
+
+	private void previous() {
+		if (canJump) {
+			this.finish();
+			canJump = false;
+		}
 	}
 }

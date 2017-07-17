@@ -78,7 +78,7 @@
                     android:background="@android:drawable/spinner_background"/>
 
             <Button
-                    android:text="观看奖励广告"
+                    android:text="观看广告,获取礼包"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/ad_show"

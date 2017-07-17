@@ -169,6 +169,9 @@ public class MainProcess {
                         Omelet omelet = new Omelet();
                         omelet.setCount(1);
                         return omelet;
+                    case 4:
+                        record.setRestoreLimit(record.getRestoreLimit() + 2);
+                        return "战斗塔重生次数增加一次";
                     default:
                         return null;
                 }

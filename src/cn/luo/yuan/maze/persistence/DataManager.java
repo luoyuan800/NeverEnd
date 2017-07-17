@@ -173,6 +173,7 @@ public class DataManager implements DataManagerInterface {
                 Maze maze = mazeLoader.load(id);
                 if (maze == null) {
                     maze = newMaze();
+                    maze.setId(id);
                 } else {
                     maze.setId(id);
                 }

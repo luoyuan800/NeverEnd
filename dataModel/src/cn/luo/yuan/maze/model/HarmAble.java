@@ -23,9 +23,7 @@ public interface HarmAble {
 
     Element getElement();
 
-    default long getUpperAtk(){
-        return getAtk();
-    }
+    long getUpperAtk();
 
     default long getUpperDef(){
         return getDef();

@@ -107,7 +107,9 @@ public class OnlineActivityOnClickHandler {
                         activity.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                if (o == null || o instanceof String) {
+                                if(o instanceof String){
+                                    SimplerDialogBuilder.build(o.toString(), Resource.getString(R.string.conform), null, context.getContext());
+                                }else if (o == null) {
                                     SimplerDialogBuilder.build("谢谢惠顾！", Resource.getString(R.string.conform), null, activity);
                                 } else {
                                     if (o instanceof IDModel) {
