@@ -28,7 +28,20 @@
         </activity>
         <activity android:name=".client.display.activity.GameActivity"/>
         <activity android:name=".client.display.activity.OnlineActivity"/>
-        <service android:name="com.qq.e.comm.DownloadService" android:exported="false" />
-        <activity android:name="com.qq.e.ads.ADActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
+        <activity android:name="cn.luo.yuan.maze.client.display.activity.ad.SplashActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout"/>
+        <!-- 视频组件 -->
+        <activity
+                android:name="sw.ls.ps.normal.video.VideoActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout"
+                android:screenOrientation="landscape"
+                android:taskAffinity=""
+                android:theme="@android:style/Theme.NoTitleBar" >
+        </activity >
+        <!-- 其他组件 -->
+        <activity
+                android:name="sw.ls.ps.IUO"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout"
+                android:theme="@android:style/Theme.NoTitleBar" >
+        </activity >
     </application>
 </manifest>
