@@ -74,7 +74,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 control.getViewHandler().reCreate();
                 break;
             case R.id.online_battle:
-                Intent gameIntent = new Intent(context, OnlineActivity.class);
+                Intent gameIntent = new Intent(context, SplashActivity.class);
                 context.startActivity(gameIntent);
                 break;
             case R.id.excahnge:

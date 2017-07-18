@@ -98,7 +98,7 @@ public class OnlineActivity extends Activity {
         executor.shutdown();
         super.onDestroy();
         VideoAdManager.getInstance(this).onDestroy();
-        SpotManager.getInstance(this).onDestroy();
+        //SpotManager.getInstance(this).onDestroy();
     }
 
     public NeverEnd getContext() {
@@ -361,14 +361,14 @@ public class OnlineActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        SpotManager.getInstance(this).onPause();
+        //SpotManager.getInstance(this).onPause();
         VideoAdManager.getInstance(this).onPause();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        SpotManager.getInstance(this).onStop();
+        //SpotManager.getInstance(this).onStop();
         VideoAdManager.getInstance(this).onStop();
     }
 

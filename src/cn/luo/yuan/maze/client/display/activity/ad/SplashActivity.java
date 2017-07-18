@@ -9,6 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
 import cn.luo.yuan.maze.client.display.activity.SelectedActivity;
 import sw.ls.ps.AdManager;
 import sw.ls.ps.normal.common.ErrorCode;
@@ -79,7 +80,7 @@ public class SplashActivity extends BaseActivity {
      */
     private void runApp() {
         //初始化SDK
-        AdManager.getInstance(mContext).init(appId, appSecret, true);
+//        AdManager.getInstance(mContext).init(appId, appSecret, true);
         //设置开屏
         setupSplashAd();
     }
@@ -99,7 +100,7 @@ public class SplashActivity extends BaseActivity {
         //		// 设置是否展示失败自动跳转，默认自动跳转
         //		splashViewSettings.setAutoJumpToTargetWhenShowFailed(false);
         // 设置跳转的窗口类
-        splashViewSettings.setTargetClass(SelectedActivity.class);
+        splashViewSettings.setTargetClass(OnlineActivity.class);
         // 设置开屏的容器
         splashViewSettings.setSplashViewContainer(splashLayout);
 
@@ -154,6 +155,6 @@ public class SplashActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         // 开屏展示界面的 onDestroy() 回调方法中调用
-        SpotManager.getInstance(mContext).onDestroy();
+        //SpotManager.getInstance(mContext).onDestroy();
     }
 }
