@@ -68,7 +68,7 @@ public class SellItemAdapter extends BaseAdapter {
                         context.getDataManager().saveAccessory((Accessory) item.instance);
                     } else if (item.instance instanceof Goods) {
                         Goods goods = (Goods) item.instance;
-                        goods.setCount(goods.getCount() + 1);
+                        context.getDataManager().add(goods);
                     }
                     notifyDataSetChanged();
                     Toast.makeText(context.getContext(), "成功购买" + item.name, Toast.LENGTH_SHORT).show();

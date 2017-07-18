@@ -86,7 +86,8 @@ public class GoodsAdapter extends BaseAdapter {
                             public void onClick(DialogInterface dialog, int which) {
                                 int count = totalPicker.getValue();
                                 GoodsProperties gp = new GoodsProperties(context.getHero());
-                                gp.put(SkillParameter.CONTEXT, count);
+                                gp.put(SkillParameter.CONTEXT, context);
+                                gp.put(SkillParameter.COUNT, count);
                                 type.use(gp);
                                 notifyDataSetChanged();
                             }

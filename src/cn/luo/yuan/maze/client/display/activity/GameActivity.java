@@ -91,6 +91,10 @@ public class GameActivity extends BaseActivity {
                 if (bitmap != null) {
                     findViewById(R.id.game_view_container).setBackground(bitmap);
                 }
+                bitmap = Resource.getImageFromSD("h.png");
+                if (bitmap != null) {
+                    findViewById(R.id.hero_pic).setBackground(bitmap);
+                }
             }
         });
     }
@@ -124,7 +128,7 @@ public class GameActivity extends BaseActivity {
         switch (v.getId()) {
             case R.id.switch_msg_view:
                 if (findViewById(R.id.info_view).getVisibility() == View.VISIBLE) {
-                    findViewById(R.id.info_view).setVisibility(View.GONE);
+                    findViewById(R.id.info_view).setVisibility(View.INVISIBLE);
                     findViewById(R.id.monster_view).setVisibility(View.VISIBLE);
                     control.getViewHandler().post(new Runnable() {
                         @Override
@@ -156,7 +160,7 @@ public class GameActivity extends BaseActivity {
                         @Override
                         public void run() {
                             findViewById(R.id.info_view).setVisibility(View.VISIBLE);
-                            findViewById(R.id.monster_view).setVisibility(View.GONE);
+                            findViewById(R.id.monster_view).setVisibility(View.INVISIBLE);
                             if (updateMonsterThread != null) {
                                 updateMonsterThread = null;
                             }

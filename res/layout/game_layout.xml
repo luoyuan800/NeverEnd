@@ -38,7 +38,7 @@
 
     <include
             layout="@layout/monster_book_view"
-            android:visibility="gone"
+            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -86,7 +86,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             android:layout_toStartOf="@+id/hero_inf_layout_2"
-            android:background="@android:drawable/spinner_dropdown_background"
+            android:background="@android:drawable/spinner_background"
             android:layout_alignBottom="@+id/hero_inf_layout_2">
 
         <LinearLayout
@@ -239,6 +239,7 @@
             android:layout_alignParentEnd="true"
             android:id="@+id/skill_layout_1"
             android:layout_alignStart="@+id/skill_layout_2">
+
         <Button
                 android:id="@+id/first_skill"
                 android:layout_width="wrap_content"
@@ -336,13 +337,14 @@
             android:layout_above="@+id/skill_layout_1"
             android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/empty_layout"
-            android:background="@android:drawable/spinner_dropdown_background">
+            android:layout_below="@+id/accessory_layout">
 
         <LinearLayout
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -368,11 +370,13 @@
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="点击:"/>
+
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -383,7 +387,8 @@
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -398,7 +403,8 @@
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -429,7 +435,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:id="@+id/accessory_layout"
-            android:layout_toEndOf="@+id/empty_layout">
+            android:layout_toEndOf="@+id/empty_layout"
+            android:background="@android:drawable/gallery_thumb">
         <TextView
                 android:id="@+id/sword"
                 android:gravity="center_horizontal"
@@ -507,7 +514,8 @@
             android:layout_below="@+id/empty_layout"
             android:layout_toStartOf="@+id/skill_layout_1"
             android:layout_alignBottom="@+id/skill_layout_2"
-            android:id="@+id/click_skill_layout">
+            android:id="@+id/click_skill_layout"
+            android:background="@android:drawable/gallery_thumb">
 
         <Button
                 android:layout_weight="1"

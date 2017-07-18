@@ -11,6 +11,7 @@ import java.util.HashMap;
 public class SkillParameter {
     public static final String TARGET = "target";;
     public static final String CONTEXT = "context";;
+    public static final String COUNT = "count";
     private SkillAbleObject owner;
     private HashMap<String, Object> parameter;
     public static final String RANDOM = "random";
