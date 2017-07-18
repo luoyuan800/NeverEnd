@@ -187,4 +187,15 @@ public class ServerService {
             LogHelper.logException(e, "ServiceService->buyOnlineItem");
         }
     }
+
+    public void addOnlineGift(NeverEnd context, int count) {
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(ADD_ONLINE_GIFT, RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            connection.addRequestProperty(Field.COUNT, String.valueOf(count));
+            server.connect(connection);
+        } catch (Exception e) {
+            LogHelper.logException(e, "ServiceService->addOnlineGift");
+        }
+    }
 }

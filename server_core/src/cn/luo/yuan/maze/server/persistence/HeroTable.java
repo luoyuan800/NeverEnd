@@ -103,11 +103,12 @@ public class HeroTable {
     public String pollBattleMsg(String id, int count) {
         ServerRecord record = getRecord(id);
         if (record.getMessages().size() > 20) {
-            count += 10;
+            count += 20;
         }
         StringBuilder s = new StringBuilder();
         while (count-- > 0 && record.getMessages().size() > 0) {
-            s.append(record.getMessages().poll()).append(count > 0 ? "<br>" : "");
+            String poll = record.getMessages().poll();
+            s.append(poll).append(count > 0 ? "<br>" : "");
         }
         return s.toString();
     }

@@ -33,12 +33,9 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
                 val hero = table.getHero(id, 0)
                 if (record != null && hero != null) {
                     val messager = Messager()
-                    if (random.nextBoolean()) {
-                        record.gift++
-                    }
                     val group = getGroup(id)
                     registerMessageReceiver(messager, id)
-                    if (hero.currentHp > 0) {
+                    if (hero.currentHp > 0 || (group!=null && group.totalHp() > 0)) {
                         val maze = table.getMaze(id, 0)
                         var oid = filterMatch(id, maze.maxLevel)
                         var ohero: Hero
@@ -56,7 +53,7 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
                             omaze = npc.getMaze(oid, maze.maxLevel)
                             otherRecord = npc.getRecord(oid)
                         }
-                        if (ohero!!.currentHp > 0) {
+                        if (ohero!!.currentHp > 0 || (ogroup!=null && ogroup.totalHp() > 0)) {
                             if (oid != "npc") {
                                 registerMessageReceiver(messager, oid)
                             }
@@ -203,7 +200,8 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
         val items = ArrayList<String>(table.allHeroIds.filter {
             val maze = table.getMaze(it, 0)
             val hero = table.getHero(it, 0)
-            it == "npc" || ((group?.isInGroup(hero.id) ?: true) && hero != null && maze != null && hero.currentHp > 0 && it != id && Math.abs(maze.maxLevel - level) < 100)
+            val isSomeGroup = (group!=null && group.isInGroup(it))
+            it == "npc" || (!isSomeGroup && hero != null && maze != null && hero.currentHp > 0 && it != id && Math.abs(maze.maxLevel - level) < 100)
         })
         items.add("npc")
         val oid = random.randomItem(items)

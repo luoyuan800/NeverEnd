@@ -117,4 +117,11 @@ class Group : HarmAble, SkillAbleObject, NameObject, PetOwner, Serializable {
     fun reset(){
         currentHero = null
     }
+
+    fun totalHp():Long{
+        val hp = heroes
+                .map { it.currentHp }
+                .sum();
+        return hp;
+    }
 }

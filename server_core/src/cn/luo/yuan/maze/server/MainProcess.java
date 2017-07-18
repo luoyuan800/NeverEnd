@@ -408,14 +408,18 @@ public class MainProcess {
                 ServerRecord record = queryRecord(hid);
                 if (record != null && record.getData() != null && record.getData().getHero() != null) {
                     builder.append(record.getData().getHero().getDisplayName())
-                            .append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(record.winRate()).append("<br>");
+                            .append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(record.winRate())
+                            .append("<br>&nbsp;&nbsp;&nbsp;&nbsp;剩余复活次数：").append(StringUtils.formatNumber(record.getRestoreLimit() - record.getDieCount()))
+                            .append("<br>");
                 }
             }
             return builder.toString();
         } else {
             ServerRecord record = queryRecord(id);
             if (record != null && record.getData() != null && record.getData().getHero() != null) {
-                return record.getData().getHero().getDisplayName() + "<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：" + record.winRate();
+                return record.getData().getHero().getDisplayName() +
+                        "<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：" + record.winRate() +
+                        "<br>&nbsp;&nbsp;&nbsp;&nbsp;剩余复活次数：" + StringUtils.formatNumber(record.getRestoreLimit() - record.getDieCount());
             }
         }
         return StringUtils.EMPTY_STRING;
@@ -528,5 +532,12 @@ public class MainProcess {
         }
         exMy.setSubmitTime(System.currentTimeMillis());
         return exMy;
+    }
+
+    public void addOnlineGift(String id, int count){
+        ServerRecord record = heroTable.getRecord(id);
+        if(record!=null){
+            record.setGift(record.getGift() + count);
+        }
     }
 }

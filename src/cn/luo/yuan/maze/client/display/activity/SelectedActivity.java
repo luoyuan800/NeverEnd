@@ -32,12 +32,16 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
     private StringAdapter<HeroIndex> adapter;
     private final static String appId = "1b3d76d520cfe2eb";
     private final static String appSecret = "338009391786dd1d";
-    public void onCreate(Bundle savedInstanceState) {
+
+    public void setupAd(){
         //初始化SDK
-        AdManager.getInstance(this).init(appId, appSecret, true);
+        AdManager.getInstance(this).init(appId, appSecret, false);
+    }
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selected_index);
         Resource.init(this);
+        setupAd();
         LogHelper.initLogSystem(this);
         indexManager = new IndexManager(this);
         final List<HeroIndex>  indexList = indexManager.getIndex();

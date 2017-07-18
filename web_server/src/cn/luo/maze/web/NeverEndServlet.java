@@ -138,6 +138,10 @@ public class NeverEndServlet extends HttpServlet {
         PrintWriter writer = null;
         Boolean success = null;
         switch (path) {
+            case ADD_ONLINE_GIFT:
+                process.addOnlineGift(ownerId,request.getIntHeader(Field.COUNT));
+                success = true;
+                break;
             case BUY_ONLINE:
                 int buyCount = request.getIntHeader(Field.COUNT);
                 String itemId = request.getHeader(Field.ITEM_ID_FIELD);

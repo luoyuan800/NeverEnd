@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Environment;
 import android.util.ArrayMap;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.BaseActivity;
@@ -18,6 +19,7 @@ import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -135,5 +137,15 @@ public class Resource {
             }
         }
     }
+
+    public static Drawable getImageFromSD(String name) {
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/neverend/" + name;
+        if (new File(path).exists()) {
+            return Drawable.createFromPath(path);
+        } else {
+            return null;
+        }
+    }
+
 
 }

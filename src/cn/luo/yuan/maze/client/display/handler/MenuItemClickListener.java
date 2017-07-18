@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
 import cn.luo.yuan.maze.client.display.activity.ad.SplashActivity;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.client.display.dialog.ExchangeDialog;
@@ -73,7 +74,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 control.getViewHandler().reCreate();
                 break;
             case R.id.online_battle:
-                Intent gameIntent = new Intent(context, SplashActivity.class);
+                Intent gameIntent = new Intent(context, OnlineActivity.class);
                 context.startActivity(gameIntent);
                 break;
             case R.id.excahnge:

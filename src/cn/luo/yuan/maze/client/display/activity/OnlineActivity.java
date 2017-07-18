@@ -5,9 +5,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,6 +24,10 @@ import cn.luo.yuan.maze.client.service.ServerService;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
+import sw.ls.ps.normal.common.ErrorCode;
+import sw.ls.ps.normal.spot.SpotListener;
+import sw.ls.ps.normal.spot.SpotManager;
+import sw.ls.ps.normal.video.VideoAdManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,12 +55,50 @@ public class OnlineActivity extends Activity {
         gameContext.setContext(this);
         initView();
         onClickHandler = new OnlineActivityOnClickHandler(this,gameContext);
+        setupAD();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Drawable bitmap = Resource.getImageFromSD("bak_1.png");
+                if (bitmap != null) {
+                    findViewById(R.id.online_view_container).setBackground(bitmap);
+                }
+            }
+        });
+
+    }
+
+    private void setupAD() {
+        // 只需要调用一次，由于在主页窗口中已经调用了一次，所以此处无需调用
+        VideoAdManager.getInstance(this).requestVideoAd(this);
+        /**
+         * 设置插屏广告
+         */
+        // 设置插屏图片类型，默认竖图
+        //		// 横图
+        //		SpotManager.getInstance(mContext).setImageType(SpotManager
+        // .IMAGE_TYPE_HORIZONTAL);
+        // 竖图
+        SpotManager.getInstance(this).setImageType(SpotManager.IMAGE_TYPE_VERTICAL);
+
+        // 设置动画类型，默认高级动画
+        //		// 无动画
+        //		SpotManager.getInstance(mContext).setAnimationType(SpotManager
+        // .ANIMATION_TYPE_NONE);
+        //		// 简单动画
+        //		SpotManager.getInstance(mContext).setAnimationType(SpotManager
+        // .ANIMATION_TYPE_SIMPLE);
+        // 高级动画
+        SpotManager.getInstance(this)
+                .setAnimationType(SpotManager.ANIMATION_TYPE_ADVANCED);
     }
 
     @Override
     protected void onDestroy() {
         executor.shutdown();
         super.onDestroy();
+        VideoAdManager.getInstance(this).onDestroy();
+        SpotManager.getInstance(this).onDestroy();
     }
 
     public NeverEnd getContext() {
@@ -312,6 +356,20 @@ public class OnlineActivity extends Activity {
         } catch (Exception e) {
             return "0";
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SpotManager.getInstance(this).onPause();
+        VideoAdManager.getInstance(this).onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SpotManager.getInstance(this).onStop();
+        VideoAdManager.getInstance(this).onStop();
     }
 
 }

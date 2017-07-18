@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-				android:background="@drawable/bak_1"
+	android:background="@drawable/bak_1"
 	>
 
 	<RelativeLayout
@@ -17,7 +17,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="3dp"
 			android:layout_alignParentBottom="true"
-			android:background="@drawable/huoyan"
+			android:background="@drawable/bg_divider"
 			/>
 	</RelativeLayout >
 

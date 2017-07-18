@@ -8,6 +8,7 @@ import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -34,6 +35,8 @@ import cn.luo.yuan.maze.client.service.PetMonsterLoder;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
+import sw.ls.ps.normal.spot.SpotManager;
+import sw.ls.ps.normal.video.VideoAdManager;
 
 import java.util.ArrayList;
 
@@ -81,6 +84,15 @@ public class GameActivity extends BaseActivity {
         if(control.getHero().getClickSkills().isEmpty()){
             new ClickSkillDialog(control).show(control.getIndex(), false);
         }
+        control.getViewHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                Drawable bitmap = Resource.getImageFromSD("bak.png");
+                if (bitmap != null) {
+                    findViewById(R.id.game_view_container).setBackground(bitmap);
+                }
+            }
+        });
     }
 
     private void initResources() {
@@ -281,8 +293,11 @@ public class GameActivity extends BaseActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         control.save();
+                        SpotManager.getInstance(GameActivity.this).onAppExit();
+                        VideoAdManager.getInstance(GameActivity.this).onAppExit();
                         finish();
                         System.exit(0);
+
                     }
 
                 });
