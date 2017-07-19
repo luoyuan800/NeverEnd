@@ -41,7 +41,7 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selected_index);
         Resource.init(this);
-        setupAd();
+//        setupAd();
         LogHelper.initLogSystem(this);
         indexManager = new IndexManager(this);
         final List<HeroIndex>  indexList = indexManager.getIndex();

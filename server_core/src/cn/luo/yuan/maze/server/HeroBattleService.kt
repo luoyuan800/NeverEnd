@@ -25,7 +25,7 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
         try {
             LogHelper.info("Start battle, number:" + table.size())
             val npc = NPCTable(File("npc"))
-            for (id in table.allHeroIds) {
+            loop@ for (id in table.allHeroIds) {
                 if (id == "npc") {
                     continue
                 }
@@ -35,14 +35,14 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
                     val messager = Messager()
                     val group = getGroup(id)
                     registerMessageReceiver(messager, id)
-                    if (hero.currentHp > 0 || (group!=null && group.totalHp() > 0)) {
+                    if (hero.currentHp > 0 || (group != null && group.totalHp() > 0)) {
                         val maze = table.getMaze(id, 0)
                         var oid = filterMatch(id, maze.maxLevel)
                         var ohero: Hero
                         var ogroup: Group? = null
                         var omaze: Maze
                         var otherRecord: ServerRecord
-                        if (oid != null && oid!="npc") {
+                        if (oid != null && oid != "npc") {
                             ohero = table.getHero(oid, 0)
                             ogroup = getGroup(oid)
                             omaze = table.getMaze(oid, 0)
@@ -53,7 +53,7 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
                             omaze = npc.getMaze(oid, maze.maxLevel)
                             otherRecord = npc.getRecord(oid)
                         }
-                        if (ohero!!.currentHp > 0 || (ogroup!=null && ogroup.totalHp() > 0)) {
+                        if (ohero!!.currentHp > 0 || (ogroup != null && ogroup.totalHp() > 0)) {
                             if (oid != "npc") {
                                 registerMessageReceiver(messager, oid)
                             }
@@ -66,7 +66,7 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
                                 if (StringUtils.isNotEmpty(otherRecord.data!!.helloMsg["group"])) {
                                     messager.speak(ohero.displayName, otherRecord.data!!.helloMsg["group"])
                                 }
-                                continue
+                                continue@loop
                             }
                             val bs = BattleService(group ?: hero, ogroup ?: ohero, random, this)
                             bs.setBattleMessage(messager)
@@ -98,7 +98,7 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
                                 win(awardMaterial, ohero, messager, otherRecord)
 
                             }
-                            continue
+                            continue@loop
                         }
                         //TODO Random events
                     } else {
@@ -189,7 +189,7 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
         }
         for (id in sortedByDescending) {
             val record = table.getRecord(id)
-            if(record!=null) {
+            if (record != null) {
                 record.range = sortedByDescending.indexOf(id) + 1
             }
         }
@@ -200,17 +200,17 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
         val items = ArrayList<String>(table.allHeroIds.filter {
             val maze = table.getMaze(it, 0)
             val hero = table.getHero(it, 0)
-            val isSomeGroup = (group!=null && group.isInGroup(it))
+            val isSomeGroup = (group != null && group.isInGroup(it))
             it == "npc" || (!isSomeGroup && hero != null && maze != null && hero.currentHp > 0 && it != id && Math.abs(maze.maxLevel - level) < 100)
         })
         items.add("npc")
         val oid = random.randomItem(items)
-        return if(oid == "npc") null else oid
+        return if (oid == "npc") null else oid
     }
 
     private fun getGroupHolder(id: String): GroupHolder? {
-        for(holder in main.groups){
-            if(holder.isInGroup(id)){
+        for (holder in main.groups) {
+            if (holder.isInGroup(id)) {
                 return holder;
             }
         }

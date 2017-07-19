@@ -72,7 +72,7 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        currentPet = adapter.getItem(position);
+                        currentPet = (Pet) parent.getItemAtPosition(position);
                         refreshDetailView(detailView);
 
                     }
@@ -235,7 +235,7 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Pet minor = petAdapter.getItem(position);
+                            Pet minor = (Pet) parent.getItemAtPosition(position);
                             if (minor != null && !minor.isMounted() && minor.getId() != currentPet.getId()) {
                                 select.dismiss();
                                 control.getDataManager().deletePet(minor);

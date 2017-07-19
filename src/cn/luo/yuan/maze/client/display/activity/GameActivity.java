@@ -93,7 +93,7 @@ public class GameActivity extends BaseActivity {
                 }
                 bitmap = Resource.getImageFromSD("h.png");
                 if (bitmap != null) {
-                    findViewById(R.id.hero_pic).setBackground(bitmap);
+                    ((ImageView)findViewById(R.id.hero_pic)).setImageDrawable(bitmap);
                 }
             }
         });

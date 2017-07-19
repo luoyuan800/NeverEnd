@@ -41,8 +41,11 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
     fun getAllSelling(): List<SellItem> {
         val con = database.getConnection()
         val stat = con.createStatement()
-        val rs = stat.executeQuery("select * from shop where on_sell = 1 and count > 0");
+        val s = "select * from shop where on_sell = 1 and count > 0"
+        LogHelper.info("execute sql : " + s);
+        val rs = stat.executeQuery(s);
         val list = mutableListOf<SellItem>()
+        LogHelper.info("sql return result: " + rs.row)
         while (rs.next()) {
             val type = rs.getString("type")
             val sellItem = SellItem()
@@ -75,6 +78,7 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
 
         }
         stat?.close()
+        LogHelper.info("return shop item result: " + list)
         return list
     }
 

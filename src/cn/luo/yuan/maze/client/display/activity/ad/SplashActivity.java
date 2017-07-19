@@ -80,7 +80,7 @@ public class SplashActivity extends BaseActivity {
      */
     private void runApp() {
         //初始化SDK
-//        AdManager.getInstance(mContext).init(appId, appSecret, true);
+        AdManager.getInstance(mContext).init(appId, appSecret, true);
         //设置开屏
         setupSplashAd();
     }

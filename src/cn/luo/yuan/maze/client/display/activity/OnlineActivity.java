@@ -69,28 +69,32 @@ public class OnlineActivity extends Activity {
     }
 
     private void setupAD() {
-        // 只需要调用一次，由于在主页窗口中已经调用了一次，所以此处无需调用
-        VideoAdManager.getInstance(this).requestVideoAd(this);
-        /**
-         * 设置插屏广告
-         */
-        // 设置插屏图片类型，默认竖图
-        //		// 横图
-        //		SpotManager.getInstance(mContext).setImageType(SpotManager
-        // .IMAGE_TYPE_HORIZONTAL);
-        // 竖图
-        SpotManager.getInstance(this).setImageType(SpotManager.IMAGE_TYPE_VERTICAL);
+        try {
+            // 只需要调用一次，由于在主页窗口中已经调用了一次，所以此处无需调用
+            VideoAdManager.getInstance(this).requestVideoAd(this);
+            /**
+             * 设置插屏广告
+             */
+            // 设置插屏图片类型，默认竖图
+            //		// 横图
+            //		SpotManager.getInstance(mContext).setImageType(SpotManager
+            // .IMAGE_TYPE_HORIZONTAL);
+            // 竖图
+            SpotManager.getInstance(this).setImageType(SpotManager.IMAGE_TYPE_VERTICAL);
 
-        // 设置动画类型，默认高级动画
-        //		// 无动画
-        //		SpotManager.getInstance(mContext).setAnimationType(SpotManager
-        // .ANIMATION_TYPE_NONE);
-        //		// 简单动画
-        //		SpotManager.getInstance(mContext).setAnimationType(SpotManager
-        // .ANIMATION_TYPE_SIMPLE);
-        // 高级动画
-        SpotManager.getInstance(this)
-                .setAnimationType(SpotManager.ANIMATION_TYPE_ADVANCED);
+            // 设置动画类型，默认高级动画
+            //		// 无动画
+            //		SpotManager.getInstance(mContext).setAnimationType(SpotManager
+            // .ANIMATION_TYPE_NONE);
+            //		// 简单动画
+            //		SpotManager.getInstance(mContext).setAnimationType(SpotManager
+            // .ANIMATION_TYPE_SIMPLE);
+            // 高级动画
+            SpotManager.getInstance(this)
+                    .setAnimationType(SpotManager.ANIMATION_TYPE_ADVANCED);
+        }catch (Exception e){
+            LogHelper.logException(e, "setupAD");
+        }
     }
 
     @Override

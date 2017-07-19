@@ -57,7 +57,7 @@ public class PetMonsterHelper implements PetMonsterHelperInterface {
             if(rate > 100 && monster.getPetRate() > 0){
                 rate = 100 - monster.getPetRate() + random.nextFloat(petCount - 5);
             }
-            float current = random.nextInt(100) + random.nextFloat() + EffectHandler.getEffectAdditionFloatValue(EffectHandler.PET_RATE, hero.getEffects());
+            float current = (random.nextInt(100) + random.nextFloat() + EffectHandler.getEffectAdditionFloatValue(EffectHandler.PET_RATE, hero.getEffects()))/Data.PET_RATE_REDUCE;
             if (current >= 100) {
                 current = 99.5f;
             }

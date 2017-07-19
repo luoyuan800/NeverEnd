@@ -92,7 +92,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Object item = parent.getAdapter().getItem(position);
+        Object item = parent.getItemAtPosition(position);
         if (item instanceof Serializable) {
             if (currentShowingDialog != null) {
                 currentShowingDialog.dismiss();
@@ -236,7 +236,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Object myItem = parent.getAdapter().getItem(position);
+                Object myItem = parent.getItemAtPosition(position);
                 selectDialog.dismiss();
                 handler.sendEmptyMessage(8);
                 context.getExecutor().submit(new Runnable() {

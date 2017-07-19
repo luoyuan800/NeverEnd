@@ -32,6 +32,15 @@ class ServerRecord : IDModel, Serializable {
     var dieTime = 0L
     var dieCount = 0L
     var restoreLimit = Data.RESTORE_LIMIT
+        set(value){
+            if(field!=value){
+                val lastMsg = messages.peek()
+                if(lastMsg!=null && lastMsg.contains("重生次数", true)) {
+                    messages.clear()
+                }
+            }
+            field = value
+        }
     var gift = 0
 
     override fun getId(): String? {

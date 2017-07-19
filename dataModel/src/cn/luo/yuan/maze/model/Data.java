@@ -41,6 +41,7 @@ public class Data {
     public static final long REINCARNATE_COST = 100000;
     public static final long REINCARNATE_LEVEL = 100;
     public static long GROW_INCRESE = 2;
+    public static final float PET_RATE_REDUCE = 2f;
 
     /**
      * 计算击败一个怪物可以获得的锻造点

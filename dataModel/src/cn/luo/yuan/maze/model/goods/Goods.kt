@@ -73,7 +73,7 @@ abstract class Goods : Serializable, IDModel, OwnedAble, Cloneable {
 
 
     open fun use(properties: GoodsProperties): Boolean {
-        if (count > 0) {
+        if (!lock && count > 0) {
             count--;
             return true
         } else {
