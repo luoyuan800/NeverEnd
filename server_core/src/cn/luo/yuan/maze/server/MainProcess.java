@@ -171,7 +171,7 @@ public class MainProcess {
                         return omelet;
                     case 4:
                         record.setRestoreLimit(record.getRestoreLimit() + 2);
-                        return "战斗塔重生次数增加一次";
+                        return "战斗塔重生次数增加两次";
                     default:
                         return null;
                 }
