@@ -38,6 +38,12 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
         AdManager.getInstance(this).init(appId, appSecret, false);
     }
     public void onCreate(Bundle savedInstanceState) {
+        //这是为了应用程序安装完后直接打开，按home键退出后，再次打开程序出现的BUG
+        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
+            //结束你的activity
+            this.finish();
+            return;
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selected_index);
         Resource.init(this);

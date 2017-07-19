@@ -1,6 +1,8 @@
 package cn.luo.yuan.maze.model.skill;
 
 import cn.luo.yuan.maze.model.skill.evil.EvilTalent;
+import cn.luo.yuan.maze.model.skill.evil.Reinforce;
+import cn.luo.yuan.maze.model.skill.evil.Stealth;
 import cn.luo.yuan.maze.model.skill.hero.Dodge;
 import cn.luo.yuan.maze.model.skill.hero.FightBack;
 import cn.luo.yuan.maze.model.skill.hero.HeroHit;
@@ -25,6 +27,12 @@ public class SkillFactory {
                     break;
                 case "Dodge":
                     skill = new Dodge();
+                    break;
+                case "Reinforce":
+                    skill = new Reinforce();
+                    break;
+                case "Stealth":
+                    skill = new Stealth();
                     break;
             }
         }

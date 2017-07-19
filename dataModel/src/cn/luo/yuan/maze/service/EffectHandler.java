@@ -73,6 +73,8 @@ public class EffectHandler {
         for(Effect effect : effects){
             if(effect instanceof HpEffect && effect.isEnable()) {
                 hp += ((HpEffect) effect).getHp();
+            }else if(effect instanceof HPPercentEffect && effect.isEnable()){
+                hp += ((HPPercentEffect) effect).getAdditionValue();
             }
         }
         return hp;

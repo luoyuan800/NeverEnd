@@ -1,9 +1,8 @@
 package cn.luo.yuan.maze.model.skill.evil;
 
-import cn.luo.yuan.maze.model.skill.Skill;
-import cn.luo.yuan.maze.model.skill.SkillFactory;
-import cn.luo.yuan.maze.model.skill.SkillModel;
-import cn.luo.yuan.maze.model.skill.SkillParameter;
+import cn.luo.yuan.maze.model.Data;
+import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.skill.*;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 
 /**
@@ -26,5 +25,15 @@ public class EvilModel extends SkillModel {
         InfoControlInterface context = parameter.get(SkillParameter.CONTEXT);
         return !isSkillEnable("HeroHit",context);
     }
+
+    public void upgrade(SkillParameter parameter){
+        SkillAbleObject hero = parameter.getOwner();
+        if (hero instanceof Hero) {
+            ((Hero) hero).setPoint(((Hero) hero).getPoint() - ((UpgradeAble)skill).getLevel() * Data.SKILL_ENABLE_COST);
+        }
+    }
+
+
+
 
 }

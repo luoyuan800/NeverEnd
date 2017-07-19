@@ -73,13 +73,13 @@ public enum SecondName {
     }
 
     public long getReducedAtk(long value){
-        return MathUtils.getReducedValue(value, additionAtk);
+        return MathUtils.getPercentAdditionReduceValue(value, additionAtk);
     }
 
 
 
     public long getReducedHp(long value){
-        return MathUtils.getReducedValue(value, additionHp);
+        return MathUtils.getPercentAdditionReduceValue(value, additionHp);
     }
 
 }

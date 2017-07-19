@@ -49,19 +49,17 @@
                             android:visibility="visible"/>
                 </ScrollView>
 
-                <LinearLayout
+                <ScrollView
                         android:id="@+id/evil_skill"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
-                    <Button
-                            android:text="@string/evil_talent"
-                            android:tag="EvilTalent"
+                    <include
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/evil_talent"
-                            style="@android:style/Widget.Button.Inset"/>
-                </LinearLayout>
+                            layout="@layout/skill_layout_evils"
+                            android:visibility="visible"/>
+                </ScrollView>
 
                 <LinearLayout
                         android:id="@+id/tab3"

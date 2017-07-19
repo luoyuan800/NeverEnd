@@ -48,7 +48,7 @@ public class SkillDialog implements View.OnClickListener {
 
         //Evil skills
         tabHost.addTab(tabHost.newTabSpec("evil_skill").setIndicator(Resource.getString(R.string.evil_skill)).setContent(R.id.evil_skill));
-        initSkillButton((Button) dialog.findViewById(R.id.evil_talent));
+        initSkillButton((Button) dialog.findViewById(R.id.evil_talent), (Button)dialog.findViewById(R.id.reinforce), (Button)dialog.findViewById(R.id.stealth));
     }
 
     private void initSkillButton(Button ... skillButtons) {

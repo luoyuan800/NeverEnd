@@ -5,6 +5,8 @@ package cn.luo.yuan.maze.model.skill;
  */
 public abstract class PropertySkill implements Skill {
     private boolean delete;
+    private String id;
+
     @Override
     public boolean isDelete() {
         return delete;
@@ -24,5 +26,15 @@ public abstract class PropertySkill implements Skill {
     }
     public void setEnable(boolean enable){
         this.enable = enable;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
     }
 }

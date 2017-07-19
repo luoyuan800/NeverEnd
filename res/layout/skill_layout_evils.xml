@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:layout_gravity="left|center_vertical"
+        android:gravity="fill">
+
+    <Button
+            android:text="@string/evil_talent"
+            android:tag="EvilTalent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/evil_talent"
+            android:layout_gravity="center_horizontal"
+            style="@android:style/Widget.Button.Inset"/>
+
+    <ImageView
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" android:src="@drawable/line_2_center"
+            android:adjustViewBounds="true"/>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="强化"
+                android:layout_weight="1"
+                style="@android:style/Widget.Button.Inset"
+                android:gravity="center"
+                android:textStyle="bold|italic"
+                android:id="@+id/reinforce"
+                android:tag="Reinforce"
+                android:layout_gravity="center"
+                android:visibility="visible"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="隐身"
+                android:layout_weight="1"
+                style="@android:style/Widget.Button.Inset"
+                android:gravity="center"
+                android:textStyle="bold|italic"
+                android:id="@+id/stealth"
+                android:tag="Stealth"
+                android:layout_gravity="center"
+                android:visibility="visible"/>
+    </LinearLayout>
+
+</LinearLayout>
