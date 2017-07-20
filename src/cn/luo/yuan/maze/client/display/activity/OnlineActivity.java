@@ -13,8 +13,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
+import cn.luo.yuan.maze.client.display.handler.AdHandler;
 import cn.luo.yuan.maze.client.display.handler.OnlineActivityHandler;
 import cn.luo.yuan.maze.client.display.handler.OnlineActivityOnClickHandler;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
@@ -24,6 +26,8 @@ import cn.luo.yuan.maze.client.service.ServerService;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
+import com.soulgame.sgsdk.tgsdklib.TGSDK;
+import com.soulgame.sgsdk.tgsdklib.TGSDKServiceResultCallBack;
 import sw.ls.ps.normal.common.ErrorCode;
 import sw.ls.ps.normal.spot.SpotListener;
 import sw.ls.ps.normal.spot.SpotManager;
@@ -32,6 +36,7 @@ import sw.ls.ps.normal.video.VideoAdManager;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -41,10 +46,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class OnlineActivity extends Activity {
     public ServerService service = new ServerService(getVersion());
-    private NeverEnd gameContext;
+    public NeverEnd gameContext;
     public ScheduledExecutorService executor;
     public OnlineActivityHandler handler = new OnlineActivityHandler(this);
     private OnlineActivityOnClickHandler onClickHandler;
+    public AdHandler adHandler;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         gameContext = (NeverEnd)getApplication();
@@ -55,7 +61,6 @@ public class OnlineActivity extends Activity {
         gameContext.setContext(this);
         initView();
         onClickHandler = new OnlineActivityOnClickHandler(this,gameContext);
-        setupAD();
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -65,44 +70,16 @@ public class OnlineActivity extends Activity {
                 }
             }
         });
+        adHandler = new AdHandler(this);
+        adHandler.setupAD();
 
-    }
-
-    private void setupAD() {
-        try {
-            // 只需要调用一次，由于在主页窗口中已经调用了一次，所以此处无需调用
-            VideoAdManager.getInstance(this).requestVideoAd(this);
-            /**
-             * 设置插屏广告
-             */
-            // 设置插屏图片类型，默认竖图
-            //		// 横图
-            //		SpotManager.getInstance(mContext).setImageType(SpotManager
-            // .IMAGE_TYPE_HORIZONTAL);
-            // 竖图
-            SpotManager.getInstance(this).setImageType(SpotManager.IMAGE_TYPE_VERTICAL);
-
-            // 设置动画类型，默认高级动画
-            //		// 无动画
-            //		SpotManager.getInstance(mContext).setAnimationType(SpotManager
-            // .ANIMATION_TYPE_NONE);
-            //		// 简单动画
-            //		SpotManager.getInstance(mContext).setAnimationType(SpotManager
-            // .ANIMATION_TYPE_SIMPLE);
-            // 高级动画
-            SpotManager.getInstance(this)
-                    .setAnimationType(SpotManager.ANIMATION_TYPE_ADVANCED);
-        }catch (Exception e){
-            LogHelper.logException(e, "setupAD");
-        }
     }
 
     @Override
     protected void onDestroy() {
         executor.shutdown();
         super.onDestroy();
-        VideoAdManager.getInstance(this).onDestroy();
-        //SpotManager.getInstance(this).onDestroy();
+        adHandler.onDestroy();
     }
 
     public NeverEnd getContext() {
@@ -365,15 +342,36 @@ public class OnlineActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        //SpotManager.getInstance(this).onPause();
-        VideoAdManager.getInstance(this).onPause();
+        adHandler.onPause();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        //SpotManager.getInstance(this).onStop();
-        VideoAdManager.getInstance(this).onStop();
+        adHandler.onStop();
     }
 
+    @Override
+    protected void onActivityResult(int reqCode, int resCode, Intent data) {
+        super.onActivityResult(reqCode, resCode, data);
+        adHandler.onActivityResult(reqCode, resCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        adHandler.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adHandler.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adHandler.onResume();
+    }
 }

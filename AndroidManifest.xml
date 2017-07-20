@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="cn.luo.yuan.maze"
-          android:versionCode="5035"
-          android:versionName="5.0.3.5">
+          android:versionCode="5037"
+          android:versionName="5.0.3.7">
     <uses-sdk
             android:minSdkVersion="19"
             android:targetSdkVersion="24" />
@@ -14,11 +14,16 @@
     <!-- 以下为可选权限 -->
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application android:label="@string/app_name" android:icon="@drawable/ic_launcher"
             android:name=".client.service.NeverEnd"
                  android:theme="@android:style/Theme.Holo.Light"
             >
+
         <activity android:name=".client.display.activity.ad.BaseActivity" >
         </activity >
 
@@ -76,5 +81,37 @@
                     android:name="android.support.FILE_PROVIDER_PATHS"
                     android:resource="@xml/file_provider" />
         </provider >
+
+        <!-- UnityAds -->
+        <activity
+                android:name="com.unity3d.ads.adunit.AdUnitActivity"
+                android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
+                android:hardwareAccelerated="true"
+                android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+                android:name="com.unity3d.ads.adunit.AdUnitSoftwareActivity"
+                android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
+                android:hardwareAccelerated="false"
+                android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+        <!-- Vungle -->
+        <activity
+                android:name="com.vungle.publisher.VideoFullScreenAdActivity"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity android:name="com.vungle.publisher.MraidFullScreenAdActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize"
+                  android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
+
+        <!-- Mobvista -->
+        <activity
+                android:name="com.mobvista.msdk.reward.player.MVRewardVideoActivity"
+                android:screenOrientation="landscape"
+                android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+        <!-- Applovin -->
+        <activity android:name="com.applovin.adview.AppLovinInterstitialActivity" />
+        <activity android:name="com.applovin.adview.AppLovinConfirmationActivity" />
+
     </application>
 </manifest>

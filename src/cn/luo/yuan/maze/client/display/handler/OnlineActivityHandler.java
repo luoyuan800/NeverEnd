@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.Toast;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -48,5 +49,25 @@ public class OnlineActivityHandler extends Handler {
                 onlineActivity.showErrorDialog();
                 break;
         }
+    }
+
+    /**
+     * 展示Toast
+     *
+     * @param format
+     * @param args
+     */
+    public void showToast(String format, Object... args) {
+        Toast.makeText(onlineActivity, String.format(format, args), Toast.LENGTH_SHORT).show();
+    }
+
+    public void addOnlineGift(int count) {
+        onlineActivity.executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                onlineActivity.service.addOnlineGift(onlineActivity.gameContext, count);
+                onlineActivity.postGiftCount();
+            }
+        });
     }
 }

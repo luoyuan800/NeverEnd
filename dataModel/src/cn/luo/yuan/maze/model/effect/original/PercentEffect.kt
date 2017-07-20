@@ -11,7 +11,15 @@ import cn.luo.yuan.maze.utils.MathUtils
 abstract class PercentEffect: LongValueEffect {
     var percent = 0F
     var additionValue = 0L
+    private var enable = true
+    private var elementControl: Boolean = false
+    override fun isElementControl(): Boolean {
+        return elementControl
+    }
 
+    override fun setElementControl(elementControl: Boolean) {
+        this.elementControl = elementControl
+    }
     override fun getValue(): Long {
         return additionValue
     }
@@ -24,5 +32,14 @@ abstract class PercentEffect: LongValueEffect {
         this.percent = percent
         this.additionValue = (base * (percent/100f)).toLong()
     }
+
+    override fun isEnable(): Boolean {
+        return enable
+    }
+
+    override fun setEnable(enable: Boolean) {
+        this.enable = enable
+    }
+
 
 }

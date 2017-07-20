@@ -40,11 +40,7 @@ public class OnlineActivityOnClickHandler {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ad_show:
-                if(context.getRandom().nextBoolean()) {
-                    showVideoAD();
-                }else {
-                    showSpotAD();
-                }
+                activity.adHandler.showAd();
                 break;
             case R.id.online_shop:
                 Message message = new Message();
@@ -105,115 +101,6 @@ public class OnlineActivityOnClickHandler {
         }
     }
 
-    private void showSpotAD() {
-        // 展示插屏广告
-        SpotManager.getInstance(activity).showSpot(activity, new SpotListener() {
-
-            @Override
-            public void onShowSuccess() {
-                showToast("获得一个礼包，点击广告可以再获得一个礼包");
-                addOnlineGift(1);
-            }
-
-            @Override
-            public void onShowFailed(int errorCode) {
-                Log.d("mazAD", "插屏展示失败");
-                switch (errorCode) {
-                    case ErrorCode.NON_NETWORK:
-                        showToast("网络异常");
-                        break;
-                    case ErrorCode.NON_AD:
-                        showToast("暂无插屏广告");
-                        break;
-                    case ErrorCode.RESOURCE_NOT_READY:
-                        showToast("插屏资源还没准备好");
-                        break;
-                    case ErrorCode.SHOW_INTERVAL_LIMITED:
-                        showToast("请勿频繁展示");
-                        break;
-                    case ErrorCode.WIDGET_NOT_IN_VISIBILITY_STATE:
-                        showToast("请设置插屏为可见状态");
-                        break;
-                    default:
-                        showToast("请稍后再试%s", errorCode);
-                        break;
-                }
-            }
-
-            @Override
-            public void onSpotClosed() {
-                showToast("插屏被关闭");
-            }
-
-            @Override
-            public void onSpotClicked(boolean isWebPage) {
-                showToast("获得一个礼包");
-                addOnlineGift(1);
-            }
-        });
-
-    }
-
-    private void showVideoAD() {
-        // 设置视频广告
-        final VideoAdSettings videoAdSettings = new VideoAdSettings();
-        videoAdSettings.setInterruptTips("退出视频播放将无法获得奖励" + "\n确定要退出吗？");
-// 展示视频广告
-        VideoAdManager.getInstance(activity)
-                .showVideoAd(activity, videoAdSettings, new VideoAdListener() {
-                    @Override
-                    public void onPlayStarted() {
-                        Log.d("AD", "开始播放视频");
-                    }
-
-                    @Override
-                    public void onPlayInterrupted() {
-                        Log.i("AD", "播放视频被中断");
-                    }
-
-                    @Override
-                    public void onPlayFailed(int errorCode) {
-                        Log.i("AD", "视频播放失败");
-                        switch (errorCode) {
-                            case ErrorCode.NON_NETWORK:
-                                showToast("网络异常");
-                                break;
-                            case ErrorCode.NON_AD:
-                                showToast("视频暂无广告");
-                                break;
-                            case ErrorCode.RESOURCE_NOT_READY:
-                                showToast("视频资源还没准备好");
-                                break;
-                            case ErrorCode.SHOW_INTERVAL_LIMITED:
-                                showToast("视频展示间隔限制");
-                                break;
-                            case ErrorCode.WIDGET_NOT_IN_VISIBILITY_STATE:
-                                showToast("视频控件处在不可见状态");
-                                break;
-                            default:
-                                showToast("请稍后再试");
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onPlayCompleted() {
-                        showToast("获得一个礼包");
-                        addOnlineGift(2);
-                    }
-                });
-    }
-
-    private void addOnlineGift(int count) {
-        activity.executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                activity.service.addOnlineGift(context, count);
-                activity.postGiftCount();
-            }
-        });
-    }
-
     private void getBackHeroData(Dialog progress) {
         String award = activity.service.queryAwardString(context);
         ServerData data = activity.service.getBackHero(context);
@@ -250,13 +137,5 @@ public class OnlineActivityOnClickHandler {
         }
     }
 
-    /**
-     * 展示Toast
-     *
-     * @param format
-     * @param args
-     */
-    private void showToast(String format, Object... args) {
-        Toast.makeText(activity, String.format(format, args), Toast.LENGTH_SHORT).show();
-    }
+
 }
