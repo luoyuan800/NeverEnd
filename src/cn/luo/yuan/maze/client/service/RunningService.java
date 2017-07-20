@@ -135,7 +135,7 @@ public class RunningService implements RunningServiceInterface {
                         maze.setStep(0);
                     } else {
                         boolean meet = false;
-                        if (random.nextFloat(100f) < Data.MONSTER_MEET_RATE) {
+                        if (random.nextFloat(100f) < maze.getMeetRate()) {
                             HarmAble monster = null;
                             if (maze.getStep() > 10 && random.nextInt(100) < 35) {
                                 Log.d("maze", "Find defender");

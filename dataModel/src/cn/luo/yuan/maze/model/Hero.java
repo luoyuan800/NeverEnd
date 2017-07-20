@@ -49,6 +49,7 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     private Gift gift;
     private EncodeLong click = new EncodeLong(0);
     private Race race;
+    private float elementRate = 0.5f;
     public Hero() {
     }
 
@@ -343,5 +344,14 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
 
     public void setClickSkills(ArrayList<ClickSkill> clickSkills) {
         this.clickSkills = clickSkills;
+    }
+
+    @Override
+    public float getElementRate() {
+        return elementRate;
+    }
+
+    public void setElementRate(float elementRate) {
+        this.elementRate = elementRate;
     }
 }

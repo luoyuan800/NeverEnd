@@ -61,7 +61,7 @@ class FightBack() : DefSkill(), UpgradeAble {
     }
 
     override fun invoke(parameter: SkillParameter): SkillResult {
-        val monster: HarmAble = parameter.get(SkillParameter.TARGET)
+        val monster: HarmAble = parameter.get(SkillParameter.ATKER)
         val hero: HarmAble = parameter.owner as HarmAble
         val minHarm: Long = parameter.get(SkillParameter.MINHARM)
         val random: Random = parameter.get(SkillParameter.RANDOM)

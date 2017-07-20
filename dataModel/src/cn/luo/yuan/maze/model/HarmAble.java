@@ -11,6 +11,7 @@ public interface HarmAble {
     long getDef();
     long getHp();
     void setHp(long hp);
+    float getElementRate();
 
     default long getCurrentHp() {
         return getHp();

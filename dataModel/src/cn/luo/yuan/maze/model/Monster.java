@@ -33,6 +33,7 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
     private Race race;
     private Skill skill;
     private int rank;
+    private float elementRate = 0.5f;
 
     public long getUpperAtk(){
         return getAtk();
@@ -249,5 +250,14 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
 
     public void setRank(int rank) {
         this.rank = rank;
+    }
+
+    @Override
+    public float getElementRate() {
+        return elementRate;
+    }
+
+    public void setElementRate(float elementRate) {
+        this.elementRate = elementRate;
     }
 }

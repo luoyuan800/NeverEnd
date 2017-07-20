@@ -17,6 +17,9 @@ public class SkillParameter {
     public static final String RANDOM = "random";
     public static final String MESSAGE = "message";
     public static final String MINHARM = "minHarm";
+    @Nullable
+    public static final String ATKER = "atker";
+    public static final String DEFENDER = "defender";
 
     public SkillParameter(SkillAbleObject owner) {
         this.owner = owner;

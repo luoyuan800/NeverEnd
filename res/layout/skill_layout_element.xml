@@ -5,56 +5,51 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent" android:layout_gravity="left|center_vertical"
-        android:gravity="fill"
-        android:id="@+id/base_skill_layout_root">
+        android:gravity="fill">
+
     <Button
+            android:text="元素使"
+            android:tag="Elementalist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/hero_hit"
-            android:tag="HeroHit"
-            android:id="@+id/hero_hit"
-            style="@android:style/Widget.Button.Inset"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:typeface="serif"
+            android:id="@+id/element_alist"
+            android:layout_gravity="center_horizontal"
             android:textStyle="bold|italic"
-            />
+            style="@android:style/Widget.Button.Inset"/>
 
     <ImageView
             android:layout_width="65dp"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView" android:layout_gravity="center" android:src="@drawable/line_2_center"
+            android:layout_gravity="center" android:src="@drawable/line_2_center"
             android:adjustViewBounds="true"/>
     <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:typeface="serif"
-                android:textStyle="bold|italic"
-                android:text="@string/dodge_hit"
-                android:tag="Dodge"
-                android:id="@+id/dodge"
-                style="@android:style/Widget.Button.Inset"
-                android:layout_gravity="center|top"
-                />
 
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="反击"
-                android:tag="FightBack"
+                android:text="元素防御"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:typeface="serif"
-                android:textStyle="bold|italic"
                 style="@android:style/Widget.Button.Inset"
-                android:id="@+id/fight_back"
-                android:layout_gravity="center|top"
-                />
+                android:gravity="center"
+                android:textStyle="bold|italic"
+                android:id="@+id/element_Defend"
+                android:tag="ElementDefend"
+                android:layout_gravity="center"
+                android:visibility="visible"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="隐身"
+                android:layout_weight="1"
+                style="@android:style/Widget.Button.Inset"
+                android:gravity="center"
+                android:textStyle="bold|italic"
+                android:id="@+id/stealth"
+                android:tag="Stealth"
+                android:layout_gravity="center"
+                android:visibility="visible"/>
     </LinearLayout>
 
 </LinearLayout>

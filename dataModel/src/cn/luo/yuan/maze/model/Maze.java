@@ -20,7 +20,7 @@ public class Maze implements IDModel, Serializable {
     private String id;
     private EncodeLong maxLevel = new EncodeLong(1);
     private EncodeLong level = new EncodeLong(1);
-    private float meetRate = 100f;
+    private float meetRate = Data.MONSTER_MEET_RATE;
     private long streaking;//连胜次数
     private long step;//连续前进步数
     private Set<Effect> effects = new HashSet<>();

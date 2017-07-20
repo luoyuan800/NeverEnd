@@ -33,15 +33,15 @@ public class BattleServiceBase {
         if (harm <= 0) {
             harm = random.nextLong(minHarm);
         }
-        harm = elementAffectHarm(atker.getElement(), defender.getElement(), harm);
+        harm = elementAffectHarm(atker.getElement(), defender.getElement(), harm, atker.getElementRate(), defender.getElementRate());
         return harm;
     }
 
-     public static long elementAffectHarm(Element atker, Element defer, long baseHarm) {
+     public static long elementAffectHarm(Element atker, Element defer, long baseHarm, float atkElementRate, float defElementRate) {
         if (atker.restriction(defer) || (defer == Element.NONE && atker != Element.NONE)) {
-            baseHarm *= 1.5;
+            baseHarm *= 1 + atkElementRate;
         } else if (defer.restriction(atker) || (atker == Element.NONE && defer != Element.NONE)) {
-            baseHarm *= 0.5;
+            baseHarm *= defElementRate;
         }
         return baseHarm;
     }

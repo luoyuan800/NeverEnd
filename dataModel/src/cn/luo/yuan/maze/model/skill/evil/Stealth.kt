@@ -7,6 +7,7 @@ import cn.luo.yuan.maze.model.skill.SkillParameter
 import cn.luo.yuan.maze.model.skill.UpgradeAble
 import cn.luo.yuan.maze.model.skill.result.DonothingResult
 import cn.luo.yuan.maze.model.skill.result.SkillResult
+import cn.luo.yuan.maze.service.InfoControlInterface
 import cn.luo.yuan.maze.utils.StringUtils
 
 /**
@@ -31,29 +32,19 @@ class Stealth():PropertySkill(),UpgradeAble {
     override fun upgrade(parameter: SkillParameter?): Boolean {
         model.upgrade(parameter)
         level ++
+        val context:InfoControlInterface = parameter!![SkillParameter.CONTEXT]
+        val maze = context.maze
+        maze.meetRate -= percent
         percent += 0.5f
+        maze.meetRate += percent
         return true
     }
 
     override fun disable(parameter: SkillParameter?) {
-        val hero = parameter!!.owner
-        if(hero is Hero){
-            for(effect in hero.effects.toList()){
-                if(effect is MeetRateEffect && effect.meetRate == percent){
-                    hero.effects.remove(effect)
-                }
-            }
-        }
-    }
-
-    override fun invoke(parameter: SkillParameter?): SkillResult {
-        val hero = parameter!!.owner
-        if(hero is Hero){
-            val effect = MeetRateEffect()
-            effect.meetRate = percent
-            hero.effects.add(effect)
-        }
-        return DonothingResult()
+        val context:InfoControlInterface = parameter!![SkillParameter.CONTEXT]
+        val maze = context.maze
+        maze.meetRate -= percent
+        isEnable = false
     }
 
     override fun getLevel(): Long {
@@ -62,11 +53,18 @@ class Stealth():PropertySkill(),UpgradeAble {
 
     override fun enable(parameter: SkillParameter?) {
         if(model.canEnable(parameter)){
+            val context:InfoControlInterface = parameter!![SkillParameter.CONTEXT]
+            val maze = context.maze
+            maze.meetRate += percent
             isEnable = true
         }
     }
 
     override fun getSkillName(): String {
         return model.skillName
+    }
+
+    override fun canEnable(parameter: SkillParameter?): Boolean {
+        return model.canEnable(parameter)
     }
 }

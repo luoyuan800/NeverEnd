@@ -1,5 +1,9 @@
 package cn.luo.yuan.maze.model.skill;
 
+import cn.luo.yuan.maze.model.skill.result.DonothingResult;
+import cn.luo.yuan.maze.model.skill.result.SkillResult;
+import cn.luo.yuan.maze.model.skill.result.SkipThisTurn;
+
 /**
  * Created by gluo on 4/27/2017.
  */
@@ -36,5 +40,10 @@ public abstract class PropertySkill implements Skill {
     @Override
     public void setId(String id) {
         this.id = id;
+    }
+
+   public SkillResult invoke(SkillParameter parameter){
+        //Do nothing
+       return new DonothingResult();
     }
 }
