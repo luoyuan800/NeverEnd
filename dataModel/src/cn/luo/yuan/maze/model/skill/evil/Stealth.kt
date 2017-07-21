@@ -8,12 +8,16 @@ import cn.luo.yuan.maze.model.skill.UpgradeAble
 import cn.luo.yuan.maze.model.skill.result.DonothingResult
 import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.service.InfoControlInterface
+import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.StringUtils
 
 /**
  * Created by luoyuan on 2017/7/19.
  */
 class Stealth():PropertySkill(),UpgradeAble {
+    companion object {
+        private const val serialVersionUID = Field.SERVER_VERSION
+    }
     private var level = 1L
     private val model = EvilModel(this)
     var percent = 5F

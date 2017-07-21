@@ -9,34 +9,28 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
 import cn.luo.yuan.maze.client.display.handler.AdHandler;
 import cn.luo.yuan.maze.client.display.handler.OnlineActivityHandler;
 import cn.luo.yuan.maze.client.display.handler.OnlineActivityOnClickHandler;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
-import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.ServerService;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
+import cn.luo.yuan.maze.model.Accessory;
+import cn.luo.yuan.maze.model.Data;
+import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.utils.StringUtils;
-import com.soulgame.sgsdk.tgsdklib.TGSDK;
-import com.soulgame.sgsdk.tgsdklib.TGSDKServiceResultCallBack;
-import sw.ls.ps.normal.common.ErrorCode;
-import sw.ls.ps.normal.spot.SpotListener;
-import sw.ls.ps.normal.spot.SpotManager;
-import sw.ls.ps.normal.video.VideoAdManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -49,18 +43,19 @@ public class OnlineActivity extends Activity {
     public NeverEnd gameContext;
     public ScheduledExecutorService executor;
     public OnlineActivityHandler handler = new OnlineActivityHandler(this);
-    private OnlineActivityOnClickHandler onClickHandler;
     public AdHandler adHandler;
+    private OnlineActivityOnClickHandler onClickHandler;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        gameContext = (NeverEnd)getApplication();
+        gameContext = (NeverEnd) getApplication();
         Resource.init(this);
         LogHelper.initLogSystem(this);
         setContentView(R.layout.online_view);
         executor = Executors.newScheduledThreadPool(4);
         gameContext.setContext(this);
         initView();
-        onClickHandler = new OnlineActivityOnClickHandler(this,gameContext);
+        onClickHandler = new OnlineActivityOnClickHandler(this, gameContext);
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -75,13 +70,6 @@ public class OnlineActivity extends Activity {
 
     }
 
-    @Override
-    protected void onDestroy() {
-        executor.shutdown();
-        super.onDestroy();
-        adHandler.onDestroy();
-    }
-
     public NeverEnd getContext() {
         return gameContext;
     }
@@ -90,53 +78,16 @@ public class OnlineActivity extends Activity {
         this.gameContext = context;
     }
 
-    private void initView(){
-        AlertDialog dialog = new AlertDialog.Builder(this).setMessage("正在同步服务器数据，请稍候……").setCancelable(true).setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                dialog.dismiss();
-                finish();
-            }
-        }).show();
-        executor.submit(new Runnable() {
-            @Override
-            public void run() {
-                initDialog(dialog);
-            }
-        });
-    }
-
-    private void initDialog(Dialog showing) {
-        try {
-            String data = service.postOnlineData(gameContext);
-            if (StringUtils.isEmpty(data)) {
-                handler.sendEmptyMessage(1);//showuploaddialog
-            } else {
-                startPost();
-            }
-        }catch (Exception e){
-            handler.sendEmptyMessage(0);//showErrorDialog();
-        }
-        dismissDialog(showing);
-    }
-
-    private void dismissDialog(Dialog showing) {
-        Message msg = new Message();
-        msg.what = 2;
-        msg.obj = showing;
-        handler.sendMessage(msg);
-    }
-
     public void showErrorDialog() {
         SimplerDialogBuilder.build("网络错误，稍后再试", Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();
             }
-        },this);
+        }, this);
     }
 
-    public void finish(){
+    public void finish() {
         executor.shutdown();
         super.finish();
     }
@@ -162,12 +113,101 @@ public class OnlineActivity extends Activity {
         });
     }
 
+    public void onClick(View view) {
+        onClickHandler.onClick(view);
+    }
+
+    public void postGiftCount() {
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                String count = service.postOnlineGiftCount(gameContext);
+                if (StringUtils.isNotEmpty(count)) {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Button button = (Button) findViewById(R.id.online_gifts);
+                            button.setText("礼包 X" + count);
+                            if (Integer.valueOf(count) <= 0) {
+                                button.setEnabled(false);
+                            } else {
+                                button.setEnabled(true);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+    }
+
+    public String getVersion() {
+        try {
+            String pkName = getPackageName();
+            int versionCode = getPackageManager()
+                    .getPackageInfo(pkName, 0).versionCode;
+            return versionCode + "";
+        } catch (Exception e) {
+            return "0";
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        adHandler.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onDestroy() {
+        executor.shutdown();
+        super.onDestroy();
+        adHandler.onDestroy();
+    }
+
+    private void initView() {
+        AlertDialog dialog = new AlertDialog.Builder(this).setMessage("正在同步服务器数据，请稍候……").setCancelable(true).setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                dialog.dismiss();
+                finish();
+            }
+        }).show();
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                initDialog(dialog);
+            }
+        });
+    }
+
+    private void initDialog(Dialog showing) {
+        try {
+            String data = service.postOnlineData(gameContext);
+            if (StringUtils.isEmpty(data)) {
+                handler.sendEmptyMessage(1);//showuploaddialog
+            } else {
+                startPost();
+            }
+        } catch (Exception e) {
+            handler.sendEmptyMessage(0);//showErrorDialog();
+        }
+        dismissDialog(showing);
+    }
+
+    private void dismissDialog(Dialog showing) {
+        Message msg = new Message();
+        msg.what = 2;
+        msg.obj = showing;
+        handler.sendMessage(msg);
+    }
+
     private void upload() {
         ServerData uploadData = new ServerData();
         uploadData.setHero(gameContext.getHero());
         uploadData.setAccessories(new ArrayList<>(gameContext.getHero().getAccessories().size()));
-        for(Accessory accessory : gameContext.getHero().getAccessories()){
-                uploadData.getAccessories().add((Accessory) gameContext.convertToServerObject(accessory));
+        for (Accessory accessory : gameContext.getHero().getAccessories()) {
+            uploadData.getAccessories().add((Accessory) gameContext.convertToServerObject(accessory));
         }
         uploadData.setPets(new ArrayList<>(gameContext.getHero().getPets()));
         uploadData.setSkills(Arrays.asList(gameContext.getHero().getSkills()));
@@ -182,36 +222,30 @@ public class OnlineActivity extends Activity {
         executor.submit(new Runnable() {
             @Override
             public void run() {
-                if(service.uploadHero(uploadData)){
+                if (service.uploadHero(uploadData)) {
                     initDialog(uploadDialog);
-                }else{
-                   handler.sendEmptyMessage(0);
+                } else {
+                    handler.sendEmptyMessage(0);
                 }
             }
         });
     }
 
-    public void onClick(View view){
-        onClickHandler.onClick(view);
-    }
-
-
-
-    private void startPost(){
-        ((RollTextView)findViewById(R.id.online_battle_msg)).addMessage("等待中……");
+    private void startPost() {
+        ((RollTextView) findViewById(R.id.online_battle_msg)).addMessage("等待中……");
 
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 postBattleMsg();
             }
-        },10, Data.REFRESH_SPEED * 5, TimeUnit.MILLISECONDS);
+        }, 10, Data.REFRESH_SPEED * 5, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 postOnlineRange();
             }
-        },10, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
+        }, 10, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -236,47 +270,24 @@ public class OnlineActivity extends Activity {
     private void postDefender() {
         long level = gameContext.getRandom().randomRange(100, gameContext.getMaze().getMaxLevel() + 150);
         Hero defender = service.postDefender(level);
-        if(defender!=null){
-            gameContext.getDataManager().addDefender(defender,level);
+        if (defender != null) {
+            gameContext.getDataManager().addDefender(defender, level);
         }
     }
 
-    public void postGiftCount() {
-        executor.submit(new Runnable() {
-            @Override
-            public void run() {
-                String count = service.postOnlineGiftCount(gameContext);
-                if(StringUtils.isNotEmpty(count)) {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Button button = (Button) findViewById(R.id.online_gifts);
-                            button.setText("礼包 X" + count);
-                            if (Integer.valueOf(count) <= 0) {
-                                button.setEnabled(false);
-                            } else {
-                                button.setEnabled(true);
-                            }
-                        }
-                    });
-                }
-            }
-        });
-
-    }
-
-    private void postBattleMsg(){
+    private void postBattleMsg() {
         String msg = service.postSingleBattleMsg(gameContext);
-        if(StringUtils.isNotEmpty(msg)) {
+        if (StringUtils.isNotEmpty(msg)) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    ((RollTextView)findViewById(R.id.online_battle_msg)).addMessage(msg);
+                    ((RollTextView) findViewById(R.id.online_battle_msg)).addMessage(msg);
                 }
             });
         }
     }
-    private void postOnlineRange(){
+
+    private void postOnlineRange() {
         try {
             String msg = service.postOnlineRange(gameContext);
             if (StringUtils.isNotEmpty(msg)) {
@@ -287,17 +298,15 @@ public class OnlineActivity extends Activity {
                     }
                 });
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             handler.sendEmptyMessage(0);//showErrorDialog();
-            if(!(e instanceof IOException)){
+            if (!(e instanceof IOException)) {
                 LogHelper.logException(e, "OnlineActivity -> postOnlineRange");
             }
         }
     }
 
-
-
-    private void postGroup(){
+    private void postGroup() {
         try {
             String msg = service.postOnlineData(gameContext);
             if (StringUtils.isNotEmpty(msg)) {
@@ -308,34 +317,23 @@ public class OnlineActivity extends Activity {
                     }
                 });
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             handler.sendEmptyMessage(0);//showErrorDialog();
-            if(!(e instanceof IOException)){
+            if (!(e instanceof IOException)) {
                 LogHelper.logException(e, "OnlineActivity -> postGroup");
             }
         }
     }
 
-    private void postAward(){
+    private void postAward() {
         String award = service.queryAwardString(gameContext);
-        if(StringUtils.isNotEmpty(award)){
+        if (StringUtils.isNotEmpty(award)) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    ((TextView)findViewById(R.id.online_award)).setText(Html.fromHtml(award));
+                    ((TextView) findViewById(R.id.online_award)).setText(Html.fromHtml(award));
                 }
             });
-        }
-    }
-
-    public String getVersion() {
-        try {
-            String pkName = getPackageName();
-            int versionCode = getPackageManager()
-                    .getPackageInfo(pkName, 0).versionCode;
-            return versionCode + "";
-        } catch (Exception e) {
-            return "0";
         }
     }
 
@@ -355,12 +353,6 @@ public class OnlineActivity extends Activity {
     protected void onActivityResult(int reqCode, int resCode, Intent data) {
         super.onActivityResult(reqCode, resCode, data);
         adHandler.onActivityResult(reqCode, resCode, data);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        adHandler.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override

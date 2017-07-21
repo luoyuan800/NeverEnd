@@ -2,15 +2,19 @@ package cn.luo.yuan.maze.model.effect.original;
 
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.FloatValueEffect;
+import cn.luo.yuan.maze.utils.Field;
 
 /**
  * Created by gluo on 5/15/2017.
  */
-public class SkillRateEffect implements FloatValueEffect{
+public class SkillRateEffect implements FloatValueEffect {
+    private static final long serialVersionUID = Field.SERVER_VERSION;
+    private String tag;
     private float skillRate;
     private boolean enable = false;
 
     private boolean elementControl;
+
     @Override
     public boolean isElementControl() {
         return elementControl;
@@ -20,14 +24,15 @@ public class SkillRateEffect implements FloatValueEffect{
     public void setElementControl(boolean elementControl) {
         this.elementControl = elementControl;
     }
-    @Override
-    public void setValue(float value) {
-        setSkillRate(value);
-    }
 
     @Override
     public Float getValue() {
         return getSkillRate();
+    }
+
+    @Override
+    public void setValue(float value) {
+        setSkillRate(value);
     }
 
     public float getSkillRate() {
@@ -46,11 +51,22 @@ public class SkillRateEffect implements FloatValueEffect{
     public void setEnable(boolean enable) {
         this.enable = enable;
     }
-    public Effect clone(){
+
+    public Effect clone() {
         try {
             return (Effect) super.clone();
         } catch (CloneNotSupportedException e) {
             return this;
         }
+    }
+
+    @Override
+    public String getTag() {
+        return tag;
+    }
+
+    @Override
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }

@@ -1,5 +1,8 @@
 package cn.luo.yuan.maze.model.skill;
 
+import cn.luo.yuan.maze.model.skill.elementalist.ElementBomb;
+import cn.luo.yuan.maze.model.skill.elementalist.ElementDefend;
+import cn.luo.yuan.maze.model.skill.elementalist.Elementalist;
 import cn.luo.yuan.maze.model.skill.evil.EvilTalent;
 import cn.luo.yuan.maze.model.skill.evil.Reinforce;
 import cn.luo.yuan.maze.model.skill.evil.Stealth;
@@ -33,6 +36,15 @@ public class SkillFactory {
                     break;
                 case "Stealth":
                     skill = new Stealth();
+                    break;
+                case "Elementalist":
+                    skill = new Elementalist();
+                    break;
+                case "ElementBomb":
+                    skill = new ElementBomb();
+                    break;
+                case "ElementDefend":
+                    skill = new ElementDefend();
                     break;
             }
         }

@@ -17,4 +17,5 @@ public interface UpgradeAble {
     }
 
     long getLevel();
+
 }

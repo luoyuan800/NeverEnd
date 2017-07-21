@@ -7,11 +7,13 @@ import cn.luo.yuan.maze.utils.Field;
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class HpEffect implements LongValueEffect{
+public class HpEffect implements LongValueEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
+    private String tag;
     private long hp;
     private boolean enable = false;
     private boolean elementControl;
+
     @Override
     public boolean isElementControl() {
         return elementControl;
@@ -21,6 +23,7 @@ public class HpEffect implements LongValueEffect{
     public void setElementControl(boolean elementControl) {
         this.elementControl = elementControl;
     }
+
     public long getHp() {
         return hp;
     }
@@ -47,7 +50,8 @@ public class HpEffect implements LongValueEffect{
     public void setEnable(boolean enable) {
         this.enable = enable;
     }
-    public Effect clone(){
+
+    public Effect clone() {
         try {
             return (Effect) super.clone();
         } catch (CloneNotSupportedException e) {
@@ -56,4 +60,13 @@ public class HpEffect implements LongValueEffect{
     }
 
 
+    @Override
+    public String getTag() {
+        return tag;
+    }
+
+    @Override
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 }

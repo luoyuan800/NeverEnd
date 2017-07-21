@@ -15,7 +15,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Small Text"
-                android:textColor="#95ff7f05"
+                android:textColor="#edff0505"
                 android:id="@+id/item_name"
                 android:textSize="15sp"/>
     </ScrollView>

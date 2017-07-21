@@ -8,6 +8,7 @@ import cn.luo.yuan.maze.utils.Field;
  * Created by luoyuan on 2017/3/18.
  */
 public class AtkEffect implements LongValueEffect {
+    private String tag;
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private long atk;
     private boolean enable = false;
@@ -54,5 +55,15 @@ public class AtkEffect implements LongValueEffect {
         } catch (CloneNotSupportedException e) {
             return this;
         }
+    }
+
+    @Override
+    public String getTag() {
+        return tag;
+    }
+
+    @Override
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }

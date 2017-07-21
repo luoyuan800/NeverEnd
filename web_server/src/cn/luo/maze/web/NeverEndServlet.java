@@ -45,6 +45,7 @@ public class NeverEndServlet extends HttpServlet {
         super();
         LogHelper.init(root);
         process.setDatabase(new MysqlConnection());
+        process.start();
     }
 
     @Override

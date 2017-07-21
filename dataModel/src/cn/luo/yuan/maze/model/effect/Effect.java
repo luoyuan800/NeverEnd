@@ -10,7 +10,8 @@ import java.io.Serializable;
  */
 public interface Effect extends Serializable, NameObject,Cloneable {
     boolean isEnable();
-
+    void setTag(String tag);
+    String getTag();
     Effect clone();
 
     void setEnable(boolean enable);
@@ -27,7 +28,7 @@ public interface Effect extends Serializable, NameObject,Cloneable {
     Number getValue();
 
     default Effect covertToOriginal(){
-        return null;
+        return this;
     }
 
     void setElementControl(boolean control);

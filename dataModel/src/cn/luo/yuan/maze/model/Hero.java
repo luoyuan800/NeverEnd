@@ -121,7 +121,7 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     }
 
     public long getMaxAgi() {
-        return agi.getValue() + EffectHandler.getEffectAdditionLongValue(EffectHandler.AGI, getEffects());
+        return agi.getValue() + EffectHandler.getEffectAdditionLongValue(EffectHandler.AGI, getEffects(), this);
     }
 
     public long getStr() {
@@ -133,7 +133,7 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     }
 
     public long getMaxStr() {
-        return str.getValue() + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects());
+        return str.getValue() + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects(), this);
     }
 
     public String getName() {
@@ -154,11 +154,11 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
 
 
     public long getCurrentMaxHp() {
-        return this.maxHp.getValue() + EffectHandler.getEffectAdditionLongValue(EffectHandler.HP, getEffects()) + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects()) * getHpGrow();
+        return this.maxHp.getValue() + EffectHandler.getEffectAdditionLongValue(EffectHandler.HP, getEffects(), this) + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects(), this) * getHpGrow();
     }
 
     public long getCurrentHp() {
-        return this.hp.getValue() + EffectHandler.getEffectAdditionLongValue(EffectHandler.HP, getEffects()) + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects()) * getHpGrow();
+        return this.hp.getValue() + EffectHandler.getEffectAdditionLongValue(EffectHandler.HP, getEffects(), this) + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects(), this) * getHpGrow();
     }
 
     public long getHp() {
@@ -199,7 +199,7 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     }
 
     public long getUpperHp() {
-        return getMaxHp() + EffectHandler.getEffectAdditionLongValue(EffectHandler.HP, getEffects()) + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects()) * getHpGrow();
+        return getMaxHp() + EffectHandler.getEffectAdditionLongValue(EffectHandler.HP, getEffects(), this) + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects(), this) * getHpGrow();
     }
 
     @Override
@@ -220,11 +220,11 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     }
 
     public long getUpperAtk() {
-        return getAtk() + EffectHandler.getEffectAdditionLongValue(EffectHandler.ATK, getEffects()) + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects()) * getAtkGrow();
+        return getAtk() + EffectHandler.getEffectAdditionLongValue(EffectHandler.ATK, getEffects(), this) + EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects(), this) * getAtkGrow();
     }
 
     public long getUpperDef() {
-        return getDef() + EffectHandler.getEffectAdditionLongValue(EffectHandler.DEF, getEffects()) + EffectHandler.getEffectAdditionLongValue(EffectHandler.AGI, getEffects()) * getDefGrow();
+        return getDef() + EffectHandler.getEffectAdditionLongValue(EffectHandler.DEF, getEffects(), this) + EffectHandler.getEffectAdditionLongValue(EffectHandler.AGI, getEffects(), this) * getDefGrow();
     }
 
 

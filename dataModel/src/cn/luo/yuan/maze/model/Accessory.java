@@ -152,6 +152,8 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, 
         for (Effect effect : getEffects()) {
             if (effect.isElementControl()) {
                 effect.setEnable(false);
+            } else{
+                effect.setEnable(true);
             }
         }
     }

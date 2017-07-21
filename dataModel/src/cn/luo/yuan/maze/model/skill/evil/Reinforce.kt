@@ -9,6 +9,7 @@ import cn.luo.yuan.maze.model.skill.UpgradeAble
 import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.model.skill.result.SkipThisTurn
 import cn.luo.yuan.maze.service.InfoControlInterface
+import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.StringUtils
 import java.util.concurrent.TimeUnit
 
@@ -16,6 +17,13 @@ import java.util.concurrent.TimeUnit
  * Created by luoyuan on 2017/7/19.
  */
 class Reinforce() : AtkSkill(), UpgradeAble {
+    fun setLevel(level: Long) {
+        this.level = level
+    }
+
+    companion object {
+        private const val serialVersionUID = Field.SERVER_VERSION
+    }
     private var level = 1L
     private var percen = 5.0f
     private var turn = 3 * 60 * 1000L
@@ -49,7 +57,8 @@ class Reinforce() : AtkSkill(), UpgradeAble {
         val rs = SkipThisTurn()
         if (hero is Hero) {
             val hppe = HPPercentEffect()
-            hppe.setValue(hero.upperHp,percen)
+            hppe.tag = this.id
+            hppe.setPercent(percen)
             hero.effects.add(hppe)
             val context: InfoControlInterface = parameter[SkillParameter.CONTEXT]
             context.executor.schedule({ hero.effects.remove(hppe) }, turn, TimeUnit.MILLISECONDS)

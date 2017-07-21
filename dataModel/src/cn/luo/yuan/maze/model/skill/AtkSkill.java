@@ -34,6 +34,7 @@ public abstract class AtkSkill implements Skill, MountAble {
     }
     public void disable(){
         this.enable = false;
+
     }
     public void setEnable(boolean enable){
         this.enable = enable;

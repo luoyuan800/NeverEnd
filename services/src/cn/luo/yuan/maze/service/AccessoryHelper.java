@@ -98,14 +98,7 @@ public class AccessoryHelper {
         if (hero.getAccessories().add(accessory)) {
             hero.getEffects().addAll(accessory.getEffects());
             accessory.setMounted(true);
-            for (Accessory mounted : hero.getAccessories()) {
-                mounted.resetElementEffectEnable();
-                for (Accessory other : hero.getAccessories()) {
-                    if (other != mounted && other.getElement().isReinforce(mounted.getElement())) {
-                        mounted.elementEffectEnable();
-                    }
-                }
-            }
+            judgeEffectEnable(hero);
         }
         return uMount;
     }
@@ -122,7 +115,7 @@ public class AccessoryHelper {
         for (Accessory mounted : hero.getAccessories()) {
             mounted.resetElementEffectEnable();
             for (Accessory other : hero.getAccessories()) {
-                if (other != mounted) {
+                if (other != mounted && other.getElement().isReinforce(mounted.getElement())) {
                     mounted.elementEffectEnable();
                 }
             }

@@ -6,12 +6,14 @@ import cn.luo.yuan.maze.model.skill.*;
 import cn.luo.yuan.maze.model.skill.result.SkillResult;
 import cn.luo.yuan.maze.model.skill.result.SkipThisTurn;
 import cn.luo.yuan.maze.service.InfoControlInterface;
+import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 /**
  * Created by luoyuan on 2017/5/28.
  */
 public class EvilTalent extends DefSkill implements UpgradeAble {
+    private static final long serialVersionUID = Field.SERVER_VERSION;
     private long level = 1;
     private EvilModel model = new EvilModel(this);
 

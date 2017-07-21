@@ -21,7 +21,7 @@ public class Material extends ClickSkill {
 
     @Override
     public void perform(Hero hero, HarmAble monster, InfoControlInterface context) {
-        long value = 1 + EffectHandler.getEffectAdditionLongValue(EffectHandler.CLICK_MATERIAL, hero.getEffects());
+        long value = 1 + EffectHandler.getEffectAdditionLongValue(EffectHandler.CLICK_MATERIAL, hero.getEffects(), hero);
         hero.setMaterial(hero.getMaterial() + value);
 
     }

@@ -1,12 +1,15 @@
 package cn.luo.yuan.maze.server.persistence
 
 import cn.luo.yuan.maze.model.Accessory
+import cn.luo.yuan.maze.model.Element
 import cn.luo.yuan.maze.model.SellItem
 import cn.luo.yuan.maze.model.goods.Goods
 import cn.luo.yuan.maze.server.LogHelper
 import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable
+import cn.luo.yuan.maze.utils.Random
 import java.io.File
+import java.sql.Connection
 import java.sql.Statement
 
 /**
@@ -15,6 +18,7 @@ import java.sql.Statement
  */
 class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
     private var accessoryDb: ObjectTable<Accessory>? = null
+    private val random = Random(System.currentTimeMillis())
 
     init {
         initIfNeed()
@@ -23,8 +27,9 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
 
     private fun initIfNeed() {
         var statement: Statement? = null
+        var connection: Connection? = null
         try {
-            val connection = database.getConnection()
+            connection = database.getConnection()
             statement = connection.createStatement()
             statement.execute("create table IF NOT EXISTS shop(id varchar(100) NOT NULL, " +
                     "type varchar(100) NOT NULL, cost INT default 0, count INT default 0, " +
@@ -34,51 +39,61 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
             LogHelper.error(e)
         } finally {
             statement?.close()
+            connection?.close()
         }
 
     }
 
     fun getAllSelling(): List<SellItem> {
-        val con = database.getConnection()
-        val stat = con.createStatement()
-        val s = "select * from shop where on_sell = 1 and count > 0"
-        LogHelper.info("execute sql : " + s);
-        val rs = stat.executeQuery(s);
+        var con:Connection? = null
+        var stat:Statement? = null
         val list = mutableListOf<SellItem>()
-        LogHelper.info("sql return result: " + rs.row)
-        while (rs.next()) {
-            val type = rs.getString("type")
-            val sellItem = SellItem()
-            when (type) {
-                "goods" -> {
-                    val ins = Class.forName(rs.getString("ref")).newInstance()
-                    (ins as Goods).count = 1
-                    sellItem.instance = ins
-                    sellItem.desc = ins.desc
-                    sellItem.type = "物品"
-                    sellItem.name = ins.name
-                }
-                "accessory" -> {
-                    val acc = accessoryDb!!.loadObject(rs.getString("ref"))
-                    if (acc != null) {
-                        sellItem.instance = acc
-                        sellItem.color = acc.color
-                        sellItem.author = acc.author
-                        sellItem.desc = acc.desc
-                        sellItem.effects = acc.effects
-                        sellItem.type = acc.type
+        try {
+            con = database.getConnection()
+            stat = con.createStatement()
+            val s = "select * from shop where on_sell = 1 and count > 0"
+            LogHelper.info("execute sql : " + s);
+            val rs = stat.executeQuery(s);
+            LogHelper.info("sql return result: " + rs.row)
+            while (rs.next()) {
+                val type = rs.getString("type")
+                val sellItem = SellItem()
+                when (type) {
+                    "goods" -> {
+                        val ins = Class.forName(rs.getString("ref")).newInstance()
+                        (ins as Goods).count = 1
+                        sellItem.count = rs.getInt("count")
+                        sellItem.instance = ins
+                        sellItem.desc = ins.desc
+                        sellItem.type = "物品"
+                        sellItem.name = ins.name
+                        list.add(sellItem)
+                    }
+                    "accessory" -> {
+                        val acc = accessoryDb!!.loadObject(rs.getString("ref"))
+                        if (acc != null) {
+                            acc.element = random.randomItem(Element.values())
+                            sellItem.count = 1;
+                            sellItem.instance = acc
+                            sellItem.color = acc.color
+                            sellItem.author = acc.author
+                            sellItem.desc = acc.desc
+                            sellItem.effects = acc.effects
+                            sellItem.type = acc.type
+                            sellItem.name = acc.displayName
+                            list.add(sellItem)
+                        }
                     }
                 }
+                sellItem.id = rs.getString("id")
+                sellItem.price = rs.getLong("cost")
+                sellItem.special = rs.getBoolean("special")
+                LogHelper.info("return shop item result: " + list)
             }
-            sellItem.id = rs.getString("id")
-            sellItem.count = rs.getInt("count")
-            sellItem.price = rs.getLong("cost")
-            sellItem.special = rs.getBoolean("special")
-            list.add(sellItem)
-
+        }finally {
+            stat?.close()
+            con?.close()
         }
-        stat?.close()
-        LogHelper.info("return shop item result: " + list)
         return list
     }
 
@@ -86,5 +101,7 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
         val conn = database.getConnection()
         val stat = conn.createStatement()
         stat.execute("update shop set count = count - " + item.count + ", sold = sold + " + item.count + " where id = '" + item.id + "'")
+        stat.close()
+        conn.close()
     }
 }

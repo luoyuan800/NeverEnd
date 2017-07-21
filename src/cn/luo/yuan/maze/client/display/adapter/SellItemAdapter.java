@@ -71,7 +71,7 @@ public class SellItemAdapter extends BaseAdapter {
                         context.getDataManager().add(goods);
                     }
                     notifyDataSetChanged();
-                    Toast.makeText(context.getContext(), "成功购买" + item.name, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context.getContext(), Html.fromHtml("成功购买" + item.name), Toast.LENGTH_SHORT).show();
                     if(sellListener!=null){
                         sellListener.sell(item.id,1);
                     }

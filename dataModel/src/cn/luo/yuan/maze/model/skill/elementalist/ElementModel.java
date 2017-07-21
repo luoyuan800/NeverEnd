@@ -4,11 +4,13 @@ import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.skill.*;
 import cn.luo.yuan.maze.service.InfoControlInterface;
+import cn.luo.yuan.maze.utils.Field;
 
 /**
  * Created by luoyuan on 2017/7/16.
  */
 public class ElementModel extends SkillModel {
+        private static final long serialVersionUID = Field.SERVER_VERSION;
     public ElementModel(Skill skill){
         super(skill);
     }

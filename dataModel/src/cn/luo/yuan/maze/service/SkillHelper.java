@@ -69,12 +69,13 @@ public class SkillHelper {
     }
 
     public static long getSkillBaseHarm(Hero hero, Random random) {
-        return random.nextLong(getEffectAdditionLongValue(ATK, hero.getEffects()) + getEffectAdditionLongValue(STR, hero.getEffects()) * hero.getAtkGrow()) + hero.getAtk();
+        return random.nextLong(getEffectAdditionLongValue(ATK, hero.getEffects(), hero) + getEffectAdditionLongValue(STR, hero.getEffects(), hero) * hero.getAtkGrow()) + hero.getAtk();
     }
 
     public static void enableSkill(Skill skill, InfoControlInterface context, SkillParameter parameter) {
         if (parameter == null) {
             parameter = new SkillParameter(context.getHero());
+            parameter.set(SkillParameter.CONTEXT, context);
         }
         skill.enable(parameter);
         context.getHero().setPoint(context.getHero().getPoint() - Data.SKILL_ENABLE_COST);

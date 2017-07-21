@@ -2,24 +2,27 @@ package cn.luo.yuan.maze.model.effect.original;
 
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.FloatValueEffect;
+import cn.luo.yuan.maze.utils.Field;
 
 /**
  * Created by luoyuan on 2017/6/29.
  */
 public class EggRateEffect implements FloatValueEffect {
+    private static final long serialVersionUID = Field.SERVER_VERSION;
+    private String tag;
     private float eggRate;
     private boolean enable = false;
 
     private boolean elementControl;
 
     @Override
-    public void setValue(float value) {
-        setEggRate(value);
+    public boolean isEnable() {
+        return enable;
     }
 
     @Override
-    public boolean isEnable() {
-        return enable;
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 
     @Override
@@ -32,18 +35,13 @@ public class EggRateEffect implements FloatValueEffect {
     }
 
     @Override
-    public void setEnable(boolean enable) {
-        this.enable = enable;
-    }
-
-    @Override
     public Float getValue() {
         return getEggRate();
     }
 
     @Override
-    public void setElementControl(boolean control) {
-        this.elementControl = control;
+    public void setValue(float value) {
+        setEggRate(value);
     }
 
     @Override
@@ -51,15 +49,30 @@ public class EggRateEffect implements FloatValueEffect {
         return elementControl;
     }
 
-    public void setEggRate(float eggRate) {
-        this.eggRate = eggRate;
+    @Override
+    public void setElementControl(boolean control) {
+        this.elementControl = control;
     }
 
     public float getEggRate() {
         return eggRate;
     }
-    public String toString(){
+
+    public void setEggRate(float eggRate) {
+        this.eggRate = eggRate;
+    }
+
+    public String toString() {
         return "增加生蛋率：" + eggRate;
     }
 
+    @Override
+    public String getTag() {
+        return tag;
+    }
+
+    @Override
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 }

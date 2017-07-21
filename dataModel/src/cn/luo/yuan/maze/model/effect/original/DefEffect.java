@@ -7,12 +7,14 @@ import cn.luo.yuan.maze.utils.Field;
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class DefEffect implements LongValueEffect{
+public class DefEffect implements LongValueEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
+    private String tag;
     private long def;
     private boolean enable = false;
 
     private boolean elementControl;
+
     @Override
     public boolean isElementControl() {
         return elementControl;
@@ -22,6 +24,7 @@ public class DefEffect implements LongValueEffect{
     public void setElementControl(boolean elementControl) {
         this.elementControl = elementControl;
     }
+
     public long getDef() {
         return def;
     }
@@ -48,11 +51,22 @@ public class DefEffect implements LongValueEffect{
     public void setEnable(boolean enable) {
         this.enable = enable;
     }
-    public Effect clone(){
+
+    public Effect clone() {
         try {
             return (Effect) super.clone();
         } catch (CloneNotSupportedException e) {
             return this;
         }
+    }
+
+    @Override
+    public String getTag() {
+        return tag;
+    }
+
+    @Override
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }

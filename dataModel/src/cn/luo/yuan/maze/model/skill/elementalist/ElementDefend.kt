@@ -10,6 +10,7 @@ import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.model.skill.result.SkipThisTurn
 import cn.luo.yuan.maze.service.BattleMessageInterface
 import cn.luo.yuan.maze.service.BattleServiceBase
+import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.Random
 import cn.luo.yuan.maze.utils.StringUtils
 
@@ -17,6 +18,9 @@ import cn.luo.yuan.maze.utils.StringUtils
  * Created by luoyuan on 2017/7/20.
  */
 class ElementDefend():DefSkill(),UpgradeAble {
+    companion object {
+        private const val serialVersionUID = Field.SERVER_VERSION
+    }
     override fun upgrade(parameter: SkillParameter?): Boolean {
         if(rate + 0.5 < Data.RATE_MAX){
             rate += 0.5f
@@ -31,7 +35,7 @@ class ElementDefend():DefSkill(),UpgradeAble {
     }
 
     private val model = ElementModel(this)
-    private var level = 0L
+    private var level = 1L
     override fun getName(): String {
         return "元素防御 X $level"
     }

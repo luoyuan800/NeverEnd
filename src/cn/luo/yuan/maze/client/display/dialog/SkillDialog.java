@@ -52,7 +52,7 @@ public class SkillDialog implements View.OnClickListener {
 
         //Element skills
         tabHost.addTab(tabHost.newTabSpec("element_skill").setIndicator(Resource.getString(R.string.element_skill)).setContent(R.id.element_skill));
-        initSkillButton((Button) dialog.findViewById(R.id.element_alist), (Button)dialog.findViewById(R.id.element_Defend));
+        initSkillButton((Button) dialog.findViewById(R.id.element_alist), (Button)dialog.findViewById(R.id.element_Defend), (Button)dialog.findViewById(R.id.element_bomb));
     }
 
     private void initSkillButton(Button ... skillButtons) {

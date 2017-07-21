@@ -8,6 +8,7 @@ import cn.luo.yuan.maze.utils.Field;
  * Created by luoyuan on 2017/3/18.
  */
 public class AgiEffect implements LongValueEffect{
+    private String tag;
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private long agi;
     private boolean enable = false;
@@ -58,4 +59,13 @@ public class AgiEffect implements LongValueEffect{
     }
 
 
+    @Override
+    public String getTag() {
+        return tag;
+    }
+
+    @Override
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 }

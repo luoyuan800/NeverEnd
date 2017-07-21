@@ -3,11 +3,15 @@ package cn.luo.yuan.maze.model.skill.elementalist
 import cn.luo.yuan.maze.model.Hero
 import cn.luo.yuan.maze.model.skill.PropertySkill
 import cn.luo.yuan.maze.model.skill.SkillParameter
+import cn.luo.yuan.maze.utils.Field
 
 /**
  * Created by luoyuan on 2017/7/20.
  */
 class Elementalist() : PropertySkill() {
+    companion object {
+        private const val serialVersionUID = Field.SERVER_VERSION
+    }
     private val model = ElementModel(this)
     override fun getName(): String {
         return "元素使"

@@ -11,6 +11,7 @@ import cn.luo.yuan.maze.model.skill.result.HarmResult
 import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.service.BattleMessageInterface
 import cn.luo.yuan.maze.service.BattleServiceBase
+import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.Random
 import cn.luo.yuan.maze.utils.StringUtils
 
@@ -19,6 +20,9 @@ import cn.luo.yuan.maze.utils.StringUtils
  * Created by luoyuan on 2017/7/16.
  */
 class FightBack() : DefSkill(), UpgradeAble {
+    companion object {
+        private const val serialVersionUID = Field.SERVER_VERSION
+    }
     private var percent = 10f
     private var level = 1L
     private val model = HeroModel(this)

@@ -7,12 +7,16 @@ import cn.luo.yuan.maze.model.skill.SkillParameter
 import cn.luo.yuan.maze.model.skill.UpgradeAble
 import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.model.skill.result.SkipThisTurn
+import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.StringUtils
 
 /**
  * Created by luoyuan on 2017/7/16.
  */
 class Dodge():DefSkill(), UpgradeAble {
+    companion object {
+        private const val serialVersionUID = Field.SERVER_VERSION
+    }
     private var level = 1L
     private val model = HeroModel(this)
     override fun upgrade(parameter: SkillParameter?): Boolean {

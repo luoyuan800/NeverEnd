@@ -8,6 +8,7 @@ import cn.luo.yuan.maze.model.skill.result.HarmResult;
 import cn.luo.yuan.maze.model.skill.result.SkillResult;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.service.SkillHelper;
+import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -16,6 +17,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
  * Created by gluo on 4/27/2017.
  */
 public class HeroHit extends AtkSkill implements UpgradeAble {
+    private static final long serialVersionUID = Field.SERVER_VERSION;
     private long minHarm = 50;
     private long maxHarm = 300;
     private long level = 1;

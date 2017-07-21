@@ -225,6 +225,9 @@ public class BattleService{
                     battleMessage.rowMessage(msg);
                 }
             }
+            if(result instanceof DonothingResult){
+                return false;
+            }
             if(result instanceof EndBattleResult){
                 return true;
             }
@@ -246,6 +249,7 @@ public class BattleService{
         SkillParameter atkPara = new SkillParameter(atker);
         atkPara.set(SkillParameter.RANDOM, random);
         atkPara.set(SkillParameter.TARGET, target);
+        atkPara.set(SkillParameter.DEFENDER, target);
         atkPara.set(SkillParameter.MINHARM, level);
         atkPara.set(SkillParameter.MESSAGE, battleMessage);
         return atkPara;

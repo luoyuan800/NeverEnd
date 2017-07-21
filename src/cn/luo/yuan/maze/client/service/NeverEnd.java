@@ -380,6 +380,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
                     skill.disable();
                 }
             }
+            dataManager.delete(skill);
         }
         return totalPoint;
     }

@@ -31,6 +31,7 @@ public abstract class DefSkill implements Skill, MountAble {
     }
     public void disable(){
         this.enable = false;
+
     }
 
     public boolean isEnable(){

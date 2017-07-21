@@ -1,17 +1,29 @@
 package cn.luo.yuan.maze.model.skill.elementalist
 
 import cn.luo.yuan.maze.model.Data
+import cn.luo.yuan.maze.model.HarmAble
 import cn.luo.yuan.maze.model.skill.AtkSkill
+import cn.luo.yuan.maze.model.skill.SkillAbleObject
 import cn.luo.yuan.maze.model.skill.SkillParameter
 import cn.luo.yuan.maze.model.skill.UpgradeAble
+import cn.luo.yuan.maze.model.skill.result.DonothingResult
+import cn.luo.yuan.maze.model.skill.result.HarmResult
 import cn.luo.yuan.maze.model.skill.result.SkillResult
+import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.StringUtils
 
 /**
  * Copyright @Luo
  * Created by Gavin Luo on 7/21/2017.
  */
-class ElementBomb():AtkSkill(),UpgradeAble {
+class ElementBomb :AtkSkill(),UpgradeAble {
+     fun setLevel(level: Long) {
+        this.level = level
+    }
+
+    companion object {
+        private const val serialVersionUID = Field.SERVER_VERSION
+    }
     private val model = ElementModel(this)
     private var level = 1L
     override fun getName(): String {
@@ -29,8 +41,21 @@ class ElementBomb():AtkSkill(),UpgradeAble {
         return model.canMount(parameter)
     }
 
-    override fun invoke(parameter: SkillParameter?): SkillResult {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun invoke(parameter: SkillParameter): SkillResult {
+        val hrs = HarmResult()
+        val monster:HarmAble = parameter[SkillParameter.TARGET]
+        val hero : SkillAbleObject = parameter.owner
+        if(hero is HarmAble){
+            if(hero.element.restriction(monster.element)){
+                hrs.harm = monster.currentHp
+                hrs.addMessage("$name 生效！")
+            }else{
+                val rs = DonothingResult()
+                rs.messages.add("$name 无效")
+                return rs
+            }
+        }
+        return hrs
     }
 
     override fun enable(parameter: SkillParameter?) {
@@ -51,7 +76,7 @@ class ElementBomb():AtkSkill(),UpgradeAble {
     }
 
     override fun getLevel(): Long {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return level
     }
 
     override fun canUpgrade(parameter: SkillParameter?): Boolean {

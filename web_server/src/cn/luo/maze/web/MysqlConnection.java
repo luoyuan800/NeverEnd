@@ -1,5 +1,6 @@
 package cn.luo.maze.web;
 
+import cn.luo.yuan.maze.server.LogHelper;
 import com.sun.istack.internal.NotNull;
 
 import java.sql.*;
@@ -66,7 +67,7 @@ public class MysqlConnection implements cn.luo.yuan.maze.server.persistence.db.D
 
     @Override
     public Connection getConnection() throws Exception {
-
+        LogHelper.info("Try to get connection");
         Connection connection;
 
         String jndi = getJndi();
@@ -80,7 +81,6 @@ public class MysqlConnection implements cn.luo.yuan.maze.server.persistence.db.D
                 dataSource = init();
 
             connection = dataSource.getConnection();
-
             return connection;
 
         } catch (SQLException PaEx_ex) {
@@ -102,6 +102,8 @@ public class MysqlConnection implements cn.luo.yuan.maze.server.persistence.db.D
 
 
 
+
+
     /**
 
      * 初始化连接;
@@ -119,7 +121,7 @@ public class MysqlConnection implements cn.luo.yuan.maze.server.persistence.db.D
     public DataSource init() throws Exception {
 
         try {
-
+            LogHelper.info("init mysql data source");
             Properties p = new Properties();
 
             IC_ictx = new InitialContext(p);
