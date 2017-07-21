@@ -21,7 +21,6 @@ class Dodge():DefSkill(), UpgradeAble {
         }
         val hero = parameter!!.owner
         if (hero is Hero) {
-            hero.point -= level * Data.SKILL_ENABLE_COST
             rate += 0.3f
             level++
             return true

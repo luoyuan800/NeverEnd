@@ -33,6 +33,9 @@ public class ElementModel extends SkillModel {
         }
     }
 
+    public boolean canUpgrade(SkillParameter parameter){
+        return isUpgradePointEnough(parameter);
+    }
 
 
 

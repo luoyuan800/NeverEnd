@@ -26,4 +26,8 @@ public class SkillModel {
     public String getSkillName() {
         return "<font color='" + (skill.isEnable() ? "#8fda5f0a" : "#453e22") + "'>" + skill.getName() + "</font>" + (skill instanceof MountAble ? (((MountAble) skill).isMounted() ? "√" : "") : "");
     }
+
+    public boolean isUpgradePointEnough(SkillParameter parameter) {
+        return ((Hero) parameter.getOwner()).getPoint() > (skill instanceof UpgradeAble ? ((UpgradeAble) skill).getLevel() : 1)* Data.SKILL_ENABLE_COST;
+    }
 }

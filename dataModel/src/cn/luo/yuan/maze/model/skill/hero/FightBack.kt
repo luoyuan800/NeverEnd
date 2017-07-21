@@ -28,7 +28,6 @@ class FightBack() : DefSkill(), UpgradeAble {
         }
         val hero = parameter!!.owner
         if (hero is Hero) {
-            hero.point -= level * Data.SKILL_ENABLE_COST
             level++
             percent++
             rate += 0.5f

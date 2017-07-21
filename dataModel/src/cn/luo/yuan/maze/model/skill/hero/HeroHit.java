@@ -71,7 +71,6 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
             return false;
         }
         if(parameter.getOwner() instanceof Hero) {
-            ((Hero) parameter.getOwner()).setPoint(((Hero) parameter.getOwner()).getPoint() - level * Data.SKILL_ENABLE_COST);
             level++;
             minHarm += level;
             maxHarm *= level;

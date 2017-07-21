@@ -1,9 +1,11 @@
 package cn.luo.yuan.maze.model.skill.elementalist
 
+import cn.luo.yuan.maze.model.Data
 import cn.luo.yuan.maze.model.HarmAble
 import cn.luo.yuan.maze.model.NameObject
 import cn.luo.yuan.maze.model.skill.DefSkill
 import cn.luo.yuan.maze.model.skill.SkillParameter
+import cn.luo.yuan.maze.model.skill.UpgradeAble
 import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.model.skill.result.SkipThisTurn
 import cn.luo.yuan.maze.service.BattleMessageInterface
@@ -14,10 +16,24 @@ import cn.luo.yuan.maze.utils.StringUtils
 /**
  * Created by luoyuan on 2017/7/20.
  */
-class ElementDefend():DefSkill() {
+class ElementDefend():DefSkill(),UpgradeAble {
+    override fun upgrade(parameter: SkillParameter?): Boolean {
+        if(rate + 0.5 < Data.RATE_MAX){
+            rate += 0.5f
+            level++
+            return true
+        }
+        return false
+    }
+
+    override fun getLevel(): Long {
+        return level
+    }
+
     private val model = ElementModel(this)
+    private var level = 0L
     override fun getName(): String {
-        return "元素防御"
+        return "元素防御 X $level"
     }
 
     override fun getDisplayName(): String {
@@ -54,5 +70,9 @@ class ElementDefend():DefSkill() {
 
     override fun getSkillName(): String {
         return model.skillName
+    }
+
+    override fun canUpgrade(parameter: SkillParameter?): Boolean {
+        return rate + 0.5 < Data.RATE_MAX && model.canUpgrade(parameter)
     }
 }
