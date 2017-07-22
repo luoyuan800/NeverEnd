@@ -37,7 +37,7 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     private EncodeLong atkGrow = new EncodeLong(1);//攻击成长（每点力量）
     private long birthDay;//生日
     private EncodeLong reincarnate = new EncodeLong(0);//转生次数
-    private EncodeLong material = new EncodeLong(1000000);//锻造点（货币）
+    private EncodeLong material = new EncodeLong(0);//锻造点（货币）
     transient private HashSet<Effect> effects = new HashSet<>(3);//附加的效果
     transient private HashSet<Accessory> accessories = new HashSet<>(3);//装备
     transient private Skill[] skills = {EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL};//装备
@@ -89,6 +89,9 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     }
 
     public void setHpGrow(long hpGrow) {
+        if(hpGrow <= 0){
+            hpGrow =5;
+        }
         this.hpGrow.setValue(hpGrow);
     }
 
@@ -97,6 +100,9 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     }
 
     public void setDefGrow(long defGrow) {
+        if(defGrow <= 0){
+            defGrow = 3;
+        }
         this.defGrow.setValue(defGrow);
     }
 
@@ -105,6 +111,9 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     }
 
     public void setAtkGrow(long atkGrow) {
+        if(atkGrow <= 0){
+            atkGrow = 1;
+        }
         this.atkGrow.setValue(atkGrow);
     }
 
@@ -204,7 +213,7 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
 
     @Override
     public boolean isDodge(Random random) {
-        return random.nextLong(100) + random.nextLong((long) (getAgi() * Data.DODGE_AGI_RATE)) > 97 + random.nextInt(100) + random.nextLong((long) (getStr() * Data.DODGE_STR_RATE));
+        return random.nextLong(100) + random.nextLong((long) (getAgi() * Data.DODGE_AGI_RATE)) + random.nextFloat(EffectHandler.getEffectAdditionFloatValue(EffectHandler.DOGE, getEffects())) > 97 + random.nextInt(100) + random.nextLong((long) (getStr() * Data.DODGE_STR_RATE));
     }
 
     @Override

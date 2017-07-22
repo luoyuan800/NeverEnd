@@ -65,6 +65,7 @@ public class SellItemAdapter extends BaseAdapter {
                     context.getHero().setMaterial(context.getHero().getMaterial() - item.price);
                     item.count--;
                     if (item.instance instanceof Accessory) {
+                        ((Accessory) item.instance).setId(null);
                         context.getDataManager().saveAccessory((Accessory) item.instance);
                     } else if (item.instance instanceof Goods) {
                         Goods goods = (Goods) item.instance;

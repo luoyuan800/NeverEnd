@@ -20,7 +20,7 @@ public class Data {
     public static final String DISABLE_COLOR = "#C0C0C0";
     public static final String ENABLE_COLOR = "#33038C";
     public static final int MAX_PET_COUNT = 100;//最多背包宠物个数
-    public static final long FUSE_COST = 2000; //装备升级消耗的锻造
+    public static final long FUSE_COST = 20000; //装备升级消耗的锻造
     public static final long BASE_PET_COUNT = 3;
     public static float MONSTER_MEET_RATE = 99f;//遇怪的概率
     public static float PORTAL_RATE = 0.05f;//传送门的概率
@@ -52,11 +52,11 @@ public class Data {
      * @return 返回可以获得的基础锻造数量
      */
     public static long getMonsterMaterial(long hp, long atk, long level, Random random) {
-        long m1 = random.nextLong(hp + 1) / 181 + 3;
-        long m2 = random.nextLong(atk + 1) / 411 + 5;
+        long m1 = random.nextLong(hp + 1) / 281 + 2;
+        long m2 = random.nextLong(atk + 1) / 811 + 4;
         long material = random.nextLong((m1 + m2) / 1832 + 1) + 10 + random.nextLong(level / 100 + 1);
         if (material > 1000) {
-            material = 300 + random.nextInt(700);
+            material = 100 + random.nextInt(900);
         }
         return material;
     }

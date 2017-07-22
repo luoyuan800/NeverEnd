@@ -70,18 +70,20 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
                         list.add(sellItem)
                     }
                     "accessory" -> {
-                        val acc = accessoryDb!!.loadObject(rs.getString("ref"))
-                        if (acc != null) {
-                            acc.element = random.randomItem(Element.values())
-                            sellItem.count = 1;
-                            sellItem.instance = acc
-                            sellItem.color = acc.color
-                            sellItem.author = acc.author
-                            sellItem.desc = acc.desc
-                            sellItem.effects = acc.effects
-                            sellItem.type = acc.type
-                            sellItem.name = acc.displayName
-                            list.add(sellItem)
+                        if(random.nextBoolean()) {
+                            val acc = accessoryDb!!.loadObject(rs.getString("ref"))
+                            if (acc != null) {
+                                acc.element = random.randomItem(Element.values())
+                                sellItem.count = 1;
+                                sellItem.instance = acc
+                                sellItem.color = acc.color
+                                sellItem.author = acc.author
+                                sellItem.desc = acc.desc
+                                sellItem.effects = acc.effects
+                                sellItem.type = acc.type
+                                sellItem.name = acc.displayName
+                                list.add(sellItem)
+                            }
                         }
                     }
                 }

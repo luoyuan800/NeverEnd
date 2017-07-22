@@ -666,4 +666,40 @@
         <rank>6</rank>
         <evolution></evolution>
     </monster>
+    <monster>
+        <index>75</index>
+        <meet meet_rate="1" min_level="100"/>
+        <name>月儿の萌萌</name>
+        <desc>
+        </desc>
+        <atk>255</atk>
+        <def>255</def>
+        <hp>1</hp>
+        <hit>5</hit>
+        <silent>100</silent>
+        <egg_rate>1</egg_rate>
+        <pet_rate>1</pet_rate>
+        <sex>0</sex>
+        <race>Elyosr</race>
+        <rank>4</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>151</index>
+        <meet meet_rate="1" min_level="10000"/>
+        <name>花●萌萌</name>
+        <desc>萌萌进化！！！
+        </desc>
+        <atk>255</atk>
+        <def>255</def>
+        <hp>100</hp>
+        <hit>50</hit>
+        <silent>100</silent>
+        <egg_rate>0</egg_rate>
+        <pet_rate>0</pet_rate>
+        <sex>0</sex>
+        <race>Wizardsr</race>
+        <rank>6</rank>
+        <evolution></evolution>
+    </monster>
 </monsters>

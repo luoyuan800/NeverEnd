@@ -157,7 +157,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
         return petMonsterHelper;
     }
 
-    public void save() {
+    public synchronized void save() {
         Gift gift = hero.getGift();
         if (gift != null) {
             try {
