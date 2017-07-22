@@ -36,7 +36,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     }
 
     public void setupAD() {
-        setUpYomobAd();
+        //setUpYomobAd();
     }
 
     public boolean isYomob() {

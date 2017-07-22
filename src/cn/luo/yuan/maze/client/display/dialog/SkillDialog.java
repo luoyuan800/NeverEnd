@@ -39,7 +39,7 @@ public class SkillDialog implements View.OnClickListener {
                 dialog.dismiss();
             }
         });
-        TabHost tabHost = (TabHost) dialog.findViewById(R.id.skill_tabs);
+        TabHost tabHost = (TabHost) dialog.findViewById(R.id.skill_tabs_main);
         tabHost.setup();
         //Hero Skills
         tabHost.addTab(tabHost.newTabSpec("hero_skill").setIndicator(Resource.getString(R.string.hero_skill)).setContent(R.id.hero_skill));
@@ -53,6 +53,16 @@ public class SkillDialog implements View.OnClickListener {
         //Element skills
         tabHost.addTab(tabHost.newTabSpec("element_skill").setIndicator(Resource.getString(R.string.element_skill)).setContent(R.id.element_skill));
         initSkillButton((Button) dialog.findViewById(R.id.element_alist), (Button)dialog.findViewById(R.id.element_Defend), (Button)dialog.findViewById(R.id.element_bomb));
+
+        //Secondary Skill
+        TabHost tabHost1 = (TabHost) dialog.findViewById(R.id.skill_tag_second);
+        tabHost1.setup();
+
+        //Swindler Skills
+        tabHost1.addTab(tabHost1.newTabSpec("swindler_skill").setIndicator(Resource.getString(R.string.swindler_skill)).setContent(R.id.swindler_skill));
+        //Pet Skills
+        tabHost1.addTab(tabHost1.newTabSpec("pet_skill").setIndicator(Resource.getString(R.string.pet_skill)).setContent(R.id.pet_skill));
+
     }
 
     private void initSkillButton(Button ... skillButtons) {

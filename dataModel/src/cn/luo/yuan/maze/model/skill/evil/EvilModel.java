@@ -16,7 +16,7 @@ public class EvilModel extends SkillModel {
     }
     public boolean canEnable(SkillParameter parameter){
         InfoControlInterface context = parameter.get("context");
-        if(isSkillEnable("HeroHit", context)){
+        if(isSkillEnable("HeroHit", context) || isSkillEnable("Elementalist", context)){
             return false;
         }else {
             return (skill instanceof EvilTalent || isSkillEnable("EvilTalent", context)) && isEnablePointEnough(parameter);
@@ -25,7 +25,7 @@ public class EvilModel extends SkillModel {
 
     public boolean canMount(SkillParameter parameter) {
         InfoControlInterface context = parameter.get(SkillParameter.CONTEXT);
-        return !isSkillEnable("HeroHit",context);
+        return !isSkillEnable("HeroHit",context) && !isSkillEnable("Elementalist", context);
     }
 
     public void upgrade(SkillParameter parameter){

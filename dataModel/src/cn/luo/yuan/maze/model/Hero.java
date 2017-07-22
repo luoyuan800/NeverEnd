@@ -213,7 +213,11 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
 
     @Override
     public boolean isDodge(Random random) {
-        return random.nextLong(100) + random.nextLong((long) (getAgi() * Data.DODGE_AGI_RATE)) + random.nextFloat(EffectHandler.getEffectAdditionFloatValue(EffectHandler.DOGE, getEffects())) > 97 + random.nextInt(100) + random.nextLong((long) (getStr() * Data.DODGE_STR_RATE));
+        float v = random.nextLong(100) + random.nextLong((long) (getAgi() * Data.DODGE_AGI_RATE)) + random.nextFloat(EffectHandler.getEffectAdditionFloatValue(EffectHandler.DOGE, getEffects()));
+        if(v > Data.RATE_MAX){
+            v = Data.RATE_MAX;
+        }
+        return v > 97 + random.nextInt(100) + random.nextLong((long) (getStr() * Data.DODGE_STR_RATE));
     }
 
     @Override
@@ -225,7 +229,11 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
 
     @Override
     public boolean isParry(Random random) {
-        return random.nextLong(100) + getStr() * Data.PARRY_STR_RATE > 97 + random.nextInt(100) + random.nextLong((long) (getAgi() * Data.PARRY_AGI_RATE));
+        float v = random.nextLong(100) + getStr() * Data.PARRY_STR_RATE + random.nextFloat(EffectHandler.getEffectAdditionFloatValue(EffectHandler.PARRY, getEffects()));
+        if(v > Data.RATE_MAX){
+            v = Data.RATE_MAX;
+        }
+        return v > 97 + random.nextInt(100) + random.nextLong((long) (getAgi() * Data.PARRY_AGI_RATE));
     }
 
     public long getUpperAtk() {

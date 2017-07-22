@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:layout_gravity="left|center_vertical"
+        android:gravity="fill">
+
+    <Button
+            android:text="欺诈师"
+            android:tag="Swindler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/swindler"
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold|italic"
+            style="@android:style/Widget.Button.Inset"/>
+
+    <ImageView
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" android:src="@drawable/line_2_center"
+            android:adjustViewBounds="true"/>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="斩击"
+                android:layout_weight="1"
+                style="@android:style/Widget.Button.Inset"
+                android:gravity="center"
+                android:textStyle="bold|italic"
+                android:id="@+id/hp_hit"
+                android:tag="HpHit"
+                android:layout_gravity="center"
+                android:visibility="visible"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="欺诈游戏"
+                android:layout_weight="1"
+                style="@android:style/Widget.Button.Inset"
+                android:gravity="center"
+                android:textStyle="bold|italic"
+                android:id="@+id/swindler_game"
+                android:tag="ElementBomb"
+                android:layout_gravity="center"
+                android:visibility="visible"/>
+    </LinearLayout>
+
+</LinearLayout>

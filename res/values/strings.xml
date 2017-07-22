@@ -100,4 +100,6 @@
     <string name="dodge_hit">闪避</string>
     <string name="btn_show_video_ad" >展示视频广告</string >
     <string name="element_skill">元素使</string>
+    <string name="swindler_skill">欺诈师</string>
+    <string name="pet_skill">宠物大师</string>
 </resources>

@@ -4,22 +4,13 @@
                 android:layout_height="match_parent"
                 >
 
-    <Button
-            android:text="@string/close"
-            style="@android:style/Widget.Button.Inset"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/skill_close"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"/>
-
     <TabHost
-            android:id="@+id/skill_tabs"
+            android:id="@+id/skill_tabs_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
-            android:layout_above="@+id/skill_close">
+            >
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -73,14 +64,78 @@
                             android:visibility="visible"/>
                 </ScrollView>
 
-                <LinearLayout
-                        android:id="@+id/tab3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                </LinearLayout>
             </FrameLayout>
         </LinearLayout>
     </TabHost>
+
+    <ImageView
+            android:src="@drawable/huoyan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/skill_tabs_main"
+            android:id="@+id/line_h"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:scaleType="fitXY"/>
+
+    <TabHost
+            android:layout_width="200dip"
+            android:layout_height="300dip"
+            android:layout_below="@+id/line_h"
+            android:id="@+id/skill_tag_second"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_above="@+id/skill_close">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <FrameLayout
+                    android:id="@android:id/tabcontent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <ScrollView
+                        android:id="@+id/swindler_skill"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                <include
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        layout="@layout/skill_layout_swindler"
+                       />
+                </ScrollView>
+                <ScrollView
+                        android:id="@+id/pet_skill"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                <include
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        layout="@layout/skill_layout_pet"
+                        />
+                </ScrollView>
+
+            </FrameLayout>
+
+            <TabWidget
+                    android:id="@android:id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+            </TabWidget>
+
+        </LinearLayout>
+    </TabHost>
+
+    <Button
+            android:text="@string/close"
+            style="@android:style/Widget.Button.Inset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/skill_close"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"/>
 </RelativeLayout>

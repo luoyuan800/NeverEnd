@@ -16,7 +16,7 @@ public class HeroModel extends SkillModel {
     }
     public boolean canEnable(SkillParameter parameter){
         InfoControlInterface context = parameter.get("context");
-        if(isSkillEnable("EvilTalent", context)){
+        if(isSkillEnable("EvilTalent", context)|| isSkillEnable("Elementalist", context)){
             return false;
         }else {
             if(!(skill instanceof HeroHit)){
@@ -29,7 +29,7 @@ public class HeroModel extends SkillModel {
 
     public boolean canMount(SkillParameter parameter) {
         InfoControlInterface context = parameter.get(SkillParameter.CONTEXT);
-        return !isSkillEnable("EvilTalent",context);
+        return !isSkillEnable("EvilTalent",context) && !isSkillEnable("Elementalist", context);
     }
 
 }

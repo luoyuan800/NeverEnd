@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.model.skill;
 
+import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.service.EffectHandler;
 import cn.luo.yuan.maze.utils.Random;
@@ -43,7 +44,11 @@ public abstract class AtkSkill implements Skill, MountAble {
     public boolean invokeAble(SkillParameter parameter){
         Random random = parameter.get("random");
         SkillAbleObject hero = parameter.getOwner();
-        return random.nextInt(100) + random.nextFloat() < rate + (hero instanceof Hero ? EffectHandler.getEffectAdditionFloatValue(EffectHandler.SKILL_RATE, ((Hero)hero).getEffects()) : 0f);
+        float v = rate + (hero instanceof Hero ? EffectHandler.getEffectAdditionFloatValue(EffectHandler.SKILL_RATE, ((Hero) hero).getEffects()) : 0f);
+        if(v > Data.RATE_MAX){
+            v = Data.RATE_MAX;
+        }
+        return random.nextInt(100) + random.nextFloat() < v;
     }
 
     public float getRate() {

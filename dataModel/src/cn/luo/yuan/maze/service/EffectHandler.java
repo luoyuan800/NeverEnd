@@ -15,7 +15,7 @@ import java.util.Collection;
 public class EffectHandler {
     public static final String HP = "hp", STR="str", AGI="agi", ATK="atk", DEF="def", MEET_RATE="meet",
             PET_RATE="pet", SKILL_RATE = "skill_rate", EGG="egg_rate", CLICK_MATERIAL="material",
-            DOGE="doge";
+            DOGE="doge", PARRY="parry";
 
     public static long getEffectAdditionLongValue(String property, Collection<Effect> effects, Hero hero){
         switch (property){
@@ -38,6 +38,13 @@ public class EffectHandler {
     public static float getEffectAdditionFloatValue(String property, Collection<Effect> effects){
         float value = 0.0f;
         switch (property){
+            case PARRY:
+                for(Effect effect : effects){
+                    if(effect instanceof ParryEffect){
+                        value += ((ParryEffect) effect).getValue();
+                    }
+                }
+                break;
             case DOGE:
                 for(Effect effect : effects){
                     if(effect instanceof DogeRateEffect){

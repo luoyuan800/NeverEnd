@@ -39,6 +39,7 @@ import sw.ls.ps.normal.spot.SpotManager;
 import sw.ls.ps.normal.video.VideoAdManager;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by luoyuan on 2017/3/29.
@@ -130,31 +131,19 @@ public class GameActivity extends BaseActivity {
                 if (findViewById(R.id.info_view).getVisibility() == View.VISIBLE) {
                     findViewById(R.id.info_view).setVisibility(View.INVISIBLE);
                     findViewById(R.id.monster_view).setVisibility(View.VISIBLE);
-                    control.getViewHandler().post(new Runnable() {
+                    Runnable update = new Runnable() {
                         @Override
                         public void run() {
-                            updateMonsterThread = new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Runnable update = new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            randomMonsterBook();
-                                        }
-                                    };
-                                    while (findViewById(R.id.monster_view).getVisibility() == View.VISIBLE) {
-                                        control.getViewHandler().post(update);
-                                        try {
-                                            Thread.sleep(10000);
-                                        } catch (InterruptedException e) {
-                                            LogHelper.logException(e, "GameActivity ->111Switch");
-                                        }
-                                    }
-                                }
-                            });
-                            updateMonsterThread.start();
+                            randomMonsterBook();
                         }
-                    });
+                    };
+                    control.getExecutor().scheduleAtFixedRate(new Runnable() {
+                        @Override
+                        public void run() {
+                            control.getViewHandler().post(update);
+                        }
+                    },0, 1, TimeUnit.MINUTES);
+
                 } else {
                     control.getViewHandler().post(new Runnable() {
                         @Override

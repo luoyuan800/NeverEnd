@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:layout_gravity="left|center_vertical"
+        android:gravity="fill">
+
+    <Button
+            android:text="宠物大师"
+            android:tag="PetMaster"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/pet_master"
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold|italic"
+            style="@android:style/Widget.Button.Inset"/>
+
+    <ImageView
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" android:src="@drawable/line_2_center"
+            android:adjustViewBounds="true"/>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="群殴"
+                android:layout_weight="1"
+                style="@android:style/Widget.Button.Inset"
+                android:gravity="center"
+                android:textStyle="bold|italic"
+                android:id="@+id/pet_battle"
+                android:tag="PetBattle"
+                android:layout_gravity="center"
+                android:visibility="visible"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="反击"
+                android:layout_weight="1"
+                style="@android:style/Widget.Button.Inset"
+                android:gravity="center"
+                android:textStyle="bold|italic"
+                android:id="@+id/pet_fight_back"
+                android:tag="PetFightBack"
+                android:layout_gravity="center"
+                android:visibility="visible"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -27,7 +27,7 @@ public class SellItem implements Serializable {
     public String toString() {
             if (effects == null)
                 return name + " * " + count + (special ? " 特价" : " 价格") + " : " + StringUtils.formatNumber(price) + "<br>" + desc;
-            return "<font color='" + color + "'>" + name + "</font>(" + type + ")" + " * "
+            return "<font color='" + color + "'>" + name + "</font>"+ " * "
                     + count + (special ? " 特价" : " 价格") + " : " + StringUtils.formatNumber(price)
                     + (StringUtils.isNotEmpty(author) ? "<br>" + author : "")
                     + (StringUtils.isNotEmpty(desc) ? "<br>" + desc : "")
