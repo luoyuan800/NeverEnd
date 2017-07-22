@@ -129,4 +129,58 @@ public class EffectHandler {
         }
         return value;
     }
+
+    public static Effect buildEffect(String effectName, String value) {
+        switch (effectName) {
+            case "ClickMaterialEffect":
+                ClickMaterialEffect clickMaterialEffect = new ClickMaterialEffect();
+                clickMaterialEffect.setValue(Long.parseLong(value));
+                return clickMaterialEffect;
+            case "DefPercentEffect":
+                DefPercentEffect defPercentEffect = new DefPercentEffect();
+                defPercentEffect.setPercent(Float.parseFloat(value));
+                return defPercentEffect;
+            case "AtkPercentEffect":
+                AtkPercentEffect atkPercentEffect = new AtkPercentEffect();
+                atkPercentEffect.setPercent(Float.parseFloat(value));
+                return atkPercentEffect;
+            case "HPPercentEffect":
+                HPPercentEffect hpPercentEffect = new HPPercentEffect();
+                hpPercentEffect.setPercent(Float.parseFloat(value));
+                return hpPercentEffect;
+            case "SkillRateEffect":
+                SkillRateEffect skillRateEffect = new SkillRateEffect();
+                skillRateEffect.setSkillRate(Float.parseFloat(value));
+                return skillRateEffect;
+            case "AgiEffect":
+                AgiEffect agiEffect = new AgiEffect();
+                agiEffect.setAgi(Long.parseLong(value));
+                return agiEffect;
+            case "AtkEffect":
+                AtkEffect atkEffect = new AtkEffect();
+                atkEffect.setAtk(Long.parseLong(value));
+                return atkEffect;
+            case "DefEffect":
+                DefEffect defEffect = new DefEffect();
+                defEffect.setDef(Long.parseLong(value));
+                return defEffect;
+            case "HpEffect":
+                HpEffect hpEffect = new HpEffect();
+                hpEffect.setHp(Long.parseLong(value));
+                return hpEffect;
+            case "StrEffect":
+                StrEffect strEffect = new StrEffect();
+                strEffect.setStr(Long.parseLong(value));
+                return strEffect;
+            case "MeetRateEffect":
+                MeetRateEffect meetRateEffect = new MeetRateEffect();
+                meetRateEffect.setMeetRate(Float.parseFloat(value));
+                return meetRateEffect;
+            case "PetRateEffect":
+                PetRateEffect petRateEffect = new PetRateEffect();
+                petRateEffect.setPetRate(Float.parseFloat(value));
+                return petRateEffect;
+        }
+        return null;
+    }
 }

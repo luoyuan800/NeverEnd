@@ -139,6 +139,12 @@ public class NeverEndServlet extends HttpServlet {
         PrintWriter writer = null;
         Boolean success = null;
         switch (path) {
+            case ADD_ACCESSORY:
+                process.addAccessory(request.getParameter("name"),request.getParameter("tag"),
+                        request.getParameter("type"), request.getParameter("author"),
+                        request.getParameter("e1"),request.getParameter("e2"),request.getParameter("e3"),
+                        request.getParameter("e4"),request.getParameter("e5"),request.getParameter("e6"),
+                        request.getParameter("e7"),request.getParameter("e8"));
             case ADD_ONLINE_GIFT:
                 process.addOnlineGift(ownerId,request.getIntHeader(Field.COUNT));
                 success = true;

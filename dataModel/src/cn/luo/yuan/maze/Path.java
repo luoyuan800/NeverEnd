@@ -35,5 +35,6 @@ public class Path {
     public static final String ONLINE_SHOP = "shop";
     public static final String BUY_ONLINE = "buy";
     public static final String ADD_ONLINE_GIFT = "add_online_gift";
+    public static final String ADD_ACCESSORY = "add_accessory";
 
 }

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Basic Form - jQuery EasyUI Demo</title>
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5.1/themes/metro/easyui.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5.1/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5.1/project.css">
+    <script type="text/javascript" src="jquery-easyui-1.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
+</head>
+<body>
+<center>
+<h2>添加装备</h2>
+<div style="margin:20px 0;">Example: AgiEffect,10,</div>
+<div style="margin:20px 0;">Type: 项链, 戒指, 帽子, 武器, 防具</div>
+<div style="margin:20px 0;">Effect: AgiEffect, AtkEffect, AtkPercentEffect, ClickMaterialEffect, DefEffect, DefPercentEffect,</div>
+<div style="margin:20px 0;">Effect: EggRateEffect, HpEffect, HPPercentEffect, MeetRateEffect, PetRateEffect, SkillRateEffect, StrEffect</div>
+<div class="easyui-panel" title="New Topic" style="width:100%;max-width:400px;padding:30px 60px;">
+    <form id="ff" method="post" action="/app/add_accessory">
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" name="name" style="width:100%" data-options="label:'Name:',required:true" labelPosition="top">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" name="type" style="width:100%" data-options="label:'Type:',required:true" labelPosition="top">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" name="tag" style="width:100%" data-options="label:'Tag:'" labelPosition="top">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" name="e1" style="width:100%" data-options="label:'Effect1:',required:true" labelPosition="top">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" name="e2" style="width:100%" data-options="label:'Effect2:'" labelPosition="top">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" name="e3" style="width:100%" data-options="label:'Effect3:'" labelPosition="top">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" name="e4" style="width:100%" data-options="label:'Effect4:'" labelPosition="top">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" name="e5" style="width:100%" data-options="label:'Effect5:'" labelPosition="top">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" name="e6" style="width:100%" data-options="label:'Effect6:'" labelPosition="top">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" name="e7" style="width:100%" data-options="label:'Effect7:'" labelPosition="top">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" name="e8" style="width:100%" data-options="label:'Effect8:'" labelPosition="top">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" name="author" style="width:100%" data-options="label:'author:',required:true" labelPosition="top">
+        </div>
+
+    </form>
+    <div style="text-align:center;padding:5px 0">
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" style="width:80px">Submit</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()" style="width:80px">Clear</a>
+    </div>
+</div>
+</center>
+<script>
+            function submitForm(){
+                $('#ff').form({
+                    success:function(data){
+                        if(data == 'success'){
+                            clearForm();
+                        }else{
+                            if(data == 'Duplicate'){
+                                $.messager.alert('Result（结果）', 'Please use another user ID（名重复，请重新输入）', 'error');
+                            }else{
+                                $.messager.alert('Result（结果）', data, 'error');
+                            }
+                        }
+                    }
+                });
+                $('#ff').form('submit');
+            }
+            function clearForm(){
+                $('#ff').form('clear');
+            }
+        </script>
+</body>
+</html>

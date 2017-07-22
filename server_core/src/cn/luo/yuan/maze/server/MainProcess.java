@@ -12,6 +12,7 @@ import cn.luo.yuan.maze.server.model.User;
 import cn.luo.yuan.maze.server.persistence.*;
 import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection;
 import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
+import cn.luo.yuan.maze.service.EffectHandler;
 import cn.luo.yuan.maze.task.Task;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -137,7 +138,7 @@ public class MainProcess {
             for (String effect : accessory_effects.split(";")) {
                 String[] ev = effect.split(":");
                 if (ev.length > 1) {
-                    accessory.getEffects().add(buildEffect(ev[0], ev[1]));
+                    accessory.getEffects().add(EffectHandler.buildEffect(ev[0], ev[1]));
                 }
             }
             accessory.setLevel(Long.parseLong(accessory_level));
@@ -474,42 +475,27 @@ public class MainProcess {
         }
     }
 
-    private static Effect buildEffect(String effectName, String value) {
-        switch (effectName) {
-            case "SkillRateEffect":
-                SkillRateEffect skillRateEffect = new SkillRateEffect();
-                skillRateEffect.setSkillRate(Float.parseFloat(value));
-                return skillRateEffect;
-            case "AgiEffect":
-                AgiEffect agiEffect = new AgiEffect();
-                agiEffect.setAgi(Long.parseLong(value));
-                return agiEffect;
-            case "AtkEffect":
-                AtkEffect atkEffect = new AtkEffect();
-                atkEffect.setAtk(Long.parseLong(value));
-                return atkEffect;
-            case "DefEffect":
-                DefEffect defEffect = new DefEffect();
-                defEffect.setDef(Long.parseLong(value));
-                return defEffect;
-            case "HpEffect":
-                HpEffect hpEffect = new HpEffect();
-                hpEffect.setHp(Long.parseLong(value));
-                return hpEffect;
-            case "StrEffect":
-                StrEffect strEffect = new StrEffect();
-                strEffect.setStr(Long.parseLong(value));
-                return strEffect;
-            case "MeetRateEffect":
-                MeetRateEffect meetRateEffect = new MeetRateEffect();
-                meetRateEffect.setMeetRate(Float.parseFloat(value));
-                return meetRateEffect;
-            case "PetRateEffect":
-                PetRateEffect petRateEffect = new PetRateEffect();
-                petRateEffect.setPetRate(Float.parseFloat(value));
-                return petRateEffect;
+    public void addAccessory(String name, String tag, String type, String author, String... effects) {
+        Accessory accessory = new Accessory();
+        accessory.setName(name);
+        accessory.setDesc(tag);
+        accessory.setAuthor(author);
+        accessory.setType(type);
+        for(String effect : effects){
+            if(StringUtils.isNotEmpty(effect)){
+                String[] ss = StringUtils.split(effect, ",|，");
+                if(ss.length >= 2){
+                    Effect e = EffectHandler.buildEffect(ss[0].trim(), ss[1].trim());
+                    if(e!=null){
+                        if(ss.length > 2 && StringUtils.isNotEmpty(ss[2])){
+                            e.setElementControl(true);
+                        }
+                        accessory.getEffects().add(e);
+                    }
+                }
+            }
         }
-        return null;
+        shop.add(accessory);
     }
 
     //Only use for unit test

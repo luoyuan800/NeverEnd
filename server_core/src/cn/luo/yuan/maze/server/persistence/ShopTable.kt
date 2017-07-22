@@ -104,4 +104,26 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
         stat.close()
         conn.close()
     }
+
+    fun add(item:Any){
+        val conn = database.getConnection()
+        try{
+        when(item){
+            is Accessory ->{
+                accessoryDb?.save(item)
+                val state = conn.prepareStatement("insert into shop(id, type, cost, count,ref) values(?,?,?,?,?)")
+                state.setString(1, item.id)
+                state.setString(2, "accessory")
+                state.setLong(3, 500000)
+                state.setLong(4, 100)
+                state.setString(5, item.id)
+                state.execute()
+                state.close()
+            }
+        }
+        }catch (e:Exception) {
+            LogHelper.error(e)
+        }
+        conn.close()
+    }
 }

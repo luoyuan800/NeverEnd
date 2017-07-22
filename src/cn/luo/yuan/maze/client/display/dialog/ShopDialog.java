@@ -36,7 +36,7 @@ public class ShopDialog {
 
     public void showOnlineShop(Handler handler){
         ServerService ss = new ServerService(context);
-        List<SellItem> sellItems = ss.getOnlineSellItems();
+        List<SellItem> sellItems = ss.getOnlineSellItems(context);
         handler.post(new Runnable() {
             @Override
             public void run() {

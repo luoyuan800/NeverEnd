@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.client.service;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.client.utils.RestConnection;
+import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.SellItem;
 import cn.luo.yuan.maze.model.ServerData;
@@ -164,11 +165,16 @@ public class ServerService {
         return null;
     }
 
-    public List<SellItem> getOnlineSellItems() {
+    public List<SellItem> getOnlineSellItems(NeverEnd context) {
         try {
             HttpURLConnection connection = server.getHttpURLConnection(ONLINE_SHOP, RestConnection.POST);
             Object o = server.connect(connection);
             if(o instanceof ArrayList){
+                for(SellItem item : (ArrayList<SellItem>)o){
+                    if(item.instance instanceof Accessory){
+                        item.instance = context.covertAccessoryToLocal((Accessory) item.instance);
+                    }
+                }
                 return (ArrayList<SellItem>)o;
             }
         } catch (Exception e) {

@@ -26,6 +26,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     private final static String youmiappId = "1b3d76d520cfe2eb";
     private final static String youmiappSecret = "338009391786dd1d";
     private final static String adcenseid = "c7ytLzE6IjZr5oo0KnJ";
+    private int award = 1;
     private OnlineActivity context;
     private boolean yomob = false;
     private boolean debug = false;
@@ -91,8 +92,8 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     @Override
     public void onADAwardSuccess(String s) {
-        context.handler.showToast("获得两个礼包，点击广告可以再获得一个礼包");
-        context.handler.addOnlineGift(2);
+        context.handler.showToast("获得一个礼包，点击广告可以再获得一个礼包");
+        context.handler.addOnlineGift(1);
     }
 
     @Override
@@ -148,8 +149,8 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     @Override
     public void onShowSuccess() {
-        context.handler.showToast("获得一个礼包，点击广告可以再获得一个礼包");
-        context.handler.addOnlineGift(1);
+        context.handler.showToast("获得" + award + "个礼包，点击广告可以再获得" + award + "个礼包");
+        context.handler.addOnlineGift(award);
     }
 
     @Override
@@ -183,8 +184,8 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     @Override
     public void onSpotClicked(boolean isWebPage) {
-        context.handler.showToast("获得一个礼包");
-        context.handler.addOnlineGift(1);
+        context.handler.showToast("获得" + award + "个礼包");
+        context.handler.addOnlineGift(award);
     }
 
     public void onActivityResult(int reqCode, int resCode, Intent data) {
@@ -196,23 +197,32 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     }
 
     private void setUpYomobAd() {
+        try {
 //        TGSDK.setDebugModel(true);
-        TGSDK.initialize(context, yomobappId, new TGSDKServiceResultCallBack() {
+            TGSDK.initialize(context, yomobappId, new TGSDKServiceResultCallBack() {
 
-            @Override
-            public void onFailure(Object arg0, String arg1) {
-                debug("Failure: %s , %s", arg0, arg1);
-                setUpYouMiAd();
-            }
+                @Override
+                public void onFailure(Object arg0, String arg1) {
+                    debug("Failure: %s , %s", arg0, arg1);
+                    setUpYouMiAd();
+                }
 
-            @Override
-            public void onSuccess(Object arg0, Map<String, String> arg1) {
-                yomob = true;
-            }
-        });
-        TGSDK.preloadAd(context, this);
-        TGSDK.setADListener(this);
-        TGSDK.setRewardVideoADListener(this);
+                @Override
+                public void onSuccess(Object arg0, Map<String, String> arg1) {
+                    yomob = true;
+                    try {
+                        award = Integer.parseInt(TGSDK.parameterFromAdScene(adcenseid, "base_award").toString());
+                    } catch (Exception e) {
+                        LogHelper.logException(e, "Set Award count!");
+                    }
+                }
+            });
+            TGSDK.preloadAd(context, this);
+            TGSDK.setADListener(this);
+            TGSDK.setRewardVideoADListener(this);
+        }catch (Exception e){
+            LogHelper.logException(e, "Setup AD");
+        }
     }
 
     private void setUpYouMiAd() {
