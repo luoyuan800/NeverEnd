@@ -15,6 +15,7 @@ import java.util.concurrent.ScheduledExecutorService;
 public class MockGameContext implements InfoControlInterface {
     public Random random = new Random(System.currentTimeMillis());
     public Hero hero;
+    public DataManagerInterface dataManager;
     @Override
     public Hero getHero() {
         return hero;
@@ -42,7 +43,7 @@ public class MockGameContext implements InfoControlInterface {
 
     @Override
     public DataManagerInterface getDataManager() {
-        return null;
+        return dataManager;
     }
 
     @Override

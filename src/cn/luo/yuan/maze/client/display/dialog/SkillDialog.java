@@ -164,6 +164,8 @@ public class SkillDialog implements View.OnClickListener {
                 }
             }
 
+        }else{
+            SimplerDialogBuilder.build("敬请期待", Resource.getString(R.string.conform), null,context.getContext());
         }
     }
 

@@ -47,6 +47,11 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     public void onPreloadSuccess(String s) {
         debug("PreloadSuccess: %s",s);
         yomob = true;
+        try {
+            award = Integer.parseInt(TGSDK.parameterFromAdScene(adcenseid, "base_award").toString());
+        } catch (Exception e) {
+            LogHelper.logException(e, "Set Award count!");
+        }
     }
 
     @Override
@@ -138,10 +143,10 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (yomob && TGSDK.couldShowAd(adcenseid)) {
-                    TGSDK.showAd(context, adcenseid);
+                if (yomob) {
+                    TGSDK.showTestView(context, adcenseid);
                 } else {
-                    SpotManager.getInstance(context).showSpot(context, AdHandler.this);
+                    debug("Could not show!");
                 }
             }
         });
@@ -199,7 +204,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     private void setUpYomobAd() {
         try {
-//        TGSDK.setDebugModel(true);
+        TGSDK.setDebugModel(true);
             TGSDK.initialize(context, yomobappId, new TGSDKServiceResultCallBack() {
 
                 @Override
@@ -211,14 +216,11 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
                 @Override
                 public void onSuccess(Object arg0, Map<String, String> arg1) {
                     yomob = true;
-                    try {
-                        award = Integer.parseInt(TGSDK.parameterFromAdScene(adcenseid, "base_award").toString());
-                    } catch (Exception e) {
-                        LogHelper.logException(e, "Set Award count!");
-                    }
+                    debug("Init AD success");
+
+                    TGSDK.preloadAd(context, AdHandler.this);
                 }
             });
-            TGSDK.preloadAd(context, this);
             TGSDK.setADListener(this);
             TGSDK.setRewardVideoADListener(this);
         }catch (Exception e){
