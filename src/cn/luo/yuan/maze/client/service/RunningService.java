@@ -9,6 +9,11 @@ import cn.luo.yuan.maze.listener.LostListener;
 import cn.luo.yuan.maze.listener.PetCatchListener;
 import cn.luo.yuan.maze.listener.WinListener;
 import cn.luo.yuan.maze.model.*;
+import cn.luo.yuan.maze.model.skill.MountAble;
+import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.model.skill.SkillFactory;
+import cn.luo.yuan.maze.model.skill.SkillParameter;
+import cn.luo.yuan.maze.model.skill.swindler.EatHarm;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.service.*;
 import cn.luo.yuan.maze.utils.Random;
@@ -35,6 +40,9 @@ public class RunningService implements RunningServiceInterface {
     private HarmAble target;
     private RandomEventService randomEventService;
     private PetMonsterHelper monsterHelper;
+    public NeverEnd getContext(){
+        return gameContext;
+    }
     public RunningService(Hero hero, Maze maze, NeverEnd gameContext, DataManager dataManager, long fps) {
         startTime = System.currentTimeMillis();
         this.hero = hero;
@@ -218,6 +226,26 @@ public class RunningService implements RunningServiceInterface {
     private void mazeLevelCalculate() {
         if (maze.getMaxLevel() < maze.getLevel()) {
             maze.setMaxLevel(maze.getLevel());
+        }
+        if(maze.getLevel()>= 100 && maze.getLevel()%100 == 0){
+            Skill skill = SkillFactory.geSkillByName("EatHarm",gameContext.getDataManager());
+            if(skill.isEnable()){
+                if(random.nextInt(4) == 0){
+                    if(skill instanceof MountAble){
+                        if(((MountAble) skill).isMounted()){
+                            SkillHelper.unMountSkill((MountAble) skill, hero);
+                        }
+                    }
+                    skill.disable();
+                }
+            }else{
+                if(random.nextBoolean()){
+                    SkillParameter sp = new SkillParameter(hero);
+                    sp.set(SkillParameter.RANDOM, random);
+                    sp.set(SkillParameter.CONTEXT, gameContext);
+                    skill.enable(sp);
+                }
+            }
         }
     }
 

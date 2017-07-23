@@ -29,13 +29,13 @@
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="斩击"
+                android:text="虚无吞噬"
                 android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"
                 android:gravity="center"
                 android:textStyle="bold|italic"
-                android:id="@+id/hp_hit"
-                android:tag="HpHit"
+                android:id="@+id/eat_harm"
+                android:tag="EatHarm"
                 android:layout_gravity="center"
                 android:visibility="visible"/>
         <Button
@@ -47,7 +47,7 @@
                 android:gravity="center"
                 android:textStyle="bold|italic"
                 android:id="@+id/swindler_game"
-                android:tag="ElementBomb"
+                android:tag="SwindlerGame"
                 android:layout_gravity="center"
                 android:visibility="visible"/>
     </LinearLayout>

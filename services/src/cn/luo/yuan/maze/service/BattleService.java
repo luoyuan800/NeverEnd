@@ -236,8 +236,13 @@ public class BattleService{
             }
             if(result instanceof HarmResult){
                 if(atker instanceof NameObject && target instanceof NameObject) {
-                    target.setHp(target.getHp() - ((HarmResult) result).getHarm());
-                    battleMessage.harm((NameObject) atker, (NameObject) target, ((HarmResult) result).getHarm());
+                    if(((HarmResult) result).isBack()){
+                        ((HarmAble)atker).setHp(((HarmAble)atker).getHp() - ((HarmResult) result).getHarm());
+                        battleMessage.harm((NameObject) target, (NameObject) atker, ((HarmResult) result).getHarm());
+                    }else {
+                        target.setHp(target.getHp() - ((HarmResult) result).getHarm());
+                        battleMessage.harm((NameObject) atker, (NameObject) target, ((HarmResult) result).getHarm());
+                    }
                 }
             }
             return true;
@@ -252,6 +257,7 @@ public class BattleService{
         atkPara.set(SkillParameter.DEFENDER, target);
         atkPara.set(SkillParameter.MINHARM, level);
         atkPara.set(SkillParameter.MESSAGE, battleMessage);
+        atkPara.set(SkillParameter.CONTEXT, runninfService.getContext());
         return atkPara;
     }
 }

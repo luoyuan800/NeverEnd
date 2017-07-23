@@ -14,8 +14,6 @@ import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.service.SkillHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 
-import java.util.ArrayList;
-
 /**
  * Created by luoyuan on 2017/5/28.
  */
@@ -60,6 +58,7 @@ public class SkillDialog implements View.OnClickListener {
 
         //Swindler Skills
         tabHost1.addTab(tabHost1.newTabSpec("swindler_skill").setIndicator(Resource.getString(R.string.swindler_skill)).setContent(R.id.swindler_skill));
+        initSkillButton((Button)dialog.findViewById(R.id.swindler), (Button)dialog.findViewById(R.id.swindler_game), (Button)dialog.findViewById(R.id.eat_harm));
         //Pet Skills
         tabHost1.addTab(tabHost1.newTabSpec("pet_skill").setIndicator(Resource.getString(R.string.pet_skill)).setContent(R.id.pet_skill));
 

@@ -5,6 +5,7 @@ import cn.luo.yuan.maze.server.model.Messager
 import cn.luo.yuan.maze.server.persistence.HeroTable
 import cn.luo.yuan.maze.server.persistence.NPCTable
 import cn.luo.yuan.maze.service.BattleService
+import cn.luo.yuan.maze.service.InfoControlInterface
 import cn.luo.yuan.maze.service.RunningServiceInterface
 import cn.luo.yuan.maze.utils.Random
 import cn.luo.yuan.maze.utils.StringUtils
@@ -16,6 +17,10 @@ import java.util.*
  * Created by gluo on 6/26/2017.
  */
 class HeroBattleService(private val table: HeroTable, val groups: MutableList<GroupHolder>, val main: MainProcess) : Runnable, RunningServiceInterface {
+    override fun getContext(): InfoControlInterface {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun isPause(): Boolean {
         return false
     }

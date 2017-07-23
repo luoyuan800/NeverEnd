@@ -27,16 +27,19 @@ class FightBack() : DefSkill(), UpgradeAble {
     private var level = 1L
     private val model = HeroModel(this)
     override fun upgrade(parameter: SkillParameter?): Boolean {
-        if (percent + 1 > Data.RATE_MAX) {
+        if (percent + 1 > Data.RATE_MAX/3) {
             return false
         }
         val hero = parameter!!.owner
         if (hero is Hero) {
             level++
             percent++
-            rate += 0.5f
+            if(rate < Data.RATE_MAX/5) {
+                rate += 0.5f
+            }
             return true
         }
+
         return false
     }
 

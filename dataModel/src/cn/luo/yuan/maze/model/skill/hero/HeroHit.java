@@ -76,8 +76,8 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
             level++;
             minHarm += level;
             maxHarm *= level;
-            if(getRate() < 25) {
-                setRate(getRate() + 3.1f);
+            if(getRate() < Data.RATE_MAX/3) {
+                setRate(getRate() + 1.1f);
             }
             return true;
         }

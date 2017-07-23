@@ -9,6 +9,9 @@ import cn.luo.yuan.maze.model.skill.evil.Stealth;
 import cn.luo.yuan.maze.model.skill.hero.Dodge;
 import cn.luo.yuan.maze.model.skill.hero.FightBack;
 import cn.luo.yuan.maze.model.skill.hero.HeroHit;
+import cn.luo.yuan.maze.model.skill.swindler.EatHarm;
+import cn.luo.yuan.maze.model.skill.swindler.Swindler;
+import cn.luo.yuan.maze.model.skill.swindler.SwindlerGame;
 import cn.luo.yuan.maze.persistence.DataManagerInterface;
 
 /**
@@ -45,6 +48,15 @@ public class SkillFactory {
                     break;
                 case "ElementDefend":
                     skill = new ElementDefend();
+                    break;
+                case "Swindler":
+                    skill = new Swindler();
+                    break;
+                case "SwindlerGame":
+                    skill = new SwindlerGame();
+                    break;
+                case "EatHarm":
+                    skill = new EatHarm();
                     break;
             }
         }

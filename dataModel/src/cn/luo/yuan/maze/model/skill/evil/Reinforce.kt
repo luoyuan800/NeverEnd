@@ -83,7 +83,7 @@ class Reinforce() : AtkSkill(), UpgradeAble {
     }
 
     override fun canUpgrade(parameter: SkillParameter?): Boolean {
-        return isUpgradePointEnough(parameter) && rate < Data.RATE_MAX
+        return isUpgradePointEnough(parameter) && rate < Data.RATE_MAX/2
     }
 
     override fun canEnable(parameter: SkillParameter?): Boolean {

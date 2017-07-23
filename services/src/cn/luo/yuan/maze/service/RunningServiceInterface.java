@@ -5,4 +5,5 @@ package cn.luo.yuan.maze.service;
  */
 public interface RunningServiceInterface extends Runnable {
     boolean isPause();
+    InfoControlInterface getContext();
 }

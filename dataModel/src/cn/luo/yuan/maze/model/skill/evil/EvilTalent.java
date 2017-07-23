@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.model.skill.evil;
 
+import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.skill.*;
@@ -81,7 +82,7 @@ public class EvilTalent extends DefSkill implements UpgradeAble {
 
     public boolean
     canUpgrade(SkillParameter parameter) {
-        return isEnable() && getRate() < 15f && isUpgradePointEnough(parameter);
+        return isEnable() && getRate() < Data.RATE_MAX/4 && isUpgradePointEnough(parameter);
     }
 
     public String getSkillName(){

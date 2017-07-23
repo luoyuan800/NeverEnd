@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.model.skill.evil
 
+import cn.luo.yuan.maze.model.Data
 import cn.luo.yuan.maze.model.Hero
 import cn.luo.yuan.maze.model.effect.original.MeetRateEffect
 import cn.luo.yuan.maze.model.skill.PropertySkill
@@ -42,6 +43,10 @@ class Stealth():PropertySkill(),UpgradeAble {
         percent += 0.5f
         maze.meetRate += percent
         return true
+    }
+
+    override fun canUpgrade(parameter: SkillParameter?): Boolean {
+        return percent < Data.RATE_MAX/2 && isUpgradePointEnough(parameter)
     }
 
     override fun disable(parameter: SkillParameter?) {
