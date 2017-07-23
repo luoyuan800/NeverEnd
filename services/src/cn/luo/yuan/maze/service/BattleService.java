@@ -252,6 +252,7 @@ public class BattleService{
 
     private SkillParameter getSkillParameter(SkillAbleObject atker, HarmAble target, Random random, long level) {
         SkillParameter atkPara = new SkillParameter(atker);
+        atkPara.set(SkillParameter.ATKER, atker);
         atkPara.set(SkillParameter.RANDOM, random);
         atkPara.set(SkillParameter.TARGET, target);
         atkPara.set(SkillParameter.DEFENDER, target);

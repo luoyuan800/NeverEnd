@@ -35,6 +35,10 @@ public class EvilModel extends SkillModel {
         }
     }
 
+    public boolean canUpgrade(SkillParameter parameter){
+        return skill.isEnable() && isUpgradePointEnough(parameter);
+    }
+
 
 
 

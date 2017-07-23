@@ -50,6 +50,7 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     private EncodeLong click = new EncodeLong(0);
     private Race race;
     private float elementRate = 0.5f;
+    private int petCount = (int) Data.BASE_PET_COUNT;
     public Hero() {
     }
 
@@ -370,5 +371,13 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
 
     public void setElementRate(float elementRate) {
         this.elementRate = elementRate;
+    }
+
+    public int getPetCount() {
+        return petCount;
+    }
+
+    public void setPetCount(int petCount) {
+        this.petCount = petCount;
     }
 }

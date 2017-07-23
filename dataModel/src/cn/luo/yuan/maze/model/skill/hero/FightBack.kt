@@ -67,19 +67,20 @@ class FightBack() : DefSkill(), UpgradeAble {
     }
 
     override fun invoke(parameter: SkillParameter): SkillResult {
-        val monster: HarmAble = parameter.get(SkillParameter.ATKER)
-        val hero: HarmAble = parameter.owner as HarmAble
+        val atker: HarmAble = parameter.get(SkillParameter.ATKER)
+        val defender: HarmAble = parameter.owner as HarmAble
         val minHarm: Long = parameter.get(SkillParameter.MINHARM)
         val random: Random = parameter.get(SkillParameter.RANDOM)
         val battleMessage = parameter.get<BattleMessageInterface>(SkillParameter.MESSAGE)
-        val harm = BattleServiceBase.getHarm(hero, monster, minHarm, random, battleMessage)
-        monster.hp -= harm
-        if (hero is NameObject && monster is NameObject) {
-            battleMessage.harm(hero, monster, harm)
+        val harm = BattleServiceBase.getHarm(atker, defender, minHarm, random, battleMessage)
+        defender.hp -= harm
+        if (defender is NameObject && atker is NameObject) {
+            battleMessage.harm(atker, defender, harm)
         }
 
         val rHarm: Long = Math.round(harm * (percent / 100f)).toLong()
         val result = HarmResult()
+        result.isBack = true
         result.harm = rHarm
         return result
     }

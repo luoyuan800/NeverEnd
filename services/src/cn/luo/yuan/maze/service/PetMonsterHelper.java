@@ -373,7 +373,7 @@ public class PetMonsterHelper implements PetMonsterHelperInterface {
     }
 
     public boolean mountPet(Pet pet, Hero hero){
-        if(hero.getPets().size() >= Data.BASE_PET_COUNT + hero.getReincarnate()){
+        if(hero.getPets().size() >= hero.getPetCount() + hero.getReincarnate()){
             return false;
         }else{
             pet.setMounted(true);

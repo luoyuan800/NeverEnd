@@ -29,7 +29,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     private int award = 1;
     private OnlineActivity context;
     private boolean yomob = false;
-    private boolean debug = true;
+    private boolean debug = false;
 
     public AdHandler(OnlineActivity a) {
         this.context = a;
@@ -143,9 +143,14 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (yomob) {
+                if (yomob && TGSDK.couldShowAd(adcenseid)) {
                     TGSDK.showTestView(context, adcenseid);
                 } else {
+                    if(SpotManager.getInstance(context).checkSpotAdConfig()) {
+                        SpotManager.getInstance(context).showSpot(context, AdHandler.this);
+                    }else{
+                        setUpYouMiAd();
+                    }
                     debug("Could not show!");
                 }
             }

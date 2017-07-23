@@ -79,4 +79,8 @@ class ElementDefend():DefSkill(),UpgradeAble {
     override fun canUpgrade(parameter: SkillParameter?): Boolean {
         return rate + 0.5 < Data.RATE_MAX/4 && model.canUpgrade(parameter)
     }
+
+    override fun canEnable(parameter: SkillParameter?): Boolean {
+        return model.canEnable(parameter)
+    }
 }

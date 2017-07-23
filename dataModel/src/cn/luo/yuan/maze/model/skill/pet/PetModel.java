@@ -16,22 +16,12 @@ public class PetModel extends SkillModel {
         super(skill);
     }
     public boolean canEnable(SkillParameter parameter){
-        InfoControlInterface context = parameter.get("context");
-        return (skill instanceof EvilTalent || isSkillEnable("Swindler", context)) && isEnablePointEnough(parameter);
+        return isEnablePointEnough(parameter);
     }
 
     public boolean canMount(SkillParameter parameter) {
         return skill.isEnable();
     }
-
-    public void upgrade(SkillParameter parameter){
-        SkillAbleObject hero = parameter.getOwner();
-        if (hero instanceof Hero) {
-            ((Hero) hero).setPoint(((Hero) hero).getPoint() - ((UpgradeAble)skill).getLevel() * Data.SKILL_ENABLE_COST);
-        }
-    }
-
-
 
 
 }

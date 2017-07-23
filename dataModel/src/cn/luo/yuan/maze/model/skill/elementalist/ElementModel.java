@@ -28,15 +28,8 @@ public class ElementModel extends SkillModel {
         return !isSkillEnable("HeroHit",context)&& !isSkillEnable("EvilTalent", context);
     }
 
-    public void upgrade(SkillParameter parameter){
-        SkillAbleObject hero = parameter.getOwner();
-        if (hero instanceof Hero) {
-            ((Hero) hero).setPoint(((Hero) hero).getPoint() - ((UpgradeAble)skill).getLevel() * Data.SKILL_ENABLE_COST);
-        }
-    }
-
     public boolean canUpgrade(SkillParameter parameter){
-        return isUpgradePointEnough(parameter);
+        return skill.isEnable() && isUpgradePointEnough(parameter);
     }
 
 

@@ -80,12 +80,12 @@ public class EvilTalent extends DefSkill implements UpgradeAble {
         setEnable(true);
     }
 
-    public boolean
-    canUpgrade(SkillParameter parameter) {
+    public boolean canUpgrade(SkillParameter parameter) {
         return isEnable() && getRate() < Data.RATE_MAX/4 && isUpgradePointEnough(parameter);
     }
 
     public String getSkillName(){
         return model.getSkillName();
     }
+
 }

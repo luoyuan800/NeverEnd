@@ -131,19 +131,31 @@ public class GameActivity extends BaseActivity {
                 if (findViewById(R.id.info_view).getVisibility() == View.VISIBLE) {
                     findViewById(R.id.info_view).setVisibility(View.INVISIBLE);
                     findViewById(R.id.monster_view).setVisibility(View.VISIBLE);
-                    Runnable update = new Runnable() {
+                    control.getViewHandler().post(new Runnable() {
                         @Override
                         public void run() {
-                            randomMonsterBook();
+                            updateMonsterThread = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Runnable update = new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            randomMonsterBook();
+                                        }
+                                    };
+                                    while (findViewById(R.id.monster_view).getVisibility() == View.VISIBLE) {
+                                        control.getViewHandler().post(update);
+                                        try {
+                                            Thread.sleep(10000);
+                                        } catch (InterruptedException e) {
+                                            LogHelper.logException(e, "GameActivity ->111Switch");
+                                        }
+                                    }
+                                }
+                            });
+                            updateMonsterThread.start();
                         }
-                    };
-                    control.getExecutor().scheduleAtFixedRate(new Runnable() {
-                        @Override
-                        public void run() {
-                            control.getViewHandler().post(update);
-                        }
-                    },0, 1, TimeUnit.MINUTES);
-
+                    });
                 } else {
                     control.getViewHandler().post(new Runnable() {
                         @Override

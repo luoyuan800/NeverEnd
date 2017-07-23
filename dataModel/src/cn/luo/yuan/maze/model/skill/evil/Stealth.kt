@@ -35,7 +35,6 @@ class Stealth():PropertySkill(),UpgradeAble {
     }
 
     override fun upgrade(parameter: SkillParameter?): Boolean {
-        model.upgrade(parameter)
         level ++
         val context:InfoControlInterface = parameter!![SkillParameter.CONTEXT]
         val maze = context.maze
@@ -46,7 +45,7 @@ class Stealth():PropertySkill(),UpgradeAble {
     }
 
     override fun canUpgrade(parameter: SkillParameter?): Boolean {
-        return percent < Data.RATE_MAX/2 && isUpgradePointEnough(parameter)
+        return isEnable && percent < Data.RATE_MAX/2 && isUpgradePointEnough(parameter)
     }
 
     override fun disable(parameter: SkillParameter?) {
