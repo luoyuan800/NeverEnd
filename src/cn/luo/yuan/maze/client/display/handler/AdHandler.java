@@ -29,14 +29,14 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     private int award = 1;
     private OnlineActivity context;
     private boolean yomob = false;
-    private boolean debug = false;
+    private boolean debug = true;
 
     public AdHandler(OnlineActivity a) {
         this.context = a;
     }
 
     public void setupAD() {
-        //setUpYomobAd();
+        setUpYomobAd();
     }
 
     public boolean isYomob() {
@@ -52,6 +52,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     @Override
     public void onPreloadFailed(String s, String s1) {
         debug("%s: %s", s, s1);
+        setUpYouMiAd();
     }
 
     @Override
