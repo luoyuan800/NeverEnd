@@ -109,29 +109,13 @@
                 android:name="com.mobvista.msdk.reward.player.MVRewardVideoActivity"
                 android:screenOrientation="landscape"
                 android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-        <!-- Applovin -->
-        <activity android:name="com.applovin.adview.AppLovinInterstitialActivity" />
-        <activity android:name="com.applovin.adview.AppLovinConfirmationActivity" />
         <!-- Domob -->
         <activity
                 android:name="com.pad.android_independent_video_sdk.view.DvxVideoActivity"
                 android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
                 android:configChanges="orientation|keyboard|screenSize|screenLayout"/>
         <service android:name="com.pad.android_independent_video_sdk.IndependentService"/>
-        <!-- Inmobi -->
-        <activity
-                android:name="com.inmobi.rendering.InMobiAdActivity"
-                android:configChanges="keyboardHidden|orientation|keyboard|smallestScreenSize|screenSize"
-                android:theme="@android:style/Theme.Translucent.NoTitleBar"
-                android:hardwareAccelerated="true" />
-        <receiver
-                android:name="com.inmobi.commons.core.utilities.uid.ImIdShareBroadCastReceiver"
-                android:enabled="true"
-                android:exported="true" >
-            <intent-filter>
-                <action android:name="com.inmobi.share.id" />
-            </intent-filter>
-        </receiver>
+
         <!-- OneWay -->
         <activity
                 android:name="mobi.oneway.sdk.AdShowActivity"
