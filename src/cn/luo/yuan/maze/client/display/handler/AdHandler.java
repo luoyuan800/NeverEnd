@@ -218,7 +218,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     private void setUpYomobAd() {
         try {
-        TGSDK.setDebugModel(true);
+        TGSDK.setDebugModel(debug);
             TGSDK.initialize(context, yomobappId, new TGSDKServiceResultCallBack() {
 
                 @Override
