@@ -12,10 +12,15 @@ import cn.luo.yuan.maze.model.PetOwner;
 import cn.luo.yuan.maze.model.SilentAbleObject;
 import cn.luo.yuan.maze.model.skill.AtkSkill;
 import cn.luo.yuan.maze.model.skill.DefSkill;
-import cn.luo.yuan.maze.model.skill.result.*;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillAbleObject;
 import cn.luo.yuan.maze.model.skill.SkillParameter;
+import cn.luo.yuan.maze.model.skill.result.DonothingResult;
+import cn.luo.yuan.maze.model.skill.result.EndBattleResult;
+import cn.luo.yuan.maze.model.skill.result.HarmResult;
+import cn.luo.yuan.maze.model.skill.result.HasMessageResult;
+import cn.luo.yuan.maze.model.skill.result.SkillResult;
+import cn.luo.yuan.maze.model.skill.result.SkipThisTurn;
 import cn.luo.yuan.maze.utils.Random;
 
 import static cn.luo.yuan.maze.service.ListenerService.battleEndListeners;
@@ -23,7 +28,7 @@ import static cn.luo.yuan.maze.service.ListenerService.battleEndListeners;
 /**
  * Created by luoyuan on 2017/4/2.
  */
-public class BattleService{
+public class BattleService {
     private HarmAble monster;
     private HarmAble hero;
     private Random random;
@@ -42,7 +47,7 @@ public class BattleService{
         boolean heroAtk = random.nextBoolean();
         battleMessage.startBattle(hero instanceof NameObject ? ((NameObject) hero).getDisplayName() : "", monster instanceof NameObject ? ((NameObject) monster).getDisplayName() : "");
         while (hero.getCurrentHp() > 0 && monster.getCurrentHp() > 0) {
-            if(runninfService!=null && runninfService.isPause()){
+            if (runninfService != null && runninfService.isPause()) {
                 continue;
             }
             if (round > 60 && round % 61 == 0) {
@@ -50,10 +55,10 @@ public class BattleService{
                 hero.setHp(hero.getHp() / 2);
                 monster.setHp(monster.getHp() / 2);
             }
-            if(hero instanceof Group){
+            if (hero instanceof Group) {
                 ((Group) hero).roll(random);
             }
-            if(monster instanceof Group){
+            if (monster instanceof Group) {
                 ((Group) monster).roll(random);
             }
             if (heroAtk) {
@@ -61,10 +66,10 @@ public class BattleService{
             } else {
                 atk(monster, hero, level);
             }
-            if(hero instanceof Group){
+            if (hero instanceof Group) {
                 ((Group) hero).reset();
             }
-            if(monster instanceof Group){
+            if (monster instanceof Group) {
                 ((Group) monster).reset();
             }
             heroAtk = !heroAtk;
@@ -77,20 +82,20 @@ public class BattleService{
 
         }
         if (monster.getCurrentHp() <= 0) {
-            if(hero instanceof NameObject && monster instanceof NameObject){
-                battleMessage.win((NameObject)hero, (NameObject)monster);
+            if (hero instanceof NameObject && monster instanceof NameObject) {
+                battleMessage.win((NameObject) hero, (NameObject) monster);
             }
-            if(hero instanceof Hero) {
+            if (hero instanceof Hero) {
                 for (BattleEndListener endListener : battleEndListeners.values()) {
                     endListener.end((Hero) hero, monster);
                 }
             }
             return true;
         } else {
-            if(hero instanceof NameObject && monster instanceof NameObject){
-                battleMessage.lost((NameObject)hero, (NameObject)monster);
+            if (hero instanceof NameObject && monster instanceof NameObject) {
+                battleMessage.lost((NameObject) hero, (NameObject) monster);
             }
-            if(hero instanceof Hero) {
+            if (hero instanceof Hero) {
                 for (BattleEndListener endListener : battleEndListeners.values()) {
                     endListener.end((Hero) hero, monster);
                 }
@@ -104,32 +109,32 @@ public class BattleService{
     }
 
     private void atk(HarmAble atker, HarmAble defender, long minHarm) {
-        if(atker instanceof PetOwner) {
+        if (atker instanceof PetOwner) {
             petActionOnAtk((PetOwner) atker, defender);
         }
-        if(defender instanceof PetOwner) {
+        if (defender instanceof PetOwner) {
             if (petActionOnDef((PetOwner) defender, atker)) {
                 return;
             }
         }
-        if(atker instanceof SkillAbleObject) {
-            if (releaseSkill((SkillAbleObject)atker, defender, random, minHarm)) {
+        if (atker instanceof SkillAbleObject) {
+            if (releaseSkill((SkillAbleObject) atker, defender, random, minHarm, true)) {
                 return;
             }
         }
-        if(defender instanceof SkillAbleObject){
-            if(releaseSkill((SkillAbleObject) defender, atker, random, minHarm)){
+        if (defender instanceof SkillAbleObject) {
+            if (releaseSkill((SkillAbleObject) defender, atker, random, minHarm, false)) {
                 return;
             }
         }
 
-        if(!defender.isDodge(random)) {
+        if (!defender.isDodge(random)) {
             long harm = BattleServiceBase.getHarm(atker, defender, minHarm, random, battleMessage);
             defender.setHp(defender.getHp() - harm);
             if (atker instanceof NameObject && defender instanceof NameObject)
                 battleMessage.harm((NameObject) atker, (NameObject) defender, harm);
-        }else{
-            if(atker instanceof NameObject) {
+        } else {
+            if (atker instanceof NameObject) {
                 battleMessage.dodge((NameObject) atker, (NameObject) defender);
             }
         }
@@ -139,14 +144,14 @@ public class BattleService{
     private void petActionOnAtk(PetOwner hero, HarmAble monster) {
         for (Pet pet : hero.getPets()) {
             if (isPetWork(pet, random, true)) {
-                if (monster instanceof Monster && ((Monster)monster).getRank() > pet.getRank() && random.nextInt(5) < 1) {
-                   battleMessage.petSuppress(pet, (NameObject) monster);
+                if (monster instanceof Monster && ((Monster) monster).getRank() > pet.getRank() && random.nextInt(5) < 1) {
+                    battleMessage.petSuppress(pet, (NameObject) monster);
                 } else {
                     long harm = pet.getAtk() - monster.getDef();
                     if (harm > 0) {
                         monster.setHp(monster.getHp() - harm);
-                        if(hero instanceof NameObject && monster instanceof NameObject){
-                            battleMessage.harm(pet, (NameObject)monster, harm);
+                        if (hero instanceof NameObject && monster instanceof NameObject) {
+                            battleMessage.harm(pet, (NameObject) monster, harm);
                         }
                     }
                 }
@@ -157,14 +162,14 @@ public class BattleService{
     private boolean petActionOnDef(PetOwner hero, HarmAble monster) {
         for (Pet pet : hero.getPets()) {
             if (isPetWork(pet, random, true)) {
-                if (monster instanceof Monster && ((Monster)monster).getRank() > pet.getRank() && random.nextInt(5) < 1) {
+                if (monster instanceof Monster && ((Monster) monster).getRank() > pet.getRank() && random.nextInt(5) < 1) {
                     battleMessage.petSuppress(pet, (NameObject) monster);
                 } else {
                     long harm = monster.getAtk() - pet.getDef();
                     if (harm > 0) {
                         monster.setHp(monster.getHp() - harm);
                         battleMessage.petDefend(pet);
-                        if(monster instanceof NameObject) {
+                        if (monster instanceof NameObject) {
                             battleMessage.harm(pet, (NameObject) monster, harm);
                         }
                     }
@@ -182,80 +187,74 @@ public class BattleService{
         return pet.getHp() > 0 && 100 + random.nextInt(100) < random.nextLong(pet.getIntimacy());
     }
 
-    private boolean releaseSkill(SkillAbleObject atker, HarmAble target, Random random, long level) {
-        AtkSkill atkSkill = null;
-        SkillParameter skillPara = getSkillParameter(atker, target, random, level);
+    private boolean releaseSkill(SkillAbleObject owner, HarmAble target, Random random, long level, boolean atk) {
+        Skill skill = null;
+        SkillParameter skillPara;
+        if (atk) {
+            skillPara = getSkillParameter(owner, (HarmAble) owner, target, random, level);
+            for (Skill s : owner.getSkills()) {
+                if (s instanceof AtkSkill && ((AtkSkill) s).invokeAble(skillPara)) {
+                    skill = s;
+                    break;
+                }
+            }
+        } else {
+            skillPara = getSkillParameter(owner, target, (HarmAble) owner, random, level);
 
-        for (Skill skill : atker.getSkills()) {
-            if (skill instanceof AtkSkill && ((AtkSkill) skill).invokeAble(skillPara)) {
-                atkSkill = (AtkSkill) skill;
-                break;
+            for (Skill s : ((SkillAbleObject) target).getSkills()) {
+                if (s instanceof DefSkill && ((DefSkill) s).invokeAble(skillPara)) {
+                    skill = s;
+                    break;
+                }
             }
         }
-        if (atkSkill != null) {
+        if (skill != null) {
             if (target instanceof SilentAbleObject) {
                 boolean silent = random.nextInt(100) + random.nextFloat() < ((SilentAbleObject) target).getSilent();
                 if (silent) {
-                    battleMessage.silent(atker,target, atkSkill);
+                    battleMessage.silent(owner, target, skill);
                     return true;
                 }
             }
-            if (target instanceof SkillAbleObject) {
-                DefSkill defSkill = null;
-                for (Skill skill : ((SkillAbleObject) target).getSkills()) {
-                    if (skill instanceof DefSkill && ((DefSkill) skill).invokeAble(skillPara)) {
-                        defSkill = (DefSkill) skill;
-                        break;
-                    }
-                }
-                if(defSkill!=null){
-                    SkillResult result = defSkill.invoke(skillPara);
-                    battleMessage.releaseSkill(target,defSkill );
-                    if(result instanceof HasMessageResult){
-                        for(String msg : result.getMessages()){
-                            battleMessage.rowMessage(msg);
-                        }
-                    }
-                }
-            }
-            SkillResult result = atkSkill.invoke(skillPara);
-            battleMessage.releaseSkill((HarmAble)atker, atkSkill);
-            if(result instanceof HasMessageResult){
-                for(String msg : result.getMessages()){
+            SkillResult result = skill.invoke(skillPara);
+            battleMessage.releaseSkill((HarmAble) owner, skill);
+            if (result instanceof HasMessageResult) {
+                for (String msg : result.getMessages()) {
                     battleMessage.rowMessage(msg);
                 }
             }
-            if(result instanceof DonothingResult){
+            if (result instanceof DonothingResult) {
                 return false;
             }
-            if(result instanceof EndBattleResult){
+            if (result instanceof EndBattleResult) {
                 return true;
             }
-            if(result instanceof SkipThisTurn){
+            if (result instanceof SkipThisTurn) {
                 return true;
             }
-            if(result instanceof HarmResult){
-                if(atker instanceof NameObject && target instanceof NameObject) {
-                    if(((HarmResult) result).isBack()){
-                        ((HarmAble)atker).setHp(((HarmAble)atker).getHp() - ((HarmResult) result).getHarm());
-                        battleMessage.harm((NameObject) target, (NameObject) atker, ((HarmResult) result).getHarm());
-                    }else {
+            if (result instanceof HarmResult) {
+                if (owner instanceof NameObject && target instanceof NameObject) {
+                    if (((HarmResult) result).isBack()) {
+                        ((HarmAble) owner).setHp(((HarmAble) owner).getHp() - ((HarmResult) result).getHarm());
+                        battleMessage.harm((NameObject) target, (NameObject) owner, ((HarmResult) result).getHarm());
+                    } else {
                         target.setHp(target.getHp() - ((HarmResult) result).getHarm());
-                        battleMessage.harm((NameObject) atker, (NameObject) target, ((HarmResult) result).getHarm());
+                        battleMessage.harm((NameObject) owner, (NameObject) target, ((HarmResult) result).getHarm());
                     }
                 }
             }
             return true;
         }
+
         return false;
     }
 
-    private SkillParameter getSkillParameter(SkillAbleObject atker, HarmAble target, Random random, long level) {
-        SkillParameter atkPara = new SkillParameter(atker);
+    private SkillParameter getSkillParameter(SkillAbleObject owner, HarmAble atker, HarmAble defender, Random random, long level) {
+        SkillParameter atkPara = new SkillParameter(owner);
         atkPara.set(SkillParameter.ATKER, atker);
         atkPara.set(SkillParameter.RANDOM, random);
-        atkPara.set(SkillParameter.TARGET, target);
-        atkPara.set(SkillParameter.DEFENDER, target);
+        atkPara.set(SkillParameter.TARGET, atker == owner ? defender : atker);
+        atkPara.set(SkillParameter.DEFENDER, defender);
         atkPara.set(SkillParameter.MINHARM, level);
         atkPara.set(SkillParameter.MESSAGE, battleMessage);
         atkPara.set(SkillParameter.CONTEXT, runninfService.getContext());
