@@ -29,7 +29,8 @@ public class YiJi extends ClickSkill {
     }
 
     public void perform(Hero hero, HarmAble monster, InfoControlInterface context){
-        monster.setHp(1);
+        long hp = monster.getCurrentHp();
+        monster.setHp(monster.getHp() - hp + 1);
         context.addMessage("使用" + getName() + "将" + (monster instanceof NameObject ? ((NameObject) monster).getDisplayName() : "") + "的生命值调整为1");
     }
 }
