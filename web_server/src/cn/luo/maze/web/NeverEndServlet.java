@@ -36,6 +36,7 @@ import static cn.luo.yuan.maze.Path.*;
 public class NeverEndServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final String root = "E:\\www1\\luoyuan800-0b44449e5d24473a015d30fddbd602dd\\webapp\\data";
+    private final static String sign_match = "";
     private MainProcess process = new MainProcess(root);
 
     /**
@@ -134,6 +135,12 @@ public class NeverEndServlet extends HttpServlet {
         String ownerId = request.getHeader(Field.OWNER_ID_FIELD);
         String version = request.getHeader(Field.VERSION_FIELD);
         String sign = request.getHeader(Field.SIGN_FIELD);
+        LogHelper.info("sign: " + sign);
+        if(StringUtils.isNotEmpty(sign_match)){
+            if(!sign_match.equalsIgnoreCase(sign)){
+                throw new IOException("Sign verify failed!");
+            }
+        }
         String limit = readEncodeHeader(request, Field.LIMIT_STRING);
         response.setCharacterEncoding("utf-8");
         PrintWriter writer = null;

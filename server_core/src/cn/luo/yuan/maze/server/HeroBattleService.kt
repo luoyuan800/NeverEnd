@@ -18,7 +18,7 @@ import java.util.*
  */
 class HeroBattleService(private val table: HeroTable, val groups: MutableList<GroupHolder>, val main: MainProcess) : Runnable, RunningServiceInterface {
     override fun getContext(): InfoControlInterface {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return main.context;
     }
 
     override fun isPause(): Boolean {
@@ -62,7 +62,7 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
                             if (oid != "npc") {
                                 registerMessageReceiver(messager, oid)
                             }
-                            if (group == null && ogroup == null && random.nextInt(hero.displayName.length) >= random.nextInt(ohero.displayName.length)) {
+                            if (group == null && ogroup == null && random.nextInt(hero.displayName.length) > random.nextInt(ohero.displayName.length)) {
                                 main.addGroup(id, oid)
                                 messager.buildGroup(hero.displayName, ohero.displayName)
                                 if (StringUtils.isNotEmpty(record.data!!.helloMsg["group"])) {

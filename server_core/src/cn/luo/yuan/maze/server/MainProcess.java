@@ -48,6 +48,7 @@ public class MainProcess {
     private DatabaseConnection database;
     private ShopTable shop;
     private cn.luo.yuan.maze.utils.Random random = new Random(System.currentTimeMillis());
+    public GameContext context = new GameContext();
 
     public MainProcess(String root) throws IOException, ClassNotFoundException {
         this.root = new File(root);
