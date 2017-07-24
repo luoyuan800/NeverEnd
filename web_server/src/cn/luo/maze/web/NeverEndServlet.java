@@ -307,6 +307,7 @@ public class NeverEndServlet extends HttpServlet {
                 break;
             default:
                 doGet(request,response);
+                return;
         }
         if (success != null && writer==null) {
             writer = response.getWriter();
