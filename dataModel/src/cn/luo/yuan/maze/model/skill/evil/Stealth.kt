@@ -6,7 +6,7 @@ import cn.luo.yuan.maze.model.effect.original.MeetRateEffect
 import cn.luo.yuan.maze.model.skill.PropertySkill
 import cn.luo.yuan.maze.model.skill.SkillParameter
 import cn.luo.yuan.maze.model.skill.UpgradeAble
-import cn.luo.yuan.maze.model.skill.result.DonothingResult
+import cn.luo.yuan.maze.model.skill.result.DoNoThingResult
 import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.service.InfoControlInterface
 import cn.luo.yuan.maze.utils.Field
@@ -38,9 +38,10 @@ class Stealth():PropertySkill(),UpgradeAble {
         level ++
         val context:InfoControlInterface = parameter!![SkillParameter.CONTEXT]
         val maze = context.maze
-        maze.meetRate -= percent
-        percent += 0.5f
+        if(maze.meetRate > 100 - Data.RATE_MAX/2)
         maze.meetRate += percent
+        percent += 0.5f
+        maze.meetRate -= percent
         return true
     }
 
@@ -51,7 +52,7 @@ class Stealth():PropertySkill(),UpgradeAble {
     override fun disable(parameter: SkillParameter?) {
         val context:InfoControlInterface = parameter!![SkillParameter.CONTEXT]
         val maze = context.maze
-        maze.meetRate -= percent
+        maze.meetRate += percent
         isEnable = false
     }
 
@@ -60,12 +61,10 @@ class Stealth():PropertySkill(),UpgradeAble {
     }
 
     override fun enable(parameter: SkillParameter?) {
-        if(model.canEnable(parameter)){
             val context:InfoControlInterface = parameter!![SkillParameter.CONTEXT]
             val maze = context.maze
-            maze.meetRate += percent
+            maze.meetRate -= percent
             isEnable = true
-        }
     }
 
     override fun getSkillName(): String {

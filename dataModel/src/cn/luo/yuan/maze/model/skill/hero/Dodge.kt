@@ -2,11 +2,13 @@ package cn.luo.yuan.maze.model.skill.hero
 
 import cn.luo.yuan.maze.model.Data
 import cn.luo.yuan.maze.model.Hero
+import cn.luo.yuan.maze.model.NameObject
 import cn.luo.yuan.maze.model.skill.DefSkill
 import cn.luo.yuan.maze.model.skill.SkillParameter
 import cn.luo.yuan.maze.model.skill.UpgradeAble
 import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.model.skill.result.SkipThisTurn
+import cn.luo.yuan.maze.service.BattleMessageInterface
 import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.StringUtils
 
@@ -51,8 +53,11 @@ class Dodge():DefSkill(), UpgradeAble {
         return model.canMount(parameter)
     }
 
-    override fun invoke(parameter: SkillParameter?): SkillResult {
-        return SkipThisTurn()
+    override fun invoke(parameter: SkillParameter): SkillResult {
+        val skipThisTurn = SkipThisTurn()
+        val massger : BattleMessageInterface = parameter[SkillParameter.MESSAGE]
+        massger.dodge(parameter.owner as NameObject, parameter[SkillParameter.ATKER])
+        return skipThisTurn
     }
 
     override fun enable(parameter: SkillParameter?) {
