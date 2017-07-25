@@ -1,15 +1,11 @@
 package cn.luo.yuan.maze.client.display.activity;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.method.LinkMovementMethod;
@@ -23,29 +19,25 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.client.display.dialog.*;
 import cn.luo.yuan.maze.client.display.handler.AdHandler;
+import cn.luo.yuan.maze.client.display.handler.GameActivityBakViewHandler;
 import cn.luo.yuan.maze.client.display.handler.GameActivityViewHandler;
 import cn.luo.yuan.maze.client.display.handler.MenuItemClickListener;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
+import cn.luo.yuan.maze.client.service.NeverEnd;
+import cn.luo.yuan.maze.client.service.PetMonsterLoder;
+import cn.luo.yuan.maze.client.utils.LogHelper;
+import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.persistence.DataManager;
-import cn.luo.yuan.maze.client.service.NeverEnd;
-import cn.luo.yuan.maze.client.service.PetMonsterLoder;
-import cn.luo.yuan.maze.client.utils.LogHelper;
-import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
-import sw.ls.ps.normal.spot.SpotManager;
-import sw.ls.ps.normal.video.VideoAdManager;
-
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by luoyuan on 2017/3/29.
  */
-public class GameActivity extends BaseActivity {
+public class GameActivityBak extends GameActivity {
     public DataManager dataManager;
     public NeverEnd control;
     private PopupMenu popupMenu;
@@ -59,20 +51,20 @@ public class GameActivity extends BaseActivity {
         if(config.getTheme() != 0){
             setTheme(config.getTheme());
         }
-        setContentView(R.layout.game_layout);
+        setContentView(R.layout.game_layout_bak);
 
         control = (NeverEnd)getApplication();
         control.setContext(this, dataManager);
-        control.setViewHandler(new GameActivityViewHandler(this, control));
+        control.setViewHandler(new GameActivityBakViewHandler(this, control));
         control.setTextView((RollTextView) findViewById(R.id.info_view));
         initResources();
         Resource.askWritePermissions(new PermissionRequestListener() {
             @Override
             public void result(int requestCode, String[] permissions, int[] grantResults) {
                 if(grantResults[0] + grantResults[1]  == 0){
-                    Toast.makeText(GameActivity.this, "已经获得记录数据的权限", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GameActivityBak.this, "已经获得记录数据的权限", Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(GameActivity.this, "无法获得记录数据的权限", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GameActivityBak.this, "无法获得记录数据的权限", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -128,9 +120,6 @@ public class GameActivity extends BaseActivity {
         control.getHero().setClick(control.getHero().getClick() + 1);
         HarmAble currentBattleTarget = control.getCurrentBattleTarget();
         switch (v.getId()) {
-            case R.id.more_pet:
-                new PetDialog(control, new PetAdapter(this, control.getDataManager(), "")).show();
-                break;
             case R.id.switch_msg_view:
                 if (findViewById(R.id.info_view).getVisibility() == View.VISIBLE) {
                     findViewById(R.id.info_view).setVisibility(View.INVISIBLE);
@@ -174,6 +163,26 @@ public class GameActivity extends BaseActivity {
                     });
                 }
                 break;
+            case R.id.hat_view:
+            case R.id.ring_view:
+            case R.id.armor:
+            case R.id.necklace_view:
+            case R.id.sword:
+                new AccessoriesDialog(control).show();
+                break;
+            case R.id.pets:
+            case R.id.pets_root:
+                PetAdapter adapter = new PetAdapter(this, control.getDataManager(), "");
+                new PetDialog(control, adapter).show();
+                break;
+            case R.id.first_skill:
+            case R.id.secondary_skill:
+            case R.id.third_skill:
+            case R.id.fourth_skill:
+            case R.id.fifit_skill:
+            case R.id.sixth_skill:
+                new SkillDialog(control).show();
+                break;
             case R.id.first_click_skill:
                 if(control.getHero().getClickSkills().size() >= 1) {
                     if(currentBattleTarget !=null) {
@@ -210,6 +219,19 @@ public class GameActivity extends BaseActivity {
             popupMenu.setOnMenuItemClickListener(new MenuItemClickListener(this,control));
         }
         popupMenu.show();
+    }
+
+    public void runBackground() {
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setContentTitle("Running...");
+        builder.setContentText("Click to open");
+        builder.setWhen(System.currentTimeMillis());
+        builder.setAutoCancel(true);
+        builder.setOngoing(true);
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        int id = (int) SystemClock.uptimeMillis();
+        manager.notify(id, builder.build());
+        this.moveTaskToBack(true);
     }
 
     private void randomMonsterBook() {
@@ -276,7 +298,7 @@ public class GameActivity extends BaseActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         control.save();
-                        AdHandler.onAppExit(GameActivity.this);
+                        AdHandler.onAppExit(GameActivityBak.this);
                         finish();
                         System.exit(0);
 
@@ -295,5 +317,24 @@ public class GameActivity extends BaseActivity {
         dialog.show();
     }
 
+    private void showPayDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
+        dialog.setTitle("点赞？");
+        ScrollView linearLayout = new ScrollView(this);
+        TextView tv = new TextView(this);
+        tv.setText("请关注我的公众号，每日发送兑换码！");
+        tv.setAutoLinkMask(Linkify.ALL);
+        tv.setMovementMethod(LinkMovementMethod.getInstance());
+        linearLayout.addView(tv);
+        dialog.setView(linearLayout);
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.conform), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
+                dialog.dismiss();
+            }
+
+        });
+        dialog.show();
+    }
 }

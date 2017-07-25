@@ -4,9 +4,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
 import cn.luo.yuan.maze.client.display.activity.ad.SplashActivity;
@@ -48,6 +52,9 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.pay:
+                showPayDialog();
+                break;
             case R.id.reincarnation:
                 SimplerDialogBuilder.build("转生，重新开始，保留宠物和装备。",
                         Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
@@ -118,5 +125,25 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 dialog.show();
         }
         return false;
+    }
+
+    private void showPayDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(context).create();
+        dialog.setTitle("点赞？");
+        ScrollView linearLayout = new ScrollView(context);
+        TextView tv = new TextView(context);
+        tv.setText("请关注作者的公众号，某鸟碎碎，偶尔会发送兑换码哦！");
+        tv.setAutoLinkMask(Linkify.ALL);
+        tv.setMovementMethod(LinkMovementMethod.getInstance());
+        linearLayout.addView(tv);
+        dialog.setView(linearLayout);
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+
+        });
+        dialog.show();
     }
 }
