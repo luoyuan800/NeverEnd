@@ -33,7 +33,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
     public void shareToNet() {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
-        //shareIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.share_string));
+        shareIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.share_string));
         shareIntent.setType("text/*");
         Intent chooser = Intent.createChooser(shareIntent, "分享到");
         context.startActivity(chooser);
@@ -99,7 +99,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                         shareToNet();
                     }
                 });
-                sharingTip.setMessage("如果你觉得这个游戏好玩，不妨帮忙分享到你的圈子中，让更多的人参与到我们的游戏建设中来，一起享受放置的快乐。");
+                sharingTip.setMessage("如果你觉得这个游戏好玩，不妨帮忙分享到你的圈子中，让更多的人参与到我们的游戏建设中来，一起享受放置的快乐。欢迎关注作者的的微信订阅号：某鸟碎碎");
                 sharingTip.show();
                 break;
             case R.id.save:

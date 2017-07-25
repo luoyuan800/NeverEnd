@@ -1,17 +1,20 @@
 package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.client.service.RunningService;
+import cn.luo.yuan.maze.exception.MonsterToPetException;
 import cn.luo.yuan.maze.listener.BattleEndListener;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Group;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Monster;
+import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.model.skill.hero.HeroHit;
 import cn.luo.yuan.maze.persistence.DataManagerInterface;
+import cn.luo.yuan.maze.server.*;
 import cn.luo.yuan.maze.server.model.Messager;
 import cn.luo.yuan.maze.utils.Random;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +25,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -66,8 +70,34 @@ public class TestBattleService {
         BattleService battleService = new BattleService(hero, monster, random, rs);
         battleService.setBattleMessage(battleMessage);
         battleService.battle(1);
-        verify(battleMessage, atLeastOnce()).harm(any(), any(), anyLong());
+        verify(battleMessage, atLeastOnce()).harm(eq(hero), eq(monster), anyLong());
+        verify(battleMessage, atLeastOnce()).harm(eq(monster), eq(hero), anyLong());
         assertTrue(hero.getHp() <= 0, "End battle!");
+    }
+
+    @Test
+    public void testHeroBattle() throws MonsterToPetException {
+        Hero hero = getHero(100, 100, Element.WOOD);
+        Hero monster = getHero(100, 100, Element.EARTH);
+        monster.setElement(Element.FIRE);
+        PetMonsterHelper instance = PetMonsterHelper.instance;
+        instance.setRandom(context.getRandom());
+        Pet pet = instance.monsterToPet(getMonster(), monster,10);
+        pet.setIntimacy(300);
+        pet.setMaxHp(100);
+        pet.setHp(100);
+        pet.setAtk(10);
+        pet.setDef(8);
+        monster.getPets().add(pet);
+        Random random = new Random(System.currentTimeMillis());
+        BattleMessage battleMessage = mock(BattleMessage.class);
+        BattleService battleService = new BattleService(hero, monster, random, rs);
+        battleService.setBattleMessage(battleMessage);
+        battleService.battle(1);
+        verify(battleMessage, atLeastOnce()).harm(eq(hero), eq(monster), anyLong());
+        verify(battleMessage, atLeastOnce()).harm(eq(monster), eq(hero), anyLong());
+        verify(battleMessage, atLeastOnce()).harm(eq(pet), eq(hero), anyLong());
+        //assertTrue(hero.getHp() <= 0, "End battle!");
     }
 
     @Test

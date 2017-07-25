@@ -1,7 +1,9 @@
 package cn.luo.yuan.maze.client.display.handler;
 
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import cn.luo.yuan.maze.client.display.activity.GameActivity;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.model.Element;
@@ -214,6 +216,12 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         TGSDK.onRequestPermissionsResult(context, requestCode, permissions, grantResults);
+    }
+
+    public static void onAppExit(Context context) {
+        if(SpotManager.getInstance(context).checkSpotAdConfig()){
+            SpotManager.getInstance(context).onAppExit();
+        }
     }
 
     private void setUpYomobAd() {

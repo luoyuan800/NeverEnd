@@ -109,12 +109,12 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
                     } else {
                         if (record.dieCount > record.restoreLimit) {
                             messager.restoreLimit(hero.displayName)
+                            main.removeGroup(id)
                         } else {
                             val period = Data.RESTOREPERIOD - (System.currentTimeMillis() - record.dieTime)
                             if (period <= 0) {
                                 hero.hp = hero.maxHp
                                 messager.restore(hero.displayName)
-                                main.removeGroup(id)
                             } else {
                                 messager.waitingForRestore(hero.displayName, period)
                             }

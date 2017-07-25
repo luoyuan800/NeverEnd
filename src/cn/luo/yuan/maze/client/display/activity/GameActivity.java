@@ -22,6 +22,7 @@ import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.client.display.dialog.*;
+import cn.luo.yuan.maze.client.display.handler.AdHandler;
 import cn.luo.yuan.maze.client.display.handler.GameActivityViewHandler;
 import cn.luo.yuan.maze.client.display.handler.MenuItemClickListener;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
@@ -286,6 +287,13 @@ public class GameActivity extends BaseActivity {
         super.onDestroy();
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        control.save();
+    }
+
     /**
      * 弹出退出程序提示框
      */
@@ -298,8 +306,7 @@ public class GameActivity extends BaseActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         control.save();
-                        SpotManager.getInstance(GameActivity.this).onAppExit();
-                        VideoAdManager.getInstance(GameActivity.this).onAppExit();
+                        AdHandler.onAppExit(GameActivity.this);
                         finish();
                         System.exit(0);
 

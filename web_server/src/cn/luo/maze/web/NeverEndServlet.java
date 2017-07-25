@@ -207,23 +207,19 @@ public class NeverEndServlet extends HttpServlet {
             case EXCHANGE_PET_LIST:
                 List<ExchangeObject> pets = process.exchangeTable.loadAll(1, limit, ownerId);
                 writeObject(response, pets);
-                success = true;
                 break;
             case EXCHANGE_ACCESSORY_LIST:
                 List<ExchangeObject> acces = process.exchangeTable.loadAll(2, limit, ownerId);
                 writeObject(response, acces);
-                success = true;
                 break;
             case EXCHANGE_GOODS_LIST:
                 List<ExchangeObject> goods = process.exchangeTable.loadAll(3, limit, ownerId);
                 writeObject(response, goods);
-                success = true;
                 break;
             case QUERY_MY_EXCHANGE:
                 List<ExchangeObject> exs = process.exchangeTable.loadAll(ownerId);
                 response.setHeader(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
                 writeObject(response, exs);
-                success = true;
                 break;
             case REQUEST_EXCHANGE:
                 Object objMy = readObject(request);
@@ -253,7 +249,7 @@ public class NeverEndServlet extends HttpServlet {
                 int expectType = Integer.parseInt(request.getHeader(Field.EXPECT_TYPE));
                 writer = response.getWriter();
                 if (process.submitExchange(ownerId, limit, eo, expectType)) {
-                    success = true;
+                    writer.write(Field.RESPONSE_RESULT_OK);
                 } else {
                    writer.write("Could not add exchange, maybe there already an exchange object has the same id existed!");
                 }
