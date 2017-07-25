@@ -25,7 +25,7 @@ public class TestHeroBattleService {
     public void testBattle() throws IOException, ClassNotFoundException {
         MainProcess process = new MainProcess("data");
         Hero hero = new Hero();
-        hero.setName("骑士☆某鸟");
+        hero.setName("人人");
         hero.setMaxHp(2000);
         hero.setHp(1000);
         hero.setAtk(10000);

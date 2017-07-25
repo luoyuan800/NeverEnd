@@ -3,16 +3,21 @@ package cn.luo.yuan.maze.client.display.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TabHost;
 import cn.luo.yuan.maze.R;
-import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.skill.*;
 import cn.luo.yuan.maze.client.service.NeverEnd;
-import cn.luo.yuan.maze.service.SkillHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
+import cn.luo.yuan.maze.model.Data;
+import cn.luo.yuan.maze.model.skill.MountAble;
+import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.model.skill.SkillFactory;
+import cn.luo.yuan.maze.model.skill.SkillParameter;
+import cn.luo.yuan.maze.model.skill.UpgradeAble;
+import cn.luo.yuan.maze.service.SkillHelper;
 
 /**
  * Created by luoyuan on 2017/5/28.
@@ -23,10 +28,14 @@ public class SkillDialog implements View.OnClickListener {
 
     public SkillDialog(NeverEnd context) {
         this.context = context;
-        dialog = new AlertDialog.Builder(context.getContext())
-                .setTitle(Resource.getString(R.string.skill_title))
-                .setView(R.layout.skill_layout)
-                .create();
+        AlertDialog.Builder builder = new AlertDialog.Builder(context.getContext())
+                .setTitle(Resource.getString(R.string.skill_title));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.setView(R.layout.skill_layout);
+        } else {
+            builder.setView(View.inflate(context.getContext(), R.layout.skill_layout, null));
+        }
+        dialog = builder.create();
     }
 
     public void show() {
@@ -42,15 +51,15 @@ public class SkillDialog implements View.OnClickListener {
         //Hero Skills
         tabHost.addTab(tabHost.newTabSpec("hero_skill").setIndicator(Resource.getString(R.string.hero_skill)).setContent(R.id.hero_skill));
         initSkillButton((Button) dialog.findViewById(R.id.hero_hit)
-                , (Button) dialog.findViewById(R.id.fight_back), (Button)dialog.findViewById(R.id.dodge));
+                , (Button) dialog.findViewById(R.id.fight_back), (Button) dialog.findViewById(R.id.dodge));
 
         //Evil skills
         tabHost.addTab(tabHost.newTabSpec("evil_skill").setIndicator(Resource.getString(R.string.evil_skill)).setContent(R.id.evil_skill));
-        initSkillButton((Button) dialog.findViewById(R.id.evil_talent), (Button)dialog.findViewById(R.id.reinforce), (Button)dialog.findViewById(R.id.stealth));
+        initSkillButton((Button) dialog.findViewById(R.id.evil_talent), (Button) dialog.findViewById(R.id.reinforce), (Button) dialog.findViewById(R.id.stealth));
 
         //Element skills
         tabHost.addTab(tabHost.newTabSpec("element_skill").setIndicator(Resource.getString(R.string.element_skill)).setContent(R.id.element_skill));
-        initSkillButton((Button) dialog.findViewById(R.id.element_alist), (Button)dialog.findViewById(R.id.element_Defend), (Button)dialog.findViewById(R.id.element_bomb));
+        initSkillButton((Button) dialog.findViewById(R.id.element_alist), (Button) dialog.findViewById(R.id.element_Defend), (Button) dialog.findViewById(R.id.element_bomb));
 
         //Secondary Skill
         TabHost tabHost1 = (TabHost) dialog.findViewById(R.id.skill_tag_second);
@@ -58,21 +67,10 @@ public class SkillDialog implements View.OnClickListener {
 
         //Swindler Skills
         tabHost1.addTab(tabHost1.newTabSpec("swindler_skill").setIndicator(Resource.getString(R.string.swindler_skill)).setContent(R.id.swindler_skill));
-        initSkillButton((Button)dialog.findViewById(R.id.swindler), (Button)dialog.findViewById(R.id.swindler_game), (Button)dialog.findViewById(R.id.eat_harm));
+        initSkillButton((Button) dialog.findViewById(R.id.swindler), (Button) dialog.findViewById(R.id.swindler_game), (Button) dialog.findViewById(R.id.eat_harm));
         //Pet Skills
         tabHost1.addTab(tabHost1.newTabSpec("pet_skill").setIndicator(Resource.getString(R.string.pet_skill)).setContent(R.id.pet_skill));
 
-    }
-
-    private void initSkillButton(Button ... skillButtons) {
-        Skill skill;
-        for(Button b : skillButtons) {
-            b.setOnClickListener(this);
-            skill = SkillFactory.geSkillByName(b.getTag().toString(), context.getDataManager());
-            if (skill != null) {
-                b.setText(Html.fromHtml(skill.getSkillName()));
-            }
-        }
     }
 
     public void onClick(View view) {
@@ -128,15 +126,15 @@ public class SkillDialog implements View.OnClickListener {
                         });
             }
 
-            if(skill instanceof UpgradeAble){
+            if (skill instanceof UpgradeAble) {
                 detail.setButton(DialogInterface.BUTTON_NEUTRAL, Resource.getString(R.string.upgrade), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         showWarning("升级", "需要消耗" + ((UpgradeAble) skill).getLevel() * Data.SKILL_ENABLE_COST + "能力点来升级" + ((UpgradeAble) skill).getLevel(), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if(((UpgradeAble) skill).canUpgrade(parameter)){
-                                        SkillHelper.upgradeSkill((UpgradeAble) skill, parameter, context);
+                                if (((UpgradeAble) skill).canUpgrade(parameter)) {
+                                    SkillHelper.upgradeSkill((UpgradeAble) skill, parameter, context);
                                 }
                             }
                         });
@@ -158,19 +156,30 @@ public class SkillDialog implements View.OnClickListener {
                 }
             }
 
-            if(skill instanceof UpgradeAble){
-                if(!((UpgradeAble) skill).canUpgrade(parameter)){
+            if (skill instanceof UpgradeAble) {
+                if (!((UpgradeAble) skill).canUpgrade(parameter)) {
                     detail.getButton(DialogInterface.BUTTON_NEUTRAL).setEnabled(false);
                 }
             }
 
-        }else{
-            SimplerDialogBuilder.build("敬请期待", Resource.getString(R.string.conform), null,context.getContext());
+        } else {
+            SimplerDialogBuilder.build("敬请期待", Resource.getString(R.string.conform), null, context.getContext());
         }
     }
 
-    private void showWarning(String title, String message,Dialog.OnClickListener conform){
-        new AlertDialog.Builder(context.getContext()).setPositiveButton(Resource.getString(R.string.conform),conform).setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
+    private void initSkillButton(Button... skillButtons) {
+        Skill skill;
+        for (Button b : skillButtons) {
+            b.setOnClickListener(this);
+            skill = SkillFactory.geSkillByName(b.getTag().toString(), context.getDataManager());
+            if (skill != null) {
+                b.setText(Html.fromHtml(skill.getSkillName()));
+            }
+        }
+    }
+
+    private void showWarning(String title, String message, Dialog.OnClickListener conform) {
+        new AlertDialog.Builder(context.getContext()).setPositiveButton(Resource.getString(R.string.conform), conform).setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

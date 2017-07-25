@@ -7,6 +7,7 @@ import cn.luo.yuan.maze.model.skill.SkillParameter
 import cn.luo.yuan.maze.model.skill.result.HarmResult
 import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.service.BattleServiceBase
+import cn.luo.yuan.maze.service.InfoControlInterface
 import cn.luo.yuan.maze.utils.Random
 import cn.luo.yuan.maze.utils.StringUtils
 
@@ -39,7 +40,8 @@ class EatHarm:DefSkill() {
         val min: Long = parameter[SkillParameter.MINHARM]
         hr.addMessage((defender as NameObject).displayName + " 抛了一次硬币，结果为：" + if(side) "正" else "反")
         if(!side){
-            if(model.isSkillEnable("Swindler", parameter[SkillParameter.CONTEXT])){
+            val context: InfoControlInterface = parameter[SkillParameter.CONTEXT]
+            if(model.isSkillEnable("Swindler", context)){
                 side = random.nextBoolean()
                 hr.addMessage(defender.displayName + "不要脸的又抛了一次硬币,结果为：" + if(side) "正" else "反")
             }

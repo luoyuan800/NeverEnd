@@ -79,6 +79,7 @@
             android:scaleType="fitXY"/>
 
     <TabHost
+            android:visibility="invisible"
             android:layout_width="200dip"
             android:layout_height="300dip"
             android:layout_below="@+id/line_h"

@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.model.skill;
 
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.persistence.DataManagerInterface;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.utils.Field;
 
@@ -17,8 +18,13 @@ public class SkillModel {
     }
 
     public boolean isSkillEnable(String name, InfoControlInterface context){
-        Skill skill = SkillFactory.geSkillByName("EvilTalent",context.getDataManager());
-        return skill !=null && skill.isEnable();
+        DataManagerInterface dataManager = context.getDataManager();
+        if(dataManager != null) {
+            Skill skill = SkillFactory.geSkillByName(name, dataManager);
+            return skill != null && skill.isEnable();
+        }else{
+            return false;
+        }
     }
 
     public boolean isEnablePointEnough(SkillParameter parameter) {

@@ -1,18 +1,27 @@
 package cn.luo.yuan.maze.service;
 
+import cn.luo.yuan.maze.client.service.RunningService;
+import cn.luo.yuan.maze.exception.MonsterToPetException;
 import cn.luo.yuan.maze.listener.BattleEndListener;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Group;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Monster;
+import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.model.skill.hero.HeroHit;
+import cn.luo.yuan.maze.persistence.DataManagerInterface;
+import cn.luo.yuan.maze.server.*;
 import cn.luo.yuan.maze.server.model.Messager;
 import cn.luo.yuan.maze.utils.Random;
+import org.jetbrains.annotations.NotNull;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
@@ -21,60 +30,78 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertTrue;
 
 /**
  * Created by gluo on 5/22/2017.
  */
 public class TestBattleService {
+    RunningServiceInterface rs;
+    MockGameContext context = new MockGameContext();
+    @BeforeTest
+    public void init(){
+        rs = mock(RunningServiceInterface.class);
+        context.dataManager = mock(DataManagerInterface.class);
+        context.executor = mock(ScheduledThreadPoolExecutor.class);
+        when(rs.getContext()).thenReturn(context);
+    }
     @Test
-    public void testBattle(){
-        Hero hero = new Hero();
-        hero.setMaxHp(2000);
-        hero.setHp(1000);
-        hero.setAtk(10);
-        hero.setDef(5);
-        hero.setElement(Element.EARTH);
-        Monster monster = new Monster();
-        monster.setHp(2000);
-        monster.setMaxHp(2000);
-        monster.setAtk(10);
-        monster.setDef(5);
-        monster.setElement(Element.FIRE);
+    public void testBattle() {
+        Hero hero = getHero(2000, 1000, Element.EARTH);
+        Monster monster = getMonster();
         Random random = new Random(System.currentTimeMillis());
         BattleMessage battleMessage = mock(BattleMessage.class);
-        BattleService battleService = new BattleService(hero,monster,random, null);
+        BattleService battleService = new BattleService(hero, monster, random, rs);
         battleService.setBattleMessage(battleMessage);
+
         battleService.battle(1);
-        verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
+        verify(battleMessage, atLeastOnce()).harm(any(), any(), anyLong());
         assertTrue(hero.getHp() <= 0 || monster.getHp() <= 0, "End battle!");
     }
 
     @Test
-    public void testBattleMaybeFailed(){
-        Hero hero = new Hero();
-        hero.setMaxHp(100);
-        hero.setHp(100);
-        hero.setAtk(10);
-        hero.setDef(5);
-        hero.setElement(Element.WOOD);
-        Monster monster = new Monster();
-        monster.setHp(2000);
-        monster.setMaxHp(2000);
-        monster.setAtk(60);
-        monster.setDef(10);
+    public void testBattleMaybeFailed() {
+        Hero hero = getHero(10, 10, Element.WOOD);
+        Monster monster = getMonster();
         monster.setElement(Element.FIRE);
         Random random = new Random(System.currentTimeMillis());
         BattleMessage battleMessage = mock(BattleMessage.class);
-        BattleService battleService = new BattleService(hero,monster,random, null);
+        BattleService battleService = new BattleService(hero, monster, random, rs);
         battleService.setBattleMessage(battleMessage);
         battleService.battle(1);
-        verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
+        verify(battleMessage, atLeastOnce()).harm(eq(hero), eq(monster), anyLong());
+        verify(battleMessage, atLeastOnce()).harm(eq(monster), eq(hero), anyLong());
         assertTrue(hero.getHp() <= 0, "End battle!");
     }
 
     @Test
-    public void testSkillRelease(){
+    public void testHeroBattle() throws MonsterToPetException {
+        Hero hero = getHero(100, 100, Element.WOOD);
+        Hero monster = getHero(100, 100, Element.EARTH);
+        monster.setElement(Element.FIRE);
+        PetMonsterHelper instance = PetMonsterHelper.instance;
+        instance.setRandom(context.getRandom());
+        Pet pet = instance.monsterToPet(getMonster(), monster,10);
+        pet.setIntimacy(300);
+        pet.setMaxHp(100);
+        pet.setHp(100);
+        pet.setAtk(10);
+        pet.setDef(8);
+        monster.getPets().add(pet);
+        Random random = new Random(System.currentTimeMillis());
+        BattleMessage battleMessage = mock(BattleMessage.class);
+        BattleService battleService = new BattleService(hero, monster, random, rs);
+        battleService.setBattleMessage(battleMessage);
+        battleService.battle(1);
+        verify(battleMessage, atLeastOnce()).harm(eq(hero), eq(monster), anyLong());
+        verify(battleMessage, atLeastOnce()).harm(eq(monster), eq(hero), anyLong());
+        verify(battleMessage, atLeastOnce()).harm(eq(pet), eq(hero), anyLong());
+        //assertTrue(hero.getHp() <= 0, "End battle!");
+    }
+
+    @Test
+    public void testSkillRelease() {
         Hero hero = new Hero();
         HeroHit heroHit = new HeroHit();
         heroHit.setEnable(true);
@@ -86,15 +113,10 @@ public class TestBattleService {
         hero.setAtk(10);
         hero.setDef(5);
         hero.setElement(Element.WOOD);
-        Monster monster = new Monster();
-        monster.setHp(20000);
-        monster.setMaxHp(20000);
-        monster.setAtk(60);
-        monster.setDef(10);
-        monster.setElement(Element.FIRE);
+        Monster monster = getMonster();
         Random random = new Random(System.currentTimeMillis());
         BattleMessage battleMessage = mock(BattleMessage.class);
-        BattleService battleService = new BattleService(hero,monster,random, null);
+        BattleService battleService = new BattleService(hero, monster, random, rs);
         battleService.setBattleMessage(battleMessage);
         battleService.battle(1);
         //verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
@@ -102,30 +124,20 @@ public class TestBattleService {
     }
 
     @Test
-    public void testBattleMaybeWin(){
-        Hero hero = new Hero();
-        hero.setMaxHp(1000);
-        hero.setHp(1000);
-        hero.setAtk(10);
-        hero.setDef(5);
-        hero.setElement(Element.WOOD);
-        Monster monster = new Monster();
-        monster.setHp(200);
-        monster.setMaxHp(200);
-        monster.setAtk(6);
-        monster.setDef(1);
-        monster.setElement(Element.FIRE);
+    public void testBattleMaybeWin() {
+        Hero hero = getHero(10000, 10000, Element.WOOD);
+        Monster monster = getMonster();
         Random random = new Random(System.currentTimeMillis());
         BattleMessage battleMessage = mock(BattleMessage.class);
-        BattleService battleService = new BattleService(hero,monster,random, null);
+        BattleService battleService = new BattleService(hero, monster, random, rs);
         battleService.setBattleMessage(battleMessage);
         battleService.battle(1);
-        verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
+        verify(battleMessage, atLeastOnce()).harm(any(), any(), anyLong());
         assertTrue(monster.getHp() <= 0, "End battle!");
     }
 
     @Test
-    public void testGroupBattle(){
+    public void testGroupBattle() {
         Hero hero = new Hero();
         hero.setName("QA_1");
         hero.setMaxHp(1000);
@@ -162,7 +174,7 @@ public class TestBattleService {
                 System.out.println(msg);
             }
         };
-        BattleService battleService = spy(new BattleService(group,monster,random, null));
+        BattleService battleService = spy(new BattleService(group, monster, random, rs));
         battleService.setBattleMessage(battleMessage);
         battleService.battle(100);
         //verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
@@ -170,7 +182,7 @@ public class TestBattleService {
     }
 
     @Test
-    public void testBattleEndListener(){
+    public void testBattleEndListener() {
         BattleEndListener endListener = new BattleEndListener() {
             @Override
             public void end(Hero battler, HarmAble target) {
@@ -183,24 +195,40 @@ public class TestBattleService {
             }
         };
         ListenerService.registerListener(endListener);
+        Hero hero = getHero(100, 1000, Element.WOOD);
+        Monster monster = getMonster();
+        Random random = new Random(System.currentTimeMillis());
+        BattleMessage battleMessage = mock(BattleMessage.class);
+        BattleService battleService = new BattleService(hero, monster, random, rs);
+        battleService.setBattleMessage(battleMessage);
+        battleService.battle(1);
+        verify(battleMessage, atLeastOnce()).harm(any(), any(), anyLong());
+        assertTrue(monster.getHp() <= 0, "End battle!");
+    }
+
+    @NotNull
+    private Hero getHero(int maxHp, int hp, Element earth) {
         Hero hero = new Hero();
-        hero.setMaxHp(100);
-        hero.setHp(1000);
+        hero.setMaxHp(maxHp);
+        hero.setHp(hp);
         hero.setAtk(10);
         hero.setDef(5);
-        hero.setElement(Element.WOOD);
+        hero.setElement(earth);
+        hero.setRace(Race.Eviler.ordinal());
+        return hero;
+    }
+
+    @NotNull
+    private Monster getMonster() {
         Monster monster = new Monster();
         monster.setHp(200);
         monster.setMaxHp(200);
+        monster.setFirstName(FirstName.frailty);
+        monster.setSecondName(SecondName.face);
         monster.setAtk(6);
         monster.setDef(1);
         monster.setElement(Element.FIRE);
-        Random random = new Random(System.currentTimeMillis());
-        BattleMessage battleMessage = mock(BattleMessage.class);
-        BattleService battleService = new BattleService(hero,monster,random, null);
-        battleService.setBattleMessage(battleMessage);
-        battleService.battle(1);
-        verify(battleMessage,atLeastOnce()).harm(any(), any(), anyLong());
-        assertTrue(monster.getHp() <= 0, "End battle!");
+        monster.setRace(Race.Elyosr);
+        return monster;
     }
 }

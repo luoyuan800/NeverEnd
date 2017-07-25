@@ -1,9 +1,12 @@
 package cn.luo.yuan.maze.client.display.handler;
 
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import cn.luo.yuan.maze.client.display.activity.GameActivity;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
 import cn.luo.yuan.maze.client.utils.LogHelper;
+import cn.luo.yuan.maze.model.Element;
 import com.soulgame.sgsdk.tgsdklib.TGSDK;
 import com.soulgame.sgsdk.tgsdklib.TGSDKServiceResultCallBack;
 import com.soulgame.sgsdk.tgsdklib.ad.ITGADListener;
@@ -130,8 +133,12 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     }
 
     public void onResume() {
-        if (yomob)
-            TGSDK.onResume(context);
+        try {
+            if (yomob)
+                TGSDK.onResume(context);
+        }catch (Exception e){
+            LogHelper.logException(e, "ADHandler->onResume");
+        }
     }
 
     public void onDestroy() {
@@ -144,7 +151,11 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
             @Override
             public void run() {
                 if (yomob && TGSDK.couldShowAd(adcenseid)) {
-                    TGSDK.showTestView(context, adcenseid);
+                    if(debug) {
+                        TGSDK.showTestView(context, adcenseid);
+                    }else{
+                        TGSDK.showAd(context, adcenseid);
+                    }
                 } else {
                     if(SpotManager.getInstance(context).checkSpotAdConfig()) {
                         SpotManager.getInstance(context).showSpot(context, AdHandler.this);
@@ -207,9 +218,15 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
         TGSDK.onRequestPermissionsResult(context, requestCode, permissions, grantResults);
     }
 
+    public static void onAppExit(Context context) {
+        if(SpotManager.getInstance(context).checkSpotAdConfig()){
+            SpotManager.getInstance(context).onAppExit();
+        }
+    }
+
     private void setUpYomobAd() {
         try {
-        TGSDK.setDebugModel(true);
+        TGSDK.setDebugModel(debug);
             TGSDK.initialize(context, yomobappId, new TGSDKServiceResultCallBack() {
 
                 @Override

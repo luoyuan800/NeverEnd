@@ -58,6 +58,7 @@ class Reinforce() : AtkSkill(), UpgradeAble {
             val hppe = HPPercentEffect()
             hppe.tag = this.id
             hppe.setPercent(percen)
+            hppe.isEnable = true
             hero.effects.add(hppe)
             val context: InfoControlInterface = parameter[SkillParameter.CONTEXT]
             context.executor.schedule({ hero.effects.remove(hppe) }, turn, TimeUnit.MILLISECONDS)

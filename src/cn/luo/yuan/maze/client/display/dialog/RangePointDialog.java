@@ -2,11 +2,14 @@ package cn.luo.yuan.maze.client.display.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.os.Build;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.service.NeverEnd;
+import cn.luo.yuan.maze.service.InfoControlInterface;
+import cn.luo.yuan.maze.service.RangePropertiesHelper;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 /**
@@ -32,7 +35,11 @@ public class RangePointDialog implements View.OnClickListener, SeekBar.OnSeekBar
     }
 
     public void show() {
-        dialog = new AlertDialog.Builder(context.getContext()).setTitle(R.string.rang_point_title).setView(R.layout.rang_point).show();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            dialog = new AlertDialog.Builder(context.getContext()).setTitle(R.string.rang_point_title).setView(R.layout.rang_point).show();
+        }else {
+            dialog = new AlertDialog.Builder(context.getContext()).setTitle(R.string.rang_point_title).setView(View.inflate(context.getContext(), R.layout.rang_point, null)).show();
+        }
         dialog.findViewById(R.id.range_close).setOnClickListener(this);
         dialog.findViewById(R.id.range_conform).setOnClickListener(this);
         ((TextView) dialog.findViewById(R.id.point_value)).setText(StringUtils.formatNumber(context.getHero().getPoint()));
@@ -59,15 +66,10 @@ public class RangePointDialog implements View.OnClickListener, SeekBar.OnSeekBar
                 int agiPoint = agiAddValue.getProgress();
                 if(agiPoint + strPoint <= context.getHero().getPoint()) {
                     if (agiPoint != 0) {
-                        context.getHero().setAgi(context.getHero().getAgi() + agiPoint);
-                        context.getHero().setDef(context.getHero().getDef() + context.getHero().getDefGrow() * agiPoint);
+                        RangePropertiesHelper.addAgi(agiPoint, context);
                     }
                     if (strPoint != 0) {
-                        context.getHero().setStr(context.getHero().getStr() + strPoint);
-                        long hpG = context.getHero().getHpGrow() * strPoint;
-                        context.getHero().setMaxHp(context.getHero().getMaxHp() + hpG);
-                        context.getHero().setHp(context.getHero().getHp() + hpG);
-                        context.getHero().setAtk(context.getHero().getAtk() + context.getHero().getAtkGrow() * strPoint);
+                        RangePropertiesHelper.addStr(strPoint, context);
                     }
                     context.getHero().setPoint(context.getHero().getPoint() - strPoint - agiPoint);
                     context.getViewHandler().refreshProperties(context.getHero());
@@ -76,6 +78,7 @@ public class RangePointDialog implements View.OnClickListener, SeekBar.OnSeekBar
                 break;
         }
     }
+
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

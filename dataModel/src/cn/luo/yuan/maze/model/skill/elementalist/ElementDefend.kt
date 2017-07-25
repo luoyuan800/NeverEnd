@@ -6,6 +6,7 @@ import cn.luo.yuan.maze.model.NameObject
 import cn.luo.yuan.maze.model.skill.DefSkill
 import cn.luo.yuan.maze.model.skill.SkillParameter
 import cn.luo.yuan.maze.model.skill.UpgradeAble
+import cn.luo.yuan.maze.model.skill.result.HarmResult
 import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.model.skill.result.SkipThisTurn
 import cn.luo.yuan.maze.service.BattleMessageInterface
@@ -52,7 +53,7 @@ class ElementDefend():DefSkill(),UpgradeAble {
     }
 
     override fun invoke(parameter: SkillParameter): SkillResult {
-        val rs = SkipThisTurn()
+        val rs = HarmResult()
         val atker:HarmAble = parameter[SkillParameter.ATKER]
         val defender:HarmAble = parameter.owner as HarmAble
         val minHarm:Long = parameter[SkillParameter.MINHARM]
@@ -60,10 +61,11 @@ class ElementDefend():DefSkill(),UpgradeAble {
         val random:Random = parameter[SkillParameter.RANDOM]
         var harm = BattleServiceBase.getHarm(atker, defender,minHarm, random,messager)
         if(defender.element.restriction(atker.element)){
-            rs.messages.add((defender as NameObject).displayName + "免疫了" + (atker as NameObject).displayName + "的" + StringUtils.formatNumber(harm) + "点伤害")
+            rs.messages.add((defender as NameObject).displayName + "免疫了" + (atker as NameObject).displayName + "的" + StringUtils.formatNumber(harm) + "点伤害(100%)")
+            rs.harm = 0
         }else{
             rs.messages.add((defender as NameObject).displayName + "免疫了" + (atker as NameObject).displayName + "的" + StringUtils.formatNumber(harm/2) + "点伤害(50%)")
-            defender.hp -= harm/2
+            rs.harm = harm/2
         }
         return rs
     }

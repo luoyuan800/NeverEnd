@@ -30,50 +30,50 @@
     </LinearLayout>
     <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:id="@+id/skill_layout_2" android:layout_weight="1" android:layout_gravity="center_vertical">
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="守财奴"
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="守财奴" android:enabled="false"
                 android:id="@+id/Searcher" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="龙裔"
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="龙裔" android:enabled="false"
                 android:id="@+id/Long" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="元素之心"
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="元素之心" android:enabled="false"
                 android:id="@+id/Element" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
     </LinearLayout>
     <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:id="@+id/empty_layout" android:layout_weight="1" android:layout_gravity="center_vertical">
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="神奇宝贝"
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="神奇宝贝" android:enabled="false"
                 android:id="@+id/Pokemon" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="火焰身躯"
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="火焰身躯" android:enabled="false"
                 android:id="@+id/FireBody" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="技能大师"
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="技能大师" android:enabled="false"
                 android:id="@+id/SkillMaster" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
     </LinearLayout>
     <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:id="@+id/hero_inf_layout_2" android:layout_weight="1" android:layout_gravity="center_vertical">
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="冒险之心"
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="冒险之心" android:enabled="false"
                 android:id="@+id/RandomMaster" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="元素抗性"
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="元素抗性" android:enabled="false"
                 android:id="@+id/ElementReject" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="匠心"
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="匠心" android:enabled="false"
                 android:id="@+id/Maker" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
     </LinearLayout>
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" android:layout_weight="1">
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="美食家"
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="美食家" android:enabled="false"
                 android:id="@+id/Epicure" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="孩子王"
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="孩子王" android:enabled="false"
                 android:id="@+id/ChildrenKing" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="奶爸"
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="奶爸" android:enabled="false"
                 android:id="@+id/Daddy" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
     </LinearLayout>

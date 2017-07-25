@@ -15,7 +15,7 @@ import cn.luo.yuan.maze.model.skill.DefSkill;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillAbleObject;
 import cn.luo.yuan.maze.model.skill.SkillParameter;
-import cn.luo.yuan.maze.model.skill.result.DonothingResult;
+import cn.luo.yuan.maze.model.skill.result.DoNoThingResult;
 import cn.luo.yuan.maze.model.skill.result.EndBattleResult;
 import cn.luo.yuan.maze.model.skill.result.HarmResult;
 import cn.luo.yuan.maze.model.skill.result.HasMessageResult;
@@ -223,7 +223,7 @@ public class BattleService {
                     battleMessage.rowMessage(msg);
                 }
             }
-            if (result instanceof DonothingResult) {
+            if (result instanceof DoNoThingResult) {
                 return false;
             }
             if (result instanceof EndBattleResult) {

@@ -7,6 +7,7 @@ import cn.luo.yuan.maze.persistence.DataManagerInterface;
 import cn.luo.yuan.maze.utils.Random;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
@@ -16,6 +17,8 @@ public class MockGameContext implements InfoControlInterface {
     public Random random = new Random(System.currentTimeMillis());
     public Hero hero;
     public DataManagerInterface dataManager;
+    public ScheduledExecutorService executor;
+    public Maze maze;
     @Override
     public Hero getHero() {
         return hero;
@@ -28,7 +31,7 @@ public class MockGameContext implements InfoControlInterface {
 
     @Override
     public Maze getMaze() {
-        return null;
+        return maze;
     }
 
     @Override
@@ -58,7 +61,7 @@ public class MockGameContext implements InfoControlInterface {
 
     @Override
     public ScheduledExecutorService getExecutor() {
-        return null;
+        return executor;
     }
 
     @Override

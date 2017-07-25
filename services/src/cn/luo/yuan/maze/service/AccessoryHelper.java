@@ -12,7 +12,9 @@ import cn.luo.yuan.maze.model.effect.original.StrEffect;
 import cn.luo.yuan.maze.utils.StringUtils;
 import sun.rmi.log.LogHandler;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by gluo on 6/26/2017.
@@ -23,7 +25,7 @@ public class AccessoryHelper {
      * @param check
      * @return Accessory that un mount
      */
-    public static Accessory mountAccessory(Accessory accessory, Hero hero, boolean check) throws MountLimitException {
+    public synchronized static Accessory mountAccessory(Accessory accessory, Hero hero, boolean check) throws MountLimitException {
         Accessory uMount = null;
         String needEffect = null;
         long needEffectValue = 0;
@@ -80,11 +82,11 @@ public class AccessoryHelper {
                     break;
             }
         }
-        Iterator<Accessory> iterator = hero.getAccessories().iterator();
-        while (iterator.hasNext()) {
-            uMount = iterator.next();
+        List<Accessory> iterator = new ArrayList<>(hero.getAccessories());
+        for(Accessory a : iterator) {
+            uMount = a;
             if (uMount!=null && uMount.getType().equals(accessory.getType())) {
-                iterator.remove();
+                hero.getAccessories().remove(a);
                 for(Effect effect : uMount.getEffects()){
                     if(effect!=null){
                         hero.getEffects().remove(effect);

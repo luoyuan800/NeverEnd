@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.model.goods.types
 import cn.luo.yuan.maze.model.goods.GoodsProperties
 import cn.luo.yuan.maze.model.goods.UsableGoods
 import cn.luo.yuan.maze.service.InfoControlInterface
+import cn.luo.yuan.maze.service.RangePropertiesHelper
 import cn.luo.yuan.maze.utils.Field
 
 /**
@@ -29,7 +30,7 @@ class Grill() : UsableGoods() {
                         value = random.nextLong(100)
                     }
                     desc = "吃到了带血丝的烤肉，力量增加了$value。但是要小心寄生虫感染哦！"
-                    hero.str += value
+                    RangePropertiesHelper.addStr(value,context)
                 }
                 1 -> {
                     value = random.nextLong(hero.agi / 20000) + 1
@@ -37,7 +38,7 @@ class Grill() : UsableGoods() {
                     if (value > 100) {
                         value = random.nextLong(100)
                     }
-                    hero.agi += value
+                    RangePropertiesHelper.addAgi(value, context)
                 }
             }
             context.showPopup(desc)

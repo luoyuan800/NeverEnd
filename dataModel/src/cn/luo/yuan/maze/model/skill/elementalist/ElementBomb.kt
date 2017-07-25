@@ -6,7 +6,7 @@ import cn.luo.yuan.maze.model.skill.AtkSkill
 import cn.luo.yuan.maze.model.skill.SkillAbleObject
 import cn.luo.yuan.maze.model.skill.SkillParameter
 import cn.luo.yuan.maze.model.skill.UpgradeAble
-import cn.luo.yuan.maze.model.skill.result.DonothingResult
+import cn.luo.yuan.maze.model.skill.result.DoNoThingResult
 import cn.luo.yuan.maze.model.skill.result.HarmResult
 import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.utils.Field
@@ -50,7 +50,7 @@ class ElementBomb :AtkSkill(),UpgradeAble {
                 hrs.harm = monster.currentHp
                 hrs.addMessage("$name 生效！")
             }else{
-                val rs = DonothingResult()
+                val rs = DoNoThingResult()
                 rs.messages.add("$name 无效")
                 return rs
             }
@@ -67,8 +67,8 @@ class ElementBomb :AtkSkill(),UpgradeAble {
     }
 
     override fun upgrade(parameter: SkillParameter?): Boolean {
-        if(rate + 0.5 < Data.RATE_MAX/10){
-            rate += 0.5f
+        if(rate + 1 < Data.RATE_MAX/5){
+            rate += 1
             level ++
             return true
         }
@@ -80,7 +80,7 @@ class ElementBomb :AtkSkill(),UpgradeAble {
     }
 
     override fun canUpgrade(parameter: SkillParameter?): Boolean {
-        return rate + 0.5 < Data.RATE_MAX/10 && model.canUpgrade(parameter)
+        return rate + 1 < Data.RATE_MAX/5 && model.canUpgrade(parameter)
     }
 
     override fun canEnable(parameter: SkillParameter?): Boolean {

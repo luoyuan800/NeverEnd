@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -40,7 +41,7 @@ public class MainProcess {
     public WarehouseTable warehouseTable;
     public ExchangeTable exchangeTable;
     public ObjectTable<Task> taskTable;
-    public List<GroupHolder> groups = new ArrayList<>();
+    public Set<GroupHolder> groups = new ConcurrentSkipListSet<GroupHolder>();
     public HeroTable heroTable;
     private ObjectTable<User> userDb;
     private File root;
@@ -48,6 +49,7 @@ public class MainProcess {
     private DatabaseConnection database;
     private ShopTable shop;
     private cn.luo.yuan.maze.utils.Random random = new Random(System.currentTimeMillis());
+    public GameContext context = new GameContext();
 
     public MainProcess(String root) throws IOException, ClassNotFoundException {
         this.root = new File(root);
@@ -172,6 +174,7 @@ public class MainProcess {
                         return omelet;
                     case 4:
                         record.setRestoreLimit(record.getRestoreLimit() + 2);
+                        record.getMessages().add("重生次数增加了！");
                         return "战斗塔重生次数增加两次";
                     default:
                         return null;
@@ -249,7 +252,7 @@ public class MainProcess {
             @Override
             public void run() {
                 LogHelper.info("Preparing battle info");
-                new HeroBattleService(heroTable, new ArrayList<>(groups), MainProcess.this).run();
+                new HeroBattleService(heroTable, MainProcess.this).run();
                 LogHelper.info("updating range message");
                 heroRange = buildHeroRange();
                 LogHelper.info("updated range message");

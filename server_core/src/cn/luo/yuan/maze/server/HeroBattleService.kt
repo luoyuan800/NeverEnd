@@ -16,9 +16,9 @@ import java.util.*
  *
  * Created by gluo on 6/26/2017.
  */
-class HeroBattleService(private val table: HeroTable, val groups: MutableList<GroupHolder>, val main: MainProcess) : Runnable, RunningServiceInterface {
+class HeroBattleService(private val table: HeroTable, val main: MainProcess) : Runnable, RunningServiceInterface {
     override fun getContext(): InfoControlInterface {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return main.context;
     }
 
     override fun isPause(): Boolean {
@@ -62,7 +62,7 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
                             if (oid != "npc") {
                                 registerMessageReceiver(messager, oid)
                             }
-                            if (group == null && ogroup == null && random.nextInt(hero.displayName.length) >= random.nextInt(ohero.displayName.length)) {
+                            if (group == null && ogroup == null && random.nextInt(hero.displayName.length) > random.nextInt(ohero.displayName.length)) {
                                 main.addGroup(id, oid)
                                 messager.buildGroup(hero.displayName, ohero.displayName)
                                 if (StringUtils.isNotEmpty(record.data!!.helloMsg["group"])) {
@@ -81,7 +81,7 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
                             if (StringUtils.isNotEmpty(otherRecord.data!!.helloMsg["meet"])) {
                                 messager.speak(ohero.displayName, otherRecord.data!!.helloMsg["meet"])
                             }
-                            val awardMaterial = random.nextLong(maze.maxLevel + omaze.maxLevel) + 1
+                            val awardMaterial = random.nextLong((maze.maxLevel + omaze.maxLevel)/2) + 1
                             if (bs.battle(maze.maxLevel + omaze.maxLevel)) {
                                 if (StringUtils.isNotEmpty(record.data!!.helloMsg["win"])) {
                                     messager.speak(hero.displayName, record.data!!.helloMsg["win"])
@@ -109,12 +109,12 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
                     } else {
                         if (record.dieCount > record.restoreLimit) {
                             messager.restoreLimit(hero.displayName)
+                            main.removeGroup(id)
                         } else {
                             val period = Data.RESTOREPERIOD - (System.currentTimeMillis() - record.dieTime)
                             if (period <= 0) {
                                 hero.hp = hero.maxHp
                                 messager.restore(hero.displayName)
-                                main.removeGroup(id)
                             } else {
                                 messager.waitingForRestore(hero.displayName, period)
                             }
@@ -160,7 +160,7 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
         }
         var inGroup = false
         val group = Group()
-        loop@ for (holder in groups) {
+        loop@ for (holder in main.groups) {
             if (holder.isInGroup(id)) {
                 inGroup = true
                 for (hid in holder.heroIds) {
