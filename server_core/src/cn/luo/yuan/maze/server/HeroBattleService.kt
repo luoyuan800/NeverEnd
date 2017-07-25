@@ -16,7 +16,7 @@ import java.util.*
  *
  * Created by gluo on 6/26/2017.
  */
-class HeroBattleService(private val table: HeroTable, val groups: MutableList<GroupHolder>, val main: MainProcess) : Runnable, RunningServiceInterface {
+class HeroBattleService(private val table: HeroTable, val main: MainProcess) : Runnable, RunningServiceInterface {
     override fun getContext(): InfoControlInterface {
         return main.context;
     }
@@ -160,7 +160,7 @@ class HeroBattleService(private val table: HeroTable, val groups: MutableList<Gr
         }
         var inGroup = false
         val group = Group()
-        loop@ for (holder in groups) {
+        loop@ for (holder in main.groups) {
             if (holder.isInGroup(id)) {
                 inGroup = true
                 for (hid in holder.heroIds) {

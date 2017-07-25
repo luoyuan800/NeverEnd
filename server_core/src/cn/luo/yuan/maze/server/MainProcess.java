@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -40,7 +41,7 @@ public class MainProcess {
     public WarehouseTable warehouseTable;
     public ExchangeTable exchangeTable;
     public ObjectTable<Task> taskTable;
-    public List<GroupHolder> groups = new ArrayList<>();
+    public Set<GroupHolder> groups = new ConcurrentSkipListSet<GroupHolder>();
     public HeroTable heroTable;
     private ObjectTable<User> userDb;
     private File root;
@@ -251,7 +252,7 @@ public class MainProcess {
             @Override
             public void run() {
                 LogHelper.info("Preparing battle info");
-                new HeroBattleService(heroTable, new ArrayList<>(groups), MainProcess.this).run();
+                new HeroBattleService(heroTable, MainProcess.this).run();
                 LogHelper.info("updating range message");
                 heroRange = buildHeroRange();
                 LogHelper.info("updated range message");
