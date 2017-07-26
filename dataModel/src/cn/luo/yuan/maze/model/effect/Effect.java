@@ -2,35 +2,43 @@ package cn.luo.yuan.maze.model.effect;
 
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.NameObject;
+import sun.rmi.log.LogHandler;
 
 import java.io.Serializable;
 
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public interface Effect extends Serializable, NameObject,Cloneable {
-    boolean isEnable();
-    void setTag(String tag);
-    String getTag();
-    Effect clone();
+public abstract class Effect implements Serializable, NameObject,Cloneable {
+    public abstract boolean isEnable();
+    public abstract void setTag(String tag);
+    public abstract String getTag();
 
-    void setEnable(boolean enable);
+    public abstract void setEnable(boolean enable);
 
     @Override
-    default String getDisplayName() {
+    public String getDisplayName() {
         return "<font color='" + (isEnable()? Data.ENABLE_COLOR : Data.DISABLE_COLOR) + "'>" + toString() + "</font>";
     }
 
     @Override
-    default String getName() {
+    public String getName() {
         return getClass().getSimpleName();
     }
-    Number getValue();
+    public abstract Number getValue();
 
-    default Effect covertToOriginal(){
+    public Effect covertToOriginal(){
         return this;
     }
 
-    void setElementControl(boolean control);
-    boolean isElementControl();
+    public abstract void setElementControl(boolean control);
+    public abstract boolean isElementControl();
+
+    public Effect clone(){
+        try {
+            return (Effect) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return this;
+        }
+    }
 }

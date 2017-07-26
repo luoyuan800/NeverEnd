@@ -62,7 +62,7 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
     @Override
     public boolean canUpgrade(SkillParameter parameter) {
         return isEnable() && parameter.getOwner() instanceof Hero && minHarm + level > 0
-                && maxHarm * level > 0 && isUpgradePointEnough(parameter);
+                && maxHarm * level > 0 && model.isUpgradePointEnough(parameter);
     }
 
 

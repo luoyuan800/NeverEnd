@@ -72,6 +72,6 @@ class Dodge():DefSkill(), UpgradeAble {
     }
 
     override fun canUpgrade(parameter: SkillParameter): Boolean {
-        return isEnable && parameter.owner is Hero && rate < Data.RATE_MAX && isUpgradePointEnough(parameter)
+        return isEnable && parameter.owner is Hero && rate < Data.RATE_MAX && model.canUpgrade(parameter)
     }
 }

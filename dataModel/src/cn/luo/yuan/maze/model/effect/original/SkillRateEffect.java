@@ -7,7 +7,7 @@ import cn.luo.yuan.maze.utils.Field;
 /**
  * Created by gluo on 5/15/2017.
  */
-public class SkillRateEffect implements FloatValueEffect {
+public class SkillRateEffect extends FloatValueEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private String tag;
     private float skillRate;
@@ -50,14 +50,6 @@ public class SkillRateEffect implements FloatValueEffect {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
-    }
-
-    public Effect clone() {
-        try {
-            return (Effect) super.clone();
-        } catch (CloneNotSupportedException e) {
-            return this;
-        }
     }
 
     @Override

@@ -63,7 +63,7 @@ class FightBack() : DefSkill(), UpgradeAble {
     }
 
     override fun canUpgrade(parameter: SkillParameter): Boolean {
-        return isEnable && parameter.owner is Hero && percent < Data.RATE_MAX && isUpgradePointEnough(parameter)
+        return isEnable && parameter.owner is Hero && percent < Data.RATE_MAX && model.isUpgradePointEnough(parameter)
     }
 
     override fun invoke(parameter: SkillParameter): SkillResult {

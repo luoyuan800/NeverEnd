@@ -7,7 +7,7 @@ import cn.luo.yuan.maze.utils.Field;
 /**
  * Created by luoyuan on 2017/3/19.
  */
-public class PetRateEffect implements FloatValueEffect {
+public class PetRateEffect extends FloatValueEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private String tag;
     private float meetRate;
@@ -50,14 +50,6 @@ public class PetRateEffect implements FloatValueEffect {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
-    }
-
-    public Effect clone() {
-        try {
-            return (Effect) super.clone();
-        } catch (CloneNotSupportedException e) {
-            return this;
-        }
     }
 
     @Override

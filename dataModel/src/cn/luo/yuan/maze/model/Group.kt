@@ -11,7 +11,7 @@ import java.io.Serializable
  * Copyright @Luo
  * Created by Gavin Luo on 7/7/2017.
  */
-class Group : HarmAble, SkillAbleObject, NameObject, PetOwner, Serializable {
+class Group : HarmObject(), SkillAbleObject, NameObject, PetOwner, Serializable {
     override fun getElementRate(): Float {
         return if(currentHero!=null) (currentHero as Hero).elementRate else 0.5f
     }

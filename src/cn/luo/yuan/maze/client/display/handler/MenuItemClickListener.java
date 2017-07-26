@@ -72,10 +72,10 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 break;
             case R.id.theme:
                 NeverEndConfig config = control.getDataManager().getConfig();
-                if(config.getTheme() == android.R.style.Theme_Holo){
-                   config.setTheme(android.R.style.Theme_Holo_Light);
+                if(config.getTheme() == android.R.style.Theme_Holo_NoActionBar_Fullscreen){
+                   config.setTheme(android.R.style.Theme_Holo_Light_NoActionBar_Fullscreen);
                 }else{
-                    config.setTheme(android.R.style.Theme_Holo);
+                    config.setTheme(android.R.style.Theme_Holo_NoActionBar_Fullscreen);
                 }
                 control.getDataManager().save(config);
                 control.getViewHandler().reCreate();

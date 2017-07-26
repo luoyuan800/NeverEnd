@@ -7,7 +7,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 /**
  * Created by luoyuan on 2017/7/22.
  */
-public class ParryEffect implements FloatValueEffect {
+public class ParryEffect extends FloatValueEffect {
     private boolean enable;
     private String tag;
     private boolean elementControl;
@@ -39,14 +39,6 @@ public class ParryEffect implements FloatValueEffect {
     @Override
     public String getTag() {
         return tag;
-    }
-
-    public Effect clone() {
-        try {
-            return (Effect) super.clone();
-        } catch (CloneNotSupportedException e) {
-            return this;
-        }
     }
 
     @Override

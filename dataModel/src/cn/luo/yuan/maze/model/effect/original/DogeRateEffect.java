@@ -7,7 +7,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 /**
  * Created by luoyuan on 2017/7/22.
  */
-public class DogeRateEffect implements FloatValueEffect {
+public class DogeRateEffect extends FloatValueEffect {
     private float doge;
     private boolean enable;
     private String tag;
@@ -30,14 +30,6 @@ public class DogeRateEffect implements FloatValueEffect {
     @Override
     public String getTag() {
         return tag;
-    }
-
-    public Effect clone() {
-        try {
-            return (Effect) super.clone();
-        } catch (CloneNotSupportedException e) {
-            return this;
-        }
     }
 
     @Override

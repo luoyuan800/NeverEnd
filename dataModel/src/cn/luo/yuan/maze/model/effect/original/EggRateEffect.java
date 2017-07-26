@@ -7,7 +7,7 @@ import cn.luo.yuan.maze.utils.Field;
 /**
  * Created by luoyuan on 2017/6/29.
  */
-public class EggRateEffect implements FloatValueEffect {
+public class EggRateEffect extends FloatValueEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private String tag;
     private float eggRate;
@@ -25,14 +25,6 @@ public class EggRateEffect implements FloatValueEffect {
         this.enable = enable;
     }
 
-    @Override
-    public Effect clone() {
-        try {
-            return (Effect) super.clone();
-        } catch (CloneNotSupportedException e) {
-            return this;
-        }
-    }
 
     @Override
     public Float getValue() {

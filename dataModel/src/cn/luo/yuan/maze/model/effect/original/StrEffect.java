@@ -7,7 +7,7 @@ import cn.luo.yuan.maze.utils.Field;
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class StrEffect implements LongValueEffect{
+public class StrEffect extends LongValueEffect{
     private String tag;
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private long str;
@@ -47,13 +47,6 @@ public class StrEffect implements LongValueEffect{
 
     public void setEnable(boolean enable) {
         this.enable = enable;
-    }
-    public Effect clone(){
-        try {
-            return (Effect) super.clone();
-        } catch (CloneNotSupportedException e) {
-            return this;
-        }
     }
 
     @Override

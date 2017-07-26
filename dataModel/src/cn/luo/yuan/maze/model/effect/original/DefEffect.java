@@ -7,7 +7,7 @@ import cn.luo.yuan.maze.utils.Field;
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class DefEffect implements LongValueEffect {
+public class DefEffect extends LongValueEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private String tag;
     private long def;
@@ -52,13 +52,6 @@ public class DefEffect implements LongValueEffect {
         this.enable = enable;
     }
 
-    public Effect clone() {
-        try {
-            return (Effect) super.clone();
-        } catch (CloneNotSupportedException e) {
-            return this;
-        }
-    }
 
     @Override
     public String getTag() {

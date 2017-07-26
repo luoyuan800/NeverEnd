@@ -58,4 +58,7 @@ class PetMonster:PropertySkill(), UpgradeAble {
     }
 
     private val model = PetModel(this)
+    override fun canUpgrade(parameter: SkillParameter?): Boolean {
+        return petCount < Data.MAX_PET_COUNT/5 && model.canUpgrade(parameter)
+    }
 }

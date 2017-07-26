@@ -21,7 +21,7 @@
 
     <application android:label="@string/app_name" android:icon="@drawable/ic_launcher"
             android:name="cn.luo.yuan.maze.client.service.NeverEnd"
-                 android:theme="@android:style/Theme.Holo.Light"
+                 android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen"
             >
 
         <activity android:name="cn.luo.yuan.maze.client.display.activity.ad.BaseActivity" >
@@ -33,7 +33,6 @@
 
         </activity>
         <activity android:name="cn.luo.yuan.maze.client.display.activity.SelectedActivity"
-                  android:theme="@android:style/Theme.NoTitleBar"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

@@ -12,7 +12,7 @@ import java.io.Serializable;
 /**
  * Created by gluo on 4/1/2017.
  */
-public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbleObject,Cloneable, Serializable {
+public class Monster extends HarmObject implements SilentAbleObject, NameObject, SkillAbleObject,Cloneable, Serializable {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private FirstName firstName;
     private SecondName secondName;
@@ -259,5 +259,9 @@ public class Monster implements HarmAble, SilentAbleObject, NameObject, SkillAbl
 
     public void setElementRate(float elementRate) {
         this.elementRate = elementRate;
+    }
+
+    public long getUpperDef() {
+        return getDef();
     }
 }

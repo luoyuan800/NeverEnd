@@ -8,7 +8,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 /**
  * Created by gluo on 7/3/2017.
  */
-public class ClickMaterialEffect implements LongValueEffect {
+public class ClickMaterialEffect extends LongValueEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private String tag;
     private long material;
@@ -25,16 +25,6 @@ public class ClickMaterialEffect implements LongValueEffect {
     @Override
     public void setEnable(boolean enable) {
         this.enable = enable;
-    }
-
-    @Override
-    public Effect clone() {
-        try {
-            return (Effect) super.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-        return this;
     }
 
     @Override

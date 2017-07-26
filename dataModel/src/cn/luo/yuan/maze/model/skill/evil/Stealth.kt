@@ -43,7 +43,7 @@ class Stealth() : PropertySkill(), UpgradeAble {
     }
 
     override fun canUpgrade(parameter: SkillParameter?): Boolean {
-        return isEnable && percent < Data.RATE_MAX / 2 && isUpgradePointEnough(parameter)
+        return isEnable && percent < Data.RATE_MAX / 2 && model.isUpgradePointEnough(parameter)
     }
 
     override fun disable(parameter: SkillParameter?) {

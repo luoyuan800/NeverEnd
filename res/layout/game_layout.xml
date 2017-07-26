@@ -20,7 +20,7 @@
 
     <include
             layout="@layout/monster_book_view"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -46,31 +46,27 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                >
+                android:gravity="center_horizontal">
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="生命:"/>
+                    android:text="生命:" android:layout_gravity="center_horizontal" android:gravity="center_horizontal"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/hero_hp"
-                    android:text="10000000W"/>
+                    android:text="10W" android:singleLine="true" android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal"/>
 
-            <LinearLayout
-                    android:layout_gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="/"/>
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/hero_max_hp"
-                    android:text="10000000W"/>
-            </LinearLayout>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/hero_max_hp"
+                android:text="10000000W"/>
         </LinearLayout>
 
         <LinearLayout
@@ -166,7 +162,7 @@
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="100dp"
             android:id="@+id/click_skill_layout"
             android:background="@android:drawable/gallery_thumb"
             android:layout_below="@+id/hero_info"
@@ -211,7 +207,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/hero_info"
-            android:background="@android:drawable/spinner_background"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true">
 

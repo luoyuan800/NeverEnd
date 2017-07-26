@@ -38,4 +38,8 @@ public class SkillModel {
     public boolean isUpgradePointEnough(SkillParameter parameter) {
         return ((Hero) parameter.getOwner()).getPoint() > (skill instanceof UpgradeAble ? ((UpgradeAble) skill).getLevel() : 1)* Data.SKILL_ENABLE_COST;
     }
+
+    public boolean canUpgrade(SkillParameter parameter){
+        return isUpgradePointEnough(parameter);
+    }
 }

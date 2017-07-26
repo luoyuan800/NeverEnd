@@ -1,6 +1,5 @@
 package cn.luo.yuan.maze.model;
 
-import cn.luo.yuan.maze.service.EffectHandler;
 import cn.luo.yuan.maze.utils.Random;
 
 /**
@@ -8,41 +7,34 @@ import cn.luo.yuan.maze.utils.Random;
  */
 public interface HarmAble {
     long getAtk();
+
     long getDef();
+
     long getHp();
+
     void setHp(long hp);
+
     float getElementRate();
 
-    default long getCurrentHp() {
-        return getHp();
-    }
 
-    default void setMaxHp(long hp){
-
-    }
     long getMaxHp();
+
+    void setMaxHp(long hp);
 
     Element getElement();
 
+    long getUpperDef();
+
+    long getUpperHp();
+
+    boolean isDodge(Random random);
+
+    boolean isHit(Random random);
+
+    boolean isParry(Random random);
+
     long getUpperAtk();
 
-    default long getUpperDef(){
-        return getDef();
-    }
+    long getCurrentHp();
 
-    default long getUpperHp(){
-        return getMaxHp();
-    }
-
-    default boolean isDodge(Random random){
-        return random.nextLong(100) > 97 + random.nextInt(100);
-    }
-
-    default boolean isHit(Random random){
-        return random.nextLong(100) > 97 + random.nextInt(100);
-    }
-
-    default boolean isParry(Random random){
-        return random.nextLong(100) > 97 + random.nextInt(100);
-    }
 }

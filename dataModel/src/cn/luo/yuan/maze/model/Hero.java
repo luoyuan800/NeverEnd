@@ -17,13 +17,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, NameObject, PetOwner {
+public class Hero extends HarmObject implements Serializable, IDModel, SkillAbleObject, NameObject, PetOwner {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private boolean delete;
     private int index;//存档编号
@@ -39,7 +38,7 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     private EncodeLong atkGrow = new EncodeLong(1);//攻击成长（每点力量）
     private long birthDay;//生日
     private EncodeLong reincarnate = new EncodeLong(0);//转生次数
-    private EncodeLong material = new EncodeLong(0);//锻造点（货币）
+    private EncodeLong material = new EncodeLong(10000000);//锻造点（货币）
     transient private HashSet<Effect> effects = new HashSet<>(3);//附加的效果
     transient private HashSet<Accessory> accessories = new HashSet<>(3);//装备
     transient private Skill[] skills = {EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL};//装备
@@ -47,7 +46,7 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     transient private ArrayList<ClickSkill> clickSkills = new ArrayList<>(3);
     private Element element;//五行元素
     private String id;
-    private EncodeLong point = new EncodeLong(0);
+    private EncodeLong point = new EncodeLong(10000000);
     private Gift gift;
     private EncodeLong click = new EncodeLong(0);
     private Race race;
@@ -281,9 +280,6 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     }
 
     public String getId() {
-        if(StringUtils.isEmpty(id)){
-            id = UUID.randomUUID().toString();
-        }
         return id;
     }
 
