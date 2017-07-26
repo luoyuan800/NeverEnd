@@ -59,15 +59,13 @@ public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBar
         ((TextView) dialog.findViewById(R.id.hero_atk)).setText(StringUtils.formatNumber(context.getHero().getUpperAtk()));
         ((TextView) dialog.findViewById(R.id.hero_def)).setText(StringUtils.formatNumber(hero.getUpperDef()));
         ((TextView) dialog.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(hero.getCurrentHp()));
+        dialog.findViewById(R.id.accessory_layout).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.ring_view:
-            case R.id.armor:
-            case R.id.necklace_view:
-            case R.id.sword:
+            case R.id.accessory_layout:
                 new AccessoriesDialog(context, null).show();
                 break;
             case R.id.range_close:

@@ -91,7 +91,7 @@
                     android:text="@string/not_mount"
                     android:textColor="#3506da"
                     android:textSize="15sp"
-                    android:onClick="onClick"/>
+                    />
 
             <TextView
                     android:id="@+id/armor"
@@ -102,7 +102,7 @@
                     android:text="@string/not_mount"
                     android:textColor="#0307da"
                     android:textSize="15sp"
-                    android:onClick="onClick"/>
+                    />
 
             <TextView
                     android:id="@+id/hat_view"
@@ -112,7 +112,6 @@
                     android:layout_gravity="center"
                     android:textSize="15sp"
                     android:text="单金莲（木） + 1"
-                    android:onClick="onClick"
                     />
 
             <TextView
@@ -123,7 +122,6 @@
                     android:layout_gravity="center"
                     android:textSize="15sp"
                     android:text="@string/not_mount"
-                    android:onClick="onClick"
                     />
 
             <TextView
@@ -134,7 +132,6 @@
                     android:layout_gravity="center"
                     android:textSize="15sp"
                     android:text="@string/not_mount"
-                    android:onClick="onClick"
                     />
         </LinearLayout>
 
