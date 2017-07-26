@@ -104,6 +104,7 @@ public class SkillDialog implements View.OnClickListener {
                                     SkillHelper.mountSkill(skill, context.getHero());
                                 }
                             }
+                            refreshSkillDisplay(view);
                         }
                     }
                 })
@@ -118,6 +119,7 @@ public class SkillDialog implements View.OnClickListener {
                                     public void onClick(DialogInterface dialog, int which) {
                                         if (skill.canEnable(parameter)) {
                                             SkillHelper.enableSkill(skill, context, parameter);
+                                            refreshSkillDisplay(view);
                                         }
                                     }
                                 });
@@ -134,6 +136,7 @@ public class SkillDialog implements View.OnClickListener {
                             public void onClick(DialogInterface dialog, int which) {
                                 if (((UpgradeAble) skill).canUpgrade(parameter)) {
                                     SkillHelper.upgradeSkill((UpgradeAble) skill, parameter, context);
+                                    refreshSkillDisplay(view);
                                 }
                             }
                         });
@@ -164,6 +167,15 @@ public class SkillDialog implements View.OnClickListener {
         } else {
             SimplerDialogBuilder.build("敬请期待", Resource.getString(R.string.conform), null, context.getContext());
         }
+    }
+
+    private void refreshSkillDisplay(View view) {
+        context.getViewHandler().refreshSkill();
+        Skill skill = SkillFactory.geSkillByName(view.getTag().toString(), context.getDataManager());
+        if(skill!=null && view instanceof Button){
+            ((Button) view).setText(Html.fromHtml(skill.getSkillName()));
+        }
+
     }
 
     private void initSkillButton(Button... skillButtons) {

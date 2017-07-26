@@ -6,10 +6,12 @@ import cn.luo.yuan.maze.persistence.DataManagerInterface;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.utils.Field;
 
+import java.io.Serializable;
+
 /**
  * Created by luoyuan on 2017/7/16.
  */
-public class SkillModel {
+public class SkillModel implements Serializable {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     protected Skill skill;
 

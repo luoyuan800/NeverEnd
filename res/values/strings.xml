@@ -63,7 +63,7 @@
     <string name="fourth_skill_enable">二转开启</string>
     <string name="str_label">力量:</string>
     <string name="agi_label">敏捷:</string>
-    <string name="rang_point_title">分配能力点</string>
+    <string name="properties_view_title">人物属性</string>
     <string name="mount_not_drop">出战中或者有备注的宠物无法丢弃</string>
     <string name="conform_drop">确认丢弃%1$s</string>
     <string name="select_pet">选择一个宠物</string>
@@ -103,4 +103,7 @@
     <string name="swindler_skill">欺诈师</string>
     <string name="pet_skill">宠物大师</string>
     <string name="share_string">我已经在这个迷宫里称霸四方了，你，要来挑战我吗？创新无等级角色扮演冒险放置游戏，宠物培养、装备自定义、技能混搭应有尽有。快来加群543177861享受一番吧！</string>
+    <string name="hp_label">生命:</string>
+    <string name="atk_label">攻击:</string>
+    <string name="def_label">防御:</string>
 </resources>

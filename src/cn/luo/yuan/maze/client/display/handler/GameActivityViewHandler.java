@@ -7,27 +7,25 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.text.Html;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.GameActivity;
 import cn.luo.yuan.maze.client.display.dialog.GiftDialog;
-import cn.luo.yuan.maze.client.display.view.PetTextView;
-import cn.luo.yuan.maze.client.display.view.RevealTextView;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.PetMonsterLoder;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.skill.EmptySkill;
+import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
-import cn.luo.yuan.maze.service.PetMonsterHelper;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by luoyuan on 2017/6/25.
@@ -35,40 +33,108 @@ import java.util.ArrayList;
 public class GameActivityViewHandler extends Handler {
     private GameActivity context;
     private NeverEnd neverEnd;
-    private Runnable refreshClickSkillTask = new Runnable() {
+    private Runnable refreshSkillTask = new Runnable() {
         @Override
         public void run() {
             Hero hero = neverEnd.getHero();
-            ArrayList<ClickSkill> skills = hero.getClickSkills();
-            Button first = (Button) context.findViewById(R.id.first_click_skill);
-            first.setEnabled(false);
-            Button second = (Button) context.findViewById(R.id.second_click_skill);
-            second.setEnabled(false);
-            Button third = (Button) context.findViewById(R.id.third_click_skill);
-            third.setEnabled(false);
-            if (skills.size() > 0) {
-                first.setBackgroundResource(skills.get(0).getImageResource());
-                first.setText(skills.get(0).getName());
-                if (skills.get(0).isUsable()) {
-                    first.setEnabled(true);
-                }
-            }
-            if (skills.size() > 1) {
-                second.setBackgroundResource(skills.get(1).getImageResource());
-                second.setText(skills.get(1).getName());
-                if (skills.get(1).isUsable()) {
-                    second.setEnabled(true);
-                }
-            }
-            if (skills.size() > 2) {
-                third.setBackgroundResource(skills.get(2).getImageResource());
-                third.setText(skills.get(2).getName());
-                if (skills.get(2).isUsable()) {
-                    third.setEnabled(true);
-                }
-            }
+            clickSkill(hero);
+            heroSkill(hero);
+
         }
     };
+
+    private void heroSkill(Hero hero) {
+        Skill[] heroSkills = hero.getSkills();
+        if (heroSkills.length > 0 && heroSkills[0] != null && !(heroSkills[0] instanceof EmptySkill)) {
+            ((TextView) context.findViewById(R.id.first_skill)).setText(Html.fromHtml(heroSkills[0].getName()));
+        } else {
+            ((TextView) context.findViewById(R.id.first_skill)).setText(Resource.getString(R.string.not_mount));
+        }
+        if (heroSkills.length > 1 && heroSkills[1] != null && !(heroSkills[1] instanceof EmptySkill)) {
+            ((TextView) context.findViewById(R.id.secondary_skill)).setText(Html.fromHtml(heroSkills[1].getName()));
+        } else {
+            ((TextView) context.findViewById(R.id.secondary_skill)).setText(R.string.not_mount);
+        }
+        if (heroSkills.length > 2 && heroSkills[2] != null && !(heroSkills[2] instanceof EmptySkill)) {
+            ((TextView) context.findViewById(R.id.third_skill)).setText(Html.fromHtml(heroSkills[2].getName()));
+        } else {
+            ((TextView) context.findViewById(R.id.third_skill)).setText(Resource.getString(R.string.not_mount));
+        }
+        if (heroSkills.length > 3 && heroSkills[3] != null && !(heroSkills[3] instanceof EmptySkill)) {
+            ((TextView) context.findViewById(R.id.fourth_skill)).setText(Html.fromHtml(heroSkills[3].getName()));
+        } else {
+            if (hero.getReincarnate() >= 2) {
+                ((TextView) context.findViewById(R.id.fourth_skill)).setText(R.string.not_mount);
+                context.findViewById(R.id.fourth_skill).setEnabled(true);
+            } else {
+                ((TextView) context.findViewById(R.id.fourth_skill)).setText(R.string.fourth_skill_enable);
+                context.findViewById(R.id.fourth_skill).setEnabled(false);
+            }
+        }
+        if (heroSkills.length > 4 && heroSkills[4] != null && !(heroSkills[4] instanceof EmptySkill)) {
+            ((TextView) context.findViewById(R.id.fifit_skill)).setText(Html.fromHtml(heroSkills[4].getName()));
+        } else {
+            if (hero.getReincarnate() >= 4) {
+                ((TextView) context.findViewById(R.id.fifit_skill)).setText(R.string.not_mount);
+                context.findViewById(R.id.fifit_skill).setEnabled(true);
+            } else {
+                ((TextView) context.findViewById(R.id.fifit_skill)).setText(R.string.fifth_skill_enable);
+                context.findViewById(R.id.fifit_skill).setEnabled(false);
+            }
+        }
+        if (heroSkills.length > 5 && heroSkills[5] != null && !(heroSkills[5] instanceof EmptySkill)) {
+            ((TextView) context.findViewById(R.id.sixth_skill)).setText(Html.fromHtml(heroSkills[5].getName()));
+        } else {
+            if (hero.getReincarnate() >= 8) {
+                ((TextView) context.findViewById(R.id.sixth_skill)).setText(R.string.not_mount);
+                context.findViewById(R.id.sixth_skill).setEnabled(true);
+            } else {
+                ((TextView) context.findViewById(R.id.sixth_skill)).setText(R.string.sixth_skill_enable);
+                context.findViewById(R.id.sixth_skill).setEnabled(false);
+            }
+        }
+    }
+
+    private void clickSkill(Hero hero) {
+        ArrayList<ClickSkill> skills = hero.getClickSkills();
+        Button first = (Button) context.findViewById(R.id.first_click_skill);
+        first.setEnabled(false);
+        Button second = (Button) context.findViewById(R.id.second_click_skill);
+        second.setEnabled(false);
+        Button third = (Button) context.findViewById(R.id.third_click_skill);
+        third.setEnabled(false);
+        if (skills.size() > 0) {
+            first.setBackgroundResource(skills.get(0).getImageResource());
+            first.setText(skills.get(0).getName());
+            if (skills.get(0).isUsable()) {
+                first.setEnabled(true);
+            }
+        }else{
+            first.setEnabled(false);
+            first.setBackgroundResource(0);
+        }
+        if (skills.size() > 1) {
+            second.setBackgroundResource(skills.get(1).getImageResource());
+            second.setText(skills.get(1).getName());
+            if (skills.get(1).isUsable()) {
+                second.setEnabled(true);
+            }
+        }else{
+            second.setEnabled(false);
+            second.setBackgroundResource(0);
+        }
+        if (skills.size() > 2) {
+            third.setBackgroundResource(skills.get(2).getImageResource());
+            third.setText(skills.get(2).getName());
+            if (skills.get(2).isUsable()) {
+                third.setEnabled(true);
+            }
+        }else{
+            third.setEnabled(false);
+            third.setBackgroundResource(0);
+        }
+    }
+
     private Runnable refreshFreqPrepertiesTask = new Runnable() {
         @Override
         public void run() {
@@ -88,20 +154,26 @@ public class GameActivityViewHandler extends Handler {
         public void run() {
             Hero hero = neverEnd.getHero();
             ArrayList<Pet> pets = new ArrayList<>(hero.getPets());
+            ImageView first = (ImageView)context.findViewById(R.id.pet_1);
+            ImageView second = (ImageView)context.findViewById(R.id.pet_2);
+            ImageView third = (ImageView)context.findViewById(R.id.pet_3);
             if(pets.size() > 0){
                 Pet pet = pets.get(0);
-                ImageView petView = (ImageView)context.findViewById(R.id.pet_1);
-                updatePetView(pet, petView);
+                updatePetView(pet, first);
+            }else{
+                first.setImageResource(0);
             }
             if(pets.size() > 1){
                 Pet pet = pets.get(1);
-                ImageView petView = (ImageView)context.findViewById(R.id.pet_2);
-                updatePetView(pet, petView);
+                updatePetView(pet, second);
+            }else{
+                second.setImageResource(0);
             }
             if(pets.size() > 3){
                 Pet pet = pets.get(2);
-                ImageView petView = (ImageView)context.findViewById(R.id.pet_3);
-                updatePetView(pet, petView);
+                updatePetView(pet, third);
+            }else{
+                third.setImageResource(0);
             }
             ((Button)context.findViewById(R.id.more_pet)).setText(String.format("%d+",pets.size()));
         }
@@ -152,8 +224,8 @@ public class GameActivityViewHandler extends Handler {
         ImageView heroHead = (ImageView) context.findViewById(R.id.hero_pic);
     }
 
-    public void refreshClickSkill() {
-        post(refreshClickSkillTask);
+    public void refreshSkill() {
+        post(refreshSkillTask);
     }
 
     public void refreshProperties(final Hero hero) {

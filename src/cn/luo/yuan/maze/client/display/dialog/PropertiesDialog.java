@@ -3,19 +3,20 @@ package cn.luo.yuan.maze.client.display.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Build;
+import android.os.Handler;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.service.NeverEnd;
-import cn.luo.yuan.maze.service.InfoControlInterface;
+import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.service.RangePropertiesHelper;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 /**
  * Created by gluo on 5/31/2017.
  */
-public class RangePointDialog implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
+public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     private Dialog dialog;
     private NeverEnd context;
     private int maxPoint;
@@ -23,8 +24,9 @@ public class RangePointDialog implements View.OnClickListener, SeekBar.OnSeekBar
     private SeekBar agiAddValue;
     private TextView strAddShow;
     private TextView agiAddShow;
+    Handler handler = new Handler();
 
-    public RangePointDialog(NeverEnd context) {
+    public PropertiesDialog(NeverEnd context) {
         this.context = context;
         long point = context.getHero().getPoint();
         if (point > Integer.MAX_VALUE) {
@@ -36,12 +38,13 @@ public class RangePointDialog implements View.OnClickListener, SeekBar.OnSeekBar
 
     public void show() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            dialog = new AlertDialog.Builder(context.getContext()).setTitle(R.string.rang_point_title).setView(R.layout.rang_point).show();
+            dialog = new AlertDialog.Builder(context.getContext()).setTitle(R.string.properties_view_title).setView(R.layout.properties_view).show();
         }else {
-            dialog = new AlertDialog.Builder(context.getContext()).setTitle(R.string.rang_point_title).setView(View.inflate(context.getContext(), R.layout.rang_point, null)).show();
+            dialog = new AlertDialog.Builder(context.getContext()).setTitle(R.string.properties_view_title).setView(View.inflate(context.getContext(), R.layout.properties_view, null)).show();
         }
         dialog.findViewById(R.id.range_close).setOnClickListener(this);
         dialog.findViewById(R.id.range_conform).setOnClickListener(this);
+        Hero hero = context.getHero();
         ((TextView) dialog.findViewById(R.id.point_value)).setText(StringUtils.formatNumber(context.getHero().getPoint()));
         strAddValue = (SeekBar) dialog.findViewById(R.id.str_add_value);
         strAddValue.setMax(maxPoint);
@@ -53,11 +56,20 @@ public class RangePointDialog implements View.OnClickListener, SeekBar.OnSeekBar
         ((TextView)dialog.findViewById(R.id.str_value)).setText(StringUtils.formatNumber(context.getHero().getStr()));
         strAddShow = (TextView) dialog.findViewById(R.id.str_add_show);
         agiAddShow = (TextView) dialog.findViewById(R.id.agi_add_show);
+        ((TextView) dialog.findViewById(R.id.hero_atk)).setText(StringUtils.formatNumber(context.getHero().getUpperAtk()));
+        ((TextView) dialog.findViewById(R.id.hero_def)).setText(StringUtils.formatNumber(hero.getUpperDef()));
+        ((TextView) dialog.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(hero.getCurrentHp()));
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ring_view:
+            case R.id.armor:
+            case R.id.necklace_view:
+            case R.id.sword:
+                new AccessoriesDialog(context, null).show();
+                break;
             case R.id.range_close:
                 dialog.dismiss();
                 break;
@@ -72,7 +84,6 @@ public class RangePointDialog implements View.OnClickListener, SeekBar.OnSeekBar
                         RangePropertiesHelper.addStr(strPoint, context);
                     }
                     context.getHero().setPoint(context.getHero().getPoint() - strPoint - agiPoint);
-                    context.getViewHandler().refreshProperties(context.getHero());
                 }
                 dialog.dismiss();
                 break;

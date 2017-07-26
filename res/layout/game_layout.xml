@@ -16,18 +16,18 @@
             android:layout_marginLeft="5dp"
             android:visibility="visible"
             android:background="@android:drawable/spinner_background"
-            android:layout_below="@+id/click_skill_layout"/>
+            android:layout_below="@+id/skill_layout"/>
 
     <include
             layout="@layout/monster_book_view"
-            android:visibility="visible"
+            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:id="@+id/monster_view"
             android:layout_toEndOf="@+id/pets"
             android:layout_marginLeft="5dp"
-            android:layout_below="@+id/click_skill_layout"/>
+            android:layout_below="@+id/skill_layout"/>
 
 
     <LinearLayout
@@ -159,48 +159,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:id="@+id/click_skill_layout"
-            android:background="@android:drawable/gallery_thumb"
-            android:layout_below="@+id/hero_info"
-            >
-
-        <Button
-                android:layout_weight="1"
-                android:layout_width="70dp"
-                android:layout_height="match_parent"
-                android:id="@+id/first_click_skill"
-                android:enabled="true"
-                android:onClick="onClick"
-                android:background="@color/toumin"
-                />
-
-        <Button
-                android:layout_weight="1"
-                android:layout_width="70dp"
-                android:layout_height="match_parent"
-                android:id="@+id/second_click_skill"
-                android:enabled="true"
-                android:onClick="onClick"
-                android:background="@color/toumin"
-                android:layout_marginStart="30dp"
-                />
-
-        <Button
-                android:layout_weight="1"
-                android:layout_width="70dp"
-                android:layout_height="match_parent"
-                android:id="@+id/third_click_skill"
-                android:enabled="true"
-                android:onClick="onClick"
-                android:background="@color/toumin"
-                android:layout_marginStart="30dp"
-                />
-    </LinearLayout>
-
 
     <LinearLayout
             android:orientation="horizontal"
@@ -257,7 +215,7 @@
             android:onClick="onClick"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/click_skill_layout"
+            android:layout_below="@+id/skill_layout"
             android:scaleType="fitCenter"/>
 
     <LinearLayout
@@ -267,7 +225,7 @@
             android:id="@+id/pet_layout"
             android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/hero_info"
-            android:layout_above="@+id/click_skill_layout">
+            android:layout_above="@+id/skill_layout">
 
         <ImageView
                 android:src="@drawable/evo_fei_2"
@@ -308,5 +266,150 @@
             android:onClick="showButtons"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"/>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:id="@+id/skill_layout"
+            android:background="@android:drawable/gallery_thumb"
+            android:layout_below="@+id/hero_info"
+            android:layout_alignParentStart="true"
+            android:gravity="center_vertical">
+
+        <Button
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:id="@+id/first_click_skill"
+                android:enabled="true"
+                android:onClick="onClick"
+                android:background="@color/toumin"
+                />
+
+        <Button
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:id="@+id/second_click_skill"
+                android:enabled="true"
+                android:onClick="onClick"
+                android:background="@color/toumin"
+                android:layout_marginStart="30dp"
+                />
+
+        <Button
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:id="@+id/third_click_skill"
+                android:enabled="true"
+                android:onClick="onClick"
+                android:background="@color/toumin"
+                android:layout_marginStart="30dp"
+                />
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="3">
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/skill_layout_1"
+                    android:layout_weight="1">
+
+                <Button
+                        android:id="@+id/first_skill"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:alpha="90"
+                        android:focusableInTouchMode="false"
+                        android:gravity="center"
+                        android:textSize="12sp"
+                        android:onClick="onClick"
+                        android:background="@color/toumin"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"/>
+
+                <Button
+                        android:id="@+id/secondary_skill"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:alpha="90"
+                        android:gravity="center"
+                        android:textSize="12sp"
+                        android:onClick="onClick"
+                        android:background="@color/toumin"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"/>
+
+                <Button
+                        android:id="@+id/third_skill"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:alpha="95"
+                        android:focusableInTouchMode="false"
+                        android:gravity="center"
+                        android:textSize="12sp"
+                        android:onClick="onClick"
+                        android:background="@color/toumin"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/skill_layout_2"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp">
+
+                <Button
+                        android:id="@+id/fourth_skill"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:alpha="90"
+                        android:focusableInTouchMode="false"
+                        android:gravity="center"
+                        android:text="@string/fourth_skill_enable"
+                        android:textSize="12sp"
+                        android:enabled="false"
+                        android:onClick="onClick"
+                        android:background="@color/toumin"
+                        android:layout_marginStart="10dp"/>
+
+                <Button
+                        android:id="@+id/fifit_skill"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:alpha="95"
+                        android:focusableInTouchMode="false"
+                        android:gravity="center"
+                        android:text="@string/fifth_skill_enable"
+                        android:textSize="12sp"
+                        android:onClick="onClick"
+                        android:background="@color/toumin"
+                        android:layout_marginStart="5dp"/>
+
+                <Button
+                        android:id="@+id/sixth_skill"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:alpha="90"
+                        android:gravity="center"
+                        android:text="@string/sixth_skill_enable"
+                        android:textSize="12sp"
+                        android:onClick="onClick"
+                        android:background="@color/toumin"
+                        android:layout_marginStart="5dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

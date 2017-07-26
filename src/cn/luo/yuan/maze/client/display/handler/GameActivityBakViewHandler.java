@@ -94,7 +94,7 @@ public class GameActivityBakViewHandler extends GameActivityViewHandler {
         ImageView heroHead = (ImageView) context.findViewById(R.id.hero_pic);
     }
 
-    public void refreshClickSkill() {
+    public void refreshSkill() {
         post(refreshClickSkillTask);
     }
 
@@ -225,8 +225,6 @@ public class GameActivityBakViewHandler extends GameActivityViewHandler {
                         context.findViewById(R.id.sixth_skill).setEnabled(false);
                     }
                 }
-
-
             }
         });
     }

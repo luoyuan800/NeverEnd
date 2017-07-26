@@ -20,7 +20,6 @@ import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.client.display.dialog.*;
 import cn.luo.yuan.maze.client.display.handler.AdHandler;
 import cn.luo.yuan.maze.client.display.handler.GameActivityBakViewHandler;
-import cn.luo.yuan.maze.client.display.handler.GameActivityViewHandler;
 import cn.luo.yuan.maze.client.display.handler.MenuItemClickListener;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
 import cn.luo.yuan.maze.client.service.NeverEnd;
@@ -168,7 +167,7 @@ public class GameActivityBak extends GameActivity {
             case R.id.armor:
             case R.id.necklace_view:
             case R.id.sword:
-                new AccessoriesDialog(control).show();
+                new AccessoriesDialog(control, null).show();
                 break;
             case R.id.pets:
             case R.id.pets_root:
@@ -205,7 +204,7 @@ public class GameActivityBak extends GameActivity {
                 break;
             case R.id.range_point:
                 if (control.getHero().getPoint() > 0) {
-                    new RangePointDialog(control).show();
+                    new PropertiesDialog(control).show();
                 }
                 break;
 

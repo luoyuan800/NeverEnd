@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/properties_layout">
+
+            <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hp_label"
+                        android:layout_weight="1"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/hero_hp"
+                        android:text="10000000W"
+                        android:layout_weight="1"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/atk_label"
+                        android:layout_weight="1"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/hero_atk"
+                        android:text="100000W"
+                        android:layout_weight="1"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/def_label"
+                        android:layout_weight="1"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/hero_def"
+                        android:text="100000W"
+                        android:layout_weight="1"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/accessory_layout"
+                android:layout_gravity="center"
+                android:gravity="center">
+            <TextView
+                    android:id="@+id/sword"
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/not_mount"
+                    android:textColor="#3506da"
+                    android:textSize="15sp"
+                    android:onClick="onClick"/>
+
+            <TextView
+                    android:id="@+id/armor"
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/not_mount"
+                    android:textColor="#0307da"
+                    android:textSize="15sp"
+                    android:onClick="onClick"/>
+
+            <TextView
+                    android:id="@+id/hat_view"
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="15sp"
+                    android:text="单金莲（木） + 1"
+                    android:onClick="onClick"
+                    />
+
+            <TextView
+                    android:id="@+id/necklace_view"
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="15sp"
+                    android:text="@string/not_mount"
+                    android:onClick="onClick"
+                    />
+
+            <TextView
+                    android:id="@+id/ring_view"
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="15sp"
+                    android:text="@string/not_mount"
+                    android:onClick="onClick"
+                    />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_weight="1">
+
+        <TextView
+                android:text="@string/str_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/str_label"
+                android:layout_weight="1"/>
+
+        <TextView
+                android:text="11111"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/str_value"
+                android:layout_weight="1"/>
+
+        <ImageView
+                android:src="@drawable/jiahao_zi"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:id="@+id/add_label"
+                android:layout_weight="0.24"/>
+
+        <SeekBar
+                android:layout_width="170dp"
+                android:layout_height="match_parent"
+                android:id="@+id/str_add_value"
+                android:layout_weight="1"/>
+
+        <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/str_add_show"
+                android:layout_weight="1"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_weight="1">
+
+        <TextView
+                android:text="@string/agi_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/agi_label"
+                android:layout_weight="1"/>
+
+        <TextView
+                android:text="11111"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/agi_value"
+                android:layout_weight="1"/>
+
+        <ImageView
+                android:src="@drawable/jiahao_zi"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_weight="0.23"/>
+
+        <SeekBar
+                android:layout_width="170dp"
+                android:layout_height="match_parent"
+                android:id="@+id/agi_add_value"
+                android:layout_weight="1"/>
+
+        <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/agi_add_show"
+                android:layout_weight="1"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_weight="1">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/point_label"
+                android:layout_weight="1"
+                android:text="@string/point_label"/>
+
+        <TextView
+                android:text="111223"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/point_value"
+                android:layout_weight="1"/>
+    </LinearLayout>
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal"
+              android:layout_weight="1">
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/conform" android:id="@+id/range_conform" android:layout_weight="1" style="@android:style/Widget.Button.Inset"/>
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/close" android:id="@+id/range_close" android:layout_weight="1" style="@android:style/Widget.Button.Inset"/>
+</LinearLayout>
+</LinearLayout>

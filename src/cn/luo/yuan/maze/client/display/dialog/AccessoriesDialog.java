@@ -12,12 +12,13 @@ import android.widget.Toast;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
+import cn.luo.yuan.maze.client.service.NeverEnd;
+import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.exception.MountLimitException;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.client.service.NeverEnd;
-import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.service.AccessoryHelper;
+import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.Comparator;
@@ -27,6 +28,7 @@ import java.util.List;
  * Created by luoyuan on 2017/5/26.
  */
 public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreListener, View.OnClickListener, View.OnLongClickListener {
+    private OnAccessoryChangeListener changeListener;
     private Dialog dialog;
     private StringAdapter<Accessory> accessoryAdapter;
     private List<Accessory> accessories;
@@ -40,14 +42,14 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
             return compare == 0 ? Long.compare(rhs.getLevel(), lhs.getLevel()) : compare;
         }
     };
-
-    public AccessoriesDialog(NeverEnd context) {
+    public AccessoriesDialog(NeverEnd context, OnAccessoryChangeListener listener) {
         this.context = context;
+        this.changeListener = listener;
         AlertDialog.Builder builder = new AlertDialog.Builder(context.getContext());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.setView(R.layout.accessory);
-        }else{
-            builder.setView(View.inflate(context.getContext(),R.layout.accessory, null));
+        } else {
+            builder.setView(View.inflate(context.getContext(), R.layout.accessory, null));
         }
         dialog = builder.create();
         accessories = context.getDataManager().loadAccessories(0, 10, key, order);
@@ -79,11 +81,12 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
                                                     try {
                                                         context.mountAccessory(main, true);
                                                     } catch (MountLimitException e) {
-                                                        Toast.makeText(context.getContext(),e.word, Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(context.getContext(), e.word, Toast.LENGTH_SHORT).show();
                                                     }
                                                 }
                                                 accessoryAdapter.notifyDataSetChanged();
                                                 refreshMainAccessoryView();
+                                                notifyChange();
                                             }
                                         }
                                     }
@@ -125,6 +128,7 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
                                 }).setCancelable(false).
                                 create().show();
                     }
+                    notifyChange();
 
                 }
             }
@@ -136,6 +140,12 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
                                                                            }
                                                                        }
         );
+    }
+
+    private void notifyChange() {
+        if(changeListener!=null){
+            changeListener.change(context);
+        }
     }
 
     public void dismiss() {
@@ -181,13 +191,17 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
         return false;
     }
 
+    public static interface OnAccessoryChangeListener {
+        void change(InfoControlInterface context);
+    }
+
     private void refreshFuseAccessoryView() {
         if (fuse != null) {
             ((TextView) dialog.findViewById(R.id.accessory_name_2)).setText(Html.fromHtml(fuse.getDisplayName()));
             ((TextView) dialog.findViewById(R.id.accessory_effects_2)).setText(Html.fromHtml(StringUtils.formatEffectsAsHtml(fuse.getEffects())));
-            if(StringUtils.isNotEmpty(fuse.getDesc())) {
+            if (StringUtils.isNotEmpty(fuse.getDesc())) {
                 ((TextView) dialog.findViewById(R.id.accessory_desc_2)).setText(Html.fromHtml(fuse.getDesc()));
-            }else{
+            } else {
                 ((TextView) dialog.findViewById(R.id.accessory_desc_2)).setText(StringUtils.EMPTY_STRING);
             }
         } else {
@@ -207,9 +221,9 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
             } else {
                 ((Button) dialog.findViewById(R.id.accessory_mount)).setText(Resource.getString(R.string.need_mount));
             }
-            if(StringUtils.isNotEmpty(main.getDesc())) {
+            if (StringUtils.isNotEmpty(main.getDesc())) {
                 ((TextView) dialog.findViewById(R.id.accessory_desc)).setText(Html.fromHtml(main.getDesc()));
-            }else{
+            } else {
                 ((TextView) dialog.findViewById(R.id.accessory_desc)).setText(StringUtils.EMPTY_STRING);
             }
             dialog.findViewById(R.id.accessory_mount).setEnabled(true);
@@ -225,13 +239,13 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
 
     private void detectFuseAble() {
         boolean costE = true;
-        if(main!=null){
+        if (main != null) {
             long value = Data.FUSE_COST * main.getLevel();
             costE = context.getHero().getMaterial() >= value;
-            if(costE){
-                ((Button)dialog.findViewById(R.id.accessory_fuse)).setText(R.string.upgrade);
-            }else{
-                ((Button)dialog.findViewById(R.id.accessory_fuse)).setText("升级需要锻造" + StringUtils.formatNumber(value));
+            if (costE) {
+                ((Button) dialog.findViewById(R.id.accessory_fuse)).setText(R.string.upgrade);
+            } else {
+                ((Button) dialog.findViewById(R.id.accessory_fuse)).setText("升级需要锻造" + StringUtils.formatNumber(value));
             }
         }
         if (fuse != null && main != null && fuse.getType().equals(main.getType()) && costE) {

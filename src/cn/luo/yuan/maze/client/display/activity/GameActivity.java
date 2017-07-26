@@ -1,46 +1,38 @@
 package cn.luo.yuan.maze.client.display.activity;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.*;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.TextView;
+import android.widget.Toast;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
-import cn.luo.yuan.maze.client.display.dialog.*;
+import cn.luo.yuan.maze.client.display.dialog.ClickSkillDialog;
+import cn.luo.yuan.maze.client.display.dialog.PetDialog;
+import cn.luo.yuan.maze.client.display.dialog.PropertiesDialog;
+import cn.luo.yuan.maze.client.display.dialog.SkillDialog;
 import cn.luo.yuan.maze.client.display.handler.AdHandler;
 import cn.luo.yuan.maze.client.display.handler.GameActivityViewHandler;
 import cn.luo.yuan.maze.client.display.handler.MenuItemClickListener;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
+import cn.luo.yuan.maze.client.service.NeverEnd;
+import cn.luo.yuan.maze.client.service.PetMonsterLoder;
+import cn.luo.yuan.maze.client.utils.LogHelper;
+import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.persistence.DataManager;
-import cn.luo.yuan.maze.client.service.NeverEnd;
-import cn.luo.yuan.maze.client.service.PetMonsterLoder;
-import cn.luo.yuan.maze.client.utils.LogHelper;
-import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
-import sw.ls.ps.normal.spot.SpotManager;
-import sw.ls.ps.normal.video.VideoAdManager;
-
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by luoyuan on 2017/3/29.
@@ -54,14 +46,15 @@ public class GameActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent();
 //        ListenerService.init();
-        dataManager = new DataManager(intent.getIntExtra("index", -1), this);super.onCreate(savedInstanceState);
+        dataManager = new DataManager(intent.getIntExtra("index", -1), this);
+        super.onCreate(savedInstanceState);
         NeverEndConfig config = dataManager.getConfig();
-        if(config.getTheme() != 0){
+        if (config.getTheme() != 0) {
             setTheme(config.getTheme());
         }
         setContentView(R.layout.game_layout);
 
-        control = (NeverEnd)getApplication();
+        control = (NeverEnd) getApplication();
         control.setContext(this, dataManager);
         control.setViewHandler(new GameActivityViewHandler(this, control));
         control.setTextView((RollTextView) findViewById(R.id.info_view));
@@ -69,9 +62,9 @@ public class GameActivity extends BaseActivity {
         Resource.askWritePermissions(new PermissionRequestListener() {
             @Override
             public void result(int requestCode, String[] permissions, int[] grantResults) {
-                if(grantResults[0] + grantResults[1]  == 0){
+                if (grantResults[0] + grantResults[1] == 0) {
                     Toast.makeText(GameActivity.this, "已经获得记录数据的权限", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     Toast.makeText(GameActivity.this, "无法获得记录数据的权限", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -83,7 +76,7 @@ public class GameActivity extends BaseActivity {
 
             }
         }).start();
-        if(control.getHero().getClickSkills().isEmpty()){
+        if (control.getHero().getClickSkills().isEmpty()) {
             new ClickSkillDialog(control).show(control.getIndex(), false);
         }
         control.getViewHandler().post(new Runnable() {
@@ -95,21 +88,10 @@ public class GameActivity extends BaseActivity {
                 }
                 bitmap = Resource.getImageFromSD("h.png");
                 if (bitmap != null) {
-                    ((ImageView)findViewById(R.id.hero_pic)).setImageDrawable(bitmap);
+                    ((ImageView) findViewById(R.id.hero_pic)).setImageDrawable(bitmap);
                 }
             }
         });
-    }
-
-    private void initResources() {
-        Resource.init(this);
-        LogHelper.initLogSystem(this);
-        control.setContext(this);
-    }
-
-    protected void onResume() {
-        super.onResume();
-        initResources();
     }
 
     @Override
@@ -128,6 +110,14 @@ public class GameActivity extends BaseActivity {
         control.getHero().setClick(control.getHero().getClick() + 1);
         HarmAble currentBattleTarget = control.getCurrentBattleTarget();
         switch (v.getId()) {
+            case R.id.first_skill:
+            case R.id.secondary_skill:
+            case R.id.third_skill:
+            case R.id.fourth_skill:
+            case R.id.fifit_skill:
+            case R.id.sixth_skill:
+                new SkillDialog(control).show();
+                break;
             case R.id.more_pet:
                 new PetDialog(control, new PetAdapter(this, control.getDataManager(), "")).show();
                 break;
@@ -175,28 +165,28 @@ public class GameActivity extends BaseActivity {
                 }
                 break;
             case R.id.first_click_skill:
-                if(control.getHero().getClickSkills().size() >= 1) {
-                    if(currentBattleTarget !=null) {
+                if (control.getHero().getClickSkills().size() >= 1) {
+                    if (currentBattleTarget != null) {
                         ClickSkill ck = control.getHero().getClickSkills().get(0);
                         ck.use(control.getHero(), currentBattleTarget, control);
                     }
                 }
                 break;
             case R.id.second_click_skill:
-                if(control.getHero().getClickSkills().size() >= 2) {
+                if (control.getHero().getClickSkills().size() >= 2) {
                     ClickSkill ck = control.getHero().getClickSkills().get(1);
                     ck.use(control.getHero(), currentBattleTarget, control);
                 }
                 break;
             case R.id.third_click_skill:
-                if(control.getHero().getClickSkills().size() >= 3) {
+                if (control.getHero().getClickSkills().size() >= 3) {
                     ClickSkill ck = control.getHero().getClickSkills().get(2);
                     ck.use(control.getHero(), currentBattleTarget, control);
                 }
                 break;
             case R.id.range_point:
                 if (control.getHero().getPoint() > 0) {
-                    new RangePointDialog(control).show();
+                    new PropertiesDialog(control).show();
                 }
                 break;
 
@@ -207,9 +197,20 @@ public class GameActivity extends BaseActivity {
         if (popupMenu == null) {
             popupMenu = new PopupMenu(this, view);
             popupMenu.getMenuInflater().inflate(R.menu.button_group, popupMenu.getMenu());
-            popupMenu.setOnMenuItemClickListener(new MenuItemClickListener(this,control));
+            popupMenu.setOnMenuItemClickListener(new MenuItemClickListener(this, control));
         }
         popupMenu.show();
+    }
+
+    private void initResources() {
+        Resource.init(this);
+        LogHelper.initLogSystem(this);
+        control.setContext(this);
+    }
+
+    protected void onResume() {
+        super.onResume();
+        initResources();
     }
 
     private void randomMonsterBook() {
@@ -252,7 +253,7 @@ public class GameActivity extends BaseActivity {
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         control.stopGame();
         super.onDestroy();
     }
