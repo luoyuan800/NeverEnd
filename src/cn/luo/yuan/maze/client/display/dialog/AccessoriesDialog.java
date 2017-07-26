@@ -17,6 +17,7 @@ import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.Resource;
+import cn.luo.yuan.maze.service.AccessoryHelper;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.Comparator;
@@ -82,8 +83,6 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
                                                     }
                                                 }
                                                 accessoryAdapter.notifyDataSetChanged();
-                                                context.getViewHandler().refreshAccessory(context.getHero());
-                                                context.getViewHandler().refreshProperties(context.getHero());
                                                 refreshMainAccessoryView();
                                             }
                                         }
@@ -94,9 +93,7 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
             public void onClick(View v) {
                 if (main != null && fuse != null) {
                     if (fuse.isMounted()) {
-                        context.getAccessoryHelper().unMountAccessory(fuse, context.getHero());
-                        context.getViewHandler().refreshAccessory(context.getHero());
-                        context.getViewHandler().refreshProperties(context.getHero());
+                        AccessoryHelper.unMountAccessory(fuse, context.getHero());
                     }
                     context.getHero().setMaterial(context.getHero().getMaterial() - Data.FUSE_COST * main.getLevel());
                     context.getDataManager().delete(fuse);
@@ -111,10 +108,6 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
                                         fuse = null;
                                         refreshFuseAccessoryView();
                                         accessoryAdapter.notifyDataSetChanged();
-                                        if(main.isMounted()) {
-                                            context.getViewHandler().refreshAccessory(context.getHero());
-                                            context.getViewHandler().refreshProperties(context.getHero());
-                                        }
                                     }
                                 }).
                                 create().show();

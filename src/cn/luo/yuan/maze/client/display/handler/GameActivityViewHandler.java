@@ -1,6 +1,10 @@
 package cn.luo.yuan.maze.client.display.handler;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
 import android.text.Html;
 import android.view.View;
@@ -14,15 +18,13 @@ import cn.luo.yuan.maze.client.display.dialog.GiftDialog;
 import cn.luo.yuan.maze.client.display.view.PetTextView;
 import cn.luo.yuan.maze.client.display.view.RevealTextView;
 import cn.luo.yuan.maze.client.service.NeverEnd;
+import cn.luo.yuan.maze.client.service.PetMonsterLoder;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
-import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Pet;
-import cn.luo.yuan.maze.model.skill.EmptySkill;
-import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
-import cn.luo.yuan.maze.utils.Field;
+import cn.luo.yuan.maze.service.PetMonsterHelper;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -32,8 +34,8 @@ import java.util.ArrayList;
  */
 public class GameActivityViewHandler extends Handler {
     private GameActivity context;
-
-    private Runnable refreshClickSkillTask  = new Runnable() {
+    private NeverEnd neverEnd;
+    private Runnable refreshClickSkillTask = new Runnable() {
         @Override
         public void run() {
             Hero hero = neverEnd.getHero();
@@ -67,8 +69,7 @@ public class GameActivityViewHandler extends Handler {
             }
         }
     };
-    private NeverEnd neverEnd;
-    private Runnable refreshFreqPreperties = new Runnable() {
+    private Runnable refreshFreqPrepertiesTask = new Runnable() {
         @Override
         public void run() {
             //Hero properties
@@ -82,6 +83,65 @@ public class GameActivityViewHandler extends Handler {
 
         }
     };
+    private Runnable refreshPetTask = new Runnable() {
+        @Override
+        public void run() {
+            Hero hero = neverEnd.getHero();
+            ArrayList<Pet> pets = new ArrayList<>(hero.getPets());
+            if(pets.size() > 0){
+                Pet pet = pets.get(0);
+                ImageView petView = (ImageView)context.findViewById(R.id.pet_1);
+                updatePetView(pet, petView);
+            }
+            if(pets.size() > 1){
+                Pet pet = pets.get(1);
+                ImageView petView = (ImageView)context.findViewById(R.id.pet_2);
+                updatePetView(pet, petView);
+            }
+            if(pets.size() > 3){
+                Pet pet = pets.get(2);
+                ImageView petView = (ImageView)context.findViewById(R.id.pet_3);
+                updatePetView(pet, petView);
+            }
+            ((Button)context.findViewById(R.id.more_pet)).setText(String.format("%d+",pets.size()));
+        }
+    };
+
+    private void updatePetView(Pet pet, ImageView petView) {
+        if(pet!=null){
+            boolean notChange = false;
+            Pet vp = (Pet)petView.getTag(R.string.item);
+            Drawable drawable;
+            if(vp == null || !vp.getId().equals(pet.getId())) {
+                drawable = PetMonsterLoder.loadMonsterImage(pet.getIndex());
+            }else{
+                drawable = petView.getDrawable();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if((pet.getCurrentHp() > 0 && drawable.getColorFilter() == null) || (pet.getCurrentHp() <= 0 && drawable.getColorFilter()!=null)){
+                        //宠物状态没有变化
+                        notChange = true;
+                    }
+                }
+            }
+            if(!notChange) {
+                if (pet.getCurrentHp() > 0) {
+                    drawable.clearColorFilter();
+                } else {
+                    drawable.setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+                }
+                petView.setImageDrawable(drawable);
+            }
+
+        }
+    }
+
+    private Runnable refreshPropertiesTask = new Runnable() {
+        @Override
+        public void run() {
+            ((TextView) context.findViewById(R.id.hero_name)).setText(Html.fromHtml(context.control.getHero().getDisplayName()));
+            ((TextView) context.findViewById(R.id.hero_gift)).setText(Html.fromHtml(context.control.getHero().getGift().getName()));
+        }
+    };;
 
     public GameActivityViewHandler(GameActivity activity, NeverEnd context) {
         this.context = activity;
@@ -96,184 +156,19 @@ public class GameActivityViewHandler extends Handler {
         post(refreshClickSkillTask);
     }
 
-    //刷新比较固定的属性值
     public void refreshProperties(final Hero hero) {
-        post(new Runnable() {
-            @Override
-            public void run() {
-                ((TextView) context.findViewById(R.id.hero_name)).setText(Html.fromHtml(context.control.getHero().getDisplayName()));
-                ((TextView) context.findViewById(R.id.hero_gift)).setText(StringUtils.isNotEmpty(context.control.getHero().getGift().getName()) ? context.control.getHero().getGift().getName() : "");
-                ((TextView) context.findViewById(R.id.hero_atk)).setText(StringUtils.formatNumber(hero.getUpperAtk()));
-                ((TextView) context.findViewById(R.id.hero_def)).setText(StringUtils.formatNumber(hero.getUpperDef()));
-                ((TextView) context.findViewById(R.id.hero_str)).setText(StringUtils.formatNumber(hero.getMaxStr()));
-                ((TextView) context.findViewById(R.id.hero_agi)).setText(StringUtils.formatNumber(hero.getMaxAgi()));
-            }
-        });
+        post(refreshPropertiesTask);
     }
 
     //刷新变化频繁的属性
     public void refreshFreqProperties() {
-        post(refreshFreqPreperties);
+        post(refreshFreqPrepertiesTask);
 
-    }
-
-    //刷新装备
-    public void refreshAccessory(final Hero hero) {
-        post(new Runnable() {
-            @Override
-            public void run() {
-                boolean hasHat = false;
-                boolean hasRing = false;
-                boolean hasNecklace = false;
-                boolean hasSword = false;
-                boolean hasArmor = false;
-                for (Accessory accessory : hero.getAccessories()) {
-                    switch (accessory.getType()) {
-                        case Field.HAT_TYPE:
-                            hasHat = true;
-                            ((TextView) context.findViewById(R.id.hat_view)).setText(Html.fromHtml(accessory.toString()));
-                            break;
-                        case Field.RING_TYPE:
-                            hasRing = true;
-                            ((TextView) context.findViewById(R.id.ring_view)).setText(Html.fromHtml(accessory.toString()));
-                            break;
-                        case Field.NECKLACE_TYPE:
-                            hasNecklace = true;
-                            ((TextView) context.findViewById(R.id.necklace_view)).setText(Html.fromHtml(accessory.toString()));
-                            break;
-                        case Field.SWORD_TYPE:
-                            hasSword = true;
-                            ((TextView) context.findViewById(R.id.sword)).setText(Html.fromHtml(accessory.toString()));
-                            break;
-                        case Field.ARMOR_TYPR:
-                            hasArmor = true;
-                            ((TextView) context.findViewById(R.id.armor)).setText(Html.fromHtml(accessory.toString()));
-                            break;
-                    }
-                }
-                if (!hasHat) {
-                    ((TextView) context.findViewById(R.id.hat_view)).setText(context.getString(R.string.not_mount));
-                }
-                if (!hasRing) {
-                    ((TextView) context.findViewById(R.id.ring_view)).setText(context.getString(R.string.not_mount));
-                }
-                if (!hasNecklace) {
-                    ((TextView) context.findViewById(R.id.necklace_view)).setText(context.getString(R.string.not_mount));
-                }
-                if (!hasSword) {
-                    ((TextView) context.findViewById(R.id.sword)).setText(context.getString(R.string.not_mount));
-                }
-                if (!hasArmor) {
-                    ((TextView) context.findViewById(R.id.armor)).setText(context.getString(R.string.not_mount));
-                }
-            }
-        });
-    }
-
-    public void refreshSkill(final Hero hero) {
-        post(new Runnable() {
-            @Override
-            public void run() {
-                Skill[] heroSkills = hero.getSkills();
-                if (heroSkills.length > 0 && heroSkills[0] != null && !(heroSkills[0] instanceof EmptySkill)) {
-                    ((TextView) context.findViewById(R.id.first_skill)).setText(Html.fromHtml(heroSkills[0].getName()));
-                } else {
-                    ((TextView) context.findViewById(R.id.first_skill)).setText(Resource.getString(R.string.not_mount));
-                }
-                if (heroSkills.length > 1 && heroSkills[1] != null && !(heroSkills[1] instanceof EmptySkill)) {
-                    ((TextView) context.findViewById(R.id.secondary_skill)).setText(Html.fromHtml(heroSkills[1].getName()));
-                } else {
-                    ((TextView) context.findViewById(R.id.secondary_skill)).setText(R.string.not_mount);
-                }
-                if (heroSkills.length > 2 && heroSkills[2] != null && !(heroSkills[2] instanceof EmptySkill)) {
-                    ((TextView) context.findViewById(R.id.third_skill)).setText(Html.fromHtml(heroSkills[2].getName()));
-                } else {
-                    ((TextView) context.findViewById(R.id.third_skill)).setText(Resource.getString(R.string.not_mount));
-                }
-                if (heroSkills.length > 3 && heroSkills[3] != null && !(heroSkills[3] instanceof EmptySkill)) {
-                    ((TextView) context.findViewById(R.id.fourth_skill)).setText(Html.fromHtml(heroSkills[3].getName()));
-                } else {
-                    if (hero.getReincarnate() >= 2) {
-                        ((TextView) context.findViewById(R.id.fourth_skill)).setText(R.string.not_mount);
-                        context.findViewById(R.id.fourth_skill).setEnabled(true);
-                    } else {
-                        ((TextView) context.findViewById(R.id.fourth_skill)).setText(R.string.fourth_skill_enable);
-                        context.findViewById(R.id.fourth_skill).setEnabled(false);
-                    }
-                }
-                if (heroSkills.length > 4 && heroSkills[4] != null && !(heroSkills[4] instanceof EmptySkill)) {
-                    ((TextView) context.findViewById(R.id.fifit_skill)).setText(Html.fromHtml(heroSkills[4].getName()));
-                } else {
-                    if (hero.getReincarnate() >= 4) {
-                        ((TextView) context.findViewById(R.id.fifit_skill)).setText(R.string.not_mount);
-                        context.findViewById(R.id.fifit_skill).setEnabled(true);
-                    } else {
-                        ((TextView) context.findViewById(R.id.fifit_skill)).setText(R.string.fifth_skill_enable);
-                        context.findViewById(R.id.fifit_skill).setEnabled(false);
-                    }
-                }
-                if (heroSkills.length > 5 && heroSkills[5] != null && !(heroSkills[5] instanceof EmptySkill)) {
-                    ((TextView) context.findViewById(R.id.sixth_skill)).setText(Html.fromHtml(heroSkills[5].getName()));
-                } else {
-                    if (hero.getReincarnate() >= 8) {
-                        ((TextView) context.findViewById(R.id.sixth_skill)).setText(R.string.not_mount);
-                        context.findViewById(R.id.sixth_skill).setEnabled(true);
-                    } else {
-                        ((TextView) context.findViewById(R.id.sixth_skill)).setText(R.string.sixth_skill_enable);
-                        context.findViewById(R.id.sixth_skill).setEnabled(false);
-                    }
-                }
-
-
-            }
-        });
     }
 
     public void refreshPets(final Hero hero) {
-        post(new Runnable() {
-            @Override
-            public void run() {
-                LinearLayout petRoot = (LinearLayout) context.findViewById(R.id.pets_root);
-                ArrayList<Pet> pets = new ArrayList<>(hero.getPets());
-                if (pets.size() > 0) {
-                    for (int i = 0; i < pets.size(); i++) {
-                        Pet pet = pets.get(i);
-                        View view = petRoot.getChildAt(i);
-                        if (view == null || !(view instanceof PetTextView)) {
-                            if (view != null) {
-                                petRoot.removeView(view);
-                            }
-                            view = new PetTextView(context, pet);
-                            petRoot.addView(view);
-                        } else {
-                            ((PetTextView) view).changePet(pet);
-                        }
-                    }
-                    if (pets.size() < petRoot.getChildCount()) {
-                        for (int i = pets.size(); i < petRoot.getChildCount(); i++) {
-                            petRoot.removeViewAt(i);
-                        }
-                    }
-                } else {
-                    String[] helps = Resource.getFilesInAssets("help");
 
-                    View tv = petRoot.getChildAt(0);
-                    if (tv == null || !(tv instanceof RevealTextView)) {
-                        if (tv != null) {
-                            petRoot.removeView(tv);
-                        }
-                        tv = new RevealTextView(context);
-                        petRoot.addView(tv);
-                    } else {
-                        if (tv.getTag() instanceof Number && System.currentTimeMillis() - ((Number) tv.getTag()).longValue() < 30000) {
-                            return;
-                        }
-                    }
-                    ((RevealTextView) tv).setAnimatedText(Html.fromHtml(Resource.readStringFromAssets("help", context.control.getRandom().randomItem(helps))));
-                    tv.setTag(System.currentTimeMillis());
-                }
-            }
-        });
+        post(refreshPetTask);
 
     }
 
@@ -290,19 +185,19 @@ public class GameActivityViewHandler extends Handler {
         post(new Runnable() {
             @Override
             public void run() {
-               new GiftDialog(context, neverEnd.getHero(), new DialogInterface.OnDismissListener() {
-                   @Override
-                   public void onDismiss(DialogInterface dialog) {
-                       if(neverEnd.getHero().getGift()!=null){
-                           try {
-                               neverEnd.getHero().getGift().handler(neverEnd);
-                           } catch (Exception e) {
-                               LogHelper.logException(e, "GameActivityViewHandler -> chooseGift -> ");
-                           }
-                       }
-                       refreshProperties(neverEnd.getHero());
-                   }
-               });
+                new GiftDialog(context, neverEnd.getHero(), new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        if (neverEnd.getHero().getGift() != null) {
+                            try {
+                                neverEnd.getHero().getGift().handler(neverEnd);
+                            } catch (Exception e) {
+                                LogHelper.logException(e, "GameActivityViewHandler -> chooseGift -> ");
+                            }
+                        }
+                        refreshProperties(neverEnd.getHero());
+                    }
+                });
             }
         });
     }

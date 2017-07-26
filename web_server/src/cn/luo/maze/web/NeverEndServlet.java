@@ -68,6 +68,10 @@ public class NeverEndServlet extends HttpServlet {
         PrintWriter writer = response.getWriter();
 
         switch (path) {
+            case "get_hero_list":
+                writer = response.getWriter();
+                writer.write(process.getOnlineHeroList());
+                break;
             case "add_file":
                 String file = request.getParameter("file");
                 File f = new File(root + "\\" + file);
@@ -243,7 +247,7 @@ public class NeverEndServlet extends HttpServlet {
                 }
                 break;
             case SUBMIT_EXCHANGE:
-                ExchangeObject eo = readObject(request);
+                Object eo = readObject(request);
                 limit = readEncodeHeader(request, Field.LIMIT_STRING);
                 int expectType = Integer.parseInt(request.getHeader(Field.EXPECT_TYPE));
                 writer = response.getWriter();

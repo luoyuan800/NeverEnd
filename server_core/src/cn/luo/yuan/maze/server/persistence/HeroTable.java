@@ -115,17 +115,21 @@ public class HeroTable {
 
     public ServerData getBackHero(String id) throws IOException {
         ServerRecord record = getRecord(id);
-        LogHelper.info(record.getData().getHero().getDisplayName() + " Get back!");
-        ServerData data = new ServerData(record.getData());
-        record.setData(null);
-        record.setDieCount(0);
-        record.setDieTime(0);
-        record.setCurrentWin(0);
-        record.getMessages().clear();
-        record.setRange(Integer.MAX_VALUE);
-        record.setRestoreLimit(Data.RESTORE_LIMIT);
-        save();
-        return data;
+        if(record!=null && record.getData()!=null && record.getData().getHero()!=null) {
+            LogHelper.info(record.getData().getHero().getDisplayName() + " Get back!");
+            ServerData data = new ServerData(record.getData());
+            record.setData(null);
+            record.setDieCount(0);
+            record.setDieTime(0);
+            record.setCurrentWin(0);
+            record.getMessages().clear();
+            record.setRange(Integer.MAX_VALUE);
+            record.setRestoreLimit(Data.RESTORE_LIMIT);
+            save();
+            return data;
+        }else{
+            return null;
+        }
     }
 
     public void submitHero(ServerData data) throws IOException {

@@ -95,8 +95,6 @@ public class NeverEnd extends Application implements InfoControlInterface {
     public void startGame() {
         Log.i("maze", "Starting game");
         viewHandler.refreshProperties(hero);
-        viewHandler.refreshAccessory(hero);
-        viewHandler.refreshSkill(hero);
         viewHandler.refreshPets(hero);
         runningService = new RunningService(hero, maze, this, dataManager, Data.REFRESH_SPEED);
         executor.scheduleAtFixedRate(runningService, 1, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
@@ -349,8 +347,6 @@ public class NeverEnd extends Application implements InfoControlInterface {
         maze.setLevel(1);
         maze.setMaxLevel(1);
         viewHandler.refreshProperties(hero);
-        viewHandler.refreshSkill(hero);
-        viewHandler.refreshAccessory(hero);
         save();
         return hero.getReincarnate();
     }

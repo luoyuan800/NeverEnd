@@ -359,7 +359,7 @@ public class MainProcess {
         }
     }
 
-    public boolean submitExchange(String ownerId, String limit, ExchangeObject eo, int expectType) {
+    public boolean submitExchange(String ownerId, String limit, Object eo, int expectType) {
         if (process.exchangeTable.addExchange(eo, ownerId, limit, expectType)) {
             LogHelper.info(eo + " submitted!");
             return true;
@@ -405,10 +405,12 @@ public class MainProcess {
 
     public String getGroupMessage(String id) {
         GroupHolder holder = null;
-        for (GroupHolder holder1 : groups) {
-            if (holder1.isInGroup(id)) {
-                holder = holder1;
-                break;
+        if(StringUtils.isNotEmpty(id)) {
+            for (GroupHolder holder1 : groups) {
+                if (holder1.isInGroup(id)) {
+                    holder = holder1;
+                    break;
+                }
             }
         }
         if (holder != null) {
@@ -533,5 +535,26 @@ public class MainProcess {
         if(record!=null){
             record.setGift(record.getGift() + count);
         }
+    }
+
+    public String getOnlineHeroList(){
+        StringBuilder builder = new StringBuilder("List Hero：<br>");
+        for(String id : heroTable.getAllHeroIds()){
+            ServerRecord record = heroTable.getRecord(id);
+            builder.append(id).append(": ");
+            if(record!=null){
+                builder.append("Range: ").append(record.getRange()).append("<br>");
+                builder.append("Submit: ").append(record.getSubmitDate()).append("<br>");
+                if(record.getData()!=null && record.getData().getHero()!=null){
+                    builder.append(record.getData().getHero());
+                }else{
+                    builder.append("NAN");
+                }
+            }else{
+                builder.append("NAN");
+            }
+            builder.append("<br><hr/>");
+        }
+        return builder.toString();
     }
 }

@@ -20,7 +20,7 @@ class ExchangeTable(root: File) {
     val exchangeDb = ObjectTable(ExchangeObject::class.java, root)
     val cache = mutableMapOf<key, SoftReference<ExchangeObject>>()
     fun addExchange(ex: Any?, ownerId: String, limit: String, expect: Int): Boolean {
-        val exchange = ExchangeObject(ex as IDModel, ownerId)
+        val exchange = ex as? ExchangeObject ?: ExchangeObject(ex as IDModel, ownerId)
         if (ex is Pet) {
             exchange.type = 1
         } else if (ex is Accessory) {

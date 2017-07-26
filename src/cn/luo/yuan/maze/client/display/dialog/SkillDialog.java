@@ -104,7 +104,6 @@ public class SkillDialog implements View.OnClickListener {
                                     SkillHelper.mountSkill(skill, context.getHero());
                                 }
                             }
-                            context.getViewHandler().refreshSkill(context.getHero());
                         }
                     }
                 })

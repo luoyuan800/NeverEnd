@@ -10,12 +10,14 @@ import cn.luo.yuan.maze.service.EffectHandler;
 import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
@@ -279,6 +281,9 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
     }
 
     public String getId() {
+        if(StringUtils.isEmpty(id)){
+            id = UUID.randomUUID().toString();
+        }
         return id;
     }
 
@@ -379,5 +384,12 @@ public class Hero implements Serializable, IDModel, HarmAble, SkillAbleObject, N
 
     public void setPetCount(int petCount) {
         this.petCount = petCount;
+    }
+
+    @Override
+    public String toString() {
+        return getDisplayName() + "<br>atk: " + StringUtils.formatNumber(getAtk()) + "<br>" +
+                "def: " + StringUtils.formatNumber(getDef()) + "<br>" +
+                "hp: " + StringUtils.formatNumber(getMaxHp());
     }
 }
