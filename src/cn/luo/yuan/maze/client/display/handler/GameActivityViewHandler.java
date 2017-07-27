@@ -68,6 +68,7 @@ public class GameActivityViewHandler extends Handler {
             }
             second.setBackground(Resource.getSkillDrawable(heroSkills[1]));
         } else {
+            first.setBackgroundResource(0);
             second.setText(R.string.not_mount);
         }
         TextView third = (TextView) context.findViewById(R.id.third_skill);
