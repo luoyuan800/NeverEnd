@@ -7,45 +7,46 @@
         android:layout_height="match_parent" android:layout_gravity="left|center_vertical"
         android:gravity="fill"
         android:id="@+id/base_skill_layout_root">
-    <Button
+    <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/hero_hit"
             android:tag="HeroHit"
             android:id="@+id/hero_hit"
             style="@android:style/Widget.Button.Inset"
             android:gravity="center"
             android:layout_gravity="center"
+            android:scaleType="fitCenter"
             android:typeface="serif"
             android:textStyle="bold|italic"
             />
 
     <ImageView
-            android:layout_width="65dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:scaleType="fitCenter"
             android:id="@+id/imageView" android:layout_gravity="center" android:src="@drawable/line_2_center"
             android:adjustViewBounds="true"/>
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
-        <Button
+        <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:typeface="serif"
                 android:textStyle="bold|italic"
-                android:text="@string/dodge_hit"
+                android:scaleType="fitCenter"
                 android:tag="Dodge"
                 android:id="@+id/dodge"
                 style="@android:style/Widget.Button.Inset"
                 android:layout_gravity="center|top"
                 />
 
-        <Button
+        <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="反击"
+                android:scaleType="fitCenter"
                 android:tag="FightBack"
                 android:layout_weight="1"
                 android:gravity="center"

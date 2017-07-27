@@ -19,13 +19,7 @@ public interface Skill extends Serializable, NameObject, IDModel {
 
     void enable(SkillParameter parameter);
 
-    default boolean canEnable(SkillParameter parameter) {
-        return isEnablePointEnough(parameter);
-    }
-
-    default boolean isEnablePointEnough(SkillParameter parameter) {
-        return parameter.getOwner() instanceof Hero && ((Hero) parameter.getOwner()).getPoint() > Data.SKILL_ENABLE_COST;
-    }
+    boolean canEnable(SkillParameter parameter);
 
     boolean isEnable();
 

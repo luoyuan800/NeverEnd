@@ -7,6 +7,7 @@ import android.os.Build;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TabHost;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.service.NeverEnd;
@@ -50,16 +51,16 @@ public class SkillDialog implements View.OnClickListener {
         tabHost.setup();
         //Hero Skills
         tabHost.addTab(tabHost.newTabSpec("hero_skill").setIndicator(Resource.getString(R.string.hero_skill)).setContent(R.id.hero_skill));
-        initSkillButton((Button) dialog.findViewById(R.id.hero_hit)
-                , (Button) dialog.findViewById(R.id.fight_back), (Button) dialog.findViewById(R.id.dodge));
+        initSkillButton((ImageButton) dialog.findViewById(R.id.hero_hit)
+                , (ImageButton) dialog.findViewById(R.id.fight_back), (ImageButton) dialog.findViewById(R.id.dodge));
 
         //Evil skills
         tabHost.addTab(tabHost.newTabSpec("evil_skill").setIndicator(Resource.getString(R.string.evil_skill)).setContent(R.id.evil_skill));
-        initSkillButton((Button) dialog.findViewById(R.id.evil_talent), (Button) dialog.findViewById(R.id.reinforce), (Button) dialog.findViewById(R.id.stealth));
+        initSkillButton((ImageButton) dialog.findViewById(R.id.evil_talent), (ImageButton) dialog.findViewById(R.id.reinforce), (ImageButton) dialog.findViewById(R.id.stealth));
 
         //Element skills
         tabHost.addTab(tabHost.newTabSpec("element_skill").setIndicator(Resource.getString(R.string.element_skill)).setContent(R.id.element_skill));
-        initSkillButton((Button) dialog.findViewById(R.id.element_alist), (Button) dialog.findViewById(R.id.element_Defend), (Button) dialog.findViewById(R.id.element_bomb));
+        initSkillButton((ImageButton) dialog.findViewById(R.id.element_alist), (ImageButton) dialog.findViewById(R.id.element_Defend), (ImageButton) dialog.findViewById(R.id.element_bomb));
 
         //Secondary Skill
         TabHost tabHost1 = (TabHost) dialog.findViewById(R.id.skill_tag_second);
@@ -67,7 +68,7 @@ public class SkillDialog implements View.OnClickListener {
 
         //Swindler Skills
         tabHost1.addTab(tabHost1.newTabSpec("swindler_skill").setIndicator(Resource.getString(R.string.swindler_skill)).setContent(R.id.swindler_skill));
-        initSkillButton((Button) dialog.findViewById(R.id.swindler), (Button) dialog.findViewById(R.id.swindler_game), (Button) dialog.findViewById(R.id.eat_harm));
+        initSkillButton((ImageButton) dialog.findViewById(R.id.swindler), (ImageButton) dialog.findViewById(R.id.swindler_game), (ImageButton) dialog.findViewById(R.id.eat_harm));
         //Pet Skills
         tabHost1.addTab(tabHost1.newTabSpec("pet_skill").setIndicator(Resource.getString(R.string.pet_skill)).setContent(R.id.pet_skill));
 
@@ -171,20 +172,20 @@ public class SkillDialog implements View.OnClickListener {
 
     private void refreshSkillDisplay(View view) {
         context.getViewHandler().refreshSkill();
-        Skill skill = SkillFactory.geSkillByName(view.getTag().toString(), context.getDataManager());
+        /*Skill skill = SkillFactory.geSkillByName(view.getTag().toString(), context.getDataManager());
         if(skill!=null && view instanceof Button){
             ((Button) view).setText(Html.fromHtml(skill.getSkillName()));
         }
-
+*/
     }
 
-    private void initSkillButton(Button... skillButtons) {
+    private void initSkillButton(ImageButton... skillButtons) {
         Skill skill;
-        for (Button b : skillButtons) {
+        for (ImageButton b : skillButtons) {
             b.setOnClickListener(this);
             skill = SkillFactory.geSkillByName(b.getTag().toString(), context.getDataManager());
             if (skill != null) {
-                b.setText(Html.fromHtml(skill.getSkillName()));
+                b.setImageDrawable(Resource.getSkillDrawable(skill));
             }
         }
     }

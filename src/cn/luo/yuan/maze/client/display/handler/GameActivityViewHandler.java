@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.text.Html;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
@@ -21,6 +22,7 @@ import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.model.skill.UpgradeAble;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -45,52 +47,96 @@ public class GameActivityViewHandler extends Handler {
 
     private void heroSkill(Hero hero) {
         Skill[] heroSkills = hero.getSkills();
+        Button first = (Button) context.findViewById(R.id.first_skill);
         if (heroSkills.length > 0 && heroSkills[0] != null && !(heroSkills[0] instanceof EmptySkill)) {
-            ((TextView) context.findViewById(R.id.first_skill)).setText(Html.fromHtml(heroSkills[0].getName()));
+            first.setBackground(Resource.getSkillDrawable(heroSkills[0]));
+            if(heroSkills[0] instanceof UpgradeAble){
+                first.setText(String.format("X%d", ((UpgradeAble)heroSkills[0]).getLevel()));
+            }else{
+                first.setText(Resource.getString(R.string.empty));
+            }
         } else {
-            ((TextView) context.findViewById(R.id.first_skill)).setText(Resource.getString(R.string.not_mount));
+            first.setBackgroundResource(0);
+            first.setText(Resource.getString(R.string.not_mount));
         }
+        TextView second = (TextView) context.findViewById(R.id.secondary_skill);
         if (heroSkills.length > 1 && heroSkills[1] != null && !(heroSkills[1] instanceof EmptySkill)) {
-            ((TextView) context.findViewById(R.id.secondary_skill)).setText(Html.fromHtml(heroSkills[1].getName()));
+            second.setBackground(Resource.getSkillDrawable(heroSkills[1]));
+            if(heroSkills[1] instanceof UpgradeAble){
+                second.setText(String.format("X%d", ((UpgradeAble)heroSkills[1]).getLevel()));
+            }else{
+                second.setText(Resource.getString(R.string.empty));
+            }
         } else {
-            ((TextView) context.findViewById(R.id.secondary_skill)).setText(R.string.not_mount);
+            second.setText(R.string.not_mount);
         }
+        TextView third = (TextView) context.findViewById(R.id.third_skill);
         if (heroSkills.length > 2 && heroSkills[2] != null && !(heroSkills[2] instanceof EmptySkill)) {
-            ((TextView) context.findViewById(R.id.third_skill)).setText(Html.fromHtml(heroSkills[2].getName()));
+            third.setBackground(Resource.getSkillDrawable(heroSkills[2]));
+            if(heroSkills[2] instanceof UpgradeAble){
+                third.setText(String.format("X%d", ((UpgradeAble)heroSkills[2]).getLevel()));
+            }else{
+                third.setText(Resource.getString(R.string.empty));
+            }
         } else {
-            ((TextView) context.findViewById(R.id.third_skill)).setText(Resource.getString(R.string.not_mount));
+            third.setBackgroundResource(0);
+            third.setText(Resource.getString(R.string.not_mount));
         }
+        TextView fourth = (TextView) context.findViewById(R.id.fourth_skill);
         if (heroSkills.length > 3 && heroSkills[3] != null && !(heroSkills[3] instanceof EmptySkill)) {
-            ((TextView) context.findViewById(R.id.fourth_skill)).setText(Html.fromHtml(heroSkills[3].getName()));
+            fourth.setEnabled(true);
+            fourth.setBackground(Resource.getSkillDrawable(heroSkills[3]));
+            if(heroSkills[3] instanceof UpgradeAble){
+                fourth.setText(String.format("X%d", ((UpgradeAble)heroSkills[3]).getLevel()));
+            }else{
+                fourth.setText(Resource.getString(R.string.empty));
+            }
         } else {
+            fourth.setBackgroundResource(0);
             if (hero.getReincarnate() >= 2) {
-                ((TextView) context.findViewById(R.id.fourth_skill)).setText(R.string.not_mount);
-                context.findViewById(R.id.fourth_skill).setEnabled(true);
+                fourth.setText(R.string.not_mount);
+                fourth.setEnabled(true);
             } else {
-                ((TextView) context.findViewById(R.id.fourth_skill)).setText(R.string.fourth_skill_enable);
-                context.findViewById(R.id.fourth_skill).setEnabled(false);
+                fourth.setText(R.string.fourth_skill_enable);
+               fourth.setEnabled(false);
             }
         }
+        TextView fifth = (TextView) context.findViewById(R.id.fifit_skill);
         if (heroSkills.length > 4 && heroSkills[4] != null && !(heroSkills[4] instanceof EmptySkill)) {
-            ((TextView) context.findViewById(R.id.fifit_skill)).setText(Html.fromHtml(heroSkills[4].getName()));
+            fifth.setEnabled(true);
+            fifth.setBackground(Resource.getSkillDrawable(heroSkills[4]));
+            if(heroSkills[4] instanceof UpgradeAble){
+                fifth.setText(String.format("X%d", ((UpgradeAble)heroSkills[4]).getLevel()));
+            }else{
+                fifth.setText(Resource.getString(R.string.empty));
+            }
         } else {
+            fifth.setBackgroundResource(0);
             if (hero.getReincarnate() >= 4) {
-                ((TextView) context.findViewById(R.id.fifit_skill)).setText(R.string.not_mount);
-                context.findViewById(R.id.fifit_skill).setEnabled(true);
+                fifth.setText(R.string.not_mount);
+                fifth.setEnabled(true);
             } else {
-                ((TextView) context.findViewById(R.id.fifit_skill)).setText(R.string.fifth_skill_enable);
-                context.findViewById(R.id.fifit_skill).setEnabled(false);
+                fifth.setText(R.string.fifth_skill_enable);
+                fifth.setEnabled(false);
             }
         }
+        TextView sixth = (TextView) context.findViewById(R.id.sixth_skill);
         if (heroSkills.length > 5 && heroSkills[5] != null && !(heroSkills[5] instanceof EmptySkill)) {
-            ((TextView) context.findViewById(R.id.sixth_skill)).setText(Html.fromHtml(heroSkills[5].getName()));
+            sixth.setEnabled(true);
+            sixth.setBackground(Resource.getSkillDrawable(heroSkills[5]));
+            if(heroSkills[5] instanceof UpgradeAble){
+                sixth.setText(String.format("X%d", ((UpgradeAble)heroSkills[5]).getLevel()));
+            }else{
+                sixth.setText(Resource.getString(R.string.empty));
+            }
         } else {
+            sixth.setBackgroundResource(0);
             if (hero.getReincarnate() >= 8) {
-                ((TextView) context.findViewById(R.id.sixth_skill)).setText(R.string.not_mount);
-                context.findViewById(R.id.sixth_skill).setEnabled(true);
+                sixth.setText(R.string.not_mount);
+                sixth.setEnabled(true);
             } else {
-                ((TextView) context.findViewById(R.id.sixth_skill)).setText(R.string.sixth_skill_enable);
-                context.findViewById(R.id.sixth_skill).setEnabled(false);
+                sixth.setText(R.string.sixth_skill_enable);
+                sixth.setEnabled(false);
             }
         }
     }

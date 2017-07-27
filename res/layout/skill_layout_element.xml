@@ -7,8 +7,8 @@
         android:layout_height="match_parent" android:layout_gravity="left|center_vertical"
         android:gravity="fill">
 
-    <Button
-            android:text="元素使"
+    <ImageButton
+            android:scaleType="fitCenter"
             android:tag="Elementalist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -18,18 +18,18 @@
             style="@android:style/Widget.Button.Inset"/>
 
     <ImageView
-            android:layout_width="65dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_gravity="center" android:src="@drawable/line_2_center"
             android:adjustViewBounds="true"/>
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <Button
+        <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="元素防御"
+                android:scaleType="fitCenter"
                 android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"
                 android:gravity="center"
@@ -38,10 +38,10 @@
                 android:tag="ElementDefend"
                 android:layout_gravity="center"
                 android:visibility="visible"/>
-        <Button
+        <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="元素星爆"
+                android:scaleType="fitCenter"
                 android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"
                 android:gravity="center"

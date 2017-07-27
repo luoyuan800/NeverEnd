@@ -16,6 +16,7 @@ import android.util.ArrayMap;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.BaseActivity;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
+import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.io.BufferedReader;
@@ -29,6 +30,10 @@ import java.io.InputStreamReader;
 public class Resource {
     private static final ArrayMap<Object, Drawable> drawableCache = new ArrayMap<>(10);
     private static Context context;
+
+    public static Drawable getSkillDrawable(Skill skill){
+        return loadImageFromAssets("skill/" + skill.getClass().getSimpleName() + ".png");
+    }
 
     private static void addToCache(Object key, Drawable drawable) {
         if (!drawableCache.containsKey(key)) {

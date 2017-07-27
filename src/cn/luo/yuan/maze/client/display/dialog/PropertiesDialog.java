@@ -10,13 +10,15 @@ import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.service.RangePropertiesHelper;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 /**
  * Created by gluo on 5/31/2017.
  */
-public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
+public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, AccessoriesDialog.OnAccessoryChangeListener {
+    Handler handler = new Handler();
     private Dialog dialog;
     private NeverEnd context;
     private int maxPoint;
@@ -24,7 +26,6 @@ public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBar
     private SeekBar agiAddValue;
     private TextView strAddShow;
     private TextView agiAddShow;
-    Handler handler = new Handler();
 
     public PropertiesDialog(NeverEnd context) {
         this.context = context;
@@ -39,34 +40,31 @@ public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBar
     public void show() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             dialog = new AlertDialog.Builder(context.getContext()).setTitle(R.string.properties_view_title).setView(R.layout.properties_view).show();
-        }else {
+        } else {
             dialog = new AlertDialog.Builder(context.getContext()).setTitle(R.string.properties_view_title).setView(View.inflate(context.getContext(), R.layout.properties_view, null)).show();
         }
         dialog.findViewById(R.id.range_close).setOnClickListener(this);
         dialog.findViewById(R.id.range_conform).setOnClickListener(this);
         Hero hero = context.getHero();
-        ((TextView) dialog.findViewById(R.id.point_value)).setText(StringUtils.formatNumber(context.getHero().getPoint()));
         strAddValue = (SeekBar) dialog.findViewById(R.id.str_add_value);
         strAddValue.setMax(maxPoint);
         strAddValue.setOnSeekBarChangeListener(this);
         agiAddValue = (SeekBar) dialog.findViewById(R.id.agi_add_value);
         agiAddValue.setMax(maxPoint);
         agiAddValue.setOnSeekBarChangeListener(this);
-        ((TextView)dialog.findViewById(R.id.agi_value)).setText(StringUtils.formatNumber(context.getHero().getAgi()));
-        ((TextView)dialog.findViewById(R.id.str_value)).setText(StringUtils.formatNumber(context.getHero().getStr()));
+
         strAddShow = (TextView) dialog.findViewById(R.id.str_add_show);
         agiAddShow = (TextView) dialog.findViewById(R.id.agi_add_show);
-        ((TextView) dialog.findViewById(R.id.hero_atk)).setText(StringUtils.formatNumber(context.getHero().getUpperAtk()));
-        ((TextView) dialog.findViewById(R.id.hero_def)).setText(StringUtils.formatNumber(hero.getUpperDef()));
-        ((TextView) dialog.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(hero.getCurrentHp()));
+        refreshProperties(hero);
         dialog.findViewById(R.id.accessory_layout).setOnClickListener(this);
+        refreshProperties(hero);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.accessory_layout:
-                new AccessoriesDialog(context, null).show();
+                new AccessoriesDialog(context, this).show();
                 break;
             case R.id.range_close:
                 dialog.dismiss();
@@ -74,7 +72,7 @@ public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBar
             case R.id.range_conform:
                 int strPoint = strAddValue.getProgress();
                 int agiPoint = agiAddValue.getProgress();
-                if(agiPoint + strPoint <= context.getHero().getPoint()) {
+                if (agiPoint + strPoint <= context.getHero().getPoint()) {
                     if (agiPoint != 0) {
                         RangePropertiesHelper.addAgi(agiPoint, context);
                     }
@@ -83,11 +81,11 @@ public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBar
                     }
                     context.getHero().setPoint(context.getHero().getPoint() - strPoint - agiPoint);
                 }
+                refreshProperties(context.getHero());
                 dialog.dismiss();
                 break;
         }
     }
-
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -113,6 +111,25 @@ public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBar
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
 
+    }
+
+    @Override
+    public void change(InfoControlInterface context) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                refreshProperties(context.getHero());
+            }
+        });
+    }
+
+    private void refreshProperties(Hero hero) {
+        ((TextView) dialog.findViewById(R.id.agi_value)).setText(StringUtils.formatNumber(context.getHero().getAgi()));
+        ((TextView) dialog.findViewById(R.id.str_value)).setText(StringUtils.formatNumber(context.getHero().getStr()));
+        ((TextView) dialog.findViewById(R.id.hero_atk)).setText(StringUtils.formatNumber(context.getHero().getUpperAtk()));
+        ((TextView) dialog.findViewById(R.id.hero_def)).setText(StringUtils.formatNumber(hero.getUpperDef()));
+        ((TextView) dialog.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(hero.getCurrentHp()));
+        ((TextView) dialog.findViewById(R.id.point_value)).setText(StringUtils.formatNumber(context.getHero().getPoint()));
     }
 
     private void reRangeMax(int progress, SeekBar ranger) {

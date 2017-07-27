@@ -9,17 +9,21 @@ import cn.luo.yuan.maze.model.skill.UpgradeAble
 /**
  * Created by luoyuan on 2017/7/23.
  */
-class PetMonster:PropertySkill(), UpgradeAble {
+class PetMonster : PropertySkill(), UpgradeAble {
+    override fun canEnable(parameter: SkillParameter?): Boolean {
+        return model.canEnable(parameter)
+    }
+
     private var level = 0L
     var petCount = 3
     override fun upgrade(parameter: SkillParameter): Boolean {
-        if(petCount < Data.MAX_PET_COUNT/5){
-            petCount ++
+        if (petCount < Data.MAX_PET_COUNT / 5) {
+            petCount++
             val hero = parameter.owner
-            if(hero is Hero){
-                hero.petCount ++
+            if (hero is Hero) {
+                hero.petCount++
             }
-            level ++
+            level++
             return true
         }
         return false
@@ -40,7 +44,7 @@ class PetMonster:PropertySkill(), UpgradeAble {
     override fun enable(parameter: SkillParameter) {
         isEnable = true
         val hero = parameter.owner
-        if(hero is Hero){
+        if (hero is Hero) {
             hero.petCount += petCount
         }
     }
@@ -48,7 +52,7 @@ class PetMonster:PropertySkill(), UpgradeAble {
     override fun disable(parameter: SkillParameter) {
         isEnable = false
         val hero = parameter.owner
-        if(hero is Hero){
+        if (hero is Hero) {
             hero.petCount -= petCount
         }
     }
@@ -59,6 +63,6 @@ class PetMonster:PropertySkill(), UpgradeAble {
 
     private val model = PetModel(this)
     override fun canUpgrade(parameter: SkillParameter?): Boolean {
-        return petCount < Data.MAX_PET_COUNT/5 && model.canUpgrade(parameter)
+        return petCount < Data.MAX_PET_COUNT / 5 && model.canUpgrade(parameter)
     }
 }
