@@ -59,6 +59,12 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
 
     public void show() {
         dialog = builder.create();
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                control.getViewHandler().refreshPets(control.getHero());
+            }
+        });
         dialog.show();
         final View detailView = dialog.findViewById(R.id.pet_detail_view);
         detailView.setVisibility(View.INVISIBLE);

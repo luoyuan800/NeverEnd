@@ -19,7 +19,7 @@ class Elementalist() : PropertySkill() {
 
     override fun getDisplayName(): String {
         val builder = StringBuilder()
-        builder.append("是时候展现你的风度了！激活这个技能，你的五行相生相克效果翻倍！")
+        builder.append("是时候展现你的风度了！激活这个技能，你的五行相生相克效果翻倍！不可以和勇者、魔王系技能同时激活。")
         return builder.toString()
     }
 

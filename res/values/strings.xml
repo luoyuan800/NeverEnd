@@ -106,4 +106,9 @@
     <string name="hp_label">生命:</string>
     <string name="atk_label">攻击:</string>
     <string name="def_label">防御:</string>
+    <string name="pause_label">暂停</string>
+    <string name="save_label">存档</string>
+    <string name="reincarnation_label">转生</string>
+    <string name="item_label">物品</string>
+    <string name="pet_label">宠物</string>
 </resources>

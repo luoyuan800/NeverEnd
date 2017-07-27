@@ -4,14 +4,17 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Build;
 import android.os.Handler;
+import android.text.Html;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.service.NeverEnd;
+import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.service.RangePropertiesHelper;
+import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 /**
@@ -55,7 +58,6 @@ public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBar
 
         strAddShow = (TextView) dialog.findViewById(R.id.str_add_show);
         agiAddShow = (TextView) dialog.findViewById(R.id.agi_add_show);
-        refreshProperties(hero);
         dialog.findViewById(R.id.accessory_layout).setOnClickListener(this);
         refreshProperties(hero);
     }
@@ -130,6 +132,50 @@ public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBar
         ((TextView) dialog.findViewById(R.id.hero_def)).setText(StringUtils.formatNumber(hero.getUpperDef()));
         ((TextView) dialog.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(hero.getCurrentHp()));
         ((TextView) dialog.findViewById(R.id.point_value)).setText(StringUtils.formatNumber(context.getHero().getPoint()));
+        boolean hasHat = false;
+        boolean hasRing = false;
+        boolean hasNecklace = false;
+        boolean hasSword = false;
+        boolean hasArmor = false;
+        for (Accessory accessory : hero.getAccessories()) {
+            switch (accessory.getType()) {
+                case Field.HAT_TYPE:
+                    hasHat = true;
+                    ((TextView) dialog.findViewById(R.id.hat_view)).setText(Html.fromHtml(accessory.toString()));
+                    break;
+                case Field.RING_TYPE:
+                    hasRing = true;
+                    ((TextView) dialog.findViewById(R.id.ring_view)).setText(Html.fromHtml(accessory.toString()));
+                    break;
+                case Field.NECKLACE_TYPE:
+                    hasNecklace = true;
+                    ((TextView) dialog.findViewById(R.id.necklace_view)).setText(Html.fromHtml(accessory.toString()));
+                    break;
+                case Field.SWORD_TYPE:
+                    hasSword = true;
+                    ((TextView) dialog.findViewById(R.id.sword)).setText(Html.fromHtml(accessory.toString()));
+                    break;
+                case Field.ARMOR_TYPR:
+                    hasArmor = true;
+                    ((TextView) dialog.findViewById(R.id.armor)).setText(Html.fromHtml(accessory.toString()));
+                    break;
+            }
+        }
+        if (!hasHat) {
+            ((TextView) dialog.findViewById(R.id.hat_view)).setText(context.getString(R.string.not_mount));
+        }
+        if (!hasRing) {
+            ((TextView) dialog.findViewById(R.id.ring_view)).setText(context.getString(R.string.not_mount));
+        }
+        if (!hasNecklace) {
+            ((TextView) dialog.findViewById(R.id.necklace_view)).setText(context.getString(R.string.not_mount));
+        }
+        if (!hasSword) {
+            ((TextView) dialog.findViewById(R.id.sword)).setText(context.getString(R.string.not_mount));
+        }
+        if (!hasArmor) {
+            ((TextView) dialog.findViewById(R.id.armor)).setText(context.getString(R.string.not_mount));
+        }
     }
 
     private void reRangeMax(int progress, SeekBar ranger) {

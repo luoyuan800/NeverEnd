@@ -24,10 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.InvalidClassException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -418,6 +415,9 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void save(IDModel object) {
+        if(object instanceof Skill){
+            saveSkill((Skill) object);
+        }
         if (object instanceof Pet) {
             savePet((Pet) object);
         } else if (object instanceof Accessory) {
@@ -486,4 +486,5 @@ public class DataManager implements DataManagerInterface {
         maze.setMeetRate(99.9f);
         return maze;
     }
+
 }

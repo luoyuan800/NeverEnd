@@ -61,12 +61,12 @@ public class GameActivityViewHandler extends Handler {
         }
         TextView second = (TextView) context.findViewById(R.id.secondary_skill);
         if (heroSkills.length > 1 && heroSkills[1] != null && !(heroSkills[1] instanceof EmptySkill)) {
-            second.setBackground(Resource.getSkillDrawable(heroSkills[1]));
             if(heroSkills[1] instanceof UpgradeAble){
                 second.setText(String.format("X%d", ((UpgradeAble)heroSkills[1]).getLevel()));
             }else{
                 second.setText(Resource.getString(R.string.empty));
             }
+            second.setBackground(Resource.getSkillDrawable(heroSkills[1]));
         } else {
             second.setText(R.string.not_mount);
         }
@@ -215,7 +215,7 @@ public class GameActivityViewHandler extends Handler {
             }else{
                 second.setImageResource(0);
             }
-            if(pets.size() > 3){
+            if(pets.size() > 2){
                 Pet pet = pets.get(2);
                 updatePetView(pet, third);
             }else{

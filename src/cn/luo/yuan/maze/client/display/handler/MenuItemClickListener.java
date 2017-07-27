@@ -15,11 +15,7 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
 import cn.luo.yuan.maze.client.display.activity.ad.SplashActivity;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
-import cn.luo.yuan.maze.client.display.dialog.ExchangeDialog;
-import cn.luo.yuan.maze.client.display.dialog.GoodsDialog;
-import cn.luo.yuan.maze.client.display.dialog.PetDialog;
-import cn.luo.yuan.maze.client.display.dialog.ShopDialog;
-import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
+import cn.luo.yuan.maze.client.display.dialog.*;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.NeverEndConfig;
@@ -52,6 +48,9 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.skills:
+                new SkillDialog(control).show();
+                break;
             case R.id.pay:
                 showPayDialog();
                 break;

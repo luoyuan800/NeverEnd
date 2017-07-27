@@ -105,6 +105,7 @@ public class SkillDialog implements View.OnClickListener {
                                     SkillHelper.mountSkill(skill, context.getHero());
                                 }
                             }
+                            context.getDataManager().save(skill);
                             refreshSkillDisplay(view);
                         }
                     }
@@ -122,6 +123,7 @@ public class SkillDialog implements View.OnClickListener {
                                             SkillHelper.enableSkill(skill, context, parameter);
                                             refreshSkillDisplay(view);
                                         }
+                                        context.getDataManager().save(skill);
                                     }
                                 });
                             }
@@ -139,6 +141,7 @@ public class SkillDialog implements View.OnClickListener {
                                     SkillHelper.upgradeSkill((UpgradeAble) skill, parameter, context);
                                     refreshSkillDisplay(view);
                                 }
+                                context.getDataManager().save(skill);
                             }
                         });
                     }

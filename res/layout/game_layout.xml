@@ -293,7 +293,7 @@
                 android:enabled="true"
                 android:onClick="onClick"
                 android:background="@color/toumin"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="10dp"
                 />
 
         <Button
@@ -303,7 +303,7 @@
                 android:enabled="true"
                 android:onClick="onClick"
                 android:background="@color/toumin"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="10dp"
                 />
 
         <LinearLayout
@@ -311,67 +311,63 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="3">
+
             <LinearLayout
+                    android:gravity="center_horizontal"
                     android:orientation="horizontal"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/skill_layout_1"
-                    android:layout_weight="1">
+                    android:layout_weight="0.75">
 
                 <Button
                         android:id="@+id/first_skill"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:alpha="90"
-                        android:focusableInTouchMode="false"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:gravity="center"
                         android:textSize="12sp"
                         android:onClick="onClick"
                         android:background="@color/toumin"
                         android:layout_marginStart="10dp"
-                        android:layout_weight="1"/>
+                        />
 
                 <Button
                         android:id="@+id/secondary_skill"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:alpha="90"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:gravity="center"
                         android:textSize="12sp"
                         android:onClick="onClick"
                         android:background="@color/toumin"
                         android:layout_marginStart="5dp"
-                        android:layout_weight="1"/>
+                        />
 
                 <Button
                         android:id="@+id/third_skill"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:alpha="95"
-                        android:focusableInTouchMode="false"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:gravity="center"
                         android:textSize="12sp"
                         android:onClick="onClick"
                         android:background="@color/toumin"
                         android:layout_marginStart="5dp"
-                        android:layout_weight="1"/>
+                        />
             </LinearLayout>
+
             <LinearLayout
                     android:orientation="horizontal"
-                    android:layout_width="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/skill_layout_2"
-                    android:layout_weight="1"
+                    android:layout_weight="0.77"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp">
 
                 <Button
                         android:id="@+id/fourth_skill"
-                        android:layout_weight="1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:alpha="90"
-                        android:focusableInTouchMode="false"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:gravity="center"
                         android:text="@string/fourth_skill_enable"
                         android:textSize="12sp"
@@ -382,11 +378,8 @@
 
                 <Button
                         android:id="@+id/fifit_skill"
-                        android:layout_width="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:alpha="95"
-                        android:focusableInTouchMode="false"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:gravity="center"
                         android:text="@string/fifth_skill_enable"
                         android:textSize="12sp"
@@ -396,9 +389,8 @@
 
                 <Button
                         android:id="@+id/sixth_skill"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:alpha="90"
                         android:gravity="center"
                         android:text="@string/sixth_skill_enable"

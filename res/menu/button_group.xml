@@ -6,23 +6,26 @@
     <item
             android:id="@+id/pause"
             android:icon="@android:drawable/ic_media_play"
-            android:title="暂停"/>
+            android:title="@string/pause_label"/>
     <item
             android:id="@+id/save"
             android:icon="@android:drawable/ic_menu_save"
-            android:title="存档"/>
+            android:title="@string/save_label"/>
     <item
             android:id="@+id/reincarnation"
             android:icon="@android:drawable/ic_menu_compass"
-            android:title="转生"/>
+            android:title="@string/reincarnation_label"/>
     <item
             android:id="@+id/goods"
             android:icon="@android:drawable/ic_menu_gallery"
-            android:title="物品"/>
+            android:title="@string/item_label"/>
     <item
             android:id="@+id/pets"
             android:icon="@android:drawable/ic_menu_gallery"
-            android:title="宠物"/>
+            android:title="@string/pet_label"/>
+    <item   android:id="@+id/skills"
+            android:icon="@android:drawable/ic_menu_gallery"
+            android:title="技能"/>
     <item
             android:title="本地商店"
             android:enabled="true"

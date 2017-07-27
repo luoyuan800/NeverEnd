@@ -140,7 +140,7 @@ public class GameActivity extends BaseActivity {
                                     while (findViewById(R.id.monster_view).getVisibility() == View.VISIBLE) {
                                         control.getViewHandler().post(update);
                                         try {
-                                            Thread.sleep(10000);
+                                            Thread.sleep(60000);
                                         } catch (InterruptedException e) {
                                             LogHelper.logException(e, "GameActivity ->111Switch");
                                         }
