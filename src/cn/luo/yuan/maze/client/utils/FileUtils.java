@@ -83,8 +83,16 @@ public class FileUtils {
         try {
             fos = new FileOutputStream(fileInSD);
             zos = new ZipOutputStream(new BufferedOutputStream(fos));
-            for (String fileName : context.fileList()) {
+            /*File folder = context.getFilesDir();
+            for (File file : folder.listFiles()) {
                 try {
+                    if(file.isDirectory()){
+                        ZipEntry zipfolder = new ZipEntry(file.getName());
+                        zos.putNextEntry(zipfolder);
+                        for(String fileName : file.list()){
+
+                        }
+                    }
                     byte[] bytes = new byte[1024];
                     ZipEntry entry = new ZipEntry(fileName);
                     zos.putNextEntry(entry);
@@ -98,7 +106,7 @@ public class FileUtils {
                 }catch (Exception e){
                     //Ignore
                 }
-            }
+            }*/
             if(containLogs) {
                     for (File file : LogHelper.getLogs()) {
                         try {
