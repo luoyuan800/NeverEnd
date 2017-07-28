@@ -63,7 +63,10 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
                                 registerMessageReceiver(messager, oid)
                             }
                             if (group == null && ogroup == null && random.nextInt(hero.displayName.length) > random.nextInt(ohero.displayName.length)) {
-                                main.addGroup(id, oid)
+                                val group = main.addGroup(id, oid)
+                                if(oid == "npc"){
+                                    group.npc = ohero;
+                                }
                                 messager.buildGroup(hero.displayName, ohero.displayName)
                                 if (StringUtils.isNotEmpty(record.data!!.helloMsg["group"])) {
                                     messager.speak(hero.displayName, record.data!!.helloMsg["group"])
@@ -123,7 +126,7 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
             range()
             table.allHeroIds
                     .mapNotNull { table.getRecord(it) }
-                    .forEach { it.messages.add("下一场战斗 ${main.user.battleInterval} 后开始") }
+                    .forEach { it.messages.add("下一场战斗 ${main.user.battleInterval} 分钟后开始") }
             table.save()
             LogHelper.info("Finished battle!")
         } catch (exp: Exception) {

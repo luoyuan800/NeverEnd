@@ -134,7 +134,7 @@ public class SkillDialog implements View.OnClickListener {
                 detail.setButton(DialogInterface.BUTTON_NEUTRAL, Resource.getString(R.string.upgrade), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        showWarning("升级", "需要消耗" + ((UpgradeAble) skill).getLevel() * Data.SKILL_ENABLE_COST + "能力点来升级" + ((UpgradeAble) skill).getLevel(), new DialogInterface.OnClickListener() {
+                        showWarning("升级", "需要消耗" + ((UpgradeAble) skill).getLevel() * Data.SKILL_ENABLE_COST + "能力点来升级" + (((UpgradeAble) skill).getLevel() + 1), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (((UpgradeAble) skill).canUpgrade(parameter)) {

@@ -44,7 +44,7 @@ public class NeverEndServlet extends HttpServlet {
     public NeverEndServlet() throws IOException, ClassNotFoundException {
         super();
         LogHelper.init(root);
-        //process.setDatabase(new MysqlConnection());
+        process.setDatabase(new MysqlConnection());
         process.start();
     }
 

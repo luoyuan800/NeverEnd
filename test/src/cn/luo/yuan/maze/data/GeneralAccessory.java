@@ -8,7 +8,7 @@ import cn.luo.yuan.maze.model.effect.original.AtkPercentEffect;
 import cn.luo.yuan.maze.model.effect.original.ClickMaterialEffect;
 import cn.luo.yuan.maze.model.effect.original.DefPercentEffect;
 import cn.luo.yuan.maze.model.effect.original.HPPercentEffect;
-import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
+import cn.luo.yuan.maze.serialize.ObjectTable;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;

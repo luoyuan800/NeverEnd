@@ -19,9 +19,9 @@ class WarehouseTable(root:File):Runnable{
     }
 
     val warehouseRoot = File(root, "warehouse")
-    val petWH = ObjectTable<Pet>(Pet::class.java, File(warehouseRoot,Pet::class.java.name))
-    val accessoryWH = ObjectTable<Accessory>(Accessory::class.java, File(warehouseRoot,Accessory::class.java.name))
-    val goodsWH = ObjectTable<Goods>(Goods::class.java, File(warehouseRoot, Goods::class.java.name))
+    val petWH = ObjectTable<Pet>(Pet::class.java, warehouseRoot)
+    val accessoryWH = ObjectTable<Accessory>(Accessory::class.java, warehouseRoot)
+    val goodsWH = ObjectTable<Goods>(Goods::class.java, warehouseRoot)
 
     fun store(obj:Any){
         when(obj){

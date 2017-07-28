@@ -75,8 +75,8 @@ public class DataManager implements DataManagerInterface {
         skillLoader = new SerializeLoader<>(Skill.class, context, index);
         clickSkillLoader = new SerializeLoader<>(ClickSkill.class, context, index);
         taskLoader = new SerializeLoader<Task>(Task.class, context, index);
-        configDB = new ObjectTable<>(NeverEndConfig.class, context.getDir(NeverEndConfig.class.getName(), Context.MODE_PRIVATE));
-        defenderDB = new ObjectTable<>(Hero.class, context.getDir(Hero.class.getName(), Context.MODE_PRIVATE));
+        configDB = new ObjectTable<>(NeverEndConfig.class, context.getDir(String.valueOf(index), Context.MODE_PRIVATE));
+        defenderDB = new ObjectTable<>(Hero.class, context.getDir(String.valueOf(index), Context.MODE_PRIVATE));
         this.context = context;
         e.scheduleAtFixedRate(accessoryLoader.getDb(),1000, 500, TimeUnit.MILLISECONDS);
         e.scheduleAtFixedRate(petLoader.getDb(),1000, 500, TimeUnit.MILLISECONDS);

@@ -25,7 +25,7 @@ public class SerializeLoader<T extends Serializable> {
     private int index;
 
     public SerializeLoader(Class<T> type, Context context, int heroIndex) {
-        db = new ObjectTable<T>(type, context.getDir(type.getName(), Context.MODE_PRIVATE));
+        db = new ObjectTable<T>(type, context.getDir(String.valueOf(heroIndex), Context.MODE_PRIVATE));
         clazz = type;
         this.context = context;
         this.index = heroIndex;

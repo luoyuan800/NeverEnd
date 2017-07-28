@@ -1,7 +1,10 @@
 package cn.luo.yuan.maze.persistence;
 
 import android.content.Context;
+import android.util.Log;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
+
+import java.io.File;
 
 /**
  * Copyright @Luo
@@ -23,9 +26,18 @@ public class SaveFileManager {
     }
 
     public void clear(){
-        context.deleteDatabase(Sqlite.DB_NAME);
-        for(String file: context.fileList()){
-            context.deleteFile(file);
+        boolean clear = false;
+        File folder  = context.getFilesDir();
+        for(File file : folder.listFiles()){
+            if(!file.isFile() && file.getName().contains("@")){
+                Log.i("maze", "delete " + file.getName());
+                file.delete();
+                clear = true;
+            }
+        }
+        if(clear) {
+            Log.i("maze", "Delete DB");
+            context.deleteDatabase(Sqlite.DB_NAME);
         }
     }
 }

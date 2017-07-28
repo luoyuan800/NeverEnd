@@ -61,14 +61,14 @@ public class GameActivityViewHandler extends Handler {
         }
         TextView second = (TextView) context.findViewById(R.id.secondary_skill);
         if (heroSkills.length > 1 && heroSkills[1] != null && !(heroSkills[1] instanceof EmptySkill)) {
+            second.setBackground(Resource.getSkillDrawable(heroSkills[1]));
             if(heroSkills[1] instanceof UpgradeAble){
                 second.setText(String.format("X%d", ((UpgradeAble)heroSkills[1]).getLevel()));
             }else{
                 second.setText(Resource.getString(R.string.empty));
             }
-            second.setBackground(Resource.getSkillDrawable(heroSkills[1]));
         } else {
-            first.setBackgroundResource(0);
+            second.setBackgroundResource(0);
             second.setText(R.string.not_mount);
         }
         TextView third = (TextView) context.findViewById(R.id.third_skill);
@@ -192,7 +192,7 @@ public class GameActivityViewHandler extends Handler {
             ((TextView) context.findViewById(R.id.hero_point)).setText(StringUtils.formatNumber(context.control.getHero().getPoint()));
             ((TextView) context.findViewById(R.id.hero_click)).setText(StringUtils.formatNumber(context.control.getHero().getClick()));
             ((TextView) context.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(context.control.getHero().getCurrentHp()));
-            ((TextView) context.findViewById(R.id.hero_max_hp)).setText(StringUtils.formatNumber(context.control.getHero().getCurrentMaxHp()));
+            ((TextView) context.findViewById(R.id.hero_max_hp)).setText(StringUtils.formatNumber(context.control.getHero().getUpperHp()));
 
         }
     };

@@ -48,7 +48,7 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         SaveFileManager saveFileManager = new SaveFileManager(this);
         if(saveFileManager.isOlderSaveExisted()){
-            //saveFileManager.clear();
+            saveFileManager.clear();
         }
         setContentView(R.layout.selected_index);
         Resource.init(this);

@@ -152,7 +152,7 @@ public class OnlineActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        executor.shutdown();
+        executor.shutdownNow();
         super.onDestroy();
         adHandler.onDestroy();
     }

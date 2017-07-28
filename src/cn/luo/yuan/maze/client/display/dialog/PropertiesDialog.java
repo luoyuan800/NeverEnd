@@ -130,7 +130,7 @@ public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBar
         ((TextView) dialog.findViewById(R.id.str_value)).setText(StringUtils.formatNumber(context.getHero().getStr()));
         ((TextView) dialog.findViewById(R.id.hero_atk)).setText(StringUtils.formatNumber(context.getHero().getUpperAtk()));
         ((TextView) dialog.findViewById(R.id.hero_def)).setText(StringUtils.formatNumber(hero.getUpperDef()));
-        ((TextView) dialog.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(hero.getCurrentHp()));
+        ((TextView) dialog.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(hero.getUpperDef()));
         ((TextView) dialog.findViewById(R.id.point_value)).setText(StringUtils.formatNumber(context.getHero().getPoint()));
         boolean hasHat = false;
         boolean hasRing = false;

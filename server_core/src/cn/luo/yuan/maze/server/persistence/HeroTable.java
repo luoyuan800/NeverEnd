@@ -28,7 +28,7 @@ public class HeroTable {
 
     public HeroTable(File root) throws IOException, ClassNotFoundException {
         this.root = root;
-        recordDb = new ObjectTable<>(ServerRecord.class, new File(root,ServerRecord.class.getName()));
+        recordDb = new ObjectTable<>(ServerRecord.class, root);
     }
 
     public String queryBattleAward(String id) {

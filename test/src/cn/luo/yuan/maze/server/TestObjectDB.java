@@ -2,7 +2,7 @@ package cn.luo.yuan.maze.server;
 
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
+import cn.luo.yuan.maze.serialize.ObjectTable;
 import org.testng.annotations.Test;
 
 import java.io.File;

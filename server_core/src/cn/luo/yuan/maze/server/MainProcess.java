@@ -76,9 +76,9 @@ public class MainProcess {
         this.heroDir = new File(root, "hero");
         warehouseTable = new WarehouseTable(this.root);
         exchangeTable = new ExchangeTable(this.root);
-        taskTable = new ObjectTable<>(Task.class, new File(this.root, Task.class.getName()));
+        taskTable = new ObjectTable<>(Task.class, this.root);
         heroTable = new HeroTable(heroDir);
-        userDb = new ObjectTable<User>(User.class, new File(this.root, Task.class.getName()));
+        userDb = new ObjectTable<User>(User.class, this.root);
         process = this;
         user = userDb.loadObject("root");
         if (user == null) {
@@ -331,11 +331,12 @@ public class MainProcess {
         }
     }
 
-    public void addGroup(String h1, String h2) {
+    public GroupHolder addGroup(String h1, String h2) {
         GroupHolder holder = new GroupHolder();
         holder.getHeroIds().add(h1);
         holder.getHeroIds().add(h2);
         groups.add(holder);
+        return holder;
     }
 
     public void removeGroup(String heroId) {
@@ -436,25 +437,33 @@ public class MainProcess {
                 }
             }
         }
+        StringBuilder builder = new StringBuilder();
+        ServerRecord record = queryRecord(id);
+        if (record != null && record.getData() != null && record.getData().getHero() != null) {
+            builder.append(record.getData().getHero().getDisplayName()).append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").
+                    append(record.winRate()).append("<br>&nbsp;&nbsp;&nbsp;&nbsp;剩余复活次数：").
+                    append(StringUtils.formatNumber(record.getRestoreLimit() - record.getDieCount()));
+        }
         if (holder != null) {
-            StringBuilder builder = new StringBuilder();
             for (String hid : holder.getHeroIds()) {
-                ServerRecord record = queryRecord(hid);
-                if (record != null && record.getData() != null && record.getData().getHero() != null) {
-                    builder.append(record.getData().getHero().getDisplayName())
-                            .append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(record.winRate())
-                            .append("<br>&nbsp;&nbsp;&nbsp;&nbsp;剩余复活次数：").append(StringUtils.formatNumber(record.getRestoreLimit() - record.getDieCount()))
-                            .append("<br>");
+                if(!hid.equals(id)) {
+                    ServerRecord orecord = queryRecord(hid);
+                    if (orecord != null && orecord.getData() != null && orecord.getData().getHero() != null) {
+                        builder.append("<br>").append(orecord.getData().getHero().getDisplayName())
+                                .append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(orecord.winRate())
+                                .append("<br>&nbsp;&nbsp;&nbsp;&nbsp;剩余复活次数：").
+                                append(StringUtils.formatNumber(orecord.getRestoreLimit() - orecord.getDieCount()))
+                                .append("<br>");
+                    }
+                }else{
+                    if(hid.equals("npc")){
+                        builder.append("<br>").append(holder.getNpc().getDisplayName());
+                    }
                 }
             }
             return builder.toString();
         } else {
-            ServerRecord record = queryRecord(id);
-            if (record != null && record.getData() != null && record.getData().getHero() != null) {
-                return record.getData().getHero().getDisplayName() +
-                        "<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：" + record.winRate() +
-                        "<br>&nbsp;&nbsp;&nbsp;&nbsp;剩余复活次数：" + StringUtils.formatNumber(record.getRestoreLimit() - record.getDieCount());
-            }
+
         }
         return StringUtils.EMPTY_STRING;
     }
