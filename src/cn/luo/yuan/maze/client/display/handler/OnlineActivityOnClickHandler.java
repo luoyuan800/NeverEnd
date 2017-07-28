@@ -59,7 +59,7 @@ public class OnlineActivityOnClickHandler {
                 activity.executor.execute(new Runnable() {
                     @Override
                     public void run() {
-                        Object o = activity.service.openOnlineGift(context);
+                        final Object o = activity.service.openOnlineGift(context);
                         activity.handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -88,7 +88,7 @@ public class OnlineActivityOnClickHandler {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        Dialog sycDialog = SimplerDialogBuilder.build("正在同步服务器数据……", activity, false);
+                        final Dialog sycDialog = SimplerDialogBuilder.build("正在同步服务器数据……", activity, false);
                         activity.executor.execute(new Runnable() {
                             @Override
                             public void run() {
@@ -102,7 +102,7 @@ public class OnlineActivityOnClickHandler {
     }
 
     private void getBackHeroData(Dialog progress) {
-        String award = activity.service.queryAwardString(context);
+        final String award = activity.service.queryAwardString(context);
         ServerData data = activity.service.getBackHero(context);
         if (data != null && StringUtils.isNotEmpty(award)) {
             context.getHero().setMaterial(context.getHero().getMaterial() + data.getMaterial());

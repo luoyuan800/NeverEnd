@@ -123,6 +123,9 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
                 }
             }
             range()
+            table.allHeroIds
+                    .mapNotNull { table.getRecord(it) }
+                    .forEach { it.messages.add("下一场战斗 ${main.user.battleInterval} 后开始") }
             table.save()
             LogHelper.info("Finished battle!")
         } catch (exp: Exception) {

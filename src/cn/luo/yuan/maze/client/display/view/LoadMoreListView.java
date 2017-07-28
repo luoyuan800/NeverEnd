@@ -43,7 +43,7 @@ public class LoadMoreListView extends ListView implements OnScrollListener,
         setOnScrollListener(this);// ListView滚动监听
     }
 
-    public void initQuery(OnQueryChange onQueryChange){
+    public void initQuery(final OnQueryChange onQueryChange){
         queryView.setVisibility(View.VISIBLE);
         queryView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

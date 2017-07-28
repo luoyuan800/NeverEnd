@@ -214,9 +214,9 @@ public class GameActivity extends BaseActivity {
     }
 
     private void randomMonsterBook() {
-        Monster monster = control.getPetMonsterHelper().randomMonster();
+        final Monster monster = control.getPetMonsterHelper().randomMonster();
         if (monster != null) {
-            View view = findViewById(R.id.monster_view);
+            final View view = findViewById(R.id.monster_view);
             Animation animation = AnimationUtils.loadAnimation(this, R.anim.revert);
             animation.setAnimationListener(new Animation.AnimationListener() {
                 @Override

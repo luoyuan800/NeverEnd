@@ -250,7 +250,7 @@ public class DataManager implements DataManagerInterface {
     }
 
     @Override
-    public List<Pet> loadPets(int start, int rows, String keyWord, Comparator<Pet> comparator) {
+    public List<Pet> loadPets(int start, int rows, final String keyWord, Comparator<Pet> comparator) {
         return petLoader.loadLimit(start, rows, new Index<Pet>() {
             @Override
             public boolean match(Pet pet) {
@@ -290,7 +290,7 @@ public class DataManager implements DataManagerInterface {
     }
 
     @Override
-    public Accessory findAccessoryByName(@NotNull String name) {
+    public Accessory findAccessoryByName(@NotNull final String name) {
         List<Accessory> accessories = accessoryLoader.loadLimit(0, 1, new Index<Accessory>() {
             @Override
             public boolean match(Accessory accessory) {
@@ -305,7 +305,7 @@ public class DataManager implements DataManagerInterface {
 
     @NotNull
     @Override
-    public List<Pet> findPetByType(@NotNull String type) {
+    public List<Pet> findPetByType(@NotNull final String type) {
         return petLoader.loadLimit(0, 1, new Index<Pet>() {
             @Override
             public boolean match(Pet pet) {
@@ -329,7 +329,7 @@ public class DataManager implements DataManagerInterface {
         return skills;
     }
 
-    public List<Accessory> loadAccessories(int start, int row, String key, Comparator<Accessory> order) {
+    public List<Accessory> loadAccessories(int start, int row, final String key, Comparator<Accessory> order) {
         return accessoryLoader.loadLimit(start, row, new Index<Accessory>() {
             @Override
             public boolean match(Accessory accessory) {

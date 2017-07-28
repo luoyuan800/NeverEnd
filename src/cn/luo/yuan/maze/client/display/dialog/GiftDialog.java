@@ -71,7 +71,7 @@ public class GiftDialog implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if(view.getTag() instanceof Gift){
-            Gift gift = (Gift) view.getTag();
+            final Gift gift = (Gift) view.getTag();
             AlertDialog detailDialog = new AlertDialog.Builder(context).create();
             detailDialog.setTitle(gift.getName());
             detailDialog.setMessage(gift.getDesc());

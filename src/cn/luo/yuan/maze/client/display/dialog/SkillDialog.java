@@ -74,10 +74,10 @@ public class SkillDialog implements View.OnClickListener {
 
     }
 
-    public void onClick(View view) {
-        Skill skill = SkillFactory.geSkillByName(view.getTag().toString(), context.getDataManager());
+    public void onClick(final View view) {
+        final Skill skill = SkillFactory.geSkillByName(view.getTag().toString(), context.getDataManager());
         if (skill != null) {
-            SkillParameter parameter = new SkillParameter(context.getHero());
+            final SkillParameter parameter = new SkillParameter(context.getHero());
             parameter.set(SkillParameter.CONTEXT, context);
             parameter.set(SkillParameter.RANDOM, context.getRandom());
             AlertDialog detail = new AlertDialog.Builder(context.getContext())

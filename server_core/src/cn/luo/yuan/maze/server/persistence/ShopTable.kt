@@ -52,9 +52,9 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
             con = database.getConnection()
             stat = con.createStatement()
             val s = "select * from shop where on_sell = 1 and count > 0"
-            LogHelper.info("execute sql : " + s);
+            LogHelper.debug("execute sql : " + s);
             val rs = stat.executeQuery(s);
-            LogHelper.info("sql return result: " + rs.row)
+            LogHelper.debug("sql return result: " + rs.row)
             while (rs.next()) {
                 val type = rs.getString("type")
                 val sellItem = SellItem()
@@ -90,7 +90,7 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
                 sellItem.id = rs.getString("id")
                 sellItem.price = rs.getLong("cost")
                 sellItem.special = rs.getBoolean("special")
-                LogHelper.info("return shop item result: " + list)
+                LogHelper.debug("return shop item result: " + list)
             }
         }finally {
             stat?.close()

@@ -116,7 +116,7 @@ public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBar
     }
 
     @Override
-    public void change(InfoControlInterface context) {
+    public void change(final InfoControlInterface context) {
         handler.post(new Runnable() {
             @Override
             public void run() {

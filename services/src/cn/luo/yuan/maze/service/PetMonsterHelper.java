@@ -364,9 +364,14 @@ public class PetMonsterHelper implements PetMonsterHelperInterface {
         this.random = random;
     }
 
-    public Pet eggToPet(Pet pet, Hero hero) {
+    public Pet eggToPet(Egg egg, Hero hero) {
         try {
-            return monsterToPet(pet, hero, 1);
+            Pet pet =  monsterToPet(egg, hero, 0);
+            pet.setFarther(egg.getFarther());
+            pet.setMother(egg.getMother());
+            pet.setMounted(egg.isMounted());
+            pet.setSkill(egg.getSkill());
+            return pet;
         } catch (MonsterToPetException e) {
             return null;
         }

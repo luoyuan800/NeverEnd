@@ -92,7 +92,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Object item = parent.getItemAtPosition(position);
+        final Object item = parent.getItemAtPosition(position);
         if (item instanceof Serializable) {
             if (currentShowingDialog != null) {
                 currentShowingDialog.dismiss();
@@ -100,11 +100,11 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
             }
             LinearLayout root = new LinearLayout(context.getContext());
             root.setOrientation(LinearLayout.VERTICAL);
-            RadioButton petType = new RadioButton(context.getContext());
+            final RadioButton petType = new RadioButton(context.getContext());
             petType.setText(R.string.pet_type);
-            RadioButton accType = new RadioButton(context.getContext());
+            final RadioButton accType = new RadioButton(context.getContext());
             accType.setText(R.string.acc_type);
-            RadioButton goodesType = new RadioButton(context.getContext());
+            final RadioButton goodesType = new RadioButton(context.getContext());
             goodesType.setText(R.string.goods_type);
             LinearLayout rbg = new LinearLayout(context.getContext());
             rbg.setOrientation(LinearLayout.HORIZONTAL);
@@ -112,7 +112,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
             rbg.addView(accType);
             rbg.addView(goodesType);
             root.addView(rbg);
-            EditText limit = new EditText(context.getContext());
+            final EditText limit = new EditText(context.getContext());
             limit.setHint("输入你的限制条件");
             limit.setText("测试");
             root.addView(limit);
@@ -202,7 +202,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
     }
 
     private void showSelectExchangeDialog(final ExchangeObject eo) {
-        ListAdapter adapter;
+        final ListAdapter adapter;
         LoadMoreListView list = new LoadMoreListView(context.getContext());
         switch (eo.getExpectedType()) {
             case Field.PET_TYPE:
@@ -232,11 +232,11 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                 list.onLoadMoreComplete(true);
                 break;
         }
-        Dialog selectDialog = SimplerDialogBuilder.build(list, Resource.getString(R.string.close), null, context.getContext());
+        final Dialog selectDialog = SimplerDialogBuilder.build(list, Resource.getString(R.string.close), null, context.getContext());
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Object myItem = parent.getItemAtPosition(position);
+                final Object myItem = parent.getItemAtPosition(position);
                 selectDialog.dismiss();
                 handler.sendEmptyMessage(8);
                 context.getExecutor().submit(new Runnable() {
@@ -260,14 +260,14 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
 
     private void showOtherSubmitedDialog() {
         View view = View.inflate(context.getContext(), R.layout.select_submit, null);
-        RadioButton petR = (RadioButton) view.findViewById(R.id.pet_type);
-        RadioButton accessoryR = (RadioButton) view.findViewById(R.id.accessory_type);
-        RadioButton goodsR = (RadioButton) view.findViewById(R.id.goods_type);
-        EditText key = (EditText) view.findViewById(R.id.key_text);
-        LoadMoreListView list = (LoadMoreListView) view.findViewById(R.id.item_list);
+        final RadioButton petR = (RadioButton) view.findViewById(R.id.pet_type);
+        final RadioButton accessoryR = (RadioButton) view.findViewById(R.id.accessory_type);
+        final RadioButton goodsR = (RadioButton) view.findViewById(R.id.goods_type);
+        final EditText key = (EditText) view.findViewById(R.id.key_text);
+        final LoadMoreListView list = (LoadMoreListView) view.findViewById(R.id.item_list);
         list.onLoadMoreComplete(true);
         currentShowingDialog = SimplerDialogBuilder.build(view, Resource.getString(R.string.close), null, context.getContext());
-        Runnable updateTask = new Runnable() {
+        final Runnable updateTask = new Runnable() {
             @Override
             public void run() {
                 handler.sendEmptyMessage(8);
@@ -363,7 +363,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
         ExchangeAdapter es = new ExchangeAdapter(objects, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ExchangeObject eo = (ExchangeObject) v.getTag(R.string.item);
+                final ExchangeObject eo = (ExchangeObject) v.getTag(R.string.item);
                 context.getDataManager().add(eo.getExchange());
                 context.getExecutor().submit(new Runnable() {
                     @Override
@@ -402,11 +402,11 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
 
     private void showSelectSubmitDialog() {
         View view = View.inflate(context.getContext(), R.layout.select_submit, null);
-        RadioButton petR = (RadioButton) view.findViewById(R.id.pet_type);
-        RadioButton accessoryR = (RadioButton) view.findViewById(R.id.accessory_type);
-        RadioButton goodsR = (RadioButton) view.findViewById(R.id.goods_type);
-        EditText key = (EditText) view.findViewById(R.id.key_text);
-        LoadMoreListView list = (LoadMoreListView) view.findViewById(R.id.item_list);
+        final RadioButton petR = (RadioButton) view.findViewById(R.id.pet_type);
+        final RadioButton accessoryR = (RadioButton) view.findViewById(R.id.accessory_type);
+        final RadioButton goodsR = (RadioButton) view.findViewById(R.id.goods_type);
+        final EditText key = (EditText) view.findViewById(R.id.key_text);
+        final LoadMoreListView list = (LoadMoreListView) view.findViewById(R.id.item_list);
         list.setOnItemClickListener(ExchangeDialog.this);
         petR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -414,7 +414,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                 if (isChecked) {
                     accessoryR.setChecked(false);
                     goodsR.setChecked(false);
-                    PetAdapter adapter = new PetAdapter(context.getContext(), context.getDataManager(), key.getText().toString());
+                    final PetAdapter adapter = new PetAdapter(context.getContext(), context.getDataManager(), key.getText().toString());
                     list.setAdapter(adapter);
                     list.setOnLoadListener(adapter);
                     adapter.notifyDataSetChanged();
@@ -443,7 +443,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                 if (isChecked) {
                     petR.setChecked(false);
                     goodsR.setChecked(false);
-                    StringAdapter<Accessory> adapter = new StringAdapter<>(context.getDataManager().loadAccessories(0, 100, key.getText().toString(), null));
+                    final StringAdapter<Accessory> adapter = new StringAdapter<>(context.getDataManager().loadAccessories(0, 100, key.getText().toString(), null));
                     list.setAdapter(adapter);
                     list.setOnLoadListener(new LoadMoreListView.OnRefreshLoadingMoreListener() {
                         @Override

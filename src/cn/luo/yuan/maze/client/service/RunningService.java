@@ -77,12 +77,12 @@ public class RunningService implements RunningServiceInterface {
                 if (pet instanceof Egg) {
                     ((Egg) pet).step--;
                     if (((Egg) pet).step <= 0) {
-                        Pet p = monsterHelper.eggToPet(pet, hero);
+                        Pet p = monsterHelper.eggToPet((Egg) pet, hero);
                         if (p != null) {
-                            dataManager.add(p);
-                            hero.getPets().add(p);
                             hero.getPets().remove(pet);
                             dataManager.delete(pet);
+                            dataManager.add(p);
+                            hero.getPets().add(p);
                             gameContext.getViewHandler().refreshPets(hero);
                             gameContext.addMessage(p.getDisplayNameWithLevel() + "出生了！");
                         }

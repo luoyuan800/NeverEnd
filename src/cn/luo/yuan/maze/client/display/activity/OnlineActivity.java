@@ -121,7 +121,7 @@ public class OnlineActivity extends Activity {
         executor.submit(new Runnable() {
             @Override
             public void run() {
-                String count = service.postOnlineGiftCount(gameContext);
+                final String count = service.postOnlineGiftCount(gameContext);
                 if (StringUtils.isNotEmpty(count)) {
                     handler.post(new Runnable() {
                         @Override
@@ -166,7 +166,7 @@ public class OnlineActivity extends Activity {
     }
 
     private void initView() {
-        AlertDialog dialog = new AlertDialog.Builder(this).setMessage("正在同步服务器数据，请稍候……").setCancelable(true).setOnCancelListener(new DialogInterface.OnCancelListener() {
+        final AlertDialog dialog = new AlertDialog.Builder(this).setMessage("正在同步服务器数据，请稍候……").setCancelable(true).setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
                 dialog.dismiss();
@@ -203,16 +203,16 @@ public class OnlineActivity extends Activity {
     }
 
     private void upload() {
-        ServerData uploadData = new ServerData();
+        final ServerData uploadData = new ServerData();
         uploadData.setHero(gameContext.getHero());
-        uploadData.setAccessories(new ArrayList<>(gameContext.getHero().getAccessories().size()));
+        uploadData.setAccessories(new ArrayList<Accessory>(gameContext.getHero().getAccessories().size()));
         for (Accessory accessory : gameContext.getHero().getAccessories()) {
             uploadData.getAccessories().add((Accessory) gameContext.convertToServerObject(accessory));
         }
         uploadData.setPets(new ArrayList<>(gameContext.getHero().getPets()));
         uploadData.setSkills(Arrays.asList(gameContext.getHero().getSkills()));
         uploadData.setMaze(gameContext.getMaze());
-        AlertDialog uploadDialog = new AlertDialog.Builder(OnlineActivity.this).setMessage("上传中……").setCancelable(true).setOnCancelListener(new DialogInterface.OnCancelListener() {
+        final AlertDialog uploadDialog = new AlertDialog.Builder(OnlineActivity.this).setMessage("上传中……").setCancelable(true).setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
                 dialog.dismiss();
@@ -276,7 +276,7 @@ public class OnlineActivity extends Activity {
     }
 
     private void postBattleMsg() {
-        String msg = service.postSingleBattleMsg(gameContext);
+        final String msg = service.postSingleBattleMsg(gameContext);
         if (StringUtils.isNotEmpty(msg)) {
             handler.post(new Runnable() {
                 @Override
@@ -289,7 +289,7 @@ public class OnlineActivity extends Activity {
 
     private void postOnlineRange() {
         try {
-            String msg = service.postOnlineRange(gameContext);
+            final String msg = service.postOnlineRange(gameContext);
             if (StringUtils.isNotEmpty(msg)) {
                 handler.post(new Runnable() {
                     @Override
@@ -308,7 +308,7 @@ public class OnlineActivity extends Activity {
 
     private void postGroup() {
         try {
-            String msg = service.postOnlineData(gameContext);
+            final String msg = service.postOnlineData(gameContext);
             if (StringUtils.isNotEmpty(msg)) {
                 handler.post(new Runnable() {
                     @Override
@@ -326,7 +326,7 @@ public class OnlineActivity extends Activity {
     }
 
     private void postAward() {
-        String award = service.queryAwardString(gameContext);
+        final String award = service.queryAwardString(gameContext);
         if (StringUtils.isNotEmpty(award)) {
             handler.post(new Runnable() {
                 @Override

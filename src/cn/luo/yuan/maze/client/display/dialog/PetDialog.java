@@ -74,7 +74,7 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
         loadMoreListView.setOnLoadListener(adapter);
         loadMoreListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+            public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -129,10 +129,10 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
 
     @Override
     public void onClick(View v) {
-        PetMonsterHelper helper = control.getPetMonsterHelper();
+        final PetMonsterHelper helper = control.getPetMonsterHelper();
         switch (v.getId()) {
             case R.id.batch_drop:
-                EditText text = new EditText(control.getContext());
+                final EditText text = new EditText(control.getContext());
                 text.setHint("在此输入关键字，点击确定后名字中包含的该关键字的宠物会被丢弃。出战中或者有备注的宠物不会被丢弃。");
                 SimplerDialogBuilder.build(text, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
                     @Override
@@ -232,7 +232,7 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                     listView.setAdapter(petAdapter);
 
                     listView.setOnLoadListener(petAdapter);
-                    AlertDialog select = new AlertDialog.Builder(control.getContext()).setTitle(R.string.select_pet).setView(listView).setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
+                    final AlertDialog select = new AlertDialog.Builder(control.getContext()).setTitle(R.string.select_pet).setView(listView).setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();

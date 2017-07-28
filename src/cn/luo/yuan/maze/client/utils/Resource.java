@@ -119,7 +119,7 @@ public class Resource {
         return "";
     }
 
-    public static void askWritePermissions(BaseActivity.PermissionRequestListener listener) {
+    public static void askWritePermissions(final BaseActivity.PermissionRequestListener listener) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context instanceof BaseActivity) {
             if (context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 if (((BaseActivity) context).shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {

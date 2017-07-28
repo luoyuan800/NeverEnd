@@ -61,7 +61,7 @@ public class OnlineActivityHandler extends Handler {
         Toast.makeText(onlineActivity, String.format(format, args), Toast.LENGTH_SHORT).show();
     }
 
-    public void addOnlineGift(int count) {
+    public void addOnlineGift(final int count) {
         onlineActivity.executor.execute(new Runnable() {
             @Override
             public void run() {

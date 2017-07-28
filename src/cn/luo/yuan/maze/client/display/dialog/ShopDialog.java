@@ -35,14 +35,14 @@ public class ShopDialog {
     }
 
     public void showOnlineShop(Handler handler){
-        ServerService ss = new ServerService(context);
-        List<SellItem> sellItems = ss.getOnlineSellItems(context);
+        final ServerService ss = new ServerService(context);
+        final List<SellItem> sellItems = ss.getOnlineSellItems(context);
         handler.post(new Runnable() {
             @Override
             public void run() {
                 show("在线商店", sellItems, new SellItemAdapter.AfterSell() {
                     @Override
-                    public void sell(String id, int count) {
+                    public void sell(final String id, final int count) {
                         context.getExecutor().execute(new Runnable() {
                             @Override
                             public void run() {
