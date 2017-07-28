@@ -17,7 +17,7 @@ class ExchangeTable(root: File) {
         }
     }
 
-    val exchangeDb = ObjectTable(ExchangeObject::class.java, root)
+    val exchangeDb = ObjectTable(ExchangeObject::class.java, File(root,ExchangeObject::class.java.name))
     val cache = mutableMapOf<key, SoftReference<ExchangeObject>>()
     fun addExchange(ex: Any?, ownerId: String, limit: String, expect: Int): Boolean {
         val exchange = ex as? ExchangeObject ?: ExchangeObject(ex as IDModel, ownerId)

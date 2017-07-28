@@ -22,7 +22,7 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
 
     init {
         initIfNeed()
-        accessoryDb = ObjectTable(Accessory::class.java, fileRoot)
+        accessoryDb = ObjectTable(Accessory::class.java, File(fileRoot,Accessory::class.java.name))
     }
 
     private fun initIfNeed() {

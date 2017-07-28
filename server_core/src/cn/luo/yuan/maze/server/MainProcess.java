@@ -76,9 +76,9 @@ public class MainProcess {
         this.heroDir = new File(root, "hero");
         warehouseTable = new WarehouseTable(this.root);
         exchangeTable = new ExchangeTable(this.root);
-        taskTable = new ObjectTable<>(Task.class, this.root);
+        taskTable = new ObjectTable<>(Task.class, new File(this.root, Task.class.getName()));
         heroTable = new HeroTable(heroDir);
-        userDb = new ObjectTable<User>(User.class, this.root);
+        userDb = new ObjectTable<User>(User.class, new File(this.root, Task.class.getName()));
         process = this;
         user = userDb.loadObject("root");
         if (user == null) {

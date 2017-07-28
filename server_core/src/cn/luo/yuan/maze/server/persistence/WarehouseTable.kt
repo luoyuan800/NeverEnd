@@ -4,7 +4,7 @@ import cn.luo.yuan.maze.model.Accessory
 import cn.luo.yuan.maze.model.OwnedAble
 import cn.luo.yuan.maze.model.Pet
 import cn.luo.yuan.maze.model.goods.Goods
-import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable
+import cn.luo.yuan.maze.serialize.ObjectTable
 import cn.luo.yuan.maze.utils.Field
 import java.io.File
 
@@ -19,9 +19,9 @@ class WarehouseTable(root:File):Runnable{
     }
 
     val warehouseRoot = File(root, "warehouse")
-    val petWH = ObjectTable<Pet>(Pet::class.java, warehouseRoot)
-    val accessoryWH = ObjectTable<Accessory>(Accessory::class.java, warehouseRoot)
-    val goodsWH = ObjectTable<Goods>(Goods::class.java, warehouseRoot)
+    val petWH = ObjectTable<Pet>(Pet::class.java, File(warehouseRoot,Pet::class.java.name))
+    val accessoryWH = ObjectTable<Accessory>(Accessory::class.java, File(warehouseRoot,Accessory::class.java.name))
+    val goodsWH = ObjectTable<Goods>(Goods::class.java, File(warehouseRoot, Goods::class.java.name))
 
     fun store(obj:Any){
         when(obj){
