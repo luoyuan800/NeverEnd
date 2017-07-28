@@ -19,4 +19,14 @@ public class BaseActivity extends Activity {
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+    public String getVersion() {
+        try {
+            String pkName = getPackageName();
+            int versionCode = getPackageManager()
+                    .getPackageInfo(pkName, 0).versionCode;
+            return versionCode + "";
+        } catch (Exception e) {
+            return "0";
+        }
+    }
 }

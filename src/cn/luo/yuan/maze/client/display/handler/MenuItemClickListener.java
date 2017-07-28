@@ -48,6 +48,8 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.crash:
+                throw new RuntimeException("test exception");
             case R.id.skills:
                 new SkillDialog(control).show();
                 break;

@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.client.service;
 
+import cn.luo.yuan.maze.client.utils.FileUtils;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.client.utils.RestConnection;
@@ -11,7 +12,13 @@ import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 import cn.luo.yuan.maze.utils.annotation.StringValue;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -203,5 +210,54 @@ public class ServerService {
         } catch (Exception e) {
             LogHelper.logException(e, "ServiceService->addOnlineGift");
         }
+    }
+
+    public String uploadSaveFile(String fileName) {
+        File file = new File(fileName);
+        if(file.exists()){
+            try {
+                HttpURLConnection connection = server.getHttpURLConnection(UPLOAD_SAVE, RestConnection.POST);
+                connection.addRequestProperty(Field.FILE_NAME, file.getName());
+                FileInputStream fis = new FileInputStream(file);
+                int i = fis.read();
+                OutputStream outputStream = connection.getOutputStream();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                while(i!=-1){
+                    baos.write(i);
+                    i = fis.read();
+                }
+                fis.close();
+                outputStream.write(baos.toByteArray());
+                return server.connect(connection).toString();
+            } catch (IOException e) {
+                LogHelper.logException(e, "uploadSaveFile: " + fileName);
+            }
+        }
+        return null;
+    }
+
+    public File downloadSaveFile(String id) {
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection("download_save", RestConnection.POST);
+            connection.addRequestProperty("id", id);
+            connection.connect();
+            if(connection.getResponseCode() == 200) {
+                InputStream inputStream = connection.getInputStream();
+                File file = FileUtils.newFileInstance("", "" + ".maze", true);
+
+                FileOutputStream fos = new FileOutputStream(file);
+                int i = inputStream.read();
+                while (i != -1) {
+                    fos.write(i);
+                    i = inputStream.read();
+                }
+                fos.flush();
+                fos.close();
+                return file;
+            }
+        } catch (IOException e) {
+            LogHelper.logException(e, "downloadSaveFile: " + id);
+        }
+        return null;
     }
 }

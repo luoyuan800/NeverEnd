@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 public class LogHelper {
     private static String pkgName;
     private static int versionCode;
+    static String logFolder = FileUtils.SD_PATH + "/neverend/log";
 
     public static void initLogSystem(Context context){
         pkgName = context.getPackageName();
@@ -22,24 +23,15 @@ public class LogHelper {
             versionCode = 0;
         }
     }
-    public static void logException(final Exception e, String msg) {
+    public static void logException(final Throwable e, String msg) {
         logException(e, msg, null);
     }
 
-    public static void logException(final Exception e, String msg, Context context) {
+    public static void logException(final Throwable e, String msg, Context context) {
         e.printStackTrace();
         try {
 
-            File path = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/neverend/logs/");
-            if (!path.exists()) {
-                path.mkdirs();
-            }
-            File file = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath()
-                    + "/maze/log/" + e.getClass().getSimpleName() + "." + versionCode);
-            if (!file.exists()) {
-                file.createNewFile();
-
-            }
+            File file = FileUtils.newFileInstance(logFolder, e.getClass().getSimpleName() + "." + versionCode, true);
             FileWriter writer = new FileWriter(file, false);
             try {
                 if (msg != null) {
@@ -60,4 +52,7 @@ public class LogHelper {
         }
     }
 
+    public static File[] getLogs(){
+        return new File(logFolder).listFiles();
+    }
 }

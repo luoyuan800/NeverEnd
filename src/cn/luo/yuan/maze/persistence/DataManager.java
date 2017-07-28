@@ -16,12 +16,13 @@ import cn.luo.yuan.maze.model.goods.GoodsProperties;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
-import cn.luo.yuan.maze.persistence.serialize.ObjectDB;
+import cn.luo.yuan.maze.serialize.ObjectTable;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
 import cn.luo.yuan.maze.task.Task;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.io.InvalidClassException;
 import java.io.Serializable;
 import java.util.*;
@@ -52,8 +53,8 @@ public class DataManager implements DataManagerInterface {
     private SerializeLoader<Skill> skillLoader;
     private SerializeLoader<ClickSkill> clickSkillLoader;
     private SerializeLoader<Task> taskLoader;
-    private ObjectDB<NeverEndConfig> configDB;
-    private ObjectDB<Hero> defenderDB;
+    private ObjectTable<NeverEndConfig> configDB;
+    private ObjectTable<Hero> defenderDB;
 
     private Sqlite database;
     private Context context;
@@ -74,8 +75,8 @@ public class DataManager implements DataManagerInterface {
         skillLoader = new SerializeLoader<>(Skill.class, context, index);
         clickSkillLoader = new SerializeLoader<>(ClickSkill.class, context, index);
         taskLoader = new SerializeLoader<Task>(Task.class, context, index);
-        configDB = new ObjectDB<>(NeverEndConfig.class, context);
-        defenderDB = new ObjectDB<>(Hero.class, context);
+        configDB = new ObjectTable<>(NeverEndConfig.class, context.getDir(NeverEndConfig.class.getName(), Context.MODE_PRIVATE));
+        defenderDB = new ObjectTable<>(Hero.class, context.getDir(Hero.class.getName(), Context.MODE_PRIVATE));
         this.context = context;
         e.scheduleAtFixedRate(accessoryLoader.getDb(),1000, 500, TimeUnit.MILLISECONDS);
         e.scheduleAtFixedRate(petLoader.getDb(),1000, 500, TimeUnit.MILLISECONDS);
@@ -425,7 +426,11 @@ public class DataManager implements DataManagerInterface {
         } else if (object instanceof Goods) {
             saveGoods((Goods) object);
         } else if (object instanceof NeverEndConfig) {
-            configDB.save((NeverEndConfig) object, object.getId());
+            try {
+                configDB.save((NeverEndConfig) object, object.getId());
+            } catch (IOException e1) {
+                LogHelper.logException(e1, "save config");
+            }
         }
     }
 
@@ -448,15 +453,15 @@ public class DataManager implements DataManagerInterface {
 
     public NeverEndConfig getConfig() {
         NeverEndConfig config = null;
-        try {
-            config = configDB.loadObject(String.valueOf(index));
-        } catch (InvalidClassException e) {
-            e.printStackTrace();
-        }
+        config = configDB.loadObject(String.valueOf(index));
         if (config == null) {
             config = new NeverEndConfig();
             config.setId(String.valueOf(index));
-            configDB.save(config);
+            try {
+                configDB.save(config);
+            } catch (IOException e1) {
+                LogHelper.logException(e1, "Save Config while get");
+            }
         }
         return config;
     }
@@ -471,7 +476,11 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void addDefender(Hero hero, long level){
-        defenderDB.save(hero, String.valueOf(level));
+        try {
+            defenderDB.save(hero, String.valueOf(level));
+        } catch (IOException e1) {
+            LogHelper.logException(e1, "addDefender");
+        }
     }
 
     @NotNull

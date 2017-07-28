@@ -2,7 +2,7 @@ package cn.luo.yuan.maze.server.persistence
 
 import cn.luo.yuan.maze.model.*
 import cn.luo.yuan.maze.model.goods.Goods
-import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable
+import cn.luo.yuan.maze.serialize.ObjectTable
 import cn.luo.yuan.maze.utils.StringUtils
 import java.io.File
 import java.lang.ref.SoftReference

@@ -21,6 +21,12 @@ public class StringUtils {
         return DecimalFormatRound(value,2) + "%";
     }
 
+    public static boolean isCivil(String word) {
+        return !(word.contains("你妈的") || word.contains("日你") || word.contains("你妈") ||
+                word.contains("SB") || word.contains("sb") || word.contains("我日") ||
+                word.toLowerCase().contains("fuck") || word.contains("傻逼") || word.contains("粪") || word.contains("屎") || word.contains("屁"));
+    }
+
     public static String formatNumber(long num) {
         Double value;
         if (num > 100000000) {
@@ -189,6 +195,14 @@ public class StringUtils {
         }
         return dateInstance.format(new Date(System.currentTimeMillis()));
     }
+
+    public static String formatData(long data){
+        if(dateInstance == null){
+            dateInstance = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.MEDIUM);
+        }
+        return dateInstance.format(new Date(data));
+    }
+
     private static DateFormat timeInstance;
     public static String getCurrentTime() {
         if(timeInstance == null){

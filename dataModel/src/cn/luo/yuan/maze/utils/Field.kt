@@ -6,6 +6,7 @@ package cn.luo.yuan.maze.utils
 class Field {
     //Use static file should define companion object
     companion object {
+        const val FILE_NAME: String = "fileName"
         const val LEVEL: String = "level"
         const val SIGN_FIELD: String = "sign"
         const val LIMIT_STRING: String = "limit"
@@ -27,7 +28,7 @@ class Field {
         const val RESPONSE_OBJECT_TYPE = "object"
         const val RESPONSE_STRING_TYPE = "string"
         const val RESPONSE_NONE_TYPE = "none"
-        const val SERVER_URL = "http://luoyuan800.java.cdnjsp.org/app/"
+        const val SERVER_URL = "http://10.154.14.30:8888/Web_Server/app/"
         const val PET_TYPE = 1;
         const val ACCESSORY_TYPE = 2;
         const val GOODS_TYPE = 3;

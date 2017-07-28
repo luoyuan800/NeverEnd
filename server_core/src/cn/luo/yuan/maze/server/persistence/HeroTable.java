@@ -8,9 +8,8 @@ import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
+import cn.luo.yuan.maze.serialize.ObjectTable;
 import cn.luo.yuan.maze.server.LogHelper;
-import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection;
-import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable;
 import cn.luo.yuan.maze.service.AccessoryHelper;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.Nullable;
@@ -115,7 +114,7 @@ public class HeroTable {
 
     public ServerData getBackHero(String id) throws IOException {
         ServerRecord record = getRecord(id);
-        if(record!=null && record.getData()!=null && record.getData().getHero()!=null) {
+        if (record != null && record.getData() != null && record.getData().getHero() != null) {
             LogHelper.info(record.getData().getHero().getDisplayName() + " Get back!");
             ServerData data = new ServerData(record.getData());
             record.setData(null);
@@ -127,7 +126,7 @@ public class HeroTable {
             record.setRestoreLimit(Data.RESTORE_LIMIT);
             save();
             return data;
-        }else{
+        } else {
             return null;
         }
     }
@@ -154,6 +153,10 @@ public class HeroTable {
         return recordDb.size();
     }
 
+    public List<String> getAllHeroIds() {
+        return recordDb.loadIds();
+    }
+
     private Hero loadHero(String id) throws IOException, ClassNotFoundException {
         ServerRecord record = getRecord(id);
         if (record != null) {
@@ -178,10 +181,6 @@ public class HeroTable {
             }
         }
         return null;
-    }
-
-    public List<String> getAllHeroIds(){
-        return recordDb.loadIds();
     }
 
 }

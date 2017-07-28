@@ -6,7 +6,7 @@ import cn.luo.yuan.maze.model.SellItem
 import cn.luo.yuan.maze.model.goods.Goods
 import cn.luo.yuan.maze.server.LogHelper
 import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection
-import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable
+import cn.luo.yuan.maze.serialize.ObjectTable
 import cn.luo.yuan.maze.utils.Random
 import java.io.File
 import java.sql.Connection

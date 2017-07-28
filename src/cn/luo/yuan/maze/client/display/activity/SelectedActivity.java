@@ -16,6 +16,7 @@ import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.persistence.IndexManager;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
+import cn.luo.yuan.maze.persistence.SaveFileManager;
 import cn.luo.yuan.maze.utils.StringUtils;
 import sw.ls.ps.AdManager;
 import sw.ls.ps.normal.spot.SpotManager;
@@ -27,7 +28,7 @@ import java.util.List;
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class SelectedActivity extends Activity implements View.OnClickListener,View.OnLongClickListener{
+public class SelectedActivity extends BaseActivity implements View.OnClickListener,View.OnLongClickListener{
     private IndexManager indexManager;
     private StringAdapter<HeroIndex> adapter;
     private final static String appId = "1b3d76d520cfe2eb";
@@ -45,6 +46,10 @@ public class SelectedActivity extends Activity implements View.OnClickListener,V
             return;
         }
         super.onCreate(savedInstanceState);
+        SaveFileManager saveFileManager = new SaveFileManager(this);
+        if(saveFileManager.isOlderSaveExisted()){
+            saveFileManager.clear();
+        }
         setContentView(R.layout.selected_index);
         Resource.init(this);
 //        setupAd();

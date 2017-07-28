@@ -98,10 +98,8 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
                                 if (StringUtils.isNotEmpty(otherRecord.data!!.helloMsg["win"])) {
                                     messager.speak(ohero.displayName, otherRecord.data!!.helloMsg["win"])
                                 }
-                                messager.materialGet(ohero.displayName, awardMaterial)
                                 lost(record)
                                 win(awardMaterial, ohero, messager, otherRecord)
-
                             }
                             continue@loop
                         }

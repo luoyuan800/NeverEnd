@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
+import cn.luo.yuan.maze.client.display.handler.CrashHandler;
 import cn.luo.yuan.maze.client.display.handler.GameActivityViewHandler;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
 import cn.luo.yuan.maze.client.utils.LogHelper;
@@ -51,8 +52,16 @@ public class NeverEnd extends Application implements InfoControlInterface {
     private AccessoryHelper accessoryHelper;
     private PetMonsterHelper petMonsterHelper;
     private TaskManagerImp taskManager;
+    private CrashHandler crashHandler;
+    private ServerService serverService;
 
     public NeverEnd() {
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        crashHandler = new CrashHandler(this);
     }
 
     public ScheduledExecutorService getExecutor() {
@@ -77,13 +86,17 @@ public class NeverEnd extends Application implements InfoControlInterface {
 
     @Override
     public void stopGame() {
-        executor.shutdown();
-        executor = null;
-        dataManager.fuseCache();
-        dataManager = null;
-        petMonsterHelper = null;
-        accessoryHelper = null;
-        taskManager = null;
+        try {
+            executor.shutdown();
+            executor = null;
+            dataManager.fuseCache();
+            dataManager = null;
+            petMonsterHelper = null;
+            accessoryHelper = null;
+            taskManager = null;
+        }catch (Exception e){
+            LogHelper.logException(e, "stopGame");
+        }
 
     }
 
@@ -128,6 +141,17 @@ public class NeverEnd extends Application implements InfoControlInterface {
 
     public int getIndex() {
         return dataManager.getIndex();
+    }
+
+    public ServerService getServerService() {
+        if(serverService == null){
+            serverService = new ServerService(getVersion());
+        }
+        return serverService;
+    }
+
+    public void setServerService(ServerService serverService) {
+        this.serverService = serverService;
     }
 
     void setHero(Hero hero) {

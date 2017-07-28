@@ -44,7 +44,7 @@ public class NeverEndServlet extends HttpServlet {
     public NeverEndServlet() throws IOException, ClassNotFoundException {
         super();
         LogHelper.init(root);
-        process.setDatabase(new MysqlConnection());
+        //process.setDatabase(new MysqlConnection());
         process.start();
     }
 
@@ -149,6 +149,11 @@ public class NeverEndServlet extends HttpServlet {
         PrintWriter writer = null;
         Boolean success = null;
         switch (path) {
+            case UPLOAD_SAVE:
+                String name = process.uploadFile(request.getHeader(Field.FILE_NAME), request.getInputStream());
+                writer = response.getWriter();
+                writer.write(name);
+                break;
             case ADD_ACCESSORY:
                 process.addAccessory(request.getParameter("name"),request.getParameter("tag"),
                         request.getParameter("type"), request.getParameter("author"),

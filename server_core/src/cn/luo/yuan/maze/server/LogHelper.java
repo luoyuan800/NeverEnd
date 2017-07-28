@@ -14,7 +14,7 @@ import java.util.logging.SimpleFormatter;
  */
 public class LogHelper {
     public static final Logger logger = Logger.getLogger("NeverEndServer");
-    public static boolean debug = false;
+    public static boolean debug = MainProcess.debug;
 
     public static void init(String root) {
         try {

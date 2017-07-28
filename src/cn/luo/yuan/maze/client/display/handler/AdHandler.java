@@ -32,7 +32,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     private int award = 1;
     private OnlineActivity context;
     private boolean yomob = false;
-    private boolean debug = true;
+    private boolean debug = false;
 
     public AdHandler(OnlineActivity a) {
         this.context = a;

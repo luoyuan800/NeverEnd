@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit;
  * Created by luoyuan on 2017/6/24.
  */
 public class OnlineActivity extends Activity {
-    public ServerService service = new ServerService(getVersion());
+    public ServerService service;
     public NeverEnd gameContext;
     public ScheduledExecutorService executor;
     public OnlineActivityHandler handler = new OnlineActivityHandler(this);
@@ -49,13 +49,14 @@ public class OnlineActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         gameContext = (NeverEnd) getApplication();
+        service = gameContext.getServerService();
         Resource.init(this);
         LogHelper.initLogSystem(this);
         setContentView(R.layout.online_view);
         executor = Executors.newScheduledThreadPool(4);
         gameContext.setContext(this);
-        initView();
         onClickHandler = new OnlineActivityOnClickHandler(this, gameContext);
+        initView();
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -141,16 +142,7 @@ public class OnlineActivity extends Activity {
 
     }
 
-    public String getVersion() {
-        try {
-            String pkName = getPackageName();
-            int versionCode = getPackageManager()
-                    .getPackageInfo(pkName, 0).versionCode;
-            return versionCode + "";
-        } catch (Exception e) {
-            return "0";
-        }
-    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {

@@ -1,7 +1,7 @@
 package cn.luo.yuan.maze.server.persistence
 
 import cn.luo.yuan.maze.model.*
-import cn.luo.yuan.maze.server.persistence.serialize.ObjectTable
+import cn.luo.yuan.maze.serialize.ObjectTable
 import cn.luo.yuan.maze.utils.Random
 import java.io.File
 import java.io.IOException
