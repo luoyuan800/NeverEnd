@@ -16,6 +16,10 @@
             android:icon="@android:drawable/ic_menu_compass"
             android:title="@string/reincarnation_label"/>
     <item
+            android:id="@+id/accessory"
+            android:icon="@android:drawable/ic_menu_gallery"
+            android:title="@string/accessory_label"/>
+    <item
             android:id="@+id/goods"
             android:icon="@android:drawable/ic_menu_gallery"
             android:title="@string/item_label"/>
@@ -71,6 +75,7 @@
             android:icon="@android:drawable/ic_menu_share"
             android:title="分享"/>
     <item
+            android:visible="false"
             android:id="@+id/crash"
             android:icon="@android:drawable/ic_menu_share"
             android:title="测试"/>

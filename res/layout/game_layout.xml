@@ -70,6 +70,39 @@
         </LinearLayout>
 
         <LinearLayout
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="攻击:"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/hero_atk"
+                    android:text="100000W"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="防御:"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/hero_def"
+                    android:text="100000W"/>
+        </LinearLayout>
+        <LinearLayout
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
@@ -309,7 +342,7 @@
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="3">
 
             <LinearLayout
@@ -318,16 +351,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/skill_layout_1"
-                    android:layout_weight="0.75">
+                    android:layout_weight="1">
 
                 <Button
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:background="@drawable/xvwu"
                         android:id="@+id/first_skill"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:gravity="center"
                         android:textSize="12sp"
                         android:onClick="onClick"
-                        android:background="@color/toumin"
                         android:layout_marginStart="10dp"
                         />
 
@@ -360,7 +394,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/skill_layout_2"
-                    android:layout_weight="0.77"
+                    android:layout_weight="1"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp">
 

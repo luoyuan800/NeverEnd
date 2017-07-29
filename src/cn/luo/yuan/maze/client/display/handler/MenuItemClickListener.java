@@ -19,6 +19,7 @@ import cn.luo.yuan.maze.client.display.dialog.*;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.NeverEndConfig;
+import cn.luo.yuan.maze.service.InfoControlInterface;
 
 public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
     private Context context;
@@ -48,6 +49,14 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.accessory:
+                new AccessoriesDialog(control, new AccessoriesDialog.OnAccessoryChangeListener() {
+                    @Override
+                    public void change(InfoControlInterface context) {
+                        control.getViewHandler().refreshFreqProperties();
+                    }
+                }).show();
+                break;
             case R.id.crash:
                 throw new RuntimeException("test exception");
             case R.id.skills:

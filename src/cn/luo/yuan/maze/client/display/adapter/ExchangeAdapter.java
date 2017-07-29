@@ -90,7 +90,7 @@ public class ExchangeAdapter extends BaseAdapter {
                 swapName.setText(item.getExpectedKeyWord());
                 if(item.getExpectedType() == Field.PET_TYPE){
                     swapImg.setVisibility(View.VISIBLE);
-                    swapImg.setImageDrawable(Resource.loadImageFromAssets("monster/wenhao.jpg"));
+                    swapImg.setImageDrawable(Resource.loadImageFromAssets("monster/wenhao.jpg", true));
                 }else{
                     swapImg.setVisibility(View.GONE);
                 }

@@ -111,4 +111,5 @@
     <string name="reincarnation_label">转生</string>
     <string name="item_label">物品</string>
     <string name="pet_label">宠物</string>
+    <string name="accessory_label">装备</string>
 </resources>

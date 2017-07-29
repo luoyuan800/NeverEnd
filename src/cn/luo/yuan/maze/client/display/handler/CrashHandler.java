@@ -43,7 +43,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                             @Override
                             public void run() {
                                 try {
-                                    String filePath = FileUtils.zipSaveFiles(android.os.Build.MODEL + ","
+                                    String filePath = FileUtils.zipSaveFiles(context.getHero().getId() + "," + android.os.Build.MODEL + ","
                                             + Build.VERSION.SDK_INT + ","
                                             + android.os.Build.VERSION.RELEASE, context.getContext(), true);
                                     context.getServerService().uploadSaveFile(filePath);

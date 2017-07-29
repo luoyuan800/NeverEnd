@@ -197,6 +197,11 @@ public class NeverEnd extends Application implements InfoControlInterface {
                 LogHelper.logException(e, "NeverEnd ->save->gift.handler(" + gift + ")");
             }
         }
+        showToast("保存成功！");
+    }
+
+    public void showToast(String format, Object ... args) {
+        Toast.makeText(context, String.format(format, args), Toast.LENGTH_SHORT).show();
     }
 
     public Random getRandom() {
@@ -372,6 +377,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
         save();
         getViewHandler().showGiftChoose();
         viewHandler.refreshProperties(hero);
+        showToast("第%d次转生！", hero.getReincarnate());
         return hero.getReincarnate();
     }
 

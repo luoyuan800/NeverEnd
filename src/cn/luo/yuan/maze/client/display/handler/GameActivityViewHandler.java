@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.text.Html;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -45,55 +46,50 @@ public class GameActivityViewHandler extends Handler {
         }
     };
 
+    private void updateSkillButton(Button button, Skill skill){
+        Skill skillE = (Skill)button.getTag(R.string.item);
+        if(skillE == null || !skillE.getId().equals(skill.getId())){
+            button.setBackground(Resource.getSkillDrawable(skill));
+            button.setTag(R.string.item, skill);
+        }
+        if(skill instanceof UpgradeAble){
+            button.setText(String.format("X%d", ((UpgradeAble)skill).getLevel()));
+        }else{
+            button.setText(Resource.getString(R.string.empty));
+        }
+    }
+
+    private void resetSkillButton(Button button){
+        button.setTag(R.string.item, null);
+        button.setBackgroundResource(0);
+        button.setText(Resource.getString(R.string.not_mount));
+    }
+
     private void heroSkill(Hero hero) {
         Skill[] heroSkills = hero.getSkills();
         Button first = (Button) context.findViewById(R.id.first_skill);
         if (heroSkills.length > 0 && heroSkills[0] != null && !(heroSkills[0] instanceof EmptySkill)) {
-            first.setBackground(Resource.getSkillDrawable(heroSkills[0]));
-            if(heroSkills[0] instanceof UpgradeAble){
-                first.setText(String.format("X%d", ((UpgradeAble)heroSkills[0]).getLevel()));
-            }else{
-                first.setText(Resource.getString(R.string.empty));
-            }
+            updateSkillButton(first,heroSkills[0]);
         } else {
-            first.setBackgroundResource(0);
-            first.setText(Resource.getString(R.string.not_mount));
+            resetSkillButton(first);
         }
-        TextView second = (TextView) context.findViewById(R.id.secondary_skill);
+        Button second = (Button) context.findViewById(R.id.secondary_skill);
         if (heroSkills.length > 1 && heroSkills[1] != null && !(heroSkills[1] instanceof EmptySkill)) {
-            second.setBackground(Resource.getSkillDrawable(heroSkills[1]));
-            if(heroSkills[1] instanceof UpgradeAble){
-                second.setText(String.format("X%d", ((UpgradeAble)heroSkills[1]).getLevel()));
-            }else{
-                second.setText(Resource.getString(R.string.empty));
-            }
+            updateSkillButton(second, heroSkills[1]);
         } else {
-            second.setBackgroundResource(0);
-            second.setText(R.string.not_mount);
+            resetSkillButton(second);
         }
-        TextView third = (TextView) context.findViewById(R.id.third_skill);
+        Button third = (Button) context.findViewById(R.id.third_skill);
         if (heroSkills.length > 2 && heroSkills[2] != null && !(heroSkills[2] instanceof EmptySkill)) {
-            third.setBackground(Resource.getSkillDrawable(heroSkills[2]));
-            if(heroSkills[2] instanceof UpgradeAble){
-                third.setText(String.format("X%d", ((UpgradeAble)heroSkills[2]).getLevel()));
-            }else{
-                third.setText(Resource.getString(R.string.empty));
-            }
+            updateSkillButton(third,heroSkills[2]);
         } else {
-            third.setBackgroundResource(0);
-            third.setText(Resource.getString(R.string.not_mount));
+            resetSkillButton(third);
         }
-        TextView fourth = (TextView) context.findViewById(R.id.fourth_skill);
+        Button  fourth = (Button) context.findViewById(R.id.fourth_skill);
         if (heroSkills.length > 3 && heroSkills[3] != null && !(heroSkills[3] instanceof EmptySkill)) {
-            fourth.setEnabled(true);
-            fourth.setBackground(Resource.getSkillDrawable(heroSkills[3]));
-            if(heroSkills[3] instanceof UpgradeAble){
-                fourth.setText(String.format("X%d", ((UpgradeAble)heroSkills[3]).getLevel()));
-            }else{
-                fourth.setText(Resource.getString(R.string.empty));
-            }
+            updateSkillButton(fourth, heroSkills[3]);
         } else {
-            fourth.setBackgroundResource(0);
+            resetSkillButton(fourth);
             if (hero.getReincarnate() >= 2) {
                 fourth.setText(R.string.not_mount);
                 fourth.setEnabled(true);
@@ -102,17 +98,11 @@ public class GameActivityViewHandler extends Handler {
                fourth.setEnabled(false);
             }
         }
-        TextView fifth = (TextView) context.findViewById(R.id.fifit_skill);
+        Button fifth = (Button) context.findViewById(R.id.fifit_skill);
         if (heroSkills.length > 4 && heroSkills[4] != null && !(heroSkills[4] instanceof EmptySkill)) {
-            fifth.setEnabled(true);
-            fifth.setBackground(Resource.getSkillDrawable(heroSkills[4]));
-            if(heroSkills[4] instanceof UpgradeAble){
-                fifth.setText(String.format("X%d", ((UpgradeAble)heroSkills[4]).getLevel()));
-            }else{
-                fifth.setText(Resource.getString(R.string.empty));
-            }
+            updateSkillButton(fifth, heroSkills[4]);
         } else {
-            fifth.setBackgroundResource(0);
+            resetSkillButton(fifth);
             if (hero.getReincarnate() >= 4) {
                 fifth.setText(R.string.not_mount);
                 fifth.setEnabled(true);
@@ -121,17 +111,11 @@ public class GameActivityViewHandler extends Handler {
                 fifth.setEnabled(false);
             }
         }
-        TextView sixth = (TextView) context.findViewById(R.id.sixth_skill);
+        Button sixth = (Button) context.findViewById(R.id.sixth_skill);
         if (heroSkills.length > 5 && heroSkills[5] != null && !(heroSkills[5] instanceof EmptySkill)) {
-            sixth.setEnabled(true);
-            sixth.setBackground(Resource.getSkillDrawable(heroSkills[5]));
-            if(heroSkills[5] instanceof UpgradeAble){
-                sixth.setText(String.format("X%d", ((UpgradeAble)heroSkills[5]).getLevel()));
-            }else{
-                sixth.setText(Resource.getString(R.string.empty));
-            }
+            updateSkillButton(sixth, heroSkills[5]);
         } else {
-            sixth.setBackgroundResource(0);
+            resetSkillButton(sixth);
             if (hero.getReincarnate() >= 8) {
                 sixth.setText(R.string.not_mount);
                 sixth.setEnabled(true);
@@ -193,6 +177,8 @@ public class GameActivityViewHandler extends Handler {
             ((TextView) context.findViewById(R.id.hero_click)).setText(StringUtils.formatNumber(context.control.getHero().getClick()));
             ((TextView) context.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(context.control.getHero().getCurrentHp()));
             ((TextView) context.findViewById(R.id.hero_max_hp)).setText(StringUtils.formatNumber(context.control.getHero().getUpperHp()));
+            ((TextView) context.findViewById(R.id.hero_atk)).setText(StringUtils.formatNumber(context.control.getHero().getUpperAtk()));
+            ((TextView) context.findViewById(R.id.hero_def)).setText(StringUtils.formatNumber(context.control.getHero().getUpperDef()));
 
         }
     };
@@ -205,22 +191,28 @@ public class GameActivityViewHandler extends Handler {
             ImageView second = (ImageView)context.findViewById(R.id.pet_2);
             ImageView third = (ImageView)context.findViewById(R.id.pet_3);
             if(pets.size() > 0){
+                first.setVisibility(View.VISIBLE);
                 Pet pet = pets.get(0);
                 updatePetView(pet, first);
             }else{
                 first.setImageResource(0);
+                first.setVisibility(View.INVISIBLE);
             }
             if(pets.size() > 1){
+                second.setVisibility(View.VISIBLE);
                 Pet pet = pets.get(1);
                 updatePetView(pet, second);
             }else{
                 second.setImageResource(0);
+                second.setVisibility(View.INVISIBLE);
             }
             if(pets.size() > 2){
+                third.setVisibility(View.VISIBLE);
                 Pet pet = pets.get(2);
                 updatePetView(pet, third);
             }else{
                 third.setImageResource(0);
+                third.setVisibility(View.INVISIBLE);
             }
             ((Button)context.findViewById(R.id.more_pet)).setText(String.format("%d+",pets.size()));
         }
@@ -243,12 +235,12 @@ public class GameActivityViewHandler extends Handler {
                 }
             }
             if(!notChange) {
+                petView.setImageDrawable(drawable);
                 if (pet.getCurrentHp() > 0) {
                     drawable.clearColorFilter();
                 } else {
                     drawable.setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
                 }
-                petView.setImageDrawable(drawable);
             }
 
         }
@@ -316,7 +308,7 @@ public class GameActivityViewHandler extends Handler {
                         }
                         refreshProperties(neverEnd.getHero());
                     }
-                });
+                }).show();
             }
         });
     }

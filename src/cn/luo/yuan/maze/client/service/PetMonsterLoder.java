@@ -49,15 +49,15 @@ public class PetMonsterLoder implements MonsterLoader {
     }
 
     public static Drawable loadMonsterImage(int id) {
-        Drawable drawable = Resource.loadImageFromAssets("monster/" + id);
+        Drawable drawable = Resource.loadImageFromAssets("monster/" + id, false);
         if (drawable == null) {
-            drawable = Resource.loadImageFromAssets("monster/" + id + ".jpg");
+            drawable = Resource.loadImageFromAssets("monster/" + id + ".jpg", false);
         }
         if (drawable == null) {
-            drawable = Resource.loadImageFromAssets("monster/" + id + ".png");
+            drawable = Resource.loadImageFromAssets("monster/" + id + ".png", false);
         }
         if (drawable == null) {
-            drawable = Resource.loadImageFromAssets("monster/wenhao.jpg");
+            drawable = Resource.loadImageFromAssets("monster/wenhao.jpg", false);
         }
         return drawable;
     }

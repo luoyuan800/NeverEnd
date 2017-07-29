@@ -40,11 +40,13 @@ public class RunningService implements RunningServiceInterface {
     private HarmAble target;
     private RandomEventService randomEventService;
     private PetMonsterHelper monsterHelper;
+    private long saveTime = 0L;
     public NeverEnd getContext(){
         return gameContext;
     }
     public RunningService(Hero hero, Maze maze, NeverEnd gameContext, DataManager dataManager, long fps) {
         startTime = System.currentTimeMillis();
+        saveTime = startTime;
         this.hero = hero;
         this.gameContext = gameContext;
         this.maze = maze;
@@ -102,7 +104,7 @@ public class RunningService implements RunningServiceInterface {
                     }
 
                     gameContext.getExecutor().submit(eggWarn);
-                    if ((System.currentTimeMillis() - startTime) % 1000 == 300) {//每隔五分钟自动存储一次
+                    if ((System.currentTimeMillis() - saveTime) >= 300000) {//每隔五分钟自动存储一次
                         gameContext.save();
                     }
                     maze.setStep(maze.getStep() + 1);

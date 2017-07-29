@@ -32,7 +32,7 @@ public class Resource {
     private static Context context;
 
     public static Drawable getSkillDrawable(Skill skill){
-        return loadImageFromAssets("skill/" + skill.getClass().getSimpleName() + ".png");
+        return loadImageFromAssets("skill/" + skill.getClass().getSimpleName() + ".png", false);
     }
 
     private static void addToCache(Object key, Drawable drawable) {
@@ -61,12 +61,17 @@ public class Resource {
         return String.format(getString(id), (Object[]) args);
     }
 
-    public static Drawable loadImageFromAssets(String name) {
-        Drawable drawable = drawableCache.get(name);
+    public static Drawable loadImageFromAssets(String name, boolean cache) {
+        Drawable drawable = null;
+        if(cache) {
+            drawable = drawableCache.get(name);
+        }
         if (drawable == null) {
             try {
                 drawable = new BitmapDrawable((Resources) null, BitmapFactory.decodeStream(context.getAssets().open(name)));
-                addToCache(name, drawable);
+                if(cache) {
+                    addToCache(name, drawable);
+                }
             } catch (IOException e) {
                 //LogHelper.logException(e, "False to load image from assets: " + name);
             }
