@@ -195,28 +195,31 @@ public class GameActivityViewHandler extends Handler {
                 Pet pet = pets.get(0);
                 updatePetView(pet, first);
             }else{
-                first.setImageResource(0);
-                first.setVisibility(View.INVISIBLE);
+                resetPetButton(first);
             }
             if(pets.size() > 1){
                 second.setVisibility(View.VISIBLE);
                 Pet pet = pets.get(1);
                 updatePetView(pet, second);
             }else{
-                second.setImageResource(0);
-                second.setVisibility(View.INVISIBLE);
+               resetPetButton(second);
             }
             if(pets.size() > 2){
                 third.setVisibility(View.VISIBLE);
                 Pet pet = pets.get(2);
                 updatePetView(pet, third);
             }else{
-                third.setImageResource(0);
-                third.setVisibility(View.INVISIBLE);
+                resetPetButton(third);
             }
             ((Button)context.findViewById(R.id.more_pet)).setText(String.format("%d+",pets.size()));
         }
     };
+
+    private void resetPetButton(ImageView first) {
+        first.setTag(R.string.item, (Pet)null);
+        first.setImageResource(0);
+        first.setVisibility(View.INVISIBLE);
+    }
 
     private void updatePetView(Pet pet, ImageView petView) {
         if(pet!=null){
@@ -242,8 +245,8 @@ public class GameActivityViewHandler extends Handler {
                     drawable.setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
                 }
             }
-
         }
+        petView.setTag(R.string.item, pet);
     }
 
     private Runnable refreshPropertiesTask = new Runnable() {
