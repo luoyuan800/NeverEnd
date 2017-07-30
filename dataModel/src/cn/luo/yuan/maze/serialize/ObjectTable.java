@@ -49,10 +49,10 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         if (entry.exists()) {
             return update(object, id);
         } else {
-            saveObject(object, entry);
             if(object instanceof IDModel){
                 ((IDModel) object).setId(id);
             }
+            saveObject(object, entry);
             cache.put(id, new SoftReference<T>(object, queue));
         }
         return id;

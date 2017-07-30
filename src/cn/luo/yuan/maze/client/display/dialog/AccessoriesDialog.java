@@ -175,8 +175,11 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
     @Override
     public void onClick(View v) {
         if (v.getTag(R.string.item) instanceof Accessory) {
-            main = (Accessory) v.getTag(R.string.item);
-            refreshMainAccessoryView();
+            Accessory tag = (Accessory) v.getTag(R.string.item);
+            if(fuse == null || !tag.equals(fuse)) {
+                main = tag;
+                refreshMainAccessoryView();
+            }
         }
     }
 

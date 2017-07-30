@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 public class LogHelper {
     private static String pkgName;
     private static int versionCode;
-    static String logFolder = FileUtils.SD_PATH + "/neverend/log";
+    static String logFolder = FileUtils.SD_PATH + "/log";
 
     public static void initLogSystem(Context context){
         pkgName = context.getPackageName();
