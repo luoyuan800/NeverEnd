@@ -294,6 +294,7 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
             control.getHero().getPets().remove(currentPet);
             currentPet.setMounted(false);
         }
+        adapter.notifyDataSetChanged();
         control.getDataManager().savePet(currentPet);
         control.getViewHandler().refreshPets(control.getHero());
     }

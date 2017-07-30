@@ -172,7 +172,6 @@ public class RunningService implements RunningServiceInterface {
                                         Pet pet = tryCatch((Monster) monster, dataManager.getPetCount(), maze.getLevel());
                                         if (pet != null) {
                                             gameContext.addMessage(String.format(Resource.getString(R.string.pet_catch), pet.getDisplayName()));
-                                            dataManager.savePet(pet);
                                             for (PetCatchListener listener : petCatchListeners.values()) {
                                                 listener.catchPet(pet);
                                             }
@@ -181,6 +180,7 @@ public class RunningService implements RunningServiceInterface {
                                                 pet.setMounted(true);
                                                 gameContext.getViewHandler().refreshPets(hero);
                                             }
+                                            dataManager.savePet(pet);
                                         }
                                     }
                                     for (WinListener listener : winListeners.values()) {

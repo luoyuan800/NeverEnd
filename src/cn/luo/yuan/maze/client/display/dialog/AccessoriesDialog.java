@@ -102,26 +102,26 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
                     context.getDataManager().delete(fuse);
                     accessoryAdapter.getData().remove(fuse);
                     if (context.getAccessoryHelper().fuse(main, fuse)) {
+                        fuse = null;
                         new AlertDialog.Builder(context.getContext()).setTitle("升级成功").
                                 setMessage(Html.fromHtml(main.toString())).setCancelable(false).
                                 setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         refreshMainAccessoryView();
-                                        fuse = null;
                                         refreshFuseAccessoryView();
                                         accessoryAdapter.notifyDataSetChanged();
                                     }
                                 }).
                                 create().show();
                     } else {
+                        fuse = null;
                         new AlertDialog.Builder(context.getContext()).setTitle("升级失败").
                                 setMessage(Html.fromHtml(main.toString())).
                                 setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         refreshMainAccessoryView();
-                                        fuse = null;
                                         refreshFuseAccessoryView();
                                         accessoryAdapter.notifyDataSetChanged();
                                     }

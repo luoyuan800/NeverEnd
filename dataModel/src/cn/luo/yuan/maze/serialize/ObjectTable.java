@@ -3,6 +3,8 @@ package cn.luo.yuan.maze.serialize;
 
 import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.model.Index;
+import cn.luo.yuan.maze.utils.StringUtils;
+import com.sun.xml.internal.bind.v2.model.core.ID;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,10 +45,14 @@ public class ObjectTable<T extends Serializable> implements Runnable {
 
     public synchronized String save(T object, String id) throws IOException {
         File entry = buildFile(id);
+        entry.setWritable(true);
         if (entry.exists()) {
             return update(object, id);
         } else {
             saveObject(object, entry);
+            if(object instanceof IDModel){
+                ((IDModel) object).setId(id);
+            }
             cache.put(id, new SoftReference<T>(object, queue));
         }
         return id;
@@ -63,11 +69,14 @@ public class ObjectTable<T extends Serializable> implements Runnable {
     }
 
     public String save(T object) throws IOException {
+        String id;
         if (object instanceof IDModel) {
-            if (((IDModel) object).getId() == null) {
-                ((IDModel) object).setId(UUID.randomUUID().toString());
+            if (StringUtils.isEmpty(((IDModel) object).getId())) {
+                id = UUID.randomUUID().toString();
+            }else{
+                id = ((IDModel) object).getId();
             }
-            return save(object, ((IDModel) object).getId());
+            return save(object, id);
         } else {
             return save(object, UUID.randomUUID().toString());
         }
@@ -114,8 +123,10 @@ public class ObjectTable<T extends Serializable> implements Runnable {
     }
 
     public void delete(String id) {
-        buildFile(id).delete();
-        cache.remove(id);
+        if(StringUtils.isNotEmpty(id)) {
+            buildFile(id).delete();
+            cache.remove(id);
+        }
     }
 
     public void fuse() throws IOException {

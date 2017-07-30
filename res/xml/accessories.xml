@@ -252,7 +252,7 @@
         <description value="您捡到一只六娃"/>
         <color value="#556B2F"/>
         <author value=""/>
-        <price value="27000"/>
+        <price value="127000"/>
         <type value="帽子"/>
         <properties>
             <effect name="StrEffect" min="50" max="1500" rate="100" element="false"/>

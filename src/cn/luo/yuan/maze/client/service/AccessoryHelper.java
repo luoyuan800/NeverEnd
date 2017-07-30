@@ -56,9 +56,13 @@ public class AccessoryHelper extends cn.luo.yuan.maze.service.AccessoryHelper {
     }
 
     public boolean fuse(Accessory major, Accessory minor) {
-        if (major.getName().equalsIgnoreCase(minor.getName()) && major.getType().equalsIgnoreCase(minor.getType())) {
+        if (major.getType().equalsIgnoreCase(minor.getType())) {
             float colorReduce = Data.getColorReduce(major.getColor());
-            if (random.nextLong(major.getLevel()) < Data.ACCESSORY_FLUSE_LIMIT) {
+            int fluseLimit = Data.ACCESSORY_FLUSE_LIMIT;
+            if(!major.getName().equalsIgnoreCase(minor.getName())){
+                fluseLimit *= 2;
+            }
+            if (random.nextLong(major.getLevel()) < fluseLimit) {
                 if(major.getColor().equals(Data.DARKGOLD_COLOR)){
                     if(random.nextLong(major.getLevel()) > Data.DARKGOLD_RATE_REDUCE){
                         return false;
