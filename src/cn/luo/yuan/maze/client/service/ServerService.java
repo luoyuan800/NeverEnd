@@ -61,7 +61,7 @@ public class ServerService {
             HttpURLConnection connection = server.getHttpURLConnection(SUBMIT_HERO, RestConnection.POST);
             return Field.RESPONSE_RESULT_SUCCESS.equals(server.connect(uploaddData, connection));
         } catch (Exception e) {
-            LogHelper.logException(e, "ServiceService->45");
+            LogHelper.logException(e, "ServiceService->uploadHero");
         }
         return false;
     }

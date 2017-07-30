@@ -13,7 +13,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
-import cn.luo.yuan.maze.client.display.activity.ad.SplashActivity;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.client.display.dialog.*;
 import cn.luo.yuan.maze.client.service.NeverEnd;
@@ -120,7 +119,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 sharingTip.show();
                 break;
             case R.id.save:
-                control.save();
+                control.save(true);
                 break;
             default:
                 AlertDialog dialog = new AlertDialog.Builder(context).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {

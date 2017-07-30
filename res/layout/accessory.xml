@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:layout_alignParentStart="true"
@@ -10,91 +11,102 @@
               android:baselineAligned="false">
 
     <LinearLayout
-            android:orientation="vertical"
-            android:layout_weight="1"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:weightSum="1">
-
-        <TextView
-                android:textStyle="bold"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/accessory_name"/>
-
-        <TextView
-                android:textStyle="bold"
-                android:textColor="@color/red"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/accessory_desc"/>
-
-        <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/accessory_effects"
-                android:layout_weight="0.37"/>
-
-        <Button
-                android:text="装备"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/accessory_mount"
-                style="@android:style/Widget.Button.Inset"/>
+            android:layout_height="wrap_content"
+            >
 
         <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="1"
+                android:background="@android:drawable/gallery_thumb">
+
+            <TextView
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/accessory_name"/>
+
+            <TextView
+                    android:textStyle="bold"
+                    android:textColor="@color/red"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/accessory_desc"/>
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/accessory_effects"
+                    />
+
+            <Button
+                    android:text="装备"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/accessory_mount"
+                    style="@android:style/Widget.Button.Inset"/>
+
+            <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                    android:text="升级"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/accessory_fuse"
+                    style="@android:style/Widget.Button.Inset"
+                    android:layout_weight="1"/>
         <Button
-                android:text="升级"
+                android:text="关闭"
                 android:layout_gravity="bottom"
                 android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/accessory_fuse"
+                android:id="@+id/accessories_close"
                 style="@android:style/Widget.Button.Inset"
                 android:layout_weight="1"/>
-    <Button
-            android:text="关闭"
-            android:layout_gravity="bottom"
-            android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/accessories_close"
-            style="@android:style/Widget.Button.Inset"
-            android:layout_weight="1"/>
-</LinearLayout>
     </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:layout_weight="1">
+            <TextView
+                    android:layout_marginTop="50dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:id="@+id/accessory_name_2"
+                    android:text="长按左边装备列表"/>
+            <TextView
+                    android:textStyle="bold"
+                    android:textColor="@color/red"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/accessory_desc_2"/>
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/accessory_effects_2"
+                    android:layout_weight="0.27"
+                    android:text="选择用于升级消耗的副装备"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
     <cn.luo.yuan.maze.client.display.view.LoadMoreListView
             android:id="@+id/accessories_list"
             android:layout_height="400dp"
-            android:layout_width="150dp"/>
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:layout_weight="1">
-        <TextView
-                android:layout_marginTop="50dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:id="@+id/accessory_name_2"
-                android:text="长按左边装备列表"/>
-        <TextView
-                android:textStyle="bold"
-                android:textColor="@color/red"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/accessory_desc_2"/>
-        <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/accessory_effects_2"
-                android:layout_weight="0.27"
-                android:text="选择用于升级消耗的副装备"/>
-    </LinearLayout>
+            android:layout_width="match_parent"/>
 
 </LinearLayout>

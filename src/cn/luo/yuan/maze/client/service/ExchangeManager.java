@@ -58,8 +58,8 @@ public class ExchangeManager {
             connection.addRequestProperty(Field.EXPECT_TYPE, String.valueOf(expectType));
 
             connection.addRequestProperty(Field.LIMIT_STRING, URLEncoder.encode(limit, "utf-8"));
-            server.connect(object, connection);
-            if (connection.getHeaderField(Field.RESPONSE_CODE).equals(Field.STATE_SUCCESS)) {
+            String result = server.connect(object, connection).toString();
+            if (Field.RESPONSE_RESULT_OK.equals(result)) {
                 context.getDataManager().delete(object);
                 return true;
             }
@@ -137,8 +137,8 @@ public class ExchangeManager {
             HttpURLConnection conn = server.getHttpURLConnection(REQUEST_EXCHANGE, RestConnection.POST);
             conn.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
             conn.addRequestProperty(Field.ITEM_ID_FIELD, targetExchange.getId());
-            server.connect(myObject, conn);
-            if (conn.getHeaderField(Field.RESPONSE_CODE).equals(Field.STATE_SUCCESS)) {
+            String result = server.connect(context.convertToServerObject(myObject), conn).toString();
+            if (Field.RESPONSE_RESULT_OK.equals(result)) {
                 Object obj = targetExchange.getExchange();
                 if (obj instanceof OwnedAble) {
                     ((OwnedAble) obj).setKeeperName(context.getHero().getName());

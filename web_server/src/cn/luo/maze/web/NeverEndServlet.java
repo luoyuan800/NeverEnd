@@ -139,8 +139,8 @@ public class NeverEndServlet extends HttpServlet {
         String version = request.getHeader(Field.VERSION_FIELD);
         String sign = request.getHeader(Field.SIGN_FIELD);
         //LogHelper.info("sign: " + sign);
-        if(!process.isSignVerify(sign)){
-            IOException ioException = new IOException("Sign verify failed! " + sign);
+        if(!process.isSignVerify(sign, version)){
+            IOException ioException = new IOException("Sign verify failed! sign: " + sign + ", version: " + version);
             LogHelper.error(ioException);
             throw ioException;
         }
@@ -203,6 +203,7 @@ public class NeverEndServlet extends HttpServlet {
                 } else {
                     writeObject(response,backExchange);
                 }
+                break;
             case ACKNOWLEDGE_MY_EXCHANGE:
                 exchange_id = request.getHeader(Field.ITEM_ID_FIELD);
                 if (process.acknowledge(exchange_id)) {
@@ -346,8 +347,8 @@ public class NeverEndServlet extends HttpServlet {
     private <T> T readObject(HttpServletRequest request) throws IOException {
         try (ObjectInputStream ois = new ObjectInputStream(request.getInputStream())) {
             return (T) ois.readObject();
-        } catch (ClassNotFoundException e) {
-            LogHelper.error(e);
+        } catch (Exception e) {
+            LogHelper.error(new Exception(request.getPathInfo() + " from " + request.getRemoteAddr(), e));
             return null;
         }
     }

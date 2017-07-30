@@ -2,9 +2,9 @@
 <resources>
     <string name="app_name">勇者闯迷宫</string>
     <string name="server_version">1</string>
-    <string name="atk_effect">增加攻击上限：</string>
-    <string name="def_effect">增加防御上限：</string>
-    <string name="hp_effect">增加基础生命上限：</string>
+    <string name="atk_effect">增加攻击：</string>
+    <string name="def_effect">增加防御：</string>
+    <string name="hp_effect">增加基础生命：</string>
     <string name="agi_effect">增加敏捷：</string>
     <string name="str_effect">增加力量：</string>
     <string name="meet_effect">增加遇见怪物几率：</string>

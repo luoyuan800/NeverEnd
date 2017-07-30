@@ -64,9 +64,11 @@ public class OnlineActivityOnClickHandler {
                             @Override
                             public void run() {
                                 if (o instanceof String) {
-                                    SimplerDialogBuilder.build(o.toString(), Resource.getString(R.string.conform), null, context.getContext());
-                                } else if (o == null) {
-                                    SimplerDialogBuilder.build("谢谢惠顾！", Resource.getString(R.string.conform), null, activity);
+                                    if(StringUtils.isEmpty((String) o)){
+                                        SimplerDialogBuilder.build("谢谢惠顾！", Resource.getString(R.string.conform), null, activity);
+                                    }else {
+                                        SimplerDialogBuilder.build(o.toString(), Resource.getString(R.string.conform), null, context.getContext());
+                                    }
                                 } else {
                                     if (o instanceof IDModel) {
                                         context.getDataManager().add((IDModel) o);

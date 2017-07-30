@@ -3,10 +3,8 @@ package cn.luo.yuan.maze.client.display.handler;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import cn.luo.yuan.maze.client.display.activity.GameActivity;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
 import cn.luo.yuan.maze.client.utils.LogHelper;
-import cn.luo.yuan.maze.model.Element;
 import com.soulgame.sgsdk.tgsdklib.TGSDK;
 import com.soulgame.sgsdk.tgsdklib.TGSDKServiceResultCallBack;
 import com.soulgame.sgsdk.tgsdklib.ad.ITGADListener;
@@ -33,6 +31,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     private OnlineActivity context;
     private boolean yomob = false;
     private boolean debug = false;
+    private boolean isCPA = false;
 
     public AdHandler(OnlineActivity a) {
         this.context = a;
@@ -48,7 +47,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     @Override
     public void onPreloadSuccess(String s) {
-        debug("PreloadSuccess: %s",s);
+        debug("PreloadSuccess: %s", s);
         yomob = true;
         try {
             award = Integer.parseInt(TGSDK.parameterFromAdScene(adcenseid, "base_award").toString());
@@ -65,17 +64,20 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     @Override
     public void onCPADLoaded(String s) {
-
+        isCPA = true;
     }
 
     @Override
     public void onVideoADLoaded(String s) {
-
+        isCPA = false;
     }
 
     @Override
     public void onShowSuccess(String s) {
-        debug("ShowSuccess: %s",s);
+        if(isCPA){
+            context.handler.showToast("获得一个礼包，点击广告可以再获得一个礼包");
+            context.handler.addOnlineGift(1);
+        }
     }
 
     @Override
@@ -136,7 +138,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
         try {
             if (yomob)
                 TGSDK.onResume(context);
-        }catch (Exception e){
+        } catch (Exception e) {
             LogHelper.logException(e, "ADHandler->onResume");
         }
     }
@@ -151,15 +153,15 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
             @Override
             public void run() {
                 if (yomob && TGSDK.couldShowAd(adcenseid)) {
-                    if(debug) {
+                    if (debug) {
                         TGSDK.showTestView(context, adcenseid);
-                    }else{
+                    } else {
                         TGSDK.showAd(context, adcenseid);
                     }
                 } else {
-                    if(SpotManager.getInstance(context).checkSpotAdConfig()) {
+                    if (SpotManager.getInstance(context).checkSpotAdConfig()) {
                         SpotManager.getInstance(context).showSpot(context, AdHandler.this);
-                    }else{
+                    } else {
                         setUpYouMiAd();
                     }
                     debug("Could not show!");
@@ -219,14 +221,20 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     }
 
     public static void onAppExit(Context context) {
-        if(SpotManager.getInstance(context).checkSpotAdConfig()){
+        if (SpotManager.getInstance(context).checkSpotAdConfig()) {
             SpotManager.getInstance(context).onAppExit();
+        }
+    }
+
+    public void debug(String s, Object... objs) {
+        if (debug) {
+            context.handler.showToast(s, objs);
         }
     }
 
     private void setUpYomobAd() {
         try {
-        TGSDK.setDebugModel(debug);
+            TGSDK.setDebugModel(debug);
             TGSDK.initialize(context, yomobappId, new TGSDKServiceResultCallBack() {
 
                 @Override
@@ -245,7 +253,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
             });
             TGSDK.setADListener(this);
             TGSDK.setRewardVideoADListener(this);
-        }catch (Exception e){
+        } catch (Exception e) {
             LogHelper.logException(e, "Setup AD");
         }
     }
@@ -278,12 +286,6 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
             yomob = false;
         } catch (Exception e) {
             LogHelper.logException(e, "setupAD");
-        }
-    }
-
-    public void debug(String s, Object...objs){
-        if(debug){
-            context.handler.showToast(s, objs);
         }
     }
 }

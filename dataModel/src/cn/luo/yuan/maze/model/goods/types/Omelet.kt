@@ -39,11 +39,11 @@ class Omelet() : UsableGoods() {
                 }
                 3 -> {
                     msg = "食用煎蛋肚子疼，导致生命值减少50%。"
-                    hero.hp -= (hero.maxHp * 0.5).toLong()
+                    hero.hp -= (hero.upperHp * 0.5).toLong()
                 }
                 4 -> {
                     msg = "食用了一个黑乎乎的煎蛋，导致生命值变为1。"
-                    hero.setHp(1L)
+                    hero.hp = hero.hp - hero.currentHp + 1L
                 }
                 5 -> {
                     msg = "使用煎蛋后掉进了一个洞"

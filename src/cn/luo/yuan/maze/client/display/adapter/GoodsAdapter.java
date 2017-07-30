@@ -89,6 +89,7 @@ public class GoodsAdapter extends BaseAdapter {
                                 gp.put(SkillParameter.CONTEXT, context);
                                 gp.put(SkillParameter.COUNT, count);
                                 type.use(gp);
+                                context.getDataManager().save(type);
                                 notifyDataSetChanged();
                             }
                         });

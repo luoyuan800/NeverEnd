@@ -157,7 +157,10 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                                 message.obj = "成功上传" + (item instanceof NameObject ? ((NameObject) item).getName() : "");
                                 handler.sendMessage(message);
                             } else {
-                                Toast.makeText(context.getContext(), "上传失败，请检测网络后重试。", Toast.LENGTH_SHORT).show();
+                                Message message = new Message();
+                                message.what = 4;
+                                message.obj = "上传失败";
+                                handler.sendMessage(message);
                             }
 
                         }
@@ -250,6 +253,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                             Message message = new Message();
                             message.what = 4;
                             message.obj = "交换成功！获得了" + (eo.getExchange() instanceof NameObject ? ((NameObject) eo.getExchange()).getDisplayName() : "");
+                            context.getDataManager().delete((Serializable) myItem);
                             handler.sendMessage(message);
                         }
                     }
@@ -384,7 +388,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                             context.getDataManager().add(model);
                         }
                         if (model instanceof NameObject) {
-                            Toast.makeText(context.getContext(), "取回" + ((NameObject) model).getName(), Toast.LENGTH_SHORT).show();
+                            context.showToast("取回" + ((NameObject) model).getName());
                         }
                     }
                 });

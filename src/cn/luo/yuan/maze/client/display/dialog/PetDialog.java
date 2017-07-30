@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Created by gluo on 5/15/2017.
  */
-public class PetDialog implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class PetDialog implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, TextWatcher {
     Handler handler = new Handler();
     private NeverEnd control;
     private AlertDialog.Builder builder;
@@ -69,6 +69,7 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
         final View detailView = dialog.findViewById(R.id.pet_detail_view);
         detailView.setVisibility(View.INVISIBLE);
         EditText tag = (EditText) detailView.findViewById(R.id.pet_tag);
+        tag.addTextChangedListener(this);
         loadMoreListView = (LoadMoreListView) dialog.findViewById(R.id.pet_simple_list);
         loadMoreListView.setAdapter(adapter);
         loadMoreListView.setOnLoadListener(adapter);
@@ -297,6 +298,25 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
         adapter.notifyDataSetChanged();
         control.getDataManager().savePet(currentPet);
         control.getViewHandler().refreshPets(control.getHero());
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if(currentPet!=null){
+            currentPet.setTag(s.toString());
+            control.getDataManager().save(currentPet);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     private void refreshSortButton() {

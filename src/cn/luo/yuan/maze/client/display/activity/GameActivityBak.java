@@ -282,7 +282,7 @@ public class GameActivityBak extends GameActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        control.save();
+        control.save(false);
     }
 
     /**
@@ -296,7 +296,7 @@ public class GameActivityBak extends GameActivity {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        control.save();
+                        control.save(false);
                         AdHandler.onAppExit(GameActivityBak.this);
                         finish();
                         System.exit(0);

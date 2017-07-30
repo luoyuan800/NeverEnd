@@ -13,7 +13,6 @@ import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillFactory;
 import cn.luo.yuan.maze.model.skill.SkillParameter;
-import cn.luo.yuan.maze.model.skill.swindler.EatHarm;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.service.*;
 import cn.luo.yuan.maze.utils.Random;
@@ -105,7 +104,7 @@ public class RunningService implements RunningServiceInterface {
 
                     gameContext.getExecutor().submit(eggWarn);
                     if ((System.currentTimeMillis() - saveTime) >= 300000) {//每隔五分钟自动存储一次
-                        gameContext.save();
+                        gameContext.save(false);
                     }
                     maze.setStep(maze.getStep() + 1);
                     if (maze.getStep() > 100 || random.nextLong(10000) > 9985 || random.nextLong(maze.getStep()) > 10 + random.nextLong(22) || random.nextLong(maze.getStreaking() + 1) > 50 + maze.getLevel()) {

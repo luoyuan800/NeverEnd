@@ -178,7 +178,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
         return petMonsterHelper;
     }
 
-    public synchronized void save() {
+    public synchronized void save(boolean showTip) {
         Gift gift = hero.getGift();
         if (gift != null) {
             try {
@@ -197,7 +197,9 @@ public class NeverEnd extends Application implements InfoControlInterface {
                 LogHelper.logException(e, "NeverEnd ->save->gift.handler(" + gift + ")");
             }
         }
-        showToast("保存成功！");
+        if(showTip) {
+            showToast("保存成功！");
+        }
     }
 
     public void showToast(final String format, final Object ... args) {
@@ -379,7 +381,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
         hero.setPoint(totalPoint);
         maze.setLevel(1);
         maze.setMaxLevel(1);
-        save();
+        save(false);
         getViewHandler().showGiftChoose();
         viewHandler.refreshProperties(hero);
         showToast("第%d次转生！", hero.getReincarnate());

@@ -12,7 +12,8 @@ class Field {
         const val LIMIT_STRING: String = "limit"
         const val EXPECT_TYPE: String = "expectType"
         const val COUNT: String = "count"
-        const val SERVER_VERSION: Long = 0L
+        const val SERVER_VERSION: Long = 505L
+        const val SERVER_VERSION_FIELD: String = "server_version"
         const val STATE_SUCCESS = "1"
         const val STATE_FAILED = "21"
         const val STATE_ACKNOWLEDGE = "11"

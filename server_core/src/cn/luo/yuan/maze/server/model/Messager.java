@@ -3,7 +3,6 @@ package cn.luo.yuan.maze.server.model;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.Pet;
-import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillAbleObject;
@@ -22,17 +21,22 @@ public class Messager implements BattleMessage {
     private Set<ServerRecord> sms = new HashSet<>();
 
     public void addReceiver(ServerRecord sms) {
-        this.sms.add(sms);
+        if (sms != null) {
+            this.sms.add(sms);
+        }
     }
 
-    public void removeReceiver(ServerData sms) {
-        this.sms.remove(sms);
+    public void removeReceiver(ServerRecord sms) {
+        if (sms != null)
+            this.sms.remove(sms);
     }
 
     public void notification(String msg) {
         msg = StringUtils.getCurrentTime() + " - " + msg;
         for (ServerRecord sr : sms) {
-            sr.getMessages().add(msg);
+            if (sr != null) {
+                sr.getMessages().add(msg);
+            }
         }
     }
 
