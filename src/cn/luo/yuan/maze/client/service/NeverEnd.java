@@ -200,8 +200,13 @@ public class NeverEnd extends Application implements InfoControlInterface {
         showToast("保存成功！");
     }
 
-    public void showToast(String format, Object ... args) {
-        Toast.makeText(context, String.format(format, args), Toast.LENGTH_SHORT).show();
+    public void showToast(final String format, final Object ... args) {
+        getViewHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(context, String.format(format, args), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public Random getRandom() {

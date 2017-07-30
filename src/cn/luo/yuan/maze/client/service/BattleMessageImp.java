@@ -86,4 +86,9 @@ public class BattleMessageImp implements BattleMessage {
     public void startBattle(String hero, String monster) {
 
     }
+
+    @Override
+    public void myTurn(String displayName) {
+        control.addMessage(String.format(Resource.getString(R.string.my_turn), displayName));
+    }
 }

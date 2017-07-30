@@ -80,7 +80,7 @@ public class AccessoryHelper extends cn.luo.yuan.maze.service.AccessoryHelper {
                                 float v = random.randomRange(((FloatValueEffect) effect).getValue() * colorReduce, ((FloatValueEffect) effect).getValue());
                                 float value = ((FloatValueEffect) me).getValue();
                                 //We need to check whether the rate too larger.
-                                if (value + v < Data.RATE_MAX && random.nextFloat(value) < random.nextFloat(Data.RATE_MAX / 2f)) {
+                                if (value + v < Data.RATE_MAX/3 && random.nextFloat(value) < random.nextFloat(Data.RATE_MAX / 2f)) {
                                     ((FloatValueEffect) me).setValue(value + v);
                                 }
                             }

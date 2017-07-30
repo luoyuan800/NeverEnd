@@ -24,4 +24,6 @@ public interface BattleMessage extends BattleMessageInterface {
     void rowMessage(String msg);
 
     void startBattle(String hero, String monster);
+
+    void myTurn(String displayName);
 }

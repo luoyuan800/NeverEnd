@@ -60,6 +60,11 @@ public class MockBattleMessage implements BattleMessage {
     }
 
     @Override
+    public void myTurn(String displayName) {
+
+    }
+
+    @Override
     public void hit(NameObject hero) {
         println("hit %s", hero.getDisplayName());
     }

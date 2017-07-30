@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.model.effect.original;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.FloatValueEffect;
 import cn.luo.yuan.maze.utils.Field;
+import cn.luo.yuan.maze.utils.StringUtils;
 
 /**
  * Created by luoyuan on 2017/3/19.
@@ -63,5 +64,9 @@ public class MeetRateEffect extends FloatValueEffect {
     @Override
     public void setTag(String tag) {
         this.tag = tag;
+    }
+    @Override
+    public String toString() {
+        return "增加遇怪率：" + StringUtils.formatPercentage(getValue());
     }
 }

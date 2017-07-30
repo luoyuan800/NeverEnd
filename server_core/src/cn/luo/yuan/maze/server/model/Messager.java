@@ -103,6 +103,11 @@ public class Messager implements BattleMessage {
         notification("<b>" + hero + "和" + monster + "开始战斗！</b>");
     }
 
+    @Override
+    public void myTurn(String displayName) {
+        notification(String.format("%s的攻击回合", displayName));
+    }
+
     public void restore(@Nullable String hero) {
         notification(hero + "生命值已经恢复！");
     }

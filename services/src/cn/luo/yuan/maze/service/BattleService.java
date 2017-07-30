@@ -92,6 +92,9 @@ public class BattleService {
     }
 
     private void atk(HarmAble atker, HarmAble defender, long minHarm) {
+        if(atker instanceof NameObject) {
+            battleMessage.myTurn(((NameObject) atker).getDisplayName());
+        }
         if (atker instanceof PetOwner) {
             petActionOnAtk((PetOwner) atker, defender);
         }
@@ -205,7 +208,7 @@ public class BattleService {
                     boolean silent = random.nextInt(100) + random.nextFloat() < ((SilentAbleObject) atker).getSilent();
                     if (silent) {
                         battleMessage.silent((SkillAbleObject) defender, atker, skill);
-                        return true;
+                        return false;
                     }
                 }
             }

@@ -176,8 +176,7 @@ public class StringUtils {
                         append(effect.isEnable() ? "#B8860B": "#A19EA0").append("\">").
                         append(effect.toString()).append("</font>");
             }else{
-                builder.append("<font color=\"#00F1ED\">").
-                        append(effect.toString()).append("</font>");
+                builder.append(effect.toString());
             }
         }
 

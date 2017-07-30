@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.model.effect.original;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.FloatValueEffect;
 import cn.luo.yuan.maze.utils.Field;
+import cn.luo.yuan.maze.utils.StringUtils;
 
 /**
  * Created by gluo on 5/15/2017.
@@ -60,5 +61,10 @@ public class SkillRateEffect extends FloatValueEffect {
     @Override
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    @Override
+    public String toString() {
+        return "增加技能释放：" + StringUtils.formatPercentage(getValue());
     }
 }

@@ -12,6 +12,7 @@ public class NeverEndConfig implements IDModel, Serializable {
     private boolean delete;
     private int theme = 0;
     private static final long serialVersionUID = Field.SERVER_VERSION;
+    private String version;
 
     @Override
     public boolean isDelete() {
@@ -39,5 +40,13 @@ public class NeverEndConfig implements IDModel, Serializable {
 
     public void setTheme(int theme) {
         this.theme = theme;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

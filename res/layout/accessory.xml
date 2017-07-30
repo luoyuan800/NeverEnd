@@ -9,16 +9,11 @@
               android:layout_alignParentTop="true"
               android:baselineAligned="false">
 
-    <cn.luo.yuan.maze.client.display.view.LoadMoreListView
-            android:id="@+id/accessories_list"
-            android:layout_height="400dp"
-            android:layout_width="150dp"/>
-
     <LinearLayout
             android:orientation="vertical"
             android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:weightSum="1">
 
         <TextView
@@ -47,26 +42,7 @@
                 android:id="@+id/accessory_mount"
                 style="@android:style/Widget.Button.Inset"/>
 
-        <TextView
-                android:layout_marginTop="50dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:id="@+id/accessory_name_2"
-                android:text="长按左边装备列表"/>
-        <TextView
-                android:textStyle="bold"
-                android:textColor="@color/red"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/accessory_desc_2"/>
-        <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/accessory_effects_2"
-                android:layout_weight="0.27"
-                android:text="选择用于升级消耗的副装备"/>
-<LinearLayout
+        <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -89,6 +65,34 @@
             android:id="@+id/accessories_close"
             style="@android:style/Widget.Button.Inset"/>
 </LinearLayout>
+    </LinearLayout>
+    <cn.luo.yuan.maze.client.display.view.LoadMoreListView
+            android:id="@+id/accessories_list"
+            android:layout_height="400dp"
+            android:layout_width="150dp"/>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_weight="1">
+        <TextView
+                android:layout_marginTop="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:id="@+id/accessory_name_2"
+                android:text="长按左边装备列表"/>
+        <TextView
+                android:textStyle="bold"
+                android:textColor="@color/red"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/accessory_desc_2"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/accessory_effects_2"
+                android:layout_weight="0.27"
+                android:text="选择用于升级消耗的副装备"/>
     </LinearLayout>
 
 </LinearLayout>

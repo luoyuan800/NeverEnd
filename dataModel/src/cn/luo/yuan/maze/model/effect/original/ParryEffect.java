@@ -55,4 +55,6 @@ public class ParryEffect extends FloatValueEffect {
     public Float getValue() {
         return this.parry;
     }
+
+
 }

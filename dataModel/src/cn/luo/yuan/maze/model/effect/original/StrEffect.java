@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.model.effect.original;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.LongValueEffect;
 import cn.luo.yuan.maze.utils.Field;
+import cn.luo.yuan.maze.utils.StringUtils;
 
 /**
  * Created by luoyuan on 2017/3/18.
@@ -57,5 +58,10 @@ public class StrEffect extends LongValueEffect{
     @Override
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    @Override
+    public String toString() {
+        return "增加力量：" + StringUtils.formatNumber(getValue());
     }
 }

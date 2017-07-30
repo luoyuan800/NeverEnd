@@ -4,7 +4,7 @@
     <string name="server_version">1</string>
     <string name="atk_effect">增加攻击上限：</string>
     <string name="def_effect">增加防御上限：</string>
-    <string name="hp_effect">增加生命上限：</string>
+    <string name="hp_effect">增加基础生命上限：</string>
     <string name="agi_effect">增加敏捷：</string>
     <string name="str_effect">增加力量：</string>
     <string name="meet_effect">增加遇见怪物几率：</string>
@@ -112,4 +112,5 @@
     <string name="item_label">物品</string>
     <string name="pet_label">宠物</string>
     <string name="accessory_label">装备</string>
+    <string name="my_turn">%1$s的攻击回合</string>
 </resources>

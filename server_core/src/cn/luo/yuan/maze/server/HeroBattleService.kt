@@ -63,9 +63,9 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
                                 registerMessageReceiver(messager, oid)
                             }
                             if (group == null && ogroup == null && random.nextInt(hero.displayName.length) > random.nextInt(ohero.displayName.length)) {
-                                val group = main.addGroup(id, oid)
+                                val newgroup = main.addGroup(id, oid)
                                 if(oid == "npc"){
-                                    group.npc = ohero;
+                                    newgroup.npc = ohero;
                                 }
                                 messager.buildGroup(hero.displayName, ohero.displayName)
                                 if (StringUtils.isNotEmpty(record.data!!.helloMsg["group"])) {
@@ -168,7 +168,7 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
             if (holder.isInGroup(id)) {
                 inGroup = true
                 for (hid in holder.heroIds) {
-                    val hero = table.getHero(hid)
+                    val hero = if(hid == "npc") holder.npc else table.getHero(hid)
                     if (hero != null) {
                         group.heroes.add(hero)
                     } else {
