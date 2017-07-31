@@ -74,10 +74,8 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     @Override
     public void onShowSuccess(String s) {
-        if(isCPA){
             context.handler.showToast("获得一个礼包，点击广告可以再获得一个礼包");
             context.handler.addOnlineGift(1);
-        }
     }
 
     @Override

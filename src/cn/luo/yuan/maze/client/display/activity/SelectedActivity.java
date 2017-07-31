@@ -39,13 +39,13 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
         AdManager.getInstance(this).init(appId, appSecret, false);
     }
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         //这是为了应用程序安装完后直接打开，按home键退出后，再次打开程序出现的BUG
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             //结束你的activity
             this.finish();
             return;
         }
-        super.onCreate(savedInstanceState);
         SaveFileManager saveFileManager = new SaveFileManager(this);
         if(saveFileManager.isOlderSaveExisted()){
             saveFileManager.clear();

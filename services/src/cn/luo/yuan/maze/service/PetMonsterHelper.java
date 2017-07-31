@@ -391,7 +391,8 @@ public class PetMonsterHelper implements PetMonsterHelperInterface {
         if (!p1.getId().equals(p2.getId())) {
             if (p1.getSex() != p2.getSex()) {
                 if (p1.getElement().isReinforce(p2.getElement())) {
-                    if (gameControl.getRandom().nextInt(200) < (p1.getEggRate() + p2.getEggRate()) + EffectHandler.getEffectAdditionFloatValue(EffectHandler.EGG, gameControl.getHero().getEffects())) {
+                    if (gameControl.getRandom().nextFloat(300) < random.nextFloat(p1.getEggRate() + p2.getEggRate()) +
+                            random.nextFloat(EffectHandler.getEffectAdditionFloatValue(EffectHandler.EGG, gameControl.getHero().getEffects()))) {
                         Egg egg = new Egg();
                         egg.setType(p1.getSex() == 1 ? p1.getType() : p2.getType());
                         egg.setElement(gameControl.getRandom().randomItem(Element.values()));

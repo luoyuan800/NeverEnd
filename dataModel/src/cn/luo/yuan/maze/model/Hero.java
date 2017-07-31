@@ -384,8 +384,8 @@ public class Hero extends HarmObject implements Serializable, IDModel, SkillAble
 
     @Override
     public String toString() {
-        return getDisplayName() + "<br>atk: " + StringUtils.formatNumber(getAtk()) + "<br>" +
-                "def: " + StringUtils.formatNumber(getDef()) + "<br>" +
-                "hp: " + StringUtils.formatNumber(getMaxHp());
+        return getDisplayName() + "<br>atk: " + StringUtils.formatNumber(getUpperAtk()) + "<br>" +
+                "def: " + StringUtils.formatNumber(getUpperDef()) + "<br>" +
+                "hp: " + StringUtils.formatNumber(getCurrentHp()) + "/" + StringUtils.formatNumber(getUpperHp());
     }
 }

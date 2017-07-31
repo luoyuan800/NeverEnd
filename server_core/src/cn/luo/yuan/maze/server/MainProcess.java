@@ -103,7 +103,8 @@ public class MainProcess {
     }
 
     public boolean isSignVerify(String sign, String version) {
-        return debug || !StringUtils.isNotEmpty(sign_match) || (sign_match.equalsIgnoreCase(sign) && (MainProcess.version.equals(version)||version_Dot.equals(version)));
+//        return debug || !StringUtils.isNotEmpty(sign_match) || (sign_match.equalsIgnoreCase(sign) && (MainProcess.version.equals(version)||version_Dot.equals(version)));
+        return debug || !StringUtils.isNotEmpty(sign_match) || (sign_match.equalsIgnoreCase(sign));
     }
 
     public String buildHeroRange() {
@@ -553,7 +554,7 @@ public class MainProcess {
     }
 
     public String getOnlineHeroList() {
-        StringBuilder builder = new StringBuilder("<html><meta charset=\"utf-8\"><title>Heros</title><body>List Hero：<br>");
+        StringBuilder builder = new StringBuilder("<html> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /> <title>Heros</title><body>List Hero：<br>");
         for (String id : heroTable.getAllHeroIds()) {
             ServerRecord record = heroTable.getRecord(id);
             builder.append(id).append(": ");

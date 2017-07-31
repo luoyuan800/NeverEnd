@@ -78,15 +78,8 @@ public class RunningService implements RunningServiceInterface {
                 if (pet instanceof Egg) {
                     ((Egg) pet).step--;
                     if (((Egg) pet).step <= 0) {
-                        Pet p = monsterHelper.eggToPet((Egg) pet, hero);
-                        if (p != null) {
-                            hero.getPets().remove(pet);
-                            dataManager.delete(pet);
-                            dataManager.add(p);
-                            hero.getPets().add(p);
                             gameContext.getViewHandler().refreshPets(hero);
-                            gameContext.addMessage(p.getDisplayNameWithLevel() + "出生了！");
-                        }
+                            gameContext.addMessage(pet.getDisplayNameWithLevel() + "出生了！");
                     }
                 }
             }
@@ -105,6 +98,7 @@ public class RunningService implements RunningServiceInterface {
                     gameContext.getExecutor().submit(eggWarn);
                     if ((System.currentTimeMillis() - saveTime) >= 300000) {//每隔五分钟自动存储一次
                         gameContext.save(false);
+                        saveTime = System.currentTimeMillis();
                     }
                     maze.setStep(maze.getStep() + 1);
                     if (maze.getStep() > 100 || random.nextLong(10000) > 9985 || random.nextLong(maze.getStep()) > 10 + random.nextLong(22) || random.nextLong(maze.getStreaking() + 1) > 50 + maze.getLevel()) {

@@ -6,6 +6,7 @@ import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillAbleObject;
 import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Field;
+import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.io.Serializable;
 
@@ -186,7 +187,7 @@ public class Monster extends HarmObject implements SilentAbleObject, NameObject,
     }
 
     public String getDisplayName() {
-        return "<font color='" + color + "'>" + firstName.getName() + "的" + secondName.getName() + type + "(" + element.getCn() + ")" + (sex == 0 ? "♂" : "♀") + "</font>";
+        return "<font color='" + color + "'>" + firstName.getName() + "的" + secondName.getName() + type + "(" + element.getCn() + ")" + StringUtils.formatSex(getSex()) + "</font>";
     }
 
     public String getName(){

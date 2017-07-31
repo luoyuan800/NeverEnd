@@ -129,7 +129,8 @@ public class ServerService {
         try {
             HttpURLConnection connection = server.getHttpURLConnection(GET_BACK_HERO, RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, gameContext.getHero().getId());
-            return (ServerData) server.connect(connection);
+            Object connect = server.connect(connection);
+            return connect instanceof ServerData ? (ServerData) connect : null;
         } catch (Exception e) {
             LogHelper.logException(e, "ServiceService->getBackHero");
         }

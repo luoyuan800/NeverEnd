@@ -49,6 +49,11 @@ public class PetMonsterLoder implements MonsterLoader {
     }
 
     public static Drawable loadMonsterImage(int id) {
+        String ids = String.valueOf(id);
+        return loadMonsterImage(ids);
+    }
+
+    private static Drawable loadMonsterImage(String id) {
         Drawable drawable = Resource.loadImageFromAssets("monster/" + id, false);
         if (drawable == null) {
             drawable = Resource.loadImageFromAssets("monster/" + id + ".jpg", false);

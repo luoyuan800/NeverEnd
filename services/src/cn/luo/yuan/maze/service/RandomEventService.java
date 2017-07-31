@@ -106,6 +106,7 @@ public class RandomEventService {
                                     if(egg!=null){
                                         gameControl.addMessage(p1.getDisplayName() + "和" + p2.getDisplayName() + "生了一个蛋");
                                         gameControl.getDataManager().savePet(egg);
+                                        break;
                                     }
                                 }
                             }

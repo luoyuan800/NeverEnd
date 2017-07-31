@@ -65,11 +65,10 @@ public class NeverEndServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = getPathInfo(request);
         String ownerId = request.getHeader(Field.OWNER_ID_FIELD);
+        response.setCharacterEncoding("utf-8");
         PrintWriter writer = response.getWriter();
-
         switch (path) {
             case "get_hero_list":
-                writer = response.getWriter();
                 writer.write(process.getOnlineHeroList());
                 break;
             case "add_file":
@@ -134,6 +133,7 @@ public class NeverEndServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
+        response.setCharacterEncoding("utf-8");
         String path = getPathInfo(request);
         String ownerId = request.getHeader(Field.OWNER_ID_FIELD);
         String version = request.getHeader(Field.VERSION_FIELD);
@@ -312,7 +312,6 @@ public class NeverEndServlet extends HttpServlet {
                 data = process.getBackHero(ownerId);
                 if (data != null) {
                     writeObject(response, data);
-                    success = true;
                 } else {
                     success = false;
                 }
@@ -321,14 +320,18 @@ public class NeverEndServlet extends HttpServlet {
                 doGet(request,response);
                 return;
         }
-        if (success != null && writer==null) {
-            writer = response.getWriter();
-            if (success) {
-                response.setHeader(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
-                writer.write(Field.RESPONSE_RESULT_OK);
-            } else {
-                writer.write(Field.RESPONSE_RESULT_FAILED);
+        try {
+            if (success != null && writer == null) {
+                writer = response.getWriter();
+                if (success) {
+                    response.setHeader(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
+                    writer.write(Field.RESPONSE_RESULT_OK);
+                } else {
+                    writer.write(Field.RESPONSE_RESULT_FAILED);
+                }
             }
+        }catch (IllegalStateException e){
+            LogHelper.error(new Exception(path, e));
         }
         if(writer!=null) {
             writer.flush();

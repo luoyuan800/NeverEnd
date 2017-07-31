@@ -130,7 +130,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
     }
 
     public void fuse() throws IOException {
-        for (SoftReference<T> ref : cache.values()) {
+        for (SoftReference<T> ref : new ArrayList<>(cache.values())) {
             if (ref != null) {
                 T t = ref.get();
                 if (t != null) {

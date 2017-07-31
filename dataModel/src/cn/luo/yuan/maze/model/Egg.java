@@ -10,13 +10,13 @@ public class Egg extends Pet {
         return step > 0 ? 0 : super.getIndex();
     }
     public String getDisplayName(){
-        return "蛋";
+        return step > 0 ? "蛋" : super.getDisplayName();
     }
     public String getDisplayNameWithLevel(){
         return getDisplayName();
     }
     public String getName(){
-        return "蛋";
+        return step > 0 ? "蛋" : super.getName();
     }
     public String getType(){
         return  step > 0 ? "蛋" : super.getType();

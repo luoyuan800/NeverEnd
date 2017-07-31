@@ -183,6 +183,10 @@ public class StringUtils {
         return builder.toString();
     }
 
+    public static String formatSex(int sex){
+        return (sex == 0 ? "♂" : sex == 1 ? "♀" : "?");
+    }
+
     public static boolean isEmpty(String object) {
         return !isNotEmpty(object);
     }
