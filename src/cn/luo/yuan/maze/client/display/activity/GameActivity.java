@@ -34,6 +34,8 @@ import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.utils.StringUtils;
 
+import java.util.Arrays;
+
 /**
  * Created by luoyuan on 2017/3/29.
  */
@@ -59,6 +61,9 @@ public class GameActivity extends BaseActivity {
         control.setViewHandler(new GameActivityViewHandler(this, control));
         control.setTextView((RollTextView) findViewById(R.id.info_view));
         initResources();
+        if(StringUtils.isEmpty(config.getHead())){
+            config.setHead(control.getRandom().randomItem(Arrays.asList("Actor1_1.png", "Actor2_1.png", "Actor2_2.png", "Actor2_5.png", "Actor2_6.png", "Actor3_1.png", "Actor3_6.png", "Actor1_2.png")));
+        }
         Resource.askWritePermissions(new PermissionRequestListener() {
             @Override
             public void result(int requestCode, String[] permissions, int[] grantResults) {
@@ -89,6 +94,13 @@ public class GameActivity extends BaseActivity {
                 bitmap = Resource.getImageFromSD("h.png");
                 if (bitmap != null) {
                     ((ImageView) findViewById(R.id.hero_pic)).setImageDrawable(bitmap);
+                }else{
+                    if(StringUtils.isNotEmpty(config.getHead())){
+                        bitmap = Resource.loadImageFromAssets(config.getHead(), false);
+                        if(bitmap!=null){
+                            ((ImageView) findViewById(R.id.hero_pic)).setImageDrawable(bitmap);
+                        }
+                    }
                 }
             }
         });

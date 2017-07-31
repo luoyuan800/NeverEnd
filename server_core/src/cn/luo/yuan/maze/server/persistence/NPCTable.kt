@@ -47,6 +47,9 @@ constructor(root: File) : HeroTable(root) {
         hero.atkGrow = 10;
         hero.defGrow = 10;
         hero.hpGrow = 10;
+        if(name.contains("流氓")){
+            hero.atkGrow *= random.nextInt(5) + 1
+        }
         hero.agi = 100 * level
         hero.def += hero.defGrow * hero.agi
         hero.str = 100 * level
