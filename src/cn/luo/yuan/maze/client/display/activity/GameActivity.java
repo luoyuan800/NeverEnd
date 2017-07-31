@@ -185,9 +185,7 @@ public class GameActivity extends BaseActivity {
                 }
                 break;
             case R.id.range_point:
-                if (control.getHero().getPoint() > 0) {
-                    new PropertiesDialog(control).show();
-                }
+                new PropertiesDialog(control).show();
                 break;
 
         }
