@@ -51,7 +51,6 @@ public class NeverEnd extends Application implements InfoControlInterface {
     private ScheduledExecutorService executor;
     private AccessoryHelper accessoryHelper;
     private PetMonsterHelper petMonsterHelper;
-    private TaskManagerImp taskManager;
     private CrashHandler crashHandler;
     private ServerService serverService;
 
@@ -76,7 +75,6 @@ public class NeverEnd extends Application implements InfoControlInterface {
         accessoryHelper = AccessoryHelper.getOrCreate(this);
         petMonsterHelper.setRandom(random);
         petMonsterHelper.setMonsterLoader(PetMonsterLoder.getOrCreate(this));
-        taskManager = new TaskManagerImp(this);
         handlerData(dataManager);
     }
 
@@ -93,7 +91,6 @@ public class NeverEnd extends Application implements InfoControlInterface {
             dataManager = null;
             petMonsterHelper = null;
             accessoryHelper = null;
-            taskManager = null;
         }catch (Exception e){
             LogHelper.logException(e, "stopGame");
         }
@@ -247,11 +244,6 @@ public class NeverEnd extends Application implements InfoControlInterface {
         this.dataManager = dataManager;
         setHero(dataManager.loadHero());
         setMaze(dataManager.loadMaze());
-    }
-
-    @Override
-    public TaskManagerImp getTaskManager() {
-        return taskManager;
     }
 
     public void handlerData(DataManager dataManager) {

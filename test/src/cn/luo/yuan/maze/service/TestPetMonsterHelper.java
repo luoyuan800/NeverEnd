@@ -111,6 +111,27 @@ public class TestPetMonsterHelper {
     }
 
     @Test
+    public void testEggOut(){
+        Egg egg = new Egg();
+        egg.setAtk(100);
+        egg.setDef(100);
+        egg.setType("Test");
+        egg.setSex(1);
+        egg.setMaxHp(100);
+        egg.setHp(100);
+        egg.setFirstName(FirstName.frailty);
+        egg.setSecondName(SecondName.face);
+        egg.setId("test");
+        egg.setRace(Race.Elyosr);
+        egg.step = 10;
+        Assert.assertEquals(egg.getSex(), -1);
+        Assert.assertEquals(egg.getDisplayName(), "蛋");
+        egg.step = 0;
+        Assert.assertEquals(egg.getSex(), 1);
+        Assert.assertNotEquals(egg.getAtk(), 100);
+    }
+
+    @Test
     public void testMonsterToPet() throws MonsterToPetException {
         Monster monster = new Monster();
         long level = 100;

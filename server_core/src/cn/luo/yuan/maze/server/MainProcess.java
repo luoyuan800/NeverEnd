@@ -26,7 +26,6 @@ import cn.luo.yuan.maze.server.persistence.ShopTable;
 import cn.luo.yuan.maze.server.persistence.WarehouseTable;
 import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection;
 import cn.luo.yuan.maze.service.EffectHandler;
-import cn.luo.yuan.maze.task.Task;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -44,8 +43,6 @@ import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import static cn.luo.yuan.maze.utils.Field.RESPONSE_RESULT_SUCCESS;
 
 /**
  * Created by gluo on 7/6/2017.

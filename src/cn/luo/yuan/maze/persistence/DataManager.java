@@ -16,15 +16,16 @@ import cn.luo.yuan.maze.model.goods.GoodsProperties;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
-import cn.luo.yuan.maze.serialize.ObjectTable;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
-import cn.luo.yuan.maze.task.Task;
+import cn.luo.yuan.maze.serialize.ObjectTable;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -50,16 +51,12 @@ public class DataManager implements DataManagerInterface {
     private SerializeLoader<Goods> goodsLoader;
     private SerializeLoader<Skill> skillLoader;
     private SerializeLoader<ClickSkill> clickSkillLoader;
-    private SerializeLoader<Task> taskLoader;
     private ObjectTable<NeverEndConfig> configDB;
     private ObjectTable<Hero> defenderDB;
 
     private Sqlite database;
     private Context context;
     private ScheduledExecutorService e = Executors.newSingleThreadScheduledExecutor();
-    public int getIndex(){
-        return index;
-    }
 
     public DataManager(int index, Context context) {
         this.index = index;
@@ -72,17 +69,20 @@ public class DataManager implements DataManagerInterface {
         goodsLoader = new SerializeLoader<>(Goods.class, context, index);
         skillLoader = new SerializeLoader<>(Skill.class, context, index);
         clickSkillLoader = new SerializeLoader<>(ClickSkill.class, context, index);
-        taskLoader = new SerializeLoader<Task>(Task.class, context, index);
         configDB = new ObjectTable<>(NeverEndConfig.class, context.getDir(String.valueOf(index), Context.MODE_PRIVATE));
         defenderDB = new ObjectTable<>(Hero.class, context.getDir(String.valueOf(index), Context.MODE_PRIVATE));
         this.context = context;
-        e.scheduleAtFixedRate(accessoryLoader.getDb(),1000, 500, TimeUnit.MILLISECONDS);
-        e.scheduleAtFixedRate(petLoader.getDb(),1000, 500, TimeUnit.MILLISECONDS);
-        e.scheduleAtFixedRate(goodsLoader.getDb(),1000, 500, TimeUnit.MILLISECONDS);
-        e.scheduleAtFixedRate(skillLoader.getDb(),1000, 500, TimeUnit.MILLISECONDS);
-        e.scheduleAtFixedRate(clickSkillLoader.getDb(),1000, 500, TimeUnit.MILLISECONDS);
-        e.scheduleAtFixedRate(configDB,1000, 500, TimeUnit.MILLISECONDS);
-        e.scheduleAtFixedRate(defenderDB,1000, 500, TimeUnit.MILLISECONDS);
+        e.scheduleAtFixedRate(accessoryLoader.getDb(), 1000, 500, TimeUnit.MILLISECONDS);
+        e.scheduleAtFixedRate(petLoader.getDb(), 1000, 500, TimeUnit.MILLISECONDS);
+        e.scheduleAtFixedRate(goodsLoader.getDb(), 1000, 500, TimeUnit.MILLISECONDS);
+        e.scheduleAtFixedRate(skillLoader.getDb(), 1000, 500, TimeUnit.MILLISECONDS);
+        e.scheduleAtFixedRate(clickSkillLoader.getDb(), 1000, 500, TimeUnit.MILLISECONDS);
+        e.scheduleAtFixedRate(configDB, 1000, 500, TimeUnit.MILLISECONDS);
+        e.scheduleAtFixedRate(defenderDB, 1000, 500, TimeUnit.MILLISECONDS);
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public Hero loadHero() {
@@ -202,23 +202,23 @@ public class DataManager implements DataManagerInterface {
             }
         }
         for (Pet pet : new ArrayList<>(petLoader.loadAll())) {
-            if(pet.getHeroIndex() == index) {
+            if (pet.getHeroIndex() == index) {
                 petLoader.delete(pet.getId());
             }
         }
         for (Accessory accessory : new ArrayList<>(accessoryLoader.loadAll())) {
-            if(accessory.getHeroIndex() == index) {
-               delete(accessory.getId());
+            if (accessory.getHeroIndex() == index) {
+                delete(accessory.getId());
             }
         }
-        for(Skill skill : loadAllSkill()){
+        for (Skill skill : loadAllSkill()) {
             delete(skill);
         }
-        for(Goods goods : loadAllGoods()){
+        for (Goods goods : loadAllGoods()) {
             goods.markDelete();
             goodsLoader.delete(goods.getId());
         }
-        for(ClickSkill clickSkill : loadClickSkill()){
+        for (ClickSkill clickSkill : loadClickSkill()) {
             deleteClickSkill(clickSkill);
         }
         database.excuseSQLWithoutResult("delete from maze where hero_index = " + index);
@@ -274,11 +274,11 @@ public class DataManager implements DataManagerInterface {
             long org = d.getCount();
             d.setCount(d.getCount() + newGoods.getCount());
             saveGoods(d);
-            if(org <= 0 && d.getCount() > 0){
+            if (org <= 0 && d.getCount() > 0) {
                 load = true;
             }
         }
-        if(load){
+        if (load) {
             d.load(new GoodsProperties(loadHero()));
         }
 
@@ -366,7 +366,6 @@ public class DataManager implements DataManagerInterface {
         petLoader.fuse();
         skillLoader.fuse();
         clickSkillLoader.fuse();
-        taskLoader.fuse();
     }
 
     public List<Pet> loadMountPets() {
@@ -389,32 +388,16 @@ public class DataManager implements DataManagerInterface {
             accessoryLoader.delete(((Accessory) object).getId());
         } else if (object instanceof Goods) {
             ((Goods) object).setCount(((Goods) object).getCount() - 1);
-        } else if(object instanceof Skill){
+        } else if (object instanceof Skill) {
             skillLoader.delete(((Skill) object).getId());
-        } else if(object instanceof ClickSkill){
+        } else if (object instanceof ClickSkill) {
             deleteClickSkill((ClickSkill) object);
         }
 
     }
 
-    public Task loadTask(String taskId) {
-        return taskLoader.load(taskId);
-    }
-
-    public List<Task> loadTask(int start, int row, Index<Task> filter, Comparator<Task> order) {
-        return taskLoader.loadLimit(start, row, filter, order);
-    }
-
-    public int taskCount() {
-        return taskLoader.size();
-    }
-
-    public void addTask(Task task) {
-        taskLoader.save(task, task.getId());
-    }
-
     public void save(IDModel object) {
-        if(object instanceof Skill){
+        if (object instanceof Skill) {
             saveSkill((Skill) object);
         }
         if (object instanceof Pet) {
@@ -474,7 +457,7 @@ public class DataManager implements DataManagerInterface {
         return null;
     }
 
-    public void addDefender(Hero hero, long level){
+    public void addDefender(Hero hero, long level) {
         try {
             defenderDB.save(hero, String.valueOf(level));
         } catch (IOException e1) {

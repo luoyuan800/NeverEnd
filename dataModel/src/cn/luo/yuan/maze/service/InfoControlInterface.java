@@ -25,7 +25,6 @@ public interface InfoControlInterface {
     void stopGame();
 
     DataManagerInterface getDataManager();
-    TaskManager getTaskManager();
     PetMonsterHelperInterface getPetMonsterHelper();
 
     ScheduledExecutorService getExecutor();
