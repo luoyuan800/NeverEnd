@@ -554,24 +554,36 @@ public class MainProcess {
     }
 
     public String getOnlineHeroList() {
-        StringBuilder builder = new StringBuilder("<html> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /> <title>Heros</title><body>List Hero：<br>");
-        for (String id : heroTable.getAllHeroIds()) {
+        List<String> allHeroIds = heroTable.getAllHeroIds();
+        StringBuilder builder = new StringBuilder("{\"total\":").append(allHeroIds.size()).append(",\"rows\":[");
+        for (String id : allHeroIds) {
             ServerRecord record = heroTable.getRecord(id);
-            builder.append(id).append(": ");
-            if (record != null) {
-                builder.append("Range: ").append(record.getRange()).append("<br>");
-                builder.append("Submit: ").append(StringUtils.formatData(record.getSubmitDate())).append("<br>");
-                if (record.getData() != null && record.getData().getHero() != null) {
-                    builder.append(record.getData().getHero());
-                } else {
-                    builder.append("NAN");
-                }
-            } else {
-                builder.append("NAN");
+            String string = formatJson(record);
+            if(StringUtils.isNotEmpty(string)){
+                builder.append(string).append(",");
             }
-            builder.append("<br><hr/>");
         }
-        builder.append("</body></html>");
+        builder.replace(builder.lastIndexOf(","), builder.length(), "");
+        builder.append("]}");
+        return builder.toString();
+    }
+
+    private String formatJson(ServerRecord record){
+        StringBuilder builder = new StringBuilder();
+        builder.append("{");
+        if (record != null) {
+            builder.append("\"id\":\"").append(record.getId()).append("\",");
+            builder.append("\"Range\":").append(record.getRange()).append(",");
+            builder.append("\"Submit\":").append(record.getSubmitDate()).append(",");
+            if (record.getData() != null && record.getData().getHero() != null) {
+                builder.append("\"data\":\"").append(record.getData().getHero()).append("\"");
+            } else {
+                builder.append("\"data\":\"").append("NAN").append("\"");
+            }
+        } else {
+            return StringUtils.EMPTY_STRING;
+        }
+        builder.append("}");
         return builder.toString();
     }
 
