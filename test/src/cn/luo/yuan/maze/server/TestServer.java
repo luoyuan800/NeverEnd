@@ -239,7 +239,7 @@ public class TestServer {
         ServerData upload = new ServerData();
         upload.setHero(hero);
         upload.setMaze(maze);
-        ServerService serverService = new ServerService("http://localhost:4567","test");
+        ServerService serverService = new ServerService("http://localhost:4567","test", "test");
         serverService.uploadHero(upload);
         assertTrue(new File("data/hero/" + hero.getId()).exists());
         try {

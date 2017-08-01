@@ -10,7 +10,6 @@ import cn.luo.yuan.maze.model.SellItem;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
-import cn.luo.yuan.maze.utils.annotation.StringValue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -38,11 +37,15 @@ public class ServerService {
 
 
     public ServerService(String version) {
-        server = new RestConnection(Field.SERVER_URL, version,Resource.getSingInfo() );
+        server = new RestConnection(Field.SERVER_URL, version, Resource.getSingInfo());
     }
 
     public ServerService(String url, String version) {
-        server = new RestConnection(url, version,Resource.getSingInfo() );
+        server = new RestConnection(url, version, Resource.getSingInfo());
+    }
+
+    public ServerService(String url, String version, String sign) {
+        server = new RestConnection(url, version, sign);
     }
 
     public ServerData queryOnlineHeroData(NeverEnd gameContext) throws IOException {
@@ -148,7 +151,7 @@ public class ServerService {
         return null;
     }
 
-    public String postOnlineGiftCount(NeverEnd context){
+    public String postOnlineGiftCount(NeverEnd context) {
         try {
             HttpURLConnection connection = server.getHttpURLConnection(GET_GIFT_COUNT, RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
@@ -164,7 +167,7 @@ public class ServerService {
             HttpURLConnection connection = server.getHttpURLConnection(POST_DEFENDER, RestConnection.POST);
             connection.addRequestProperty(Field.LEVEL, String.valueOf(level));
             Object o = server.connect(connection);
-            if(o instanceof Hero){
+            if (o instanceof Hero) {
                 return (Hero) o;
             }
         } catch (Exception e) {
@@ -177,13 +180,13 @@ public class ServerService {
         try {
             HttpURLConnection connection = server.getHttpURLConnection(ONLINE_SHOP, RestConnection.POST);
             Object o = server.connect(connection);
-            if(o instanceof ArrayList){
-                for(SellItem item : (ArrayList<SellItem>)o){
-                    if(item.instance instanceof Accessory){
+            if (o instanceof ArrayList) {
+                for (SellItem item : (ArrayList<SellItem>) o) {
+                    if (item.instance instanceof Accessory) {
                         item.instance = context.covertAccessoryToLocal((Accessory) item.instance);
                     }
                 }
-                return (ArrayList<SellItem>)o;
+                return (ArrayList<SellItem>) o;
             }
         } catch (Exception e) {
             LogHelper.logException(e, "ServiceService->getOnlineSellItems");
@@ -215,7 +218,7 @@ public class ServerService {
 
     public String uploadSaveFile(String fileName) {
         File file = new File(fileName);
-        if(file.exists()){
+        if (file.exists()) {
             try {
                 HttpURLConnection connection = server.getHttpURLConnection(UPLOAD_SAVE, RestConnection.POST);
                 connection.addRequestProperty(Field.FILE_NAME, file.getName());
@@ -223,7 +226,7 @@ public class ServerService {
                 int i = fis.read();
                 OutputStream outputStream = connection.getOutputStream();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                while(i!=-1){
+                while (i != -1) {
                     baos.write(i);
                     i = fis.read();
                 }
@@ -242,7 +245,7 @@ public class ServerService {
             HttpURLConnection connection = server.getHttpURLConnection("download_save", RestConnection.POST);
             connection.addRequestProperty("id", id);
             connection.connect();
-            if(connection.getResponseCode() == 200) {
+            if (connection.getResponseCode() == 200) {
                 InputStream inputStream = connection.getInputStream();
                 File file = FileUtils.newFileInstance("", "" + ".maze", true);
 

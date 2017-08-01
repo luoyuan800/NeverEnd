@@ -203,7 +203,7 @@ public class TestBattleService {
         battleService.setBattleMessage(battleMessage);
         battleService.battle(1);
         verify(battleMessage, atLeastOnce()).harm(any(), any(), anyLong());
-        assertTrue(monster.getHp() <= 0, "End battle!");
+        assertTrue(monster.getCurrentHp() <= 0 || hero.getCurrentHp() <= 0, "End battle!");
     }
 
     @NotNull

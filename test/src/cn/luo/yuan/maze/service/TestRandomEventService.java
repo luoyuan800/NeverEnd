@@ -35,63 +35,10 @@ public class TestRandomEventService {
         Maze maze = new Maze();
         maze.setLevel(1);
         maze.setMaxLevel(10);
-        Random random = new Random(System.currentTimeMillis());
-        InfoControlInterface gameContext = new InfoControlInterface() {
-            @Override
-            public Hero getHero() {
-                return hero;
-            }
-
-            @Override
-            public Random getRandom() {
-                return random;
-            }
-
-            @Override
-            public Maze getMaze() {
-                return maze;
-            }
-
-            @Override
-            public void addMessage(String msg) {
-                System.out.println(msg);
-            }
-
-            @Override
-            public void stopGame() {
-
-            }
-
-            @Override
-            public DataManagerInterface getDataManager() {
-                return null;
-            }
-
-            @Override
-            public TaskManagerImp getTaskManager() {
-                return null;
-            }
-
-            @Override
-            public PetMonsterHelperInterface getPetMonsterHelper() {
-                return null;
-            }
-
-            @Override
-            public ScheduledExecutorService getExecutor() {
-                return null;
-            }
-
-            @Override
-            public long resetSkill(@NotNull SkillParameter sp) {
-                return 0;
-            }
-
-            @Override
-            public void showPopup(String msg) {
-
-            }
-        };
+        MockGameContext gameContext = new MockGameContext();
+        gameContext.hero = hero;
+        gameContext.executor = mock(ScheduledExecutorService.class);
+        Random random = gameContext.random;
         RandomEventService service = spy(new RandomEventService(gameContext));
         int i = 100;
         while (i-- > 0){

@@ -50,7 +50,7 @@ public class GameActivity extends BaseActivity {
 //        ListenerService.init();
         dataManager = new DataManager(intent.getIntExtra("index", -1), this);
         super.onCreate(savedInstanceState);
-        NeverEndConfig config = dataManager.getConfig();
+        final NeverEndConfig config = dataManager.getConfig();
         if (config.getTheme() != 0) {
             setTheme(config.getTheme());
         }
