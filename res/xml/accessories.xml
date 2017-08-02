@@ -266,10 +266,10 @@
         <description value=""/>
         <color value="#556B2F"/>
         <author value=""/>
-        <price value="27000"/>
+        <price value="212700"/>
         <type value="帽子"/>
         <properties>
-            <effect name="ClickMaterialEffect" min="1" max="20" rate="100" element="false"/>
+            <effect name="ClickMaterialEffect" min="1" max="10" rate="100" element="false"/>
             <effect name="AgiEffect" min="20" max="500" rate="50" element="false"/>
             <effect name="DogeRateEffect" min="-15" max="-20" rate="100" element="true"/>
             <effect name="HpEffect" min="-3000" max="-20" rate="100" element="true"/>

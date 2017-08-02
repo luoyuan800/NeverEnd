@@ -50,10 +50,6 @@ public class GameContext implements InfoControlInterface{
         return null;
     }
 
-    @Override
-    public TaskManager getTaskManager() {
-        return null;
-    }
 
     @Override
     public PetMonsterHelperInterface getPetMonsterHelper() {

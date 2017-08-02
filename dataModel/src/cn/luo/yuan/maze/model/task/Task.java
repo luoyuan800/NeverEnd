@@ -19,7 +19,7 @@ public abstract class Task implements Serializable {
     private boolean start;
     private String id;
     private String preTaskId;
-    public abstract void invoke(InfoControlInterface context);
+    public abstract void finished(InfoControlInterface context);
 
     public String getDesc() {
         return desc;
@@ -68,5 +68,10 @@ public abstract class Task implements Serializable {
     }
 
     public abstract List<IDModel> predecessorItems();
+
+    public void start(InfoControlInterface context){
+        setStart(true);
+        setFinished(false);
+    }
 
 }

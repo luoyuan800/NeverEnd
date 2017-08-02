@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
+import java.util.Set;
 
 import static cn.luo.yuan.maze.Path.*;
 
@@ -149,6 +150,16 @@ public class NeverEndServlet extends HttpServlet {
         PrintWriter writer = null;
         Boolean success = null;
         switch (path) {
+            case QUERY_TASK_SCENES:
+                String taskId = request.getHeader(Field.TASK_ID);
+                writeObject(response, process.queryScenes(taskId));
+                break;
+            case QUERY_ONLINE_TASK:
+                int start = request.getIntHeader(Field.INDEX);
+                int row = request.getIntHeader(Field.COUNT);
+                Set<String> filter = readObject(request);
+                writeObject(response, process.queryTask(start, row, filter));
+                break;
             case UPLOAD_SAVE:
                 String name = process.uploadFile(request.getHeader(Field.FILE_NAME), request.getInputStream());
                 writer = response.getWriter();

@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -155,6 +156,11 @@ public class Resource {
         } else {
             return null;
         }
+    }
+
+    public static Drawable getDrawableFromBytes(byte[] bytes){
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+        return new BitmapDrawable(context.getResources(),bitmap);
     }
 
 

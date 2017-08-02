@@ -28,17 +28,18 @@ import java.util.UUID;
  * Created by gluo on 11/28/2016.
  */
 public class ObjectTable<T extends Serializable> implements Runnable {
-    private File root;
+    private String root;
     private Class<T> table;
     private HashMap<String, SoftReference<T>> cache;
     private ReferenceQueue<T> queue;
 
     public ObjectTable(Class<T> table, File root) {
         queue = new ReferenceQueue<T>();
-        this.root = new File(root, table.getName());
-        if (!this.root.exists()) {
-            this.root.mkdirs();
-        }
+        File file = new File(root, table.getName());
+        if (!file.exists()) {
+            file.mkdirs();
+        }this.root = file.getAbsolutePath();
+
         this.table = table;
         cache = new HashMap<>();
     }
@@ -102,8 +103,9 @@ public class ObjectTable<T extends Serializable> implements Runnable {
 
     public List<T> loadAll() {
         List<T> list = new ArrayList<>();
-        if (root.isDirectory()) {
-            for (String id : root.list()) {
+        File file = new File(root);
+        if (file.isDirectory()) {
+            for (String id : file.list()) {
                 T obj = loadObject(id);
                 if (obj != null)
                     list.add(obj);
@@ -113,12 +115,13 @@ public class ObjectTable<T extends Serializable> implements Runnable {
     }
 
     public synchronized void clear() {
-        if (root.isDirectory()) {
-            for (File file : root.listFiles()) {
-                file.delete();
+        File file = new File(root);
+        if (file.isDirectory()) {
+            for (File cfile : file.listFiles()) {
+                cfile.delete();
             }
         }
-        root.delete();
+        file.delete();
         cache.clear();
     }
 
@@ -160,7 +163,8 @@ public class ObjectTable<T extends Serializable> implements Runnable {
     }
 
     public int size() {
-        return root.isDirectory() ? root.list().length : 0;
+        File file = new File(root);
+        return file.isDirectory() ? file.list().length : 0;
     }
 
     public List<T> loadLimit(int start, int row, Index<T> index, Comparator<T> comparator) throws IOException, ClassNotFoundException {
@@ -190,7 +194,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
 
     public List<String> loadIds() {
         List<String> ids = new ArrayList<>();
-        String[] list = root.list();
+        String[] list = new File(root).list();
         if (list != null) {
             Collections.addAll(ids, list);
         }
@@ -200,7 +204,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
     public List<T> removeExpire(long deathTime) {
         List<T> deleted = new ArrayList<T>();
         try {
-            File[] files = root.listFiles();
+            File[] files = new File(root).listFiles();
             if (files != null) {
                 for (File file : files) {
                     BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);

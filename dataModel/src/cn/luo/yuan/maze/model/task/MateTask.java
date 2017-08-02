@@ -14,7 +14,7 @@ import java.util.List;
 public class MateTask extends Task {
     private long mate;
     @Override
-    public void invoke(InfoControlInterface context) {
+    public void finished(InfoControlInterface context) {
         context.getHero().setMaterial(context.getHero().getMaterial() + mate);
     }
 

@@ -183,4 +183,8 @@ public class HeroTable {
         return null;
     }
 
+    public ObjectTable<ServerRecord> getDb(){
+        return recordDb;
+    }
+
 }

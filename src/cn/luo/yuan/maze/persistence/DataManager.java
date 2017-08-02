@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.model.Accessory;
+import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.model.Index;
@@ -476,6 +477,10 @@ public class DataManager implements DataManagerInterface {
         maze.setLevel(1);
         maze.setMeetRate(99.9f);
         return maze;
+    }
+
+    public void registerTable(ObjectTable table){
+        e.scheduleAtFixedRate(table,10, 20, TimeUnit.SECONDS);
     }
 
 }

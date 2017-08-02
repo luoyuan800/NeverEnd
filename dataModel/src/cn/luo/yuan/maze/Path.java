@@ -4,6 +4,8 @@ package cn.luo.yuan.maze;
  * Created by gluo on 7/6/2017.
  */
 public class Path {
+    public static final String QUERY_TASK_SCENES = "queryTaskScenes";
+    public static final String QUERY_ONLINE_TASK = "query_online_task";
     public static final String UPLOAD_SAVE = "upload_save";
     public static final String POST_DEFENDER = "post_defender";
     public static final String ADD_LIMIT = "add_restore_Limit";

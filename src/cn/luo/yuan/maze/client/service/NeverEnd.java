@@ -23,9 +23,7 @@ import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillParameter;
 import cn.luo.yuan.maze.model.skill.UpgradeAble;
 import cn.luo.yuan.maze.persistence.DataManager;
-import cn.luo.yuan.maze.service.InfoControlInterface;
-import cn.luo.yuan.maze.service.PetMonsterHelper;
-import cn.luo.yuan.maze.service.SkillHelper;
+import cn.luo.yuan.maze.service.*;
 import cn.luo.yuan.maze.utils.Random;
 import org.jetbrains.annotations.NotNull;
 
@@ -53,6 +51,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
     private PetMonsterHelper petMonsterHelper;
     private CrashHandler crashHandler;
     private ServerService serverService;
+    private TaskManager taskManager;
 
     public NeverEnd() {
     }
@@ -75,6 +74,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
         accessoryHelper = AccessoryHelper.getOrCreate(this);
         petMonsterHelper.setRandom(random);
         petMonsterHelper.setMonsterLoader(PetMonsterLoder.getOrCreate(this));
+        taskManager = new TaskManager(this);
         handlerData(dataManager);
     }
 
@@ -149,6 +149,14 @@ public class NeverEnd extends Application implements InfoControlInterface {
 
     public void setServerService(ServerService serverService) {
         this.serverService = serverService;
+    }
+
+    public TaskManager getTaskManager() {
+        return taskManager;
+    }
+
+    public void setTaskManager(TaskManager taskManager) {
+        this.taskManager = taskManager;
     }
 
     void setHero(Hero hero) {

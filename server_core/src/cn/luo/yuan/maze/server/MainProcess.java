@@ -6,6 +6,7 @@ import cn.luo.yuan.maze.model.ExchangeObject;
 import cn.luo.yuan.maze.model.GroupHolder;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.maze.model.Index;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.SellItem;
@@ -17,6 +18,8 @@ import cn.luo.yuan.maze.model.goods.types.Grill;
 import cn.luo.yuan.maze.model.goods.types.Medallion;
 import cn.luo.yuan.maze.model.goods.types.Omelet;
 import cn.luo.yuan.maze.model.goods.types.ResetSkill;
+import cn.luo.yuan.maze.model.task.Scene;
+import cn.luo.yuan.maze.model.task.Task;
 import cn.luo.yuan.maze.serialize.ObjectTable;
 import cn.luo.yuan.maze.server.model.User;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
@@ -60,6 +63,7 @@ public class MainProcess {
     public WarehouseTable warehouseTable;
     public ExchangeTable exchangeTable;
     public ObjectTable<Task> taskTable;
+    public ObjectTable<Scene> sceneTable;
     public Set<GroupHolder> groups = Collections.synchronizedSet(new HashSet<>());
     public HeroTable heroTable;
     public GameContext context = new GameContext();
@@ -76,6 +80,7 @@ public class MainProcess {
         warehouseTable = new WarehouseTable(this.root);
         exchangeTable = new ExchangeTable(this.root);
         taskTable = new ObjectTable<>(Task.class, this.root);
+        sceneTable = new ObjectTable<>(Scene.class, this.root);
         heroTable = new HeroTable(heroDir);
         userDb = new ObjectTable<User>(User.class, this.root);
         process = this;
@@ -159,7 +164,7 @@ public class MainProcess {
     }
 
     public void addTask(String name, String desc, String material, String accessory_name, String point, String accessory_color, String accessory_level, String accessory_element, String accessory_type, String accessory_effects) throws IOException {
-        Task task = new Task(name, desc);
+        /*Task task = new Task(name, desc);
         task.setId(task.getName());
         task.setMaterial(Integer.parseInt(material));
         task.setPoint(Integer.parseInt(point));
@@ -178,7 +183,7 @@ public class MainProcess {
             accessory.setType(accessory_type);
         }
         //TODO Pet
-        taskTable.save(task, task.getId());
+        taskTable.save(task, task.getId());*/
     }
 
     public Serializable openOnlineGift(String ownerId) {
@@ -301,6 +306,11 @@ public class MainProcess {
                 save();
             }
         }, 4, 4, TimeUnit.HOURS);
+        executor.scheduleAtFixedRate(taskTable, 100, 3000, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(sceneTable, 111, 3000, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(userDb, 111, 300, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(heroTable.getDb(), 99, 200, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(exchangeTable.getExchangeDb(), 120, 200, TimeUnit.MILLISECONDS);
     }
 
     public ServerData queryHeroData(String id) {
@@ -603,5 +613,38 @@ public class MainProcess {
         }
         exMy.setSubmitTime(System.currentTimeMillis());
         return exMy;
+    }
+
+    public List<Task> queryTask(int start, int row, Set<String> filter){
+        try {
+            return taskTable.loadLimit(start, row, new Index<Task>() {
+                @Override
+                public boolean match(Task task) {
+                    return !filter.contains(task.getId());
+                }
+            }, null);
+        } catch (Exception e) {
+            LogHelper.error(e);
+        }
+        return Collections.emptyList();
+    }
+
+    public List<Scene> queryScenes(String taskId){
+        try {
+            sceneTable.loadLimit(0, -1, new Index<Scene>() {
+                @Override
+                public boolean match(Scene scene) {
+                    return scene.getTaskId().equals(taskId);
+                }
+            }, new Comparator<Scene>() {
+                @Override
+                public int compare(Scene o1, Scene o2) {
+                    return Integer.compare(o1.getOrder(), o2.getOrder());
+                }
+            });
+        } catch (Exception e) {
+            LogHelper.error(e);
+        }
+        return Collections.emptyList();
     }
 }

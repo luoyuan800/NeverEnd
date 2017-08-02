@@ -248,16 +248,17 @@ public class ServerService {
             if (connection.getResponseCode() == 200) {
                 InputStream inputStream = connection.getInputStream();
                 File file = FileUtils.newFileInstance("", "" + ".maze", true);
-
-                FileOutputStream fos = new FileOutputStream(file);
-                int i = inputStream.read();
-                while (i != -1) {
-                    fos.write(i);
-                    i = inputStream.read();
+                if(file!=null) {
+                    FileOutputStream fos = new FileOutputStream(file);
+                    int i = inputStream.read();
+                    while (i != -1) {
+                        fos.write(i);
+                        i = inputStream.read();
+                    }
+                    fos.flush();
+                    fos.close();
+                    return file;
                 }
-                fos.flush();
-                fos.close();
-                return file;
             }
         } catch (IOException e) {
             LogHelper.logException(e, "downloadSaveFile: " + id);

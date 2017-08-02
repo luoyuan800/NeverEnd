@@ -48,9 +48,9 @@ public class OnlineActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Resource.init(this);
         gameContext = (NeverEnd) getApplication();
         service = gameContext.getServerService();
-        Resource.init(this);
         LogHelper.initLogSystem(this);
         setContentView(R.layout.online_view);
         executor = Executors.newScheduledThreadPool(4);
