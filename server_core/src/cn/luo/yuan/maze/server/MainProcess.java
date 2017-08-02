@@ -106,7 +106,7 @@ public class MainProcess {
 
     public boolean isSignVerify(String sign, String version) {
 //        return debug || !StringUtils.isNotEmpty(sign_match) || (sign_match.equalsIgnoreCase(sign) && (MainProcess.version.equals(version)||version_Dot.equals(version)));
-        return debug || !StringUtils.isNotEmpty(sign_match) || (sign_match.equalsIgnoreCase(sign));
+        return (StringUtils.isEmpty(sign) && StringUtils.isEmpty(version)) || debug || !StringUtils.isNotEmpty(sign_match) || (sign_match.equalsIgnoreCase(sign));
     }
 
     public String buildHeroRange() {
