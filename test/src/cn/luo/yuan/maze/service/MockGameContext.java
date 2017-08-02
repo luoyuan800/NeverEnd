@@ -49,7 +49,6 @@ public class MockGameContext implements InfoControlInterface {
         return dataManager;
     }
 
-    @Override
     public TaskManager getTaskManager() {
         return null;
     }

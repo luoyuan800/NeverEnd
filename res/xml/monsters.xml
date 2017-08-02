@@ -702,4 +702,97 @@
         <rank>6</rank>
         <evolution></evolution>
     </monster>
+    <monster>
+        <index>399</index>
+        <meet meet_rate="10" min_level="105"/>
+        <name>元素精灵</name>
+        <desc>蕴含各种元素属性的小精灵，似乎没有实体。
+        </desc>        <atk>5</atk>
+        <def>5</def>
+        <hp>300</hp>
+        <hit>10</hit>
+        <silent>100</silent>
+        <egg_rate>1</egg_rate>
+        <pet_rate>5</pet_rate>
+        <sex>-1</sex>
+        <race>Ghosr</race>
+        <rank>2</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>400</index>
+        <meet meet_rate="10" min_level="1050"/>
+        <name>土精灵</name>
+        <desc>蕴含土元素属性的小精灵，由元素精灵进化而来，擅长防御。可以让你的防御增幅10%。
+        </desc>
+        <atk>5</atk>
+        <def>300</def>
+        <hp>100</hp>
+        <hit>1</hit>
+        <silent>100</silent>
+        <egg_rate>0</egg_rate>
+        <pet_rate>0</pet_rate>
+        <sex>-1</sex>
+        <race>Ghosr</race>
+        <rank>4</rank>
+        <effect value="10">DefPercentEffect</effect>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>401</index>
+        <meet meet_rate="10" min_level="1050"/>
+        <name>火精灵</name>
+        <desc>蕴含火元素属性的小精灵，由元素精灵进化而来，擅长攻击。可以让你的攻击增幅10%。
+        </desc>
+        <atk>300</atk>
+        <def>10</def>
+        <hp>100</hp>
+        <hit>1</hit>
+        <silent>100</silent>
+        <egg_rate>0</egg_rate>
+        <pet_rate>0</pet_rate>
+        <sex>-1</sex>
+        <race>Ghosr</race>
+        <rank>4</rank>
+        <effect value="10">AtkPercentEffect</effect>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>402</index>
+        <meet meet_rate="10" min_level="1050"/>
+        <name>水精灵</name>
+        <desc>蕴含水元素属性的小精灵，由元素精灵进化而来，擅长治疗。可以让你生命恢复速度提升20%。
+        </desc>
+        <atk>130</atk>
+        <def>120</def>
+        <hp>200</hp>
+        <hit>1</hit>
+        <silent>100</silent>
+        <egg_rate>0</egg_rate>
+        <pet_rate>0</pet_rate>
+        <sex>-1</sex>
+        <race>Ghosr</race>
+        <rank>4</rank>
+        <effect value="20">RestoreHPPercentEffect</effect>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>403</index>
+        <meet meet_rate="10" min_level="1050"/>
+        <name>木精灵</name>
+        <desc>蕴含木元素属性的小精灵，由元素精灵进化而来，擅长生命法术。可以让你基础生命上限提升10%。
+        </desc>
+        <atk>20</atk>
+        <def>10</def>
+        <hp>300</hp>
+        <hit>1</hit>
+        <silent>100</silent>
+        <egg_rate>0</egg_rate>
+        <pet_rate>0</pet_rate>
+        <sex>-1</sex>
+        <race>Ghosr</race>
+        <rank>4</rank>
+        <effect value="10">HPPercentEffect</effect>
+        <evolution></evolution>
+    </monster>
 </monsters>

@@ -291,7 +291,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
         //Pet Handler
         for (Pet pet : dataManager.loadMountPets()) {
             if (pet.isMounted()) {
-                hero.getPets().add(pet);
+                petMonsterHelper.mountPet(pet, hero);
             }
         }
     }

@@ -11,6 +11,7 @@ import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Race;
+import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.service.MonsterLoader;
@@ -367,6 +368,14 @@ public class PetMonsterLoder implements MonsterLoader {
             case "race":
                 if (monster != null) {
                     monster.setRace(Race.valueOf(parser.nextText()));
+                }
+                break;
+            case "effect":
+                String value = parser.getAttributeValue(null, "meet_rate");
+                String e = parser.nextText();
+                Effect effect = ClientEffectHandler.buildEffect(e, value, false);
+                if(effect!=null && monster!=null){
+                    monster.getEffects().add(effect);
                 }
                 break;
         }

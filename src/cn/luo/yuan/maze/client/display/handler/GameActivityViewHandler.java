@@ -170,18 +170,42 @@ public class GameActivityViewHandler extends Handler {
         @Override
         public void run() {
             //Hero properties
-            ((TextView) context.findViewById(R.id.hero_level)).setText(StringUtils.formatNumber(context.control.getMaze().getLevel()));
-            ((TextView) context.findViewById(R.id.hero_level_max)).setText(StringUtils.formatNumber(context.control.getMaze().getMaxLevel()));
-            ((TextView) context.findViewById(R.id.hero_mate)).setText(StringUtils.formatNumber(context.control.getHero().getMaterial()));
-            ((TextView) context.findViewById(R.id.hero_point)).setText(StringUtils.formatNumber(context.control.getHero().getPoint()));
-            ((TextView) context.findViewById(R.id.hero_click)).setText(StringUtils.formatNumber(context.control.getHero().getClick()));
-            ((TextView) context.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(context.control.getHero().getCurrentHp()));
-            ((TextView) context.findViewById(R.id.hero_max_hp)).setText(StringUtils.formatNumber(context.control.getHero().getUpperHp()));
-            ((TextView) context.findViewById(R.id.hero_atk)).setText(StringUtils.formatNumber(context.control.getHero().getUpperAtk()));
-            ((TextView) context.findViewById(R.id.hero_def)).setText(StringUtils.formatNumber(context.control.getHero().getUpperDef()));
-
+            setText((TextView) context.findViewById(R.id.hero_level), StringUtils.formatNumber(context.control.getMaze().getLevel()));
+            setText((TextView) context.findViewById(R.id.hero_level_max), StringUtils.formatNumber(context.control.getMaze().getMaxLevel()));
+            setText((TextView) context.findViewById(R.id.hero_mate),StringUtils.formatNumber(context.control.getHero().getMaterial()));
+            setText((TextView) context.findViewById(R.id.hero_point),StringUtils.formatNumber(context.control.getHero().getPoint()));
+            setText((TextView) context.findViewById(R.id.hero_click),StringUtils.formatNumber(context.control.getHero().getClick()));
+            setText((TextView) context.findViewById(R.id.hero_hp),StringUtils.formatNumber(context.control.getHero().getCurrentHp()));
+            setText((TextView) context.findViewById(R.id.hero_max_hp),StringUtils.formatNumber(context.control.getHero().getUpperHp()));
+            TextView additionHp = (TextView) context.findViewById(R.id.hero_addition_hp);
+            long additionHpValue = context.control.getHero().getAdditionHp();
+            setNumberText(additionHp, additionHpValue);
+            setText((TextView) context.findViewById(R.id.hero_atk),StringUtils.formatNumber(context.control.getHero().getAtk()));
+            setNumberText((TextView) context.findViewById(R.id.hero_atk_addition), context.control.getHero().getAdditionAtk());
+            setText((TextView) context.findViewById(R.id.hero_def),StringUtils.formatNumber(context.control.getHero().getUpperDef()));
+            setNumberText((TextView) context.findViewById(R.id.hero_def_addition),context.control.getHero().getAdditionDef());
         }
     };
+
+    private void setNumberText(TextView textView, long value) {
+        if(value >= 0) {
+            setText(textView, " + " + StringUtils.formatNumber(value));
+            textView.setTextColor(Color.BLUE);
+        }else{
+            setText(textView, " - " + StringUtils.formatNumber(value));
+            textView.setTextColor(R.color.mobvista_reward_green);
+        }
+    }
+
+    private void setText(TextView view, String text){
+        if(text==null){
+            text = StringUtils.EMPTY_STRING;
+        }
+        if(!text.equals(view.getTag(R.string.item))){
+            view.setTag(R.string.item, text);
+            view.setText(text);
+        }
+    }
     private Runnable refreshPetTask = new Runnable() {
         @Override
         public void run() {

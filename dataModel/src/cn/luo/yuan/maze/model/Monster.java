@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.model;
 
+import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.model.skill.Skill;
@@ -9,6 +10,8 @@ import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by gluo on 4/1/2017.
@@ -35,6 +38,7 @@ public class Monster extends HarmObject implements SilentAbleObject, NameObject,
     private Skill skill;
     private int rank;
     private float elementRate = 0.5f;
+    private List<Effect> effects = new ArrayList<>(2);
 
     public long getUpperAtk(){
         return getAtk();
@@ -264,5 +268,18 @@ public class Monster extends HarmObject implements SilentAbleObject, NameObject,
 
     public long getUpperDef() {
         return getDef();
+    }
+
+    public List<Effect> getEffects() {
+        synchronized (this) {
+            if (effects == null) {
+                effects = new ArrayList<>(2);
+            }
+        }
+        return effects;
+    }
+
+    public void setEffects(List<Effect> effects){
+        this.effects = effects;
     }
 }

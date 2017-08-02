@@ -12,7 +12,6 @@ import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
-import dalvik.annotation.TestTargetClass;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

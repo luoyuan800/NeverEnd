@@ -115,12 +115,30 @@ public class PetMonsterHelper implements PetMonsterHelperInterface {
 
     public boolean evolution(Pet pet, Hero hero) {
         if(pet.getIntimacy() > 100) {
-            int eveIndex = monsterLoader.getEvolutionIndex(pet.getIndex());
+            int eveIndex = getEvolutionIndex(pet, hero);
             eveIndex = shiershengiaoDetect(eveIndex, hero);
             return evolution(pet, eveIndex);
         }else{
             return false;
         }
+    }
+
+    private int getEvolutionIndex(Pet pet, Hero hero) {
+        if(pet.getIndex() == 399){
+            switch (hero.getElement()){
+                case FIRE:
+                    return 401;
+                case WATER:
+                    return 402;
+                case WOOD:
+                    return 403;
+                case EARTH:
+                    return 400;
+                    default:
+                        return pet.getIndex();
+            }
+        }
+        return monsterLoader.getEvolutionIndex(pet.getIndex());
     }
 
     private int shiershengiaoDetect(int next, Hero hero) {
@@ -383,6 +401,7 @@ public class PetMonsterHelper implements PetMonsterHelperInterface {
         }else{
             pet.setMounted(true);
             hero.getPets().add(pet);
+            hero.getEffects().addAll(pet.getEffects());
             return true;
         }
     }

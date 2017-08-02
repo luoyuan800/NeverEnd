@@ -388,4 +388,19 @@ public class Hero extends HarmObject implements Serializable, IDModel, SkillAble
                 "def: " + StringUtils.formatNumber(getUpperDef()) + "<br>" +
                 "hp: " + StringUtils.formatNumber(getCurrentHp()) + "/" + StringUtils.formatNumber(getUpperHp());
     }
+
+    public long getAdditionAtk() {
+        return EffectHandler.getEffectAdditionLongValue(EffectHandler.ATK, getEffects(), this) +
+                EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects(), this) * getAtkGrow();
+    }
+
+    public long getAdditionDef(){
+        return EffectHandler.getEffectAdditionLongValue(EffectHandler.DEF, getEffects(), this) +
+                EffectHandler.getEffectAdditionLongValue(EffectHandler.AGI, getEffects(), this) * getDefGrow();
+    }
+
+    public long getAdditionHp(){
+        return EffectHandler.getEffectAdditionLongValue(EffectHandler.HP, getEffects(), this) +
+                EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects(), this) * getHpGrow();
+    }
 }

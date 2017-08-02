@@ -67,6 +67,15 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/hero_max_hp"
                 android:text="10000000W"/>
+
+            <TextView
+                    android:text="+1000W"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/hero_addition_hp"
+                    android:textColor="@color/red"
+                    android:drawingCacheQuality="auto"
+                    android:layout_marginStart="15sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -79,11 +88,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="攻击:"/>
+
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/hero_atk"
                     android:text="100000W"/>
+
+            <TextView
+                    android:text="+100W"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/hero_atk_addition"
+                    android:textColor="@color/red"
+                    android:layout_marginStart="15sp"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -96,11 +115,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="防御:"/>
+
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/hero_def"
                     android:text="100000W"/>
+
+            <TextView
+                    android:text="-100W"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/hero_def_addition"
+                    android:layout_marginStart="15sp"
+                    android:elevation="1dp"
+                    android:textColor="@color/mobvista_reward_green"/>
         </LinearLayout>
         <LinearLayout
                 android:layout_gravity="center"
