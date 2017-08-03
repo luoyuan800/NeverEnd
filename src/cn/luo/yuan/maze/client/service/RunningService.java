@@ -125,7 +125,7 @@ public class RunningService implements RunningServiceInterface {
                                     hero.getDisplayName(), StringUtils.formatNumber(maze.getLevel()), StringUtils.formatNumber(point));
                         }
                         long heroHp = hero.getHp();
-                        long maxHp = hero.getMaxHp();
+                        long maxHp = (long)(hero.getMaxHp() * (1 + EffectHandler.getEffectAdditionFloatValue(EffectHandler.RESTORE_RATE, hero.getEffects())/100));
                         if (heroHp < maxHp && random.nextLong(hero.getAgi()) > random.nextLong(hero.getStr())) {
                             long restore = random.nextLong((maxHp - heroHp) / 5);
                             hero.setHp(heroHp + restore);

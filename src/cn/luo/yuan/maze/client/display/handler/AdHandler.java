@@ -150,19 +150,23 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (yomob && TGSDK.couldShowAd(adcenseid)) {
-                    if (debug) {
-                        TGSDK.showTestView(context, adcenseid);
+                try {
+                    if (yomob && TGSDK.couldShowAd(adcenseid)) {
+                        if (debug) {
+                            TGSDK.showTestView(context, adcenseid);
+                        } else {
+                            TGSDK.showAd(context, adcenseid);
+                        }
                     } else {
-                        TGSDK.showAd(context, adcenseid);
+                        if (SpotManager.getInstance(context).checkSpotAdConfig()) {
+                            SpotManager.getInstance(context).showSpot(context, AdHandler.this);
+                        } else {
+                            setUpYouMiAd();
+                        }
+                        debug("Could not show!");
                     }
-                } else {
-                    if (SpotManager.getInstance(context).checkSpotAdConfig()) {
-                        SpotManager.getInstance(context).showSpot(context, AdHandler.this);
-                    } else {
-                        setUpYouMiAd();
-                    }
-                    debug("Could not show!");
+                }catch (Exception e){
+                    LogHelper.logException(e, "Show ad");
                 }
             }
         });

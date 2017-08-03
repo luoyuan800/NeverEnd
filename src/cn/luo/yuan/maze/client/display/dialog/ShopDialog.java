@@ -63,6 +63,11 @@ public class ShopDialog {
     }
 
     public void show(String title, List<SellItem> items, SellItemAdapter.AfterSell listener) {
+        if(context.getHero().getMaterial() > Data.MATERIAL_LIMIT) {
+            for (SellItem item : items) {
+                item.price *= 2;
+            }
+        }
         AlertDialog shopDialog = new AlertDialog.Builder(context.getContext()).create();
         shopDialog.setTitle(title);
         shopDialog.setButton(DialogInterface.BUTTON_POSITIVE, "退出", new DialogInterface.OnClickListener() {

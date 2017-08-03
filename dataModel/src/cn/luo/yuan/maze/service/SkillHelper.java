@@ -60,7 +60,9 @@ public class SkillHelper {
     }
 
     public static void unMountSkill(MountAble skill, Hero hero) {
-        skill.unMount();
+        if(skill!=null) {
+            skill.unMount();
+        }
         for (int i = 0; i < hero.getSkills().length; i++) {
             if (hero.getSkills()[i] == skill) {
                 hero.getSkills()[i] = EmptySkill.EMPTY_SKILL;

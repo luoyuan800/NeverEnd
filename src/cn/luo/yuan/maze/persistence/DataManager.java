@@ -6,6 +6,7 @@ import android.database.Cursor;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
+import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.model.Index;
@@ -121,7 +122,7 @@ public class DataManager implements DataManagerInterface {
         ContentValues values = new ContentValues();
         values.put("name", hero.getName());
         values.put("hero_index", hero.getIndex());
-        values.put("element", hero.getElement().name());
+        values.put("element", hero.getElement()!=null ? hero.getElement().name() : Element.NONE.name());
         values.put("reincarnate", hero.getReincarnate());
         values.put("last_update", System.currentTimeMillis());
         values.put("gift", hero.getGift().name());

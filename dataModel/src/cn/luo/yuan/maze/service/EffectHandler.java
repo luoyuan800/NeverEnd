@@ -15,7 +15,7 @@ import java.util.Collection;
 public class EffectHandler {
     public static final String HP = "hp", STR="str", AGI="agi", ATK="atk", DEF="def", MEET_RATE="meet",
             PET_RATE="pet", SKILL_RATE = "skill_rate", EGG="egg_rate", CLICK_MATERIAL="material",
-            DOGE="doge", PARRY="parry";
+            DOGE="doge", PARRY="parry", RESTORE_RATE= "restore";
 
     public static long getEffectAdditionLongValue(String property, Collection<Effect> effects, Hero hero){
         switch (property){
@@ -38,6 +38,13 @@ public class EffectHandler {
     public static float getEffectAdditionFloatValue(String property, Collection<Effect> effects){
         float value = 0.0f;
         switch (property){
+            case RESTORE_RATE:
+                for(Effect effect : effects){
+                    if(effect instanceof RestoreHPPercentEffect){
+                        value += ((RestoreHPPercentEffect)effect).getValue();
+                    }
+                }
+                break;
             case PARRY:
                 for(Effect effect : effects){
                     if(effect instanceof ParryEffect){
@@ -148,6 +155,10 @@ public class EffectHandler {
 
     public static Effect buildEffect(String effectName, String value) {
         switch (effectName) {
+            case "RestoreHPPercentEffect":
+                RestoreHPPercentEffect restoreEffect = new RestoreHPPercentEffect();
+                restoreEffect.setPercent(Float.parseFloat(value));
+                return  restoreEffect;
             case "DogeRateEffect":
                 DogeRateEffect dogeRateEffect = new DogeRateEffect();
                 dogeRateEffect.setValue(Float.parseFloat(value));
