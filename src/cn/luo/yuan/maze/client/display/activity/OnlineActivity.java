@@ -60,7 +60,7 @@ public class OnlineActivity extends Activity {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                Drawable bitmap = Resource.getImageFromSD("bak_1.png");
+                Drawable bitmap = Resource.loadImageFromSD("bak_1.png");
                 if (bitmap != null) {
                     findViewById(R.id.online_view_container).setBackground(bitmap);
                 }

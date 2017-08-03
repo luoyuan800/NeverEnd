@@ -13,9 +13,7 @@ import java.util.Calendar;
 /**
  * Created by luoyuan on 2017/5/13.
  */
-public class PetMonsterHelper implements PetMonsterHelperInterface {
-    public static PetMonsterHelper instance = new PetMonsterHelper();
-    private MonsterLoader monsterLoader;
+public abstract class PetMonsterHelper implements PetMonsterHelperInterface, MonsterLoader {
     private Random random;
 
     public Pet monsterToPet(Monster monster, Hero hero, long level) throws MonsterToPetException {
@@ -68,24 +66,17 @@ public class PetMonsterHelper implements PetMonsterHelperInterface {
     }
 
     public Monster randomMonster(long level) {
-        return monsterLoader.randomMonster(level, true);
+        return randomMonster(level, true);
     }
+
+    public abstract  Monster randomMonster(long level, boolean addKey);
 
     public Monster randomMonster() {
-        return monsterLoader.randomMonster(999, false);
+        return randomMonster(99999, false);
     }
 
-    public MonsterLoader getMonsterLoader() {
-        return monsterLoader;
-    }
 
-    public void setMonsterLoader(MonsterLoader monsterLoader) {
-        this.monsterLoader = monsterLoader;
-    }
-
-    public String getDescription(int index, String type) {
-        return monsterLoader.getDescription(index, type);
-    }
+    public abstract String getDescription(int index, String type);
 
     public boolean upgrade(Pet major, Pet minor) {
         int petUpgradeLimit = Data.PET_UPGRADE_LIMIT;
@@ -138,8 +129,10 @@ public class PetMonsterHelper implements PetMonsterHelperInterface {
                         return pet.getIndex();
             }
         }
-        return monsterLoader.getEvolutionIndex(pet.getIndex());
+        return getEvolutionIndex(pet.getIndex());
     }
+
+    public abstract int getEvolutionIndex(int index);
 
     private int shiershengiaoDetect(int next, Hero hero) {
         if (next >= 139 && next <= 150) {
@@ -382,19 +375,6 @@ public class PetMonsterHelper implements PetMonsterHelperInterface {
         this.random = random;
     }
 
-    public Pet eggToPet(Egg egg, Hero hero) {
-        try {
-            Pet pet =  monsterToPet(egg, hero, 0);
-            pet.setFarther(egg.getFarther());
-            pet.setMother(egg.getMother());
-            pet.setMounted(egg.isMounted());
-            pet.setSkill(egg.getSkill());
-            return pet;
-        } catch (MonsterToPetException e) {
-            return null;
-        }
-    }
-
     public boolean mountPet(Pet pet, Hero hero){
         if(hero.getPets().size() >= hero.getPetCount() + hero.getReincarnate()){
             return false;
@@ -450,8 +430,6 @@ public class PetMonsterHelper implements PetMonsterHelperInterface {
         return null;
     }
 
-    private Monster loadMonsterByIndex(int index) {
-        return monsterLoader.loadMonsterByIndex(index);
-    }
+    public abstract Monster loadMonsterByIndex(int index);
 
 }

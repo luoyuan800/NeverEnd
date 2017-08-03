@@ -36,13 +36,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/accessory_desc"/>
-
+<ScrollView android:layout_width="match_parent" android:layout_height="300dp">
             <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:id="@+id/accessory_effects"
                     />
-
+</ScrollView>
             <Button
                     android:text="装备"
                     android:layout_width="match_parent"
@@ -94,12 +94,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/accessory_desc_2"/>
+            <ScrollView android:layout_width="match_parent" android:layout_height="300dp">
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/accessory_effects_2"
-                    android:layout_weight="0.27"
                     android:text="选择用于升级消耗的副装备"/>
+            </ScrollView>
         </LinearLayout>
 
     </LinearLayout>

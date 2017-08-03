@@ -15,6 +15,7 @@ import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.service.MonsterLoader;
+import cn.luo.yuan.maze.service.PetMonsterHelper;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.xmlpull.v1.XmlPullParser;
@@ -28,13 +29,14 @@ import java.util.Map;
 /**
  * Created by luoyuan on 2017/5/13.
  */
-public class PetMonsterLoder implements MonsterLoader {
+public class PetMonsterLoder extends PetMonsterHelper {
     private static PetMonsterLoder instance;
     private NeverEnd control;
     private ArrayMap<MonsterKey, WeakReference<Monster>> monsterCache = new ArrayMap<>();
 
     private PetMonsterLoder(NeverEnd control) {
         this.control = control;
+        setRandom(control.getRandom());
         init();
     }
 
@@ -64,6 +66,9 @@ public class PetMonsterLoder implements MonsterLoader {
         }
         if (drawable == null) {
             drawable = Resource.loadImageFromAssets("monster/wenhao.jpg", false);
+        }
+        if(drawable == null){
+            drawable = Resource.loadImageFromAppFolder(id, false);
         }
         return drawable;
     }
@@ -284,11 +289,6 @@ public class PetMonsterLoder implements MonsterLoader {
                 LogHelper.logException(e, "PetMonsterLoder->init");
             }
         }
-    }
-
-    @Override
-    public Random getRandom() {
-        return control.getRandom();
     }
 
     public Map<MonsterKey, WeakReference<Monster>> getMonsterCache() {

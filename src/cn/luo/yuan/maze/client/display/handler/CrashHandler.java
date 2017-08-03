@@ -28,6 +28,12 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(final Thread thread, final Throwable ex) {
         LogHelper.logException(ex, "UnCatchException");
+        for(StackTraceElement element : ex.getStackTrace()){
+            if(element.getClassName().contains("OnlineActivity") || element.getClassName().contains("TGSDK") ||
+                    element.getClassName().contains("tgsdk") || element.getClassName().contains("Vungle") ){
+                return;
+            }
+        }
         new Thread() {
             @Override
             public void run() {

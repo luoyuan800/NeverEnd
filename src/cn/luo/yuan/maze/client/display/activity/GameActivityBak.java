@@ -80,11 +80,11 @@ public class GameActivityBak extends GameActivity {
         control.getViewHandler().post(new Runnable() {
             @Override
             public void run() {
-                Drawable bitmap = Resource.getImageFromSD("bak.png");
+                Drawable bitmap = Resource.loadImageFromSD("bak.png");
                 if (bitmap != null) {
                     findViewById(R.id.game_view_container).setBackground(bitmap);
                 }
-                bitmap = Resource.getImageFromSD("h.png");
+                bitmap = Resource.loadImageFromSD("h.png");
                 if (bitmap != null) {
                     ((ImageView)findViewById(R.id.hero_pic)).setImageDrawable(bitmap);
                 }

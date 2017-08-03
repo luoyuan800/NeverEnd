@@ -4,10 +4,7 @@ import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.gift.Gift;
-import cn.luo.yuan.maze.model.skill.SkillParameter;
-import cn.luo.yuan.maze.persistence.DataManagerInterface;
 import cn.luo.yuan.maze.utils.Random;
-import org.jetbrains.annotations.NotNull;
 import org.testng.annotations.Test;
 
 import java.util.concurrent.ScheduledExecutorService;

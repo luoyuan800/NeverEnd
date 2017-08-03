@@ -22,7 +22,11 @@ import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
@@ -60,6 +64,27 @@ public class Resource {
     }
     public static String getString(int id, Object...args) {
         return String.format(getString(id), (Object[]) args);
+    }
+
+    public static Drawable loadImageFromAppFolder(String name, boolean cache){
+        Drawable drawable = null;
+        if(cache) {
+            drawable = drawableCache.get(name);
+        }
+        if (drawable == null) {
+            try {
+                File image = new File(context.getDir("image", Context.MODE_PRIVATE), name);
+                if(image.exists()) {
+                    drawable = new BitmapDrawable(context.getResources(), BitmapFactory.decodeStream(new FileInputStream(image)));
+                    if (cache) {
+                        addToCache(name, drawable);
+                    }
+                }
+            } catch (IOException e) {
+                //LogHelper.logException(e, "False to load image from app folder: " + name);
+            }
+        }
+        return drawable;
     }
 
     public static Drawable loadImageFromAssets(String name, boolean cache) {
@@ -149,7 +174,7 @@ public class Resource {
         }
     }
 
-    public static Drawable getImageFromSD(String name) {
+    public static Drawable loadImageFromSD(String name) {
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/neverend/" + name;
         if (new File(path).exists()) {
             return Drawable.createFromPath(path);
@@ -158,10 +183,37 @@ public class Resource {
         }
     }
 
-    public static Drawable getDrawableFromBytes(byte[] bytes){
+    public static Drawable loadDrawableFromBytes(byte[] bytes){
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
         return new BitmapDrawable(context.getResources(),bitmap);
     }
 
+    public static void saveImageIntoAppFolder(String name, InputStream is){
+        File file = new File(context.getDir("image", Context.MODE_PRIVATE), name);
+        if(!file.exists()){
+            file.delete();
+        }
+        FileOutputStream fos = null;
+        try {
+            file.createNewFile();
+            fos = new FileOutputStream(file);
+            int b = is.read();
+            while (b!=-1){
+                fos.write(b);
+                b = is.read();
+            }
+        } catch (IOException e) {
+           LogHelper.logException(e, "write image to app");
+        } finally {
+            if(fos!=null){
+                try {
+                    fos.flush();
+                    fos.close();
+                }catch (Exception e){
+                    LogHelper.logException(e, "fuse image");
+                }
+            }
+        }
+    }
 
 }

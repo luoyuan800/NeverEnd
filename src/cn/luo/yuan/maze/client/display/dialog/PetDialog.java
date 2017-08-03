@@ -21,8 +21,6 @@ import cn.luo.yuan.maze.client.service.PetMonsterLoder;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
-import java.util.List;
-
 /**
  * Created by gluo on 5/15/2017.
  */
