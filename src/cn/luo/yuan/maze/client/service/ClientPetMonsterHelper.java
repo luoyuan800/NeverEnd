@@ -140,15 +140,20 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
                 if (clone.getSex() < 0) {
                     clone.setSex(getRandom().nextInt(2));
                 }
-                clone.setAtk(clone.getAtk() + level * Data.MONSTER_ATK_RISE_PRE_LEVEL);
+
+                clone.setAtk(clone.getAtk() + level * Data.MONSTER_ATK_RISE_PRE_LEVEL + getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT));
                 clone.setDef(clone.getDef() + level * Data.MONSTER_DEF_RISE_PRE_LEVEL);
-                clone.setMaxHp(clone.getMaxHp() + level * Data.MONSTER_HP_RISE_PRE_LEVEL);
+                clone.setMaxHp(clone.getMaxHp() + level * Data.MONSTER_HP_RISE_PRE_LEVEL + getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT));
                 clone.setHp(clone.getMaxHp());
                 clone.setElement(Element.values()[getRandom().nextInt(Element.values().length)]);
                 clone.setMaterial(Data.getMonsterMaterial(clone.getMaxHp(), clone.getAtk(), level, getRandom()));
                 clone.setFirstName(FirstName.getRandom(level, getRandom()));
                 clone.setSecondName(SecondName.getRandom(level, getRandom()));
-                clone.setColor(Data.DEFAULT_QUALITY_COLOR);
+                if(clone.getUpperAtk() > control.getHero().getUpperHp()/2) {
+                    clone.setColor(Data.RED_COLOR);
+                }else{
+                    clone.setColor(Data.DEFAULT_QUALITY_COLOR);
+                }
             }
         }
         return clone;

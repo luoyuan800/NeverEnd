@@ -1,10 +1,6 @@
 package cn.luo.yuan.maze.service;
 
-import cn.luo.yuan.maze.listener.BattleEndListener;
-import cn.luo.yuan.maze.listener.Listener;
-import cn.luo.yuan.maze.listener.LostListener;
-import cn.luo.yuan.maze.listener.PetCatchListener;
-import cn.luo.yuan.maze.listener.WinListener;
+import cn.luo.yuan.maze.listener.*;
 
 import java.util.HashMap;
 
@@ -16,6 +12,7 @@ public class ListenerService {
     public static HashMap<String, PetCatchListener> petCatchListeners = new HashMap<>(2);
     public static HashMap<String, LostListener> lostListeners = new HashMap<>(2);
     public static HashMap<String, WinListener> winListeners = new HashMap<>(2);
+    public static HashMap<String, HarmListener> harmListeners = new HashMap<>(2);
 
     public static void registerListener(Listener listener){
         if(listener instanceof BattleEndListener){
@@ -26,6 +23,8 @@ public class ListenerService {
             winListeners.put(listener.getKey(), (WinListener) listener);
         } else if(listener instanceof LostListener){
             lostListeners.put(listener.getKey(), (LostListener) listener);
+        }else if(listener instanceof HarmListener){
+            harmListeners.put(listener.getKey(), (HarmListener) listener);
         }
     }
 
@@ -38,6 +37,8 @@ public class ListenerService {
             lostListeners.remove(listener.getKey());
         }else if(listener instanceof WinListener){
             winListeners.remove(listener.getKey());
+        } else if(listener instanceof HarmListener){
+            harmListeners.remove(listener.getKey());
         }
     }
 }

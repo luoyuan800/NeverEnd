@@ -41,7 +41,7 @@ public class Data {
     public static final long REINCARNATE_COST = 100000;//转生消耗的锻造
     public static final long REINCARNATE_LEVEL = 100;//转生需要的层数
     public static final long GROW_INCRESE = 2;//每次转生增加的成长基数
-    public static final float PET_RATE_REDUCE = 1.5f; //宠物捕获率修正系数，越大捕获率越低
+    public static final float PET_RATE_REDUCE = 1.7f; //宠物捕获率修正系数，越大捕获率越低
     public static final long MATERIAL_LIMIT = 3000000;//如果携带超过这个数量的锻造，就增加商店的价格和怪物的攻击
 
     /**

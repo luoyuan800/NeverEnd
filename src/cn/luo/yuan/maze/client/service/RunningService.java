@@ -183,7 +183,7 @@ public class RunningService implements RunningServiceInterface {
                                     Log.d("maze", "Battle failed with " + ((NameObject)monster).getDisplayName());
                                     maze.setStreaking(0);
                                     for (LostListener lostListener : lostListeners.values()) {
-                                        lostListener.lost(hero, monster);
+                                        lostListener.lost(hero, monster, gameContext);
                                     }
                                     if (hero.getHp() <= 0) {
                                         gameContext.addMessage(String.format(gameContext.getContext().getString(R.string.lost), hero.getDisplayName()));

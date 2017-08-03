@@ -15,10 +15,7 @@ import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.goods.Goods;
-import cn.luo.yuan.maze.model.goods.types.Grill;
-import cn.luo.yuan.maze.model.goods.types.Medallion;
-import cn.luo.yuan.maze.model.goods.types.Omelet;
-import cn.luo.yuan.maze.model.goods.types.ResetSkill;
+import cn.luo.yuan.maze.model.goods.types.*;
 import cn.luo.yuan.maze.model.task.Scene;
 import cn.luo.yuan.maze.model.task.Task;
 import cn.luo.yuan.maze.serialize.ObjectTable;
@@ -194,9 +191,9 @@ public class MainProcess {
         ServerRecord record = heroTable.getRecord(ownerId);
         if (record != null && record.getGift() > 0) {
             try {
-                switch (random.nextInt(8)) {
+                switch (random.nextInt(10)) {
                     case 0:
-                        Medallion medallion = new Medallion();
+                        HalfSafe medallion = new HalfSafe();
                         medallion.setCount(1);
                         return medallion;
                     case 1:
@@ -215,12 +212,21 @@ public class MainProcess {
                         record.setRestoreLimit(record.getRestoreLimit() + 2);
                         record.getMessages().add("重生次数增加了！");
                         return "战斗塔重生次数增加两次";
+                    case 6:
+                        record.setRestoreLimit(record.getRestoreLimit() + 1);
+                        record.getMessages().add("重生次数增加了！");
+                        return "战斗塔重生次数增加一次";
                     case 5:
                         ServerData data = record.getData();
                         if(data!=null){
                             data.setMaterial(data.getMaterial() + 200);
                             return "获得200点锻造";
                         }
+                        return null;
+                    case 7:
+                        HPM hpm = new HPM();
+                        hpm.setCount(1);
+                        return hpm;
                     default:
                         return null;
                 }

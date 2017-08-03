@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.listener.BattleEndListener;
+import cn.luo.yuan.maze.listener.HarmListener;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.skill.*;
 import cn.luo.yuan.maze.model.skill.result.*;
@@ -46,6 +47,9 @@ public class BattleService {
             }
             if (heroAtk) {
                 atk(hero, monster, level);
+                for(HarmListener listener : ListenerService.harmListeners.values()){
+                    listener.har(hero, monster, gameContext);
+                }
             } else {
                 atk(monster, hero, level);
             }

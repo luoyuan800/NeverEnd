@@ -29,6 +29,7 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
 
             }
         }
+        pet.setColor(Data.DEFAULT_QUALITY_COLOR);
         pet.setMaxHp(monster.getMaxHp());
         pet.setHp(pet.getMaxHp());
         pet.setAtk(monster.getAtk());
