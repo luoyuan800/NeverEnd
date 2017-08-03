@@ -9,14 +9,13 @@ import android.os.Handler;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.GameActivity;
 import cn.luo.yuan.maze.client.display.dialog.GiftDialog;
 import cn.luo.yuan.maze.client.service.NeverEnd;
-import cn.luo.yuan.maze.client.service.PetMonsterLoder;
+import cn.luo.yuan.maze.client.service.ClientPetMonsterHelper;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Hero;
@@ -28,7 +27,6 @@ import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by luoyuan on 2017/6/25.
@@ -251,7 +249,7 @@ public class GameActivityViewHandler extends Handler {
             Pet vp = (Pet)petView.getTag(R.string.item);
             Drawable drawable;
             if(vp == null || !vp.getId().equals(pet.getId())) {
-                drawable = PetMonsterLoder.loadMonsterImage(pet.getIndex());
+                drawable = ClientPetMonsterHelper.loadMonsterImage(pet.getIndex());
             }else{
                 drawable = petView.getDrawable();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

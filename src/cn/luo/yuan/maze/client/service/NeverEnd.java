@@ -69,7 +69,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
     public void setContext(Context context, DataManager dataManager) {
         this.context = context;
         executor = Executors.newScheduledThreadPool(5);
-        petMonsterHelper = PetMonsterLoder.getOrCreate(this);
+        petMonsterHelper = ClientPetMonsterHelper.getOrCreate(this);
         this.setDataManager(dataManager);
         accessoryHelper = AccessoryHelper.getOrCreate(this);
         petMonsterHelper.setRandom(random);

@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
-import cn.luo.yuan.maze.client.service.PetMonsterLoder;
+import cn.luo.yuan.maze.client.service.ClientPetMonsterHelper;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.persistence.DataManager;
@@ -120,7 +120,7 @@ public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefres
         }
         Pet pet = getItem(position);
         ((TextView) convertView.findViewById(R.id.pet_name)).setText(Html.fromHtml(pet.getDisplayNameWithLevel() + (pet.isMounted() ? "√" : "")));
-        ((ImageView) convertView.findViewById(R.id.pet_image)).setImageDrawable(PetMonsterLoder.loadMonsterImage(pet.getIndex()));
+        ((ImageView) convertView.findViewById(R.id.pet_image)).setImageDrawable(ClientPetMonsterHelper.loadMonsterImage(pet.getIndex()));
         ((TextView) convertView.findViewById(R.id.pet_tag)).setText(pet.getTag());
         convertView.setTag(R.string.adapter, this);
         convertView.setTag(R.string.item, pet);

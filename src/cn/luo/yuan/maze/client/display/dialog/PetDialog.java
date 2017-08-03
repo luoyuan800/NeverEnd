@@ -17,7 +17,7 @@ import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.service.PetMonsterHelper;
-import cn.luo.yuan.maze.client.service.PetMonsterLoder;
+import cn.luo.yuan.maze.client.service.ClientPetMonsterHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -119,7 +119,7 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
             tag.setText(Html.fromHtml(currentPet.getTag()));
             detailView.findViewById(R.id.pet_drop).setOnClickListener(PetDialog.this);
             detailView.findViewById(R.id.pet_upgrade).setOnClickListener(PetDialog.this);
-            ((ImageView) detailView.findViewById(R.id.pet_image)).setImageDrawable(PetMonsterLoder.loadMonsterImage(currentPet.getIndex()));
+            ((ImageView) detailView.findViewById(R.id.pet_image)).setImageDrawable(ClientPetMonsterHelper.loadMonsterImage(currentPet.getIndex()));
             detailView.setVisibility(View.VISIBLE);
         } else {
             detailView.setVisibility(View.INVISIBLE);

@@ -120,4 +120,8 @@ public class SerializeLoader<T extends Serializable> {
     public int size() {
         return db.size();
     }
+
+    public List<String> getAllID(){
+        return db.loadIds();
+    }
 }

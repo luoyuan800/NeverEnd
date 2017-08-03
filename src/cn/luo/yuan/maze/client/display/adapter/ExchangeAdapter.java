@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.model.*;
-import cn.luo.yuan.maze.client.service.PetMonsterLoder;
+import cn.luo.yuan.maze.client.service.ClientPetMonsterHelper;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -58,7 +58,7 @@ public class ExchangeAdapter extends BaseAdapter {
             ImageView imag = (ImageView) view.findViewById(R.id.item_img);
             if (item.getExchange() instanceof Pet) {
                 imag.setVisibility(View.VISIBLE);
-                imag.setImageDrawable(PetMonsterLoder.loadMonsterImage(((Pet) item.getExchange()).getIndex()));
+                imag.setImageDrawable(ClientPetMonsterHelper.loadMonsterImage(((Pet) item.getExchange()).getIndex()));
             } else {
                 imag.setVisibility(View.GONE);
             }
@@ -81,7 +81,7 @@ public class ExchangeAdapter extends BaseAdapter {
                 }
                 if(changeExchange instanceof Pet){
                     swapImg.setVisibility(View.VISIBLE);
-                    swapImg.setImageDrawable(PetMonsterLoder.loadMonsterImage(((Pet) changeExchange).getIndex()));
+                    swapImg.setImageDrawable(ClientPetMonsterHelper.loadMonsterImage(((Pet) changeExchange).getIndex()));
                 }else{
                     swapImg.setVisibility(View.GONE);
                 }

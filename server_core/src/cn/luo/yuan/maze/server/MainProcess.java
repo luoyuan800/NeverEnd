@@ -8,6 +8,7 @@ import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.model.Index;
 import cn.luo.yuan.maze.model.Maze;
+import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.SellItem;
 import cn.luo.yuan.maze.model.ServerData;
@@ -24,6 +25,7 @@ import cn.luo.yuan.maze.serialize.ObjectTable;
 import cn.luo.yuan.maze.server.model.User;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
+import cn.luo.yuan.maze.server.persistence.MonsterTable;
 import cn.luo.yuan.maze.server.persistence.NPCTable;
 import cn.luo.yuan.maze.server.persistence.ShopTable;
 import cn.luo.yuan.maze.server.persistence.WarehouseTable;
@@ -64,6 +66,7 @@ public class MainProcess {
     public ExchangeTable exchangeTable;
     public ObjectTable<Task> taskTable;
     public ObjectTable<Scene> sceneTable;
+    public MonsterTable monsterTable;
     public Set<GroupHolder> groups = Collections.synchronizedSet(new HashSet<>());
     public HeroTable heroTable;
     public GameContext context = new GameContext();
@@ -83,6 +86,7 @@ public class MainProcess {
         sceneTable = new ObjectTable<>(Scene.class, this.root);
         heroTable = new HeroTable(heroDir);
         userDb = new ObjectTable<User>(User.class, this.root);
+        monsterTable = new MonsterTable(this.root);
         process = this;
         user = userDb.loadObject("root");
         if (user == null) {
@@ -311,6 +315,7 @@ public class MainProcess {
         executor.scheduleAtFixedRate(userDb, 111, 300, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(heroTable.getDb(), 99, 200, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(exchangeTable.getExchangeDb(), 120, 200, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(monsterTable.getMonsterTable(), 120, 500, TimeUnit.MILLISECONDS);
     }
 
     public ServerData queryHeroData(String id) {
@@ -646,5 +651,9 @@ public class MainProcess {
             LogHelper.error(e);
         }
         return Collections.emptyList();
+    }
+
+    public List<Monster> listMonster(int start, int count){
+        return monsterTable.listMonster(start, count);
     }
 }

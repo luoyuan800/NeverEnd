@@ -7,6 +7,7 @@ import android.util.Log;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
+import cn.luo.yuan.maze.client.utils.RestConnection;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Monster;
@@ -14,9 +15,10 @@ import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
-import cn.luo.yuan.maze.service.MonsterLoader;
+import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
+import cn.luo.yuan.maze.serialize.ObjectTable;
 import cn.luo.yuan.maze.service.PetMonsterHelper;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -24,27 +26,31 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by luoyuan on 2017/5/13.
  */
-public class PetMonsterLoder extends PetMonsterHelper {
-    private static PetMonsterLoder instance;
+public class ClientPetMonsterHelper extends PetMonsterHelper {
+    private static ClientPetMonsterHelper instance;
     private NeverEnd control;
     private ArrayMap<MonsterKey, WeakReference<Monster>> monsterCache = new ArrayMap<>();
+    private RestConnection server = new RestConnection(Field.SERVER_URL, control.getVersion(), Resource.getSingInfo());
+    private SerializeLoader<Monster> monsterTable;
 
-    private PetMonsterLoder(NeverEnd control) {
+    private ClientPetMonsterHelper(NeverEnd control) {
         this.control = control;
         setRandom(control.getRandom());
+        monsterTable = new SerializeLoader<>(Monster.class,control.getContext(), control.getIndex());
         init();
     }
 
-    public static PetMonsterLoder getOrCreate(NeverEnd control) {
+    public static ClientPetMonsterHelper getOrCreate(NeverEnd control) {
         if (instance == null) {
-            synchronized (PetMonsterLoder.class) {
+            synchronized (ClientPetMonsterHelper.class) {
                 if (instance == null) {
-                    instance = new PetMonsterLoder(control);
+                    instance = new ClientPetMonsterHelper(control);
                 }
             }
         }
@@ -54,6 +60,27 @@ public class PetMonsterLoder extends PetMonsterHelper {
     public static Drawable loadMonsterImage(int id) {
         String ids = String.valueOf(id);
         return loadMonsterImage(ids);
+    }
+
+    private List<String> availableSpecialMonsterIds(long level){
+        List<String> ids = new ArrayList<>();
+        for(String id : monsterTable.getAllID()){
+            if(getRandom().nextLong(level) > 100){
+                ids.add(id);
+            }
+        }
+        return ids;
+    }
+
+    public Monster randomSpecialMonster(long level){
+        String ids = getRandom().randomItem(availableSpecialMonsterIds(level));
+        if(StringUtils.isNotEmpty(ids)){
+            Monster monster = monsterTable.load(ids);
+            if(monster!=null){
+                return monster.clone();
+            }
+        }
+        return null;
     }
 
     private static Drawable loadMonsterImage(String id) {
@@ -79,41 +106,49 @@ public class PetMonsterLoder extends PetMonsterHelper {
             init();
         }
         Monster clone = null;
-        ArrayList<MonsterKey> keys = getAvaiableMonsterKey(level, addKey);
-        MonsterKey key = getRandom().randomItem(keys);
-        int reTry = 0;
-        while (reTry++ < 3 && (key == null || getRandom().nextInt(100 + key.count) >= key.meet_rate)) {
-            if (addKey) {
-                if (key != null) key.count--;
-            }
-            key = getRandom().randomItem(keys);
+        if(getRandom().nextLong(level) > 80){
+            clone = randomSpecialMonster(level);
         }
-        if (key != null) {
-            Monster monster = getMonsterCache().get(key).get();
-            if (monster == null) {
-                monster = loadMonsterByIndex(key.index);
+        if(clone == null) {
+            ArrayList<MonsterKey> keys = getAvaiableMonsterKey(level, addKey);
+            MonsterKey key = getRandom().randomItem(keys);
+            int reTry = 0;
+            while (reTry++ < 3 && (key == null || getRandom().nextInt(100 + key.count) >= key.meet_rate)) {
+                if (addKey) {
+                    if (key != null) key.count--;
+                }
+                key = getRandom().randomItem(keys);
             }
-            if (monster != null) {
-                clone = monster.clone();
-                if (clone != null) {
-                    if (addKey) {
-                        key.count++;
-                    }
-                    if (addKey) {
-                        if (clone.getSex() < 0) {
-                            clone.setSex(getRandom().nextInt(2));
+            if (key != null) {
+                Monster monster = getMonsterCache().get(key).get();
+                if (monster == null) {
+                    monster = loadMonsterByIndex(key.index);
+                }
+                if (monster != null) {
+                    clone = monster.clone();
+                    if (clone != null) {
+                        if (addKey) {
+                            key.count++;
                         }
-                        clone.setAtk(clone.getAtk() + level * Data.MONSTER_ATK_RISE_PRE_LEVEL);
-                        clone.setDef(clone.getDef() + level * Data.MONSTER_DEF_RISE_PRE_LEVEL);
-                        clone.setMaxHp(clone.getMaxHp() + level * Data.MONSTER_HP_RISE_PRE_LEVEL);
-                        clone.setHp(clone.getMaxHp());
-                        clone.setElement(Element.values()[getRandom().nextInt(Element.values().length)]);
-                        clone.setMaterial(Data.getMonsterMaterial(clone.getMaxHp(), clone.getAtk(), level, getRandom()));
-                        clone.setFirstName(FirstName.getRandom(level, getRandom()));
-                        clone.setSecondName(SecondName.getRandom(level, getRandom()));
-                        clone.setColor(Data.DEFAULT_QUALITY_COLOR);
+
                     }
                 }
+            }
+        }
+        if(clone!=null){
+            if (addKey) {
+                if (clone.getSex() < 0) {
+                    clone.setSex(getRandom().nextInt(2));
+                }
+                clone.setAtk(clone.getAtk() + level * Data.MONSTER_ATK_RISE_PRE_LEVEL);
+                clone.setDef(clone.getDef() + level * Data.MONSTER_DEF_RISE_PRE_LEVEL);
+                clone.setMaxHp(clone.getMaxHp() + level * Data.MONSTER_HP_RISE_PRE_LEVEL);
+                clone.setHp(clone.getMaxHp());
+                clone.setElement(Element.values()[getRandom().nextInt(Element.values().length)]);
+                clone.setMaterial(Data.getMonsterMaterial(clone.getMaxHp(), clone.getAtk(), level, getRandom()));
+                clone.setFirstName(FirstName.getRandom(level, getRandom()));
+                clone.setSecondName(SecondName.getRandom(level, getRandom()));
+                clone.setColor(Data.DEFAULT_QUALITY_COLOR);
             }
         }
         return clone;
@@ -293,6 +328,10 @@ public class PetMonsterLoder extends PetMonsterHelper {
 
     public Map<MonsterKey, WeakReference<Monster>> getMonsterCache() {
         return monsterCache;
+    }
+
+    public SerializeLoader<Monster> getMonsterTable() {
+        return monsterTable;
     }
 
     private ArrayList<MonsterKey> getAvaiableMonsterKey(long level, boolean addKey) {
