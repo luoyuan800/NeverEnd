@@ -39,7 +39,8 @@ public class EncodeLong implements EncodeNumber, Serializable {
         return negative ? -number : number;
     }
 
-    public synchronized void setValue(Long value) {
+    public synchronized void setValue(Number number) {
+        long value = number.longValue();
         if (value < 0) {
             negative = true;
             value = -value;

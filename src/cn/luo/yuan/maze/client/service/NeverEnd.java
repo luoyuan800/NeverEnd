@@ -367,6 +367,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
         SkillParameter sp = new SkillParameter(hero);
         sp.set(SkillParameter.CONTEXT, this);
         long totalPoint = resetSkill(sp);
+        Log.d("maze-reincarnate", "After unhandler gift, AtkGrow: " + hero.getAtkGrow() + ", HpGrow: " + hero.getHpGrow() + ", DefGrow: " + hero.getDefGrow());
         hero.setAtkGrow(hero.getReincarnate() + Data.GROW_INCRESE  + hero.getAtkGrow());
         hero.setDefGrow(hero.getReincarnate() + Data.GROW_INCRESE  + hero.getDefGrow());
         hero.setHpGrow(hero.getReincarnate() + Data.GROW_INCRESE  + hero.getHpGrow());
@@ -378,11 +379,12 @@ public class NeverEnd extends Application implements InfoControlInterface {
         hero.setStr(0);
         hero.setPoint(totalPoint);
         maze.setLevel(1);
-        maze.setMaxLevel(1);
+        maze.setMaxLevel(hero.getReincarnate() * Data.REINCARNATE_LEVEL + Data.REINCARNATE_LEVEL);
+        hero.setMaterial(hero.getMaterial() + hero.getReincarnate() * Data.REINCARNATE_COST);
         save(false);
-        getViewHandler().showGiftChoose();
         viewHandler.refreshProperties(hero);
         showToast("第%d次转生！", hero.getReincarnate());
+        Log.d("maze-reincarnate", "After reincarnate gift, AtkGrow: " + hero.getAtkGrow() + ", HpGrow: " + hero.getHpGrow() + ", DefGrow: " + hero.getDefGrow());
         return hero.getReincarnate();
     }
 

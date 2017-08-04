@@ -266,10 +266,10 @@
         <description value=""/>
         <color value="#556B2F"/>
         <author value=""/>
-        <price value="212700"/>
+        <price value="512700"/>
         <type value="帽子"/>
         <properties>
-            <effect name="ClickMaterialEffect" min="1" max="10" rate="100" element="false"/>
+            <effect name="ClickMaterialEffect" min="1" max="4" rate="100" element="false"/>
             <effect name="AgiEffect" min="20" max="500" rate="50" element="false"/>
             <effect name="DogeRateEffect" min="-15" max="-20" rate="100" element="true"/>
             <effect name="HpEffect" min="-3000" max="-20" rate="100" element="true"/>
@@ -296,10 +296,10 @@
         <price value="50000"/>
         <type value="项链"/>
         <properties>
-            <effect name="StrEffect" min="1" max="99" rate="100" element="false"/>
-            <effect name="AgiEffect" min="1" max="99" rate="100" element="false"/>
-            <effect name="DefEffect" min="-1000" max="-100" rate="40" element="true"/>
-            <effect name="AtkEffect" min="-5000" max="-200" rate="30" element="true"/>
+            <effect name="DefEffect" min="-1000" max="-100" rate="40" element="false"/>
+            <effect name="AtkEffect" min="-5000" max="-200" rate="30" element="false"/>
+            <effect name="StrEffect" min="1" max="99" rate="100" element="true"/>
+            <effect name="AgiEffect" min="1" max="99" rate="100" element="true"/>
         </properties>
     </accessory>
 </accessories>

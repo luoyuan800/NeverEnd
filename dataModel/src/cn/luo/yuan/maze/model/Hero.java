@@ -48,7 +48,7 @@ public class Hero extends HarmObject implements Serializable, IDModel, SkillAble
     transient private ArrayList<ClickSkill> clickSkills = new ArrayList<>(3);
     private Element element;//五行元素
     private String id;
-    private EncodeLong point = new EncodeLong(0);
+    private EncodeLong point = new EncodeLong(500);
     private Gift gift;
     private EncodeLong click = new EncodeLong(0);
     private Race race;

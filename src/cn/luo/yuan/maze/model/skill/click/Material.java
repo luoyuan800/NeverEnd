@@ -32,6 +32,6 @@ public class Material extends ClickSkill {
     }
 
     public Material(){
-        setDuration(100);
+        setDuration(500);
     }
 }

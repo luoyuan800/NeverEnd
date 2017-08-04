@@ -1,6 +1,5 @@
 package cn.luo.yuan.maze.model.effect.original;
 
-import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.FloatValueEffect;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -11,7 +10,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 public class PetRateEffect extends FloatValueEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private String tag;
-    private float meetRate;
+    private float petRate;
     private boolean enable = false;
 
     private boolean elementControl;
@@ -27,11 +26,11 @@ public class PetRateEffect extends FloatValueEffect {
     }
 
     public float getPetRate() {
-        return meetRate;
+        return petRate;
     }
 
     public void setPetRate(float meetRate) {
-        this.meetRate = meetRate;
+        this.petRate = meetRate;
     }
 
     @Override

@@ -38,7 +38,7 @@ public class Data {
     public static int SKILL_ENABLE_COST = 500;//激活技能消耗的能力点
     public static final long RESTOREPERIOD = 10000;//30 * 60 * 1000;//死亡后复活的时间（Server）
     public static final long RESTORE_LIMIT = 5;//死亡复活次数（Server）
-    public static final long REINCARNATE_COST = 100000;//转生消耗的锻造
+    public static final long REINCARNATE_COST = 200000;//转生消耗的锻造
     public static final long REINCARNATE_LEVEL = 100;//转生需要的层数
     public static final long GROW_INCRESE = 2;//每次转生增加的成长基数
     public static final float PET_RATE_REDUCE = 1.7f; //宠物捕获率修正系数，越大捕获率越低

@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.model.effect.original;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.FloatValueEffect;
 import cn.luo.yuan.maze.model.effect.LongValueEffect;
+import cn.luo.yuan.maze.utils.EncodeFloat;
 import cn.luo.yuan.maze.utils.MathUtils;
 
 /**
@@ -12,7 +13,7 @@ import cn.luo.yuan.maze.utils.MathUtils;
 public abstract class PercentEffect extends FloatValueEffect {
     private boolean enable;
     private boolean elementControl;
-    private float percent;
+    private EncodeFloat percent = new EncodeFloat(0f);
     private String tag;
 
     public String getTag() {
@@ -34,7 +35,7 @@ public abstract class PercentEffect extends FloatValueEffect {
     }
 
     public Float getValue() {
-        return percent;
+        return percent.getValue();
     }
 
     @Override
@@ -48,15 +49,15 @@ public abstract class PercentEffect extends FloatValueEffect {
     }
 
     public void setPercent(float percent) {
-        this.percent = percent;
+        this.percent.setValue( percent);
     }
 
     public long getAdditionValue(long value) {
-        return (long) ((double) value * (percent / 100d));
+        return (long) ((double) value * (percent.getValue() / 100d));
     }
 
     public long getReduceValue(long value) {
-        return MathUtils.getPercentAdditionReduceValue(value, percent);
+        return MathUtils.getPercentAdditionReduceValue(value, percent.getValue());
     }
 
     @Override

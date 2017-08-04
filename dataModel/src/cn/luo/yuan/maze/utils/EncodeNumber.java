@@ -6,5 +6,5 @@ package cn.luo.yuan.maze.utils;
  */
 public interface EncodeNumber {
     Number getValue();
-    void setValue(Long value);
+    void setValue(Number value);
 }

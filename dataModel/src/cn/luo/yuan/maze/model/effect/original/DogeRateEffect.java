@@ -2,19 +2,20 @@ package cn.luo.yuan.maze.model.effect.original;
 
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.FloatValueEffect;
+import cn.luo.yuan.maze.utils.EncodeFloat;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 /**
  * Created by luoyuan on 2017/7/22.
  */
 public class DogeRateEffect extends FloatValueEffect {
-    private float doge;
+    private EncodeFloat doge = new EncodeFloat(0f);
     private boolean enable;
     private String tag;
     private boolean element;
     @Override
     public void setValue(float value) {
-        this.doge = value;
+        this.doge.setValue( value);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class DogeRateEffect extends FloatValueEffect {
 
     @Override
     public Float getValue() {
-        return doge;
+        return doge.getValue();
     }
 
     @Override

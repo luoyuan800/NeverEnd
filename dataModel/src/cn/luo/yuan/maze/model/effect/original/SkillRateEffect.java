@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.model.effect.original;
 
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.FloatValueEffect;
+import cn.luo.yuan.maze.utils.EncodeFloat;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -11,7 +12,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 public class SkillRateEffect extends FloatValueEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private String tag;
-    private float skillRate;
+    private EncodeFloat skillRate = new EncodeFloat(0f);
     private boolean enable = false;
 
     private boolean elementControl;
@@ -37,11 +38,11 @@ public class SkillRateEffect extends FloatValueEffect {
     }
 
     public float getSkillRate() {
-        return skillRate;
+        return skillRate.getValue();
     }
 
     public void setSkillRate(float skillRate) {
-        this.skillRate = skillRate;
+        this.skillRate.setValue(skillRate);
     }
 
     @Override

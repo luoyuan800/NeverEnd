@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.model.effect.original;
 
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.FloatValueEffect;
+import cn.luo.yuan.maze.utils.EncodeFloat;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 /**
@@ -11,11 +12,11 @@ public class ParryEffect extends FloatValueEffect {
     private boolean enable;
     private String tag;
     private boolean elementControl;
-    private float parry;
+    private EncodeFloat parry = new EncodeFloat(0f);
 
     @Override
     public String toString() {
-        return "增加格挡：" + StringUtils.formatNumber(parry);
+        return "增加格挡：" + StringUtils.formatNumber(parry.getValue());
     }
 
     @Override
@@ -48,12 +49,12 @@ public class ParryEffect extends FloatValueEffect {
 
     @Override
     public void setValue(float value) {
-        this.parry = value;
+        this.parry.setValue(value);
     }
 
     @Override
     public Float getValue() {
-        return this.parry;
+        return this.parry.getValue();
     }
 
 

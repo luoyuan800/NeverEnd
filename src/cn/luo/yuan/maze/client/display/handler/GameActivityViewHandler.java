@@ -88,7 +88,7 @@ public class GameActivityViewHandler extends Handler {
             updateSkillButton(fourth, heroSkills[3]);
         } else {
             resetSkillButton(fourth);
-            if (hero.getReincarnate() >= 2) {
+            if (hero.getReincarnate() >= 2 && heroSkills.length > 3) {
                 fourth.setText(R.string.not_mount);
                 fourth.setEnabled(true);
             } else {
@@ -101,7 +101,7 @@ public class GameActivityViewHandler extends Handler {
             updateSkillButton(fifth, heroSkills[4]);
         } else {
             resetSkillButton(fifth);
-            if (hero.getReincarnate() >= 4) {
+            if (hero.getReincarnate() >= 4  && heroSkills.length > 4) {
                 fifth.setText(R.string.not_mount);
                 fifth.setEnabled(true);
             } else {
@@ -114,7 +114,7 @@ public class GameActivityViewHandler extends Handler {
             updateSkillButton(sixth, heroSkills[5]);
         } else {
             resetSkillButton(sixth);
-            if (hero.getReincarnate() >= 8) {
+            if (hero.getReincarnate() >= 8  && heroSkills.length > 5) {
                 sixth.setText(R.string.not_mount);
                 sixth.setEnabled(true);
             } else {
