@@ -6,7 +6,6 @@ import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.skill.*;
 import cn.luo.yuan.maze.model.skill.result.SkillResult;
 import cn.luo.yuan.maze.model.skill.result.SkipThisTurn;
-import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -70,7 +69,7 @@ public class EvilTalent extends DefSkill implements UpgradeAble {
         }
         hero.setHp(hero.getHp() + harm);
         result.addMessage((monster instanceof NameObject ? ((NameObject) monster).getDisplayName() : "") + "攻击了" + (hero instanceof NameObject ? ((NameObject) hero).getDisplayName() : ""));
-        result.addMessage((hero instanceof NameObject ? ((NameObject) hero).getDisplayName() : "") + "使用了技能" + getName() + "将" + StringUtils.formatNumber(harm) + "点伤害转化为生命");
+        result.addMessage((hero instanceof NameObject ? ((NameObject) hero).getDisplayName() : "") + "使用了技能" + getName() + "将" + StringUtils.formatNumber(harm, false) + "点伤害转化为生命");
         result.setSkip(true);
         return result;
     }

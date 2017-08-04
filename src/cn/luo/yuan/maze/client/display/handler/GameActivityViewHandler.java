@@ -168,29 +168,29 @@ public class GameActivityViewHandler extends Handler {
         @Override
         public void run() {
             //Hero properties
-            setText((TextView) context.findViewById(R.id.hero_level), StringUtils.formatNumber(context.control.getMaze().getLevel()));
-            setText((TextView) context.findViewById(R.id.hero_level_max), StringUtils.formatNumber(context.control.getMaze().getMaxLevel()));
-            setText((TextView) context.findViewById(R.id.hero_mate),StringUtils.formatNumber(context.control.getHero().getMaterial()));
-            setText((TextView) context.findViewById(R.id.hero_point),StringUtils.formatNumber(context.control.getHero().getPoint()));
-            setText((TextView) context.findViewById(R.id.hero_click),StringUtils.formatNumber(context.control.getHero().getClick()));
-            setText((TextView) context.findViewById(R.id.hero_hp),StringUtils.formatNumber(context.control.getHero().getCurrentHp()));
-            setText((TextView) context.findViewById(R.id.hero_max_hp),StringUtils.formatNumber(context.control.getHero().getUpperHp()));
+            setText((TextView) context.findViewById(R.id.hero_level), StringUtils.formatNumber(context.control.getMaze().getLevel(), true));
+            setText((TextView) context.findViewById(R.id.hero_level_max), StringUtils.formatNumber(context.control.getMaze().getMaxLevel(), false));
+            setText((TextView) context.findViewById(R.id.hero_mate),StringUtils.formatNumber(context.control.getHero().getMaterial(), false));
+            setText((TextView) context.findViewById(R.id.hero_point),StringUtils.formatNumber(context.control.getHero().getPoint(), false));
+            setText((TextView) context.findViewById(R.id.hero_click),StringUtils.formatNumber(context.control.getHero().getClick(), false));
+            setText((TextView) context.findViewById(R.id.hero_hp),StringUtils.formatNumber(context.control.getHero().getCurrentHp(), false));
+            setText((TextView) context.findViewById(R.id.hero_max_hp),StringUtils.formatNumber(context.control.getHero().getUpperHp(), false));
             TextView additionHp = (TextView) context.findViewById(R.id.hero_addition_hp);
             long additionHpValue = context.control.getHero().getAdditionHp();
             setNumberText(additionHp, additionHpValue);
-            setText((TextView) context.findViewById(R.id.hero_atk),StringUtils.formatNumber(context.control.getHero().getAtk()));
+            setText((TextView) context.findViewById(R.id.hero_atk),StringUtils.formatNumber(context.control.getHero().getAtk(), false));
             setNumberText((TextView) context.findViewById(R.id.hero_atk_addition), context.control.getHero().getAdditionAtk());
-            setText((TextView) context.findViewById(R.id.hero_def),StringUtils.formatNumber(context.control.getHero().getUpperDef()));
+            setText((TextView) context.findViewById(R.id.hero_def),StringUtils.formatNumber(context.control.getHero().getUpperDef(), false));
             setNumberText((TextView) context.findViewById(R.id.hero_def_addition),context.control.getHero().getAdditionDef());
         }
     };
 
     private void setNumberText(TextView textView, long value) {
         if(value >= 0) {
-            setText(textView, " + " + StringUtils.formatNumber(value));
+            setText(textView, " + " + StringUtils.formatNumber(value, false));
             textView.setTextColor(Color.BLUE);
         }else{
-            setText(textView, " - " + StringUtils.formatNumber(value));
+            setText(textView, " - " + StringUtils.formatNumber(value, false));
             textView.setTextColor(R.color.mobvista_reward_green);
         }
     }

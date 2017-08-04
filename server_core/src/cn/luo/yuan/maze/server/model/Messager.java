@@ -62,7 +62,7 @@ public class Messager implements BattleMessage {
 
     @Override
     public void harm(NameObject atker, NameObject defender, long harm) {
-        notification(atker.getDisplayName() + "攻击了" + defender.getDisplayName() + "，造成了<font color='red'>" + StringUtils.formatNumber(harm) + "</font>点伤害。");
+        notification(atker.getDisplayName() + "攻击了" + defender.getDisplayName() + "，造成了<font color='red'>" + StringUtils.formatNumber(harm, false) + "</font>点伤害。");
     }
 
     @Override
@@ -121,7 +121,7 @@ public class Messager implements BattleMessage {
     }
 
     public void materialGet(@Nullable String geter, long awardMaterial) {
-        notification(geter + "获得了" + StringUtils.formatNumber(awardMaterial) + "锻造点");
+        notification(geter + "获得了" + StringUtils.formatNumber(awardMaterial, false) + "锻造点");
     }
 
     public void restoreLimit(@Nullable String hero) {

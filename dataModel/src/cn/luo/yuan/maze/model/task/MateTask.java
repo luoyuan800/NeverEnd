@@ -20,7 +20,7 @@ public class MateTask extends Task {
 
     @Override
     public String getAward() {
-        return "可以获得锻造：" + StringUtils.formatNumber(mate);
+        return "可以获得锻造：" + StringUtils.formatNumber(mate, false);
     }
 
     @Override

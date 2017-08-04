@@ -49,7 +49,7 @@ class ServerData : Serializable {
         } else {
             petb.append("无")
         }
-        return "锻造点：" + StringUtils.formatNumber(material) + "<br>" + "装备：<br>"+petb+"<br>宠物：<br>"+petb
+        return "锻造点：" + StringUtils.formatNumber(material, false) + "<br>" + "装备：<br>"+petb+"<br>宠物：<br>"+petb
     }
 
     companion object {

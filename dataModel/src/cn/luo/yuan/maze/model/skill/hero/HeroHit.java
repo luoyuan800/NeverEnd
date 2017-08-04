@@ -6,7 +6,6 @@ import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.skill.*;
 import cn.luo.yuan.maze.model.skill.result.HarmResult;
 import cn.luo.yuan.maze.model.skill.result.SkillResult;
-import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.service.SkillHelper;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.Random;
@@ -102,8 +101,8 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
     public String getDisplayName() {
         return "勇者的基本技能，学会了才能踏上征途。<br>" +
                 StringUtils.DecimalFormatRound(getRate(), 2) + "%概率释放<br>" +
-                "造成额外的" + StringUtils.formatNumber(minHarm) + " - " +
-                StringUtils.formatNumber(maxHarm) + "伤害" + "<br>" +
+                "造成额外的" + StringUtils.formatNumber(minHarm, false) + " - " +
+                StringUtils.formatNumber(maxHarm, false) + "伤害" + "<br>" +
                 "不可与魔王、元素使技能同时激活";
     }
 }

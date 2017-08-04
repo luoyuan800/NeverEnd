@@ -80,6 +80,9 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
     public abstract String getDescription(int index, String type);
 
     public boolean upgrade(Pet major, Pet minor) {
+        if(major.isDelete() || minor.isDelete()){
+            return false;
+        }
         int petUpgradeLimit = Data.PET_UPGRADE_LIMIT;
         if(major.getIndex() != minor.getIndex()){
             petUpgradeLimit /= 2;
@@ -382,7 +385,7 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
         }else{
             pet.setMounted(true);
             hero.getPets().add(pet);
-            hero.getEffects().addAll(pet.getEffects());
+            hero.getEffects().addAll(pet.getContainsEffects());
             return true;
         }
     }

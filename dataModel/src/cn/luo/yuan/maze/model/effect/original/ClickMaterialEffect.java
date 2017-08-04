@@ -1,6 +1,5 @@
 package cn.luo.yuan.maze.model.effect.original;
 
-import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.LongValueEffect;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -49,7 +48,7 @@ public class ClickMaterialEffect extends LongValueEffect {
 
     @Override
     public String toString() {
-        return "点击锻造奖励：" + StringUtils.formatNumber(material);
+        return "点击锻造奖励：" + StringUtils.formatNumber(material, false);
     }
 
     @Override

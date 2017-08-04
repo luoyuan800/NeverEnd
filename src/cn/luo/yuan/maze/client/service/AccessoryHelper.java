@@ -10,6 +10,7 @@ import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.effect.*;
 import cn.luo.yuan.maze.client.utils.LogHelper;
+import cn.luo.yuan.maze.model.effect.original.ClickMaterialEffect;
 import cn.luo.yuan.maze.utils.Random;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -78,7 +79,9 @@ public class AccessoryHelper extends cn.luo.yuan.maze.service.AccessoryHelper {
                                 long value = ((LongValueEffect) me).getValue();
                                 long v = (long) random.randomRange(((LongValueEffect) effect).getValue().floatValue() * colorReduce, ((LongValueEffect) effect).getValue().floatValue());
                                 if (v + value >= 0) {
-                                    ((LongValueEffect) me).setValue(value + v);
+                                    if(!(me instanceof ClickMaterialEffect) || v < 10){
+                                        ((LongValueEffect) me).setValue(value + v);
+                                    }
                                 }
                             } else if (me instanceof FloatValueEffect) {
                                 float v = random.randomRange(((FloatValueEffect) effect).getValue() * colorReduce, ((FloatValueEffect) effect).getValue());

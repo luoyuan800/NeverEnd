@@ -10,10 +10,8 @@ import cn.luo.yuan.maze.model.effect.original.DefEffect;
 import cn.luo.yuan.maze.model.effect.original.HpEffect;
 import cn.luo.yuan.maze.model.effect.original.StrEffect;
 import cn.luo.yuan.maze.utils.StringUtils;
-import sun.rmi.log.LogHandler;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -72,12 +70,12 @@ public class AccessoryHelper {
             switch (needEffect){
                 case "力量":
                     if(hero.getMaxStr() < needEffectValue){
-                        throw new MountLimitException("需要" + needEffect + "大于" + StringUtils.formatNumber(needEffectValue));
+                        throw new MountLimitException("需要" + needEffect + "大于" + StringUtils.formatNumber(needEffectValue, false));
                     }
                     break;
                 case "敏捷":
                     if(hero.getMaxAgi() < needEffectValue){
-                        throw new MountLimitException("需要" + needEffect + "大于" + StringUtils.formatNumber(needEffectValue));
+                        throw new MountLimitException("需要" + needEffect + "大于" + StringUtils.formatNumber(needEffectValue, false));
                     }
                     break;
             }

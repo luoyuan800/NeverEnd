@@ -1,6 +1,5 @@
 package cn.luo.yuan.maze.model.effect.original;
 
-import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.LongValueEffect;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -66,6 +65,6 @@ public class AgiEffect extends LongValueEffect{
 
     @Override
     public String toString() {
-        return "增加敏捷：" + StringUtils.formatNumber(getAgi());
+        return "增加敏捷：" + StringUtils.formatNumber(getAgi(), false);
     }
 }

@@ -16,7 +16,6 @@ import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
-import cn.luo.yuan.maze.serialize.ObjectTable;
 import cn.luo.yuan.maze.service.PetMonsterHelper;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -36,13 +35,14 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
     private static ClientPetMonsterHelper instance;
     private NeverEnd control;
     private ArrayMap<MonsterKey, WeakReference<Monster>> monsterCache = new ArrayMap<>();
-    private RestConnection server = new RestConnection(Field.SERVER_URL, control.getVersion(), Resource.getSingInfo());
+    private RestConnection server;
     private SerializeLoader<Monster> monsterTable;
 
     private ClientPetMonsterHelper(NeverEnd control) {
         this.control = control;
         setRandom(control.getRandom());
         monsterTable = new SerializeLoader<>(Monster.class,control.getContext(), control.getIndex());
+        server = new RestConnection(Field.SERVER_URL, control.getVersion(), Resource.getSingInfo());
         init();
     }
 
@@ -140,10 +140,12 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
                 if (clone.getSex() < 0) {
                     clone.setSex(getRandom().nextInt(2));
                 }
-
-                clone.setAtk(clone.getAtk() + level * Data.MONSTER_ATK_RISE_PRE_LEVEL + getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT));
+                int addPercent = Math.getExponent(level);
+                clone.setAtk(clone.getAtk() + level * Data.MONSTER_ATK_RISE_PRE_LEVEL +
+                        (getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT)) * getRandom().nextInt(addPercent));
                 clone.setDef(clone.getDef() + level * Data.MONSTER_DEF_RISE_PRE_LEVEL);
-                clone.setMaxHp(clone.getMaxHp() + level * Data.MONSTER_HP_RISE_PRE_LEVEL + getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT));
+                clone.setMaxHp(clone.getMaxHp() + level * Data.MONSTER_HP_RISE_PRE_LEVEL +
+                        (getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT)) * getRandom().nextInt(addPercent));
                 clone.setHp(clone.getMaxHp());
                 clone.setElement(Element.values()[getRandom().nextInt(Element.values().length)]);
                 clone.setMaterial(Data.getMonsterMaterial(clone.getMaxHp(), clone.getAtk(), level, getRandom()));
@@ -419,7 +421,7 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
                 String e = parser.nextText();
                 Effect effect = ClientEffectHandler.buildEffect(e, value, false);
                 if(effect!=null && monster!=null){
-                    monster.getEffects().add(effect);
+                    monster.getContainsEffects().add(effect);
                 }
                 break;
         }

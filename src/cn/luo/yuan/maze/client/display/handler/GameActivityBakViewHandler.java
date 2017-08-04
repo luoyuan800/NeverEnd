@@ -1,7 +1,6 @@
 package cn.luo.yuan.maze.client.display.handler;
 
 import android.content.DialogInterface;
-import android.os.Handler;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
@@ -9,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
-import cn.luo.yuan.maze.client.display.activity.GameActivity;
 import cn.luo.yuan.maze.client.display.activity.GameActivityBak;
 import cn.luo.yuan.maze.client.display.dialog.GiftDialog;
 import cn.luo.yuan.maze.client.display.view.PetTextView;
@@ -73,13 +71,13 @@ public class GameActivityBakViewHandler extends GameActivityViewHandler {
         @Override
         public void run() {
             //Hero properties
-            ((TextView) context.findViewById(R.id.hero_level)).setText(StringUtils.formatNumber(context.control.getMaze().getLevel()));
-            ((TextView) context.findViewById(R.id.hero_level_max)).setText(StringUtils.formatNumber(context.control.getMaze().getMaxLevel()));
-            ((TextView) context.findViewById(R.id.hero_mate)).setText(StringUtils.formatNumber(context.control.getHero().getMaterial()));
-            ((TextView) context.findViewById(R.id.hero_point)).setText(StringUtils.formatNumber(context.control.getHero().getPoint()));
-            ((TextView) context.findViewById(R.id.hero_click)).setText(StringUtils.formatNumber(context.control.getHero().getClick()));
-            ((TextView) context.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(context.control.getHero().getCurrentHp()));
-            ((TextView) context.findViewById(R.id.hero_max_hp)).setText(StringUtils.formatNumber(context.control.getHero().getCurrentMaxHp()));
+            ((TextView) context.findViewById(R.id.hero_level)).setText(StringUtils.formatNumber(context.control.getMaze().getLevel(), false));
+            ((TextView) context.findViewById(R.id.hero_level_max)).setText(StringUtils.formatNumber(context.control.getMaze().getMaxLevel(), false));
+            ((TextView) context.findViewById(R.id.hero_mate)).setText(StringUtils.formatNumber(context.control.getHero().getMaterial(), false));
+            ((TextView) context.findViewById(R.id.hero_point)).setText(StringUtils.formatNumber(context.control.getHero().getPoint(), false));
+            ((TextView) context.findViewById(R.id.hero_click)).setText(StringUtils.formatNumber(context.control.getHero().getClick(), false));
+            ((TextView) context.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(context.control.getHero().getCurrentHp(), false));
+            ((TextView) context.findViewById(R.id.hero_max_hp)).setText(StringUtils.formatNumber(context.control.getHero().getCurrentMaxHp(), false));
 
         }
     };
@@ -105,10 +103,10 @@ public class GameActivityBakViewHandler extends GameActivityViewHandler {
             public void run() {
                 ((TextView) context.findViewById(R.id.hero_name)).setText(Html.fromHtml(context.control.getHero().getDisplayName()));
                 ((TextView) context.findViewById(R.id.hero_gift)).setText(StringUtils.isNotEmpty(context.control.getHero().getGift().getName()) ? context.control.getHero().getGift().getName() : "");
-                ((TextView) context.findViewById(R.id.hero_atk)).setText(StringUtils.formatNumber(hero.getUpperAtk()));
-                ((TextView) context.findViewById(R.id.hero_def)).setText(StringUtils.formatNumber(hero.getUpperDef()));
-                ((TextView) context.findViewById(R.id.hero_str)).setText(StringUtils.formatNumber(hero.getMaxStr()));
-                ((TextView) context.findViewById(R.id.hero_agi)).setText(StringUtils.formatNumber(hero.getMaxAgi()));
+                ((TextView) context.findViewById(R.id.hero_atk)).setText(StringUtils.formatNumber(hero.getUpperAtk(), false));
+                ((TextView) context.findViewById(R.id.hero_def)).setText(StringUtils.formatNumber(hero.getUpperDef(), false));
+                ((TextView) context.findViewById(R.id.hero_str)).setText(StringUtils.formatNumber(hero.getMaxStr(), false));
+                ((TextView) context.findViewById(R.id.hero_agi)).setText(StringUtils.formatNumber(hero.getMaxAgi(), false));
             }
         });
     }

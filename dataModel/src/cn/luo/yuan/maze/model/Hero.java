@@ -7,7 +7,9 @@ import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillAbleObject;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.service.EffectHandler;
+import cn.luo.yuan.maze.utils.EncodeInteger;
 import cn.luo.yuan.maze.utils.EncodeLong;
+import cn.luo.yuan.maze.utils.EncodeNumber;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -38,7 +40,7 @@ public class Hero extends HarmObject implements Serializable, IDModel, SkillAble
     private EncodeLong atkGrow = new EncodeLong(1);//攻击成长（每点力量）
     private long birthDay;//生日
     private EncodeLong reincarnate = new EncodeLong(0);//转生次数
-    private EncodeLong material = new EncodeLong(0);//锻造点（货币）
+    private EncodeNumber material = new EncodeInteger(0);//锻造点（货币）
     transient private HashSet<Effect> effects = new HashSet<>(3);//附加的效果
     transient private HashSet<Accessory> accessories = new HashSet<>(3);//装备
     transient private Skill[] skills = {EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL};//装备
@@ -75,7 +77,7 @@ public class Hero extends HarmObject implements Serializable, IDModel, SkillAble
     }
 
     public long getMaterial() {
-        return material.getValue();
+        return material.getValue().longValue();
     }
 
     public void setMaterial(long material) {
@@ -384,9 +386,9 @@ public class Hero extends HarmObject implements Serializable, IDModel, SkillAble
 
     @Override
     public String toString() {
-        return getDisplayName() + "<br>atk: " + StringUtils.formatNumber(getUpperAtk()) + "<br>" +
-                "def: " + StringUtils.formatNumber(getUpperDef()) + "<br>" +
-                "hp: " + StringUtils.formatNumber(getCurrentHp()) + "/" + StringUtils.formatNumber(getUpperHp());
+        return getDisplayName() + "<br>atk: " + StringUtils.formatNumber(getUpperAtk(), false) + "<br>" +
+                "def: " + StringUtils.formatNumber(getUpperDef(), false) + "<br>" +
+                "hp: " + StringUtils.formatNumber(getCurrentHp(), false) + "/" + StringUtils.formatNumber(getUpperHp(), false);
     }
 
     public long getAdditionAtk() {

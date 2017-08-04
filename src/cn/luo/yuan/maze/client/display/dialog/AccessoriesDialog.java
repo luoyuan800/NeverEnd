@@ -99,10 +99,10 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
                         AccessoryHelper.unMountAccessory(fuse, context.getHero());
                     }
                     context.getHero().setMaterial(context.getHero().getMaterial() - Data.FUSE_COST * main.getLevel());
-                    context.getDataManager().delete(fuse);
-                    accessoryAdapter.getData().remove(fuse);
+
                     if (context.getAccessoryHelper().fuse(main, fuse)) {
                         fuse = null;
+                        context.getDataManager().save(main);
                         new AlertDialog.Builder(context.getContext()).setTitle("升级成功").
                                 setMessage(Html.fromHtml(main.toString())).setCancelable(false).
                                 setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
@@ -128,6 +128,8 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
                                 }).setCancelable(false).
                                 create().show();
                     }
+                    context.getDataManager().delete(fuse);
+                    accessoryAdapter.getData().remove(fuse);
                     notifyChange();
 
                 }
@@ -248,7 +250,7 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
             if (costE) {
                 ((Button) dialog.findViewById(R.id.accessory_fuse)).setText(R.string.upgrade);
             } else {
-                ((Button) dialog.findViewById(R.id.accessory_fuse)).setText("升级需要锻造" + StringUtils.formatNumber(value));
+                ((Button) dialog.findViewById(R.id.accessory_fuse)).setText("升级需要锻造" + StringUtils.formatNumber(value, false));
             }
         }
         if (fuse != null && main != null && fuse.getType().equals(main.getType()) && costE) {

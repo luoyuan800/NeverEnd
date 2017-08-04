@@ -95,10 +95,10 @@ public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBar
             switch (seekBar.getId()) {
                 case R.id.str_add_value:
                     reRangeMax(progress, agiAddValue);
-                    strAddShow.setText(StringUtils.formatNumber(progress));
+                    strAddShow.setText(StringUtils.formatNumber(progress, false));
                     break;
                 case R.id.agi_add_value:
-                    agiAddShow.setText(StringUtils.formatNumber(progress));
+                    agiAddShow.setText(StringUtils.formatNumber(progress, false));
                     reRangeMax(progress, strAddValue);
                     break;
             }
@@ -126,12 +126,12 @@ public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBar
     }
 
     private void refreshProperties(Hero hero) {
-        ((TextView) dialog.findViewById(R.id.agi_value)).setText(StringUtils.formatNumber(context.getHero().getAgi()));
-        ((TextView) dialog.findViewById(R.id.str_value)).setText(StringUtils.formatNumber(context.getHero().getStr()));
-        ((TextView) dialog.findViewById(R.id.hero_atk)).setText(StringUtils.formatNumber(context.getHero().getUpperAtk()));
-        ((TextView) dialog.findViewById(R.id.hero_def)).setText(StringUtils.formatNumber(hero.getUpperDef()));
-        ((TextView) dialog.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(hero.getUpperDef()));
-        ((TextView) dialog.findViewById(R.id.point_value)).setText(StringUtils.formatNumber(context.getHero().getPoint()));
+        ((TextView) dialog.findViewById(R.id.agi_value)).setText(StringUtils.formatNumber(context.getHero().getAgi(), false));
+        ((TextView) dialog.findViewById(R.id.str_value)).setText(StringUtils.formatNumber(context.getHero().getStr(), false));
+        ((TextView) dialog.findViewById(R.id.hero_atk)).setText(StringUtils.formatNumber(context.getHero().getUpperAtk(), false));
+        ((TextView) dialog.findViewById(R.id.hero_def)).setText(StringUtils.formatNumber(hero.getUpperDef(), false));
+        ((TextView) dialog.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(hero.getUpperDef(), false));
+        ((TextView) dialog.findViewById(R.id.point_value)).setText(StringUtils.formatNumber(context.getHero().getPoint(), false));
         boolean hasHat = false;
         boolean hasRing = false;
         boolean hasNecklace = false;

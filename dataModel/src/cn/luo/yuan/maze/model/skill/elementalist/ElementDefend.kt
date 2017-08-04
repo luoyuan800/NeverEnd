@@ -61,10 +61,10 @@ class ElementDefend():DefSkill(),UpgradeAble {
         val random:Random = parameter[SkillParameter.RANDOM]
         var harm = BattleServiceBase.getHarm(atker, defender,minHarm, random,messager)
         if(defender.element.restriction(atker.element)){
-            rs.messages.add((defender as NameObject).displayName + "免疫了" + (atker as NameObject).displayName + "的" + StringUtils.formatNumber(harm) + "点伤害(100%)")
+            rs.messages.add((defender as NameObject).displayName + "免疫了" + (atker as NameObject).displayName + "的" + StringUtils.formatNumber(harm, false) + "点伤害(100%)")
             rs.harm = 0
         }else{
-            rs.messages.add((defender as NameObject).displayName + "免疫了" + (atker as NameObject).displayName + "的" + StringUtils.formatNumber(harm/2) + "点伤害(50%)")
+            rs.messages.add((defender as NameObject).displayName + "免疫了" + (atker as NameObject).displayName + "的" + StringUtils.formatNumber(harm/2, false) + "点伤害(50%)")
             rs.harm = harm/2
         }
         return rs

@@ -107,15 +107,15 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
             isMounted.setOnCheckedChangeListener(null);
             isMounted.setChecked(currentPet.isMounted());
             isMounted.setOnCheckedChangeListener(PetDialog.this);
-            ((TextView) detailView.findViewById(R.id.pet_atk)).setText(StringUtils.formatNumber(currentPet.getAtk()));
-            ((TextView) detailView.findViewById(R.id.pet_def)).setText(StringUtils.formatNumber(currentPet.getDef()));
-            ((TextView) detailView.findViewById(R.id.pet_hp)).setText(StringUtils.formatNumber(currentPet.getHp()) + "/" + StringUtils.formatNumber(currentPet.getMaxHp()));
+            ((TextView) detailView.findViewById(R.id.pet_atk)).setText(StringUtils.formatNumber(currentPet.getAtk(), false));
+            ((TextView) detailView.findViewById(R.id.pet_def)).setText(StringUtils.formatNumber(currentPet.getDef(), false));
+            ((TextView) detailView.findViewById(R.id.pet_hp)).setText(StringUtils.formatNumber(currentPet.getHp(), false) + "/" + StringUtils.formatNumber(currentPet.getMaxHp(), false));
             Skill skill = currentPet.getSkills()[0];
             ((TextView) detailView.findViewById(R.id.pet_skill)).setText(skill != null ? skill.getName() : StringUtils.EMPTY_STRING);
             ((TextView) detailView.findViewById(R.id.pet_owner)).setText(Html.fromHtml(currentPet.getOwnerName()));
             ((TextView) detailView.findViewById(R.id.pet_mother)).setText(Html.fromHtml(currentPet.getMother()));
             ((TextView) detailView.findViewById(R.id.pet_farther)).setText(Html.fromHtml(currentPet.getFarther()));
-            ((TextView) detailView.findViewById(R.id.pet_intimacy)).setText(StringUtils.formatNumber(currentPet.getIntimacy()));
+            ((TextView) detailView.findViewById(R.id.pet_intimacy)).setText(StringUtils.formatNumber(currentPet.getIntimacy(), false));
             tag.setText(Html.fromHtml(currentPet.getTag()));
             detailView.findViewById(R.id.pet_drop).setOnClickListener(PetDialog.this);
             detailView.findViewById(R.id.pet_upgrade).setOnClickListener(PetDialog.this);
@@ -241,10 +241,11 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Pet minor = (Pet) parent.getItemAtPosition(position);
-                            if (minor != null && !minor.isMounted() && minor.getId() != currentPet.getId()) {
+                            if (minor != null && !minor.isMounted() && !minor.getId().equals(currentPet.getId())) {
+                                control.getHero().setMaterial(control.getHero().getMaterial() - Data.FUSE_COST * currentPet.getLevel());
                                 select.dismiss();
-                                control.getDataManager().deletePet(minor);
                                 if (helper.upgrade(currentPet, minor)) {
+                                    control.getDataManager().save(currentPet);
                                     new AlertDialog.Builder(control.getContext()).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dd, int which) {
@@ -266,13 +267,13 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                                         }
                                     }).setMessage(Html.fromHtml(String.format(Resource.getString(R.string.upgrade_failed), currentPet.getDisplayName()))).show();
                                 }
+                                control.getDataManager().deletePet(minor);
                                 adapter.removePet(minor);
                                 adapter.notifyDataSetChanged();
                                 control.getViewHandler().refreshPets(control.getHero());
                             }
                         }
                     });
-                    control.getHero().setMaterial(control.getHero().getMaterial() - Data.FUSE_COST * currentPet.getLevel());
                     control.getViewHandler().refreshProperties(control.getHero());
                 } else {
                     if (currentPet != null) {

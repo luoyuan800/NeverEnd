@@ -15,8 +15,8 @@ public class TestEncodeLong {
         long start = System.currentTimeMillis();
         EncodeLong encodeLong = new EncodeLong(0);
         for(int i =-100; i< 200; i++){
-            encodeLong.setValue(i);
-            assertEquals(i,encodeLong.getValue(), "They should equals but not!");
+            encodeLong.setValue((long)i);
+            assertEquals(Long.valueOf(i),encodeLong.getValue(), "They should equals but not!");
         }
         assertTrue(System.currentTimeMillis() - start < 500,"Refresh too long, need to refactor encode code!");
     }

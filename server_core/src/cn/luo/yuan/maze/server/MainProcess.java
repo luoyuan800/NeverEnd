@@ -134,7 +134,7 @@ public class MainProcess {
                 ServerData data = records.get(i).getData();
                 if (data != null && data.getHero() != null)
                     sb.append(data.getHero().getDisplayName())
-                            .append(data.getMaze() != null ? ("&nbsp;" + StringUtils.formatNumber(data.getMaze().getMaxLevel()) + "层") : "")
+                            .append(data.getMaze() != null ? ("&nbsp;" + StringUtils.formatNumber(data.getMaze().getMaxLevel(), false) + "层") : "")
                             .append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(records.get(i).winRate()).append("<br>");
             }
         } catch (Exception e) {
@@ -176,7 +176,7 @@ public class MainProcess {
             for (String effect : accessory_effects.split(";")) {
                 String[] ev = effect.split(":");
                 if (ev.length > 1) {
-                    accessory.getEffects().add(EffectHandler.buildEffect(ev[0], ev[1]));
+                    accessory.getContainsEffects().add(EffectHandler.buildEffect(ev[0], ev[1]));
                 }
             }
             accessory.setLevel(Long.parseLong(accessory_level));
@@ -469,7 +469,7 @@ public class MainProcess {
         if (record != null && record.getData() != null && record.getData().getHero() != null) {
             builder.append(record.getData().getHero().getDisplayName()).append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").
                     append(record.winRate()).append("<br>&nbsp;&nbsp;&nbsp;&nbsp;剩余复活次数：").
-                    append(StringUtils.formatNumber(record.getRestoreLimit() - record.getDieCount()));
+                    append(StringUtils.formatNumber(record.getRestoreLimit() - record.getDieCount(), false));
         }
         if (holder != null) {
             for (String hid : holder.getHeroIds()) {
@@ -482,7 +482,7 @@ public class MainProcess {
                             builder.append("<br>").append(orecord.getData().getHero().getDisplayName())
                                     .append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(orecord.winRate())
                                     .append("<br>&nbsp;&nbsp;&nbsp;&nbsp;剩余复活次数：").
-                                    append(StringUtils.formatNumber(orecord.getRestoreLimit() - orecord.getDieCount()))
+                                    append(StringUtils.formatNumber(orecord.getRestoreLimit() - orecord.getDieCount(), false))
                                     .append("<br>");
                         }
                     }

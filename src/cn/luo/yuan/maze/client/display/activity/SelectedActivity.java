@@ -31,13 +31,7 @@ import java.util.List;
 public class SelectedActivity extends BaseActivity implements View.OnClickListener,View.OnLongClickListener{
     private IndexManager indexManager;
     private StringAdapter<HeroIndex> adapter;
-    private final static String appId = "1b3d76d520cfe2eb";
-    private final static String appSecret = "338009391786dd1d";
 
-    public void setupAd(){
-        //初始化SDK
-        AdManager.getInstance(this).init(appId, appSecret, false);
-    }
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //这是为了应用程序安装完后直接打开，按home键退出后，再次打开程序出现的BUG

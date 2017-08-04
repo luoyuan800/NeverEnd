@@ -47,8 +47,10 @@ public class BattleService {
             }
             if (heroAtk) {
                 atk(hero, monster, level);
-                for(HarmListener listener : ListenerService.harmListeners.values()){
-                    listener.har(hero, monster, gameContext);
+                if(runninfService!=null && runninfService.getContext()!=null) {
+                    for (HarmListener listener : ListenerService.harmListeners.values()) {
+                        listener.har(hero, monster, runninfService.getContext());
+                    }
                 }
             } else {
                 atk(monster, hero, level);

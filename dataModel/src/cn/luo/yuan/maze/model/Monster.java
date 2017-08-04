@@ -38,7 +38,7 @@ public class Monster extends HarmObject implements SilentAbleObject, NameObject,
     private Skill skill;
     private int rank;
     private float elementRate = 0.5f;
-    private List<Effect> effects = new ArrayList<>(2);
+    private List<Effect> containsEffects = new ArrayList<>(2);
 
     public long getUpperAtk(){
         return getAtk();
@@ -270,16 +270,16 @@ public class Monster extends HarmObject implements SilentAbleObject, NameObject,
         return getDef();
     }
 
-    public List<Effect> getEffects() {
+    public List<Effect> getContainsEffects() {
         synchronized (this) {
-            if (effects == null) {
-                effects = new ArrayList<>(2);
+            if (containsEffects == null) {
+                containsEffects = new ArrayList<>(2);
             }
         }
-        return effects;
+        return containsEffects;
     }
 
-    public void setEffects(List<Effect> effects){
-        this.effects = effects;
+    public void setContainsEffects(List<Effect> containsEffects){
+        this.containsEffects = containsEffects;
     }
 }

@@ -46,23 +46,22 @@ public class GameActivity extends BaseActivity {
     private Thread updateMonsterThread;
 
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initResources();
         Intent intent = getIntent();
 //        ListenerService.init();
         dataManager = new DataManager(intent.getIntExtra("index", -1), this);
-        super.onCreate(savedInstanceState);
         final NeverEndConfig config = dataManager.getConfig();
         if (config.getTheme() != 0) {
             setTheme(config.getTheme());
         }
         setContentView(R.layout.game_layout);
-
         control = (NeverEnd) getApplication();
         control.setContext(this, dataManager);
         control.setViewHandler(new GameActivityViewHandler(this, control));
         control.setTextView((RollTextView) findViewById(R.id.info_view));
-        initResources();
         if(StringUtils.isEmpty(config.getHead())){
-            config.setHead(control.getRandom().randomItem(Arrays.asList("Actor1_1.png", "Actor2_1.png", "Actor2_2.png", "Actor2_5.png", "Actor2_6.png", "Actor3_1.png", "Actor3_6.png", "Actor1_2.png")));
+            config.setHead(control.getRandom().randomItem(Arrays.asList("Actor1_1.png", "Actor2_1.png", "Actor2_2.png", "Actor2_5.png", "Actor2_6.png","Actor1_2.png", "Actor3_1.png", "Actor3_6.png")));
         }
         dataManager.save(config);
         Resource.askWritePermissions(new PermissionRequestListener() {
@@ -216,7 +215,6 @@ public class GameActivity extends BaseActivity {
     private void initResources() {
         Resource.init(this);
         LogHelper.initLogSystem(this);
-        control.setContext(this);
     }
 
     protected void onResume() {
@@ -239,9 +237,9 @@ public class GameActivity extends BaseActivity {
                             ((TextView) view.findViewById(R.id.monster_sex)).setText(monster.getSex() < 0 ? "♂♀" : (monster.getSex() == 0 ? "♂" : "♀"));
                             ((TextView) view.findViewById(R.id.monster_rank)).setText(StringUtils.formatStar(monster.getRank()));
                             ((TextView) view.findViewById(R.id.monster_race)).setText(monster.getRace().getName());
-                            ((TextView) view.findViewById(R.id.monster_atk_value)).setText(StringUtils.formatNumber(monster.getAtk()));
-                            ((TextView) view.findViewById(R.id.monster_def_value)).setText(StringUtils.formatNumber(monster.getDef()));
-                            ((TextView) view.findViewById(R.id.monster_hp_value)).setText(StringUtils.formatNumber(monster.getMaxHp()));
+                            ((TextView) view.findViewById(R.id.monster_atk_value)).setText(StringUtils.formatNumber(monster.getAtk(), false));
+                            ((TextView) view.findViewById(R.id.monster_def_value)).setText(StringUtils.formatNumber(monster.getDef(), false));
+                            ((TextView) view.findViewById(R.id.monster_hp_value)).setText(StringUtils.formatNumber(monster.getMaxHp(), false));
                             ((TextView) view.findViewById(R.id.monster_egg_rate)).setText(StringUtils.formatPercentage(monster.getEggRate()));
                             ((TextView) view.findViewById(R.id.monster_pet_rate)).setText(StringUtils.formatPercentage(monster.getPetRate()));
                             ((TextView) view.findViewById(R.id.monster_desc)).setText(control.getPetMonsterHelper().getDescription(monster.getIndex(), monster.getType()));

@@ -108,6 +108,9 @@ public class ObjectTable<T extends Serializable> implements Runnable {
             for (String id : file.list()) {
                 T obj = loadObject(id);
                 if (obj != null)
+                    if(obj instanceof IDModel && ((IDModel) obj).isDelete()){
+                        continue;
+                    }
                     list.add(obj);
             }
         }

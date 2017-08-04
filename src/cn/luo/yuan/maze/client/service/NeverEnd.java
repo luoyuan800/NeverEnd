@@ -69,10 +69,9 @@ public class NeverEnd extends Application implements InfoControlInterface {
     public void setContext(Context context, DataManager dataManager) {
         this.context = context;
         executor = Executors.newScheduledThreadPool(5);
-        petMonsterHelper = ClientPetMonsterHelper.getOrCreate(this);
         this.setDataManager(dataManager);
         accessoryHelper = AccessoryHelper.getOrCreate(this);
-        petMonsterHelper.setRandom(random);
+        petMonsterHelper = ClientPetMonsterHelper.getOrCreate(this);
         taskManager = new TaskManager(this);
         handlerData(dataManager);
     }
@@ -368,9 +367,9 @@ public class NeverEnd extends Application implements InfoControlInterface {
         SkillParameter sp = new SkillParameter(hero);
         sp.set(SkillParameter.CONTEXT, this);
         long totalPoint = resetSkill(sp);
-        hero.setAtkGrow(hero.getReincarnate()*Data.GROW_INCRESE  + hero.getAtkGrow());
-        hero.setDefGrow(hero.getReincarnate()*Data.GROW_INCRESE  + hero.getDefGrow());
-        hero.setHpGrow(hero.getReincarnate()*Data.GROW_INCRESE  + hero.getHpGrow());
+        hero.setAtkGrow(hero.getReincarnate() + Data.GROW_INCRESE  + hero.getAtkGrow());
+        hero.setDefGrow(hero.getReincarnate() + Data.GROW_INCRESE  + hero.getDefGrow());
+        hero.setHpGrow(hero.getReincarnate() + Data.GROW_INCRESE  + hero.getHpGrow());
         hero.setMaxHp(hero.getReincarnate() * 20);
         hero.setHp(hero.getMaxHp());
         hero.setDef(hero.getReincarnate() * 5);

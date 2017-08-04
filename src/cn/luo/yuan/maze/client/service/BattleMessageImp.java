@@ -40,7 +40,7 @@ public class BattleMessageImp implements BattleMessage {
 
     @Override
     public void harm(NameObject atker, NameObject defender, long harm) {
-        control.addMessage(String.format(Resource.getString(R.string.atk_harm_color_msg), atker.getDisplayName(), defender.getDisplayName(), StringUtils.formatNumber(harm)));
+        control.addMessage(String.format(Resource.getString(R.string.atk_harm_color_msg), atker.getDisplayName(), defender.getDisplayName(), StringUtils.formatNumber(harm, false)));
 
     }
 

@@ -1,6 +1,5 @@
 package cn.luo.yuan.maze.utils;
 
-import cn.luo.yuan.maze.model.OwnedAble;
 import cn.luo.yuan.maze.model.effect.Effect;
 
 import java.math.RoundingMode;
@@ -27,7 +26,7 @@ public class StringUtils {
                 word.toLowerCase().contains("fuck") || word.contains("傻逼") || word.contains("粪") || word.contains("屎") || word.contains("屁"));
     }
 
-    public static String formatNumber(long num) {
+    public static String formatNumber(long num, boolean exquisite) {
         Double value;
         if (num > 100000000) {
             value = num / 100000000d;
@@ -37,16 +36,18 @@ public class StringUtils {
             value = num / 10000000d;
             return String.format(Locale.CHINA,"%.1f", value) + "千万";
         }
-        if (num > 10000) {
-            value = num / 10000d;
-            return String.format(Locale.CHINA,"%.1f", value) + "万";
+        if(!exquisite) {
+            if (num > 10000) {
+                value = num / 10000d;
+                return String.format(Locale.CHINA, "%.1f", value) + "万";
+            }
         }
         return num + "";
     }
 
     public static String formatNumber(Number number){
-        if(number instanceof Long){
-            return formatNumber(number.longValue());
+        if(number instanceof Long || number instanceof Integer){
+            return formatNumber(number.longValue(), false);
         }
         if(number instanceof Float){
             return DecimalFormatRound(number.floatValue(), 2);
