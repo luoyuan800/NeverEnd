@@ -16,7 +16,7 @@ class Grill() : UsableGoods() {
     }
 
     override fun perform(properties: GoodsProperties): Boolean {
-        if (count > 0) {
+        if (getCount() > 0) {
             val context = properties["context"] as InfoControlInterface
             var desc = "没有任何作用！"
             val random = context.random

@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.model.goods
 
 import cn.luo.yuan.maze.model.IDModel
 import cn.luo.yuan.maze.model.OwnedAble
+import cn.luo.yuan.maze.utils.EncodeInteger
 import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.StringUtils
 import java.io.Serializable
@@ -17,10 +18,18 @@ abstract class Goods : Serializable, IDModel, OwnedAble, Cloneable {
     var lock = false;
     var index = 0
     var medId: String = "";
-    var count: Int = 0
+    private var count: EncodeInteger = EncodeInteger(0)
     abstract var desc: String
     abstract var name: String
     abstract var price: Long
+
+    fun getCount():Int{
+        return count.value
+    }
+
+    fun setCount(count:Int){
+        this.count.value = count
+    }
 
     override fun getId(): String {
         return medId
@@ -73,8 +82,8 @@ abstract class Goods : Serializable, IDModel, OwnedAble, Cloneable {
 
 
     open fun use(properties: GoodsProperties): Boolean {
-        if (!lock && count > 0) {
-            count--;
+        if (!lock && getCount() > 0) {
+            setCount(getCount() - 1)
             return true
         } else {
             return false;

@@ -23,6 +23,8 @@ import cn.luo.yuan.maze.model.skill.result.DoNoThingResult;
 import cn.luo.yuan.maze.model.skill.result.HarmResult;
 import cn.luo.yuan.maze.model.skill.result.HasMessageResult;
 import cn.luo.yuan.maze.model.skill.result.SkillResult;
+import cn.luo.yuan.maze.model.skill.swindler.EatHarm;
+import cn.luo.yuan.maze.model.skill.swindler.SwindlerGame;
 import cn.luo.yuan.maze.persistence.DataManagerInterface;
 import cn.luo.yuan.maze.service.BattleMessage;
 import cn.luo.yuan.maze.service.MockBattleMessage;
@@ -158,6 +160,47 @@ public class TestSkill {
         assertTrue(rs instanceof HarmResult);
         assertTrue(((HarmResult)rs).getHarm() >= monster.getCurrentHp());
     }
+
+    @Test
+    public void testSwindlerGame() {
+        Hero hero = buildHero("QA");
+        Hero monster = buildHero("QA_2");
+        context.hero = hero;
+        SwindlerGame skill = new SwindlerGame();
+        SkillParameter parameter = getSkillParameter(hero,hero,monster, context.random,10);
+        skill.enable(parameter);
+        hero.setElement(Element.FIRE.getRestriction());
+        monster.setElement(Element.FIRE);
+        for(int i = 0;i<5;i++) {
+            SkillResult rs = testSkillInvoke(skill, hero, monster);
+            printlnMessage(rs);
+            assertTrue(rs instanceof HarmResult);
+            System.out.println(((HarmResult) rs).isBack() + ", harm: " + ((HarmResult) rs).getHarm());
+        }
+    }
+    @Test
+    public void testEatHarm() {
+        Hero hero = buildHero("QA");
+        Hero monster = buildHero("QA_2");
+        context.hero = hero;
+        EatHarm skill = new EatHarm();
+        SkillParameter parameter = getSkillParameter(hero,monster,hero, context.random,10);
+        skill.enable(parameter);
+        hero.setElement(Element.FIRE.getRestriction());
+        monster.setElement(Element.FIRE);
+        for(int i=0;i<5;i++) {
+            SkillResult rs = testSkillInvoke(skill, monster, hero);
+            printlnMessage(rs);
+            assertTrue(rs instanceof HarmResult);
+            if (((HarmResult) rs).isBack()) {
+                assertTrue(((HarmResult) rs).getHarm() > 0);
+            } else {
+                assertTrue(((HarmResult) rs).getHarm() == 0);
+            }
+
+        }
+    }
+
     @Test
     public void testElementDefend() {
         Hero hero = buildHero("QA");

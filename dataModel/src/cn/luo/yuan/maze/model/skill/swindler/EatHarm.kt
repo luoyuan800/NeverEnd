@@ -47,6 +47,7 @@ class EatHarm:DefSkill() {
             }
         }
         if(side){
+            hr.isBack = true
             hr.harm = BattleServiceBase.getHarm(defender,atk,min,random,parameter[SkillParameter.MESSAGE])
         }
         return hr

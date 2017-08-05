@@ -379,8 +379,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
         hero.setStr(0);
         hero.setPoint(totalPoint);
         maze.setLevel(1);
-        maze.setMaxLevel(hero.getReincarnate() * Data.REINCARNATE_LEVEL + Data.REINCARNATE_LEVEL);
-        hero.setMaterial(hero.getMaterial() + hero.getReincarnate() * Data.REINCARNATE_COST);
+        maze.setMaxLevel(1);
         save(false);
         viewHandler.refreshProperties(hero);
         showToast("第%d次转生！", hero.getReincarnate());

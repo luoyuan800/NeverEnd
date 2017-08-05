@@ -61,7 +61,7 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
                 when (type) {
                     "goods" -> {
                         val ins = Class.forName(rs.getString("ref")).newInstance()
-                        (ins as Goods).count = 1
+                        (ins as Goods).setCount(1)
                         sellItem.count = 4
                         sellItem.instance = ins
                         sellItem.desc = ins.desc

@@ -79,7 +79,7 @@
             android:scaleType="fitXY"/>
 
     <TabHost
-            android:visibility="invisible"
+            android:visibility="visible"
             android:layout_width="200dip"
             android:layout_height="300dip"
             android:layout_below="@+id/line_h"
@@ -105,18 +105,20 @@
                 <include
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="visible"
                         layout="@layout/skill_layout_swindler"
                        />
                 </ScrollView>
                 <ScrollView
                         android:id="@+id/pet_skill"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:visibility="invisible">
                 <include
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         layout="@layout/skill_layout_pet"
-                        />
+                        android:visibility="invisible"/>
                 </ScrollView>
 
             </FrameLayout>

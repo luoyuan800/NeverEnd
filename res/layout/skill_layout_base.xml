@@ -28,11 +28,11 @@
             android:adjustViewBounds="true"/>
     <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
         <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:typeface="serif"
                 android:textStyle="bold|italic"
@@ -40,22 +40,21 @@
                 android:tag="Dodge"
                 android:id="@+id/dodge"
                 style="@android:style/Widget.Button.Inset"
-                android:layout_gravity="center|top"
-                />
+                android:layout_gravity="top|left"
+                android:layout_marginEnd="50sp"/>
 
         <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="fitCenter"
                 android:tag="FightBack"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:typeface="serif"
                 android:textStyle="bold|italic"
                 style="@android:style/Widget.Button.Inset"
                 android:id="@+id/fight_back"
-                android:layout_gravity="center|top"
-                />
+                android:layout_gravity="top|right"
+                android:layout_marginStart="50sp"/>
     </LinearLayout>
 
 </LinearLayout>

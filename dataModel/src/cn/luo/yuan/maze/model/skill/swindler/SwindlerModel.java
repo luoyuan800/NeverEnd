@@ -17,7 +17,7 @@ public class SwindlerModel extends SkillModel {
     }
     public boolean canEnable(SkillParameter parameter){
         InfoControlInterface context = parameter.get("context");
-        return (skill instanceof EvilTalent || isSkillEnable("Swindler", context)) && isEnablePointEnough(parameter);
+        return (skill instanceof Swindler || isSkillEnable("Swindler", context)) && isEnablePointEnough(parameter);
     }
 
     public boolean canMount(SkillParameter parameter) {

@@ -171,7 +171,7 @@
 
     <ScrollView
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
+            android:layout_height="90dp"
             >
     <TextView
             android:text="只要有人的地方就有蟑螂，不管你爬得多高，你都可以遇见它们。它们是这个世界上最古老的怪物之一，并且也是繁殖力最高（没有之一）的。适应力非常强，据说不同时间可以进化出不同种类的蟑螂……"

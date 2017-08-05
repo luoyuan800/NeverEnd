@@ -16,7 +16,7 @@ class Omelet() : UsableGoods() {
     override fun perform(properties: GoodsProperties): Boolean {
         val context = properties["context"] as InfoControlInterface
         val hero = properties.hero
-        if (count > 0) {
+        if (getCount() > 0) {
             val index = context.random.nextInt(6)
             var msg = ""
             when (index) {
