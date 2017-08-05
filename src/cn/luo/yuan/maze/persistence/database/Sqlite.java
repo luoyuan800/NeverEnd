@@ -12,7 +12,7 @@ import cn.luo.yuan.maze.client.utils.LogHelper;
  */
 public class Sqlite {
     public final static String DB_NAME = "NeverEnd";
-    public static int DB_VERSION = 1;
+    public static int DB_VERSION = 5060;
     public static boolean isUpgrade = false;
     private static Sqlite sqlite;
     private Context context;
@@ -81,9 +81,14 @@ public class Sqlite {
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if(oldVersion < 5060){
+            db.delete("hero", null, null);
+            db.delete("maze", null, null);
+        }
         if (newVersion < oldVersion) {
             throw new RuntimeException("反向安装了低版本：" + oldVersion + "-->" + newVersion);
         }
+        db.setVersion(newVersion);
     }
 
     public void beginTransaction() {
@@ -134,6 +139,7 @@ public class Sqlite {
                 "name TEXT NOT NULL," +
                 "race TEXT ," +
                 "gift TEXT ," +
+                "version TEXT ," +
                 "reincarnate INTEGER ," +
                 "id TEXT NOT NULL PRIMARY KEY," +
                 "element INTEGER " +

@@ -14,9 +14,9 @@
 <table id="adg" title="Alarms" class="easyui-datagrid" style="height:250px"
 
        data-options="
-                    url: '/app/get_hero_list',
+                    url: 'app/get_hero_list',
                     method:'get',
-                    pagination: true,
+                    pagination: false,
                     pageSize: 10,
                     pageList: [2,10,20],
                     idField: 'id',
@@ -25,9 +25,9 @@
                 ">
     <thead>
     <tr>
-        <th field="id" width="130" >Id</th>
-        <th field="data" width="350">Details</th>
-        <th field="range" width="50">Range</th>
+        <th field="id" width="150" >Id</th>
+        <th field="data" width="150">Details</th>
+        <th field="Range" width="50">Range</th>
         <th field="Submit" width="200" align="right" formatter="formatDate">Last Update</th>
     </tr>
     </thead>

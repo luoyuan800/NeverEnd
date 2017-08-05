@@ -141,11 +141,15 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
                     clone.setSex(getRandom().nextInt(2));
                 }
                 int addPercent = Math.getExponent(level);
+                long atkAddition = (getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT)) * getRandom().nextInt(addPercent);
                 clone.setAtk(clone.getAtk() + level * Data.MONSTER_ATK_RISE_PRE_LEVEL +
-                        (getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT)) * getRandom().nextInt(addPercent));
+                        atkAddition);
+                clone.setAtkAddition(atkAddition);
                 clone.setDef(clone.getDef() + level * Data.MONSTER_DEF_RISE_PRE_LEVEL);
+                long hpAddition = (getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT)) * getRandom().nextInt(addPercent);
                 clone.setMaxHp(clone.getMaxHp() + level * Data.MONSTER_HP_RISE_PRE_LEVEL +
-                        (getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT)) * getRandom().nextInt(addPercent));
+                        hpAddition);
+                clone.setHpAddition(hpAddition);
                 clone.setHp(clone.getMaxHp());
                 clone.setElement(Element.values()[getRandom().nextInt(Element.values().length)]);
                 clone.setMaterial(Data.getMonsterMaterial(clone.getMaxHp(), clone.getAtk(), level, getRandom()));
@@ -417,7 +421,7 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
                 }
                 break;
             case "effect":
-                String value = parser.getAttributeValue(null, "meet_rate");
+                String value = parser.getAttributeValue(null, "value");
                 String e = parser.nextText();
                 Effect effect = ClientEffectHandler.buildEffect(e, value, false);
                 if(effect!=null && monster!=null){

@@ -39,6 +39,8 @@ public class Monster extends HarmObject implements SilentAbleObject, NameObject,
     private int rank;
     private float elementRate = 0.5f;
     private List<Effect> containsEffects = new ArrayList<>(2);
+    private long atkAddition;
+    private long hpAddition;
 
     public long getUpperAtk(){
         return getAtk();
@@ -281,5 +283,21 @@ public class Monster extends HarmObject implements SilentAbleObject, NameObject,
 
     public void setContainsEffects(List<Effect> containsEffects){
         this.containsEffects = containsEffects;
+    }
+
+    public long getAtkAddition() {
+        return atkAddition;
+    }
+
+    public void setAtkAddition(long atkAddition) {
+        this.atkAddition = atkAddition;
+    }
+
+    public long getHpAddition() {
+        return hpAddition;
+    }
+
+    public void setHpAddition(long hpAddition) {
+        this.hpAddition = hpAddition;
     }
 }

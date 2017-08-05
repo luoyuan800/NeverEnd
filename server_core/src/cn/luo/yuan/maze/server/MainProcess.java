@@ -36,6 +36,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -50,9 +54,8 @@ import java.util.concurrent.TimeUnit;
  * Created by gluo on 7/6/2017.
  */
 public class MainProcess {
-    private final static String sign_match = "308202f9308201e1a003020102020413c56148300d06092a864886f70d01010b0500302d310b3009060355040813024744310b3009060355040713025a483111300f060355040313084c756f205975616e301e170d3135303930313037353531315a170d3430303832353037353531315a302d310b3009060355040813024744310b3009060355040713025a483111300f060355040313084c756f205975616e30820122300d06092a864886f70d01010105000382010f003082010a028201010098f398450e3cf13f8f7106c59f157be54eac63a0237ae11596f5b5cefd2228e8befd012c4673bec4c1cc90f21a585c0d4006726c0f0056f6bdb2ddead630227918318e0d6432e4b8cc6b65d0193afcd42c6a9f85b549f66bea8f1297ca374e437a7da338b234bc2e1a4bb2860f7fca1699d1c6e34ed897784d4a728c511241d3e0fe3879ea24460bac0b07010bef3c61d868c2c65cd458e6f79e032d845134a0da3009f9f687d4917ffeeab701d2b933d68580e6e9e47c110afc6633867d74b93836a43d31b824f83f7b0f7b70abda65bfd7a673d7ae0cf2d4b30481d09a51ba3e8f6d8175d6425e3c6b37dc9463e098ac549e5cfda8b1e35de0a2d188ab9bcd0203010001a321301f301d0603551d0e041604147ab8e6bfe5f22df19046f038eff017784c04c694300d06092a864886f70d01010b050003820101005b780aeee5909829165b51dda614d7a73c6caeab3ac784d730a98ef0d98e55095bf9d9fe95fa435bdf4d1cd939b0f1285141431686906c6d9547ac798a076d5da36cfad51be641b3e020d2b6bc391d1532f9c48b9f0575a4e8e4c6b525eb343e501efa4ad263e8ba12dfd08090aa27bd69cb43937075fd7fbb038f574e4e3f801b6d93a45b6fdebb94b79c0acbe9e9f901d0b518c9efe18939144f0942163b994c63a0bdab2627f5ffc16859feca9df40a57b6841ed9593a3a0aab57d0db10f529fc399163fa2ce5e62070eecff2b09678d43bcf7b66b6c84b94f102311d64d6e7910cfadcf7bf52963824055276907329b84130a847820aff9fb3f4852203c3";
-    private final static String version = "5051";
-    private final static String version_Dot = "5.0.5.1";
+    private String sign_match = StringUtils.EMPTY_STRING;
+    private String version = StringUtils.EMPTY_STRING;
     public static boolean debug = false;
     public static MainProcess process;
     public String sing = StringUtils.EMPTY_STRING;
@@ -107,6 +110,13 @@ public class MainProcess {
 
     public boolean isSignVerify(String sign, String version) {
 //        return debug || !StringUtils.isNotEmpty(sign_match) || (sign_match.equalsIgnoreCase(sign) && (MainProcess.version.equals(version)||version_Dot.equals(version)));
+        boolean verify = true;
+        if(StringUtils.isNotEmpty(version) && StringUtils.isNotEmpty(this.version)){
+            verify = this.version.equalsIgnoreCase(version);
+            if(!verify){
+                return false;
+            }
+        }
         return (StringUtils.isEmpty(sign) && StringUtils.isEmpty(version)) || debug || !StringUtils.isNotEmpty(sign_match) || (sign_match.equalsIgnoreCase(sign));
     }
 
@@ -298,6 +308,18 @@ public class MainProcess {
     public void start() {
         if (database != null) {
             shop = new ShopTable(database, root);
+            try(Connection connection = database.getConnection()){
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery("select sign,version from verify");
+                if(rs.next()){
+                    sign_match = rs.getString("sign");
+                    version = rs.getString("version");
+                }
+                rs.close();
+                statement.close();
+            } catch (Exception e) {
+                LogHelper.error(e);
+            }
         }
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
@@ -594,7 +616,7 @@ public class MainProcess {
             builder.append("\"Range\":").append(record.getRange()).append(",");
             builder.append("\"Submit\":").append(record.getSubmitDate()).append(",");
             if (record.getData() != null && record.getData().getHero() != null) {
-                builder.append("\"data\":\"").append(record.getData().getHero()).append("\"");
+                builder.append("\"data\":\"").append(record.getData().getHero().toString().replaceAll("\"", "'")).append("\"");
             } else {
                 builder.append("\"data\":\"").append("NAN").append("\"");
             }

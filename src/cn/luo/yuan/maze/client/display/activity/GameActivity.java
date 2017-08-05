@@ -220,6 +220,7 @@ public class GameActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         initResources();
+        control.setContext(this);
     }
 
     private void randomMonsterBook() {
