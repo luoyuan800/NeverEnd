@@ -9,23 +9,24 @@ import static org.testng.Assert.assertTrue;
  */
 public class TestRandom {
     @Test
-    public void testRandomFloat(){
+    public void testRandomFloat() {
         Random r = new Random(System.currentTimeMillis());
         float min = 1.2f;
         float max = 1.6f;
-        for(int i =0; i<10;i++){
+        for (int i = 0; i < 10; i++) {
             assertTrue(r.nextFloat(max) < max, "next result should lesser then max");
             float v = r.randomRange(min, max);
             assertTrue(v < max, "next result should lesser then max");
             assertTrue(v >= min, "next result should larger or equals to min");
         }
     }
+
     @Test
-    public void testRandomLong(){
+    public void testRandomLong() {
         Random r = new Random(System.currentTimeMillis());
-        Long min = Long.MIN_VALUE/10;
-        Long max = Long.MAX_VALUE -2;
-        for(int i =0; i<10;i++){
+        Long min = Long.MIN_VALUE / 10;
+        Long max = Long.MAX_VALUE - 2;
+        for (int i = 0; i < 10; i++) {
             assertTrue(r.nextLong(max) < max, "next result should lesser then max");
             Long v = r.randomRange(min, max);
             assertTrue(v < max, "next result should lesser then max");
@@ -34,5 +35,13 @@ public class TestRandom {
             assertTrue(v < max, "next result should lesser then max");
             assertTrue(v >= min, "next result should larger or equals to min");
         }
+    }
+
+    @Test
+    public void testRandomItems() {
+        Random r = new Random(System.currentTimeMillis());
+        String[] strings = {"1", "2", "3", "4", "5", "6"};
+        for (int i = 0; i < 100; i++)
+            System.out.println(r.randomItem(strings));
     }
 }

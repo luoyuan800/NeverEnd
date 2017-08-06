@@ -590,7 +590,7 @@ public class MainProcess {
     public String updateShopAccessory(int start){
         List<Accessory> accessories = new ArrayList<>(10);
         BombRestConnection connection = new BombRestConnection();
-        for(int i =start; i< 5; i++) {
+        for(int i =start; i< start + 5; i++) {
             try {
                 MyJSON json = connection.queryObjects("SelfAccessory", "createAt", i, 1);
                 json.parse();
