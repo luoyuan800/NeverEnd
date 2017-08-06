@@ -55,19 +55,21 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
             LogHelper.debug("execute sql : " + s);
             val rs = stat.executeQuery(s);
             LogHelper.debug("sql return result: " + rs.row)
-            while (rs.next()) {
+            while (rs.next() && list.size < 15) {
                 val type = rs.getString("type")
                 val sellItem = SellItem()
                 when (type) {
                     "goods" -> {
-                        val ins = Class.forName(rs.getString("ref")).newInstance()
-                        (ins as Goods).setCount(1)
-                        sellItem.count = 4
-                        sellItem.instance = ins
-                        sellItem.desc = ins.desc
-                        sellItem.type = "物品"
-                        sellItem.name = ins.name
-                        list.add(sellItem)
+                        if(random.nextBoolean()) {
+                            val ins = Class.forName(rs.getString("ref")).newInstance()
+                            (ins as Goods).setCount(1)
+                            sellItem.count = 4
+                            sellItem.instance = ins
+                            sellItem.desc = ins.desc
+                            sellItem.type = "物品"
+                            sellItem.name = ins.name
+                            list.add(sellItem)
+                        }
                     }
                     "accessory" -> {
                         if(random.nextBoolean()) {

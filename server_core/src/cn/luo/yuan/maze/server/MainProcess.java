@@ -19,6 +19,10 @@ import cn.luo.yuan.maze.model.goods.types.*;
 import cn.luo.yuan.maze.model.task.Scene;
 import cn.luo.yuan.maze.model.task.Task;
 import cn.luo.yuan.maze.serialize.ObjectTable;
+import cn.luo.yuan.maze.server.bomb.BombRestConnection;
+import cn.luo.yuan.maze.server.bomb.json.JSON;
+import cn.luo.yuan.maze.server.bomb.json.JSONValue;
+import cn.luo.yuan.maze.server.bomb.json.SimpleToken;
 import cn.luo.yuan.maze.server.model.User;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
@@ -28,6 +32,7 @@ import cn.luo.yuan.maze.server.persistence.ShopTable;
 import cn.luo.yuan.maze.server.persistence.WarehouseTable;
 import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection;
 import cn.luo.yuan.maze.service.EffectHandler;
+import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -36,16 +41,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.security.AccessControlContext;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -563,7 +564,7 @@ public class MainProcess {
         }
     }
 
-    public void addAccessory(String name, String tag, String type, String author, String... effects) {
+    public Accessory addAccessory(String name, String tag, String type, String author, String... effects) {
         Accessory accessory = new Accessory();
         accessory.setName(name);
         accessory.setDesc(tag);
@@ -584,6 +585,51 @@ public class MainProcess {
             }
         }
         shop.add(accessory);
+        return accessory;
+    }
+
+    public List<Accessory> updateShopAccessory(){
+        List<Accessory> accessories = new ArrayList<>(10);
+        BombRestConnection connection = new BombRestConnection();
+        for(int i =0; i< 10; i++) {
+            JSON json = connection.queryObjects("SelfAccessory", "createAt", 8, 1);
+            json.parse();
+            List<SimpleToken> tokens = json.getTokens();
+            SimpleToken nameToken;
+            if (tokens.size() == 3) {
+                nameToken = tokens.get(2);
+            }else if(tokens.size() == 2){
+                nameToken = tokens.get(1);
+            } else{
+                continue;
+            }
+            List<String> effectString = new ArrayList<>();
+            SimpleToken aeffectToken = tokens.get(0);
+            for (Map.Entry<String, JSONValue> entry : aeffectToken.getData().entrySet()) {
+                effectString.add(entry.getKey() + "," + entry.getValue() + ",e");
+            }
+            if(tokens.size() == 3){
+                SimpleToken effectToken = tokens.get(0);
+                for (Map.Entry<String, JSONValue> entry : effectToken.getData().entrySet()) {
+                    effectString.add(entry.getKey() + "," + entry.getValue() + ",");
+                }
+            }
+            int typenumber = nameToken.getValue("type");
+            String type = "";
+            switch (typenumber){
+                case 1:
+                    type = Field.RING_TYPE;
+                    break;
+                case 2:
+                    type = Field.NECKLACE_TYPE;
+                    break;
+                case 0:
+                    type = Field.HAT_TYPE;
+                    break;
+            }
+            accessories.add(addAccessory(nameToken.getValue("name"), nameToken.getValue("desc"), type, nameToken.getValue("userName"), effectString.toArray(new String[effectString.size()])));
+        }
+        return accessories;
     }
 
     public void addOnlineGift(String id, int count) {

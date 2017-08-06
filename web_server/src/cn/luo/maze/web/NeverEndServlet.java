@@ -69,6 +69,15 @@ public class NeverEndServlet extends HttpServlet {
         response.setCharacterEncoding("utf-8");
         PrintWriter writer = response.getWriter();
         switch (path) {
+            case "update_shop_accessory":
+                writer.write("<html>\n" +
+                        "<head><meta charset=\"utf-8\"></head>\n" +
+                        "<body>");
+                writer.write(process.updateShopAccessory().toString());
+                writer.write("</body>" +
+                        "\n" +
+                        "</html>");
+                break;
             case "get_hero_list":
                 writer.write(process.getOnlineHeroList());
                 break;
