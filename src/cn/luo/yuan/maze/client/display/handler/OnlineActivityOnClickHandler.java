@@ -3,9 +3,7 @@ package cn.luo.yuan.maze.client.display.handler;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
 import cn.luo.yuan.maze.client.display.dialog.ShopDialog;
@@ -18,12 +16,6 @@ import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.utils.StringUtils;
-import sw.ls.ps.normal.common.ErrorCode;
-import sw.ls.ps.normal.spot.SpotListener;
-import sw.ls.ps.normal.spot.SpotManager;
-import sw.ls.ps.normal.video.VideoAdListener;
-import sw.ls.ps.normal.video.VideoAdManager;
-import sw.ls.ps.normal.video.VideoAdSettings;
 
 /**
  * Created by luoyuan on 2017/7/5.
@@ -65,18 +57,18 @@ public class OnlineActivityOnClickHandler {
                             public void run() {
                                 if (o instanceof String) {
                                     if(StringUtils.isEmpty((String) o)){
-                                        SimplerDialogBuilder.build("谢谢惠顾！", Resource.getString(R.string.conform), null, activity);
+                                        SimplerDialogBuilder.build("谢谢惠顾！", Resource.getString(R.string.conform), null, activity, context.getRandom());
                                     }else {
-                                        SimplerDialogBuilder.build(o.toString(), Resource.getString(R.string.conform), null, context.getContext());
+                                        SimplerDialogBuilder.build(o.toString(), Resource.getString(R.string.conform), null, context.getContext(), context.getRandom());
                                     }
                                 } else {
                                     if (o instanceof IDModel) {
                                         context.getDataManager().add((IDModel) o);
                                     }
                                     if (o instanceof NameObject) {
-                                        SimplerDialogBuilder.build("获得了 " + ((NameObject) o).getDisplayName(), Resource.getString(R.string.conform), null, activity);
+                                        SimplerDialogBuilder.build("获得了 " + ((NameObject) o).getDisplayName(), Resource.getString(R.string.conform), null, activity, context.getRandom());
                                     } else {
-                                        SimplerDialogBuilder.build("获得了 " + o, Resource.getString(R.string.conform), null, activity);
+                                        SimplerDialogBuilder.build("获得了 " + o, Resource.getString(R.string.conform), null, activity, context.getRandom());
                                     }
                                 }
                                 activity.postGiftCount();
@@ -98,7 +90,7 @@ public class OnlineActivityOnClickHandler {
                             }
                         });
                     }
-                }, activity);
+                }, activity, context.getRandom());
                 break;
         }
     }
@@ -130,7 +122,7 @@ public class OnlineActivityOnClickHandler {
                             dialog.dismiss();
                             activity.finish();
                         }
-                    }, activity);
+                    }, activity, context.getRandom());
                 }
             });
 

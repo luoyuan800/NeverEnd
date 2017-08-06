@@ -62,7 +62,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                     showSelectExchangeDialog(eo);
                     break;
                 case 5:
-                    SimplerDialogBuilder.build("网络异常，请稍后再试", Resource.getString(R.string.close), (DialogInterface.OnClickListener) null, context.getContext());
+                    SimplerDialogBuilder.build("网络异常，请稍后再试", Resource.getString(R.string.close), (DialogInterface.OnClickListener) null, context.getContext(), context.getRandom());
                     break;
                 case 4:
                     Object item = msg.obj;

@@ -154,11 +154,11 @@
         </activity>
         <service android:name="com.apptracker.android.track.AppTrackerService" />
         <!-- Chartboost -->
-        <activity android:name="com.chartboost.sdk.CBImpressionActivity"
+        <!--<activity android:name="com.chartboost.sdk.CBImpressionActivity"
                   android:excludeFromRecents="true"
                   android:hardwareAccelerated="true"
                   android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
-                  android:configChanges="keyboardHidden|orientation|screenSize" />
+                  android:configChanges="keyboardHidden|orientation|screenSize" />-->
         <!-- AdColony -->
         <activity android:name="com.jirbo.adcolony.AdColonyOverlay"
                   android:configChanges="keyboardHidden|orientation|screenSize"

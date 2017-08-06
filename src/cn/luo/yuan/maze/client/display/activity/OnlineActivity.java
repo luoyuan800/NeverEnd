@@ -86,7 +86,7 @@ public class OnlineActivity extends Activity {
                 public void onClick(DialogInterface dialog, int which) {
                     finish();
                 }
-            }, this);
+            }, this, gameContext.getRandom());
         }catch (Exception e){
             LogHelper.logException(e, "Show net error");
         }

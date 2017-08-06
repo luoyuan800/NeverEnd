@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.text.Html;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TabHost;
 import cn.luo.yuan.maze.R;
@@ -169,7 +168,7 @@ public class SkillDialog implements View.OnClickListener {
             }
 
         } else {
-            SimplerDialogBuilder.build("敬请期待", Resource.getString(R.string.conform), null, context.getContext());
+            SimplerDialogBuilder.build("敬请期待", Resource.getString(R.string.conform), null, context.getContext(), context.getRandom());
         }
     }
 

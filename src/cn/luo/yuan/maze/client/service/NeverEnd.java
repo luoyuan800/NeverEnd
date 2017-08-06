@@ -386,7 +386,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
     }
 
     public void showPopup(String msg) {
-        SimplerDialogBuilder.build(msg, Resource.getString(R.string.close), null, context);
+        SimplerDialogBuilder.build(msg, Resource.getString(R.string.close), null, context, random);
     }
 
     public long resetSkill(@NotNull SkillParameter sp) {

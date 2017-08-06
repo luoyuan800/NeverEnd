@@ -1,8 +1,6 @@
 package cn.luo.yuan.maze.client.display.dialog;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.os.Build;
 import android.os.Handler;
 import android.text.Html;
 import android.view.View;
@@ -10,6 +8,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.service.NeverEnd;
+import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.service.InfoControlInterface;
@@ -41,11 +40,7 @@ public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBar
     }
 
     public void show() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            dialog = new AlertDialog.Builder(context.getContext()).setTitle(R.string.properties_view_title).setView(R.layout.properties_view).show();
-        } else {
-            dialog = new AlertDialog.Builder(context.getContext()).setTitle(R.string.properties_view_title).setView(View.inflate(context.getContext(), R.layout.properties_view, null)).show();
-        }
+        dialog = SimplerDialogBuilder.build(View.inflate(context.getContext(), R.layout.properties_view, null), Resource.getString(R.string.properties_view_title), context.getContext(), context.getRandom());
         dialog.findViewById(R.id.range_close).setOnClickListener(this);
         dialog.findViewById(R.id.range_conform).setOnClickListener(this);
         Hero hero = context.getHero();
