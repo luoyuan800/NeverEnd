@@ -184,6 +184,25 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:text="连胜:"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/red"
+                    android:textStyle="bold"
+                    android:id="@+id/hero_streaking"
+                    android:text="10000000W"/>
+        </LinearLayout>
+        <LinearLayout
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="@string/mate_label"/>
             <TextView
                     android:layout_width="wrap_content"

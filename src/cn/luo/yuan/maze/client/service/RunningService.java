@@ -101,7 +101,7 @@ public class RunningService implements RunningServiceInterface {
                         saveTime = System.currentTimeMillis();
                     }
                     maze.setStep(maze.getStep() + 1);
-                    if (maze.getStep() > 50 || random.nextLong(10000) > 9985 || random.nextLong(maze.getStep()) > 10 + random.nextLong(22) || random.nextLong(maze.getStreaking() + 1) > 10 + maze.getLevel()) {
+                    if (maze.getStep() > 50 || random.nextLong(10000) > 9985 || random.nextLong(maze.getStep()) > 10 + random.nextLong(22) || random.nextLong(maze.getStreaking() + 1) > 5 + maze.getLevel()) {
                         maze.setLevel(maze.getLevel() + 1);
                         Log.d("maze", "End to next level");
                         long point = 1;

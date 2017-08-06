@@ -170,6 +170,7 @@ public class MainProcess {
     }
 
     public ServerData getBackHero(String id) throws IOException {
+        removeGroup(id);
         return heroTable.getBackHero(id);
     }
 
