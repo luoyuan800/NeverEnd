@@ -17,13 +17,11 @@ import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.gift.Gift;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.GoodsProperties;
-import cn.luo.yuan.maze.model.skill.MountAble;
-import cn.luo.yuan.maze.model.skill.PropertySkill;
-import cn.luo.yuan.maze.model.skill.Skill;
-import cn.luo.yuan.maze.model.skill.SkillParameter;
-import cn.luo.yuan.maze.model.skill.UpgradeAble;
+import cn.luo.yuan.maze.model.skill.*;
 import cn.luo.yuan.maze.persistence.DataManager;
-import cn.luo.yuan.maze.service.*;
+import cn.luo.yuan.maze.service.InfoControlInterface;
+import cn.luo.yuan.maze.service.PetMonsterHelper;
+import cn.luo.yuan.maze.service.SkillHelper;
 import cn.luo.yuan.maze.utils.Random;
 import org.jetbrains.annotations.NotNull;
 
@@ -77,7 +75,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
     }
 
     public void addMessage(String msg) {
-            textView.addMessage(msg);
+        textView.addMessage(msg);
     }
 
     @Override
@@ -89,7 +87,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
             dataManager = null;
             petMonsterHelper = null;
             accessoryHelper = null;
-        }catch (Exception e){
+        } catch (Exception e) {
             LogHelper.logException(e, "stopGame");
         }
 
@@ -111,7 +109,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
                 try {
                     if (!runningService.getPause())
                         viewHandler.refreshFreqProperties();
-                }catch (Exception e){
+                } catch (Exception e) {
                     LogHelper.logException(e, "refreshfreqProperties_runnable");
                 }
             }
@@ -122,7 +120,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
                 try {
                     if (!runningService.getPause())
                         viewHandler.refreshSkill();
-                }catch (Exception e){
+                } catch (Exception e) {
                     LogHelper.logException(e, "refreshfreqProperties_runnable");
                 }
             }
@@ -134,12 +132,17 @@ public class NeverEnd extends Application implements InfoControlInterface {
         return hero;
     }
 
+    void setHero(Hero hero) {
+        this.hero = hero;
+        random = new Random(hero.getBirthDay());
+    }
+
     public int getIndex() {
         return dataManager.getIndex();
     }
 
     public ServerService getServerService() {
-        if(serverService == null){
+        if (serverService == null) {
             serverService = new ServerService(getVersion());
         }
         return serverService;
@@ -155,11 +158,6 @@ public class NeverEnd extends Application implements InfoControlInterface {
 
     public void setTaskManager(TaskManager taskManager) {
         this.taskManager = taskManager;
-    }
-
-    void setHero(Hero hero) {
-        this.hero = hero;
-        random = new Random(hero.getBirthDay());
     }
 
     public String getVersion() {
@@ -200,12 +198,12 @@ public class NeverEnd extends Application implements InfoControlInterface {
                 LogHelper.logException(e, "NeverEnd ->save->gift.handler(" + gift + ")");
             }
         }
-        if(showTip) {
+        if (showTip) {
             showToast("保存成功！");
         }
     }
 
-    public void showToast(final String format, final Object ... args) {
+    public void showToast(final String format, final Object... args) {
         getViewHandler().post(new Runnable() {
             @Override
             public void run() {
@@ -340,20 +338,20 @@ public class NeverEnd extends Application implements InfoControlInterface {
         return object;
     }
 
-    public long reincarnate(){
-        long mate = (hero.getReincarnate()+1) * Data.REINCARNATE_COST;
-        if(hero.getMaterial() < mate){
+    public long reincarnate() {
+        long mate = (hero.getReincarnate() * 2 + 1) * Data.REINCARNATE_COST;
+        if (hero.getMaterial() < mate) {
             Toast.makeText(context, Resource.getString(R.string.need_mate, mate), Toast.LENGTH_SHORT).show();
             return hero.getReincarnate();
         }
-        long level = Data.REINCARNATE_LEVEL + hero.getReincarnate() * Data.REINCARNATE_LEVEL;
-        if(maze.getMaxLevel() < level){
+        long level = Data.REINCARNATE_LEVEL + hero.getReincarnate() * Data.REINCARNATE_LEVEL * 2;
+        if (maze.getMaxLevel() < level) {
             Toast.makeText(context, Resource.getString(R.string.need_level, level), Toast.LENGTH_SHORT).show();
             return hero.getReincarnate();
         }
         hero.setMaterial(hero.getMaterial() - mate);
         hero.setReincarnate(hero.getReincarnate() + 1);
-        if(hero.getGift()!=null){
+        if (hero.getGift() != null) {
             try {
                 hero.getGift().unHandler(this);
             } catch (Exception e) {
@@ -361,16 +359,16 @@ public class NeverEnd extends Application implements InfoControlInterface {
             }
         }
         SkillHelper.detectSkillCount(hero);
-        for(Accessory accessory : new ArrayList<>(hero.getAccessories())){
+        for (Accessory accessory : new ArrayList<>(hero.getAccessories())) {
             AccessoryHelper.unMountAccessory(accessory, hero);
         }
         SkillParameter sp = new SkillParameter(hero);
         sp.set(SkillParameter.CONTEXT, this);
         long totalPoint = resetSkill(sp);
         Log.d("maze-reincarnate", "After unhandler gift, AtkGrow: " + hero.getAtkGrow() + ", HpGrow: " + hero.getHpGrow() + ", DefGrow: " + hero.getDefGrow());
-        hero.setAtkGrow(hero.getReincarnate() + Data.GROW_INCRESE  + hero.getAtkGrow());
-        hero.setDefGrow(hero.getReincarnate() + Data.GROW_INCRESE  + hero.getDefGrow());
-        hero.setHpGrow(hero.getReincarnate() + Data.GROW_INCRESE  + hero.getHpGrow());
+        hero.setAtkGrow(hero.getReincarnate() + Data.GROW_INCRESE + hero.getAtkGrow());
+        hero.setDefGrow(hero.getReincarnate() + Data.GROW_INCRESE + hero.getDefGrow());
+        hero.setHpGrow(hero.getReincarnate() + Data.GROW_INCRESE + hero.getHpGrow());
         hero.setMaxHp(hero.getReincarnate() * 20);
         hero.setHp(hero.getMaxHp());
         hero.setDef(hero.getReincarnate() * 5);
@@ -387,28 +385,28 @@ public class NeverEnd extends Application implements InfoControlInterface {
         return hero.getReincarnate();
     }
 
-    public void showPopup(String msg){
+    public void showPopup(String msg) {
         SimplerDialogBuilder.build(msg, Resource.getString(R.string.close), null, context);
     }
 
     public long resetSkill(@NotNull SkillParameter sp) {
         long totalPoint = 0L;
         sp.set(SkillParameter.CONTEXT, this);
-        for( Skill skill : dataManager.loadAllSkill()){
-            if(skill instanceof MountAble){
-                if(((MountAble) skill).isMounted()){
+        for (Skill skill : dataManager.loadAllSkill()) {
+            if (skill instanceof MountAble) {
+                if (((MountAble) skill).isMounted()) {
                     SkillHelper.unMountSkill((MountAble) skill, hero);
                 }
             }
-            if(skill.isEnable()){
-                if(skill instanceof UpgradeAble){
+            if (skill.isEnable()) {
+                if (skill instanceof UpgradeAble) {
                     totalPoint += ((UpgradeAble) skill).getLevel() * Data.SKILL_ENABLE_COST;
-                }else{
+                } else {
                     totalPoint += Data.SKILL_ENABLE_COST;
                 }
-                if(skill instanceof PropertySkill){
-                    ((PropertySkill)skill).disable(sp);
-                }else {
+                if (skill instanceof PropertySkill) {
+                    ((PropertySkill) skill).disable(sp);
+                } else {
                     skill.disable();
                 }
             }

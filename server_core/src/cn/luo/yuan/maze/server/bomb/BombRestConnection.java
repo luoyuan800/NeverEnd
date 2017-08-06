@@ -115,6 +115,30 @@ public class BombRestConnection {
         return null;
     }
 
+    public JSON queryObjects(String table,String order, Integer skip, Integer limit){
+        try {
+            URL url = new URL(BASE_URL + table + "?order=" + order + "&limit=" + limit + "&skip=" + skip);
+            HttpURLConnection connection = getHttpURLConnection(url);
+            connection.setRequestMethod("GET");
+            connection.connect();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line = reader.readLine();
+            StringBuilder sb = new StringBuilder();
+            while (line != null) {
+                sb.append(line);
+                line = reader.readLine();
+            }
+            JSON json = new JSON(sb.toString());
+            reader.close();
+            return json;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public JSON queryObjects(String table, int limit){
         return queryObjects(table,"updatedAt", limit);
     }

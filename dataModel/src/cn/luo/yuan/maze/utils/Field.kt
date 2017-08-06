@@ -14,7 +14,7 @@ class Field {
         const val EXPECT_TYPE: String = "expectType"
         const val INDEX: String = "index"
         const val COUNT: String = "count"
-        const val SERVER_VERSION: Long = 505L
+        const val SERVER_VERSION: Long = 506L
         const val SERVER_VERSION_FIELD: String = "server_version"
         const val STATE_SUCCESS = "1"
         const val STATE_FAILED = "21"
