@@ -20,8 +20,8 @@ import cn.luo.yuan.maze.model.task.Scene;
 import cn.luo.yuan.maze.model.task.Task;
 import cn.luo.yuan.maze.serialize.ObjectTable;
 import cn.luo.yuan.maze.server.bomb.BombRestConnection;
-import cn.luo.yuan.maze.server.bomb.json.JSON;
-import cn.luo.yuan.maze.server.bomb.json.JSONValue;
+import cn.luo.yuan.maze.server.bomb.json.MyJSON;
+import cn.luo.yuan.maze.server.bomb.json.MyJSONValue;
 import cn.luo.yuan.maze.server.bomb.json.SimpleToken;
 import cn.luo.yuan.maze.server.model.User;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
@@ -41,10 +41,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.security.AccessControlContext;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -565,6 +563,7 @@ public class MainProcess {
     }
 
     public Accessory addAccessory(String name, String tag, String type, String author, String... effects) {
+        LogHelper.info("Add accessory: " + name);
         Accessory accessory = new Accessory();
         accessory.setName(name);
         accessory.setDesc(tag);
@@ -588,48 +587,137 @@ public class MainProcess {
         return accessory;
     }
 
-    public List<Accessory> updateShopAccessory(){
+    public String updateShopAccessory(int start){
         List<Accessory> accessories = new ArrayList<>(10);
         BombRestConnection connection = new BombRestConnection();
-        for(int i =0; i< 10; i++) {
-            JSON json = connection.queryObjects("SelfAccessory", "createAt", 8, 1);
-            json.parse();
-            List<SimpleToken> tokens = json.getTokens();
-            SimpleToken nameToken;
-            if (tokens.size() == 3) {
-                nameToken = tokens.get(2);
-            }else if(tokens.size() == 2){
-                nameToken = tokens.get(1);
-            } else{
-                continue;
-            }
-            List<String> effectString = new ArrayList<>();
-            SimpleToken aeffectToken = tokens.get(0);
-            for (Map.Entry<String, JSONValue> entry : aeffectToken.getData().entrySet()) {
-                effectString.add(entry.getKey() + "," + entry.getValue() + ",e");
-            }
-            if(tokens.size() == 3){
-                SimpleToken effectToken = tokens.get(0);
-                for (Map.Entry<String, JSONValue> entry : effectToken.getData().entrySet()) {
-                    effectString.add(entry.getKey() + "," + entry.getValue() + ",");
+        for(int i =start; i< 5; i++) {
+            try {
+                MyJSON json = connection.queryObjects("SelfAccessory", "createAt", i, 1);
+                json.parse();
+                List<SimpleToken> tokens = json.getTokens();
+                SimpleToken nameToken;
+                if (tokens.size() == 3) {
+                    nameToken = tokens.get(2);
+                } else if (tokens.size() == 2) {
+                    nameToken = tokens.get(1);
+                } else {
+                    continue;
                 }
+                List<String> effectString = new ArrayList<>();
+                SimpleToken aeffectToken = tokens.get(0);
+                for (Map.Entry<String, MyJSONValue> entry : aeffectToken.getData().entrySet()) {
+                    String effect = buildEffectString(entry, true);
+                    if(StringUtils.isNotEmpty(effect)) {
+                        effectString.add(effect);
+                    }
+                }
+                if (tokens.size() == 3) {
+                    SimpleToken effectToken = tokens.get(1);
+                    for (Map.Entry<String, MyJSONValue> entry : effectToken.getData().entrySet()) {
+                        String effect = buildEffectString(entry, false);
+                        if(StringUtils.isNotEmpty(effect)) {
+                            effectString.add(effect);
+                        }
+                    }
+                }
+                int typenumber = Integer.parseInt(nameToken.getValue("type").toString());
+                String type = "";
+                switch (typenumber) {
+                    case 1:
+                        type = Field.RING_TYPE;
+                        break;
+                    case 2:
+                        type = Field.NECKLACE_TYPE;
+                        break;
+                    case 0:
+                        type = Field.HAT_TYPE;
+                        break;
+                }
+                if (Boolean.parseBoolean(nameToken.getValue("isConform"))) {
+                    accessories.add(addAccessory(nameToken.getValue("name"), nameToken.getValue("desc"), type, nameToken.getValue("userName"), effectString.toArray(new String[effectString.size()])));
+                }
+            }catch (Exception e){
+                LogHelper.error(e);
             }
-            int typenumber = nameToken.getValue("type");
-            String type = "";
-            switch (typenumber){
-                case 1:
-                    type = Field.RING_TYPE;
-                    break;
-                case 2:
-                    type = Field.NECKLACE_TYPE;
-                    break;
-                case 0:
-                    type = Field.HAT_TYPE;
-                    break;
-            }
-            accessories.add(addAccessory(nameToken.getValue("name"), nameToken.getValue("desc"), type, nameToken.getValue("userName"), effectString.toArray(new String[effectString.size()])));
         }
-        return accessories;
+        StringBuilder builder = new StringBuilder();
+        for(Accessory accessory : accessories){
+            builder.append(accessory.getName()).append("<br>");
+        }
+        return builder.toString();
+    }
+
+    private String buildEffectString(Map.Entry<String, MyJSONValue> entry, boolean isElement) {
+        String key = entry.getKey();
+        Object value = entry.getValue().getValue();
+        switch (key){
+            case "ADD_ATK":
+                key = "AtkEffect";
+                if(value instanceof Number){
+                    value = ((Number) value).longValue()/50;
+                }
+                break;
+            case "ADD_UPPER_HP":
+                key = "HpEffect";
+                if(value instanceof Number){
+                    value = ((Number) value).longValue()/30;
+                }
+                break;
+            case "ADD_DEF":
+                key = "DefEffect";
+                if(value instanceof Number){
+                    value = ((Number) value).longValue()/30;
+                }
+                break;
+            case "ADD_AGI":
+                key = "AgiEffect";
+                if(value instanceof Number){
+                    value = ((Number) value).longValue()/10;
+                }
+                break;
+            case "ADD_STR":
+                key = "StrEffect";
+                if(value instanceof Number){
+                    value = ((Number) value).longValue()/20;
+                }
+                break;
+            case "ADD_DODGE_RATE":
+                key = "DogeRateEffect";
+                if(value instanceof Number){
+                    value = ((Number) value).longValue()/5;
+                }
+                break;
+            case "ADD_PARRY":
+                key = "ParryEffect";
+                if(value instanceof Number){
+                    value = ((Number) value).longValue()/5;
+                }
+                break;
+            case "ADD_PER_ATK":
+                key = "AtkPercentEffect";
+                if(value instanceof Number){
+                    value = ((Number) value).longValue()/7;
+                }
+                break;
+            case "ADD_PER_UPPER_HP":
+                key = "HPPercentEffect";
+                if(value instanceof Number){
+                    value = ((Number) value).longValue()/7;
+                }
+                break;
+            case "ADD_PER_DEF":
+                key = "DefPercentEffect";
+                if(value instanceof Number){
+                    value = ((Number) value).longValue()/7;
+                }
+                break;
+                default:
+                    value = 0;
+        }
+        if(value instanceof Number && ((Number) value).longValue() > 0) {
+            return key + "," + value.toString() + (isElement ? ",e" : ",");
+        }
+        else return StringUtils.EMPTY_STRING;
     }
 
     public void addOnlineGift(String id, int count) {

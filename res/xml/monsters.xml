@@ -300,7 +300,7 @@
         <hit>50</hit>
         <silent>30</silent>
         <egg_rate>10</egg_rate>
-        <pet_rate>5</pet_rate>
+        <pet_rate>15</pet_rate>
         <sex>-1</sex>
         <race>Elyosr</race>
         <rank>4</rank>
@@ -408,7 +408,7 @@
         <hit>10</hit>
         <silent>1</silent>
         <egg_rate>10</egg_rate>
-        <pet_rate>20</pet_rate>
+        <pet_rate>30</pet_rate>
         <sex>-1</sex>
         <race>Eviler</race>
         <rank>1</rank>
@@ -559,6 +559,42 @@
         <evolution></evolution>
     </monster>
     <monster>
+        <index>18</index>
+        <meet meet_rate="25" min_level="225"/>
+        <name>战蛇</name>
+        <desc>滑溜溜的武装蛇
+        </desc>
+        <atk>200</atk>
+        <def>55</def>
+        <hp>240</hp>
+        <hit>25</hit>
+        <silent>10</silent>
+        <egg_rate>10</egg_rate>
+        <pet_rate>10</pet_rate>
+        <sex>-1</sex>
+        <race>Orger</race>
+        <rank>4</rank>
+        <evolution>144</evolution>
+    </monster>
+    <monster>
+        <index>17</index>
+        <meet meet_rate="25" min_level="55"/>
+        <name>蛇</name>
+        <desc>滑溜溜的
+        </desc>
+        <atk>100</atk>
+        <def>95</def>
+        <hp>200</hp>
+        <hit>25</hit>
+        <silent>1</silent>
+        <egg_rate>20</egg_rate>
+        <pet_rate>20</pet_rate>
+        <sex>-1</sex>
+        <race>Eviler</race>
+        <rank>3</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
         <index>145</index>
         <meet meet_rate="5" min_level="1225"/>
         <name>午马</name>
@@ -629,6 +665,24 @@
         <race>Wizardsr</race>
         <rank>6</rank>
         <evolution></evolution>
+    </monster>
+    <monster>
+        <index>404</index>
+        <meet meet_rate="35" min_level="325"/>
+        <name>妖鸡</name>
+        <desc>吃起来嘎嘣脆的
+        </desc>
+        <atk>15</atk>
+        <def>130</def>
+        <hp>120</hp>
+        <hit>55</hit>
+        <silent>6</silent>
+        <egg_rate>30</egg_rate>
+        <pet_rate>30</pet_rate>
+        <sex>1</sex>
+        <race>Eviler</race>
+        <rank>2</rank>
+        <evolution>148</evolution>
     </monster>
     <monster>
         <index>149</index>
@@ -713,7 +767,7 @@
         <hit>10</hit>
         <silent>100</silent>
         <egg_rate>1</egg_rate>
-        <pet_rate>5</pet_rate>
+        <pet_rate>25</pet_rate>
         <sex>-1</sex>
         <race>Ghosr</race>
         <rank>2</rank>

@@ -342,7 +342,7 @@ public class DataManager implements DataManagerInterface {
     public List<ClickSkill> loadClickSkill() {
         List<ClickSkill> clickSkills = clickSkillLoader.loadAll();
         for (ClickSkill skill : new ArrayList<>(clickSkills)) {
-            if (!skill.getId().endsWith("@" + index)) {
+            if (skill!=null && !skill.getId().endsWith("@" + index)) {
                 clickSkills.remove(skill);
             }
         }

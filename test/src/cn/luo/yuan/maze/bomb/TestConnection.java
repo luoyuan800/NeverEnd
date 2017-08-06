@@ -1,10 +1,8 @@
 package cn.luo.yuan.maze.bomb;
 
-import cn.luo.yuan.maze.model.Accessory;
-import cn.luo.yuan.maze.server.MainProcess;
 import cn.luo.yuan.maze.server.bomb.BombRestConnection;
-import cn.luo.yuan.maze.server.bomb.json.JSON;
-import cn.luo.yuan.maze.server.bomb.json.JSONValue;
+import cn.luo.yuan.maze.server.bomb.json.MyJSON;
+import cn.luo.yuan.maze.server.bomb.json.MyJSONValue;
 import cn.luo.yuan.maze.server.bomb.json.SimpleToken;
 import org.testng.annotations.Test;
 
@@ -20,7 +18,7 @@ public class TestConnection {
     public void testBomb() throws IOException, ClassNotFoundException {
         BombRestConnection connection = new BombRestConnection();
         System.out.println("count : " + connection.getRowCount("SelfAccessory"));
-        JSON json = connection.queryObjects("SelfAccessory", "createAt",8,1);
+        MyJSON json = connection.queryObjects("SelfAccessory", "createAt",8,1);
         json.parse();
         List<SimpleToken> tokens  = json.getTokens();
         if(tokens.size() == 3){
@@ -31,7 +29,7 @@ public class TestConnection {
             System.out.println("userName: " + nameToken.getValue("userName"));
         }
         SimpleToken effectToken = tokens.get(0);
-        for(Map.Entry<String, JSONValue> entry:  effectToken.getData().entrySet()){
+        for(Map.Entry<String, MyJSONValue> entry:  effectToken.getData().entrySet()){
             System.out.println(entry.getKey() + ": " + entry.getValue().getValue());
         }
 

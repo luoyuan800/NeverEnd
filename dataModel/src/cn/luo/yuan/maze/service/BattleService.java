@@ -157,12 +157,12 @@ public class BattleService {
                 if (monster instanceof Monster && ((Monster) monster).getRank() > pet.getRank() && random.nextInt(5) < 1) {
                     battleMessage.petSuppress(pet, (NameObject) monster);
                 } else {
-                    long harm = monster.getAtk() - pet.getDef();
+                    long harm = BattleServiceBase.getHarm(monster,pet, 1,random,battleMessage);
                     if (harm > 0) {
-                        monster.setHp(monster.getHp() - harm);
+                        pet.setHp(pet.getHp() - harm);
                         battleMessage.petDefend(pet);
                         if (monster instanceof NameObject) {
-                            battleMessage.harm(pet, (NameObject) monster, harm);
+                            battleMessage.harm((NameObject) monster, pet,  harm);
                         }
                     }
                     return true;

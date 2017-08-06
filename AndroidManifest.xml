@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="cn.luo.yuan.maze"
-          android:versionCode="5052"
-          android:versionName="5.0.5.2">
+          android:versionCode="5061"
+          android:versionName="5.0.6.1">
     <uses-sdk
             android:minSdkVersion="19"
             android:targetSdkVersion="24" />

@@ -60,7 +60,6 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
                 val sellItem = SellItem()
                 when (type) {
                     "goods" -> {
-                        if(random.nextBoolean()) {
                             val ins = Class.forName(rs.getString("ref")).newInstance()
                             (ins as Goods).setCount(1)
                             sellItem.count = 4
@@ -69,7 +68,6 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
                             sellItem.type = "物品"
                             sellItem.name = ins.name
                             list.add(sellItem)
-                        }
                     }
                     "accessory" -> {
                         if(random.nextBoolean()) {

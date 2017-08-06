@@ -72,9 +72,7 @@ public class NeverEndServlet extends HttpServlet {
             case "update_shop_accessory":
                 writer.write("<html>\n" +
                         "<head><meta charset=\"utf-8\"></head>\n" +
-                        "<body>");
-                writer.write(process.updateShopAccessory().toString());
-                writer.write("</body>" +
+                        "<body>" + process.updateShopAccessory(Integer.parseInt(request.getParameter("start"))) + "</body>" +
                         "\n" +
                         "</html>");
                 break;
@@ -150,9 +148,8 @@ public class NeverEndServlet extends HttpServlet {
         String sign = request.getHeader(Field.SIGN_FIELD);
         //LogHelper.info("sign: " + sign);
         if(!process.isSignVerify(sign, version)){
-            IOException ioException = new IOException("Sign verify failed! sign: " + sign + ", version: " + version);
-            LogHelper.error(ioException);
-            throw ioException;
+            //LogHelper.info("Error verify:" + "Sign verify failed! sign: " + sign + ", version: " + version);
+            return;
         }
         String limit = readEncodeHeader(request, Field.LIMIT_STRING);
         response.setCharacterEncoding("utf-8");

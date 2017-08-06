@@ -45,7 +45,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                         final ProgressDialog progress = new ProgressDialog(context.getContext());
                         progress.setMessage("上传中……");
                         progress.show();
-                        context.getExecutor().execute(new Runnable() {
+                        new Thread(new Runnable() {
                             @Override
                             public void run() {
                                 try {
@@ -57,7 +57,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                                     defaultHandler.uncaughtException(thread, ex);
                                 }
                             }
-                        });
+                        }).start();
                         try {
                             Thread.sleep(3000);
                         } catch (InterruptedException e) {

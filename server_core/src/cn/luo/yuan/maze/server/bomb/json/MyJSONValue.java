@@ -3,7 +3,7 @@ package cn.luo.yuan.maze.server.bomb.json;
 /**
  * Created by luoyuan on 2016/6/18.
  */
-public class JSONValue<T> {
+public class MyJSONValue<T> {
     T value;
     public T getValue(){
         return value;

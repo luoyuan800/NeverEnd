@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class SimpleToken {
     private String content;
-    private Map<String, JSONValue> data = new HashMap<>();
+    private Map<String, MyJSONValue> data = new HashMap<>();
 
     public SimpleToken(String content) {
         this.content = content;
@@ -34,12 +34,12 @@ public class SimpleToken {
                     }
                 }
                 if (entry[1].matches("^\\[.*\\]$")) {
-                    JSONValue<List<JSONValue>> value = new JSONValue<>();
+                    MyJSONValue<List<MyJSONValue>> value = new MyJSONValue<>();
                     entry[1] = entry[1].replaceAll("\\[|\\]", "");
                     String[] listArray = entry[1].split(",");
-                    List<JSONValue> jsondata = new ArrayList<>();
+                    List<MyJSONValue> jsondata = new ArrayList<>();
                     for (String s : listArray) {
-                        JSONValue value1 = buildJSONValue(s);
+                        MyJSONValue value1 = buildJSONValue(s);
                         jsondata.add(value1);
                     }
                     value.setValue(jsondata);
@@ -51,24 +51,24 @@ public class SimpleToken {
         }
     }
 
-    private JSONValue buildJSONValue(String value) {
+    private MyJSONValue buildJSONValue(String value) {
         if(value.matches("\\d+")) {
             //Number type
             if(value.indexOf(".") > 0){
                 //Double
-                JSONValue<Double> jsonValue = new JSONValue<>();
+                MyJSONValue<Double> jsonValue = new MyJSONValue<>();
                 jsonValue.setValue(StringUtils.toFloat(value).doubleValue());
                 return jsonValue;
             }else{
                 //Long
-                JSONValue<Long> jsonValue = new JSONValue<>();
+                MyJSONValue<Long> jsonValue = new MyJSONValue<>();
                 jsonValue.setValue(StringUtils.toLong(value));
                 return jsonValue;
             }
 
         }else{
             //String
-            JSONValue<String> jsonValue = new JSONValue<>();
+            MyJSONValue<String> jsonValue = new MyJSONValue<>();
             jsonValue.setValue(value.replaceAll("\"", ""));
             return jsonValue;
         }
@@ -78,14 +78,14 @@ public class SimpleToken {
         return data.toString();
     }
 
-    public Map<String, JSONValue> getData() {
+    public Map<String, MyJSONValue> getData() {
         return data;
     }
 
     public String toJSONString() {
         StringBuilder builder = new StringBuilder("{");
         int i = 0;
-        for (Map.Entry<String, JSONValue> entry : data.entrySet()) {
+        for (Map.Entry<String, MyJSONValue> entry : data.entrySet()) {
             builder.append("\"").append(entry.getKey()).append("\"").append(":").append(entry.getValue().toString());
             if (i < data.size() - 1) {
                 builder.append(",");
@@ -97,7 +97,7 @@ public class SimpleToken {
     }
 
     public <T> T getValue(String key) {
-        JSONValue value = data.get(key);
+        MyJSONValue value = data.get(key);
         if (value != null && value.getValue() != null) {
             return (T) value.getValue();
         }
@@ -105,7 +105,7 @@ public class SimpleToken {
     }
 
     public <T> void setValue(String key, T value) {
-        JSONValue<T> jsonValue = new JSONValue<>();
+        MyJSONValue<T> jsonValue = new MyJSONValue<>();
         jsonValue.setValue(value);
         this.data.put(key, jsonValue);
     }

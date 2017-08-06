@@ -7,12 +7,12 @@ import java.util.Stack;
 /**
  * Created by luoyuan on 2016/6/18.
  */
-public class JSON {
+public class MyJSON {
     private String content;
     private List<SimpleToken> tokens = new ArrayList<>();
     private String rootKey;
 
-    public JSON(String content) {
+    public MyJSON(String content) {
         this.content = content;
     }
 

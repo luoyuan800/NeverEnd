@@ -96,9 +96,17 @@ public class AccessoryHelper extends cn.luo.yuan.maze.service.AccessoryHelper {
                     }
                     if (append) {
                         if (effect instanceof LongValueEffect) {
-                            ((LongValueEffect) effect).setValue((long) random.randomRange(((LongValueEffect) effect).getValue() * colorReduce, ((LongValueEffect) effect).getValue()));
+                            long value = (long) random.randomRange(((LongValueEffect) effect).getValue() * colorReduce, ((LongValueEffect) effect).getValue());
+                            if(value == 0){
+                                value = 1;
+                            }
+                            ((LongValueEffect) effect).setValue(value);
                         } else if (effect instanceof FloatValueEffect) {
-                            ((FloatValueEffect) effect).setValue(random.randomRange(((FloatValueEffect) effect).getValue() * colorReduce, ((FloatValueEffect) effect).getValue()));
+                            float value = random.randomRange(((FloatValueEffect) effect).getValue() * colorReduce, ((FloatValueEffect) effect).getValue());
+                            if(value == 0){
+                                value = 0.1f;
+                            }
+                            ((FloatValueEffect) effect).setValue(value);
                         }
                         major.getEffects().add(effect);
                     }
