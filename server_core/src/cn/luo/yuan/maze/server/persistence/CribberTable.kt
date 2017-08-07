@@ -57,7 +57,9 @@ class CribberTable(private val database: DatabaseConnection) {
             val stat = connection.createStatement()
             stat.execute("insert into cribber(uuid, mac, name) values('$uuid' , '$mac' , '$name' )")
             stat.close()
-        } finally {
+        } catch (e: Exception){
+            LogHelper.error(e)
+        }finally {
             connection.close()
         }
     }

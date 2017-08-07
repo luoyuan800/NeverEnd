@@ -4,10 +4,6 @@
       tools:context=".activity.SimpleMainActivity"
         >
     <item
-            android:id="@+id/pause"
-            android:icon="@android:drawable/ic_media_play"
-            android:title="@string/pause_label"/>
-    <item
             android:id="@+id/save"
             android:icon="@android:drawable/ic_menu_save"
             android:title="@string/save_label"/>

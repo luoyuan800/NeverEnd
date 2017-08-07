@@ -5,6 +5,7 @@ import cn.luo.yuan.maze.model.effect.*;
 import cn.luo.yuan.maze.model.effect.original.*;
 
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Created by luoyuan on 2017/3/19.
@@ -18,70 +19,72 @@ public class EffectHandler {
             DOGE="doge", PARRY="parry", RESTORE_RATE= "restore";
 
     public static long getEffectAdditionLongValue(String property, Collection<Effect> effects, Hero hero){
+        Collection<Effect> synEffects = Collections.synchronizedCollection(effects);
         switch (property){
             case CLICK_MATERIAL:
-                return getEffectAdditionMate(effects, hero);
+                return getEffectAdditionMate(synEffects, hero);
             case STR:
-                return getEffectAdditionStr(effects, hero);
+                return getEffectAdditionStr(synEffects, hero);
             case AGI:
-                return getEffectAdditionAgi(effects, hero);
+                return getEffectAdditionAgi(synEffects, hero);
             case HP:
-                return getEffectAdditionHP(effects, hero);
+                return getEffectAdditionHP(synEffects, hero);
             case ATK:
-                return getEffectAdditionAtk(effects, hero);
+                return getEffectAdditionAtk(synEffects, hero);
             case DEF:
-                return getEffectAdditionDef(effects, hero);
+                return getEffectAdditionDef(synEffects, hero);
         }
         return 0;
     }
 
     public static float getEffectAdditionFloatValue(String property, Collection<Effect> effects){
+        Collection<Effect> synEffects = Collections.synchronizedCollection(effects);
         float value = 0.0f;
         switch (property){
             case RESTORE_RATE:
-                for(Effect effect : effects){
+                for(Effect effect : synEffects){
                     if(effect instanceof RestoreHPPercentEffect){
                         value += ((RestoreHPPercentEffect)effect).getValue();
                     }
                 }
                 break;
             case PARRY:
-                for(Effect effect : effects){
+                for(Effect effect : synEffects){
                     if(effect instanceof ParryEffect){
                         value += ((ParryEffect) effect).getValue();
                     }
                 }
                 break;
             case DOGE:
-                for(Effect effect : effects){
+                for(Effect effect : synEffects){
                     if(effect instanceof DogeRateEffect){
                         value += ((DogeRateEffect) effect).getValue();
                     }
                 }
                 break;
             case EGG:
-                for(Effect effect : effects){
+                for(Effect effect : synEffects){
                     if(effect instanceof EggRateEffect){
                         value += ((EggRateEffect) effect).getEggRate();
                     }
                 }
                 break;
             case MEET_RATE:
-                for(Effect effect : effects){
+                for(Effect effect : synEffects){
                     if(effect instanceof MeetRateEffect){
                         value += ((MeetRateEffect) effect).getMeetRate();
                     }
                 }
                 break;
             case PET_RATE:
-                for(Effect effect : effects){
+                for(Effect effect : synEffects){
                     if(effect instanceof PetRateEffect){
                         value += ((PetRateEffect) effect).getPetRate();
                     }
                 }
                 break;
             case SKILL_RATE:
-                for(Effect effect : effects){
+                for(Effect effect : synEffects){
                     if(effect instanceof SkillRateEffect){
                         value += ((SkillRateEffect) effect).getSkillRate();
                     }

@@ -122,7 +122,10 @@ public class ExchangeManager {
             if (connection != null) {
                 connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
                 connection.addRequestProperty(Field.LIMIT_STRING, URLEncoder.encode(limitKey, "utf-8"));
-                eos.addAll((List<ExchangeObject>) server.connect(connection));
+                Object connect = server.connect(connection);
+                if(connect instanceof List) {
+                    eos.addAll((List<ExchangeObject>) connect);
+                }
 
             }
 

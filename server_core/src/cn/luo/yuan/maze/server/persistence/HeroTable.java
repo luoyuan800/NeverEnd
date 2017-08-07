@@ -101,8 +101,8 @@ public class HeroTable {
 
     public String pollBattleMsg(String id, int count) {
         ServerRecord record = getRecord(id);
-        if (record.getMessages().size() > 20) {
-            count += 20;
+        if (record.getMessages().size() > 10) {
+            count = record.getMessages().size();
         }
         StringBuilder s = new StringBuilder();
         while (count-- > 0 && record.getMessages().size() > 0) {

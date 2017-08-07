@@ -786,12 +786,12 @@ public class MainProcess {
             builder.append("\"id\":\"").append(record.getId()).append("\",");
             builder.append("\"Range\":").append(record.getRange()).append(",");
             builder.append("\"Submit\":").append(record.getSubmitDate()).append(",");
+            builder.append("\"mac\":\"").append(record.getMac()).append("\",");
             if (record.getData() != null && record.getData().getHero() != null) {
                 builder.append("\"data\":\"").append(record.getData().getHero().toString().replaceAll("\"", "'")).append("\"");
             } else {
                 builder.append("\"data\":\"").append("NAN").append("\"");
             }
-            builder.append("\"mac\":\"").append(record.getMac()).append("\",");
         } else {
             return StringUtils.EMPTY_STRING;
         }
@@ -880,10 +880,12 @@ public class MainProcess {
 
     public void addCribber(String id){
         if(StringUtils.isNotEmpty(id) && cribber !=null){
+            LogHelper.info("add cribber: " + id);
             ServerRecord record;
             record = heroTable.getRecord(id);
             String mac = record.getMac();
             cribber.addToCribber(id ,StringUtils.isEmpty(mac)? " " : mac, record.getData()!=null && record.getData().getHero()!=null  ? record.getData().getHero().getName() : " ");
+            LogHelper.info("delete cribber: " + id);
             heroTable.delete(id);
         }
     }
@@ -891,8 +893,8 @@ public class MainProcess {
     public String exchangeJson(){
         StringBuilder builder = new StringBuilder();
         for(String id : exchangeTable.getExchangeDb().loadIds()){
-
+            builder.append(formatJson(exchangeTable.loadObject(id)));
         }
-        return StringUtils.EMPTY_STRING;
+        return builder.toString();
     }
 }

@@ -69,8 +69,11 @@ public class NeverEndServlet extends HttpServlet {
         response.setCharacterEncoding("utf-8");
         PrintWriter writer = response.getWriter();
         switch (path) {
+            case "get_exchange_list":
+                writer.write(process.exchangeJson());
+                break;
             case "add_cribber":
-                process.addCribber(ownerId);
+                process.addCribber(request.getParameter(Field.OWNER_ID_FIELD));
                 break;
             case "update_shop_accessory":
                 writer.write("<html>\n" +

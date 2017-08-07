@@ -9,10 +9,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.client.display.dialog.ClickSkillDialog;
@@ -125,6 +122,12 @@ public class GameActivity extends BaseActivity {
         control.getHero().setClick(control.getHero().getClick() + 1);
         HarmAble currentBattleTarget = control.getCurrentBattleTarget();
         switch (v.getId()) {
+            case R.id.pause:
+                boolean pause = control.pauseGame();
+                if(v instanceof ImageButton) {
+                   ((ImageButton) v).setImageResource(pause ? android.R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
+                }
+                break;
             case R.id.first_skill:
             case R.id.secondary_skill:
             case R.id.third_skill:

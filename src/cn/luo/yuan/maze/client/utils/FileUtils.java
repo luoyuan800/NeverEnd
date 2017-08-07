@@ -76,6 +76,7 @@ public class FileUtils {
     }
 
     public static String zipSaveFiles(String uuid, Context context, boolean containLogs) {
+        uuid.replaceAll("\\?", "NN");
         FileOutputStream fos;
         ZipOutputStream zos = null;
         String name = SD_PATH + "/" + uuid + ".maze";
