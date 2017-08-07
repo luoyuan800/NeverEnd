@@ -40,9 +40,9 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
         long atk_l = level * Data.MONSTER_ATK_RISE_PRE_LEVEL  + monster.getAtkAddition();
         long def_l = level * Data.MONSTER_DEF_RISE_PRE_LEVEL ;
         long hp_l = level * Data.MONSTER_HP_RISE_PRE_LEVEL  + monster.getHpAddition();
-        pet.setAtk(pet.getAtk() - atk_l + random.nextLong(random.reduceToSpecialDigit(atk_l, 3)));
-        pet.setDef(pet.getDef() - def_l + random.nextLong(random.reduceToSpecialDigit(def_l, 3)));
-        pet.setMaxHp(pet.getMaxHp() - hp_l + random.nextLong(random.reduceToSpecialDigit(hp_l, 3)));
+        pet.setAtk(pet.getAtk() - atk_l + getRandom().nextLong(getRandom().reduceToSpecialDigit(atk_l, 3)));
+        pet.setDef(pet.getDef() - def_l + getRandom().nextLong(getRandom().reduceToSpecialDigit(def_l, 3)));
+        pet.setMaxHp(pet.getMaxHp() - hp_l + getRandom().nextLong(getRandom().reduceToSpecialDigit(hp_l, 3)));
         pet.setHp(pet.getMaxHp());
         pet.setFirstName(monster.getFirstName());
         pet.setSecondName(monster.getSecondName());
@@ -395,8 +395,8 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
         if (!p1.getId().equals(p2.getId())) {
             if (p1.getSex() != p2.getSex()) {
                 if (p1.getElement().isReinforce(p2.getElement())) {
-                    if (gameControl.getRandom().nextFloat(300) < random.nextFloat(p1.getEggRate() + p2.getEggRate()) +
-                            random.nextFloat(EffectHandler.getEffectAdditionFloatValue(EffectHandler.EGG, gameControl.getHero().getEffects()))) {
+                    if (gameControl.getRandom().nextFloat(300) < getRandom().nextFloat(p1.getEggRate() + p2.getEggRate()) +
+                            getRandom().nextFloat(EffectHandler.getEffectAdditionFloatValue(EffectHandler.EGG, gameControl.getHero().getEffects()))) {
                         Egg egg = new Egg();
                         egg.setType(p1.getSex() == 1 ? p1.getType() : p2.getType());
                         egg.setElement(gameControl.getRandom().randomItem(Element.values()));
@@ -418,16 +418,16 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
                         Monster m1 = loadMonsterByIndex(p1.getIndex());
                         Monster m2 = loadMonsterByIndex(p2.getIndex());
                         if (m1 != null && m2 != null) {
-                            egg.setMaxHp(gameControl.getRandom().nextLong(m1.getMaxHp()) + m2.getMaxHp() + random.reduceToSpecialDigit(gameControl.getMaze().getLevel(),2));
-                            egg.setAtk(gameControl.getRandom().nextLong(m2.getAtk()) + m1.getAtk() + random.reduceToSpecialDigit(gameControl.getMaze().getLevel(),2));
-                            egg.setDef(gameControl.getRandom().nextLong(m1.getDef()) + m2.getDef() + random.reduceToSpecialDigit(gameControl.getMaze().getLevel(),2));
+                            egg.setMaxHp(gameControl.getRandom().nextLong(m1.getMaxHp()) + m2.getMaxHp() + getRandom().reduceToSpecialDigit(gameControl.getMaze().getLevel(),2));
+                            egg.setAtk(gameControl.getRandom().nextLong(m2.getAtk()) + m1.getAtk() + getRandom().reduceToSpecialDigit(gameControl.getMaze().getLevel(),2));
+                            egg.setDef(gameControl.getRandom().nextLong(m1.getDef()) + m2.getDef() + getRandom().reduceToSpecialDigit(gameControl.getMaze().getLevel(),2));
                             egg.setHitRate(m1.getHitRate());
                             egg.setEggRate(p1.getSex() == 1 ? m1.getEggRate() : m2.getEggRate());
                         }
                         egg.setFirstName(p1.getSex() == 0 ? p1.getFirstName() : p2.getFirstName());
                         egg.setSecondName(p1.getSex() == 0 ? p2.getSecondName() : p2.getSecondName());
                         egg.setIntimacy(30);
-                        egg.setSex(random.nextInt(2));
+                        egg.setSex(getRandom().nextInt(2));
                         return egg;
                     }
                 }

@@ -57,18 +57,18 @@ public class OnlineActivityOnClickHandler {
                             public void run() {
                                 if (o instanceof String) {
                                     if(StringUtils.isEmpty(o.toString())){
-                                        SimplerDialogBuilder.build("谢谢惠顾！", Resource.getString(R.string.conform), null, activity, context.getRandom());
+                                        SimplerDialogBuilder.build("谢谢惠顾！", Resource.getString(R.string.conform), activity, context.getRandom());
                                     }else {
-                                        SimplerDialogBuilder.build(o.toString(), Resource.getString(R.string.conform), null, context.getContext(), context.getRandom());
+                                        SimplerDialogBuilder.build(o.toString(), Resource.getString(R.string.conform), context.getContext(), context.getRandom());
                                     }
                                 } else {
                                     if (o instanceof IDModel) {
                                         context.getDataManager().add((IDModel) o);
                                     }
                                     if (o instanceof NameObject) {
-                                        SimplerDialogBuilder.build("获得了 " + ((NameObject) o).getDisplayName(), Resource.getString(R.string.conform), null, activity, context.getRandom());
+                                        SimplerDialogBuilder.build("获得了 " + ((NameObject) o).getDisplayName(), Resource.getString(R.string.conform), activity, context.getRandom());
                                     } else {
-                                        SimplerDialogBuilder.build("获得了 " + o, Resource.getString(R.string.conform), null, activity, context.getRandom());
+                                        SimplerDialogBuilder.build("获得了 " + o, Resource.getString(R.string.conform),activity, context.getRandom());
                                     }
                                 }
                                 activity.postGiftCount();

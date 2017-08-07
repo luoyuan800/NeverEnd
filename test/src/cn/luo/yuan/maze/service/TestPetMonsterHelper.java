@@ -5,6 +5,7 @@ import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Egg;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.Race;
@@ -18,6 +19,10 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -68,18 +73,20 @@ public class TestPetMonsterHelper {
 
     @Test
     public void testEgg() throws MonsterToPetException {
-        /*PetMonsterHelper helper = PetMonsterHelper.instance;
-        MockMonsterLoader loader = new MockMonsterLoader();
-        helper.setMonsterLoader(loader);
         MockGameContext context = new MockGameContext();
         context.hero = new Hero();
+        context.maze = new Maze();
         context.hero.setRace(Race.Elyosr.ordinal());
-        helper.setRandom(context.getRandom());
+        PetMonsterHelper helper = mock(PetMonsterHelper.class);
+        helper.setRandom(context.random);
         Monster m1 = new Pet();
         m1.setIndex(0);
         m1.setType("test");
         m1.setSex(0);
         m1.setRace(Race.Elyosr);
+        m1.setAtk(100);
+        m1.setDef(100);
+        m1.setMaxHp(100);
         m1.setElement(Element.FIRE.getReinforce());
         m1.setFirstName(context.getRandom().randomItem(FirstName.values()));
         m1.setSecondName(context.getRandom().randomItem(SecondName.values()));
@@ -90,21 +97,31 @@ public class TestPetMonsterHelper {
         m2.setSex(1);
         m2.setRace(Race.Elyosr);
         m2.setElement(Element.FIRE);
-        m1.setEggRate(200);
-        m2.setEggRate(100);
+        m2.setAtk(100);
+        m2.setDef(100);
+        m2.setMaxHp(100);
+        m1.setEggRate(500);
+        m2.setEggRate(1000);
         m2.setFirstName(context.getRandom().randomItem(FirstName.values()));
         m2.setSecondName(context.getRandom().randomItem(SecondName.values()));
         m2.setRank(5);
-        loader.setMonsterList(new ArrayList<>(Arrays.<Monster>asList(m1, m2)));
-        Pet p1 = helper.monsterToPet(m1, new Hero(), 100);
+        when(helper.loadMonsterByIndex(m1.getIndex())).thenReturn(m1);
+        when(helper.loadMonsterByIndex(m2.getIndex())).thenReturn(m2);
+        when(helper.monsterToPet(any(Monster.class),any(Hero.class), anyLong())).thenCallRealMethod();
+        when(helper.getRandom()).thenReturn(context.getRandom());
+        when(helper.buildEgg(any(Pet.class), any(Pet.class), any(InfoControlInterface.class))).thenCallRealMethod();
+        Pet p1 = helper.monsterToPet(m1, new Hero(), 0);
         p1.setId("1");
-        Pet p2 = helper.monsterToPet(m2, new Hero(), 100);
+        Pet p2 = helper.monsterToPet(m2, new Hero(), 0);
         p2.setId("2");
-        Egg egg = helper.buildEgg(p1, p2, context);
-        if(egg!=null) {
-            assertTrue(egg.step > 0);
-            Assert.assertEquals(egg.getName(), "蛋");
-        }*/
+        for(int i =0; i< 1; i++) {
+            Egg egg = helper.buildEgg(p1, p2, context);
+            if (egg != null) {
+                assertTrue(egg.step > 0);
+                Assert.assertEquals(egg.getName(), "蛋");
+                System.out.println(egg);
+            }
+        }
     }
 
     @Test

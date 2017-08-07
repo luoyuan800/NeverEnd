@@ -11,6 +11,7 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.dialog.ClickSkillDialog;
 import cn.luo.yuan.maze.client.display.dialog.GiftDialog;
+import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.persistence.IndexManager;
@@ -18,8 +19,6 @@ import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.persistence.SaveFileManager;
 import cn.luo.yuan.maze.utils.StringUtils;
-import sw.ls.ps.AdManager;
-import sw.ls.ps.normal.spot.SpotManager;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
@@ -100,8 +99,11 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
                         hero.setElement((Element) element.getSelectedItem());
                         Spinner race = (Spinner) dialog.findViewById(R.id.select_race);
                         hero.setRace(((Race) race.getSelectedItem()).ordinal());
-                        if(!StringUtils.isNotEmpty(hero.getName()) || hero.getGift() == null){
+                        if(!StringUtils.isNotEmpty(hero.getName()) || hero.getGift() == null || !StringUtils.isCivil(hero.getName())){
                             dialog.show();
+                            if(StringUtils.isNotEmpty(hero.getName()) && !StringUtils.isCivil(hero.getName())){
+                                SimplerDialogBuilder.build("请文明用语！", Resource.getString(R.string.conform), SelectedActivity.this, null);
+                            }
                         }else{
                             dataManager.saveHero(hero);
                             dataManager.saveMaze(maze);

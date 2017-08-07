@@ -791,6 +791,7 @@ public class MainProcess {
             } else {
                 builder.append("\"data\":\"").append("NAN").append("\"");
             }
+            builder.append("\"mac\":\"").append(record.getMac()).append("\",");
         } else {
             return StringUtils.EMPTY_STRING;
         }

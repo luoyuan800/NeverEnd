@@ -58,9 +58,7 @@ public class TestMainProcess {
         upload.setPets(new ArrayList<>(hero.getPets()));
         try {
             process.submitHero(upload);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println(process.buildHeroRange());

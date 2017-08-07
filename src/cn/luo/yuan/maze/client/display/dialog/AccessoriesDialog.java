@@ -101,35 +101,14 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
                     context.getHero().setMaterial(context.getHero().getMaterial() - Data.FUSE_COST * main.getLevel());
 
                     if (context.getAccessoryHelper().fuse(main, fuse)) {
-                        fuse = null;
                         context.getDataManager().save(main);
-                        new AlertDialog.Builder(context.getContext()).setTitle("升级成功").
-                                setMessage(Html.fromHtml(main.toString())).setCancelable(false).
-                                setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        refreshMainAccessoryView();
-                                        refreshFuseAccessoryView();
-                                        accessoryAdapter.notifyDataSetChanged();
-                                    }
-                                }).
-                                create().show();
+                        SimplerDialogBuilder.build(main.toString(), "升级成功", Resource.getString(R.string.close),context.getContext(), context.getRandom());
                     } else {
-                        fuse = null;
-                        new AlertDialog.Builder(context.getContext()).setTitle("升级失败").
-                                setMessage(Html.fromHtml(main.toString())).
-                                setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        refreshMainAccessoryView();
-                                        refreshFuseAccessoryView();
-                                        accessoryAdapter.notifyDataSetChanged();
-                                    }
-                                }).setCancelable(false).
-                                create().show();
+                        SimplerDialogBuilder.build(main.toString(), "升级失败", Resource.getString(R.string.close),context.getContext(), context.getRandom());
                     }
                     context.getDataManager().delete(fuse);
                     accessoryAdapter.getData().remove(fuse);
+                    fuse = null;
                     notifyChange();
 
                 }
@@ -145,6 +124,9 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
     }
 
     private void notifyChange() {
+        accessoryAdapter.notifyDataSetChanged();
+        refreshMainAccessoryView();
+        refreshFuseAccessoryView();
         if(changeListener!=null){
             changeListener.change(context);
         }

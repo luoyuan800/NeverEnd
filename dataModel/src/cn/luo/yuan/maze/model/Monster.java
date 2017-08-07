@@ -52,18 +52,18 @@ public class Monster extends HarmObject implements SilentAbleObject, NameObject,
 
     public void setFirstName(FirstName firstName) {
         if(this.firstName!=null){
-            setAtk(this.firstName.getReducedAtk(getAtk()));
-            setMaxHp(this.firstName.getReducedHp(getMaxHp()));
-            setHp(getMaxHp());
+            setAtk(this.firstName.getReducedAtk(atk.getValue()));
+            setMaxHp(this.firstName.getReducedHp(maxHP.getValue()));
+            setHp(maxHP.getValue());
             silent -= this.firstName.getSilent();
             eggRate -= this.firstName.getEggRate();
 
         }
         this.firstName = firstName;
         if(this.firstName != null){
-            setAtk(getAtk() + firstName.getAtkAddition(getAtk()));
-           setMaxHp(getMaxHp() + firstName.getHPAddition(getMaxHp()));
-            setHp(getMaxHp());
+            setAtk(atk.getValue() + firstName.getAtkAddition(getAtk()));
+            setMaxHp(maxHP.getValue() + firstName.getHPAddition(getMaxHp()));
+            setHp(maxHP.getValue());
             silent += firstName.getSilent();
             eggRate += firstName.getEggRate();
         }
@@ -75,17 +75,17 @@ public class Monster extends HarmObject implements SilentAbleObject, NameObject,
 
     public void setSecondName(SecondName secondName) {
         if(this.secondName!=null){
-            setAtk(this.secondName.getReducedAtk(getAtk()));
-            setMaxHp(this.secondName.getReducedHp(getMaxHp()));
-            setHp(getMaxHp());
+            setAtk(this.secondName.getReducedAtk(atk.getValue()));
+            setMaxHp(this.secondName.getReducedHp(maxHP.getValue()));
+            setHp(maxHP.getValue());
             silent -= this.secondName.getSilent();
             petRate -= this.secondName.getPetRate();
         }
         this.secondName = secondName;
         if(this.secondName!=null){
-            setAtk(getAtk() + secondName.getAtkAddition(getAtk()));
-            setMaxHp( getMaxHp() + secondName.getHpAddition(getMaxHp()));
-            setHp(getMaxHp());
+            setAtk(atk.getValue() + secondName.getAtkAddition(atk.getValue()));
+            setMaxHp( maxHP.getValue() + secondName.getHpAddition(maxHP.getValue()));
+            setHp(maxHP.getValue());
             silent += secondName.getSilent();
             petRate += secondName.getPetRate();
         }

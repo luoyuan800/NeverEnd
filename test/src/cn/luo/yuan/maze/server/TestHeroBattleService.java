@@ -53,9 +53,7 @@ public class TestHeroBattleService {
         upload.setPets(new ArrayList<>(hero.getPets()));
         try {
             process.submitHero(upload);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         /*hero.setId("QA" + UUID.randomUUID().toString());

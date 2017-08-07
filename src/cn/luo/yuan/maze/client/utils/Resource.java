@@ -28,6 +28,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.util.Collections;
 import java.util.List;
@@ -223,22 +224,30 @@ public class Resource {
         try {
             List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
             for (NetworkInterface nif : all) {
-                if (!nif.getName().equalsIgnoreCase("wlan0")) continue;
+                if(nif.getInterfaceAddresses()!=null && nif.getInterfaceAddresses().size() > 0) {
+                    boolean skip = false;
+                    for(InterfaceAddress address : nif.getInterfaceAddresses()){
+                        if(address.toString().contains("127.0.0.1")){
+                            skip = true;
+                            break;
+                        }
+                    }
+                    if(skip) continue;
+                    byte[] macBytes = nif.getHardwareAddress();
+                    if (macBytes == null) {
+                        return "";
+                    }
 
-                byte[] macBytes = nif.getHardwareAddress();
-                if (macBytes == null) {
-                    return "";
-                }
+                    StringBuilder res1 = new StringBuilder();
+                    for (byte b : macBytes) {
+                        res1.append(String.format("%02X:", b));
+                    }
 
-                StringBuilder res1 = new StringBuilder();
-                for (byte b : macBytes) {
-                    res1.append(String.format("%02X:",b));
+                    if (res1.length() > 0) {
+                        res1.deleteCharAt(res1.length() - 1);
+                    }
+                    return res1.toString();
                 }
-
-                if (res1.length() > 0) {
-                    res1.deleteCharAt(res1.length() - 1);
-                }
-                return res1.toString();
             }
         } catch (Exception ex) {
             LogHelper.logException(ex, "Query MAC");

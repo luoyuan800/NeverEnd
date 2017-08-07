@@ -39,6 +39,49 @@ public class SimplerDialogBuilder {
                 .show();
         return dialogBuilder;
     }
+    public static Dialog build(String msg, String posivStr, Context context, Random random) {
+        final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
+        if (random != null) {
+            dialogBuilder.withEffect(random.randomItem(Effectstype.values()));
+        }
+        dialogBuilder
+                .withMessageColor(Color.RED)
+                .withMessage(Html.fromHtml(msg))                     //.withMessage(null)  no Msg
+                .withButton1Text(posivStr)                                      //def gone
+                .withDuration(700)
+                .withDialogColor(Color.WHITE)
+                .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
+                .setButton1Click(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogBuilder.dismiss();
+                    }
+                })
+                .show();
+        return dialogBuilder;
+    }
+    public static Dialog build(String msg, String title, String posivStr, Context context, Random random) {
+        final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
+        if (random != null) {
+            dialogBuilder.withEffect(random.randomItem(Effectstype.values()));
+        }
+        dialogBuilder
+                .withTitle(title)
+                .withMessageColor(Color.RED)
+                .withMessage(Html.fromHtml(msg))                     //.withMessage(null)  no Msg
+                .withButton1Text(posivStr)                                      //def gone
+                .withDuration(700)
+                .withDialogColor(Color.WHITE)
+                .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
+                .setButton1Click(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogBuilder.dismiss();
+                    }
+                })
+                .show();
+        return dialogBuilder;
+    }
 
     public static AlertDialog build(String msg, String positiveStr, DialogInterface.OnClickListener positive,
                                     String negativeStr, DialogInterface.OnClickListener negative, Context context) {
