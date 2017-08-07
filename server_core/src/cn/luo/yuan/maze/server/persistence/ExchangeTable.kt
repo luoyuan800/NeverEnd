@@ -94,17 +94,17 @@ class ExchangeTable(root: File) {
         }
     }
 
-    fun loadAll(id: String): List<ExchangeObject> {
+    fun loadAll(ownerId: String): List<ExchangeObject> {
         val result = mutableListOf<ExchangeObject>()
         if (cache.size == exchangeDb.size()) {
             for ((key, value) in cache.entries) {
                 val exchangeObject = value.get()
-                if (exchangeObject != null && exchangeObject.ownerId == id && !exchangeObject.acknowledge) {
+                if (exchangeObject != null && exchangeObject.ownerId == ownerId && !exchangeObject.acknowledge) {
                     result.add(exchangeObject)
                 } else {
                     val eo = exchangeDb.loadObject(key.id)
                     if (eo != null) {
-                        if (eo.ownerId == id && !eo.acknowledge) {
+                        if (eo.ownerId == ownerId && !eo.acknowledge) {
                             result.add(eo);
                         }
                         cache.put(key, SoftReference(eo))
@@ -116,7 +116,7 @@ class ExchangeTable(root: File) {
                 val eo = exchangeDb.loadObject(exchangeId);
                 if (eo != null) {
                     cache.put(key(eo.id, eo.type, eo.expectedType), SoftReference(eo))
-                    if (eo.ownerId == id && !eo.acknowledge) {
+                    if (eo.ownerId == ownerId && !eo.acknowledge) {
                         result.add(eo)
                     }
                 }

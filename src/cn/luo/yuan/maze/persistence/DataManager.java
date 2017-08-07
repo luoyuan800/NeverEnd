@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import cn.luo.yuan.maze.client.utils.LogHelper;
+import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Element;
@@ -446,7 +447,16 @@ public class DataManager implements DataManagerInterface {
                 LogHelper.logException(e1, "Save Config while get");
             }
         }
-
+        try {
+            if (StringUtils.isEmpty(config.getSign())) {
+                config.setSign(Resource.getSingInfo());
+            }
+            if (StringUtils.isEmpty(config.getVersion())) {
+                config.setVersion(Resource.getVersion());
+            }
+        }catch (Exception e){
+            LogHelper.logException(e, "load config");
+        }
         return config;
     }
 

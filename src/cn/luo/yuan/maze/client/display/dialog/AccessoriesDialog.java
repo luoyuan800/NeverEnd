@@ -94,7 +94,7 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
         dialog.findViewById(R.id.accessory_fuse).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (main != null && fuse != null) {
+                if (main != null && fuse != null && !main.getId().equals(fuse.getId())) {
                     if (fuse.isMounted()) {
                         AccessoryHelper.unMountAccessory(fuse, context.getHero());
                     }
@@ -253,7 +253,7 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
                 ((Button) dialog.findViewById(R.id.accessory_fuse)).setText("升级需要锻造" + StringUtils.formatNumber(value, false));
             }
         }
-        if (fuse != null && main != null && fuse.getType().equals(main.getType()) && costE) {
+        if (fuse != null && main != null && fuse.getType().equals(main.getType()) && costE && !fuse.getId().equals(main.getId())) {
             dialog.findViewById(R.id.accessory_fuse).setEnabled(true);
         } else {
             dialog.findViewById(R.id.accessory_fuse).setEnabled(false);

@@ -52,6 +52,9 @@ public class GameActivity extends BaseActivity {
 //        ListenerService.init();
         dataManager = new DataManager(intent.getIntExtra("index", -1), this);
         final NeverEndConfig config = dataManager.getConfig();
+        if(!config.getSign().equals(Resource.getSingInfo())){
+            finish();
+        }
         if (config.getTheme() != 0) {
             setTheme(config.getTheme());
         }

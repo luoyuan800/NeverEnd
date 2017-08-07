@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.server;
 
+import cn.luo.yuan.maze.exception.CribberException;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.ExchangeObject;
@@ -15,7 +16,11 @@ import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.goods.Goods;
-import cn.luo.yuan.maze.model.goods.types.*;
+import cn.luo.yuan.maze.model.goods.types.Grill;
+import cn.luo.yuan.maze.model.goods.types.HPM;
+import cn.luo.yuan.maze.model.goods.types.HalfSafe;
+import cn.luo.yuan.maze.model.goods.types.Omelet;
+import cn.luo.yuan.maze.model.goods.types.ResetSkill;
 import cn.luo.yuan.maze.model.task.Scene;
 import cn.luo.yuan.maze.model.task.Task;
 import cn.luo.yuan.maze.serialize.ObjectTable;
@@ -24,6 +29,7 @@ import cn.luo.yuan.maze.server.bomb.json.MyJSON;
 import cn.luo.yuan.maze.server.bomb.json.MyJSONValue;
 import cn.luo.yuan.maze.server.bomb.json.SimpleToken;
 import cn.luo.yuan.maze.server.model.User;
+import cn.luo.yuan.maze.server.persistence.CribberTable;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
 import cn.luo.yuan.maze.server.persistence.MonsterTable;
@@ -44,7 +50,13 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -74,6 +86,7 @@ public class MainProcess {
     private File heroDir;
     private DatabaseConnection database;
     private ShopTable shop;
+    private CribberTable cribber;
     private cn.luo.yuan.maze.utils.Random random = new Random(System.currentTimeMillis());
 
     public MainProcess(String root) throws IOException, ClassNotFoundException {
@@ -98,7 +111,6 @@ public class MainProcess {
                 LogHelper.error(e);
             }
         }
-
     }
 
     //Only use for unit test
@@ -113,10 +125,11 @@ public class MainProcess {
         if(StringUtils.isNotEmpty(version) && StringUtils.isNotEmpty(this.version)){
             verify = this.version.equalsIgnoreCase(version);
             if(!verify){
+                LogHelper.info("Verify version: " + version + " not match " + this.version);
                 return false;
             }
         }
-        return (StringUtils.isEmpty(sign) && StringUtils.isEmpty(version)) || debug || !StringUtils.isNotEmpty(sign_match) || (sign_match.equalsIgnoreCase(sign));
+        return  (StringUtils.isEmpty(sign) && StringUtils.isEmpty(version)) || debug || !StringUtils.isNotEmpty(sign_match) || (sign_match.equalsIgnoreCase(sign));
     }
 
     public String buildHeroRange() {
@@ -164,9 +177,11 @@ public class MainProcess {
         return false;
     }
 
-    public void submitHero(ServerData data) throws IOException, ClassNotFoundException {
+    public boolean submitHero(ServerData data) throws IOException, ClassNotFoundException, CribberException {
+        checkCribber(data);
         data.getMaze().setId(data.getHero().getId());
         heroTable.submitHero(data);
+        return true;
     }
 
     public ServerData getBackHero(String id) throws IOException {
@@ -249,6 +264,7 @@ public class MainProcess {
     }
 
     public boolean requestExchange(Object objMy, ExchangeObject exServer, String id) throws Exception {
+        if (checkCribber(id)) return false;
         ExchangeObject exMy = createExchangeObject(id, objMy);
         if (exServer.change(exMy)) {
             exMy.setChanged(exServer);
@@ -256,6 +272,24 @@ public class MainProcess {
             exMy.setAcknowledge(true);
             exchangeTable.addExchange(exMy);
             return true;
+        }
+        return false;
+    }
+
+    public boolean checkCribber(String id) {
+        if(cribber !=null){
+            if(cribber.isCribber(id)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkCribber(ServerData data) throws CribberException {
+        if(cribber !=null){
+            if(cribber.isCribber(data)){
+                throw new CribberException(data.getId(), data.getMac(), data.getHero()!=null ?data.getHero().getName() : " ");
+            }
         }
         return false;
     }
@@ -308,6 +342,7 @@ public class MainProcess {
     public void start() {
         if (database != null) {
             shop = new ShopTable(database, root);
+            cribber = new CribberTable(database);
             try(Connection connection = database.getConnection()){
                 Statement statement = connection.createStatement();
                 ResultSet rs = statement.executeQuery("select sign,version from verify");
@@ -433,6 +468,7 @@ public class MainProcess {
     }
 
     public boolean submitExchange(String ownerId, String limit, Object eo, int expectType) {
+        if (checkCribber(ownerId)) return false;
         if (process.exchangeTable.addExchange(eo, ownerId, limit, expectType)) {
             LogHelper.info(eo + " submitted!");
             return true;
@@ -762,6 +798,27 @@ public class MainProcess {
         return builder.toString();
     }
 
+    private String formatJson(ExchangeObject exchange){
+        StringBuilder builder = new StringBuilder();
+        builder.append("{");
+        if (exchange != null) {
+            builder.append("\"id\":\"").append(exchange.getId()).append("\",");
+            builder.append("\"name\":").append(exchange.toString().replaceAll("\"", "'")).append(",");
+            builder.append("\"Submit\":").append(exchange.getSubmitTime()).append(",");
+            if (exchange.getExchange() instanceof Accessory) {
+                builder.append("\"data\":\"").append(StringUtils.formatEffectsAsHtml(((Accessory) exchange.getExchange()).getEffects()).replaceAll("\"", "'")).append("\"");
+            } else if(exchange.getExchange() instanceof Pet){
+                builder.append("\"data\":\"").append(exchange.getExchange().toString()).append("\"");
+            } else {
+                builder.append("\"data\":\"").append("").append("\"");
+            }
+        } else {
+            return StringUtils.EMPTY_STRING;
+        }
+        builder.append("}");
+        return builder.toString();
+    }
+
     public String uploadFile(String name, InputStream stream) {
         SaveService.root = root;
         return SaveService.instance.saveFile(name, stream);
@@ -818,5 +875,23 @@ public class MainProcess {
 
     public List<Monster> listMonster(int start, int count){
         return monsterTable.listMonster(start, count);
+    }
+
+    public void addCribber(String id){
+        if(StringUtils.isNotEmpty(id) && cribber !=null){
+            ServerRecord record;
+            record = heroTable.getRecord(id);
+            String mac = record.getMac();
+            cribber.addToCribber(id ,StringUtils.isEmpty(mac)? " " : mac, record.getData()!=null && record.getData().getHero()!=null  ? record.getData().getHero().getName() : " ");
+            heroTable.delete(id);
+        }
+    }
+
+    public String exchangeJson(){
+        StringBuilder builder = new StringBuilder();
+        for(String id : exchangeTable.getExchangeDb().loadIds()){
+
+        }
+        return StringUtils.EMPTY_STRING;
     }
 }

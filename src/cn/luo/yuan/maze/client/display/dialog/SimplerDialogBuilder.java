@@ -15,8 +15,8 @@ import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
  * Created by luoyuan on 2017/6/24.
  */
 public class SimplerDialogBuilder {
-    public static Dialog build(String msg, String posivStr, DialogInterface.OnClickListener posiv, Context context, Random random) {
-        NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
+    public static Dialog build(String msg, String posivStr, final DialogInterface.OnClickListener posiv, Context context, Random random) {
+        final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
         if (random != null) {
             dialogBuilder.withEffect(random.randomItem(Effectstype.values()));
         }
@@ -30,7 +30,9 @@ public class SimplerDialogBuilder {
                 .setButton1Click(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        posiv.onClick(dialogBuilder, DialogInterface.BUTTON_POSITIVE);
+                        if(posiv!=null) {
+                            posiv.onClick(dialogBuilder, DialogInterface.BUTTON_POSITIVE);
+                        }
                         dialogBuilder.dismiss();
                     }
                 })
@@ -61,7 +63,7 @@ public class SimplerDialogBuilder {
 
     public static Dialog build(View view, String posivStr, DialogInterface.OnClickListener listener, Context context) {
         if (listener == null) {
-            NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
+            final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
             dialogBuilder
                     .withDialogColor(Color.WHITE)
                     .setCustomView(view, context)                   //.withMessage(null)  no Msg

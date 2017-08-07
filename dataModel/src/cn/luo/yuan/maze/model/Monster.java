@@ -300,4 +300,8 @@ public class Monster extends HarmObject implements SilentAbleObject, NameObject,
     public void setHpAddition(long hpAddition) {
         this.hpAddition = hpAddition;
     }
+
+    public String toString(){
+        return "atk: " + StringUtils.formatNumber(getUpperAtk(), false) + ", def: " + StringUtils.formatNumber(getUpperDef(), false) + ", Hp: " + StringUtils.formatNumber(getUpperHp(), false);
+    }
 }

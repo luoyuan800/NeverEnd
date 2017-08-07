@@ -28,12 +28,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(final Thread thread, final Throwable ex) {
         LogHelper.logException(ex, "UnCatchException");
-        for(StackTraceElement element : ex.getStackTrace()){
-            if(element.getClassName().contains("OnlineActivity") || element.getClassName().contains("TGSDK") ||
-                    element.getClassName().contains("tgsdk") || element.getClassName().contains("Vungle") ){
-                return;
-            }
-        }
         new Thread() {
             @Override
             public void run() {
@@ -45,7 +39,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                         final ProgressDialog progress = new ProgressDialog(context.getContext());
                         progress.setMessage("上传中……");
                         progress.show();
-                        new Thread(new Runnable() {
+                        context.getExecutor().execute(new Runnable() {
                             @Override
                             public void run() {
                                 try {
@@ -57,13 +51,12 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                                     defaultHandler.uncaughtException(thread, ex);
                                 }
                             }
-                        }).start();
+                        });
                         try {
-                            Thread.sleep(3000);
+                            Thread.sleep(2000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        context.save(false);
                         context.stopGame();
                         android.os.Process.killProcess(android.os.Process.myPid());
                         System.exit(1);

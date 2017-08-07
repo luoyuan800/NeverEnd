@@ -61,6 +61,7 @@ public class ServerService {
 
     public boolean uploadHero(ServerData uploaddData) {
         try {
+            uploaddData.setMac(Resource.getMacAddr());
             HttpURLConnection connection = server.getHttpURLConnection(SUBMIT_HERO, RestConnection.POST);
             return Field.RESPONSE_RESULT_SUCCESS.equals(server.connect(uploaddData, connection));
         } catch (Exception e) {

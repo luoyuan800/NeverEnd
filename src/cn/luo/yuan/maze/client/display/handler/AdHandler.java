@@ -2,7 +2,6 @@ package cn.luo.yuan.maze.client.display.handler;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import com.soulgame.sgsdk.tgsdklib.TGSDK;
@@ -10,11 +9,6 @@ import com.soulgame.sgsdk.tgsdklib.TGSDKServiceResultCallBack;
 import com.soulgame.sgsdk.tgsdklib.ad.ITGADListener;
 import com.soulgame.sgsdk.tgsdklib.ad.ITGPreloadListener;
 import com.soulgame.sgsdk.tgsdklib.ad.ITGRewardVideoADListener;
-import sw.ls.ps.AdManager;
-import sw.ls.ps.normal.common.ErrorCode;
-import sw.ls.ps.normal.spot.SpotListener;
-import sw.ls.ps.normal.spot.SpotManager;
-import sw.ls.ps.normal.video.VideoAdManager;
 
 import java.util.Map;
 
@@ -22,7 +16,7 @@ import java.util.Map;
  * Copyright @Luo
  * Created by Gavin Luo on 7/20/2017.
  */
-public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVideoADListener, SpotListener {
+public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVideoADListener {
     private final static String yomobappId = "C948Vgq3sHbo3L12iUCm";
     private final static String youmiappId = "1b3d76d520cfe2eb";
     private final static String youmiappSecret = "338009391786dd1d";
@@ -59,7 +53,6 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     @Override
     public void onPreloadFailed(String s, String s1) {
         debug("%s: %s", s, s1);
-        setUpYouMiAd();
     }
 
     @Override
@@ -74,7 +67,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     @Override
     public void onShowSuccess(String s) {
-            context.handler.showToast("获得一个礼包，点击广告可以再获得一个礼包");
+            context.handler.showToast("获得一个礼包");
             context.handler.addOnlineGift(1);
     }
 
@@ -90,8 +83,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     @Override
     public void onADClick(String s) {
-        context.handler.showToast("获得一个礼包");
-        context.handler.addOnlineGift(1);
+
     }
 
     @Override
@@ -101,7 +93,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     @Override
     public void onADAwardSuccess(String s) {
-        context.handler.showToast("获得一个礼包，点击广告可以再获得一个礼包");
+        context.handler.showToast("获得一个礼包");
         context.handler.addOnlineGift(1);
     }
 
@@ -119,16 +111,12 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     public void onStop() {
         if (yomob) {
             TGSDK.onStop(context);
-        } else {
-            SpotManager.getInstance(context).onStop();
         }
     }
 
     public void onPause() {
         if (yomob) {
             TGSDK.onPause(context);
-        } else {
-            SpotManager.getInstance(context).onPause();
         }
     }
 
@@ -143,7 +131,6 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     public void onDestroy() {
         TGSDK.onDestroy(context);
-        SpotManager.getInstance(context).onDestroy();
     }
 
     public void showAd() {
@@ -158,11 +145,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
                             TGSDK.showAd(context, adcenseid);
                         }
                     } else {
-                        if (SpotManager.getInstance(context).checkSpotAdConfig()) {
-                            SpotManager.getInstance(context).showSpot(context, AdHandler.this);
-                        } else {
-                            setUpYouMiAd();
-                        }
+                        context.handler.showToast("网络连接不顺畅，请稍后...");
                         debug("Could not show!");
                     }
                 }catch (Exception e){
@@ -173,46 +156,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     }
 
-    @Override
-    public void onShowSuccess() {
-        context.handler.showToast("获得" + award + "个礼包，点击广告可以再获得" + award + "个礼包");
-        context.handler.addOnlineGift(award);
-    }
 
-    @Override
-    public void onShowFailed(int errorCode) {
-        Log.d("mazAD", "插屏展示失败");
-        switch (errorCode) {
-            case ErrorCode.NON_NETWORK:
-                debug("网络异常");
-                break;
-            case ErrorCode.NON_AD:
-                debug("暂无插屏广告");
-                break;
-            case ErrorCode.RESOURCE_NOT_READY:
-                debug("插屏资源还没准备好");
-                break;
-            case ErrorCode.SHOW_INTERVAL_LIMITED:
-                context.handler.showToast("不能频繁观看广告");
-                break;
-            case ErrorCode.WIDGET_NOT_IN_VISIBILITY_STATE:
-                debug("请设置插屏为可见状态");
-                break;
-            default:
-                debug("请稍后再试%s", errorCode);
-                break;
-        }
-    }
-
-    @Override
-    public void onSpotClosed() {
-    }
-
-    @Override
-    public void onSpotClicked(boolean isWebPage) {
-        context.handler.showToast("获得" + award + "个礼包");
-        context.handler.addOnlineGift(award);
-    }
 
     public void onActivityResult(int reqCode, int resCode, Intent data) {
         TGSDK.onActivityResult(context, reqCode, resCode, data);
@@ -223,9 +167,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     }
 
     public static void onAppExit(Context context) {
-        if (SpotManager.getInstance(context).checkSpotAdConfig()) {
-            SpotManager.getInstance(context).onAppExit();
-        }
+
     }
 
     public void debug(String s, Object... objs) {
@@ -242,7 +184,6 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
                 @Override
                 public void onFailure(Object arg0, String arg1) {
                     debug("Failure: %s , %s", arg0, arg1);
-                    setUpYouMiAd();
                 }
 
                 @Override
@@ -260,34 +201,4 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
         }
     }
 
-    private void setUpYouMiAd() {
-        try {
-            AdManager.getInstance(context).init(youmiappId, youmiappSecret, false);
-// 只需要调用一次，由于在主页窗口中已经调用了一次，所以此处无需调用
-            VideoAdManager.getInstance(context).requestVideoAd(context);
-            /**
-             * 设置插屏广告
-             */
-            // 设置插屏图片类型，默认竖图
-            //		// 横图
-            //		SpotManager.getInstance(mContext).setImageType(SpotManager
-            // .IMAGE_TYPE_HORIZONTAL);
-            // 竖图
-            SpotManager.getInstance(context).setImageType(SpotManager.IMAGE_TYPE_VERTICAL);
-
-            // 设置动画类型，默认高级动画
-            //		// 无动画
-            //		SpotManager.getInstance(mContext).setAnimationType(SpotManager
-            // .ANIMATION_TYPE_NONE);
-            //		// 简单动画
-            //		SpotManager.getInstance(mContext).setAnimationType(SpotManager
-            // .ANIMATION_TYPE_SIMPLE);
-            // 高级动画
-            SpotManager.getInstance(context)
-                    .setAnimationType(SpotManager.ANIMATION_TYPE_ADVANCED);
-            yomob = false;
-        } catch (Exception e) {
-            LogHelper.logException(e, "setupAD");
-        }
-    }
 }

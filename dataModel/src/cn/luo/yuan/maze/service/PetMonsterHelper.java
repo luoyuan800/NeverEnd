@@ -4,6 +4,7 @@ import cn.luo.yuan.maze.exception.MonsterToPetException;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.utils.MathUtils;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -417,15 +418,16 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
                         Monster m1 = loadMonsterByIndex(p1.getIndex());
                         Monster m2 = loadMonsterByIndex(p2.getIndex());
                         if (m1 != null && m2 != null) {
-                            egg.setMaxHp(gameControl.getRandom().nextLong(m1.getMaxHp()) + m2.getMaxHp());
-                            egg.setAtk(gameControl.getRandom().nextLong(m2.getAtk()) + m1.getAtk());
-                            egg.setAtk(gameControl.getRandom().nextLong(m1.getDef()) + m2.getDef());
+                            egg.setMaxHp(gameControl.getRandom().nextLong(m1.getMaxHp()) + m2.getMaxHp() + random.reduceToSpecialDigit(gameControl.getMaze().getLevel(),2));
+                            egg.setAtk(gameControl.getRandom().nextLong(m2.getAtk()) + m1.getAtk() + random.reduceToSpecialDigit(gameControl.getMaze().getLevel(),2));
+                            egg.setDef(gameControl.getRandom().nextLong(m1.getDef()) + m2.getDef() + random.reduceToSpecialDigit(gameControl.getMaze().getLevel(),2));
                             egg.setHitRate(m1.getHitRate());
                             egg.setEggRate(p1.getSex() == 1 ? m1.getEggRate() : m2.getEggRate());
                         }
                         egg.setFirstName(p1.getSex() == 0 ? p1.getFirstName() : p2.getFirstName());
                         egg.setSecondName(p1.getSex() == 0 ? p2.getSecondName() : p2.getSecondName());
                         egg.setIntimacy(30);
+                        egg.setSex(random.nextInt(2));
                         return egg;
                     }
                 }

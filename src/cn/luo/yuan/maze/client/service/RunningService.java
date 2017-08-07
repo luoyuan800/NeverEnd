@@ -8,19 +8,34 @@ import cn.luo.yuan.maze.exception.MonsterToPetException;
 import cn.luo.yuan.maze.listener.LostListener;
 import cn.luo.yuan.maze.listener.PetCatchListener;
 import cn.luo.yuan.maze.listener.WinListener;
-import cn.luo.yuan.maze.model.*;
+import cn.luo.yuan.maze.model.Data;
+import cn.luo.yuan.maze.model.Egg;
+import cn.luo.yuan.maze.model.HarmAble;
+import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.Maze;
+import cn.luo.yuan.maze.model.Monster;
+import cn.luo.yuan.maze.model.NameObject;
+import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillFactory;
 import cn.luo.yuan.maze.model.skill.SkillParameter;
 import cn.luo.yuan.maze.persistence.DataManager;
-import cn.luo.yuan.maze.service.*;
+import cn.luo.yuan.maze.service.BattleMessage;
+import cn.luo.yuan.maze.service.BattleService;
+import cn.luo.yuan.maze.service.EffectHandler;
+import cn.luo.yuan.maze.service.PetMonsterHelper;
+import cn.luo.yuan.maze.service.RandomEventService;
+import cn.luo.yuan.maze.service.RunningServiceInterface;
+import cn.luo.yuan.maze.service.SkillHelper;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.ArrayList;
 
-import static cn.luo.yuan.maze.service.ListenerService.*;
+import static cn.luo.yuan.maze.service.ListenerService.lostListeners;
+import static cn.luo.yuan.maze.service.ListenerService.petCatchListeners;
+import static cn.luo.yuan.maze.service.ListenerService.winListeners;
 
 
 /**
@@ -29,6 +44,22 @@ import static cn.luo.yuan.maze.service.ListenerService.*;
 public class RunningService implements RunningServiceInterface {
     private Hero hero;
     private NeverEnd gameContext;
+    Runnable eggWarn = new Runnable() {
+        @Override
+        public void run() {
+
+            for (Pet pet : new ArrayList<>(hero.getPets())) {
+                if (pet instanceof Egg && ((Egg) pet).step > 0) {
+                    ((Egg) pet).step--;
+                    if (((Egg) pet).step <= 0) {
+                        pet.setHp(pet.getMaxHp());
+                        gameContext.getViewHandler().refreshPets(hero);
+                        gameContext.addMessage(pet.getDisplayNameWithLevel() + "出生了！");
+                    }
+                }
+            }
+        }
+    };
     private Maze maze;
     private boolean running;
     private boolean pause;
@@ -40,9 +71,7 @@ public class RunningService implements RunningServiceInterface {
     private RandomEventService randomEventService;
     private PetMonsterHelper monsterHelper;
     private long saveTime = 0L;
-    public NeverEnd getContext(){
-        return gameContext;
-    }
+
     public RunningService(Hero hero, Maze maze, NeverEnd gameContext, DataManager dataManager, long fps) {
         startTime = System.currentTimeMillis();
         saveTime = startTime;
@@ -57,6 +86,10 @@ public class RunningService implements RunningServiceInterface {
         monsterHelper = gameContext.getPetMonsterHelper();
     }
 
+    public NeverEnd getContext() {
+        return gameContext;
+    }
+
     public void close() {
         this.running = false;
     }
@@ -69,22 +102,6 @@ public class RunningService implements RunningServiceInterface {
         this.pause = !this.pause;
         return pause;
     }
-
-    Runnable eggWarn = new Runnable() {
-        @Override
-        public void run() {
-
-            for (Pet pet : new ArrayList<>(hero.getPets())) {
-                if (pet instanceof Egg) {
-                    ((Egg) pet).step--;
-                    if (((Egg) pet).step <= 0) {
-                            gameContext.getViewHandler().refreshPets(hero);
-                            gameContext.addMessage(pet.getDisplayNameWithLevel() + "出生了！");
-                    }
-                }
-            }
-        }
-    };
 
     @Override
     public void run() {
@@ -125,7 +142,7 @@ public class RunningService implements RunningServiceInterface {
                                     hero.getDisplayName(), StringUtils.formatNumber(maze.getLevel(), true), StringUtils.formatNumber(point, false));
                         }
                         long heroHp = hero.getHp();
-                        long maxHp = (long)(hero.getMaxHp() * (1 + EffectHandler.getEffectAdditionFloatValue(EffectHandler.RESTORE_RATE, hero.getEffects())/100));
+                        long maxHp = (long) (hero.getMaxHp() * (1 + EffectHandler.getEffectAdditionFloatValue(EffectHandler.RESTORE_RATE, hero.getEffects()) / 100));
                         if (heroHp < maxHp && random.nextLong(hero.getAgi()) > random.nextLong(hero.getStr())) {
                             long restore = random.nextLong((maxHp - heroHp) / 5);
                             hero.setHp(heroHp + restore);
@@ -143,7 +160,7 @@ public class RunningService implements RunningServiceInterface {
                             if (maze.getStep() > 10 && random.nextInt(100) < 35) {
                                 Log.d("maze", "Find defender");
                                 monster = dataManager.loadDefender(maze.getLevel());
-                            }else {
+                            } else {
                                 Log.d("maze", "Try to find target battle");
                                 monster = monsterHelper.randomMonster(maze.getLevel());
                             }
@@ -151,17 +168,17 @@ public class RunningService implements RunningServiceInterface {
                             if (monster != null) {
                                 monster.setHp(monster.getMaxHp());
                                 meet = true;
-                                gameContext.addMessage("遇见了 " + ((NameObject)monster).getDisplayName());
+                                gameContext.addMessage("遇见了 " + ((NameObject) monster).getDisplayName());
                                 BattleService battleService = new BattleService(hero, monster, gameContext.getRandom(), this);
                                 BattleMessage battleMessage = new BattleMessageImp(gameContext);
                                 battleService.setBattleMessage(battleMessage);
-                                long material = monster instanceof Monster ? ((Monster)monster).getMaterial() : maze.getLevel();
+                                long material = monster instanceof Monster ? ((Monster) monster).getMaterial() : maze.getLevel();
                                 if (battleService.battle(gameContext.getMaze().getLevel())) {
-                                    Log.d("maze", "Battle win " + ((NameObject)monster).getDisplayName());
+                                    Log.d("maze", "Battle win " + ((NameObject) monster).getDisplayName());
                                     maze.setStreaking(maze.getStreaking() + 1);
                                     hero.setMaterial(hero.getMaterial() + material);
                                     gameContext.addMessage(String.format(gameContext.getContext().getString(R.string.add_mate), StringUtils.formatNumber(material, false)));
-                                    if(monster instanceof Monster) {
+                                    if (monster instanceof Monster) {
                                         Pet pet = tryCatch((Monster) monster, dataManager.getPetCount(), maze.getLevel());
                                         if (pet != null) {
                                             gameContext.addMessage(String.format(Resource.getString(R.string.pet_catch), pet.getDisplayName()));
@@ -180,7 +197,7 @@ public class RunningService implements RunningServiceInterface {
                                         listener.win(hero, monster);
                                     }
                                 } else {
-                                    Log.d("maze", "Battle failed with " + ((NameObject)monster).getDisplayName());
+                                    Log.d("maze", "Battle failed with " + ((NameObject) monster).getDisplayName());
                                     maze.setStreaking(0);
                                     for (LostListener lostListener : lostListeners.values()) {
                                         lostListener.lost(hero, monster, gameContext);
@@ -210,7 +227,7 @@ public class RunningService implements RunningServiceInterface {
                     LogHelper.logException(e, "Error while running game thread.");
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             LogHelper.logException(e, "Running service run");
         }
     }
@@ -220,23 +237,27 @@ public class RunningService implements RunningServiceInterface {
         return pause;
     }
 
+    public HarmAble getTarget() {
+        return target;
+    }
+
     private void mazeLevelCalculate() {
         if (maze.getMaxLevel() < maze.getLevel()) {
             maze.setMaxLevel(maze.getLevel());
         }
-        if(maze.getLevel()>= 100 && maze.getLevel()%100 == 0){
-            Skill skill = SkillFactory.geSkillByName("EatHarm",gameContext.getDataManager());
-            if(skill.isEnable()){
-                if(random.nextInt(4) == 0){
-                    if(skill instanceof MountAble){
-                        if(((MountAble) skill).isMounted()){
+        if (maze.getLevel() >= 100 && maze.getLevel() % 100 == 0) {
+            Skill skill = SkillFactory.geSkillByName("EatHarm", gameContext.getDataManager());
+            if (skill.isEnable()) {
+                if (random.nextInt(4) == 0) {
+                    if (skill instanceof MountAble) {
+                        if (((MountAble) skill).isMounted()) {
                             SkillHelper.unMountSkill((MountAble) skill, hero);
                         }
                     }
                     skill.disable();
                 }
-            }else{
-                if(random.nextBoolean()){
+            } else {
+                if (random.nextBoolean()) {
                     SkillParameter sp = new SkillParameter(hero);
                     sp.set(SkillParameter.RANDOM, random);
                     sp.set(SkillParameter.CONTEXT, gameContext);
@@ -244,10 +265,6 @@ public class RunningService implements RunningServiceInterface {
                 }
             }
         }
-    }
-
-    public HarmAble getTarget() {
-        return target;
     }
 
     private Pet tryCatch(Monster monster, int petCount, long level) {
@@ -258,7 +275,7 @@ public class RunningService implements RunningServiceInterface {
                 return null;
             }
         } catch (MonsterToPetException e) {
-            LogHelper.logException(e,"RunningService->tryCatch{" + monster + "}");
+            LogHelper.logException(e, "RunningService->tryCatch{" + monster + "}");
         }
         return null;
     }

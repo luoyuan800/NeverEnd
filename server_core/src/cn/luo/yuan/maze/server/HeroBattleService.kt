@@ -40,7 +40,7 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
                     val messager = Messager()
                     val group = getGroup(id)
                     registerMessageReceiver(messager, id)
-                    if (hero.currentHp > 0 || (group != null && group.totalHp() > 0)) {
+                    if ((hero.currentHp > 0 || (group != null && group.totalHp() > 0)) && (record.dieCount <= record.restoreLimit)) {
                         val maze = table.getMaze(id, 0)
                         var oid = filterMatch(id, maze.maxLevel)
                         var ohero: Hero

@@ -56,7 +56,7 @@ public class OnlineActivityOnClickHandler {
                             @Override
                             public void run() {
                                 if (o instanceof String) {
-                                    if(StringUtils.isEmpty((String) o)){
+                                    if(StringUtils.isEmpty(o.toString())){
                                         SimplerDialogBuilder.build("谢谢惠顾！", Resource.getString(R.string.conform), null, activity, context.getRandom());
                                     }else {
                                         SimplerDialogBuilder.build(o.toString(), Resource.getString(R.string.conform), null, context.getContext(), context.getRandom());

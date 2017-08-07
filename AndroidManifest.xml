@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="cn.luo.yuan.maze"
-          android:versionCode="5061"
-          android:versionName="5.0.6.1">
+          android:versionCode="5062"
+          android:versionName="5.0.6.2">
     <uses-sdk
             android:minSdkVersion="19"
             android:targetSdkVersion="24" />
@@ -42,45 +42,6 @@
 
         <activity android:name="cn.luo.yuan.maze.client.display.activity.GameActivity"/>
         <activity android:name="cn.luo.yuan.maze.client.display.activity.OnlineActivity"/>
-
-        <!-- 视频组件 -->
-        <activity
-                android:name="sw.ls.ps.normal.video.VideoActivity"
-                android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout"
-                android:screenOrientation="landscape"
-                android:taskAffinity=""
-                android:theme="@android:style/Theme.NoTitleBar" >
-        </activity >
-        <!-- 其他组件 -->
-        <activity
-                android:name="sw.ls.ps.IUO"
-                android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout"
-                android:theme="@android:style/Theme.NoTitleBar" >
-        </activity >
-        <service
-                android:name="sw.ls.ps.IOAS"
-                android:exported="false" >
-        </service >
-
-        <receiver android:name="sw.ls.ps.YGYU" >
-            <intent-filter >
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
-                <action android:name="android.intent.action.PACKAGE_INSTALL" />
-
-                <data android:scheme="package" />
-            </intent-filter >
-        </receiver >
-
-       <!--  有米SDK为了兼容Android N应用间共享文件行为变更而需要配置的FileProvider  -->
-        <provider
-                android:name="android.support.v4.content.FileProvider"
-                android:authorities="cn.luo.yuan.maze"
-                android:exported="false"
-                android:grantUriPermissions="true" >
-            <meta-data
-                    android:name="android.support.FILE_PROVIDER_PATHS"
-                    android:resource="@xml/file_provider" />
-        </provider >
 
         <!-- UnityAds -->
         <activity

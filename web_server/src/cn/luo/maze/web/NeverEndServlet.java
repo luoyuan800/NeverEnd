@@ -69,6 +69,9 @@ public class NeverEndServlet extends HttpServlet {
         response.setCharacterEncoding("utf-8");
         PrintWriter writer = response.getWriter();
         switch (path) {
+            case "add_cribber":
+                process.addCribber(ownerId);
+                break;
             case "update_shop_accessory":
                 writer.write("<html>\n" +
                         "<head><meta charset=\"utf-8\"></head>\n" +
@@ -140,219 +143,223 @@ public class NeverEndServlet extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("utf-8");
-        response.setCharacterEncoding("utf-8");
-        String path = getPathInfo(request);
-        String ownerId = request.getHeader(Field.OWNER_ID_FIELD);
-        String version = request.getHeader(Field.VERSION_FIELD);
-        String sign = request.getHeader(Field.SIGN_FIELD);
-        //LogHelper.info("sign: " + sign);
-        if(!process.isSignVerify(sign, version)){
-            //LogHelper.info("Error verify:" + "Sign verify failed! sign: " + sign + ", version: " + version);
-            return;
-        }
-        String limit = readEncodeHeader(request, Field.LIMIT_STRING);
-        response.setCharacterEncoding("utf-8");
-        PrintWriter writer = null;
-        Boolean success = null;
-        switch (path) {
-            case QUERY_TASK_SCENES:
-                String taskId = request.getHeader(Field.TASK_ID);
-                writeObject(response, process.queryScenes(taskId));
-                break;
-            case QUERY_ONLINE_TASK:
-                int start = request.getIntHeader(Field.INDEX);
-                int row = request.getIntHeader(Field.COUNT);
-                Set<String> filter = readObject(request);
-                writeObject(response, process.queryTask(start, row, filter));
-                break;
-            case UPLOAD_SAVE:
-                String name = process.uploadFile(request.getHeader(Field.FILE_NAME), request.getInputStream());
-                writer = response.getWriter();
-                writer.write(name);
-                break;
-            case ADD_ACCESSORY:
-                process.addAccessory(request.getParameter("name"),request.getParameter("tag"),
-                        request.getParameter("type"), request.getParameter("author"),
-                        request.getParameter("e1"),request.getParameter("e2"),request.getParameter("e3"),
-                        request.getParameter("e4"),request.getParameter("e5"),request.getParameter("e6"),
-                        request.getParameter("e7"),request.getParameter("e8"));
-            case ADD_ONLINE_GIFT:
-                process.addOnlineGift(ownerId,request.getIntHeader(Field.COUNT));
-                success = true;
-                break;
-            case BUY_ONLINE:
-                int buyCount = request.getIntHeader(Field.COUNT);
-                String itemId = request.getHeader(Field.ITEM_ID_FIELD);
-                process.buy(itemId, buyCount);
-                success = true;
-                break;
-            case ONLINE_SHOP:
-                writeObject(response,process.getOnlineSell());
-                break;
-            case POST_DEFENDER:
-                Hero hero = process.postHeroByLevel(request.getIntHeader(Field.LEVEL));
-                if(hero!=null){
-                    writeObject(response, hero);
-                }else{
-                    success = false;
-                }
-                break;
-            case ADD_BOSS:
-                process.submitBoss(request.getParameter("name"), request.getParameter("element"),
-                        request.getParameter("race"),request.getParameter("atk"),request.getParameter("def"),
-                        request.getParameter("hp"),request.getParameter("grow"),request.getParameter("grow"),request.getParameter("grow"));
-                success = true;
-                break;
-            case GET_GIFT_COUNT:
-                writer = response.getWriter();
-                writer.write(String.valueOf(process.getGiftCount(ownerId)));
-                break;
-            case GET_BACK_EXCHANGE:
-                String exchange_id = request.getHeader(Field.ITEM_ID_FIELD);
-                Object backExchange = process.get_back_exchange(exchange_id);
-                if (backExchange == Integer.valueOf(1)) {
+        try {
+            request.setCharacterEncoding("utf-8");
+            response.setCharacterEncoding("utf-8");
+            String path = getPathInfo(request);
+            String ownerId = request.getHeader(Field.OWNER_ID_FIELD);
+            String version = request.getHeader(Field.VERSION_FIELD);
+            String sign = request.getHeader(Field.SIGN_FIELD);
+            //LogHelper.info("sign: " + sign);
+            if (!process.isSignVerify(sign, version)) {
+                LogHelper.info("Error verify:" + "Sign verify failed! sign: " + sign + ", version: " + version);
+                return;
+            }
+            String limit = readEncodeHeader(request, Field.LIMIT_STRING);
+            response.setCharacterEncoding("utf-8");
+            PrintWriter writer = null;
+            Boolean success = null;
+            switch (path) {
+                case QUERY_TASK_SCENES:
+                    String taskId = request.getHeader(Field.TASK_ID);
+                    writeObject(response, process.queryScenes(taskId));
+                    break;
+                case QUERY_ONLINE_TASK:
+                    int start = request.getIntHeader(Field.INDEX);
+                    int row = request.getIntHeader(Field.COUNT);
+                    Set<String> filter = readObject(request);
+                    writeObject(response, process.queryTask(start, row, filter));
+                    break;
+                case UPLOAD_SAVE:
+                    String name = process.uploadFile(request.getHeader(Field.FILE_NAME), request.getInputStream());
                     writer = response.getWriter();
-                    writer.write("Could not found special exchange!");
-                } else if (backExchange instanceof ExchangeObject) {
-                    response.setHeader(Field.RESPONSE_CODE, Field.STATE_ACKNOWLEDGE);
-                    writeObject(response, backExchange);
-                } else {
-                    writeObject(response,backExchange);
-                }
-                break;
-            case ACKNOWLEDGE_MY_EXCHANGE:
-                exchange_id = request.getHeader(Field.ITEM_ID_FIELD);
-                if (process.acknowledge(exchange_id)) {
+                    writer.write(name);
+                    break;
+                case ADD_ACCESSORY:
+                    process.addAccessory(request.getParameter("name"), request.getParameter("tag"),
+                            request.getParameter("type"), request.getParameter("author"),
+                            request.getParameter("e1"), request.getParameter("e2"), request.getParameter("e3"),
+                            request.getParameter("e4"), request.getParameter("e5"), request.getParameter("e6"),
+                            request.getParameter("e7"), request.getParameter("e8"));
+                case ADD_ONLINE_GIFT:
+                    process.addOnlineGift(ownerId, request.getIntHeader(Field.COUNT));
                     success = true;
-                } else {
-                    writer = response.getWriter();
-                    writer.write("Error object could not found!");
-                }
-                break;
-            case EXCHANGE_PET_LIST:
-                List<ExchangeObject> pets = process.exchangeTable.loadAll(1, limit, ownerId);
-                writeObject(response, pets);
-                break;
-            case EXCHANGE_ACCESSORY_LIST:
-                List<ExchangeObject> acces = process.exchangeTable.loadAll(2, limit, ownerId);
-                writeObject(response, acces);
-                break;
-            case EXCHANGE_GOODS_LIST:
-                List<ExchangeObject> goods = process.exchangeTable.loadAll(3, limit, ownerId);
-                writeObject(response, goods);
-                break;
-            case QUERY_MY_EXCHANGE:
-                List<ExchangeObject> exs = process.exchangeTable.loadAll(ownerId);
-                response.setHeader(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
-                writeObject(response, exs);
-                break;
-            case REQUEST_EXCHANGE:
-                Object objMy = readObject(request);
-                ExchangeObject exServer = process.exchangeTable.loadObject(request.getHeader(Field.ITEM_ID_FIELD));
-                writer = response.getWriter();
-                if (objMy == null) {
-                    writer.write("Exchange Object submit error!");
-                }
-                if (exServer == null) {
-                    response.setHeader(Field.RESPONSE_CODE, Field.STATE_FAILED);
-                    writer.write("Could not find Object your request!");
-                }
-                try {
-                    if (process.requestExchange(objMy, exServer, ownerId)) {
-                        writer.write(Field.RESPONSE_RESULT_OK);
-                    }else{
-                        writer.write("Could not do exchange because the target has been changed by other!");
+                    break;
+                case BUY_ONLINE:
+                    int buyCount = request.getIntHeader(Field.COUNT);
+                    String itemId = request.getHeader(Field.ITEM_ID_FIELD);
+                    process.buy(itemId, buyCount);
+                    success = true;
+                    break;
+                case ONLINE_SHOP:
+                    writeObject(response, process.getOnlineSell());
+                    break;
+                case POST_DEFENDER:
+                    Hero hero = process.postHeroByLevel(request.getIntHeader(Field.LEVEL));
+                    if (hero != null) {
+                        writeObject(response, hero);
+                    } else {
+                        success = false;
                     }
-                } catch (Exception e) {
-                    LogHelper.error(e);
-                    success = false;
-                }
-                break;
-            case SUBMIT_EXCHANGE:
-                Object eo = readObject(request);
-                limit = readEncodeHeader(request, Field.LIMIT_STRING);
-                int expectType = Integer.parseInt(request.getHeader(Field.EXPECT_TYPE));
-                writer = response.getWriter();
-                if (process.submitExchange(ownerId, limit, eo, expectType)) {
-                    writer.write(Field.RESPONSE_RESULT_OK);
-                } else {
-                   writer.write("Could not add exchange, maybe there already an exchange object has the same id existed!");
-                }
-                break;
-            case ONLINE_GIFT_OPEN:
-                Serializable obj = process.openOnlineGift(ownerId);
-                if (obj != null) {
-                    writeObject(response, obj);
-                } else {
+                    break;
+                case ADD_BOSS:
+                    process.submitBoss(request.getParameter("name"), request.getParameter("element"),
+                            request.getParameter("race"), request.getParameter("atk"), request.getParameter("def"),
+                            request.getParameter("hp"), request.getParameter("grow"), request.getParameter("grow"), request.getParameter("grow"));
+                    success = true;
+                    break;
+                case GET_GIFT_COUNT:
                     writer = response.getWriter();
-                    writer.write(StringUtils.EMPTY_STRING);
-                }
-                break;
-            case SUBMIT_HERO:
-                ServerData data = readObject(request);
-                if (data != null) {
-                    try {
-                        process.submitHero(data);
+                    writer.write(String.valueOf(process.getGiftCount(ownerId)));
+                    break;
+                case GET_BACK_EXCHANGE:
+                    String exchange_id = request.getHeader(Field.ITEM_ID_FIELD);
+                    Object backExchange = process.get_back_exchange(exchange_id);
+                    if (backExchange == Integer.valueOf(1)) {
+                        writer = response.getWriter();
+                        writer.write("Could not found special exchange!");
+                    } else if (backExchange instanceof ExchangeObject) {
+                        response.setHeader(Field.RESPONSE_CODE, Field.STATE_ACKNOWLEDGE);
+                        writeObject(response, backExchange);
+                    } else {
+                        writeObject(response, backExchange);
+                    }
+                    break;
+                case ACKNOWLEDGE_MY_EXCHANGE:
+                    exchange_id = request.getHeader(Field.ITEM_ID_FIELD);
+                    if (process.acknowledge(exchange_id)) {
                         success = true;
-                    } catch (ClassNotFoundException e) {
+                    } else {
+                        writer = response.getWriter();
+                        writer.write("Error object could not found!");
+                    }
+                    break;
+                case EXCHANGE_PET_LIST:
+                    List<ExchangeObject> pets = process.exchangeTable.loadAll(1, limit, ownerId);
+                    writeObject(response, pets);
+                    break;
+                case EXCHANGE_ACCESSORY_LIST:
+                    List<ExchangeObject> acces = process.exchangeTable.loadAll(2, limit, ownerId);
+                    writeObject(response, acces);
+                    break;
+                case EXCHANGE_GOODS_LIST:
+                    List<ExchangeObject> goods = process.exchangeTable.loadAll(3, limit, ownerId);
+                    writeObject(response, goods);
+                    break;
+                case QUERY_MY_EXCHANGE:
+                    List<ExchangeObject> exs = process.exchangeTable.loadAll(ownerId);
+                    response.setHeader(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
+                    writeObject(response, exs);
+                    break;
+                case REQUEST_EXCHANGE:
+                    Object objMy = readObject(request);
+                    ExchangeObject exServer = process.exchangeTable.loadObject(request.getHeader(Field.ITEM_ID_FIELD));
+                    writer = response.getWriter();
+                    if (objMy == null) {
+                        writer.write("Exchange Object submit error!");
+                    }
+                    if (exServer == null) {
+                        response.setHeader(Field.RESPONSE_CODE, Field.STATE_FAILED);
+                        writer.write("Could not find Object your request!");
+                    }
+                    try {
+                        if (process.requestExchange(objMy, exServer, ownerId)) {
+                            writer.write(Field.RESPONSE_RESULT_OK);
+                        } else {
+                            writer.write("Could not do exchange because the target has been changed by other!");
+                        }
+                    } catch (Exception e) {
                         LogHelper.error(e);
                         success = false;
                     }
-                } else {
-                    success = false;
-                }
-                break;
-            case POOL_BATTLE_MSG:
-                int count = request.getIntHeader(Field.COUNT);
-                writer = response.getWriter();
-                writer.write(process.queryBattleMessages(ownerId, count));
-                break;
-            case POOL_ONLINE_DATA_MSG:
-                String sd = process.getGroupMessage(ownerId);
-                writer = response.getWriter();
-                writer.write(sd);
-                break;
-            case QUERY_BATTLE_AWARD:
-                writer = response.getWriter();
-                writer.write(process.queryBattleAward(ownerId));
-                break;
-            case QUERY_HERO_DATA:
-                data = process.queryHeroData(ownerId);
-                if (data != null) {
-                    writeObject(response, data);
-                } else {
-                    success = false;
-                }
-                break;
-            case GET_BACK_HERO:
-                data = process.getBackHero(ownerId);
-                if (data != null) {
-                    writeObject(response, data);
-                } else {
-                    success = false;
-                }
-                break;
-            default:
-                doGet(request,response);
-                return;
-        }
-        try {
-            if (success != null && writer == null) {
-                writer = response.getWriter();
-                if (success) {
-                    response.setHeader(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
-                    writer.write(Field.RESPONSE_RESULT_OK);
-                } else {
-                    writer.write(Field.RESPONSE_RESULT_FAILED);
-                }
+                    break;
+                case SUBMIT_EXCHANGE:
+                    Object eo = readObject(request);
+                    limit = readEncodeHeader(request, Field.LIMIT_STRING);
+                    int expectType = Integer.parseInt(request.getHeader(Field.EXPECT_TYPE));
+                    writer = response.getWriter();
+                    if (process.submitExchange(ownerId, limit, eo, expectType)) {
+                        writer.write(Field.RESPONSE_RESULT_OK);
+                    } else {
+                        writer.write("Could not add exchange, maybe there already an exchange object has the same id existed!");
+                    }
+                    break;
+                case ONLINE_GIFT_OPEN:
+                    Serializable obj = process.openOnlineGift(ownerId);
+                    if (obj != null) {
+                        writeObject(response, obj);
+                    } else {
+                        writer = response.getWriter();
+                        writer.write(StringUtils.EMPTY_STRING);
+                    }
+                    break;
+                case SUBMIT_HERO:
+                    ServerData data = readObject(request);
+                    if (data != null) {
+                        try {
+                            success = process.submitHero(data);
+                        } catch (ClassNotFoundException e) {
+                            LogHelper.error(e);
+                            success = false;
+                        }
+                    } else {
+                        success = false;
+                    }
+                    break;
+                case POOL_BATTLE_MSG:
+                    int count = request.getIntHeader(Field.COUNT);
+                    writer = response.getWriter();
+                    writer.write(process.queryBattleMessages(ownerId, count));
+                    break;
+                case POOL_ONLINE_DATA_MSG:
+                    String sd = process.getGroupMessage(ownerId);
+                    writer = response.getWriter();
+                    writer.write(sd);
+                    break;
+                case QUERY_BATTLE_AWARD:
+                    writer = response.getWriter();
+                    writer.write(process.queryBattleAward(ownerId));
+                    break;
+                case QUERY_HERO_DATA:
+                    data = process.queryHeroData(ownerId);
+                    if (data != null) {
+                        writeObject(response, data);
+                    } else {
+                        success = false;
+                    }
+                    break;
+                case GET_BACK_HERO:
+                    data = process.getBackHero(ownerId);
+                    if (data != null) {
+                        writeObject(response, data);
+                    } else {
+                        success = false;
+                    }
+                    break;
+                default:
+                    doGet(request, response);
+                    return;
             }
-        }catch (IllegalStateException e){
-            LogHelper.error(new Exception(path, e));
-        }
-        if(writer!=null) {
-            writer.flush();
-            writer.close();
+            try {
+                if (success != null && writer == null) {
+                    writer = response.getWriter();
+                    if (success) {
+                        response.setHeader(Field.RESPONSE_CODE, Field.STATE_SUCCESS);
+                        writer.write(Field.RESPONSE_RESULT_OK);
+                    } else {
+                        writer.write(Field.RESPONSE_RESULT_FAILED);
+                    }
+                }
+            } catch (IllegalStateException e) {
+                LogHelper.error(new Exception(path, e));
+            }
+            if (writer != null) {
+                writer.flush();
+                writer.close();
+            }
+        }catch (Exception e){
+            LogHelper.error(e);
+            response.sendError(403, e.getMessage());
         }
     }
 

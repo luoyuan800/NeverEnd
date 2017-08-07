@@ -12,6 +12,7 @@ import java.io.Serializable
  */
 class ServerData : Serializable {
 
+    var mac: String? = StringUtils.EMPTY_STRING
     var hero: Hero? = null
     var maze: Maze? = null
     var accessories: List<Accessory>? = null
@@ -49,7 +50,11 @@ class ServerData : Serializable {
         } else {
             petb.append("无")
         }
-        return "锻造点：" + StringUtils.formatNumber(material, false) + "<br>" + "装备：<br>"+petb+"<br>宠物：<br>"+petb
+        return "锻造点：" + StringUtils.formatNumber(material, false) + "<br>" + "装备：<br>" + petb + "<br>宠物：<br>" + petb
+    }
+
+    fun getId(): String? {
+        return hero?.id
     }
 
     companion object {

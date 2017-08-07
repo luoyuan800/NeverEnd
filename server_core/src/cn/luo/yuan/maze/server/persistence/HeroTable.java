@@ -137,6 +137,7 @@ public class HeroTable {
             record = new ServerRecord();
             record.setId(data.getHero().getId());
         }
+        record.setMac(data.getMac());
         record.setSubmitDate(System.currentTimeMillis());
         record.setRange(Integer.MAX_VALUE);
         record.setData(data);
@@ -155,6 +156,10 @@ public class HeroTable {
 
     public List<String> getAllHeroIds() {
         return recordDb.loadIds();
+    }
+
+    public void delete(String id) {
+        recordDb.delete(id);
     }
 
     private Hero loadHero(String id) throws IOException, ClassNotFoundException {
