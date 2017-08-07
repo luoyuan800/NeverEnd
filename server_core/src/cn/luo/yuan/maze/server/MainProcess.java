@@ -804,7 +804,7 @@ public class MainProcess {
         builder.append("{");
         if (exchange != null) {
             builder.append("\"id\":\"").append(exchange.getId()).append("\",");
-            builder.append("\"name\":").append(exchange.toString().replaceAll("\"", "'")).append(",");
+            builder.append("\"name\":\"").append(exchange.toString().replaceAll("\"", "'")).append("\",");
             builder.append("\"Submit\":").append(exchange.getSubmitTime()).append(",");
             if (exchange.getExchange() instanceof Accessory) {
                 builder.append("\"data\":\"").append(StringUtils.formatEffectsAsHtml(((Accessory) exchange.getExchange()).getEffects()).replaceAll("\"", "'")).append("\"");
@@ -891,10 +891,15 @@ public class MainProcess {
     }
 
     public String exchangeJson(){
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder("{\"total\":").append(exchangeTable.getExchangeDb().size()).append(",\"rows\":[");
         for(String id : exchangeTable.getExchangeDb().loadIds()){
-            builder.append(formatJson(exchangeTable.loadObject(id)));
+            String str = formatJson(exchangeTable.loadObject(id));
+            if(StringUtils.isNotEmpty(str)){
+                builder.append(str).append(",");
+            }
         }
+        builder.replace(builder.lastIndexOf(","), builder.length(), "");
+        builder.append("]}");
         return builder.toString();
     }
 }
