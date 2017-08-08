@@ -912,4 +912,19 @@ public class MainProcess {
         builder.append("]}");
         return builder.toString();
     }
+
+    public int getDebris(String ownerId){
+        ServerRecord record = heroTable.getRecord(ownerId);
+        if(record!=null){
+            return record.getDebris();
+        }
+        return 0;
+    }
+
+    public void addDebris(String ownerId, int count){
+        ServerRecord record = heroTable.getRecord(ownerId);
+        if(record!=null){
+            record.setDebris(record.getDebris() + count);
+        }
+    }
 }

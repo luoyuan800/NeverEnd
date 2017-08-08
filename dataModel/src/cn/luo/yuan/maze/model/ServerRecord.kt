@@ -33,6 +33,14 @@ class ServerRecord : IDModel, Serializable {
     var dieTime = 0L
     var dieCount = 0L
     var restoreLimit = Data.RESTORE_LIMIT
+    var debris:Int = 0
+        set(value) {
+            if(value >= 0){
+                field = value
+            }else{
+                field = 0;
+            }
+        }
 
     var gift = 0
 

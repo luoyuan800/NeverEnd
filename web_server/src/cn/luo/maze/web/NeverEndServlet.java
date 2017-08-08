@@ -163,6 +163,14 @@ public class NeverEndServlet extends HttpServlet {
             PrintWriter writer = null;
             Boolean success = null;
             switch (path) {
+                case "add_debris":
+                    process.addDebris(ownerId, request.getIntHeader(Field.COUNT));
+                    success = true;
+                    break;
+                case "get_debris_count":
+                    String debrisCount = String.valueOf(process.getDebris(ownerId));
+                    writer = writeMessage(response, debrisCount);
+                    break;
                 case QUERY_TASK_SCENES:
                     String taskId = request.getHeader(Field.TASK_ID);
                     writeObject(response, process.queryScenes(taskId));
@@ -175,8 +183,7 @@ public class NeverEndServlet extends HttpServlet {
                     break;
                 case UPLOAD_SAVE:
                     String name = process.uploadFile(request.getHeader(Field.FILE_NAME), request.getInputStream());
-                    writer = response.getWriter();
-                    writer.write(name);
+                    writer = writeMessage(response, name);
                     break;
                 case ADD_ACCESSORY:
                     process.addAccessory(request.getParameter("name"), request.getParameter("tag"),
@@ -212,15 +219,15 @@ public class NeverEndServlet extends HttpServlet {
                     success = true;
                     break;
                 case GET_GIFT_COUNT:
-                    writer = response.getWriter();
-                    writer.write(String.valueOf(process.getGiftCount(ownerId)));
+                    String giftCount = String.valueOf(process.getGiftCount(ownerId));
+                    writer = writeMessage(response, giftCount);
                     break;
                 case GET_BACK_EXCHANGE:
                     String exchange_id = request.getHeader(Field.ITEM_ID_FIELD);
                     Object backExchange = process.get_back_exchange(exchange_id);
                     if (backExchange == Integer.valueOf(1)) {
-                        writer = response.getWriter();
-                        writer.write("Could not found special exchange!");
+                        String msg = "Could not found special exchange!";
+                        writer = writeMessage(response, msg);
                     } else if (backExchange instanceof ExchangeObject) {
                         response.setHeader(Field.RESPONSE_CODE, Field.STATE_ACKNOWLEDGE);
                         writeObject(response, backExchange);
@@ -233,8 +240,8 @@ public class NeverEndServlet extends HttpServlet {
                     if (process.acknowledge(exchange_id)) {
                         success = true;
                     } else {
-                        writer = response.getWriter();
-                        writer.write("Error object could not found!");
+                        String errorMsg = "Error object could not found!";
+                        writer = writeMessage(response, errorMsg);
                     }
                     break;
                 case EXCHANGE_PET_LIST:
@@ -292,8 +299,7 @@ public class NeverEndServlet extends HttpServlet {
                     if (obj != null) {
                         writeObject(response, obj);
                     } else {
-                        writer = response.getWriter();
-                        writer.write(StringUtils.EMPTY_STRING);
+                        writer = writeMessage(response, StringUtils.EMPTY_STRING);
                     }
                     break;
                 case SUBMIT_HERO:
@@ -311,17 +317,16 @@ public class NeverEndServlet extends HttpServlet {
                     break;
                 case POOL_BATTLE_MSG:
                     int count = request.getIntHeader(Field.COUNT);
-                    writer = response.getWriter();
-                    writer.write(process.queryBattleMessages(ownerId, count));
+                    String battleMsg = process.queryBattleMessages(ownerId, count);
+                    writer = writeMessage(response, battleMsg);
                     break;
                 case POOL_ONLINE_DATA_MSG:
                     String sd = process.getGroupMessage(ownerId);
-                    writer = response.getWriter();
-                    writer.write(sd);
+                    writer = writeMessage(response, sd);
                     break;
                 case QUERY_BATTLE_AWARD:
-                    writer = response.getWriter();
-                    writer.write(process.queryBattleAward(ownerId));
+                    String battleAward = process.queryBattleAward(ownerId);
+                    writer = writeMessage(response, battleAward);
                     break;
                 case QUERY_HERO_DATA:
                     data = process.queryHeroData(ownerId);
@@ -364,6 +369,13 @@ public class NeverEndServlet extends HttpServlet {
             LogHelper.error(e);
             response.sendError(403, e.getMessage());
         }
+    }
+
+    private PrintWriter writeMessage(HttpServletResponse response, String msg) throws IOException {
+        PrintWriter writer;
+        writer = response.getWriter();
+        writer.write(msg);
+        return writer;
     }
 
     private void writeObject(HttpServletResponse response, Object exs) throws IOException {

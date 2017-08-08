@@ -16,6 +16,7 @@ public abstract class ClickSkill implements Serializable, IDModel {
     private String id;
     private long click;
     private long lastUseTime;
+    private long lastClickTime;
     private int index;
     private long duration;
     private boolean delete;
@@ -92,5 +93,13 @@ public abstract class ClickSkill implements Serializable, IDModel {
     @Override
     public void setId(String id) {
         this.id = id;
+    }
+
+    public long getLastClickTime() {
+        return lastClickTime;
+    }
+
+    public void setLastClickTime(long lastClickTime) {
+        this.lastClickTime = lastClickTime;
     }
 }
