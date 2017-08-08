@@ -25,7 +25,7 @@ public class EvilModel extends SkillModel {
 
     public boolean canMount(SkillParameter parameter) {
         InfoControlInterface context = parameter.get(SkillParameter.CONTEXT);
-        return !isSkillEnable("HeroHit",context) && !isSkillEnable("Elementalist", context);
+        return skill.isEnable() && !isSkillEnable("HeroHit",context) && !isSkillEnable("Elementalist", context);
     }
 
     public void upgrade(SkillParameter parameter){

@@ -137,7 +137,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
             @Override
             public void run() {
                 try {
-                    if (yomob && TGSDK.couldShowAd(adcenseid)) {
+                    if (TGSDK.couldShowAd(adcenseid)) {
                         if (debug) {
                             TGSDK.showTestView(context, adcenseid);
                         } else {

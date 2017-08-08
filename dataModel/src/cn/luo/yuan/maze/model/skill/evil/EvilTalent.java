@@ -32,7 +32,7 @@ public class EvilTalent extends DefSkill implements UpgradeAble {
 
     @Override
     public boolean canMount(SkillParameter parameter) {
-        return model.canEnable(parameter);
+        return model.canMount(parameter);
     }
 
     public boolean canEnable(SkillParameter parameter){

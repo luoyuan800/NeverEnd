@@ -15,7 +15,7 @@ class Swindler: PropertySkill() {
 
     override fun getDisplayName(): String {
         val builder = StringBuilder()
-        builder.append("机会还是有的，只要你脸皮厚。<br>每当抛硬币的时候，如果抛出的硬币为反面的话，还可以不要脸的再抛一次。<br>")
+        builder.append("机会还是有的，只要你脸皮厚。<br>每当抛硬币的时候，如果抛出的硬币为反面的话，还可以不要脸的再抛一次。<br>被动技能，无需装备")
         return builder.toString()
     }
 

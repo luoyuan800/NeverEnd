@@ -173,7 +173,7 @@ public class RunningService implements RunningServiceInterface {
                                 BattleMessage battleMessage = new BattleMessageImp(gameContext);
                                 battleService.setBattleMessage(battleMessage);
                                 long material = monster instanceof Monster ? ((Monster) monster).getMaterial() : maze.getLevel();
-                                if (battleService.battle(gameContext.getMaze().getLevel())) {
+                                if (hero.getHp() > 0 && battleService.battle(gameContext.getMaze().getLevel())) {
                                     Log.d("maze", "Battle win " + ((NameObject) monster).getDisplayName());
                                     maze.setStreaking(maze.getStreaking() + 1);
                                     hero.setMaterial(hero.getMaterial() + material);

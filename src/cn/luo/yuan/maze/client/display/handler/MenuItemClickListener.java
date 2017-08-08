@@ -65,7 +65,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 showPayDialog();
                 break;
             case R.id.reincarnation:
-                SimplerDialogBuilder.build("转生，重新开始，保留宠物和装备。",
+                SimplerDialogBuilder.build("转生，增加难度，重新开始，保留宠物和装备。",
                         Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
