@@ -163,11 +163,20 @@ public class NeverEndServlet extends HttpServlet {
             PrintWriter writer = null;
             Boolean success = null;
             switch (path) {
-                case "add_debris":
+                case BUY_DLC:
+                    success = process.buyDlc(ownerId, request.getHeader(Field.ITEM_ID_FIELD));
+                    break;
+                case QUERY_DLC_DETAIL:
+                    writeObject(response, process.getDlc(ownerId, request.getHeader(Field.ITEM_ID_FIELD)));
+                    break;
+                case QUERY_DLC:
+                    writeObject(response, process.queryDLCKeys(ownerId));
+                    break;
+                case ADD_DEBRIS:
                     process.addDebris(ownerId, request.getIntHeader(Field.COUNT));
                     success = true;
                     break;
-                case "get_debris_count":
+                case GET_DEBRIS_COUNT:
                     String debrisCount = String.valueOf(process.getDebris(ownerId));
                     writer = writeMessage(response, debrisCount);
                     break;

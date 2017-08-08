@@ -1,13 +1,17 @@
 package cn.luo.yuan.maze.client.service;
 
+import cn.luo.yuan.maze.Path;
 import cn.luo.yuan.maze.client.utils.FileUtils;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.client.utils.RestConnection;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.SellItem;
 import cn.luo.yuan.maze.model.ServerData;
+import cn.luo.yuan.maze.model.dlc.DLCKey;
+import cn.luo.yuan.maze.model.dlc.MonsterDLC;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -265,5 +269,49 @@ public class ServerService {
             LogHelper.logException(e, "downloadSaveFile: " + id);
         }
         return null;
+    }
+
+    public MonsterDLC getMonsterDlcDetail(String id, NeverEnd context){
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(Path.QUERY_DLC_DETAIL, RestConnection.POST);
+            connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            Object o = server.connect(connection);
+            if(o instanceof MonsterDLC){
+                return (MonsterDLC) o;
+            }
+        } catch (IOException e) {
+            LogHelper.logException(e, "Query dlc details");
+        }
+        return null;
+    }
+
+    public List<DLCKey> getMonsterDlcKey(NeverEnd context){
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(Path.QUERY_DLC, RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            Object o = server.connect(connection);
+            if(o instanceof List){
+                return (List<DLCKey>) o;
+            }
+        } catch (IOException e) {
+            LogHelper.logException(e, "Query dlc list");
+        }
+        return Collections.emptyList();
+    }
+
+    public boolean buyMonsterDlcKey(String id, NeverEnd context){
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(Path.QUERY_DLC, RestConnection.POST);
+            connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            Object o = server.connect(connection);
+            if(o.toString().equals(Field.RESPONSE_RESULT_OK)){
+                return true;
+            }
+        } catch (IOException e) {
+            LogHelper.logException(e, "Query dlc list");
+        }
+        return false;
     }
 }

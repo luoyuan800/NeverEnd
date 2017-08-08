@@ -4,6 +4,11 @@ package cn.luo.yuan.maze;
  * Created by gluo on 7/6/2017.
  */
 public class Path {
+    public static final String BUY_DLC = "BUY_DLC";
+    public static final String QUERY_DLC_DETAIL = "query_dlc_detail";
+    public static final String QUERY_DLC = "query_dlc_key";
+    public static final String GET_DEBRIS_COUNT = "get_debris_count";
+    public static final String ADD_DEBRIS = "add_debris";
     public static final String QUERY_TASK_SCENES = "queryTaskScenes";
     public static final String QUERY_ONLINE_TASK = "query_online_task";
     public static final String UPLOAD_SAVE = "upload_save";

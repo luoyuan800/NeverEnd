@@ -14,6 +14,8 @@ import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.SellItem;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
+import cn.luo.yuan.maze.model.dlc.DLCKey;
+import cn.luo.yuan.maze.model.dlc.MonsterDLC;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.types.Grill;
@@ -30,6 +32,7 @@ import cn.luo.yuan.maze.server.bomb.json.MyJSONValue;
 import cn.luo.yuan.maze.server.bomb.json.SimpleToken;
 import cn.luo.yuan.maze.server.model.User;
 import cn.luo.yuan.maze.server.persistence.CribberTable;
+import cn.luo.yuan.maze.server.persistence.DLCTable;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
 import cn.luo.yuan.maze.server.persistence.MonsterTable;
@@ -82,11 +85,12 @@ public class MainProcess {
     public HeroTable heroTable;
     public GameContext context = new GameContext();
     private ObjectTable<User> userDb;
-    private File root;
+    public File root;
     private File heroDir;
     private DatabaseConnection database;
     private ShopTable shop;
     private CribberTable cribber;
+    private DLCTable dlcTable;
     private cn.luo.yuan.maze.utils.Random random = new Random(System.currentTimeMillis());
 
     public MainProcess(String root) throws IOException, ClassNotFoundException {
@@ -366,6 +370,7 @@ public class MainProcess {
                 LogHelper.error(e);
             }
         }
+        dlcTable = new DLCTable(this);
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -389,6 +394,7 @@ public class MainProcess {
         executor.scheduleAtFixedRate(heroTable.getDb(), 99, 200, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(exchangeTable.getExchangeDb(), 120, 200, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(monsterTable.getMonsterTable(), 120, 500, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(dlcTable.getMonsterDLCTable(), 525, 1500, TimeUnit.MILLISECONDS);
     }
 
     public ServerData queryHeroData(String id) {
@@ -926,5 +932,44 @@ public class MainProcess {
         if(record!=null){
             record.setDebris(record.getDebris() + count);
         }
+    }
+
+    public List<DLCKey> queryDLCKeys(String ownerId){
+        ServerRecord record = heroTable.getRecord(ownerId);
+        if(record!=null){
+            return dlcTable.queryKeys(record.getDlcs());
+        }else{
+            return Collections.emptyList();
+        }
+    }
+
+    public MonsterDLC getDlc(String ownerId, String id){
+        MonsterDLC dlc = dlcTable.getMonsterDLC(id);
+        if(dlc!=null){
+            dlc = dlc.clone();
+            ServerRecord record = heroTable.getRecord(ownerId);
+            if(record.getDlcs().contains(id)){
+                dlc.setDebrisCost(0);
+            }
+            return dlc;
+        }
+        return null;
+    }
+
+    public boolean buyDlc(String ownerId, String id){
+        MonsterDLC dlc = dlcTable.getMonsterDLC(id);
+        if(dlc!=null){
+            ServerRecord record = heroTable.getRecord(ownerId);
+            if(!record.getDlcs().contains(id)){
+                if(record.getDebris() >= dlc.getDebrisCost()) {
+                    record.setDebris(record.getDebris() - dlc.getDebrisCost());
+                    record.getDlcs().add(dlc.getId());
+                }else{
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 }

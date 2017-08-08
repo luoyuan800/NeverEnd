@@ -37,9 +37,9 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
         pet.setDef(monster.getDef());
         pet.setSecondName(null);
         pet.setFirstName(null);
-        long atk_l = level * Data.MONSTER_ATK_RISE_PRE_LEVEL  + monster.getAtkAddition();
-        long def_l = level * Data.MONSTER_DEF_RISE_PRE_LEVEL ;
-        long hp_l = level * Data.MONSTER_HP_RISE_PRE_LEVEL  + monster.getHpAddition();
+        long atk_l = level * Data.MONSTER_ATK_RISE_PRE_LEVEL * (hero.getReincarnate() + 1)  + monster.getAtkAddition();
+        long def_l = level * Data.MONSTER_DEF_RISE_PRE_LEVEL  * (hero.getReincarnate() + 1) ;
+        long hp_l = level * Data.MONSTER_HP_RISE_PRE_LEVEL  * (hero.getReincarnate() + 1)  + monster.getHpAddition();
         pet.setAtk(pet.getAtk() - atk_l + getRandom().nextLong(getRandom().reduceToSpecialDigit(atk_l, 3)));
         pet.setDef(pet.getDef() - def_l + getRandom().nextLong(getRandom().reduceToSpecialDigit(def_l, 3)));
         pet.setMaxHp(pet.getMaxHp() - hp_l + getRandom().nextLong(getRandom().reduceToSpecialDigit(hp_l, 3)));
