@@ -15,7 +15,7 @@ public class Data {
     public static final int PET_UPGRADE_LIMIT = 5;//宠物升级的限制级数，作用同上
     public static final String ORANGE_COLOR = "#FFA500";//橙色色（阶位）3
     public static final String DARKGOLD_COLOR = "#B8860B";//暗金色（阶位）4
-    public static final float RATE_MAX = 90f;//最高的概率，超过会强制设置为这个值
+    public static final float RATE_MAX = 70f;//最高的概率，超过会强制设置为这个值
     public static final int DARKGOLD_RATE_REDUCE = 10;//橙色阶位的二次限制
     public static final String DISABLE_COLOR = "#C0C0C0";
     public static final String ENABLE_COLOR = "#33038C";
