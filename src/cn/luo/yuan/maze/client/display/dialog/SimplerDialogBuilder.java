@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.text.Html;
 import android.view.View;
+import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
 import cn.luo.yuan.maze.utils.Random;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
@@ -137,5 +138,33 @@ public class SimplerDialogBuilder {
                 .show();
         return dialogBuilder;
 
+    }
+
+    public static Dialog build(View view, String b1, final DialogInterface.OnClickListener b1Listener, String b2, Context context, Random random) {
+        final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
+        if (random != null) {
+            dialogBuilder.withEffect(random.randomItem(Effectstype.values()));
+        }
+        dialogBuilder
+                .withDialogColor(Color.WHITE)
+                .setCustomView(view, context)                   //.withMessage(null)  no Msg
+                .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
+                .withButton1Text(b1)
+                .setButton1Click(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        b1Listener.onClick(dialogBuilder, 1);
+                        dialogBuilder.dismiss();
+                    }
+                })
+                .withButton2Text(b2)
+                .setButton2Click(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogBuilder.dismiss();
+                    }
+                })
+                .show();
+        return dialogBuilder;
     }
 }

@@ -175,13 +175,13 @@ public class GameActivityViewHandler extends Handler {
             setText((TextView) context.findViewById(R.id.hero_click),StringUtils.formatNumber(context.control.getHero().getClick(), false));
             setText((TextView) context.findViewById(R.id.hero_streaking),StringUtils.formatNumber(context.control.getMaze().getStreaking(), false));
             setText((TextView) context.findViewById(R.id.hero_hp),StringUtils.formatNumber(context.control.getHero().getCurrentHp(), false));
-            setText((TextView) context.findViewById(R.id.hero_max_hp),StringUtils.formatNumber(context.control.getHero().getUpperHp(), false));
+            setText((TextView) context.findViewById(R.id.hero_max_hp),StringUtils.formatNumber(context.control.getHero().getMaxHp(), false));
             TextView additionHp = (TextView) context.findViewById(R.id.hero_addition_hp);
             long additionHpValue = context.control.getHero().getAdditionHp();
             setNumberText(additionHp, additionHpValue);
             setText((TextView) context.findViewById(R.id.hero_atk),StringUtils.formatNumber(context.control.getHero().getAtk(), false));
             setNumberText((TextView) context.findViewById(R.id.hero_atk_addition), context.control.getHero().getAdditionAtk());
-            setText((TextView) context.findViewById(R.id.hero_def),StringUtils.formatNumber(context.control.getHero().getUpperDef(), false));
+            setText((TextView) context.findViewById(R.id.hero_def),StringUtils.formatNumber(context.control.getHero().getDef(), false));
             setNumberText((TextView) context.findViewById(R.id.hero_def_addition),context.control.getHero().getAdditionDef());
         }
     };

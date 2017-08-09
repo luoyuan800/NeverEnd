@@ -40,7 +40,7 @@ public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBar
     }
 
     public void show() {
-        dialog = SimplerDialogBuilder.build(View.inflate(context.getContext(), R.layout.properties_view, null), Resource.getString(R.string.properties_view_title), context.getContext(), context.getRandom());
+        dialog = SimplerDialogBuilder.build(View.inflate(context.getContext(), R.layout.properties_view, null), Resource.getString(R.string.properties_view_title), context.getContext(), null);
         dialog.findViewById(R.id.range_close).setOnClickListener(this);
         dialog.findViewById(R.id.range_conform).setOnClickListener(this);
         Hero hero = context.getHero();
@@ -125,7 +125,7 @@ public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBar
         ((TextView) dialog.findViewById(R.id.str_value)).setText(StringUtils.formatNumber(context.getHero().getStr(), false));
         ((TextView) dialog.findViewById(R.id.hero_atk)).setText(StringUtils.formatNumber(context.getHero().getUpperAtk(), false));
         ((TextView) dialog.findViewById(R.id.hero_def)).setText(StringUtils.formatNumber(hero.getUpperDef(), false));
-        ((TextView) dialog.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(hero.getUpperDef(), false));
+        ((TextView) dialog.findViewById(R.id.hero_hp)).setText(StringUtils.formatNumber(hero.getUpperHp(), false));
         ((TextView) dialog.findViewById(R.id.point_value)).setText(StringUtils.formatNumber(context.getHero().getPoint(), false));
         boolean hasHat = false;
         boolean hasRing = false;

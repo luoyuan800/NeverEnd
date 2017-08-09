@@ -302,7 +302,7 @@ public class MainProcess {
     public boolean checkCribber(ServerData data) throws CribberException {
         if(cribber !=null){
             if(cribber.isCribber(data)){
-                throw new CribberException(data.getId(), data.getMac(), data.getHero()!=null ?data.getHero().getName() : " ");
+                throw new CribberException(data.getId(), data.getMac(), data.getHero()!=null ? data.getHero().getName() : " ");
             }
         }
         return false;
@@ -900,9 +900,9 @@ public class MainProcess {
             ServerRecord record;
             record = heroTable.getRecord(id);
             String mac = record.getMac();
-            cribber.addToCribber(id ,StringUtils.isEmpty(mac)? " " : mac, record.getData()!=null && record.getData().getHero()!=null  ? record.getData().getHero().getName() : " ");
             LogHelper.info("delete cribber: " + id);
             heroTable.delete(id);
+            cribber.addToCribber(id ,StringUtils.isEmpty(mac)? "NAN" : mac, record.getData()!=null && record.getData().getHero()!=null  ? record.getData().getHero().getName() : "NAN");
         }
     }
 

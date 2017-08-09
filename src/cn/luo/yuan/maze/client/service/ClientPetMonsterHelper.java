@@ -42,6 +42,7 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
         this.control = control;
         setRandom(control.getRandom());
         monsterTable = new SerializeLoader<>(Monster.class,control.getContext(), control.getIndex());
+        control.getDataManager().registerTable(monsterTable.getDb());
         server = new RestConnection(Field.SERVER_URL, control.getVersion(), Resource.getSingInfo());
         init();
     }
@@ -343,6 +344,10 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
 
     public SerializeLoader<Monster> getMonsterTable() {
         return monsterTable;
+    }
+
+    public void addSpecialMonster(Monster monster){
+        monsterTable.save(monster);
     }
 
     private ArrayList<MonsterKey> getAvaiableMonsterKey(long level, boolean addKey) {

@@ -118,7 +118,7 @@ public class ShopDialog {
                 goodsItem.name = g.getName();
                 goodsItem.price = g.getPrice();
                 goodsItem.desc = g.getDesc();
-                goodsItem.count = random.nextInt(Data.MAX_SELL_COUNT);
+                goodsItem.count = random.nextInt(Data.MAX_SELL_COUNT) + 1;
                 goodsItem.instance = ng;
                 goods.add(goodsItem);
             }

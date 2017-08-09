@@ -13,6 +13,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.Settings;
 import android.util.ArrayMap;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.BaseActivity;
@@ -220,6 +221,21 @@ public class Resource {
         }
     }
 
+    public static String getDeviceId(){
+        String id = getMacAddr();
+        if(StringUtils.isEmpty(id)){
+            id = getSecure();
+        }
+        if(id == null){
+            id =StringUtils.EMPTY_STRING;
+        }
+        return id;
+    }
+
+    public static String getSecure() {
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
     public static String getMacAddr() {
         try {
             List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
@@ -247,12 +263,13 @@ public class Resource {
                         res1.deleteCharAt(res1.length() - 1);
                     }
                     return res1.toString();
+
                 }
             }
         } catch (Exception ex) {
             LogHelper.logException(ex, "Query MAC");
         }
-        return "02:00:00:00:00:00";
+        return "";
     }
 
     public static String getVersion() {

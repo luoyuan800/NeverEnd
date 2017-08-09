@@ -6,6 +6,6 @@ package cn.luo.yuan.maze.exception;
  */
 public class CribberException extends Exception {
     public CribberException(String id, String mac, String name){
-        super(name + "(" + id + ")" + mac);
+        super(name + "(" + id + ") @ " + mac);
     }
 }

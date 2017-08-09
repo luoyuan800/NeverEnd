@@ -65,7 +65,7 @@ public class ServerService {
 
     public boolean uploadHero(ServerData uploaddData) {
         try {
-            uploaddData.setMac(Resource.getMacAddr());
+            uploaddData.setMac(Resource.getDeviceId());
             HttpURLConnection connection = server.getHttpURLConnection(SUBMIT_HERO, RestConnection.POST);
             return Field.RESPONSE_RESULT_SUCCESS.equals(server.connect(uploaddData, connection));
         } catch (Exception e) {
@@ -300,9 +300,9 @@ public class ServerService {
         return Collections.emptyList();
     }
 
-    public boolean buyMonsterDlcKey(String id, NeverEnd context){
+    public boolean buyMonsterDlc(String id, NeverEnd context){
         try {
-            HttpURLConnection connection = server.getHttpURLConnection(Path.QUERY_DLC, RestConnection.POST);
+            HttpURLConnection connection = server.getHttpURLConnection(Path.BUY_DLC, RestConnection.POST);
             connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
             Object o = server.connect(connection);

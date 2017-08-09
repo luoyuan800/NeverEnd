@@ -82,7 +82,7 @@ class SwindlerGame:AtkSkill(),UpgradeAble {
     }
 
     override fun canUpgrade(parameter: SkillParameter?): Boolean {
-        return model.canEnable(parameter) && rate < Data.RATE_MAX/4
+        return model.canUpgrade(parameter) && rate < Data.RATE_MAX/4
     }
 
     override fun canEnable(parameter: SkillParameter?): Boolean {

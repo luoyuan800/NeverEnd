@@ -60,7 +60,6 @@ public class ExchangeManager {
             connection.addRequestProperty(Field.LIMIT_STRING, URLEncoder.encode(limit, "utf-8"));
             String result = server.connect(object, connection).toString();
             if (Field.RESPONSE_RESULT_OK.equals(result)) {
-                context.getDataManager().delete(object);
                 return true;
             }
         } catch (IOException e) {
@@ -75,7 +74,7 @@ public class ExchangeManager {
             urlConnection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
             return (List<ExchangeObject>) server.connect(urlConnection);
         } catch (Exception e) {
-            LogHelper.logException(e, "ExchanmgManager->querySubmittedExchangeOfMine");
+            LogHelper.logException(e, "ExchangeManager->querySubmittedExchangeOfMine");
         }
         return null;
     }
@@ -97,7 +96,6 @@ public class ExchangeManager {
             HttpURLConnection connection = server.getHttpURLConnection(GET_BACK_EXCHANGE, RestConnection.POST);
             connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
             Object object = server.connect(connection);
-
             return object;
         } catch (Exception e) {
             LogHelper.logException(e, "ExchanmgManager->getBackMyExchange");

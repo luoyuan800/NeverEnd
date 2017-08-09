@@ -50,6 +50,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
     private CrashHandler crashHandler;
     private ServerService serverService;
     private TaskManager taskManager;
+    private boolean started = false;
 
     public NeverEnd() {
     }
@@ -87,6 +88,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
             dataManager = null;
             petMonsterHelper = null;
             accessoryHelper = null;
+            started = false;
         } catch (Exception e) {
             LogHelper.logException(e, "stopGame");
         }
@@ -98,34 +100,37 @@ public class NeverEnd extends Application implements InfoControlInterface {
     }
 
     public void startGame() {
-        Log.i("maze", "Starting game");
-        viewHandler.refreshProperties(hero);
-        viewHandler.refreshPets(hero);
-        runningService = new RunningService(hero, maze, this, dataManager, Data.REFRESH_SPEED);
-        executor.scheduleAtFixedRate(runningService, 1, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
-        executor.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (!runningService.getPause())
-                        viewHandler.refreshFreqProperties();
-                } catch (Exception e) {
-                    LogHelper.logException(e, "refreshfreqProperties_runnable");
+        if(!started) {
+            Log.i("maze", "Starting game");
+            viewHandler.refreshProperties(hero);
+            viewHandler.refreshPets(hero);
+            runningService = new RunningService(hero, maze, this, dataManager, Data.REFRESH_SPEED);
+            executor.scheduleAtFixedRate(runningService, 1, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
+            executor.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (!runningService.getPause())
+                            viewHandler.refreshFreqProperties();
+                    } catch (Exception e) {
+                        LogHelper.logException(e, "refreshfreqProperties_runnable");
+                    }
                 }
-            }
-        }, 0, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
-        executor.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (!runningService.getPause())
-                        viewHandler.refreshSkill();
-                } catch (Exception e) {
-                    LogHelper.logException(e, "refreshfreqProperties_runnable");
+            }, 0, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
+            executor.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (!runningService.getPause())
+                            viewHandler.refreshSkill();
+                    } catch (Exception e) {
+                        LogHelper.logException(e, "refreshfreqProperties_runnable");
+                    }
                 }
-            }
-        }, 0, Data.REFRESH_SPEED * 2, TimeUnit.MILLISECONDS);
-        Log.i("maze", "Game started");
+            }, 0, Data.REFRESH_SPEED * 2, TimeUnit.MILLISECONDS);
+            started = true;
+            Log.i("maze", "Game started");
+        }
     }
 
     public Hero getHero() {

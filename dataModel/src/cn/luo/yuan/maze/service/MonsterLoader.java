@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public interface MonsterLoader {
     Map<MonsterKey, WeakReference<Monster>> getMonsterCache();
-
+    void addSpecialMonster(Monster monster);
     void init();
 
     Random getRandom();

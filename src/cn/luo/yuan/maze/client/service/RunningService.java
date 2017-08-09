@@ -118,7 +118,8 @@ public class RunningService implements RunningServiceInterface {
                         saveTime = System.currentTimeMillis();
                     }
                     maze.setStep(maze.getStep() + 1);
-                    if (maze.getStep() > 50 || random.nextLong(10000) > 9985 || random.nextLong(maze.getStep()) > 10 + random.nextLong(22) || random.nextLong(maze.getStreaking() + 1) > 5 + maze.getLevel()) {
+                    if (random.nextLong(10000) > 9985 || random.nextLong(maze.getStep()) > 6 + random.nextLong(22) || (maze.getStep() > 10 && random.nextLong(maze.getStreaking() + 1) > 15 + maze.getLevel())) {
+                        maze.setStep(0);
                         maze.setLevel(maze.getLevel() + 1);
                         Log.d("maze", "End to next level");
                         long point = 1;
@@ -152,7 +153,6 @@ public class RunningService implements RunningServiceInterface {
                         hero.setPoint(hero.getPoint() + point);
                         gameContext.addMessage(msg);
 
-                        maze.setStep(0);
                     } else {
                         boolean meet = false;
                         if (random.nextFloat(100f) < maze.getMeetRate()) {

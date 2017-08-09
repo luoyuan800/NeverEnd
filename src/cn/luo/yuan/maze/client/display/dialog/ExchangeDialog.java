@@ -152,6 +152,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                         @Override
                         public void run() {
                             if (manager.submitExchange((Serializable) item, limit.getText().toString(), petType.isChecked() ? Field.PET_TYPE : accType.isChecked() ? Field.ACCESSORY_TYPE : Field.GOODS_TYPE)) {
+                                context.getDataManager().delete((Serializable) item);
                                 Message message = new Message();
                                 message.what = 4;
                                 message.obj = "成功上传" + (item instanceof NameObject ? ((NameObject) item).getName() : "");
@@ -383,6 +384,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                             }
                         } else {
                             model = manager.acknowledge(eo);
+                            context.getDataManager().delete((Serializable) eo.getExchange());
                         }
                         if (model != null) {
                             context.getDataManager().add(model);
