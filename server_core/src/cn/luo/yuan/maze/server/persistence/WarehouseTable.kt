@@ -39,7 +39,7 @@ class WarehouseTable(root:File):Runnable{
         }
     }
 
-    fun retrieve(id:String, type:Int): Any? {
+    fun retrieve(id:String, type:Int): OwnedAble? {
         when(type){
             Field.PET_TYPE -> petWH.loadObject(id)
             Field.ACCESSORY_TYPE  -> accessoryWH.loadObject(id)
@@ -50,6 +50,22 @@ class WarehouseTable(root:File):Runnable{
 
     fun retrieveAll(keeperId:String):List<OwnedAble>{
         val res = mutableListOf<OwnedAble>();
+        for(obj in petWH.loadAll()){
+            filter(keeperId, obj, res)
+        }
+        res.addAll(accessoryWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId})
+        res.addAll(goodsWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId})
+
+        return res;
+    }
+
+    fun retrieveAll(keeperId:String, type:Int):List<OwnedAble>{
+        val res = mutableListOf<OwnedAble>();
+        when(type){
+            Field.PET_TYPE -> petWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId }
+            Field.ACCESSORY_TYPE -> accessoryWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId}
+            Field.GOODS_TYPE -> goodsWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId}
+        }
         for(obj in petWH.loadAll()){
             filter(keeperId, obj, res)
         }

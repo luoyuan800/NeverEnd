@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by gluo on 5/22/2017.
  */
-public class HeroTable {
+public class HeroTable implements Runnable {
     private ObjectTable<ServerRecord> recordDb;
     private long maxLevel = 1;
     private File root;
@@ -190,6 +190,29 @@ public class HeroTable {
 
     public ObjectTable<ServerRecord> getDb(){
         return recordDb;
+    }
+    private static final int DAYEXTIME = 3 * 24 * 60 * 60 * 1000;
+    private static final int WEEKEXTIME = 7 * 24 * 60 * 60 * 1000;
+
+    public void run(){
+        for(String id : getAllHeroIds()){
+            boolean delete = false;
+            ServerRecord record = getRecord(id);
+            if(record == null){
+                delete = true;
+            }else{
+                if(record.getData() == null && System.currentTimeMillis() - record.getSubmitDate() > DAYEXTIME){
+                    delete = true;
+                }else{
+                    if(System.currentTimeMillis() - record.getSubmitDate() > WEEKEXTIME){
+                        delete = true;
+                    }
+                }
+            }
+            if(delete){
+                delete(id);
+            }
+        }
     }
 
 }

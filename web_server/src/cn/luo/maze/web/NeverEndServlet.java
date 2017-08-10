@@ -2,6 +2,7 @@ package cn.luo.maze.web;
 
 import cn.luo.yuan.maze.model.ExchangeObject;
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.OwnedAble;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.server.LogHelper;
@@ -163,6 +164,24 @@ public class NeverEndServlet extends HttpServlet {
             PrintWriter writer = null;
             Boolean success = null;
             switch (path) {
+                case DOWNLOAD_APK:
+                    byte[] apk = process.downloadApk();
+                    response.getOutputStream().write(apk);
+                    break;
+                case RETRIEVE_BACK_WAREHOUSE:
+                    if(null!=process.deleteFromWarehouse(request.getHeader(Field.ITEM_ID_FIELD), request.getIntHeader(Field.EXPECT_TYPE), ownerId)){
+                        success = true;
+                    }else{
+                        success = false;
+                    }
+                    break;
+                case RETRIEVE_WAREHOUSE_LIST:
+                    writeObject(response, process.warehouseList(ownerId, request.getIntHeader(Field.EXPECT_TYPE)));
+                    break;
+                case STORE_WAREHOUSE:
+                    OwnedAble object = readObject(request);
+                    success = process.storeIntoWarehouse(object);
+                    break;
                 case BUY_DLC:
                     success = process.buyDlc(ownerId, request.getHeader(Field.ITEM_ID_FIELD));
                     break;

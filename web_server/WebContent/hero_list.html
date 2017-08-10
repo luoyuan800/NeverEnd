@@ -11,7 +11,7 @@
 </head>
 <body>
 <center>
-<table id="adg" title="Users" class="easyui-datagrid" style="height:450px"
+<table id="adg" title="Users" class="easyui-datagrid" style="height:550px"
 
        data-options="
                     url: 'app/get_hero_list',
@@ -31,10 +31,11 @@
                 ">
     <thead>
     <tr>
-        <th field="Range" width="50" sortable="true">Range</th>
-        <th field="id" width="250" clickable="true">Id</th>
+        <th field="Range" width="55" sortable="true">Range</th>
+        <th field="id" width="300" clickable="true">Id</th>
         <th field="data" width="150">Details</th>
-        <th field="Submit" width="200" align="right" formatter="formatDate">Last Update</th>
+        <th field="limit" width="50">Details</th>
+        <th field="Submit" width="200" align="right" formatter="formatDate" clickable="true">Last Update</th>
         <th field="mac" width="200" align="right" >MAC</th>
     </tr>
     </thead>

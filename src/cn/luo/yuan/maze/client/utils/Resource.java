@@ -14,6 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.util.ArrayMap;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.BaseActivity;
@@ -33,6 +34,7 @@ import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by luoyuan on 2017/3/18.
@@ -223,13 +225,28 @@ public class Resource {
 
     public static String getDeviceId(){
         String id = getMacAddr();
-        if(StringUtils.isEmpty(id)){
-            id = getSecure();
-        }
-        if(id == null){
+        try {
+            if (StringUtils.isEmpty(id)) {
+                id = getSecure();
+            }
+            if (StringUtils.isEmpty(id)) {
+                id = getSerial();
+            }
+        }catch (Exception e){
+            LogHelper.logException(e, "Build device id");
             id =StringUtils.EMPTY_STRING;
         }
         return id;
+    }
+
+    public static String getSerial(){
+        final TelephonyManager tm = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        final String tmDevice, tmSerial, tmPhone, androidId;
+        tmDevice = "" + tm.getDeviceId();
+        tmSerial = "" + tm.getSimSerialNumber();
+        androidId = "" + android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+        UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
+        return deviceUuid.toString();
     }
 
     public static String getSecure() {

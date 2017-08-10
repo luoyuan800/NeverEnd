@@ -29,8 +29,10 @@ public class Path {
     public static final String TASK_VERSION = "task_version";
     public static final String RETRIEVE_NEW_TASK = "retrieve_new_task";
     public static final String ADD_TASK = "add_task";
+    public static final String RETRIEVE_WAREHOUSE_LIST = "retrieve_warehouse_list";
     public static final String STORE_WAREHOUSE = "store_warehouse";
     public static final String RETRIEVE_BACK_WAREHOUSE = "retrieve_back_warehouse";
+    public static final String DOWNLOAD_APK = "download_apk";
     public static final String RETRIEVE_WAREHOUSE = "retrieve_warehouse";
     public static final String SUBMIT_HERO = "submit_hero";
     public static final String GET_BACK_HERO = "get_back_hero";

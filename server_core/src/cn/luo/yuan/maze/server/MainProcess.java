@@ -1,19 +1,7 @@
 package cn.luo.yuan.maze.server;
 
 import cn.luo.yuan.maze.exception.CribberException;
-import cn.luo.yuan.maze.model.Accessory;
-import cn.luo.yuan.maze.model.Element;
-import cn.luo.yuan.maze.model.ExchangeObject;
-import cn.luo.yuan.maze.model.GroupHolder;
-import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.model.IDModel;
-import cn.luo.yuan.maze.model.Index;
-import cn.luo.yuan.maze.model.Maze;
-import cn.luo.yuan.maze.model.Monster;
-import cn.luo.yuan.maze.model.Pet;
-import cn.luo.yuan.maze.model.SellItem;
-import cn.luo.yuan.maze.model.ServerData;
-import cn.luo.yuan.maze.model.ServerRecord;
+import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.dlc.DLCKey;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
 import cn.luo.yuan.maze.model.effect.Effect;
@@ -37,6 +25,7 @@ import cn.luo.yuan.maze.server.persistence.ExchangeTable;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
 import cn.luo.yuan.maze.server.persistence.MonsterTable;
 import cn.luo.yuan.maze.server.persistence.NPCTable;
+import cn.luo.yuan.maze.server.persistence.ReleaseManager;
 import cn.luo.yuan.maze.server.persistence.ShopTable;
 import cn.luo.yuan.maze.server.persistence.WarehouseTable;
 import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection;
@@ -92,6 +81,7 @@ public class MainProcess {
     private CribberTable cribber;
     private DLCTable dlcTable;
     private cn.luo.yuan.maze.utils.Random random = new Random(System.currentTimeMillis());
+    private ReleaseManager releaseManager;
 
     public MainProcess(String root) throws IOException, ClassNotFoundException {
         this.root = new File(root);
@@ -103,6 +93,7 @@ public class MainProcess {
         heroTable = new HeroTable(heroDir);
         userDb = new ObjectTable<User>(User.class, this.root);
         monsterTable = new MonsterTable(this.root);
+        releaseManager = new ReleaseManager(database, new File(root, "apk"));
         process = this;
         user = userDb.loadObject("root");
         if (user == null) {
@@ -382,6 +373,9 @@ public class MainProcess {
             }
         }, 0, user.getBattleInterval(), TimeUnit.MINUTES);
         executor.scheduleAtFixedRate(warehouseTable, 1, 1, TimeUnit.DAYS);
+        executor.scheduleAtFixedRate(warehouseTable.getAccessoryWH(), 100, 3000, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(warehouseTable.getPetWH(), 100, 3000, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(warehouseTable.getGoodsWH(), 100, 3000, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -392,6 +386,7 @@ public class MainProcess {
         executor.scheduleAtFixedRate(sceneTable, 111, 3000, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(userDb, 111, 300, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(heroTable.getDb(), 99, 200, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(heroTable, 1, 1, TimeUnit.DAYS);
         executor.scheduleAtFixedRate(exchangeTable.getExchangeDb(), 120, 200, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(monsterTable.getMonsterTable(), 120, 500, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(dlcTable.getMonsterDLCTable(), 525, 1500, TimeUnit.MILLISECONDS);
@@ -785,9 +780,11 @@ public class MainProcess {
         StringBuilder builder = new StringBuilder("{\"total\":").append(allHeroIds.size()).append(",\"rows\":[");
         for (String id : allHeroIds) {
             ServerRecord record = heroTable.getRecord(id);
-            String string = formatJson(record);
-            if(StringUtils.isNotEmpty(string)){
-                builder.append(string).append(",");
+            if(record.getData()!=null) {
+                String string = formatJson(record);
+                if (StringUtils.isNotEmpty(string)) {
+                    builder.append(string).append(",");
+                }
             }
         }
         builder.replace(builder.lastIndexOf(","), builder.length(), "");
@@ -801,6 +798,7 @@ public class MainProcess {
         if (record != null) {
             builder.append("\"id\":\"").append(record.getId()).append("\",");
             builder.append("\"Range\":").append(record.getRange()).append(",");
+            builder.append("\"limit\":").append(record.getRestoreLimit() - record.getDieCount()).append(",");
             builder.append("\"Submit\":").append(record.getSubmitDate()).append(",");
             builder.append("\"mac\":\"").append(record.getMac()).append("\",");
             if (record.getData() != null && record.getData().getHero() != null) {
@@ -971,5 +969,41 @@ public class MainProcess {
             return true;
         }
         return false;
+    }
+
+    public boolean storeIntoWarehouse(OwnedAble object){
+        ServerRecord record = heroTable.getRecord(object.getKeeperId());
+        if(record!=null && record.getDebris() > Data.WAREHOUSE_DEBRIS) {
+            warehouseTable.store(object);
+            record.setDebris(record.getDebris() - Data.WAREHOUSE_DEBRIS);
+            return true;
+        }
+        return false;
+    }
+
+    public OwnedAble deleteFromWarehouse(String id, int type, String ownerId){
+        OwnedAble object = warehouseTable.retrieve(id, type);
+        if(object!=null){
+            if(object.getKeeperId().equals(ownerId)){
+                return object;
+            }
+        }
+        return null;
+    }
+
+    public List<OwnedAble> warehouseList(String ownerId, int type){
+        return warehouseTable.retrieveAll(ownerId, type);
+    }
+
+    public String getLatestReleaseNotes(){
+        return releaseManager.getReleaseNotes();
+    }
+
+    public int getReleaseVersion(){
+        return releaseManager.getReleaseVersion();
+    }
+
+    public byte[] downloadApk(){
+        return releaseManager.getApk(getReleaseVersion());
     }
 }
