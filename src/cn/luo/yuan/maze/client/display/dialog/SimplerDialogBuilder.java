@@ -5,12 +5,27 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
+import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
+import cn.luo.yuan.maze.client.service.NeverEnd;
+import cn.luo.yuan.maze.client.utils.Resource;
+import cn.luo.yuan.maze.model.Accessory;
+import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.utils.Random;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
+
+import java.util.List;
 
 /**
  * Created by luoyuan on 2017/6/24.
@@ -166,5 +181,82 @@ public class SimplerDialogBuilder {
                 })
                 .show();
         return dialogBuilder;
+    }
+
+    public static Dialog showSelectLocalItemDialog(AdapterView.OnItemClickListener listener, NeverEnd context) {
+        View view = View.inflate(context.getContext(), R.layout.select_submit, null);
+        final RadioButton petR = (RadioButton) view.findViewById(R.id.pet_type);
+        final RadioButton accessoryR = (RadioButton) view.findViewById(R.id.accessory_type);
+        final RadioButton goodsR = (RadioButton) view.findViewById(R.id.goods_type);
+        final EditText key = (EditText) view.findViewById(R.id.key_text);
+        final LoadMoreListView list = (LoadMoreListView) view.findViewById(R.id.item_list);
+        list.setOnItemClickListener(listener);
+        petR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    accessoryR.setChecked(false);
+                    goodsR.setChecked(false);
+                    final PetAdapter adapter = new PetAdapter(context.getContext(), context.getDataManager(), key.getText().toString());
+                    list.setAdapter(adapter);
+                    list.setOnLoadListener(adapter);
+                    adapter.notifyDataSetChanged();
+                    key.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            adapter.setLimitKeyWord(s.toString());
+                        }
+                    });
+                }
+            }
+        });
+        accessoryR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    petR.setChecked(false);
+                    goodsR.setChecked(false);
+                    final StringAdapter<Accessory> adapter = new StringAdapter<>(context.getDataManager().loadAccessories(0, 100, key.getText().toString(), null));
+                    list.setAdapter(adapter);
+                    list.setOnLoadListener(new LoadMoreListView.OnRefreshLoadingMoreListener() {
+                        @Override
+                        public void onLoadMore(LoadMoreListView loadMoreListView) {
+                            List<Accessory> collection = context.getDataManager().loadAccessories(adapter.getCount(), 100, key.getText().toString(), null);
+                            if (collection.size() > 0) {
+                                adapter.getData().addAll(collection);
+                            } else {
+                                list.onLoadMoreComplete(true);
+                            }
+                        }
+                    });
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+        goodsR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    accessoryR.setChecked(false);
+                    petR.setChecked(false);
+                    StringAdapter<Goods> adapter = new StringAdapter<>(context.getDataManager().loadAllGoods());
+                    list.onLoadMoreComplete(true);
+                    list.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+        petR.setChecked(true);
+        return build(view, Resource.getString(R.string.close), null, context.getContext());
     }
 }

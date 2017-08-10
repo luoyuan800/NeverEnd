@@ -50,16 +50,12 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                                 } catch (Exception e) {
                                     defaultHandler.uncaughtException(thread, ex);
                                 }
+                                progress.dismiss();
+                                context.stopGame();
+                                android.os.Process.killProcess(android.os.Process.myPid());
+                                System.exit(1);
                             }
                         });
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        context.stopGame();
-                        android.os.Process.killProcess(android.os.Process.myPid());
-                        System.exit(1);
                     }
                 }, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
                     @Override

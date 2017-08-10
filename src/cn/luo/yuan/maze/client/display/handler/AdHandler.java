@@ -76,7 +76,6 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     @Override
     public void onADComplete(String s) {
-        context.handler.showToast("获得一个礼包");
         context.handler.addOnlineGift(1);
     }
 
@@ -92,7 +91,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     @Override
     public void onADAwardSuccess(String s) {
-        context.handler.showToast("获得一个礼包");
+        context.handler.showToast("获得一个礼包和一个碎片");
         context.handler.addOnlineGift(1);
     }
 

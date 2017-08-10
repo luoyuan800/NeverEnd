@@ -41,6 +41,7 @@ public class Monster extends HarmObject implements SilentAbleObject, NameObject,
     private List<Effect> containsEffects = new ArrayList<>(2);
     private long atkAddition;
     private long hpAddition;
+    private String desc;
 
     public long getUpperAtk(){
         return getAtk();
@@ -303,5 +304,13 @@ public class Monster extends HarmObject implements SilentAbleObject, NameObject,
 
     public String toString(){
         return "atk: " + StringUtils.formatNumber(getUpperAtk(), false) + ", def: " + StringUtils.formatNumber(getUpperDef(), false) + ", Hp: " + StringUtils.formatNumber(getUpperHp(), false);
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 }

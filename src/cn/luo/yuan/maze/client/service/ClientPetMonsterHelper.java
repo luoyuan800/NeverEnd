@@ -161,6 +161,7 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
                 }else{
                     clone.setColor(Data.DEFAULT_QUALITY_COLOR);
                 }
+                clone.setDesc(StringUtils.EMPTY_STRING);
             }
         }
         return clone;
@@ -169,6 +170,10 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
     public String getDescription(int index, String type) {
         if (index <= 0 && type == null) {
             return StringUtils.EMPTY_STRING;
+        }
+        Monster monster = monsterTable.load(String.valueOf(index));
+        if(monster!=null){
+            return monster.getDesc();
         }
         try (XmlResourceParser parser = control.getContext().getResources().getXml(R.xml.monsters)) {
             int monsterIndex = -1;

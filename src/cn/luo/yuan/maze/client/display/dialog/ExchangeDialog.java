@@ -69,7 +69,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                     Toast.makeText(context.getContext(), Html.fromHtml(item.toString()), Toast.LENGTH_SHORT).show();
                     break;
                 case 3:
-                    showSelectSubmitDialog();
+                    currentShowingDialog = SimplerDialogBuilder.showSelectLocalItemDialog(ExchangeDialog.this, context);
                     break;
                 case 1:
                     if (msg.obj instanceof List) {
@@ -404,83 +404,6 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
         handler.sendEmptyMessage(9);
 
         SimplerDialogBuilder.build(list, Resource.getString(R.string.close), null, context.getContext());
-    }
-
-    private void showSelectSubmitDialog() {
-        View view = View.inflate(context.getContext(), R.layout.select_submit, null);
-        final RadioButton petR = (RadioButton) view.findViewById(R.id.pet_type);
-        final RadioButton accessoryR = (RadioButton) view.findViewById(R.id.accessory_type);
-        final RadioButton goodsR = (RadioButton) view.findViewById(R.id.goods_type);
-        final EditText key = (EditText) view.findViewById(R.id.key_text);
-        final LoadMoreListView list = (LoadMoreListView) view.findViewById(R.id.item_list);
-        list.setOnItemClickListener(ExchangeDialog.this);
-        petR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    accessoryR.setChecked(false);
-                    goodsR.setChecked(false);
-                    final PetAdapter adapter = new PetAdapter(context.getContext(), context.getDataManager(), key.getText().toString());
-                    list.setAdapter(adapter);
-                    list.setOnLoadListener(adapter);
-                    adapter.notifyDataSetChanged();
-                    key.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                            adapter.setLimitKeyWord(s.toString());
-                        }
-                    });
-                }
-            }
-        });
-        accessoryR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    petR.setChecked(false);
-                    goodsR.setChecked(false);
-                    final StringAdapter<Accessory> adapter = new StringAdapter<>(context.getDataManager().loadAccessories(0, 100, key.getText().toString(), null));
-                    list.setAdapter(adapter);
-                    list.setOnLoadListener(new LoadMoreListView.OnRefreshLoadingMoreListener() {
-                        @Override
-                        public void onLoadMore(LoadMoreListView loadMoreListView) {
-                            List<Accessory> collection = context.getDataManager().loadAccessories(adapter.getCount(), 100, key.getText().toString(), null);
-                            if (collection.size() > 0) {
-                                adapter.getData().addAll(collection);
-                            } else {
-                                list.onLoadMoreComplete(true);
-                            }
-                        }
-                    });
-                    adapter.notifyDataSetChanged();
-                }
-            }
-        });
-        goodsR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    accessoryR.setChecked(false);
-                    petR.setChecked(false);
-                    StringAdapter<Goods> adapter = new StringAdapter<>(context.getDataManager().loadAllGoods());
-                    list.onLoadMoreComplete(true);
-                    list.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
-                }
-            }
-        });
-        petR.setChecked(true);
-        currentShowingDialog = SimplerDialogBuilder.build(view, Resource.getString(R.string.close), null, context.getContext());
     }
 
     private void showMyExchange() {

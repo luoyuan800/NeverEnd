@@ -79,11 +79,11 @@
                     android:background="@android:drawable/spinner_background"/>
 
             <Button
-                    android:text="观看广告,获取礼包"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/ad_show"
                     android:onClick="onClick"
+                    android:text="观看广告，获取奖励"
                     style="@android:style/Widget.Button.Inset"/>
 
             <Button
@@ -91,6 +91,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/online_shop"
+                    android:onClick="onClick"
+                    style="@android:style/Widget.Button.Inset"/>
+            <Button
+                    android:text="碎片商店"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/debris_shop"
+                    android:enabled="false"
                     android:onClick="onClick"
                     style="@android:style/Widget.Button.Inset"/>
 

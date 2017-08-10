@@ -5,23 +5,14 @@ import cn.luo.yuan.maze.client.utils.FileUtils;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.client.utils.RestConnection;
-import cn.luo.yuan.maze.model.Accessory;
-import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.model.Monster;
-import cn.luo.yuan.maze.model.SellItem;
-import cn.luo.yuan.maze.model.ServerData;
+import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.dlc.DLCKey;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
+import cn.luo.yuan.maze.persistence.serialize.ObjectDB;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -311,6 +302,55 @@ public class ServerService {
             }
         } catch (IOException e) {
             LogHelper.logException(e, "Query dlc list");
+        }
+        return false;
+    }
+
+    public String postDebrisCount(NeverEnd gameContext) {
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(GET_DEBRIS_COUNT, RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, gameContext.getHero().getId());
+            return server.connect(connection).toString();
+        } catch (Exception e) {
+            LogHelper.logException(e, "ServiceService->postOnlineGiftCount");
+        }
+        return null;
+    }
+
+    public boolean storeWarehouse(Serializable object, NeverEnd context){
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(STORE_WAREHOUSE, RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            return Field.RESPONSE_RESULT_SUCCESS.equals(server.connect(object,connection).toString());
+        } catch (Exception e) {
+            LogHelper.logException(e, "ServiceService->storeWarehouse");
+        }
+        return false;
+    }
+    public List<OwnedAble> queryWarehouse(int type, NeverEnd context){
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(RETRIEVE_WAREHOUSE_LIST, RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            connection.addRequestProperty(Field.EXPECT_TYPE, String.valueOf(type));
+            Object o  = server.connect(connection);
+            if(o instanceof List){
+                return (List<OwnedAble>) o;
+            }
+        } catch (Exception e) {
+            LogHelper.logException(e, "ServiceService->queryWarehouse");
+        }
+        return Collections.emptyList();
+    }
+    public boolean getBackWarehouse(String id, int type, NeverEnd context){
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(RETRIEVE_BACK_WAREHOUSE, RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
+            connection.addRequestProperty(Field.EXPECT_TYPE, String.valueOf(type));
+            return Field.RESPONSE_RESULT_SUCCESS.equals(server.connect(connection));
+
+        } catch (Exception e) {
+            LogHelper.logException(e, "ServiceService->queryWarehouse");
         }
         return false;
     }

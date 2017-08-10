@@ -1,10 +1,12 @@
 package cn.luo.yuan.maze.client.service;
 
+import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.dlc.DLCKey;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
 import cn.luo.yuan.maze.utils.StringUtils;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 /**
@@ -77,8 +79,11 @@ public class DLCManager {
     private void saveMonsterDlc(MonsterDLC dlc, BuyCallBack callBack) {
         if (dlc != null) {
             if (service.buyMonsterDlc(dlc.getId(), context)) {
-                for (Monster monster : dlc.getMonsters()) {
+                for (int i = 0; i < dlc.getMonsters().size(); i++) {
+                    Monster monster = dlc.getMonsters().get(i);
+                    byte[] imageByte = dlc.getImage().get(i);
                     context.getPetMonsterHelper().addSpecialMonster(monster);
+                    Resource.saveImageIntoAppFolder(String.valueOf(dlc.getId()),new ByteArrayInputStream(imageByte));
                 }
                 callBack.onBuySuccess(dlc);
             } else {

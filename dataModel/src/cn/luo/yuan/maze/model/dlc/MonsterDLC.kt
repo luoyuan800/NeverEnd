@@ -11,7 +11,7 @@ import java.io.Serializable
  * Copyright @Luo
  * Created by Gavin Luo on 8/8/2017.
  */
-class MonsterDLC : Serializable, IDModel, Cloneable {
+class MonsterDLC : DLC, Serializable, IDModel, Cloneable {
     override fun isDelete(): Boolean {
         return delete
     }
@@ -21,15 +21,18 @@ class MonsterDLC : Serializable, IDModel, Cloneable {
     }
 
     private var delete: Boolean = false
+
     companion object {
         private const val serialVersionUID = Field.SERVER_VERSION
     }
+
     val monsters = mutableListOf<Monster>()
+    val image = mutableListOf<ByteArray>()
     var desc = StringUtils.EMPTY_STRING
     var title = StringUtils.EMPTY_STRING
     var debrisCost = 0
 
-    override fun getId():String{
+    override fun getId(): String {
         return title
     }
 

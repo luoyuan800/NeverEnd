@@ -87,7 +87,7 @@ public class OnlineActivity extends Activity {
                     finish();
                 }
             }, this, gameContext.getRandom());
-        }catch (Exception e){
+        } catch (Exception e) {
             LogHelper.logException(e, "Show net error");
         }
     }
@@ -115,7 +115,7 @@ public class OnlineActivity extends Activity {
                             finish();
                         }
                     }).show();
-                }catch (Exception e){
+                } catch (Exception e) {
                     LogHelper.logException(e, "show upload Dialog");
                 }
             }
@@ -131,25 +131,30 @@ public class OnlineActivity extends Activity {
             @Override
             public void run() {
                 final String count = service.postOnlineGiftCount(gameContext);
-                if (StringUtils.isNotEmpty(count)) {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Button button = (Button) findViewById(R.id.online_gifts);
-                            button.setText("礼包 X" + count);
+                final String debris = service.postDebrisCount(gameContext);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (StringUtils.isNotEmpty(debris)) {
+                            Button debrisButton = (Button) findViewById(R.id.debris_shop);
+                            debrisButton.setText("碎片商店 X" + debris);
+                        }
+
+                        if (StringUtils.isNotEmpty(count)) {
+                            Button giftButton = (Button) findViewById(R.id.online_gifts);
+                            giftButton.setText("礼包 X" + count);
                             if (Integer.valueOf(count) <= 0) {
-                                button.setEnabled(false);
+                                giftButton.setEnabled(false);
                             } else {
-                                button.setEnabled(true);
+                                giftButton.setEnabled(true);
                             }
                         }
-                    });
-                }
+                    }
+                });
             }
         });
 
     }
-
 
 
     @Override

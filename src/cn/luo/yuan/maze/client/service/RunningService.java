@@ -209,7 +209,6 @@ public class RunningService implements RunningServiceInterface {
                                             pet.setHp(pet.getMaxHp());
                                         }
                                         maze.setLevel(1);
-                                        maze.setStep(0);
                                     }
                                     Log.d("maze", "Battle failed restore");
                                 }
