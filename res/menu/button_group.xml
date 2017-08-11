@@ -71,7 +71,7 @@
             android:icon="@android:drawable/ic_menu_share"
             android:title="分享"/>
     <item
-            android:visible="false"
+            android:visible="true"
             android:id="@+id/crash"
             android:icon="@android:drawable/ic_menu_share"
             android:title="测试"/>

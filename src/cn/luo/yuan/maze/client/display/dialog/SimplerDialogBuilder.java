@@ -183,7 +183,7 @@ public class SimplerDialogBuilder {
         return dialogBuilder;
     }
 
-    public static Dialog showSelectLocalItemDialog(AdapterView.OnItemClickListener listener, NeverEnd context) {
+    public static Dialog showSelectLocalItemDialog(AdapterView.OnItemClickListener listener, final NeverEnd context) {
         View view = View.inflate(context.getContext(), R.layout.select_submit, null);
         final RadioButton petR = (RadioButton) view.findViewById(R.id.pet_type);
         final RadioButton accessoryR = (RadioButton) view.findViewById(R.id.accessory_type);

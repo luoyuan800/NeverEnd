@@ -28,14 +28,13 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(final Thread thread, final Throwable ex) {
         LogHelper.logException(ex, "UnCatchException");
-        new Thread() {
+        context.getViewHandler().post(
+        new Runnable() {
             @Override
             public void run() {
-                Looper.prepare();
-                SimplerDialogBuilder.build("发生了未知的错误，是否上传数据供开发者分析（存档、错误日志、手机系统信息）？", Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                SimplerDialogBuilder.build("发生了未知的错误，是否上传数据供开发者分析（错误日志、手机系统信息）？", Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         final ProgressDialog progress = new ProgressDialog(context.getContext());
                         progress.setMessage("上传中……");
                         progress.show();
@@ -45,7 +44,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                                 try {
                                     String filePath = FileUtils.zipSaveFiles(context.getHero().getId() + "," + android.os.Build.MODEL + ","
                                             + Build.VERSION.SDK_INT + ","
-                                            + android.os.Build.VERSION.RELEASE, context.getContext(), true);
+                                            + android.os.Build.VERSION.RELEASE + ".zip" , context.getContext(), true);
                                     context.getServerService().uploadSaveFile(filePath);
                                 } catch (Exception e) {
                                     defaultHandler.uncaughtException(thread, ex);
@@ -64,8 +63,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                         defaultHandler.uncaughtException(thread, ex);
                     }
                 }, context.getContext());
-                Looper.loop();
             }
-        }.start();
+        });
     }
 }

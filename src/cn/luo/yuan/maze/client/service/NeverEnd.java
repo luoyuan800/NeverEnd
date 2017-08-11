@@ -85,9 +85,6 @@ public class NeverEnd extends Application implements InfoControlInterface {
             executor.shutdown();
             executor = null;
             dataManager.fuseCache();
-            dataManager = null;
-            petMonsterHelper = null;
-            accessoryHelper = null;
             started = false;
         } catch (Exception e) {
             LogHelper.logException(e, "stopGame");

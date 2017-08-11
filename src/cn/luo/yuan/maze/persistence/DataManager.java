@@ -112,7 +112,7 @@ public class DataManager implements DataManagerInterface {
     public List<Accessory> loadMountedAccessory(Hero hero) {
         List<Accessory> accessories = new ArrayList<>();
         for (Accessory accessory : accessoryLoader.loadAll()) {
-            if (accessory.getHeroIndex() == index && accessory.isMounted()) {
+            if (accessory!=null && accessory.getHeroIndex() == index && accessory.isMounted()) {
                 accessories.add(accessory);
             }
         }

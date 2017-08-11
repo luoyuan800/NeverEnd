@@ -56,7 +56,7 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
     }
 
     @Override
-    public void onDetailSuccess(MonsterDLC dlc) {
+    public void onDetailSuccess(final MonsterDLC dlc) {
         handler.post(new Runnable() {
             @Override
             public void run() {
