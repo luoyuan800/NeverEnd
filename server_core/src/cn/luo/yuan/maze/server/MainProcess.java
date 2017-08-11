@@ -70,7 +70,7 @@ public class MainProcess {
     public ObjectTable<Task> taskTable;
     public ObjectTable<Scene> sceneTable;
     public MonsterTable monsterTable;
-    public Set<GroupHolder> groups = Collections.synchronizedSet(new HashSet<>());
+    public Set<GroupHolder> groups = Collections.synchronizedSet(new HashSet<GroupHolder>());
     public HeroTable heroTable;
     public GameContext context = new GameContext();
     private ObjectTable<User> userDb;
@@ -93,7 +93,6 @@ public class MainProcess {
         heroTable = new HeroTable(heroDir);
         userDb = new ObjectTable<User>(User.class, this.root);
         monsterTable = new MonsterTable(this.root);
-        releaseManager = new ReleaseManager(database, new File(root, "apk"));
         process = this;
         user = userDb.loadObject("root");
         if (user == null) {
@@ -360,6 +359,7 @@ public class MainProcess {
             } catch (Exception e) {
                 LogHelper.error(e);
             }
+            releaseManager = new ReleaseManager(database, new File(root, "apk"));
         }
         dlcTable = new DLCTable(this);
         executor.scheduleAtFixedRate(new Runnable() {
@@ -681,8 +681,8 @@ public class MainProcess {
                         type = Field.HAT_TYPE;
                         break;
                 }
-                if (Boolean.parseBoolean(nameToken.getValue("isConform"))) {
-                    accessories.add(addAccessory(nameToken.getValue("name"), nameToken.getValue("desc"), type, nameToken.getValue("userName"), effectString.toArray(new String[effectString.size()])));
+                if (Boolean.parseBoolean(nameToken.<String>getValue("isConform"))) {
+                    accessories.add(addAccessory(nameToken.<String>getValue("name"), nameToken.<String>getValue("desc"), type, nameToken.<String>getValue("userName"), effectString.toArray(new String[effectString.size()])));
                 }
             }catch (Exception e){
                 LogHelper.error(e);
@@ -996,14 +996,23 @@ public class MainProcess {
     }
 
     public String getLatestReleaseNotes(){
+        if(releaseManager!=null)
         return releaseManager.getReleaseNotes();
+        else
+            return StringUtils.EMPTY_STRING;
     }
 
-    public int getReleaseVersion(){
-        return releaseManager.getReleaseVersion();
+    public int getReleaseVersion() {
+        if (releaseManager != null)
+            return releaseManager.getReleaseVersion();
+        else return 0;
     }
 
     public byte[] downloadApk(){
-        return releaseManager.getApk(getReleaseVersion());
+        if(releaseManager!=null) {
+            return releaseManager.getApk(getReleaseVersion());
+        }else{
+            return new byte[0];
+        }
     }
 }

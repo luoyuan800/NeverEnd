@@ -105,10 +105,37 @@ public class SimplerDialogBuilder {
                 .setPositiveButton(positiveStr, positive).setNegativeButton(negativeStr, negative).show();
     }
 
-    public static AlertDialog build(View view, String positiveStr, DialogInterface.OnClickListener positive,
+    public static Dialog build(View view, String positiveStr, DialogInterface.OnClickListener positive,
                                     String negativeStr, DialogInterface.OnClickListener negative, Context context) {
-        return new AlertDialog.Builder(context).setView(view)
-                .setPositiveButton(positiveStr, positive).setNegativeButton(negativeStr, negative).show();
+        final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
+        dialogBuilder
+                .withDialogColor(Color.WHITE)
+                .setCustomView(view, context)                   //.withMessage(null)  no Msg
+                .withButton1Text(positiveStr)                                      //def gone
+                .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
+                .setButton1Click(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(positive!=null){
+                            positive.onClick(dialogBuilder, 1);
+                        }else{
+                            dialogBuilder.dismiss();
+                        }
+                    }
+                })
+                .withButton2Text(negativeStr)
+                .setButton2Click(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(negative!=null){
+                            negative.onClick(dialogBuilder, 2);
+                        }else{
+                            dialogBuilder.dismiss();
+                        }
+                    }
+                })
+                .show();
+        return dialogBuilder;
     }
 
     public static AlertDialog build(String msg, Context context, boolean lazy) {

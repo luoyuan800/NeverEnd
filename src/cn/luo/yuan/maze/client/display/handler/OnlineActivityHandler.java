@@ -70,4 +70,14 @@ public class OnlineActivityHandler extends Handler {
             }
         });
     }
+
+    public void addDebris(final int count) {
+        onlineActivity.executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                onlineActivity.service.addDebris(onlineActivity.gameContext, count);
+                onlineActivity.postGiftCount();
+            }
+        });
+    }
 }

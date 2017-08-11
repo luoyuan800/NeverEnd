@@ -4,9 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
@@ -26,40 +24,122 @@ public class WarehouseDialog implements AdapterView.OnItemClickListener, View.On
     private NeverEnd context;
     private ServerService service;
     private Handler handler = new Handler();
+    private ProgressDialog progressDialog;
+
+    private void closeProgressDialog(){
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if(progressDialog!=null && progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                }
+            }
+        });
+    }
     public WarehouseDialog(NeverEnd context){
         this.context = context;
+        progressDialog = new ProgressDialog(context.getContext());
+        service = new ServerService(context);
     }
 
     public void show(){
-        ProgressDialog progressDialog = new ProgressDialog(context.getContext());
-        progressDialog.show();
-        context.getExecutor().execute(new Runnable() {
+        final View view = View.inflate(context.getContext(), R.layout.select_submit, null);
+        final RadioButton petType = (RadioButton)view.findViewById(R.id.pet_type);
+        final RadioButton accessoryType = (RadioButton)view.findViewById(R.id.accessory_type);
+        final RadioButton goodsType = (RadioButton)view.findViewById(R.id.goods_type);
+        petType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void run() {
-                final List<OwnedAble> ownedAbleList = service.queryWarehouse(Field.PET_TYPE, context);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    accessoryType.setChecked(false);
+                    goodsType.setChecked(false);
+                    progressDialog.show();
+                    context.getExecutor().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            final List<OwnedAble> ownedAbleList = service.queryWarehouse(Field.PET_TYPE, context);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    LoadMoreListView list = (LoadMoreListView) view.findViewById(R.id.item_list);
+                                    StringAdapter<OwnedAble> adapter = new StringAdapter<>(ownedAbleList);
+                                    list.setAdapter(adapter);
+                                    adapter.notifyDataSetChanged();
+                                    progressDialog.dismiss();
+                                }
+                            });
+
+                        }
+                    });
+                }
+            }
+        });
+        goodsType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    accessoryType.setChecked(false);
+                    petType.setChecked(false);
+                    progressDialog.show();
+                    context.getExecutor().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            final List<OwnedAble> ownedAbleList = service.queryWarehouse(Field.GOODS_TYPE, context);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    LoadMoreListView list = (LoadMoreListView) view.findViewById(R.id.item_list);
+                                    StringAdapter<OwnedAble> adapter = new StringAdapter<>(ownedAbleList);
+                                    list.setAdapter(adapter);
+                                    adapter.notifyDataSetChanged();
+                                    progressDialog.dismiss();
+                                }
+                            });
+
+                        }
+                    });
+                }
+            }
+        });
+        accessoryType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    goodsType.setChecked(false);
+                    petType.setChecked(false);
+                    progressDialog.show();
+                    context.getExecutor().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            final List<OwnedAble> ownedAbleList = service.queryWarehouse(Field.ACCESSORY_TYPE, context);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    LoadMoreListView list = (LoadMoreListView) view.findViewById(R.id.item_list);
+                                    StringAdapter<OwnedAble> adapter = new StringAdapter<>(ownedAbleList);
+                                    list.setAdapter(adapter);
+                                    adapter.notifyDataSetChanged();
+                                    progressDialog.dismiss();
+                                }
+                            });
+
+                        }
+                    });
+                }
+            }
+        });
+        petType.setChecked(true);
+        SimplerDialogBuilder.build(view, "上传", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        View view = View.inflate(context.getContext(), R.layout.select_submit, null);
-                        LoadMoreListView list = (LoadMoreListView) view.findViewById(R.id.item_list);
-                        StringAdapter<OwnedAble> adapter = new StringAdapter<>(ownedAbleList);
-                        adapter.setOnClickListener(WarehouseDialog.this);
-                        list.setAdapter(adapter);
-                        SimplerDialogBuilder.build(view, "上传", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        SimplerDialogBuilder.showSelectLocalItemDialog(WarehouseDialog.this, context);
-                                    }
-                                });
-                            }
-                        }, "关闭", null, context.getContext());
+                        SimplerDialogBuilder.showSelectLocalItemDialog(WarehouseDialog.this, context);
                     }
                 });
             }
-        });
+        }, "关闭", null, context.getContext());
 
     }
 
@@ -67,11 +147,17 @@ public class WarehouseDialog implements AdapterView.OnItemClickListener, View.On
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Object object = parent.getItemAtPosition(position);
         if(object instanceof Serializable){
-            if(service.storeWarehouse((Serializable) object,context)){
-                context.showToast("%s存储成功", object instanceof NameObject ? ((NameObject) object).getDisplayName(): "");
-            }else{
-                context.showToast("碎片数量不足，需要%d块片", Data.WAREHOUSE_DEBRIS);
-            }
+            context.getExecutor().execute(new Runnable() {
+                @Override
+                public void run() {
+                    if(service.storeWarehouse((Serializable) object,context)){
+                        context.showToast("%s存储成功", object instanceof NameObject ? ((NameObject) object).getDisplayName(): "");
+                    }else{
+                        context.showToast("碎片数量不足，需要%d块片", Data.WAREHOUSE_DEBRIS);
+                    }
+                }
+            });
+
         }
     }
 

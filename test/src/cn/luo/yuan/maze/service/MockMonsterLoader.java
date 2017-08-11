@@ -24,6 +24,11 @@ public class MockMonsterLoader implements MonsterLoader {
     }
 
     @Override
+    public void addSpecialMonster(Monster monster) {
+
+    }
+
+    @Override
     public void init() {
 
     }

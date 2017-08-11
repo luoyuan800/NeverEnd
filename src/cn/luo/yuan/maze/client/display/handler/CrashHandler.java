@@ -1,7 +1,9 @@
 package cn.luo.yuan.maze.client.display.handler;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Looper;
 import cn.luo.yuan.maze.R;
@@ -28,42 +30,19 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(final Thread thread, final Throwable ex) {
         LogHelper.logException(ex, "UnCatchException");
-        context.getViewHandler().post(
-        new Runnable() {
+        new Thread() {
             @Override
             public void run() {
-                SimplerDialogBuilder.build("发生了未知的错误，是否上传数据供开发者分析（错误日志、手机系统信息）？", Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        final ProgressDialog progress = new ProgressDialog(context.getContext());
-                        progress.setMessage("上传中……");
-                        progress.show();
-                        context.getExecutor().execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    String filePath = FileUtils.zipSaveFiles(context.getHero().getId() + "," + android.os.Build.MODEL + ","
-                                            + Build.VERSION.SDK_INT + ","
-                                            + android.os.Build.VERSION.RELEASE + ".zip" , context.getContext(), true);
-                                    context.getServerService().uploadSaveFile(filePath);
-                                } catch (Exception e) {
-                                    defaultHandler.uncaughtException(thread, ex);
-                                }
-                                progress.dismiss();
-                                context.stopGame();
-                                android.os.Process.killProcess(android.os.Process.myPid());
-                                System.exit(1);
-                            }
-                        });
-                    }
-                }, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        context.stopGame();
-                        defaultHandler.uncaughtException(thread, ex);
-                    }
-                }, context.getContext());
+                Looper.prepare();
+                SharedPreferences sp = context.getContext().getSharedPreferences("mark", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putBoolean("exception", true);
+                editor.apply();
+
+                SimplerDialogBuilder.build("发生了未知的错误，请重启游戏！", Resource.getString(R.string.conform),
+                        (DialogInterface.OnClickListener) null,context.getContext(), null);
+                Looper.loop();
             }
-        });
+        }.start();
     }
 }

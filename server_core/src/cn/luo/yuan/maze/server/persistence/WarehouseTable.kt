@@ -50,9 +50,7 @@ class WarehouseTable(root:File):Runnable{
 
     fun retrieveAll(keeperId:String):List<OwnedAble>{
         val res = mutableListOf<OwnedAble>();
-        for(obj in petWH.loadAll()){
-            filter(keeperId, obj, res)
-        }
+        res.addAll(petWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId})
         res.addAll(accessoryWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId})
         res.addAll(goodsWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId})
 
@@ -66,9 +64,8 @@ class WarehouseTable(root:File):Runnable{
             Field.ACCESSORY_TYPE -> accessoryWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId}
             Field.GOODS_TYPE -> goodsWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId}
         }
-        for(obj in petWH.loadAll()){
-            filter(keeperId, obj, res)
-        }
+        res.addAll(petWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId})
+
         res.addAll(accessoryWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId})
         res.addAll(goodsWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId})
 

@@ -93,6 +93,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     public void onADAwardSuccess(String s) {
         context.handler.showToast("获得一个礼包和一个碎片");
         context.handler.addOnlineGift(1);
+        context.handler.addDebris(1);
     }
 
     @Override

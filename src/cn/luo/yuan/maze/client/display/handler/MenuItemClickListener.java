@@ -48,6 +48,9 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.warehouse:
+                new WarehouseDialog(control).show();
+                break;
             case R.id.accessory:
                 new AccessoriesDialog(control, new AccessoriesDialog.OnAccessoryChangeListener() {
                     @Override

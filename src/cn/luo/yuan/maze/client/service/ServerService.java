@@ -212,6 +212,17 @@ public class ServerService {
         }
     }
 
+    public void addDebris(NeverEnd context, int count) {
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(ADD_DEBRIS, RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            connection.addRequestProperty(Field.COUNT, String.valueOf(count));
+            server.connect(connection);
+        } catch (Exception e) {
+            LogHelper.logException(e, "ServiceService->addDebris");
+        }
+    }
+
     public String uploadSaveFile(String fileName) {
         File file = new File(fileName);
         if (file.exists()) {

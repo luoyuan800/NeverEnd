@@ -15,6 +15,7 @@ public class NeverEndConfig implements IDModel, Serializable {
     private String version;
     private String head;
     private String sign;
+    private boolean exception;
 
     @Override
     public boolean isDelete() {
@@ -66,5 +67,13 @@ public class NeverEndConfig implements IDModel, Serializable {
 
     public void setSign(String sign) {
         this.sign = sign;
+    }
+
+    public void setException(boolean exception) {
+        this.exception = exception;
+    }
+
+    public boolean isException() {
+        return exception;
     }
 }

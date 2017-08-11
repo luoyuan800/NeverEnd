@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Environment;
 import cn.luo.yuan.maze.model.ExchangeObject;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
+import cn.luo.yuan.maze.utils.Field;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -73,6 +74,12 @@ public class FileUtils {
             entry = zis.getNextEntry();
         }
         saveFile.deleteOnExit();
+    }
+
+    public static void clearLog(){
+        for(File file : LogHelper.getLogs()){
+            file.deleteOnExit();
+        }
     }
 
     public static String zipSaveFiles(String uuid, Context context, boolean containLogs) {
@@ -153,5 +160,9 @@ public class FileUtils {
             }
         }
         return name;
+    }
+
+    public static void deleteFile(String filePath) {
+        new File(filePath).deleteOnExit();
     }
 }

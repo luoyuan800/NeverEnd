@@ -1,17 +1,19 @@
 package cn.luo.yuan.maze.client.display.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
-import cn.luo.yuan.maze.client.display.dialog.ClickSkillDialog;
 import cn.luo.yuan.maze.client.display.dialog.GiftDialog;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
+import cn.luo.yuan.maze.client.service.ServerService;
+import cn.luo.yuan.maze.client.utils.FileUtils;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.persistence.IndexManager;
@@ -116,6 +118,33 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
         });
     }
 
+
+    public void showUploadException(){
+        SharedPreferences sp = this.getSharedPreferences("mark", MODE_PRIVATE);
+        if(sp.getBoolean("exception", false)){
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putBoolean("exception", false);
+            editor.apply();
+            SimplerDialogBuilder.build("上一次运行游戏发生了错误，是否上传错误信息？", getString(R.string.conform), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String filePath = FileUtils.zipSaveFiles(android.os.Build.MODEL + ","
+                                    + Build.VERSION.SDK_INT + ","
+                                    + android.os.Build.VERSION.RELEASE + ".zip" , SelectedActivity.this, true);
+
+                            new ServerService(getVersion()).uploadSaveFile(filePath);
+                            FileUtils.clearLog();
+                            FileUtils.deleteFile(filePath);
+                        }
+                    }).start();
+                }
+            }, getString(R.string.close), null, this);
+        }
+    }
     @Override
     public void onClick(View v) {
         Object o = v.getTag(R.string.item);
