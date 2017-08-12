@@ -48,6 +48,8 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
         pet.setSecondName(monster.getSecondName());
         pet.setOwnerId(hero.getId());
         pet.setOwnerName(hero.getName());
+        pet.setKeeperId(hero.getId());
+        pet.setKeeperName(hero.getName());
         return pet;
     }
 

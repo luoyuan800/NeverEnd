@@ -41,9 +41,9 @@ class WarehouseTable(root:File):Runnable{
 
     fun retrieve(id:String, type:Int): OwnedAble? {
         when(type){
-            Field.PET_TYPE -> petWH.loadObject(id)
-            Field.ACCESSORY_TYPE  -> accessoryWH.loadObject(id)
-            Field.GOODS_TYPE -> goodsWH.loadObject(id)
+            Field.PET_TYPE -> return petWH.loadObject(id)
+            Field.ACCESSORY_TYPE  -> return accessoryWH.loadObject(id)
+            Field.GOODS_TYPE -> return goodsWH.loadObject(id)
         }
         return null
     }
@@ -60,15 +60,10 @@ class WarehouseTable(root:File):Runnable{
     fun retrieveAll(keeperId:String, type:Int):List<OwnedAble>{
         val res = mutableListOf<OwnedAble>();
         when(type){
-            Field.PET_TYPE -> petWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId }
-            Field.ACCESSORY_TYPE -> accessoryWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId}
-            Field.GOODS_TYPE -> goodsWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId}
+            Field.PET_TYPE -> res.addAll(petWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId })
+            Field.ACCESSORY_TYPE -> res.addAll(accessoryWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId})
+            Field.GOODS_TYPE -> res.addAll(goodsWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId})
         }
-        res.addAll(petWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId})
-
-        res.addAll(accessoryWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId})
-        res.addAll(goodsWH.loadAll().filter { it is OwnedAble && it.keeperId == keeperId})
-
         return res;
     }
 

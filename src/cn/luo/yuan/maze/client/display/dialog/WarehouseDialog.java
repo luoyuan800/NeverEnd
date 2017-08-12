@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.client.display.dialog;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Handler;
@@ -25,14 +26,16 @@ public class WarehouseDialog implements AdapterView.OnItemClickListener, View.On
     private ServerService service;
     private Handler handler = new Handler();
     private ProgressDialog progressDialog;
+    private Dialog dialog;
 
-    private void closeProgressDialog(){
+    private void dismiss(){
         handler.post(new Runnable() {
             @Override
             public void run() {
                 if(progressDialog!=null && progressDialog.isShowing()){
                     progressDialog.dismiss();
                 }
+                dialog.dismiss();
             }
         });
     }
@@ -63,6 +66,7 @@ public class WarehouseDialog implements AdapterView.OnItemClickListener, View.On
                                 public void run() {
                                     LoadMoreListView list = (LoadMoreListView) view.findViewById(R.id.item_list);
                                     StringAdapter<OwnedAble> adapter = new StringAdapter<>(ownedAbleList);
+                                    adapter.setOnClickListener(WarehouseDialog.this);
                                     list.setAdapter(adapter);
                                     adapter.notifyDataSetChanged();
                                     progressDialog.dismiss();
@@ -90,6 +94,7 @@ public class WarehouseDialog implements AdapterView.OnItemClickListener, View.On
                                 public void run() {
                                     LoadMoreListView list = (LoadMoreListView) view.findViewById(R.id.item_list);
                                     StringAdapter<OwnedAble> adapter = new StringAdapter<>(ownedAbleList);
+                                    adapter.setOnClickListener(WarehouseDialog.this);
                                     list.setAdapter(adapter);
                                     adapter.notifyDataSetChanged();
                                     progressDialog.dismiss();
@@ -117,6 +122,7 @@ public class WarehouseDialog implements AdapterView.OnItemClickListener, View.On
                                 public void run() {
                                     LoadMoreListView list = (LoadMoreListView) view.findViewById(R.id.item_list);
                                     StringAdapter<OwnedAble> adapter = new StringAdapter<>(ownedAbleList);
+                                    adapter.setOnClickListener(WarehouseDialog.this);
                                     list.setAdapter(adapter);
                                     adapter.notifyDataSetChanged();
                                     progressDialog.dismiss();
@@ -129,12 +135,13 @@ public class WarehouseDialog implements AdapterView.OnItemClickListener, View.On
             }
         });
         petType.setChecked(true);
-        SimplerDialogBuilder.build(view, "上传", new DialogInterface.OnClickListener() {
+        dialog = SimplerDialogBuilder.build(view, "上传", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        dialog.dismiss();
                         SimplerDialogBuilder.showSelectLocalItemDialog(WarehouseDialog.this, context);
                     }
                 });
@@ -145,12 +152,18 @@ public class WarehouseDialog implements AdapterView.OnItemClickListener, View.On
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Object object = parent.getItemAtPosition(position);
+        final Object object = parent.getItemAtPosition(position);
         if(object instanceof Serializable){
             context.getExecutor().execute(new Runnable() {
                 @Override
                 public void run() {
                     if(service.storeWarehouse((Serializable) object,context)){
+                        context.getDataManager().delete((Serializable) object);
+                        Object adapter = parent.getAdapter();
+                        if(adapter instanceof StringAdapter){
+                            ((StringAdapter) adapter).getData().remove(object);
+                            ((StringAdapter) adapter).notifyDataSetChanged();
+                        }
                         context.showToast("%s存储成功", object instanceof NameObject ? ((NameObject) object).getDisplayName(): "");
                     }else{
                         context.showToast("碎片数量不足，需要%d块片", Data.WAREHOUSE_DEBRIS);
@@ -165,14 +178,21 @@ public class WarehouseDialog implements AdapterView.OnItemClickListener, View.On
     public void onClick(View v) {
         Object object = v.getTag(R.string.item);
         if(object instanceof IDModel){
-            context.getDataManager().add((IDModel) object);
-            if(service.getBackWarehouse(((IDModel) object).getId(),
-                    (object instanceof Pet ? Field.PET_TYPE : ( object instanceof Accessory ? Field.ACCESSORY_TYPE : Field.GOODS_TYPE)),
-                    context)){
-                context.showToast("取回了 %s",object instanceof NameObject ? ((NameObject) object).getDisplayName(): "" );
-            }else{
-                context.showToast("无法取回，稍后再试");
-            }
+            context.getExecutor().execute(new Runnable() {
+                @Override
+                public void run() {
+                    if(service.getBackWarehouse(((IDModel) object).getId(),
+                            (object instanceof Pet ? Field.PET_TYPE : ( object instanceof Accessory ? Field.ACCESSORY_TYPE : Field.GOODS_TYPE)),
+                            context)){
+                        context.showToast("取回了 %s",object instanceof NameObject ? ((NameObject) object).getDisplayName(): "" );
+                        context.getDataManager().add((IDModel) object);
+                        dismiss();
+                    }else{
+                        context.showToast("无法取回，稍后再试");
+                    }
+                }
+            });
+
         }
     }
 }

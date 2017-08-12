@@ -55,11 +55,11 @@ abstract class Goods : Serializable, IDModel, OwnedAble, Cloneable {
     }
 
     override fun setKeeperName(name: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun setOwnerName(name: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun setKeeperId(id: String) {

@@ -330,9 +330,14 @@ public class ServerService {
 
     public boolean storeWarehouse(Serializable object, NeverEnd context){
         try {
+            if(object instanceof OwnedAble){
+                ((OwnedAble) object).setKeeperId(context.getHero().getId());
+                ((OwnedAble) object).setKeeperName(context.getHero().getName());
+            }
             HttpURLConnection connection = server.getHttpURLConnection(STORE_WAREHOUSE, RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
-            return Field.RESPONSE_RESULT_SUCCESS.equals(server.connect(object,connection).toString());
+            Object connect = server.connect(object, connection);
+            return Field.RESPONSE_RESULT_SUCCESS.equals(connect.toString());
         } catch (Exception e) {
             LogHelper.logException(e, "ServiceService->storeWarehouse");
         }
@@ -358,7 +363,8 @@ public class ServerService {
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
             connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
             connection.addRequestProperty(Field.EXPECT_TYPE, String.valueOf(type));
-            return Field.RESPONSE_RESULT_SUCCESS.equals(server.connect(connection));
+            Object connect = server.connect(connection);
+            return Field.RESPONSE_RESULT_SUCCESS.equals(connect);
 
         } catch (Exception e) {
             LogHelper.logException(e, "ServiceService->queryWarehouse");

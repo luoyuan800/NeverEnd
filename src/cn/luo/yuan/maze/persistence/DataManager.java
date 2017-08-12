@@ -5,15 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
-import cn.luo.yuan.maze.model.Accessory;
-import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.Element;
-import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.model.IDModel;
-import cn.luo.yuan.maze.model.Index;
-import cn.luo.yuan.maze.model.Maze;
-import cn.luo.yuan.maze.model.NeverEndConfig;
-import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.GoodsProperties;
 import cn.luo.yuan.maze.model.skill.Skill;
@@ -390,7 +382,8 @@ public class DataManager implements DataManagerInterface {
         } else if (object instanceof Accessory) {
             accessoryLoader.delete(((Accessory) object).getId());
         } else if (object instanceof Goods) {
-            ((Goods) object).setCount(((Goods) object).getCount() - 1);
+            ((Goods) object).setCount(0);
+            goodsLoader.save((Goods) object);
         } else if (object instanceof Skill) {
             skillLoader.delete(((Skill) object).getId());
         } else if (object instanceof ClickSkill) {
@@ -400,6 +393,11 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void save(IDModel object) {
+        if(object instanceof OwnedAble){
+            Hero hero = loadHero();
+            ((OwnedAble) object).setKeeperName(hero.getName());
+            ((OwnedAble) object).setKeeperId(hero.getId());
+        }
         if (object instanceof Skill) {
             saveSkill((Skill) object);
         }

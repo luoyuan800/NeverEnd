@@ -985,6 +985,7 @@ public class MainProcess {
         OwnedAble object = warehouseTable.retrieve(id, type);
         if(object!=null){
             if(object.getKeeperId().equals(ownerId)){
+                warehouseTable.delete(object);
                 return object;
             }
         }

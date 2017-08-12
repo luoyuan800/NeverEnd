@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.client.service;
 
 import android.app.Application;
 import android.content.Context;
+import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
 import cn.luo.yuan.maze.R;
@@ -209,7 +210,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
         getViewHandler().post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(context, String.format(format, args), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, Html.fromHtml(String.format(format, args)), Toast.LENGTH_SHORT).show();
             }
         });
     }
