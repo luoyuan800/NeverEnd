@@ -780,7 +780,7 @@ public class MainProcess {
         StringBuilder builder = new StringBuilder("{\"total\":").append(allHeroIds.size()).append(",\"rows\":[");
         for (String id : allHeroIds) {
             ServerRecord record = heroTable.getRecord(id);
-            if(record.getData()!=null) {
+            if(record!=null && record.getData()!=null) {
                 String string = formatJson(record);
                 if (StringUtils.isNotEmpty(string)) {
                     builder.append(string).append(",");
