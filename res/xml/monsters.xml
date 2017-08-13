@@ -56,6 +56,57 @@
         <evolution>55</evolution>
     </monster>
     <monster>
+        <index>32</index>
+        <meet meet_rate="40" min_level="150"/>
+        <name>骷髅</name>
+        <desc>迷宫中的死神，据说被迷宫制造者赋予了管理迷宫生物生死的权利，但是在迷宫制造者消失之后，它们就变成了暴虐的怪物。
+        </desc>
+        <atk>120</atk>
+        <def>254</def>
+        <hp>200</hp>
+        <hit>10</hit>
+        <silent>10</silent>
+        <egg_rate>5</egg_rate>
+        <pet_rate>28</pet_rate>
+        <sex>-1</sex>
+        <race>Ghosr</race>
+        <rank>2</rank>
+    </monster>
+    <monster>
+        <index>27</index>
+        <meet meet_rate="40" min_level="250"/>
+        <name>僵尸童</name>
+        <desc>并不是所有的僵尸都是腐烂的尸体，这些僵尸具有可爱的外表，并且攻击力也很低。似乎是一种纯粹卖萌的怪物。
+        </desc>
+        <atk>20</atk>
+        <def>89</def>
+        <hp>90</hp>
+        <hit>0</hit>
+        <silent>30</silent>
+        <egg_rate>1</egg_rate>
+        <pet_rate>38</pet_rate>
+        <sex>-1</sex>
+        <race>Ghosr</race>
+        <rank>2</rank>
+    </monster>
+    <monster>
+        <index>28</index>
+        <meet meet_rate="40" min_level="250"/>
+        <name>僵尸战士</name>
+        <desc>攻击里超高，防御却很低的怪物。
+        </desc>
+        <atk>220</atk>
+        <def>19</def>
+        <hp>190</hp>
+        <hit>20</hit>
+        <silent>10</silent>
+        <egg_rate>1</egg_rate>
+        <pet_rate>18</pet_rate>
+        <sex>-1</sex>
+        <race>Ghosr</race>
+        <rank>3</rank>
+    </monster>
+    <monster>
         <index>55</index>
         <meet meet_rate="50" min_level="80"/>
         <name>树精</name>
@@ -70,6 +121,42 @@
         <pet_rate>5</pet_rate>
         <sex>1</sex>
         <race>Wizardsr</race>
+        <rank>3</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>29</index>
+        <meet meet_rate="30" min_level="880"/>
+        <name>怨魂</name>
+        <desc>据说是那些被离去玩家抛弃的勇者们默默死亡后变成的幽灵。它们在不断寻找那些抛弃它们的人。
+        </desc>
+        <atk>250</atk>
+        <def>11</def>
+        <hp>181</hp>
+        <hit>2</hit>
+        <silent>40</silent>
+        <egg_rate>1</egg_rate>
+        <pet_rate>26</pet_rate>
+        <sex>-1</sex>
+        <race>Ghosr</race>
+        <rank>2</rank>
+        <evolution>429</evolution>
+    </monster>
+    <monster>
+        <index>429</index>
+        <meet meet_rate="30" min_level="880"/>
+        <name>幽魂</name>
+        <desc>据说是那些被离去玩家抛弃的勇者们默默死亡后变成的幽灵。它们在不断寻找那些抛弃它们的人。
+        </desc>
+        <atk>230</atk>
+        <def>111</def>
+        <hp>101</hp>
+        <hit>21</hit>
+        <silent>40</silent>
+        <egg_rate>1</egg_rate>
+        <pet_rate>15</pet_rate>
+        <sex>-1</sex>
+        <race>Ghosr</race>
         <rank>3</rank>
         <evolution></evolution>
     </monster>

@@ -32,4 +32,6 @@ public interface InfoControlInterface {
     long resetSkill(@NotNull SkillParameter sp);
 
     void showPopup(String msg);
+
+    void postTaskInUIThread(Runnable task);
 }

@@ -70,4 +70,9 @@ public class GameContext implements InfoControlInterface{
     public void showPopup(String msg) {
 
     }
+
+    @Override
+    public void postTaskInUIThread(Runnable task) {
+
+    }
 }

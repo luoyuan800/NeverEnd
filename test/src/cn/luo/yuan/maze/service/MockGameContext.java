@@ -72,4 +72,9 @@ public class MockGameContext implements InfoControlInterface {
     public void showPopup(String msg) {
 
     }
+
+    @Override
+    public void postTaskInUIThread(Runnable task) {
+
+    }
 }

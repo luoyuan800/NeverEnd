@@ -53,6 +53,11 @@ public class NeverEnd extends Application implements InfoControlInterface {
     private TaskManager taskManager;
     private boolean started = false;
 
+    @Override
+    public void postTaskInUIThread(Runnable task) {
+        getViewHandler().post(task);
+    }
+
     public NeverEnd() {
     }
 

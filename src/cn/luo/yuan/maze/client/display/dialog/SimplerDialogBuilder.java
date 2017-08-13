@@ -46,7 +46,7 @@ public class SimplerDialogBuilder {
                 .setButton1Click(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(posiv!=null) {
+                        if (posiv != null) {
                             posiv.onClick(dialogBuilder, DialogInterface.BUTTON_POSITIVE);
                         }
                         dialogBuilder.dismiss();
@@ -55,6 +55,7 @@ public class SimplerDialogBuilder {
                 .show();
         return dialogBuilder;
     }
+
     public static Dialog build(String msg, String posivStr, Context context, Random random) {
         final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
         if (random != null) {
@@ -76,6 +77,7 @@ public class SimplerDialogBuilder {
                 .show();
         return dialogBuilder;
     }
+
     public static Dialog build(String msg, String title, String posivStr, Context context, Random random) {
         final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
         if (random != null) {
@@ -106,7 +108,7 @@ public class SimplerDialogBuilder {
     }
 
     public static Dialog build(View view, String positiveStr, DialogInterface.OnClickListener positive,
-                                    String negativeStr, DialogInterface.OnClickListener negative, Context context) {
+                               String negativeStr, DialogInterface.OnClickListener negative, Context context) {
         final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
         dialogBuilder
                 .withDialogColor(Color.WHITE)
@@ -116,9 +118,9 @@ public class SimplerDialogBuilder {
                 .setButton1Click(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(positive!=null){
+                        if (positive != null) {
                             positive.onClick(dialogBuilder, 1);
-                        }else{
+                        } else {
                             dialogBuilder.dismiss();
                         }
                     }
@@ -127,9 +129,9 @@ public class SimplerDialogBuilder {
                 .setButton2Click(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(negative!=null){
+                        if (negative != null) {
                             negative.onClick(dialogBuilder, 2);
-                        }else{
+                        } else {
                             dialogBuilder.dismiss();
                         }
                     }
@@ -285,5 +287,52 @@ public class SimplerDialogBuilder {
         });
         petR.setChecked(true);
         return build(view, Resource.getString(R.string.close), null, context.getContext());
+    }
+
+    public static Dialog buildClickWarnDialog(Context context, Random random) {
+        NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
+        dialogBuilder
+                .withDialogColor(Color.WHITE)
+                .isCancelableOnTouchOutside(false)                           //def    | isCancelable(true)
+                .withMessage("点累了吧？休息一会吧！")
+                .withMessageColor(Color.RED)
+        ;
+        if (random != null) {
+            dialogBuilder.withEffect(random.randomItem(Effectstype.values()));
+        }
+        if(random!=null && random.nextBoolean()){
+            dialogBuilder.setButton1Click(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialogBuilder.dismiss();
+                }
+            });
+            dialogBuilder.withButton1Text("不了，谢谢！");
+            dialogBuilder.setButton2Click(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+            dialogBuilder.withButton2Text("好的，谢谢！");
+        }else{
+            dialogBuilder.setButton2Click(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialogBuilder.dismiss();
+                }
+            });
+            dialogBuilder.withButton2Text("不了，谢谢！");
+
+            dialogBuilder.setButton1Click(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+            dialogBuilder.withButton1Text("好的，谢谢！");
+        }
+        dialogBuilder.show();
+        return dialogBuilder;
     }
 }

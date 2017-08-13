@@ -21,7 +21,7 @@
     <include
             layout="@layout/monster_book_view"
             android:visibility="invisible"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:id="@+id/monster_view"
@@ -495,6 +495,41 @@
             android:onClick="showButtons"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"/>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/monster_book_control"
+            android:visibility="gone">
+
+        <ImageButton
+                android:src="@drawable/mobvista_cm_backward"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/monster_previous"
+                android:onClick="onClick"
+                android:layout_weight="1"/>
+
+        <ImageButton
+                android:src="@drawable/mobvista_cm_refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/monster_random"
+                android:onClick="onClick"
+                android:layout_weight="1"/>
+
+        <ImageButton
+                android:src="@drawable/mobvista_cm_forward"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/monster_next"
+                android:layout_weight="1"
+                android:onClick="onClick"
+                />
+    </LinearLayout>
 
 
 </RelativeLayout>

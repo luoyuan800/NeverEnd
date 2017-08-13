@@ -6,10 +6,13 @@ import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.service.EffectHandler;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by luoyuan on 2017/7/9.
  */
 public class Material extends ClickSkill {
+    transient private ClickSkillCheckThread checkThread;
     @Override
     public int getImageResource() {
         if (isUsable()) {
@@ -23,7 +26,10 @@ public class Material extends ClickSkill {
     public void perform(Hero hero, HarmAble monster, InfoControlInterface context) {
         long value = 1 + EffectHandler.getEffectAdditionLongValue(EffectHandler.CLICK_MATERIAL, hero.getEffects(), hero);
         hero.setMaterial(hero.getMaterial() + value);
-
+        if(checkThread == null){
+            checkThread = new ClickSkillCheckThread(this, context, 35);
+            context.getExecutor().scheduleAtFixedRate(checkThread, 10000, 10000, TimeUnit.MILLISECONDS);
+        }
     }
 
     @Override
@@ -32,6 +38,6 @@ public class Material extends ClickSkill {
     }
 
     public Material(){
-        setDuration(700);
+        setDuration(300);
     }
 }
