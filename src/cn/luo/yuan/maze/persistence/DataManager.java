@@ -424,7 +424,7 @@ public class DataManager implements DataManagerInterface {
         }
     }
 
-    public List<Goods> loadAllGoods(boolean all) {
+    public List<Goods> loadAllGoods(final boolean all) {
         return goodsLoader.loadLimit(0, -1, new Index<Goods>() {
             @Override
             public boolean match(Goods goods) {

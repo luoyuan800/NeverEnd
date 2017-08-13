@@ -107,8 +107,8 @@ public class SimplerDialogBuilder {
                 .setPositiveButton(positiveStr, positive).setNegativeButton(negativeStr, negative).show();
     }
 
-    public static Dialog build(View view, String positiveStr, DialogInterface.OnClickListener positive,
-                               String negativeStr, DialogInterface.OnClickListener negative, Context context) {
+    public static Dialog build(View view, String positiveStr, final DialogInterface.OnClickListener positive,
+                               String negativeStr, final DialogInterface.OnClickListener negative, Context context) {
         final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
         dialogBuilder
                 .withDialogColor(Color.WHITE)
@@ -290,7 +290,7 @@ public class SimplerDialogBuilder {
     }
 
     public static Dialog buildClickWarnDialog(Context context, Random random) {
-        NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
+        final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
         dialogBuilder
                 .withDialogColor(Color.WHITE)
                 .isCancelableOnTouchOutside(false)                           //def    | isCancelable(true)

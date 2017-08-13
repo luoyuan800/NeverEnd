@@ -138,7 +138,7 @@ public class WarehouseDialog implements AdapterView.OnItemClickListener, View.On
         petType.setChecked(true);
         dialog = SimplerDialogBuilder.build(view, "上传", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(final DialogInterface dialog, int which) {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -152,7 +152,7 @@ public class WarehouseDialog implements AdapterView.OnItemClickListener, View.On
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemClick(final AdapterView<?> parent, View view, int position, long id) {
         final Object object = parent.getItemAtPosition(position);
         if(object instanceof MountAble && ((MountAble) object).isMounted()){
             context.showToast("装备、出战中的装备或宠物无法存入仓库！");
