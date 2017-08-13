@@ -172,7 +172,7 @@ public class WarehouseDialog implements AdapterView.OnItemClickListener, View.On
                         dismiss();
                         context.showToast("%s存储成功", object instanceof NameObject ? ((NameObject) object).getDisplayName(): "");
                     }else{
-                        context.showToast("碎片数量不足，需要%d块片", Data.WAREHOUSE_DEBRIS);
+                        context.showToast("碎片数量不足，需要%d块片。碎片可以通过观看广告获取。", Data.WAREHOUSE_DEBRIS);
                     }
                 }
             });

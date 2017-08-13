@@ -231,7 +231,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                 });
                 break;
             case Field.GOODS_TYPE:
-                adapter = new StringAdapter<Goods>(context.getDataManager().loadAllGoods());
+                adapter = new StringAdapter<Goods>(context.getDataManager().loadAllGoods(false));
                 list.setAdapter(adapter);
                 list.onLoadMoreComplete(true);
                 break;

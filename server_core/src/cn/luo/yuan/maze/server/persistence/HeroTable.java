@@ -33,7 +33,7 @@ public class HeroTable implements Runnable {
 
     public String queryBattleAward(String id) {
         ServerRecord record = getRecord(id);
-        if (record.getData() != null) {
+        if (record!=null && record.getData() != null) {
             return record.getData().toString();
         }
         return StringUtils.EMPTY_STRING;
@@ -101,13 +101,15 @@ public class HeroTable implements Runnable {
 
     public String pollBattleMsg(String id, int count) {
         ServerRecord record = getRecord(id);
-        if (record.getMessages().size() > 10) {
-            count = record.getMessages().size();
-        }
         StringBuilder s = new StringBuilder();
-        while (count-- > 0 && record.getMessages().size() > 0) {
-            String poll = record.getMessages().poll();
-            s.append(poll).append(count > 0 ? "<br>" : "");
+        if(record!=null) {
+            if (record.getMessages().size() > 10) {
+                count = record.getMessages().size();
+            }
+            while (count-- > 0 && record.getMessages().size() > 0) {
+                String poll = record.getMessages().poll();
+                s.append(poll).append(count > 0 ? "<br>" : "");
+            }
         }
         return s.toString();
     }

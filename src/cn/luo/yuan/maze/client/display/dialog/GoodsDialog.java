@@ -16,7 +16,7 @@ import java.util.List;
 public class GoodsDialog {
     public void show(NeverEnd context){
         ListView list = new ListView(context.getContext());
-        List<Goods> goods = context.getDataManager().loadAllGoods();
+        List<Goods> goods = context.getDataManager().loadAllGoods(false);
         List<Goods> rGoodes = new ArrayList<>(goods.size());
         for(Goods g : goods){
             if(g.getCount() > 0){

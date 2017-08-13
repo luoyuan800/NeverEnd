@@ -288,7 +288,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
 
         //Goods handle
         GoodsProperties goodsProperties = new GoodsProperties(hero);
-        for (Goods goods : dataManager.loadAllGoods()) {
+        for (Goods goods : dataManager.loadAllGoods(true)) {
             goods.load(goodsProperties);
         }
 

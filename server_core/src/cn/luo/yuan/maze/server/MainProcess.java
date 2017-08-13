@@ -778,7 +778,19 @@ public class MainProcess {
     public String getOnlineHeroList() {
         List<String> allHeroIds = heroTable.getAllHeroIds();
         StringBuilder builder = new StringBuilder("{\"total\":").append(allHeroIds.size()).append(",\"rows\":[");
-        for (String id : allHeroIds) {
+        List<String> sortedByDescending = heroTable.getAllHeroIds();
+        sortedByDescending.sort(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                ServerRecord record1 = heroTable.getRecord(o1);
+                ServerRecord record2 = heroTable.getRecord(o2);
+                if(record1!=null && record2!=null){
+                    return Integer.compare(record1.getRange(), record2.getRange());
+                }
+                return 0;
+            }
+        });
+        for (String id : sortedByDescending) {
             ServerRecord record = heroTable.getRecord(id);
             if(record!=null && record.getData()!=null) {
                 String string = formatJson(record);

@@ -278,7 +278,7 @@ public class SimplerDialogBuilder {
                 if (isChecked) {
                     accessoryR.setChecked(false);
                     petR.setChecked(false);
-                    StringAdapter<Goods> adapter = new StringAdapter<>(context.getDataManager().loadAllGoods());
+                    StringAdapter<Goods> adapter = new StringAdapter<>(context.getDataManager().loadAllGoods(false));
                     list.onLoadMoreComplete(true);
                     list.setAdapter(adapter);
                     adapter.notifyDataSetChanged();

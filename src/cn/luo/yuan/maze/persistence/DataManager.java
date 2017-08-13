@@ -209,7 +209,7 @@ public class DataManager implements DataManagerInterface {
         for (Skill skill : loadAllSkill()) {
             delete(skill);
         }
-        for (Goods goods : loadAllGoods()) {
+        for (Goods goods : loadAllGoods(true)) {
             goods.markDelete();
             goodsLoader.delete(goods.getId());
         }
@@ -424,11 +424,11 @@ public class DataManager implements DataManagerInterface {
         }
     }
 
-    public List<Goods> loadAllGoods() {
+    public List<Goods> loadAllGoods(boolean all) {
         return goodsLoader.loadLimit(0, -1, new Index<Goods>() {
             @Override
             public boolean match(Goods goods) {
-                return goods.getHeroIndex() == index;
+                return goods.getHeroIndex() == index && (all || goods.getCount() > 0);
             }
         }, null);
     }

@@ -1,7 +1,6 @@
 package cn.luo.yuan.maze.client.display.dialog;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.widget.TextView;
@@ -110,7 +109,7 @@ public class ShopDialog {
 
     public List<SellItem> randomGoods() {
         List<SellItem> goods = new ArrayList<>();
-        for (Goods g : context.getDataManager().loadAllGoods()) {
+        for (Goods g : context.getDataManager().loadAllGoods(true)) {
             Goods ng = (Goods) g.clone();
             ng.setCount(1);
             if (g.canLocalSell() && random.nextBoolean()) {
