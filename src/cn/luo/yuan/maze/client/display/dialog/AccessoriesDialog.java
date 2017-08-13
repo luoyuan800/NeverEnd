@@ -202,7 +202,8 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
     private void refreshMainAccessoryView() {
         if (main != null) {
             ((TextView) dialog.findViewById(R.id.accessory_name)).setText(Html.fromHtml(main.getDisplayName()));
-            ((TextView) dialog.findViewById(R.id.accessory_effects)).setText(Html.fromHtml(StringUtils.formatEffectsAsHtml(main.getEffects())));
+            ((TextView) dialog.findViewById(R.id.accessory_effects)).setText(Html.fromHtml(
+                    StringUtils.formatEffectsAsHtml(main.getEffects()) + "<br>" + AccessoryHelper.getLimitString(main,context.getHero())));
             if (main.isMounted()) {
                 ((Button) dialog.findViewById(R.id.accessory_mount)).setText(Resource.getString(R.string.need_un_mount));
             } else {

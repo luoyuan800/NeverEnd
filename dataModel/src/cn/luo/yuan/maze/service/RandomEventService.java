@@ -81,7 +81,7 @@ public class RandomEventService {
                         gameControl.addMessage(gameControl.getHero().getDisplayName() + "和宠物们玩耍了一下会。");
                         for (Pet pet : gameControl.getHero().getPets()) {
                             if (gameControl.getRandom().nextBoolean()) {
-                                pet.setIntimacy(pet.getIntimacy() + 1);
+                                pet.setIntimacy(pet.getIntimacy() + (pet.getAtk() > gameControl.getHero().getUpperAtk() && pet.getIntimacy() > 10 ? -1 : 1));
                             }
                         }
                     } else {

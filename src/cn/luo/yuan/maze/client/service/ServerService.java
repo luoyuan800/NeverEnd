@@ -330,6 +330,7 @@ public class ServerService {
 
     public boolean storeWarehouse(Serializable object, NeverEnd context){
         try {
+            object = context.convertToServerObject(object);
             if(object instanceof OwnedAble){
                 ((OwnedAble) object).setKeeperId(context.getHero().getId());
                 ((OwnedAble) object).setKeeperName(context.getHero().getName());

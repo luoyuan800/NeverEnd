@@ -4,11 +4,7 @@ import cn.luo.yuan.maze.exception.MountLimitException;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.effect.Effect;
-import cn.luo.yuan.maze.model.effect.original.AgiEffect;
-import cn.luo.yuan.maze.model.effect.original.AtkEffect;
-import cn.luo.yuan.maze.model.effect.original.DefEffect;
-import cn.luo.yuan.maze.model.effect.original.HpEffect;
-import cn.luo.yuan.maze.model.effect.original.StrEffect;
+import cn.luo.yuan.maze.model.effect.original.*;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -18,6 +14,72 @@ import java.util.List;
  * Created by gluo on 6/26/2017.
  */
 public class AccessoryHelper {
+
+    public static String getLimitString(Accessory accessory, Hero hero){
+        try{
+            checkMountLimit(accessory.getEffects(), hero);
+        } catch (MountLimitException e) {
+            return e.getMessage();
+        }
+        return StringUtils.EMPTY_STRING;
+    }
+
+    public static void checkMountLimit(List<Effect> effects, Hero hero) throws MountLimitException {
+        String needEffect = null;
+        long needEffectValue = 0;
+        try {
+            for (Effect effect : effects) {
+                if (effect != null) {
+                    long count = effect.getValue().longValue() * 2;
+                    if (effect instanceof AgiEffect && count > needEffectValue) {
+                        needEffect = "力量";
+                        needEffectValue = count;
+                        break;
+                    }
+                    if (effect instanceof StrEffect && count > needEffectValue) {
+                        needEffect = "敏捷";
+                        needEffectValue = count;
+                        break;
+                    }
+                    long value = count / hero.getHpGrow();
+                    if (effect instanceof HpEffect && value > needEffectValue) {
+                        needEffect = "力量";
+                        needEffectValue = value * 2;
+                        break;
+                    }
+                    value = count / hero.getDefGrow();
+                    if (effect instanceof DefEffect && value > needEffectValue) {
+                        needEffect = "敏捷";
+                        needEffectValue = value;
+                        break;
+                    }
+                    value = count / hero.getAtkGrow();
+                    if (effect instanceof AtkEffect && value > needEffectValue) {
+                        needEffect = "力量";
+                        needEffectValue = value;
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (needEffect != null && needEffectValue > 0) {
+            switch (needEffect) {
+                case "力量":
+                    if (hero.getMaxStr() < needEffectValue) {
+                        throw new MountLimitException("需要" + needEffect + "大于" + StringUtils.formatNumber(needEffectValue, false));
+                    }
+                    break;
+                case "敏捷":
+                    if (hero.getMaxAgi() < needEffectValue) {
+                        throw new MountLimitException("需要" + needEffect + "大于" + StringUtils.formatNumber(needEffectValue, false));
+                    }
+                    break;
+            }
+        }
+    }
+
     /**
      * @param accessory mounted
      * @param check
@@ -25,68 +87,16 @@ public class AccessoryHelper {
      */
     public synchronized static Accessory mountAccessory(Accessory accessory, Hero hero, boolean check) throws MountLimitException {
         Accessory uMount = null;
-        String needEffect = null;
-        long needEffectValue = 0;
-        try {
-            if (check) {
-                for (Effect effect : accessory.getEffects()) {
-                    if (effect != null) {
-                        long count = effect.getValue().longValue() * 2;
-                        if (effect instanceof AgiEffect && count > needEffectValue) {
-                            needEffect = "力量";
-                            needEffectValue = count;
-                            break;
-                        }
-                        if (effect instanceof StrEffect && count > needEffectValue) {
-                            needEffect = "敏捷";
-                            needEffectValue = count;
-                            break;
-                        }
-                        long value = count / hero.getHpGrow();
-                        if (effect instanceof HpEffect && value > needEffectValue) {
-                            needEffect = "力量";
-                            needEffectValue = value * 2;
-                            break;
-                        }
-                        value = count / hero.getDefGrow();
-                        if (effect instanceof DefEffect && value > needEffectValue) {
-                            needEffect = "敏捷";
-                            needEffectValue = value;
-                            break;
-                        }
-                        value = count / hero.getAtkGrow();
-                        if (effect instanceof AtkEffect && value > needEffectValue) {
-                            needEffect = "力量";
-                            needEffectValue = value;
-                            break;
-                        }
-                    }
-                }
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        if(needEffect!=null && needEffectValue > 0){
-            switch (needEffect){
-                case "力量":
-                    if(hero.getMaxStr() < needEffectValue){
-                        throw new MountLimitException("需要" + needEffect + "大于" + StringUtils.formatNumber(needEffectValue, false));
-                    }
-                    break;
-                case "敏捷":
-                    if(hero.getMaxAgi() < needEffectValue){
-                        throw new MountLimitException("需要" + needEffect + "大于" + StringUtils.formatNumber(needEffectValue, false));
-                    }
-                    break;
-            }
+        if (check) {
+            checkMountLimit(accessory.getEffects(), hero);
         }
         List<Accessory> iterator = new ArrayList<>(hero.getAccessories());
-        for(Accessory a : iterator) {
+        for (Accessory a : iterator) {
             uMount = a;
-            if (uMount!=null && uMount.getType().equals(accessory.getType())) {
+            if (uMount != null && uMount.getType().equals(accessory.getType())) {
                 hero.getAccessories().remove(a);
-                for(Effect effect : uMount.getEffects()){
-                    if(effect!=null){
+                for (Effect effect : uMount.getEffects()) {
+                    if (effect != null) {
                         hero.getEffects().remove(effect);
                     }
                 }

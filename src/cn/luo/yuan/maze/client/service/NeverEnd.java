@@ -324,6 +324,14 @@ public class NeverEnd extends Application implements InfoControlInterface {
         return a;
     }
 
+    public Object convertToLocalObject(Object o){
+        if(o instanceof Accessory){
+            return covertAccessoryToLocal((Accessory) o);
+        }else{
+            return o;
+        }
+    }
+
     public Serializable convertToServerObject(Serializable object) {
         if (object instanceof Accessory) {
             Accessory accessory = new Accessory();

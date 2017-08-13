@@ -12,6 +12,7 @@ import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.ServerService;
 import cn.luo.yuan.maze.model.*;
+import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.utils.Field;
 
 import java.io.Serializable;
@@ -153,6 +154,10 @@ public class WarehouseDialog implements AdapterView.OnItemClickListener, View.On
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Object object = parent.getItemAtPosition(position);
+        if(object instanceof MountAble && ((MountAble) object).isMounted()){
+            context.showToast("装备、出战中的装备或宠物无法存入仓库！");
+            return;
+        }
         if(object instanceof Serializable){
             context.getExecutor().execute(new Runnable() {
                 @Override
@@ -164,6 +169,7 @@ public class WarehouseDialog implements AdapterView.OnItemClickListener, View.On
                             ((StringAdapter) adapter).getData().remove(object);
                             ((StringAdapter) adapter).notifyDataSetChanged();
                         }
+                        dismiss();
                         context.showToast("%s存储成功", object instanceof NameObject ? ((NameObject) object).getDisplayName(): "");
                     }else{
                         context.showToast("碎片数量不足，需要%d块片", Data.WAREHOUSE_DEBRIS);
@@ -176,7 +182,7 @@ public class WarehouseDialog implements AdapterView.OnItemClickListener, View.On
 
     @Override
     public void onClick(View v) {
-        Object object = v.getTag(R.string.item);
+        final Object object = context.convertToLocalObject(v.getTag(R.string.item));
         if(object instanceof IDModel){
             context.getExecutor().execute(new Runnable() {
                 @Override
