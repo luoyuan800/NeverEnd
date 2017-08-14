@@ -108,6 +108,78 @@
         <evolution>132</evolution>
     </monster>
     <monster>
+        <index>20</index>
+        <meet meet_rate="40" min_level="50"/>
+        <name>野牛</name>
+        <desc>据说勤劳老实木讷的人会变成一头牛。
+        </desc>
+        <atk>150</atk>
+        <def>25</def>
+        <hp>250</hp>
+        <hit>10</hit>
+        <silent>10</silent>
+        <egg_rate>15</egg_rate>
+        <pet_rate>27</pet_rate>
+        <sex>-1</sex>
+        <race>Eviler</race>
+        <rank>1</rank>
+        <evolution>140</evolution>
+    </monster>
+    <monster>
+        <index>12</index>
+        <meet meet_rate="40" min_level="60"/>
+        <name>变异蝎</name>
+        <desc>变异的蝎子，似乎是身躯变大，并且毒性会导致敌人产生幻觉。经常被一些无良的商人抓来制作成毒品卖给爬楼的勇者。
+        </desc>
+        <atk>40</atk>
+        <def>130</def>
+        <hp>50</hp>
+        <hit>0</hit>
+        <silent>0</silent>
+        <egg_rate>25</egg_rate>
+        <pet_rate>37</pet_rate>
+        <sex>-1</sex>
+        <race>Eviler</race>
+        <rank>1</rank>
+        <evolution>13</evolution>
+    </monster>
+    <monster>
+        <index>13</index>
+        <meet meet_rate="40" min_level="70"/>
+        <name>红蝎</name>
+        <desc>变异更加厉害的蝎子，似乎是身躯变大，并且毒性会致死。
+        </desc>
+        <atk>140</atk>
+        <def>30</def>
+        <hp>80</hp>
+        <hit>30</hit>
+        <silent>2</silent>
+        <egg_rate>25</egg_rate>
+        <pet_rate>17</pet_rate>
+        <sex>-1</sex>
+        <race>Eviler</race>
+        <rank>2</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>11</index>
+        <meet meet_rate="40" min_level="35"/>
+        <name>蛟</name>
+        <desc>龙的亚种，身躯脆肉，但是攻击力不俗。
+        </desc>
+        <atk>205</atk>
+        <def>70</def>
+        <hp>100</hp>
+        <hit>3</hit>
+        <silent>2</silent>
+        <egg_rate>25</egg_rate>
+        <pet_rate>27</pet_rate>
+        <sex>-1</sex>
+        <race>Orger</race>
+        <rank>1</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
         <index>28</index>
         <meet meet_rate="40" min_level="250"/>
         <name>僵尸战士</name>
