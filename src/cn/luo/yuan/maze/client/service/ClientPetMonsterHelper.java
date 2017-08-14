@@ -73,6 +73,10 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
         return ids;
     }
 
+    public Monster loadSpecialMonsterByIndex(String index){
+        return monsterTable.load(index);
+    }
+
     public Monster randomSpecialMonster(long level){
         String ids = getRandom().randomItem(availableSpecialMonsterIds(level));
         if(StringUtils.isNotEmpty(ids)){
@@ -156,6 +160,7 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
                 clone.setMaterial(Data.getMonsterMaterial(clone.getMaxHp(), clone.getAtk(), level, getRandom()));
                 clone.setFirstName(FirstName.getRandom(level, getRandom()));
                 clone.setSecondName(SecondName.getRandom(level, getRandom()));
+                clone.setDesc(StringUtils.EMPTY_STRING);
                 if(clone.getUpperAtk() > control.getHero().getUpperHp()/2) {
                     clone.setColor(Data.RED_COLOR);
                 }else{
@@ -213,6 +218,10 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
     }
 
     public int getEvolutionIndex(int index) {
+        Monster monster = loadSpecialMonsterByIndex(String.valueOf(index));
+        if(monster!=null){
+            return monster.getNext();
+        }
         int evolutionIndex = index;
         try (XmlResourceParser parser = control.getContext().getResources().getXml(R.xml.monsters)) {
             int monsterIndex = -1;
@@ -250,7 +259,10 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
     }
 
     public Monster loadMonsterByIndex(int index) {
-        Monster monster = null;
+        Monster monster = monsterTable.load(String.valueOf(index));
+        if(monster!=null){
+            return monster;
+        }
         MonsterKey key = null;
         try (XmlResourceParser parser = control.getContext().getResources().getXml(R.xml.monsters)) {
             loop:

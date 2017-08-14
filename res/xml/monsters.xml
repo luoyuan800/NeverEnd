@@ -90,6 +90,24 @@
         <rank>2</rank>
     </monster>
     <monster>
+        <index>40</index>
+        <meet meet_rate="40" min_level="350"/>
+        <name>九尾狐</name>
+        <desc>九尾狐，中华古代汉族神话传说中的生物--青丘之山，有兽焉，其状如狐而九尾。在迷宫创造者消失后才出现的生物。
+        </desc>
+        <atk>100</atk>
+        <def>89</def>
+        <hp>190</hp>
+        <hit>10</hit>
+        <silent>10</silent>
+        <egg_rate>15</egg_rate>
+        <pet_rate>38</pet_rate>
+        <sex>-1</sex>
+        <race>Eviler</race>
+        <rank>2</rank>
+        <evolution>132</evolution>
+    </monster>
+    <monster>
         <index>28</index>
         <meet meet_rate="40" min_level="250"/>
         <name>僵尸战士</name>
@@ -215,7 +233,7 @@
     </monster>
     <monster>
         <index>132</index>
-        <meet meet_rate="50" min_level="100"/>
+        <meet meet_rate="50" min_level="600"/>
         <name>青丘</name>
         <desc>纵有青丘吟夜月，无因重照旧云鬟。舍弃爱情与缘分，好似风中尘土扬。
         </desc>
@@ -228,7 +246,7 @@
         <pet_rate>1</pet_rate>
         <sex>-1</sex>
         <race>Eviler</race>
-        <rank>5</rank>
+        <rank>4</rank>
         <evolution></evolution>
     </monster>
     <monster>

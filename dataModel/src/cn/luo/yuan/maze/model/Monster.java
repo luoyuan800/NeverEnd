@@ -16,8 +16,9 @@ import java.util.List;
 /**
  * Created by gluo on 4/1/2017.
  */
-public class Monster extends HarmObject implements SilentAbleObject, NameObject, SkillAbleObject,Cloneable, Serializable {
+public class Monster extends HarmObject implements IDModel, SilentAbleObject, NameObject, SkillAbleObject,Cloneable, Serializable {
     private static final long serialVersionUID = Field.SERVER_VERSION;
+    private int next;
     private FirstName firstName;
     private SecondName secondName;
     private String type;
@@ -42,6 +43,7 @@ public class Monster extends HarmObject implements SilentAbleObject, NameObject,
     private long atkAddition;
     private long hpAddition;
     private String desc;
+    private boolean delete;
 
     public long getUpperAtk(){
         return getAtk();
@@ -312,5 +314,33 @@ public class Monster extends HarmObject implements SilentAbleObject, NameObject,
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    @Override
+    public boolean isDelete() {
+        return delete;
+    }
+
+    @Override
+    public void markDelete() {
+        this.delete = true;
+    }
+
+    @Override
+    public String getId() {
+        return String.valueOf(index);
+    }
+
+    @Override
+    public void setId(String id) {
+        this.index = Integer.parseInt(id);
+    }
+
+    public int getNext() {
+        return next;
+    }
+
+    public void setNext(int next) {
+        this.next = next;
     }
 }
