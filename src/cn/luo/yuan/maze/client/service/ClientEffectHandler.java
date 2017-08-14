@@ -20,6 +20,7 @@ public class ClientEffectHandler {
 
     public static Effect buildEffect(String effectName, String value, boolean elementControl) {
         Effect effect = null;
+        value = value.trim();
         switch (effectName) {
             case "ClickMaterialEffect":
                 effect = new ClickMaterialEffect();

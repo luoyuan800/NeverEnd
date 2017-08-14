@@ -70,6 +70,15 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
                 accessoryAdapter.setData(context.getDataManager().loadAccessories(0, 10, key, order));
             }
         });
+        dialog.findViewById(R.id.accessory_recycle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(main!=null){
+                    context.showToast("拆解装备获得了%s锻造", StringUtils.formatNumber(context.getAccessoryHelper().recycle(main)));
+
+                }
+            }
+        });
         dialog.findViewById(R.id.accessory_mount)
                 .setOnClickListener(new View.OnClickListener() {
                                         @Override

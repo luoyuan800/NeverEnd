@@ -4,6 +4,7 @@ import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.effect.*;
 import cn.luo.yuan.maze.model.effect.original.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -19,7 +20,7 @@ public class EffectHandler {
             DOGE="doge", PARRY="parry", RESTORE_RATE= "restore";
 
     public static long getEffectAdditionLongValue(String property, Collection<Effect> effects, Hero hero){
-        Collection<Effect> synEffects = Collections.synchronizedCollection(effects);
+        Collection<Effect> synEffects = new ArrayList<>(effects);
         switch (property){
             case CLICK_MATERIAL:
                 return getEffectAdditionMate(synEffects, hero);
@@ -38,7 +39,7 @@ public class EffectHandler {
     }
 
     public static float getEffectAdditionFloatValue(String property, Collection<Effect> effects){
-        Collection<Effect> synEffects = Collections.synchronizedCollection(effects);
+        Collection<Effect> synEffects = new ArrayList<>(effects);
         float value = 0.0f;
         switch (property){
             case RESTORE_RATE:

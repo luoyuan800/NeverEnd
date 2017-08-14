@@ -318,7 +318,7 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
                         case XmlResourceParser.START_TAG:
                             switch (parser.getName()) {
                                 case "index":
-                                    currentIndex = Integer.parseInt(parser.nextText());
+                                    currentIndex = Integer.parseInt(parser.nextText().trim());
                                     break;
                                 case "meet":
                                     if (currentIndex > 0) {
@@ -381,53 +381,53 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
         switch (parser.getName()) {
             case "rank":
                 if (monster != null) {
-                    monster.setRank(Integer.parseInt(parser.nextText()));
+                    monster.setRank(Integer.parseInt(parser.nextText().trim()));
                 }
                 break;
             case "atk":
                 if (monster != null) {
-                    monster.setAtk(Long.parseLong(parser.nextText()));
+                    monster.setAtk(Long.parseLong(parser.nextText().trim()));
                 }
                 break;
             case "def":
                 if (monster != null) {
-                    monster.setDef(Long.parseLong(parser.nextText()));
+                    monster.setDef(Long.parseLong(parser.nextText().trim()));
                 }
                 break;
             case "hp":
                 if (monster != null) {
-                    monster.setMaxHp(Long.parseLong(parser.nextText()));
+                    monster.setMaxHp(Long.parseLong(parser.nextText().trim()));
                     monster.setHp(monster.getMaxHp());
                 }
                 break;
             case "hit":
                 if (monster != null) {
-                    monster.setHitRate(Float.parseFloat(parser.nextText()));
+                    monster.setHitRate(Float.parseFloat(parser.nextText().trim()));
                 }
                 break;
             case "silent":
                 if (monster != null) {
-                    monster.setSilent(Float.parseFloat(parser.nextText()));
+                    monster.setSilent(Float.parseFloat(parser.nextText().trim()));
                 }
                 break;
             case "pet_rate":
                 if (monster != null) {
-                    monster.setPetRate(Float.parseFloat(parser.nextText()));
+                    monster.setPetRate(Float.parseFloat(parser.nextText().trim()));
                 }
                 break;
             case "egg_rate":
                 if (monster != null) {
-                    monster.setEggRate(Float.parseFloat(parser.nextText()));
+                    monster.setEggRate(Float.parseFloat(parser.nextText().trim()));
                 }
                 break;
             case "sex":
                 if (monster != null) {
-                    monster.setSex(Integer.parseInt(parser.nextText()));
+                    monster.setSex(Integer.parseInt(parser.nextText().trim()));
                 }
                 break;
             case "race":
                 if (monster != null) {
-                    monster.setRace(Race.valueOf(parser.nextText()));
+                    monster.setRace(Race.valueOf(parser.nextText().trim()));
                 }
                 break;
             case "effect":

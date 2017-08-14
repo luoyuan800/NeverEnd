@@ -322,4 +322,10 @@ public class AccessoryHelper extends cn.luo.yuan.maze.service.AccessoryHelper {
             LogHelper.logException(e, "Accessory->initAccessories");
         }
     }
+
+    public long recycle(Accessory accessory){
+        long m = Data.RECYCLE_MATERIAL * (1 + accessory.getLevel());
+        control.getHero().setMaterial(control.getHero().getMaterial() + m);
+        return m;
+    }
 }

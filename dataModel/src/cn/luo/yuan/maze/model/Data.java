@@ -44,6 +44,7 @@ public class Data {
     public static final float PET_RATE_REDUCE = 1.7f; //宠物捕获率修正系数，越大捕获率越低
     public static final long MATERIAL_LIMIT = 3000000;//如果携带超过这个数量的锻造，就增加商店的价格和怪物的攻击
     public static final int WAREHOUSE_DEBRIS = 3;//仓库需要消耗的碎片数量
+    public static final long RECYCLE_MATERIAL = 2000;
 
     /**
      * 计算击败一个怪物可以获得的锻造点

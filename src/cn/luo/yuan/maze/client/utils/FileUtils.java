@@ -2,9 +2,7 @@ package cn.luo.yuan.maze.client.utils;
 
 import android.content.Context;
 import android.os.Environment;
-import cn.luo.yuan.maze.model.ExchangeObject;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
-import cn.luo.yuan.maze.utils.Field;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -82,7 +80,7 @@ public class FileUtils {
         }
     }
 
-    public static String zipSaveFiles(String uuid, Context context, boolean containLogs) {
+    public static String zipLogFiles(String uuid) {
         uuid.replaceAll("\\?", "NN");
         FileOutputStream fos;
         ZipOutputStream zos = null;
@@ -115,7 +113,6 @@ public class FileUtils {
                     //Ignore
                 }
             }*/
-            if(containLogs) {
                     for (File file : LogHelper.getLogs()) {
                         try {
                             byte[] bytes = new byte[1024];
@@ -133,8 +130,7 @@ public class FileUtils {
                         }
                     }
 
-            }
-            try {
+            /*try {
                 File databasePath = context.getDatabasePath(DB_NAME);
                 byte[] bytes = new byte[1024];
                 ZipEntry entry = new ZipEntry(databasePath.getName());
@@ -147,7 +143,7 @@ public class FileUtils {
                 }
             }catch (IOException e){
                 //ignore
-            }
+            }*/
         } catch (Exception e) {
             LogHelper.logException(e, "Zip save");
         } finally {

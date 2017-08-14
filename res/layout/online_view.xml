@@ -98,7 +98,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/debris_shop"
-                    android:enabled="false"
+                    android:enabled="true"
                     android:onClick="onClick"
                     style="@android:style/Widget.Button.Inset"/>
 

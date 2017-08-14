@@ -106,8 +106,9 @@ public class NiftyDialogBuilder extends Dialog implements DialogInterface {
     }
 
     public static NiftyDialogBuilder getInstance(Context context) {
+        return new NiftyDialogBuilder(context, R.style.dialog_untran);
 
-        if (instance == null || !tmpContext.equals(context)) {
+        /*if (instance == null || !tmpContext.equals(context)) {
             synchronized (NiftyDialogBuilder.class) {
                 if (instance == null || !tmpContext.equals(context)) {
                     instance = new NiftyDialogBuilder(context, R.style.dialog_untran);
@@ -115,7 +116,7 @@ public class NiftyDialogBuilder extends Dialog implements DialogInterface {
             }
         }
         tmpContext = context;
-        return instance;
+        return instance;*/
 
     }
 
@@ -332,5 +333,7 @@ public class NiftyDialogBuilder extends Dialog implements DialogInterface {
         super.dismiss();
         mButton1.setVisibility(View.GONE);
         mButton2.setVisibility(View.GONE);
+        mTitle.setVisibility(View.GONE);
+        mMessage.setVisibility(View.GONE);
     }
 }

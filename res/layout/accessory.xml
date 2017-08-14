@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <Button
-                    android:text="升级"
+                    android:text="@string/upgrade"
                     android:layout_gravity="bottom"
                     android:gravity="center"
                     android:layout_width="wrap_content"
@@ -64,16 +64,17 @@
                     android:id="@+id/accessory_fuse"
                     style="@android:style/Widget.Button.Inset"
                     android:layout_weight="1"/>
-        <Button
-                android:text="关闭"
-                android:layout_gravity="bottom"
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/accessories_close"
-                style="@android:style/Widget.Button.Inset"
-                android:layout_weight="1"/>
+            <Button
+                    android:text="@string/recycle"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/accessory_recycle"
+                    style="@android:style/Widget.Button.Inset"
+                    android:layout_weight="1"/>
+
     </LinearLayout>
         </LinearLayout>
 
@@ -107,7 +108,16 @@
 
     <cn.luo.yuan.maze.client.display.view.LoadMoreListView
             android:id="@+id/accessories_list"
-            android:layout_height="400dp"
+            android:layout_height="300sp"
             android:layout_width="match_parent"/>
+    <Button
+            android:text="@string/close"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/accessories_close"
+            style="@android:style/Widget.Button.Inset"
+            />
 
 </LinearLayout>

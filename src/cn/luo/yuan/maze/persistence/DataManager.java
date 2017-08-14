@@ -366,7 +366,7 @@ public class DataManager implements DataManagerInterface {
     public List<Pet> loadMountPets() {
         List<Pet> pets = new ArrayList<>();
         for (Pet pet : petLoader.loadAll()) {
-            if (pet.getHeroIndex() == index && pet.isMounted()) {
+            if (pet!=null && pet.getHeroIndex() == index && pet.isMounted()) {
                 pets.add(pet);
             }
         }

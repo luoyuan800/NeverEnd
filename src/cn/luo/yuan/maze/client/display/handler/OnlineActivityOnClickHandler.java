@@ -6,6 +6,7 @@ import android.os.Message;
 import android.view.View;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
+import cn.luo.yuan.maze.client.display.dialog.DlcDialog;
 import cn.luo.yuan.maze.client.display.dialog.ShopDialog;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
 import cn.luo.yuan.maze.client.service.NeverEnd;
@@ -31,6 +32,9 @@ public class OnlineActivityOnClickHandler {
 
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.debris_shop:
+                new DlcDialog(context).show();
+                break;
             case R.id.ad_show:
                 activity.adHandler.showAd();
                 break;

@@ -35,7 +35,7 @@
                 android:src="@drawable/evo_du"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/dlc_2"
+                android:id="@+id/dlc_3"
                 android:layout_weight="1"/>
     </LinearLayout>
 

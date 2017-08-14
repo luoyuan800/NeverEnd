@@ -33,6 +33,9 @@ import java.util.List;
 public class SimplerDialogBuilder {
     public static Dialog build(String msg, String posivStr, final DialogInterface.OnClickListener posiv, Context context, Random random) {
         final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
+        if(dialogBuilder.isShowing()){
+            dialogBuilder.dismiss();
+        }
         if (random != null) {
             dialogBuilder.withEffect(random.randomItem(Effectstype.values()));
         }
@@ -58,6 +61,9 @@ public class SimplerDialogBuilder {
 
     public static Dialog build(String msg, String posivStr, Context context, Random random) {
         final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
+        if(dialogBuilder.isShowing()){
+            dialogBuilder.dismiss();
+        }
         if (random != null) {
             dialogBuilder.withEffect(random.randomItem(Effectstype.values()));
         }
@@ -80,6 +86,9 @@ public class SimplerDialogBuilder {
 
     public static Dialog build(String msg, String title, String posivStr, Context context, Random random) {
         final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
+        if(dialogBuilder.isShowing()){
+            dialogBuilder.dismiss();
+        }
         if (random != null) {
             dialogBuilder.withEffect(random.randomItem(Effectstype.values()));
         }
@@ -149,10 +158,10 @@ public class SimplerDialogBuilder {
         }
     }
 
-    public static Dialog build(View view, String posivStr, DialogInterface.OnClickListener listener, Context context) {
-        if (listener == null) {
+    public static Dialog build(View view, String posivStr, final DialogInterface.OnClickListener listener, Context context) {
             final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
             dialogBuilder
+                    .withMessage(null)
                     .withDialogColor(Color.WHITE)
                     .setCustomView(view, context)                   //.withMessage(null)  no Msg
                     .withButton1Text(posivStr)                                      //def gone
@@ -160,22 +169,28 @@ public class SimplerDialogBuilder {
                     .setButton1Click(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            dialogBuilder.dismiss();
+                            if(listener!=null){
+                                listener.onClick(dialogBuilder, 1);
+                            }else{
+                                dialogBuilder.dismiss();
+                            }
                         }
                     })
                     .show();
             return dialogBuilder;
         }
-        return new AlertDialog.Builder(context).setView(view).setPositiveButton(posivStr, listener).show();
-    }
 
     public static Dialog build(View view, String title, Context context, Random random) {
         NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
+        if(dialogBuilder.isShowing()){
+            dialogBuilder.dismiss();
+        }
         if (random != null) {
             dialogBuilder.withEffect(random.randomItem(Effectstype.values()));
         }
         dialogBuilder
                 .withDialogColor(Color.WHITE)
+                .withTitleColor(Color.RED)
                 .withTitle(title)
                 .setCustomView(view, context)                   //.withMessage(null)  no Msg
                 .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
@@ -186,6 +201,9 @@ public class SimplerDialogBuilder {
 
     public static Dialog build(View view, String b1, final DialogInterface.OnClickListener b1Listener, String b2, Context context, Random random) {
         final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
+        if(dialogBuilder.isShowing()){
+            dialogBuilder.dismiss();
+        }
         if (random != null) {
             dialogBuilder.withEffect(random.randomItem(Effectstype.values()));
         }

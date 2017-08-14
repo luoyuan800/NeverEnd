@@ -408,8 +408,8 @@ public class NeverEndServlet extends HttpServlet {
 
     private void writeObject(HttpServletResponse response, Object exs) throws IOException {
         ObjectOutputStream oos = new ObjectOutputStream(response.getOutputStream());
-        oos.writeObject(exs);
         response.setHeader(Field.RESPONSE_TYPE, Field.RESPONSE_OBJECT_TYPE);
+        oos.writeObject(exs);
         oos.flush();
         oos.close();
     }

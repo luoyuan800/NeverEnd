@@ -116,10 +116,11 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
                 });
             }
         });
+        showUploadException();
     }
 
 
-    public void showUploadException(){
+    private void showUploadException(){
         SharedPreferences sp = this.getSharedPreferences("mark", MODE_PRIVATE);
         if(sp.getBoolean("exception", false)){
             SharedPreferences.Editor editor = sp.edit();
@@ -132,9 +133,9 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            String filePath = FileUtils.zipSaveFiles(android.os.Build.MODEL + ","
+                            String filePath = FileUtils.zipLogFiles(android.os.Build.MODEL + ","
                                     + Build.VERSION.SDK_INT + ","
-                                    + android.os.Build.VERSION.RELEASE + ".zip" , SelectedActivity.this, true);
+                                    + android.os.Build.VERSION.RELEASE + ".zip");
 
                             new ServerService(getVersion()).uploadSaveFile(filePath);
                             FileUtils.clearLog();

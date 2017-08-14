@@ -254,4 +254,29 @@ public class StringUtils {
             return index;
         }
     }
+
+    public static String formatIntimacyString(long intimacy) {
+        String source = "<font color=\"#6A5ACD\">";
+        if (intimacy < 5) {
+            source += "它似乎很讨厌你。";
+        } else if (intimacy < 20) {
+            source += "它好像不愿搭理你。";
+        } else if (intimacy <50) {
+            source += "它在偷偷看你。";
+        } else if (intimacy < 90) {
+            source += "它有一点傲娇。";
+        } else if (intimacy < 120) {
+            source += "它开始喜欢你了。";
+        } else if (intimacy < 170) {
+            source += "它在亲近你。";
+        } else if (intimacy < 210) {
+            source += "它不愿意离开你。";
+        } else if (intimacy > 240) {
+            source += "它黏在你身上甩不掉。";
+        } else {
+            source += "默默的看着你...";
+        }
+        source += "</font>";
+        return source;
+    }
 }

@@ -401,8 +401,13 @@ public class NeverEnd extends Application implements InfoControlInterface {
         return hero.getReincarnate();
     }
 
-    public void showPopup(String msg) {
-        SimplerDialogBuilder.build(msg, Resource.getString(R.string.close), context, random);
+    public void showPopup(final String msg) {
+        viewHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                SimplerDialogBuilder.build(msg, Resource.getString(R.string.close), context, random);
+            }
+        });
     }
 
     public long resetSkill(@NotNull SkillParameter sp) {

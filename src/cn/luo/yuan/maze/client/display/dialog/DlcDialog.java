@@ -52,37 +52,45 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
 
     @Override
     public void onBuyFailure(String failure) {
-        context.showPopup("购买失败");
+        context.showPopup("购买失败，请确保你拥有足够的碎片。碎片可以通过观看广告获取。");
     }
 
     @Override
     public void onDetailSuccess(final MonsterDLC dlc) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                View view = View.inflate(context.getContext(),R.layout.monster_dlc, null);
-                view.setTag(R.string.item, dlc);
-                if(dlc.getImage().size() > 0){
-                    ((ImageView)view.findViewById(R.id.dlc_1)).setImageDrawable(Resource.loadDrawableFromBytes(dlc.getImage().get(0)));
+        if(dlc!=null) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    View view = View.inflate(context.getContext(), R.layout.monster_dlc, null);
+                    view.setTag(R.string.item, dlc);
+                    if (dlc.getImage().size() > 0) {
+                        ((ImageView) view.findViewById(R.id.dlc_1)).setImageDrawable(Resource.loadDrawableFromBytes(dlc.getImage().get(0)));
+                    }else{
+                        ((ImageView) view.findViewById(R.id.dlc_1)).setImageDrawable(null);
+                    }
+                    if (dlc.getImage().size() > 1) {
+                        ((ImageView) view.findViewById(R.id.dlc_2)).setImageDrawable(Resource.loadDrawableFromBytes(dlc.getImage().get(1)));
+                    }else{
+                        ((ImageView) view.findViewById(R.id.dlc_2)).setImageDrawable(null);
+                    }
+                    if (dlc.getImage().size() > 2) {
+                        ((ImageView) view.findViewById(R.id.dlc_3)).setImageDrawable(Resource.loadDrawableFromBytes(dlc.getImage().get(2)));
+                    }else{
+                        ((ImageView) view.findViewById(R.id.dlc_3)).setImageDrawable(null);
+                    }
+                    ((TextView) view.findViewById(R.id.dlc_title)).setText(Html.fromHtml(dlc.getTitle()));
+                    ((TextView) view.findViewById(R.id.dlc_desc)).setText(Html.fromHtml(dlc.getDesc()));
+                    ((TextView) view.findViewById(R.id.dlc_cost)).setText(StringUtils.formatNumber(dlc.getDebrisCost()));
+                    Dialog dialog = SimplerDialogBuilder.build(view, "详情", context.getContext(), context.getRandom());
+                    view.findViewById(R.id.dlc_buy).setOnClickListener(DlcDialog.this);
+                    view.findViewById(R.id.dlc_buy).setTag(R.string.item, dlc);
+                    view.findViewById(R.id.dlc_buy).setTag(R.string.dialog, dialog);
+                    view.findViewById(R.id.close).setOnClickListener(DlcDialog.this);
+                    view.findViewById(R.id.close).setTag(R.string.item, dlc);
+                    view.findViewById(R.id.close).setTag(R.string.dialog, dialog);
                 }
-                if(dlc.getImage().size() > 1){
-                    ((ImageView)view.findViewById(R.id.dlc_2)).setImageDrawable(Resource.loadDrawableFromBytes(dlc.getImage().get(1)));
-                }
-                if(dlc.getImage().size() > 2){
-                    ((ImageView)view.findViewById(R.id.dlc_2)).setImageDrawable(Resource.loadDrawableFromBytes(dlc.getImage().get(2)));
-                }
-                ((TextView)view.findViewById(R.id.dlc_title)).setText(Html.fromHtml(dlc.getTitle()));
-                ((TextView)view.findViewById(R.id.dlc_desc)).setText(Html.fromHtml(dlc.getDesc()));
-                ((TextView)view.findViewById(R.id.dlc_cost)).setText(StringUtils.formatNumber(dlc.getDebrisCost()));
-                Dialog dialog = SimplerDialogBuilder.build(view, "详情", context.getContext(), context.getRandom());
-                view.findViewById(R.id.dlc_buy).setOnClickListener(DlcDialog.this);
-                view.findViewById(R.id.dlc_buy).setTag(R.string.item, dlc);
-                view.findViewById(R.id.dlc_buy).setTag(R.string.dialog, dialog);
-                view.findViewById(R.id.close).setOnClickListener(DlcDialog.this);
-                view.findViewById(R.id.close).setTag(R.string.item, dlc);
-                view.findViewById(R.id.close).setTag(R.string.dialog, dialog);
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -101,7 +109,12 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
                     adapter.setOnClickListener(DlcDialog.this);
                     LoadMoreListView list = new LoadMoreListView(context.getContext());
                     list.setAdapter(adapter);
-                    SimplerDialogBuilder.build(list, Resource.getString(R.string.close), context.getContext(), context.getRandom());
+                    SimplerDialogBuilder.build(list, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }, context.getContext());
                 }
             }
         });

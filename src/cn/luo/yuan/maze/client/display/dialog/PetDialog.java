@@ -115,7 +115,7 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
             ((TextView) detailView.findViewById(R.id.pet_owner)).setText(Html.fromHtml(currentPet.getOwnerName()));
             ((TextView) detailView.findViewById(R.id.pet_mother)).setText(Html.fromHtml(currentPet.getMother()));
             ((TextView) detailView.findViewById(R.id.pet_farther)).setText(Html.fromHtml(currentPet.getFarther()));
-            ((TextView) detailView.findViewById(R.id.pet_intimacy)).setText(StringUtils.formatNumber(currentPet.getIntimacy(), false));
+            ((TextView) detailView.findViewById(R.id.pet_intimacy)).setText(Html.fromHtml(StringUtils.formatIntimacyString(currentPet.getIntimacy())));
             tag.setText(Html.fromHtml(currentPet.getTag()));
             detailView.findViewById(R.id.pet_drop).setOnClickListener(PetDialog.this);
             detailView.findViewById(R.id.pet_upgrade).setOnClickListener(PetDialog.this);

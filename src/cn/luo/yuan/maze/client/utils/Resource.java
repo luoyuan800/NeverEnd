@@ -151,8 +151,8 @@ public class Resource {
             if (signatures != null && signatures.length > 0) {
                 return signatures[0].toCharsString();
             }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            LogHelper.logException(e, "Resource->getSingInfo");
         }
         return "";
     }

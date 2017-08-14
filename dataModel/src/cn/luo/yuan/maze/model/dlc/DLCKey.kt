@@ -17,6 +17,6 @@ class DLCKey:Serializable {
     var cost:Int = 0
 
     override fun toString(): String {
-        return "$id - ${StringUtils.formatNumber(cost)}<br> $desc"
+        return "$id - ${StringUtils.formatNumber(cost)}碎片"
     }
 }
