@@ -49,5 +49,5 @@ class Grill() : UsableGoods() {
 
     override var desc: String = "一团黑乎乎的烤肉，不知道是什么味道。"
     override var name: String = "烤肉"
-    override var price = 1000L
+    override var price = 10000L
 }

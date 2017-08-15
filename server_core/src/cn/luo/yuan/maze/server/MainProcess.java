@@ -7,11 +7,7 @@ import cn.luo.yuan.maze.model.dlc.DLCKey;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.goods.Goods;
-import cn.luo.yuan.maze.model.goods.types.Grill;
-import cn.luo.yuan.maze.model.goods.types.HPM;
-import cn.luo.yuan.maze.model.goods.types.HalfSafe;
-import cn.luo.yuan.maze.model.goods.types.Omelet;
-import cn.luo.yuan.maze.model.goods.types.ResetSkill;
+import cn.luo.yuan.maze.model.goods.types.*;
 import cn.luo.yuan.maze.model.task.Scene;
 import cn.luo.yuan.maze.model.task.Task;
 import cn.luo.yuan.maze.serialize.ObjectTable;
@@ -223,7 +219,7 @@ public class MainProcess {
         ServerRecord record = heroTable.getRecord(ownerId);
         if (record != null && record.getGift() > 0) {
             try {
-                switch (random.nextInt(10)) {
+                switch (random.nextInt(14)) {
                     case 0:
                         HalfSafe medallion = new HalfSafe();
                         medallion.setCount(1);
@@ -259,6 +255,13 @@ public class MainProcess {
                         HPM hpm = new HPM();
                         hpm.setCount(1);
                         return hpm;
+                    case 8:
+                        ChangeHead ch = new ChangeHead();
+                        ch.setCount(1);
+                        return ch;
+                    case 9:
+                        record.setDebris(record.getDebris() + 1);
+                        return "获得一块碎片";
                     default:
                         return null;
                 }

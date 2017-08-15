@@ -438,7 +438,7 @@ public class DataManager implements DataManagerInterface {
         }, null);
     }
 
-    public NeverEndConfig getConfig() {
+    public NeverEndConfig loadConfig() {
         NeverEndConfig config = null;
         config = configDB.loadObject(String.valueOf(index));
         if (config == null) {

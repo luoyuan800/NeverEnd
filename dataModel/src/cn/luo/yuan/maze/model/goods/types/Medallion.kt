@@ -29,7 +29,7 @@ class Medallion() : Goods(){
         ListenerService.registerListener(MedallionListener)
     }
 
-    override var price = 1000000L
+    override var price = 9000000L
     override var desc = "拥有这个物品可以在被击败时不会掉到第一层，你和你宠物原地半血复活。"
 
     override var name = "免死金牌";

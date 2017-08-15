@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.persistence;
 
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.skill.Skill;
@@ -34,4 +35,6 @@ public interface DataManagerInterface {
     void saveAccessory(Accessory accessory);
 
     void savePet(@NotNull Pet pet);
+
+    NeverEndConfig loadConfig();
 }

@@ -27,10 +27,8 @@ import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.persistence.DataManager;
-import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
 import cn.luo.yuan.maze.utils.StringUtils;
 
-import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -49,7 +47,7 @@ public class GameActivity extends BaseActivity {
         Intent intent = getIntent();
 //        ListenerService.init();
         dataManager = new DataManager(intent.getIntExtra("index", -1), this);
-        final NeverEndConfig config = dataManager.getConfig();
+        final NeverEndConfig config = dataManager.loadConfig();
         if (!config.getSign().equals(Resource.getSingInfo())) {
             finish();
         }

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
@@ -90,7 +89,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 new GoodsDialog().show(control);
                 break;
             case R.id.theme:
-                NeverEndConfig config = control.getDataManager().getConfig();
+                NeverEndConfig config = control.getDataManager().loadConfig();
                 if(config.getTheme() == android.R.style.Theme_Holo_NoActionBar_Fullscreen){
                    config.setTheme(android.R.style.Theme_Holo_Light_NoActionBar_Fullscreen);
                 }else{

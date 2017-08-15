@@ -22,7 +22,7 @@ class ResetSkill : UsableGoods() {
 
     override var name: String = "易筋经"
 
-    override var price: Long = 100000L
+    override var price: Long = 600000L
 
 
     override fun perform(properties: GoodsProperties): Boolean {

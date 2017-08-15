@@ -46,7 +46,7 @@ public class GameActivityBak extends GameActivity {
         Intent intent = getIntent();
 //        ListenerService.init();
         dataManager = new DataManager(intent.getIntExtra("index", -1), this);super.onCreate(savedInstanceState);
-        NeverEndConfig config = dataManager.getConfig();
+        NeverEndConfig config = dataManager.loadConfig();
         if(config.getTheme() != 0){
             setTheme(config.getTheme());
         }

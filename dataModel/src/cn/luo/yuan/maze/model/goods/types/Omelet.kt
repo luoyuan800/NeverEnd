@@ -66,5 +66,5 @@ class Omelet() : UsableGoods() {
     override var desc: String = "传说中的煎蛋。吃下去之后发生随机事件。"
 
     override var name: String = "煎蛋"
-    override var price: Long = 1000L
+    override var price: Long = 9000L
 }
