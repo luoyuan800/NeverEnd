@@ -20,6 +20,7 @@ import cn.luo.yuan.maze.server.bomb.json.MyJSON;
 import cn.luo.yuan.maze.server.bomb.json.MyJSONValue;
 import cn.luo.yuan.maze.server.bomb.json.SimpleToken;
 import cn.luo.yuan.maze.server.model.User;
+import cn.luo.yuan.maze.server.persistence.CDKEYTable;
 import cn.luo.yuan.maze.server.persistence.CribberTable;
 import cn.luo.yuan.maze.server.persistence.DLCTable;
 import cn.luo.yuan.maze.server.persistence.ExchangeTable;
@@ -83,6 +84,7 @@ public class MainProcess {
     private DLCTable dlcTable;
     private cn.luo.yuan.maze.utils.Random random = new Random(System.currentTimeMillis());
     private ReleaseManager releaseManager;
+    private CDKEYTable cdkeyTable;
 
     public MainProcess(String root) throws IOException, ClassNotFoundException {
         this.root = new File(root);
@@ -348,6 +350,7 @@ public class MainProcess {
         if (database != null) {
             shop = new ShopTable(database, root);
             cribber = new CribberTable(database);
+            cdkeyTable = new CDKEYTable(database);
             try(Connection connection = database.getConnection()){
                 Statement statement = connection.createStatement();
                 ResultSet rs = statement.executeQuery("select sign,version from verify");
@@ -1027,6 +1030,20 @@ public class MainProcess {
             return releaseManager.getApk(getReleaseVersion());
         }else{
             return new byte[0];
+        }
+    }
+
+    public String useCdkey(String cdId, String userId){
+        ServerRecord record = heroTable.getRecord(userId);
+        if(record.getCdkdys().contains(cdId)){
+            return "已经使用过该兑换码了";
+        }else{
+            CDKEYTable.UseResult us = cdkeyTable.use(cdId);
+            if(us.getVerify()){
+                record.setDebris(record.getDebris() + us.getDebris());
+                record.setGift(record.getGift()+ us.getGift());
+            }
+            return us.toString();
         }
     }
 }

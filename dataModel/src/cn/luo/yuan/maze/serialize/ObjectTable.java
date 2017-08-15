@@ -261,7 +261,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
             e.printStackTrace();
             entry.deleteOnExit();
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return null;
 

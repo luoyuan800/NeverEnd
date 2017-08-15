@@ -530,6 +530,12 @@
                 android:onClick="onClick"
                 />
     </LinearLayout>
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:id="@+id/die_msg_button" android:layout_above="@+id/pause" android:layout_alignParentEnd="true"
+            android:src="@drawable/die_msg" android:background="@color/toumin" android:visibility="invisible"/>
 
 
 </RelativeLayout>

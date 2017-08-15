@@ -164,6 +164,9 @@ public class NeverEndServlet extends HttpServlet {
             PrintWriter writer = null;
             Boolean success = null;
             switch (path) {
+                case USE_KEY:
+                    writer = writeMessage(response,process.useCdkey(request.getHeader(Field.ITEM_ID_FIELD), ownerId));
+                    break;
                 case DOWNLOAD_APK:
                     byte[] apk = process.downloadApk();
                     response.getOutputStream().write(apk);
@@ -183,10 +186,10 @@ public class NeverEndServlet extends HttpServlet {
                     success = process.storeIntoWarehouse(object);
                     break;
                 case BUY_DLC:
-                    success = process.buyDlc(ownerId, request.getHeader(Field.ITEM_ID_FIELD));
+                    success = process.buyDlc(ownerId, readEncodeHeader(request, Field.ITEM_ID_FIELD));
                     break;
                 case QUERY_DLC_DETAIL:
-                    writeObject(response, process.getDlc(ownerId, request.getHeader(Field.ITEM_ID_FIELD)));
+                    writeObject(response, process.getDlc(ownerId, readEncodeHeader(request, Field.ITEM_ID_FIELD)));
                     break;
                 case QUERY_DLC:
                     writeObject(response, process.queryDLCKeys(ownerId));

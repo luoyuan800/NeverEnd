@@ -348,24 +348,38 @@ public class GameActivityViewHandler extends Handler {
 
     private void refreshDieMessage(){
         if(!SDFileUtils.getFilesListFromSD("die").isEmpty()){
-            //Show die icon
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    context.findViewById(R.id.die_msg_button).setVisibility(View.VISIBLE);
+                }
+            });
         }else{
-            //Hide die icon
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    context.findViewById(R.id.die_msg_button).setVisibility(View.GONE);
+                }
+            });
         }
     }
 
     public void addDieMessage(List<String> msgs){
-        List<String> list = SDFileUtils.getFilesListFromSD("die");
-        if(list.size() > 10){
-            SDFileUtils.deleteFile("die", list.get(0));
+        try {
+            List<String> list = SDFileUtils.getFilesListFromSD("die");
+            if (list.size() > 10) {
+                SDFileUtils.deleteFile("die", list.get(0));
+            }
+            String title = StringUtils.getCurrentTime();
+            StringBuilder builder = new StringBuilder(title).append(": <br>");
+            for (String s : msgs) {
+                builder.append(s);
+            }
+            SDFileUtils.saveStringIntoSD("die", title, builder.toString());
+            refreshDieMessage();
+        }catch (Exception e){
+            //ignore
         }
-        String title = StringUtils.getCurrentTime();
-        StringBuilder builder = new StringBuilder(title).append(": <br>");
-        for(String s : msgs){
-            builder.append(s);
-        }
-        SDFileUtils.saveStringIntoSD("die",title,builder.toString());
-        refreshDieMessage();
     }
 
     public void showDieList(){

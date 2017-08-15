@@ -123,6 +123,9 @@ public class GameActivity extends BaseActivity {
         control.getHero().setClick(control.getHero().getClick() + 1);
         HarmAble currentBattleTarget = control.getCurrentBattleTarget();
         switch (v.getId()) {
+            case R.id.die_msg_button:
+                control.getViewHandler().showDieList();
+                break;
             case R.id.monster_random:
                 updateRandomMonster = !updateRandomMonster;
                 updateMonsterControlButton();

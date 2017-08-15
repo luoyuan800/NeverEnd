@@ -43,7 +43,9 @@ class ServerRecord : IDModel, Serializable {
         }
     var gift = 0
 
-    var dlcs = mutableSetOf<String>()
+    val dlcs = mutableSetOf<String>()
+
+    val cdkdys = mutableSetOf<String>()
 
     override fun getId(): String? {
         return id

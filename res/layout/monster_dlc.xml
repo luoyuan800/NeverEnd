@@ -19,22 +19,22 @@
 
         <ImageView
                 android:src="@drawable/evo_er_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100sp"
+                android:layout_height="100sp"
                 android:id="@+id/dlc_1"
                 android:layout_weight="1"/>
 
         <ImageView
                 android:src="@drawable/evo_an"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100sp"
+                android:layout_height="100sp"
                 android:id="@+id/dlc_2"
                 android:layout_weight="1"/>
 
         <ImageView
                 android:src="@drawable/evo_du"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100sp"
+                android:layout_height="100sp"
                 android:id="@+id/dlc_3"
                 android:layout_weight="1"/>
     </LinearLayout>

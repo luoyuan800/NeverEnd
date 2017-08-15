@@ -13,6 +13,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -275,7 +276,7 @@ public class ServerService {
     public MonsterDLC getMonsterDlcDetail(String id, NeverEnd context){
         try {
             HttpURLConnection connection = server.getHttpURLConnection(Path.QUERY_DLC_DETAIL, RestConnection.POST);
-            connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
+            connection.addRequestProperty(Field.ITEM_ID_FIELD, URLEncoder.encode(id, "utf-8"));
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
             Object o = server.connect(connection);
             if(o instanceof MonsterDLC){
@@ -304,7 +305,7 @@ public class ServerService {
     public boolean buyDlc(String id, NeverEnd context){
         try {
             HttpURLConnection connection = server.getHttpURLConnection(Path.BUY_DLC, RestConnection.POST);
-            connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
+            connection.addRequestProperty(Field.ITEM_ID_FIELD, URLEncoder.encode(id, "utf-8"));
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
             Object o = server.connect(connection);
             if(o.toString().equals(Field.RESPONSE_RESULT_OK)){
