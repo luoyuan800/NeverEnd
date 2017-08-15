@@ -1,14 +1,13 @@
 package cn.luo.yuan.maze.client.service;
 
 import cn.luo.yuan.maze.Path;
-import cn.luo.yuan.maze.client.utils.FileUtils;
+import cn.luo.yuan.maze.client.utils.SDFileUtils;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.client.utils.RestConnection;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.dlc.DLCKey;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
-import cn.luo.yuan.maze.persistence.serialize.ObjectDB;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -254,7 +253,7 @@ public class ServerService {
             connection.connect();
             if (connection.getResponseCode() == 200) {
                 InputStream inputStream = connection.getInputStream();
-                File file = FileUtils.newFileInstance("", "" + ".maze", true);
+                File file = SDFileUtils.newFileInstance("", "" + ".maze", true);
                 if(file!=null) {
                     FileOutputStream fos = new FileOutputStream(file);
                     int i = inputStream.read();
@@ -302,7 +301,7 @@ public class ServerService {
         return Collections.emptyList();
     }
 
-    public boolean buyMonsterDlc(String id, NeverEnd context){
+    public boolean buyDlc(String id, NeverEnd context){
         try {
             HttpURLConnection connection = server.getHttpURLConnection(Path.BUY_DLC, RestConnection.POST);
             connection.addRequestProperty(Field.ITEM_ID_FIELD, id);

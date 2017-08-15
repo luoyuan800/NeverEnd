@@ -6,18 +6,23 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Message;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.GameActivity;
+import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.dialog.GiftDialog;
+import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.ClientPetMonsterHelper;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
+import cn.luo.yuan.maze.client.utils.SDFileUtils;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
@@ -26,7 +31,9 @@ import cn.luo.yuan.maze.model.skill.UpgradeAble;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.utils.StringUtils;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by luoyuan on 2017/6/25.
@@ -192,7 +199,7 @@ public class GameActivityViewHandler extends Handler {
             textView.setTextColor(Color.BLUE);
         }else{
             setText(textView, " - " + StringUtils.formatNumber(value, false));
-            textView.setTextColor(R.color.mobvista_reward_green);
+            textView.setTextColor(context.getResources().getColor(R.color.mobvista_reward_green));
         }
     }
 
@@ -337,6 +344,57 @@ public class GameActivityViewHandler extends Handler {
                 }).show();
             }
         });
+    }
+
+    private void refreshDieMessage(){
+        if(!SDFileUtils.getFilesListFromSD("die").isEmpty()){
+            //Show die icon
+        }else{
+            //Hide die icon
+        }
+    }
+
+    public void addDieMessage(List<String> msgs){
+        List<String> list = SDFileUtils.getFilesListFromSD("die");
+        if(list.size() > 10){
+            SDFileUtils.deleteFile("die", list.get(0));
+        }
+        String title = StringUtils.getCurrentTime();
+        StringBuilder builder = new StringBuilder(title).append(": <br>");
+        for(String s : msgs){
+            builder.append(s);
+        }
+        SDFileUtils.saveStringIntoSD("die",title,builder.toString());
+        refreshDieMessage();
+    }
+
+    public void showDieList(){
+        post(new Runnable() {
+            @Override
+            public void run() {
+                ListView listView = new ListView(context);
+                final StringAdapter<String> adapter = new StringAdapter<>(SDFileUtils.getFilesListFromSD("die"));
+                adapter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Object o = v.getTag(R.string.item);
+                        String s = SDFileUtils.readStringFromSD("die",o.toString());
+                        SimplerDialogBuilder.build(s, Resource.getString(R.string.close), context, null);
+                        SDFileUtils.deleteFile("die", o.toString());
+                        adapter.getData().remove(o.toString());
+                        adapter.notifyDataSetChanged();
+                        refreshDieMessage();
+                    }
+                });
+                SimplerDialogBuilder.build(listView, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }, context);
+            }
+        });
+
     }
 }
 

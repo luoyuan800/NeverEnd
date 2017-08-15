@@ -170,7 +170,7 @@ public class RunningService implements RunningServiceInterface {
                                 meet = true;
                                 gameContext.addMessage("遇见了 " + ((NameObject) monster).getDisplayName());
                                 BattleService battleService = new BattleService(hero, monster, gameContext.getRandom(), this);
-                                BattleMessage battleMessage = new BattleMessageImp(gameContext);
+                                BattleMessageImp battleMessage = new BattleMessageImp(gameContext);
                                 battleService.setBattleMessage(battleMessage);
                                 long material = monster instanceof Monster ? ((Monster) monster).getMaterial() : maze.getLevel();
                                 if (hero.getHp() > 0 && battleService.battle(gameContext.getMaze().getLevel())) {
@@ -204,6 +204,7 @@ public class RunningService implements RunningServiceInterface {
                                     }
                                     if (hero.getHp() <= 0) {
                                         gameContext.addMessage(String.format(gameContext.getContext().getString(R.string.lost), hero.getDisplayName()));
+                                        gameContext.getViewHandler().addDieMessage(battleMessage.getMessageCache());
                                         hero.setHp(hero.getMaxHp());
                                         for (Pet pet : new ArrayList<>(hero.getPets())) {
                                             pet.setHp(pet.getMaxHp());

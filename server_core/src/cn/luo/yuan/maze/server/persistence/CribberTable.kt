@@ -1,14 +1,35 @@
 package cn.luo.yuan.maze.server.persistence
 
+import cn.luo.yuan.maze.model.Accessory
 import cn.luo.yuan.maze.model.ServerData
+import cn.luo.yuan.maze.serialize.ObjectTable
 import cn.luo.yuan.maze.server.LogHelper
 import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection
+import java.sql.Connection
+import java.sql.Statement
 
 /**
  * Copyright @Luo
  * Created by Gavin Luo on 8/7/2017.
  */
 class CribberTable(private val database: DatabaseConnection) {
+    init {
+        var statement: Statement? = null
+        var connection: Connection? = null
+        try {
+            connection = database.getConnection()
+            statement = connection.createStatement()
+            statement.execute("create table IF NOT EXISTS cribber(uuid varchar(100) NOT NULL, " +
+                    "mac varchar(100), name varchar(45), " +
+                    "primary key (uuid))")
+        } catch (e: Exception) {
+            LogHelper.error(e)
+        } finally {
+            statement?.close()
+            connection?.close()
+        }
+    }
+
     fun isCribber(data: ServerData): Boolean {
         val connection = database.getConnection();
         try {

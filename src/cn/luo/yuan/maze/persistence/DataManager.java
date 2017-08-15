@@ -16,6 +16,7 @@ import cn.luo.yuan.maze.serialize.ObjectTable;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class DataManager implements DataManagerInterface {
     private SerializeLoader<ClickSkill> clickSkillLoader;
     private ObjectTable<NeverEndConfig> configDB;
     private ObjectTable<Hero> defenderDB;
+    private List<ObjectTable> tables = new ArrayList<>();
 
     private Sqlite database;
     private Context context;
@@ -67,13 +69,13 @@ public class DataManager implements DataManagerInterface {
         configDB = new ObjectTable<>(NeverEndConfig.class, context.getDir(String.valueOf(index), Context.MODE_PRIVATE));
         defenderDB = new ObjectTable<>(Hero.class, context.getDir(String.valueOf(index), Context.MODE_PRIVATE));
         this.context = context;
-        e.scheduleAtFixedRate(accessoryLoader.getDb(), 1000, 500, TimeUnit.MILLISECONDS);
-        e.scheduleAtFixedRate(petLoader.getDb(), 1000, 500, TimeUnit.MILLISECONDS);
-        e.scheduleAtFixedRate(goodsLoader.getDb(), 1000, 500, TimeUnit.MILLISECONDS);
-        e.scheduleAtFixedRate(skillLoader.getDb(), 1000, 500, TimeUnit.MILLISECONDS);
-        e.scheduleAtFixedRate(clickSkillLoader.getDb(), 1000, 500, TimeUnit.MILLISECONDS);
-        e.scheduleAtFixedRate(configDB, 1000, 500, TimeUnit.MILLISECONDS);
-        e.scheduleAtFixedRate(defenderDB, 1000, 500, TimeUnit.MILLISECONDS);
+        registerTable(accessoryLoader.getDb());
+        registerTable(petLoader.getDb());
+        registerTable(goodsLoader.getDb());
+        registerTable(skillLoader.getDb());
+        registerTable(clickSkillLoader.getDb());
+        registerTable(configDB);
+        registerTable(defenderDB);
     }
 
     public int getIndex() {
@@ -288,7 +290,7 @@ public class DataManager implements DataManagerInterface {
         List<Accessory> accessories = accessoryLoader.loadLimit(0, 1, new Index<Accessory>() {
             @Override
             public boolean match(Accessory accessory) {
-                return accessory.getName().equals(name);
+                return accessory!=null && accessory.getName().equals(name);
             }
         }, null);
         if (!accessories.isEmpty()) {
@@ -327,7 +329,7 @@ public class DataManager implements DataManagerInterface {
         return accessoryLoader.loadLimit(start, row, new Index<Accessory>() {
             @Override
             public boolean match(Accessory accessory) {
-                return accessory.getHeroIndex() == index && accessory.getName().contains(key);
+                return accessory!=null && accessory.getHeroIndex() == index && accessory.getName().contains(key);
             }
         }, order);
     }
@@ -397,6 +399,9 @@ public class DataManager implements DataManagerInterface {
             Hero hero = loadHero();
             ((OwnedAble) object).setKeeperName(hero.getName());
             ((OwnedAble) object).setKeeperId(hero.getId());
+        }
+        if(object instanceof ClickSkill){
+            saveClickSkill((ClickSkill) object);
         }
         if (object instanceof Skill) {
             saveSkill((Skill) object);
@@ -489,7 +494,30 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void registerTable(ObjectTable table){
-        e.scheduleAtFixedRate(table,10, 20, TimeUnit.SECONDS);
+        e.scheduleAtFixedRate(table,100, 500, TimeUnit.SECONDS);
+        tables.add(table);
+    }
+
+    public List<File> retrieveAllSaveFile(){
+        List<File> files = new ArrayList<>();
+        List<ObjectTable> tables = new ArrayList<>(this.tables);
+        tables.remove(defenderDB);
+        for(ObjectTable table : tables){
+            List<File> listFile = table.listFile();
+            if(listFile!=null) {
+                files.addAll(listFile);
+            }
+        }
+        return files;
+    }
+
+    public void overrideCurrentSaveFile(List<Serializable> objs){
+        clean();
+        for(Serializable obj : objs){
+            if(obj instanceof IDModel){
+                add((IDModel) obj);
+            }
+        }
     }
 
 }

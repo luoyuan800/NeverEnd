@@ -7,6 +7,7 @@ import cn.luo.yuan.maze.model.Index;
 import cn.luo.yuan.maze.serialize.ObjectTable;
 import cn.luo.yuan.maze.utils.StringUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -102,7 +103,7 @@ public class SerializeLoader<T extends Serializable> {
         List<T> ts = new ArrayList<T>(row);
         for (int i = realStart; i < objects.size() && ts.size() < row; i++) {
             T t = objects.get(i);
-            if (index == null || index.match(t)) {
+            if (t!=null && (index == null || index.match(t))) {
                 ts.add(t);
             }
         }
@@ -124,4 +125,5 @@ public class SerializeLoader<T extends Serializable> {
     public List<String> getAllID(){
         return db.loadIds();
     }
+
 }

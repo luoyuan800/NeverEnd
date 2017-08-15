@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -204,6 +205,15 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         return ids;
     }
 
+    public List<File> listFile(){
+        List<File> files = new ArrayList<>();
+        File[] list = new File(root).listFiles();
+        if (list != null) {
+            Collections.addAll(files, list);
+        }
+        return files;
+    }
+
     public List<T> removeExpire(long deathTime) {
         List<T> deleted = new ArrayList<T>();
         try {
@@ -227,7 +237,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         return deleted;
     }
 
-    private void saveObject(T object, File entry) throws IOException {
+    private synchronized void saveObject(T object, File entry) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(entry))) {
             oos.writeObject(object);
             oos.flush();
@@ -247,9 +257,14 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(entry))) {
             Object o = ois.readObject();
             return table.cast(o);
+        } catch(InvalidClassException e){
+            e.printStackTrace();
+            entry.deleteOnExit();
         } catch (Exception e) {
-            return null;
+            e.printStackTrace();
         }
+        return null;
+
     }
 
     private File buildFile(String id) {

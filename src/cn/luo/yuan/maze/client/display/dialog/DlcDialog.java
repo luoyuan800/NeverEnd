@@ -14,8 +14,10 @@ import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
 import cn.luo.yuan.maze.client.service.DLCManager;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.Resource;
+import cn.luo.yuan.maze.model.dlc.DLC;
 import cn.luo.yuan.maze.model.dlc.DLCKey;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
+import cn.luo.yuan.maze.model.dlc.SingleItemDLC;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.List;
@@ -29,12 +31,13 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
     private Handler handler = new Handler();
     private ProgressDialog progress;
     private DLCManager manager;
-    public DlcDialog(NeverEnd context){
+
+    public DlcDialog(NeverEnd context) {
         this.context = context;
         manager = new DLCManager(context);
     }
 
-    public void show(){
+    public void show() {
         progress = new ProgressDialog(context.getContext());
         progress.show();
         context.getExecutor().execute(new Runnable() {
@@ -46,7 +49,7 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
     }
 
     @Override
-    public void onBuySuccess(MonsterDLC dlc) {
+    public void onBuySuccess(DLC dlc) {
         context.showPopup(String.format("购买%s成功", dlc.getTitle()));
     }
 
@@ -56,26 +59,26 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
     }
 
     @Override
-    public void onDetailSuccess(final MonsterDLC dlc) {
-        if(dlc!=null) {
+    public void onDetailSuccess(final DLC dlc) {
+        if (dlc instanceof MonsterDLC) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     View view = View.inflate(context.getContext(), R.layout.monster_dlc, null);
                     view.setTag(R.string.item, dlc);
-                    if (dlc.getImage().size() > 0) {
-                        ((ImageView) view.findViewById(R.id.dlc_1)).setImageDrawable(Resource.loadDrawableFromBytes(dlc.getImage().get(0)));
-                    }else{
+                    if (((MonsterDLC)dlc).getImage().size() > 0) {
+                        ((ImageView) view.findViewById(R.id.dlc_1)).setImageDrawable(Resource.loadDrawableFromBytes(((MonsterDLC)dlc).getImage().get(0)));
+                    } else {
                         ((ImageView) view.findViewById(R.id.dlc_1)).setImageDrawable(null);
                     }
-                    if (dlc.getImage().size() > 1) {
-                        ((ImageView) view.findViewById(R.id.dlc_2)).setImageDrawable(Resource.loadDrawableFromBytes(dlc.getImage().get(1)));
-                    }else{
+                    if (((MonsterDLC)dlc).getImage().size() > 1) {
+                        ((ImageView) view.findViewById(R.id.dlc_2)).setImageDrawable(Resource.loadDrawableFromBytes(((MonsterDLC)dlc).getImage().get(1)));
+                    } else {
                         ((ImageView) view.findViewById(R.id.dlc_2)).setImageDrawable(null);
                     }
-                    if (dlc.getImage().size() > 2) {
-                        ((ImageView) view.findViewById(R.id.dlc_3)).setImageDrawable(Resource.loadDrawableFromBytes(dlc.getImage().get(2)));
-                    }else{
+                    if (((MonsterDLC)dlc).getImage().size() > 2) {
+                        ((ImageView) view.findViewById(R.id.dlc_3)).setImageDrawable(Resource.loadDrawableFromBytes(((MonsterDLC)dlc).getImage().get(2)));
+                    } else {
                         ((ImageView) view.findViewById(R.id.dlc_3)).setImageDrawable(null);
                     }
                     ((TextView) view.findViewById(R.id.dlc_title)).setText(Html.fromHtml(dlc.getTitle()));
@@ -103,7 +106,7 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
         handler.post(new Runnable() {
             @Override
             public void run() {
-                if(progress!=null && progress.isShowing()){
+                if (progress != null && progress.isShowing()) {
                     progress.dismiss();
                     StringAdapter<DLCKey> adapter = new StringAdapter<DLCKey>(keys);
                     adapter.setOnClickListener(DlcDialog.this);
@@ -128,22 +131,24 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
     @Override
     public void onClick(View v) {
         Object o = v.getTag(R.string.item);
-        if(o instanceof MonsterDLC){
-            MonsterDLC dlc = (MonsterDLC)o;
-            switch (v.getId()){
-                case R.id.dlc_buy:
-                    manager.buyMonsterDlc(dlc, this);
-                    break;
-                case R.id.close:
-                    Dialog dialog = (Dialog) v.getTag(R.string.dialog);
-                    if(dialog!=null){
-                        dialog.dismiss();
-                    }
-                    break;
-            }
+        switch (v.getId()) {
+            case R.id.dlc_buy:
+                if(o instanceof MonsterDLC) {
+                    manager.buyMonsterDlc((MonsterDLC) o, this);
+                }else if(o instanceof SingleItemDLC){
+                    manager.buySingleItemDlc((SingleItemDLC) o, this);
+                }
+                break;
+            case R.id.close:
+                Dialog dialog = (Dialog) v.getTag(R.string.dialog);
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+                break;
         }
-        if( o instanceof DLCKey){
-            DLCKey key = (DLCKey)o;
+
+        if (o instanceof DLCKey) {
+            DLCKey key = (DLCKey) o;
             manager.queryMonsterDLC(key.getId(), this);
         }
 

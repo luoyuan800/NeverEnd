@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.server.persistence;
 
+import cn.luo.yuan.maze.model.dlc.DLC;
 import cn.luo.yuan.maze.model.dlc.DLCKey;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
 import cn.luo.yuan.maze.serialize.ObjectTable;
@@ -14,22 +15,22 @@ import java.util.Set;
  * Created by Gavin Luo on 8/8/2017.
  */
 public class DLCTable {
-    private ObjectTable<MonsterDLC> monsterDLCTable;
+    private ObjectTable<DLC> dlcTable;
     private MainProcess process;
 
     public DLCTable(MainProcess process) {
         this.process = process;
-        this.monsterDLCTable = new ObjectTable<>(MonsterDLC.class, process.root);
+        this.dlcTable = new ObjectTable<>(DLC.class, process.root);
     }
 
-    public ObjectTable<MonsterDLC> getMonsterDLCTable() {
-        return monsterDLCTable;
+    public ObjectTable<DLC> getDLCTable() {
+        return dlcTable;
     }
 
     public List<DLCKey> queryKeys(Set<String> filterOut) {
         List<DLCKey> keys = new ArrayList<>();
-        for (String title : monsterDLCTable.loadIds()) {
-            MonsterDLC dlc = monsterDLCTable.loadObject(title);
+        for (String title : dlcTable.loadIds()) {
+            DLC dlc = dlcTable.loadObject(title);
             if (dlc != null) {
                 DLCKey key = new DLCKey();
                 key.setId(dlc.getId());
@@ -41,7 +42,7 @@ public class DLCTable {
         return keys;
     }
 
-    public MonsterDLC getMonsterDLC(String id) {
-        return monsterDLCTable.loadObject(id);
+    public DLC getDLC(String id) {
+        return dlcTable.loadObject(id);
     }
 }

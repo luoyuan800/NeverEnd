@@ -2,8 +2,11 @@ package cn.luo.yuan.maze.client.service;
 
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Monster;
+import cn.luo.yuan.maze.model.dlc.DLC;
 import cn.luo.yuan.maze.model.dlc.DLCKey;
+import cn.luo.yuan.maze.model.dlc.EggDLC;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
+import cn.luo.yuan.maze.model.dlc.SingleItemDLC;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.io.ByteArrayInputStream;
@@ -28,6 +31,22 @@ public class DLCManager {
             public void run() {
                 MonsterDLC dlc = service.getMonsterDlcDetail(id, context);
                 saveMonsterDlc(dlc, callBack);
+            }
+        });
+    }
+
+    public void buySingleItemDlc(final SingleItemDLC dlc, final BuyCallBack callBack) {
+        context.getExecutor().submit(new Runnable() {
+            @Override
+            public void run() {
+                if (dlc != null) {
+                    if (service.buyDlc(dlc.getId(), context)) {
+                        context.getDataManager().add(dlc.getItem());
+                        callBack.onBuySuccess(dlc);
+                    } else {
+                        callBack.onBuyFailure(StringUtils.EMPTY_STRING);
+                    }
+                }
             }
         });
     }
@@ -61,7 +80,7 @@ public class DLCManager {
     }
 
     public interface BuyCallBack {
-        void onBuySuccess(MonsterDLC dlc);
+        void onBuySuccess(DLC dlc);
 
         void onBuyFailure(String failure);
     }
@@ -72,13 +91,13 @@ public class DLCManager {
     }
 
     public interface DetailCallBack{
-        void onDetailSuccess(MonsterDLC dlc);
+        void onDetailSuccess(DLC dlc);
         void onDetailFailure();
     }
 
     private void saveMonsterDlc(MonsterDLC dlc, BuyCallBack callBack) {
         if (dlc != null) {
-            if (service.buyMonsterDlc(dlc.getId(), context)) {
+            if (service.buyDlc(dlc.getId(), context)) {
                 for (int i = 0; i < dlc.getMonsters().size(); i++) {
                     Monster monster = dlc.getMonsters().get(i);
                     byte[] imageByte = dlc.getImage().get(i);

@@ -36,21 +36,19 @@ class ServerData : Serializable {
     override fun toString(): String {
         val acces = StringBuilder()
         if (awardAccessories != null && awardAccessories!!.isNotEmpty()) {
+            acces.append("<br>装备：<br>")
             for (accessory in awardAccessories!!) {
                 acces.append(accessory.displayName).append("<br>")
             }
-        } else {
-            acces.append("无")
         }
         val petb = StringBuilder()
         if (awardPets != null && awardPets!!.isNotEmpty()) {
+            petb.append("<br>宠物：<br>")
             for (pet in awardPets!!) {
                 petb.append(pet.displayName).append("<br>")
             }
-        } else {
-            petb.append("无")
         }
-        return "锻造点：" + StringUtils.formatNumber(material, false) + "<br>" + "装备：<br>" + petb + "<br>宠物：<br>" + petb
+        return "锻造点：" + StringUtils.formatNumber(material, false) + acces + petb
     }
 
     fun getId(): String? {

@@ -10,7 +10,7 @@ import java.io.PrintWriter;
  * Created by luoyuan on 9/20/15.
  */
 public class LogHelper {
-    static String logFolder = FileUtils.SD_PATH + "/log";
+    static String logFolder = SDFileUtils.SD_PATH + "/log";
     private static String pkgName;
     private static int versionCode;
 
@@ -30,7 +30,7 @@ public class LogHelper {
 
     public static void logException(final Throwable e, String msg, Context context) {
         e.printStackTrace();
-        File file = FileUtils.newFileInstance(logFolder, e.getClass().getSimpleName() + "." + versionCode, true);
+        File file = SDFileUtils.newFileInstance(logFolder, e.getClass().getSimpleName() + "." + versionCode, true);
         if(file!=null) {
             try (FileWriter writer = new FileWriter(file, false)) {
                 try {

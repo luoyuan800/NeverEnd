@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.server;
 
 import cn.luo.yuan.maze.exception.CribberException;
 import cn.luo.yuan.maze.model.*;
+import cn.luo.yuan.maze.model.dlc.DLC;
 import cn.luo.yuan.maze.model.dlc.DLCKey;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
 import cn.luo.yuan.maze.model.effect.Effect;
@@ -389,7 +390,7 @@ public class MainProcess {
         executor.scheduleAtFixedRate(heroTable, 1, 1, TimeUnit.DAYS);
         executor.scheduleAtFixedRate(exchangeTable.getExchangeDb(), 120, 200, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(monsterTable.getMonsterTable(), 120, 500, TimeUnit.MILLISECONDS);
-        executor.scheduleAtFixedRate(dlcTable.getMonsterDLCTable(), 525, 1500, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(dlcTable.getDLCTable(), 525, 1500, TimeUnit.MILLISECONDS);
     }
 
     public ServerData queryHeroData(String id) {
@@ -953,8 +954,8 @@ public class MainProcess {
         }
     }
 
-    public MonsterDLC getDlc(String ownerId, String id){
-        MonsterDLC dlc = dlcTable.getMonsterDLC(id);
+    public DLC getDlc(String ownerId, String id){
+        DLC dlc = dlcTable.getDLC(id);
         if(dlc!=null){
             dlc = dlc.clone();
             ServerRecord record = heroTable.getRecord(ownerId);
@@ -967,7 +968,7 @@ public class MainProcess {
     }
 
     public boolean buyDlc(String ownerId, String id){
-        MonsterDLC dlc = dlcTable.getMonsterDLC(id);
+        DLC dlc = dlcTable.getDLC(id);
         if(dlc!=null){
             ServerRecord record = heroTable.getRecord(ownerId);
             if(!record.getDlcs().contains(id)){

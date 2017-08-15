@@ -13,7 +13,7 @@ import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.dialog.GiftDialog;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
 import cn.luo.yuan.maze.client.service.ServerService;
-import cn.luo.yuan.maze.client.utils.FileUtils;
+import cn.luo.yuan.maze.client.utils.SDFileUtils;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.persistence.IndexManager;
@@ -133,13 +133,13 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            String filePath = FileUtils.zipLogFiles(android.os.Build.MODEL + ","
+                            String filePath = SDFileUtils.zipLogFiles(android.os.Build.MODEL + ","
                                     + Build.VERSION.SDK_INT + ","
                                     + android.os.Build.VERSION.RELEASE + ".zip");
 
                             new ServerService(getVersion()).uploadSaveFile(filePath);
-                            FileUtils.clearLog();
-                            FileUtils.deleteFile(filePath);
+                            SDFileUtils.clearLog();
+                            SDFileUtils.deleteFile(filePath);
                         }
                     }).start();
                 }
