@@ -359,7 +359,7 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
     public boolean evolution(Pet pet, int eveIndex) {
         if (eveIndex != pet.getIndex()) {
             Monster eveMonster = loadMonsterByIndex(eveIndex);
-            if (eveMonster != null) {
+            if (eveMonster != null && (eveMonster.getSex() == -1 || eveMonster.getSex() == pet.getSex())) {
                 pet.setIndex(eveMonster.getIndex());
                 pet.setType(eveMonster.getType());
                 pet.setAtk(pet.getAtk() + random.nextLong(eveMonster.getAtk() / 3));

@@ -7,10 +7,8 @@ import android.content.Intent;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
@@ -37,17 +35,26 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
         shareIntent.setType("text/*");
         Intent chooser = Intent.createChooser(shareIntent, "分享到");
         context.startActivity(chooser);
-            /*if (System.currentTimeMillis() - heroN.getLastShare() > 24 * 60 * 60 * 1000) {
-                //heroN.setLastShare(System.currentTimeMillis());
-                //heroN.addMaterial(500000);
-            } else {
-                Toast.makeText(context, "每24小时只能获得一次分享奖励。", Toast.LENGTH_LONG).show();
-            }*/
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.cdkey:
+                EditText editText = new EditText(context);
+                editText.setHint("输入兑换码");
+                SimplerDialogBuilder.build(editText, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }, context);
+                break;
             case R.id.warehouse:
                 new WarehouseDialog(control).show();
                 break;
@@ -118,7 +125,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                         shareToNet();
                     }
                 });
-                sharingTip.setMessage("如果你觉得这个游戏好玩，不妨帮忙分享到你的圈子中，让更多的人参与到我们的游戏建设中来，一起享受放置的快乐。欢迎关注作者的的微信订阅号：某鸟碎碎");
+                sharingTip.setMessage("如果你觉得这个游戏好玩，不妨帮忙分享到你的圈子中，让更多的人参与到我们的游戏建设中来，一起享受放置的快乐。欢迎关注作者的的微信订阅号：某鸟碎碎。 分享后发送截图到公众号，可以获得兑换码奖励。");
                 sharingTip.show();
                 break;
             case R.id.save:
@@ -144,7 +151,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
         dialog.setTitle("点赞？");
         ScrollView linearLayout = new ScrollView(context);
         TextView tv = new TextView(context);
-        tv.setText("请关注作者的公众号，某鸟碎碎，偶尔会发送兑换码哦！");
+        tv.setText("您的肯定是对我最好的鼓励！请关注作者的公众号<某鸟碎碎>，偶尔会发送兑换码哦！分享游戏到你的朋友圈、基友圈、游戏群、论坛，然后截图发送到公众号，可以获得兑换码。");
         tv.setAutoLinkMask(Linkify.ALL);
         tv.setMovementMethod(LinkMovementMethod.getInstance());
         linearLayout.addView(tv);
@@ -153,6 +160,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                shareToNet();
             }
 
         });

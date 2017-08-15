@@ -21,7 +21,7 @@ public class BuildDLC {
     public static File root = new File("dlc");
     public static void main(String... args) throws IOException {
         ObjectTable<MonsterDLC> dlcTable = new ObjectTable<MonsterDLC>(MonsterDLC.class, new File("dlc"));
-        buildJiuwei(dlcTable);
+        buildAngel(dlcTable);
     }
 
     private static byte[] readImage(String path) throws IOException {
@@ -105,6 +105,141 @@ public class BuildDLC {
         monster.setDesc("九尾狐，中华古代汉族神话传说中的生物--青丘之山，有兽焉，其状如狐而九尾。在迷宫创造者消失后才出现的生物。");
         dlc.getMonsters().add(monster);
         dlc.getImage().add(readImage("D:\\NeverEnd\\assets\\monster\\jiuweihu_red.png"));
+        System.out.println(table.save(dlc));
+    }
+    public static void buildAngel(ObjectTable<MonsterDLC> table) throws IOException {
+        MonsterDLC dlc = new MonsterDLC();
+        dlc.setTitle("天降之物");
+        dlc.setDebrisCost(10);
+        dlc.setDesc("传说天使是圣洁的，是代表勇敢，代表智慧。但其实他们也有另一面，黑暗、堕落、淫乱。据说，天使是没有性别，那么，俊美的外表下到底是否有你想要的灵魂？此DLC包含全新的七种天使。");
+        Monster monster = new Monster();
+        monster.setIndex(68);
+        monster.setHp(76);
+        monster.setMaxHp(76);
+        monster.setAtk(219);
+        monster.setDef(123);
+        monster.setEggRate(40);
+        monster.setPetRate(15);
+        monster.setSilent(16);
+        monster.setHitRate(10);
+       monster.setSex(-1);
+        monster.setRank(2);
+        monster.setNext(69);
+        monster.setRace(Race.Elyosr);
+        monster.setType("天使");
+        monster.setDesc("代表圣洁、良善，正直，保护平民不被恶魔侵扰。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("D:\\NeverEnd\\assets\\monster\\angle_0.png"));
+        //---------//
+        monster = new Monster();
+        monster.setIndex(71);
+        monster.setHp(51);
+        monster.setMaxHp(51);
+        monster.setAtk(105);
+        monster.setDef(255);
+        monster.setEggRate(19);
+        monster.setPetRate(22);
+        monster.setSilent(37);
+        monster.setHitRate(28);
+        monster.setSex(-1);
+        monster.setRank(3);
+        monster.setRace(Race.Eviler);
+        monster.setType("天使喵");
+        monster.setDesc("它的眼神为何如此忧伤，或许只是因为你不再爱它。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("D:\\NeverEnd\\assets\\monster\\angle_miao.png"));
+        //---------//
+        monster = new Monster();
+        monster.setIndex(92);
+        monster.setHp(240);
+        monster.setMaxHp(240);
+        monster.setAtk(68);
+        monster.setDef(237);
+        monster.setEggRate(9);
+        monster.setPetRate(22);
+        monster.setSilent(37);
+        monster.setHitRate(18);
+        monster.setSex(1);
+        monster.setRank(4);
+        monster.setRace(Race.Elyosr);
+        monster.setType("妮姆芙");
+        monster.setDesc("β型号");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("D:\\NeverEnd\\assets\\monster\\nimufu.png"));
+        //---------//
+        monster = new Monster();
+        monster.setIndex(69);
+        monster.setHp(86);
+        monster.setMaxHp(86);
+        monster.setAtk(175);
+        monster.setDef(253);
+        monster.setEggRate(21);
+        monster.setPetRate(13);
+        monster.setSilent(12);
+        monster.setHitRate(10);
+        monster.setSex(-1);
+        monster.setRace(Race.Orger);
+        monster.setRank(3);
+        monster.setType("黑天使");
+        monster.setDesc("被人性中最最邪恶的一面污染的天使就会进化为黑天使。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("D:\\NeverEnd\\assets\\monster\\angle_1.png"));
+        //---------//
+        monster = new Monster();
+        monster.setIndex(70);
+        monster.setHp(41);
+        monster.setMaxHp(41);
+        monster.setFirstName(FirstName.frailty);
+        monster.setSecondName(SecondName.face);
+        monster.setAtk(105);
+        monster.setDef(210);
+        monster.setEggRate(9);
+        monster.setPetRate(12);
+        monster.setSilent(27);
+        monster.setHitRate(18);
+        monster.setSex(-1);
+        monster.setRank(4);
+        monster.setRace(Race.Elyosr);
+        monster.setType("辉天使");
+        monster.setDesc("磐涅，重生，进化成更高级的生命。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("D:\\NeverEnd\\assets\\monster\\Angel.png"));
+        //---------//
+        monster = new Monster();
+        monster.setIndex(93);
+        monster.setHp(255);
+        monster.setMaxHp(255);
+        monster.setAtk(255);
+        monster.setDef(37);
+        monster.setEggRate(0);
+        monster.setPetRate(22);
+        monster.setSilent(37);
+        monster.setHitRate(18);
+        monster.setSex(1);
+        monster.setRank(4);
+        monster.setRace(Race.Elyosr);
+        monster.setType("伊卡洛斯");
+        monster.setDesc("α型号。攻击奇高，内心却很脆弱。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("D:\\NeverEnd\\assets\\monster\\yikaluos.png"));
+        //---------//
+        monster = new Monster();
+        monster.setIndex(95);
+        monster.setHp(125);
+        monster.setMaxHp(125);
+        monster.setAtk(255);
+        monster.setDef(99);
+        monster.setEggRate(0);
+        monster.setPetRate(20);
+        monster.setSilent(47);
+        monster.setHitRate(38);
+        monster.setSex(1);
+        monster.setRank(5);
+        monster.setRace(Race.Nonsr);
+        monster.setType("CHISE");
+        monster.setDesc("世界战争的\"最终兵器\"。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("D:\\NeverEnd\\assets\\monster\\chisi.png"));
         System.out.println(table.save(dlc));
     }
 }
