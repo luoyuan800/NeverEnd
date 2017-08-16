@@ -368,11 +368,11 @@ public class MainProcess {
                 }
                 rs.close();
                 statement.execute("CREATE TABLE IF NOT EXISTS rang_award (" +
-                        "  range INTEGER UNSIGNED NOT NULL," +
+                        "  `range` INTEGER UNSIGNED NOT NULL," +
                         "  debris INTEGER UNSIGNED DEFAULT 0," +
                         "  gift INTEGER UNSIGNED DEFAULT 0," +
                         "  mate INTEGER UNSIGNED DEFAULT 0," +
-                        "  PRIMARY KEY (range)" +
+                        "  PRIMARY KEY (`range`)" +
                         ")");
                 statement.close();
             } catch (Exception e) {
@@ -952,11 +952,13 @@ public class MainProcess {
                     ra.setRange(range);
                     ra.setId(userId);
                     if (range < 10) {
-                        try (ResultSet rs = sta.executeQuery("select * from rang_award where range = " + range)) {
+                        try (ResultSet rs = sta.executeQuery("select * from rang_award where `range` = " + range)) {
                             if (rs.next()) {
                                 ra.setDebris(rs.getInt("debris"));
                                 ra.setGift(rs.getInt("gift"));
                                 ra.setMate(rs.getInt("mate"));
+                            }else{
+                                return null;
                             }
                         }
                     } else {

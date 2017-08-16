@@ -8,6 +8,7 @@ import cn.luo.yuan.maze.model.dlc.EggDLC;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
 import cn.luo.yuan.maze.model.dlc.SingleItemDLC;
 import cn.luo.yuan.maze.utils.StringUtils;
+import cn.luo.yuan.maze.utils.annotation.StringValue;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
@@ -102,7 +103,7 @@ public class DLCManager {
                     Monster monster = dlc.getMonsters().get(i);
                     byte[] imageByte = dlc.getImage().get(i);
                     context.getPetMonsterHelper().addSpecialMonster(monster);
-                    Resource.saveImageIntoAppFolder(String.valueOf(dlc.getId()),new ByteArrayInputStream(imageByte));
+                    Resource.saveImageIntoAppFolder(String.valueOf(monster.getIndex()),new ByteArrayInputStream(imageByte));
                 }
                 callBack.onBuySuccess(dlc);
             } else {

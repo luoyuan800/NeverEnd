@@ -136,7 +136,7 @@ public class GameActivity extends BaseActivity {
                     int index = monster.getIndex() + 1;
                     Monster nexMonster = control.getPetMonsterHelper().loadMonsterByIndex(index);
                     int count = 0;
-                    while (nexMonster == null && count++ < 25) {
+                    while (nexMonster == null && count++ < 55) {
                         if(index > 500 || index < 0){
                             index = 1;
                         }
@@ -154,11 +154,11 @@ public class GameActivity extends BaseActivity {
                     int index = currMonster.getIndex() - 1;
                     Monster nexMonster = control.getPetMonsterHelper().loadMonsterByIndex(index);
                     int count = 0;
-                    while (nexMonster == null && count++ < 25) {
+                    while (nexMonster == null && count++ < 55) {
                         if(index > 500 || index < 0){
                             index = 1;
                         }
-                        nexMonster = control.getPetMonsterHelper().loadMonsterByIndex(index ++);
+                        nexMonster = control.getPetMonsterHelper().loadMonsterByIndex(index--);
                     }
                     updateMonsterDetails(nexMonster);
                 }

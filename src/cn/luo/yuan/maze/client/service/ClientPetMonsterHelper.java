@@ -96,11 +96,11 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
         if (drawable == null) {
             drawable = Resource.loadImageFromAssets("monster/" + id + ".png", false);
         }
-        if (drawable == null) {
-            drawable = Resource.loadImageFromAssets("monster/wenhao.jpg", false);
-        }
         if(drawable == null){
             drawable = Resource.loadImageFromAppFolder(id, false);
+        }
+        if (drawable == null) {
+            drawable = Resource.loadImageFromAssets("monster/wenhao.jpg", false);
         }
         return drawable;
     }
