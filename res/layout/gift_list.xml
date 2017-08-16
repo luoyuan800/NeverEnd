@@ -30,13 +30,13 @@
     </LinearLayout>
     <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:id="@+id/skill_layout_2" android:layout_weight="1" android:layout_gravity="center_vertical">
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="守财奴" android:enabled="false"
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="守财奴" android:enabled="true"
                 android:id="@+id/Searcher" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="龙裔" android:enabled="false"
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="龙裔" android:enabled="true"
                 android:id="@+id/Long" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="元素之心" android:enabled="false"
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="元素之心"
                 android:id="@+id/Element" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
     </LinearLayout>

@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -33,7 +34,12 @@ public class SDFileUtils {
     private static String DB_NAME = Sqlite.DB_NAME;
 
     public static List<String> getFilesListFromSD(String folder){
-        return Arrays.asList(new File(SDFileUtils.SD_PATH, folder).list());
+        File file = new File(SDFileUtils.SD_PATH, folder);
+        if(file.exists()) {
+            return Arrays.asList(file.list());
+        }else{
+            return Collections.emptyList();
+        }
     }
 
     public static File newFileInstance(String folder, String fileName, boolean delete) {
@@ -189,11 +195,7 @@ public class SDFileUtils {
     }
 
     public static void saveStringIntoSD(String folder, String file, String msg){
-        File folderFile = new File(folder);
-        if(!folderFile.exists()){
-            folderFile.mkdirs();
-        }
-        File filfile = new File(folderFile, file);
+        File filfile = newFileInstance(folder, file, true);
         try (FileWriter writer = new FileWriter(filfile)){
             writer.write(msg);
         } catch (IOException e) {

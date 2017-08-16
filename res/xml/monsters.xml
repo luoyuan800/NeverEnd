@@ -336,7 +336,7 @@
         <pet_rate>5</pet_rate>
         <sex>-1</sex>
         <race>Eviler</race>
-        <rank>5</rank>
+        <rank>3</rank>
         <evolution>141</evolution>
     </monster>
     <monster>
@@ -444,7 +444,7 @@
         <pet_rate>20</pet_rate>
         <sex>-1</sex>
         <race>Orger</race>
-        <rank>49</rank>
+        <rank>3</rank>
         <evolution></evolution>
     </monster>
     <monster>

@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.service;
 import cn.luo.yuan.maze.exception.MountLimitException;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.original.*;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -83,9 +84,10 @@ public class AccessoryHelper {
     /**
      * @param accessory mounted
      * @param check
+     * @param context
      * @return Accessory that un mount
      */
-    public synchronized static Accessory mountAccessory(Accessory accessory, Hero hero, boolean check) throws MountLimitException {
+    public synchronized static Accessory mountAccessory(Accessory accessory, Hero hero, boolean check, InfoControlInterface context) throws MountLimitException {
         Accessory uMount = null;
         if (check) {
             checkMountLimit(accessory.getEffects(), hero);
@@ -108,25 +110,35 @@ public class AccessoryHelper {
         if (hero.getAccessories().add(accessory)) {
             hero.getEffects().addAll(accessory.getEffects());
             accessory.setMounted(true);
-            judgeEffectEnable(hero);
+            judgeEffectEnable(hero, context);
         }
         return uMount;
     }
 
-    public static void unMountAccessory(Accessory accessory, Hero hero) {
+    public static void unMountAccessory(Accessory accessory, Hero hero, InfoControlInterface context) {
         hero.getAccessories().remove(accessory);
         hero.getEffects().removeAll(accessory.getEffects());
-        judgeEffectEnable(hero);
+        judgeEffectEnable(hero, context);
         accessory.setMounted(false);
         accessory.resetElementEffectEnable();
     }
 
-    public static void judgeEffectEnable(Hero hero) {
+    public static void judgeEffectEnable(Hero hero, InfoControlInterface context) {
+        boolean isElement = false;
+        if(context!=null) {
+            NeverEndConfig config = context.getDataManager().loadConfig();
+            isElement = config.isElementer();
+        }
         for (Accessory mounted : hero.getAccessories()) {
             mounted.resetElementEffectEnable();
+            if(isElement && hero.getElement().isReinforce(mounted.getElement())){
+                mounted.elementEffectEnable();
+                return;
+            }
             for (Accessory other : hero.getAccessories()) {
                 if (other != mounted && other.getElement().isReinforce(mounted.getElement())) {
                     mounted.elementEffectEnable();
+                    return;
                 }
             }
         }

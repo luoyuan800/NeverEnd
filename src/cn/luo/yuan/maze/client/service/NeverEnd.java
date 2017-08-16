@@ -309,7 +309,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
     }
 
     public void mountAccessory(Accessory accessory, boolean check) throws MountLimitException {
-        Accessory uMount = cn.luo.yuan.maze.service.AccessoryHelper.mountAccessory(accessory, hero, check);
+        Accessory uMount = cn.luo.yuan.maze.service.AccessoryHelper.mountAccessory(accessory, hero, check, this);
         if (uMount != null) {
             dataManager.saveAccessory(uMount);
         }
@@ -376,7 +376,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
         }
         SkillHelper.detectSkillCount(hero);
         for (Accessory accessory : new ArrayList<>(hero.getAccessories())) {
-            AccessoryHelper.unMountAccessory(accessory, hero);
+            AccessoryHelper.unMountAccessory(accessory, hero, this);
         }
         SkillParameter sp = new SkillParameter(hero);
         sp.set(SkillParameter.CONTEXT, this);

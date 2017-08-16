@@ -378,7 +378,7 @@ public class GameActivityViewHandler extends Handler {
             SDFileUtils.saveStringIntoSD("die", title, builder.toString());
             refreshDieMessage();
         }catch (Exception e){
-            //ignore
+            LogHelper.logException(e, "LogDie");
         }
     }
 

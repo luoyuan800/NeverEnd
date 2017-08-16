@@ -33,20 +33,30 @@ public class GiftDialog implements View.OnClickListener {
 
     public void show() {
         mainDialog.show();
+
         Button giftButton = (Button) mainDialog.findViewById(R.id.hero_heart);
         giftButton.setTag(Gift.HeroHeart);
         giftButton.setOnClickListener(this);
+
         giftButton = (Button) mainDialog.findViewById(R.id.DarkHeard);
         giftButton.setTag(Gift.DarkHeard);
         giftButton.setOnClickListener(this);
+
         giftButton = (Button) mainDialog.findViewById(R.id.Warrior);
         giftButton.setTag(Gift.Warrior);
         giftButton.setOnClickListener(this);
+
         giftButton = (Button) mainDialog.findViewById(R.id.Searcher);
+        giftButton.setTag(Gift.Searcher);
+        giftButton.setOnClickListener(this);
 
         giftButton = (Button) mainDialog.findViewById(R.id.Long);
+        giftButton.setTag(Gift.Long);
+        giftButton.setOnClickListener(this);
 
         giftButton = (Button) mainDialog.findViewById(R.id.Element);
+        giftButton.setTag(Gift.Element);
+        giftButton.setOnClickListener(this);
 
         giftButton = (Button) mainDialog.findViewById(R.id.Pokemon);
 
@@ -74,7 +84,7 @@ public class GiftDialog implements View.OnClickListener {
             final Gift gift = (Gift) view.getTag();
             AlertDialog detailDialog = new AlertDialog.Builder(context).create();
             detailDialog.setTitle(gift.getName());
-            detailDialog.setMessage(gift.getDesc());
+            detailDialog.setMessage(gift.getDesc() + (gift.getRecount() > 0 ? ("(" + gift.getRecount() + "转后可以选择)") : ""));
             detailDialog.setButton(DialogInterface.BUTTON_POSITIVE, "选择", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

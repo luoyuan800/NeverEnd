@@ -2,7 +2,6 @@ package cn.luo.yuan.maze.client.display.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Build;
 import android.text.Html;
 import android.view.View;
@@ -85,7 +84,7 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
                                         public void onClick(View v) {
                                             if (main != null) {
                                                 if (main.isMounted()) {
-                                                    context.getAccessoryHelper().unMountAccessory(main, context.getHero());
+                                                    context.getAccessoryHelper().unMountAccessory(main, context.getHero(), context);
                                                 } else {
                                                     try {
                                                         context.mountAccessory(main, true);
@@ -105,7 +104,7 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
             public void onClick(View v) {
                 if (main != null && fuse != null && !main.getId().equals(fuse.getId())) {
                     if (fuse.isMounted()) {
-                        AccessoryHelper.unMountAccessory(fuse, context.getHero());
+                        AccessoryHelper.unMountAccessory(fuse, context.getHero(), context);
                     }
                     context.getHero().setMaterial(context.getHero().getMaterial() - Data.FUSE_COST * main.getLevel());
 

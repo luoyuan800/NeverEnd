@@ -27,6 +27,7 @@ public class BattleService {
     }
 
     public boolean battle(long level) {
+        specialDetect();
         long round = 1;
         boolean heroAtk = random.nextBoolean();
         battleMessage.startBattle(hero instanceof NameObject ? ((NameObject) hero).getDisplayName() : "", monster instanceof NameObject ? ((NameObject) monster).getDisplayName() : "");
@@ -90,6 +91,21 @@ public class BattleService {
                 }
             }
             return false;
+        }
+    }
+
+    private void specialDetect() {
+        if(runninfService!=null){
+            if(runninfService.getContext()!=null){
+                if(monster instanceof NameObject){
+                    if(((NameObject) monster).getName().contains("龙")){
+                        if(runninfService.getContext().getDataManager().loadConfig().isLongKiller()){
+                            battleMessage.rowMessage("龙的传人！");
+                            monster.setHp(0);
+                        }
+                    }
+                }
+            }
         }
     }
 

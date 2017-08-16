@@ -16,6 +16,22 @@ public class NeverEndConfig implements IDModel, Serializable {
     private String head;
     private String sign;
     private boolean exception;
+    private boolean longKiller;
+    private boolean elementer;
+
+    private  long MATERIAL_LIMIT = 3000000;//如果携带超过这个数量的锻造，就增加商店的价格和怪物的攻击
+
+    public void setMATERIAL_LIMIT(long limit){
+        MATERIAL_LIMIT = limit;
+        Data.MATERIAL_LIMIT = limit;
+    }
+    public long getMATERIAL_LIMIT(){
+        return MATERIAL_LIMIT;
+    }
+
+    public void load(){
+        Data.MATERIAL_LIMIT = this.MATERIAL_LIMIT;
+    }
 
     @Override
     public boolean isDelete() {
@@ -75,5 +91,21 @@ public class NeverEndConfig implements IDModel, Serializable {
 
     public boolean isException() {
         return exception;
+    }
+
+    public boolean isLongKiller() {
+        return longKiller;
+    }
+
+    public void setLongKiller(boolean longKiller) {
+        this.longKiller = longKiller;
+    }
+
+    public boolean isElementer() {
+        return elementer;
+    }
+
+    public void setElementer(boolean elementer) {
+        this.elementer = elementer;
     }
 }

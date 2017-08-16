@@ -173,7 +173,7 @@ public class HeroTable implements Runnable {
                 if (data.getAccessories() != null && hero.getAccessories().isEmpty()) {
                     for (Accessory accessory : data.getAccessories()) {
                         try {
-                            AccessoryHelper.mountAccessory(accessory, hero, false);
+                            AccessoryHelper.mountAccessory(accessory, hero, false, null);
                         } catch (MountLimitException e) {
                             LogHelper.error(e);
                         }

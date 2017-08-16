@@ -460,6 +460,7 @@ public class DataManager implements DataManagerInterface {
         }catch (Exception e){
             LogHelper.logException(e, "load config");
         }
+        config.load();
         return config;
     }
 
