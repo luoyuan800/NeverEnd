@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.server.persistence
 
+import cn.luo.yuan.maze.model.KeyResult
 import cn.luo.yuan.maze.server.LogHelper
 import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection
 import cn.luo.yuan.maze.utils.Random
@@ -28,8 +29,8 @@ class CDKEYTable(private val database:DatabaseConnection) {
         }
     }
 
-    fun use(id:String):UseResult{
-        val ur = UseResult()
+    fun use(id:String):KeyResult{
+        val ur = KeyResult()
         val con = database.getConnection()
         var verify = false
         try{
@@ -67,12 +68,4 @@ class CDKEYTable(private val database:DatabaseConnection) {
         return ur
     }
 
-    class UseResult{
-        var gift = 0
-        var debris =0
-        var verify = false
-        override fun toString(): String {
-            return if(verify) "获得了 $gift 个礼包，和 $debris 个碎片" else "校验失败";
-        }
-    }
 }

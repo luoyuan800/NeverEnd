@@ -372,4 +372,31 @@ public class ServerService {
         }
         return false;
     }
+
+    public String useCdkey(String id, NeverEnd context) {
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(USE_KEY, RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
+            Object connect = server.connect(connection);
+            return connect.toString();
+        } catch (Exception e) {
+            LogHelper.logException(e, "ServiceService->useCdkey");
+        }
+        return StringUtils.EMPTY_STRING;
+    }
+
+    public RangeAward postRangeAward(NeverEnd context) {
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(QUERY_RANGE_AWARD, RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            Object connect = server.connect(connection);
+            if(connect instanceof RangeAward){
+                return (RangeAward) connect;
+            }
+        } catch (Exception e) {
+            LogHelper.logException(e, "ServiceService->postRangeAward");
+        }
+        return null;
+    }
 }

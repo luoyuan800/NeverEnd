@@ -40,19 +40,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.cdkey:
-                EditText editText = new EditText(context);
-                editText.setHint("输入兑换码");
-                SimplerDialogBuilder.build(editText, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }, context);
+                new CdkeyDialog(control).show();
                 break;
             case R.id.warehouse:
                 new WarehouseDialog(control).show();
@@ -74,7 +62,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 showPayDialog();
                 break;
             case R.id.reincarnation:
-                SimplerDialogBuilder.build("转生，增加难度，重新开始，保留宠物和装备。",
+                SimplerDialogBuilder.build("转生，慎重！增加难度，重新开始，保留宠物和装备。",
                         Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

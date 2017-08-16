@@ -84,7 +84,7 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
                             if (StringUtils.isNotEmpty(otherRecord.data!!.helloMsg["meet"])) {
                                 messager.speak(ohero.displayName, otherRecord.data!!.helloMsg["meet"])
                             }
-                            val awardMaterial = random.nextLong((maze.maxLevel + omaze.maxLevel)/2) + 1
+                            val awardMaterial = random.nextLong((maze.maxLevel + omaze.maxLevel)/2) + 50
                             if (bs.battle(maze.maxLevel + omaze.maxLevel)) {
                                 if (StringUtils.isNotEmpty(record.data!!.helloMsg["win"])) {
                                     messager.speak(hero.displayName, record.data!!.helloMsg["win"])

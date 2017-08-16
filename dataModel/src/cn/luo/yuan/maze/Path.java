@@ -4,6 +4,7 @@ package cn.luo.yuan.maze;
  * Created by gluo on 7/6/2017.
  */
 public class Path {
+    public static final String QUERY_RANGE_AWARD = "query_range_awarD";
     public static final String BUY_DLC = "BUY_DLC";
     public static final String QUERY_DLC_DETAIL = "query_dlc_detail";
     public static final String QUERY_DLC = "query_dlc_key";

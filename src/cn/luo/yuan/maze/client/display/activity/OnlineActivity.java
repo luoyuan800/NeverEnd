@@ -25,6 +25,7 @@ import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.RangeAward;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -239,6 +240,15 @@ public class OnlineActivity extends Activity {
     private void startPost() {
         ((RollTextView) findViewById(R.id.online_battle_msg)).addMessage("等待中……");
 
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                RangeAward ra = service.postRangeAward(gameContext);
+                if(ra!=null){
+                    gameContext.showPopup(ra.toString());
+                }
+            }
+        });
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {

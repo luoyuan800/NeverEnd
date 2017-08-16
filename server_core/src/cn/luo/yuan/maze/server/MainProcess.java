@@ -7,7 +7,12 @@ import cn.luo.yuan.maze.model.dlc.DLCKey;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.goods.Goods;
-import cn.luo.yuan.maze.model.goods.types.*;
+import cn.luo.yuan.maze.model.goods.types.ChangeHead;
+import cn.luo.yuan.maze.model.goods.types.Grill;
+import cn.luo.yuan.maze.model.goods.types.HPM;
+import cn.luo.yuan.maze.model.goods.types.HalfSafe;
+import cn.luo.yuan.maze.model.goods.types.Omelet;
+import cn.luo.yuan.maze.model.goods.types.ResetSkill;
 import cn.luo.yuan.maze.model.task.Scene;
 import cn.luo.yuan.maze.model.task.Task;
 import cn.luo.yuan.maze.serialize.ObjectTable;
@@ -55,8 +60,6 @@ import java.util.concurrent.TimeUnit;
  * Created by gluo on 7/6/2017.
  */
 public class MainProcess {
-    private String sign_match = StringUtils.EMPTY_STRING;
-    private String version = StringUtils.EMPTY_STRING;
     public static boolean debug = false;
     public static MainProcess process;
     public String sing = StringUtils.EMPTY_STRING;
@@ -71,8 +74,10 @@ public class MainProcess {
     public Set<GroupHolder> groups = Collections.synchronizedSet(new HashSet<GroupHolder>());
     public HeroTable heroTable;
     public GameContext context = new GameContext();
-    private ObjectTable<User> userDb;
     public File root;
+    private String sign_match = StringUtils.EMPTY_STRING;
+    private String version = StringUtils.EMPTY_STRING;
+    private ObjectTable<User> userDb;
     private File heroDir;
     private DatabaseConnection database;
     private ShopTable shop;
@@ -115,24 +120,24 @@ public class MainProcess {
     public boolean isSignVerify(String sign, String version) {
 //        return debug || !StringUtils.isNotEmpty(sign_match) || (sign_match.equalsIgnoreCase(sign) && (MainProcess.version.equals(version)||version_Dot.equals(version)));
         boolean verify = true;
-        if(StringUtils.isNotEmpty(version) && StringUtils.isNotEmpty(this.version)){
+        if (StringUtils.isNotEmpty(version) && StringUtils.isNotEmpty(this.version)) {
             try {
                 int vi = Integer.parseInt(this.version);
                 int vm = Integer.parseInt(version);
-                if(vm < vi){
+                if (vm < vi) {
                     LogHelper.info("Verify version: " + version + " not match " + this.version);
                     return false;
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 LogHelper.error(e);
                 verify = this.version.equalsIgnoreCase(version);
-                if(!verify){
+                if (!verify) {
                     LogHelper.info("Verify version: " + version + " not match " + this.version);
                     return false;
                 }
             }
         }
-        return  (StringUtils.isEmpty(sign) && StringUtils.isEmpty(version)) || debug || !StringUtils.isNotEmpty(sign_match) || (sign_match.equalsIgnoreCase(sign));
+        return (StringUtils.isEmpty(sign) && StringUtils.isEmpty(version)) || debug || !StringUtils.isNotEmpty(sign_match) || (sign_match.equalsIgnoreCase(sign));
     }
 
     public String buildHeroRange() {
@@ -246,9 +251,9 @@ public class MainProcess {
                         return "战斗塔重生次数增加一次";
                     case 5:
                         ServerData data = record.getData();
-                        if(data!=null){
-                            data.setMaterial(data.getMaterial() + 200);
-                            return "获得200点锻造";
+                        if (data != null) {
+                            data.setMaterial(data.getMaterial() + 2000);
+                            return "获得2000点锻造";
                         }
                         return null;
                     case 7:
@@ -287,8 +292,8 @@ public class MainProcess {
     }
 
     public boolean checkCribber(String id) {
-        if(cribber !=null){
-            if(cribber.isCribber(id)){
+        if (cribber != null) {
+            if (cribber.isCribber(id)) {
                 return true;
             }
         }
@@ -296,9 +301,9 @@ public class MainProcess {
     }
 
     public boolean checkCribber(ServerData data) throws CribberException {
-        if(cribber !=null){
-            if(cribber.isCribber(data)){
-                throw new CribberException(data.getId(), data.getMac(), data.getHero()!=null ? data.getHero().getName() : " ");
+        if (cribber != null) {
+            if (cribber.isCribber(data)) {
+                throw new CribberException(data.getId(), data.getMac(), data.getHero() != null ? data.getHero().getName() : " ");
             }
         }
         return false;
@@ -325,7 +330,7 @@ public class MainProcess {
             exchangeMy.setAcknowledge(true);
             if (exchangeMy.getChanged() != null && exchangeMy.getAcknowledge()) {
                 exchangeTable.removeObject(exchangeMy);
-                if(exchangeMy.getChanged()!=null && exchangeMy.getChanged().getAcknowledge()){
+                if (exchangeMy.getChanged() != null && exchangeMy.getChanged().getAcknowledge()) {
                     exchangeTable.removeObject(exchangeMy.getChanged());
                 }
             }
@@ -354,14 +359,21 @@ public class MainProcess {
             shop = new ShopTable(database, root);
             cribber = new CribberTable(database);
             cdkeyTable = new CDKEYTable(database);
-            try(Connection connection = database.getConnection()){
+            try (Connection connection = database.getConnection()) {
                 Statement statement = connection.createStatement();
                 ResultSet rs = statement.executeQuery("select sign,version from verify");
-                if(rs.next()){
+                if (rs.next()) {
                     sign_match = rs.getString("sign");
                     version = rs.getString("version");
                 }
                 rs.close();
+                statement.execute("CREATE TABLE IF NOT EXISTS rang_award (" +
+                        "  range INTEGER UNSIGNED NOT NULL," +
+                        "  debris INTEGER UNSIGNED DEFAULT 0," +
+                        "  gift INTEGER UNSIGNED DEFAULT 0," +
+                        "  mate INTEGER UNSIGNED DEFAULT 0," +
+                        "  PRIMARY KEY (range)" +
+                        ")");
                 statement.close();
             } catch (Exception e) {
                 LogHelper.error(e);
@@ -397,6 +409,17 @@ public class MainProcess {
         executor.scheduleAtFixedRate(exchangeTable.getExchangeDb(), 120, 200, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(monsterTable.getMonsterTable(), 120, 500, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(dlcTable.getDLCTable(), 525, 1500, TimeUnit.MILLISECONDS);
+        executor.scheduleWithFixedDelay(new Runnable() {
+            @Override
+            public void run() {
+                for (String id : new ArrayList<String>(heroTable.getAllHeroIds())) {
+                    ServerRecord record = heroTable.getRecord(id);
+                    if (record != null) {
+                        record.setAward(true);
+                    }
+                }
+            }
+        }, 0, 1, TimeUnit.DAYS);
     }
 
     public ServerData queryHeroData(String id) {
@@ -549,10 +572,10 @@ public class MainProcess {
         }
         if (holder != null) {
             for (String hid : holder.getHeroIds()) {
-                if(!hid.equals(id)) {
-                    if(hid.equals("npc")){
+                if (!hid.equals(id)) {
+                    if (hid.equals("npc")) {
                         builder.append("<br>").append(holder.getNpc().getDisplayName());
-                    }else {
+                    } else {
                         ServerRecord orecord = queryRecord(hid);
                         if (orecord != null && orecord.getData() != null && orecord.getData().getHero() != null) {
                             builder.append("<br>").append(orecord.getData().getHero().getDisplayName())
@@ -642,10 +665,10 @@ public class MainProcess {
         return accessory;
     }
 
-    public String updateShopAccessory(int start){
+    public String updateShopAccessory(int start) {
         List<Accessory> accessories = new ArrayList<>(10);
         BombRestConnection connection = new BombRestConnection();
-        for(int i =start; i< start + 5; i++) {
+        for (int i = start; i < start + 5; i++) {
             try {
                 MyJSON json = connection.queryObjects("SelfAccessory", "createAt", i, 1);
                 json.parse();
@@ -662,7 +685,7 @@ public class MainProcess {
                 SimpleToken aeffectToken = tokens.get(0);
                 for (Map.Entry<String, MyJSONValue> entry : aeffectToken.getData().entrySet()) {
                     String effect = buildEffectString(entry, true);
-                    if(StringUtils.isNotEmpty(effect)) {
+                    if (StringUtils.isNotEmpty(effect)) {
                         effectString.add(effect);
                     }
                 }
@@ -670,7 +693,7 @@ public class MainProcess {
                     SimpleToken effectToken = tokens.get(1);
                     for (Map.Entry<String, MyJSONValue> entry : effectToken.getData().entrySet()) {
                         String effect = buildEffectString(entry, false);
-                        if(StringUtils.isNotEmpty(effect)) {
+                        if (StringUtils.isNotEmpty(effect)) {
                             effectString.add(effect);
                         }
                     }
@@ -691,88 +714,15 @@ public class MainProcess {
                 if (Boolean.parseBoolean(nameToken.<String>getValue("isConform"))) {
                     accessories.add(addAccessory(nameToken.<String>getValue("name"), nameToken.<String>getValue("desc"), type, nameToken.<String>getValue("userName"), effectString.toArray(new String[effectString.size()])));
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 LogHelper.error(e);
             }
         }
         StringBuilder builder = new StringBuilder();
-        for(Accessory accessory : accessories){
+        for (Accessory accessory : accessories) {
             builder.append(accessory.getName()).append("<br>");
         }
         return builder.toString();
-    }
-
-    private String buildEffectString(Map.Entry<String, MyJSONValue> entry, boolean isElement) {
-        String key = entry.getKey();
-        Object value = entry.getValue().getValue();
-        switch (key){
-            case "ADD_ATK":
-                key = "AtkEffect";
-                if(value instanceof Number){
-                    value = ((Number) value).longValue()/50;
-                }
-                break;
-            case "ADD_UPPER_HP":
-                key = "HpEffect";
-                if(value instanceof Number){
-                    value = ((Number) value).longValue()/30;
-                }
-                break;
-            case "ADD_DEF":
-                key = "DefEffect";
-                if(value instanceof Number){
-                    value = ((Number) value).longValue()/30;
-                }
-                break;
-            case "ADD_AGI":
-                key = "AgiEffect";
-                if(value instanceof Number){
-                    value = ((Number) value).longValue()/10;
-                }
-                break;
-            case "ADD_STR":
-                key = "StrEffect";
-                if(value instanceof Number){
-                    value = ((Number) value).longValue()/20;
-                }
-                break;
-            case "ADD_DODGE_RATE":
-                key = "DogeRateEffect";
-                if(value instanceof Number){
-                    value = ((Number) value).longValue()/5;
-                }
-                break;
-            case "ADD_PARRY":
-                key = "ParryEffect";
-                if(value instanceof Number){
-                    value = ((Number) value).longValue()/5;
-                }
-                break;
-            case "ADD_PER_ATK":
-                key = "AtkPercentEffect";
-                if(value instanceof Number){
-                    value = ((Number) value).longValue()/7;
-                }
-                break;
-            case "ADD_PER_UPPER_HP":
-                key = "HPPercentEffect";
-                if(value instanceof Number){
-                    value = ((Number) value).longValue()/7;
-                }
-                break;
-            case "ADD_PER_DEF":
-                key = "DefPercentEffect";
-                if(value instanceof Number){
-                    value = ((Number) value).longValue()/7;
-                }
-                break;
-                default:
-                    value = 0;
-        }
-        if(value instanceof Number && ((Number) value).longValue() > 0) {
-            return key + "," + value.toString() + (isElement ? ",e" : ",");
-        }
-        else return StringUtils.EMPTY_STRING;
     }
 
     public void addOnlineGift(String id, int count) {
@@ -791,7 +741,7 @@ public class MainProcess {
             public int compare(String o1, String o2) {
                 ServerRecord record1 = heroTable.getRecord(o1);
                 ServerRecord record2 = heroTable.getRecord(o2);
-                if(record1!=null && record2!=null){
+                if (record1 != null && record2 != null) {
                     return Integer.compare(record1.getRange(), record2.getRange());
                 }
                 return 0;
@@ -799,7 +749,7 @@ public class MainProcess {
         });
         for (String id : sortedByDescending) {
             ServerRecord record = heroTable.getRecord(id);
-            if(record!=null && record.getData()!=null) {
+            if (record != null && record.getData() != null) {
                 String string = formatJson(record);
                 if (StringUtils.isNotEmpty(string)) {
                     builder.append(string).append(",");
@@ -811,7 +761,298 @@ public class MainProcess {
         return builder.toString();
     }
 
-    private String formatJson(ServerRecord record){
+    public String uploadFile(String name, InputStream stream) {
+        SaveService.root = root;
+        return SaveService.instance.saveFile(name, stream);
+    }
+
+    public List<Task> queryTask(int start, int row, Set<String> filter) {
+        try {
+            return taskTable.loadLimit(start, row, new Index<Task>() {
+                @Override
+                public boolean match(Task task) {
+                    return !filter.contains(task.getId());
+                }
+            }, null);
+        } catch (Exception e) {
+            LogHelper.error(e);
+        }
+        return Collections.emptyList();
+    }
+
+    public List<Scene> queryScenes(String taskId) {
+        try {
+            sceneTable.loadLimit(0, -1, new Index<Scene>() {
+                @Override
+                public boolean match(Scene scene) {
+                    return scene.getTaskId().equals(taskId);
+                }
+            }, new Comparator<Scene>() {
+                @Override
+                public int compare(Scene o1, Scene o2) {
+                    return Integer.compare(o1.getOrder(), o2.getOrder());
+                }
+            });
+        } catch (Exception e) {
+            LogHelper.error(e);
+        }
+        return Collections.emptyList();
+    }
+
+    public List<Monster> listMonster(int start, int count) {
+        return monsterTable.listMonster(start, count);
+    }
+
+    public void addCribber(String id) {
+        if (StringUtils.isNotEmpty(id) && cribber != null) {
+            LogHelper.info("add cribber: " + id);
+            ServerRecord record;
+            record = heroTable.getRecord(id);
+            String mac = record.getMac();
+            LogHelper.info("delete cribber: " + id);
+            heroTable.delete(id);
+            cribber.addToCribber(id, StringUtils.isEmpty(mac) ? "NAN" : mac, record.getData() != null && record.getData().getHero() != null ? record.getData().getHero().getName() : "NAN");
+        }
+    }
+
+    public String exchangeJson() {
+        StringBuilder builder = new StringBuilder("{\"total\":").append(exchangeTable.getExchangeDb().size()).append(",\"rows\":[");
+        for (String id : exchangeTable.getExchangeDb().loadIds()) {
+            String str = formatJson(exchangeTable.loadObject(id));
+            if (StringUtils.isNotEmpty(str)) {
+                builder.append(str).append(",");
+            }
+        }
+        builder.replace(builder.lastIndexOf(","), builder.length(), "");
+        builder.append("]}");
+        return builder.toString();
+    }
+
+    public int getDebris(String ownerId) {
+        ServerRecord record = heroTable.getRecord(ownerId);
+        if (record != null) {
+            return record.getDebris();
+        }
+        return 0;
+    }
+
+    public void addDebris(String ownerId, int count) {
+        ServerRecord record = heroTable.getRecord(ownerId);
+        if (record != null) {
+            record.setDebris(record.getDebris() + count);
+        }
+    }
+
+    public List<DLCKey> queryDLCKeys(String ownerId) {
+        ServerRecord record = heroTable.getRecord(ownerId);
+        if (record != null) {
+            return dlcTable.queryKeys(record.getDlcs());
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    public DLC getDlc(String ownerId, String id) {
+        DLC dlc = dlcTable.getDLC(id);
+        if (dlc != null) {
+            dlc = dlc.clone();
+            ServerRecord record = heroTable.getRecord(ownerId);
+            if (record.getDlcs().contains(id)) {
+                dlc.setDebrisCost(0);
+            }
+            return dlc;
+        }
+        return null;
+    }
+
+    public boolean buyDlc(String ownerId, String id) {
+        DLC dlc = dlcTable.getDLC(id);
+        if (dlc != null) {
+            ServerRecord record = heroTable.getRecord(ownerId);
+            if (!(dlc instanceof MonsterDLC) || !record.getDlcs().contains(id)) {
+                if (record.getDebris() >= dlc.getDebrisCost()) {
+                    record.setDebris(record.getDebris() - dlc.getDebrisCost());
+                    record.getDlcs().add(dlc.getId());
+                } else {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean storeIntoWarehouse(OwnedAble object) {
+        ServerRecord record = heroTable.getRecord(object.getKeeperId());
+        if (record != null && record.getDebris() > Data.WAREHOUSE_DEBRIS) {
+            warehouseTable.store(object);
+            record.setDebris(record.getDebris() - Data.WAREHOUSE_DEBRIS);
+            return true;
+        }
+        return false;
+    }
+
+    public OwnedAble deleteFromWarehouse(String id, int type, String ownerId) {
+        OwnedAble object = warehouseTable.retrieve(id, type);
+        if (object != null) {
+            if (object.getKeeperId().equals(ownerId)) {
+                warehouseTable.delete(object);
+                return object;
+            }
+        }
+        return null;
+    }
+
+    public List<OwnedAble> warehouseList(String ownerId, int type) {
+        return warehouseTable.retrieveAll(ownerId, type);
+    }
+
+    public String getLatestReleaseNotes() {
+        if (releaseManager != null)
+            return releaseManager.getReleaseNotes();
+        else
+            return StringUtils.EMPTY_STRING;
+    }
+
+    public int getReleaseVersion() {
+        if (releaseManager != null)
+            return releaseManager.getReleaseVersion();
+        else return 0;
+    }
+
+    public byte[] downloadApk() {
+        if (releaseManager != null) {
+            return releaseManager.getApk(getReleaseVersion());
+        } else {
+            return new byte[0];
+        }
+    }
+
+    public String useCdkey(String cdId, String userId) {
+        ServerRecord record = heroTable.getRecord(userId);
+        if (record.getCdkdys().contains(cdId)) {
+            return "已经使用过该兑换码了";
+        } else {
+            KeyResult us = cdkeyTable.use(cdId);
+            if (us.getVerify()) {
+                record.setDebris(record.getDebris() + us.getDebris());
+                record.setGift(record.getGift() + us.getGift());
+            }
+            return us.toString();
+        }
+    }
+
+    public RangeAward getRangeAward(String userId) {
+        ServerRecord record = heroTable.getRecord(userId);
+        try (Connection con = database.getConnection()) {
+            try (Statement sta = con.createStatement()) {
+                if (record != null && record.getAward()) {
+                    RangeAward ra = new RangeAward();
+                    int range = record.getRange();
+                    ra.setRange(range);
+                    ra.setId(userId);
+                    if (range < 10) {
+                        try (ResultSet rs = sta.executeQuery("select * from rang_award where range = " + range)) {
+                            if (rs.next()) {
+                                ra.setDebris(rs.getInt("debris"));
+                                ra.setGift(rs.getInt("gift"));
+                                ra.setMate(rs.getInt("mate"));
+                            }
+                        }
+                    } else {
+                        ra.setDebris(3);
+                        ra.setGift(5);
+                        ra.setMate(10000);
+                    }
+                    record.setDebris(record.getDebris() + ra.getDebris());
+                    record.setGift(record.getGift() + ra.getGift());
+                    if (record.getData() != null) {
+                        record.getData().setMaterial(record.getData().getMaterial() + ra.getMate());
+                    }
+                    record.setAward(false);
+                    heroTable.save(record);
+                    return ra;
+                }
+            }
+        } catch (Exception e) {
+            LogHelper.error(e);
+        }
+        return null;
+    }
+
+    private String buildEffectString(Map.Entry<String, MyJSONValue> entry, boolean isElement) {
+        String key = entry.getKey();
+        Object value = entry.getValue().getValue();
+        switch (key) {
+            case "ADD_ATK":
+                key = "AtkEffect";
+                if (value instanceof Number) {
+                    value = ((Number) value).longValue() / 50;
+                }
+                break;
+            case "ADD_UPPER_HP":
+                key = "HpEffect";
+                if (value instanceof Number) {
+                    value = ((Number) value).longValue() / 30;
+                }
+                break;
+            case "ADD_DEF":
+                key = "DefEffect";
+                if (value instanceof Number) {
+                    value = ((Number) value).longValue() / 30;
+                }
+                break;
+            case "ADD_AGI":
+                key = "AgiEffect";
+                if (value instanceof Number) {
+                    value = ((Number) value).longValue() / 10;
+                }
+                break;
+            case "ADD_STR":
+                key = "StrEffect";
+                if (value instanceof Number) {
+                    value = ((Number) value).longValue() / 20;
+                }
+                break;
+            case "ADD_DODGE_RATE":
+                key = "DogeRateEffect";
+                if (value instanceof Number) {
+                    value = ((Number) value).longValue() / 5;
+                }
+                break;
+            case "ADD_PARRY":
+                key = "ParryEffect";
+                if (value instanceof Number) {
+                    value = ((Number) value).longValue() / 5;
+                }
+                break;
+            case "ADD_PER_ATK":
+                key = "AtkPercentEffect";
+                if (value instanceof Number) {
+                    value = ((Number) value).longValue() / 7;
+                }
+                break;
+            case "ADD_PER_UPPER_HP":
+                key = "HPPercentEffect";
+                if (value instanceof Number) {
+                    value = ((Number) value).longValue() / 7;
+                }
+                break;
+            case "ADD_PER_DEF":
+                key = "DefPercentEffect";
+                if (value instanceof Number) {
+                    value = ((Number) value).longValue() / 7;
+                }
+                break;
+            default:
+                value = 0;
+        }
+        if (value instanceof Number && ((Number) value).longValue() > 0) {
+            return key + "," + value.toString() + (isElement ? ",e" : ",");
+        } else return StringUtils.EMPTY_STRING;
+    }
+
+    private String formatJson(ServerRecord record) {
         StringBuilder builder = new StringBuilder();
         builder.append("{");
         if (record != null) {
@@ -832,7 +1073,7 @@ public class MainProcess {
         return builder.toString();
     }
 
-    private String formatJson(ExchangeObject exchange){
+    private String formatJson(ExchangeObject exchange) {
         StringBuilder builder = new StringBuilder();
         builder.append("{");
         if (exchange != null) {
@@ -841,7 +1082,7 @@ public class MainProcess {
             builder.append("\"Submit\":").append(exchange.getSubmitTime()).append(",");
             if (exchange.getExchange() instanceof Accessory) {
                 builder.append("\"data\":\"").append(StringUtils.formatEffectsAsHtml(((Accessory) exchange.getExchange()).getEffects()).replaceAll("\"", "'")).append("\"");
-            } else if(exchange.getExchange() instanceof Pet){
+            } else if (exchange.getExchange() instanceof Pet) {
                 builder.append("\"data\":\"").append(exchange.getExchange().toString()).append("\"");
             } else {
                 builder.append("\"data\":\"").append("").append("\"");
@@ -851,11 +1092,6 @@ public class MainProcess {
         }
         builder.append("}");
         return builder.toString();
-    }
-
-    public String uploadFile(String name, InputStream stream) {
-        SaveService.root = root;
-        return SaveService.instance.saveFile(name, stream);
     }
 
     @NotNull
@@ -872,181 +1108,5 @@ public class MainProcess {
         }
         exMy.setSubmitTime(System.currentTimeMillis());
         return exMy;
-    }
-
-    public List<Task> queryTask(int start, int row, Set<String> filter){
-        try {
-            return taskTable.loadLimit(start, row, new Index<Task>() {
-                @Override
-                public boolean match(Task task) {
-                    return !filter.contains(task.getId());
-                }
-            }, null);
-        } catch (Exception e) {
-            LogHelper.error(e);
-        }
-        return Collections.emptyList();
-    }
-
-    public List<Scene> queryScenes(String taskId){
-        try {
-            sceneTable.loadLimit(0, -1, new Index<Scene>() {
-                @Override
-                public boolean match(Scene scene) {
-                    return scene.getTaskId().equals(taskId);
-                }
-            }, new Comparator<Scene>() {
-                @Override
-                public int compare(Scene o1, Scene o2) {
-                    return Integer.compare(o1.getOrder(), o2.getOrder());
-                }
-            });
-        } catch (Exception e) {
-            LogHelper.error(e);
-        }
-        return Collections.emptyList();
-    }
-
-    public List<Monster> listMonster(int start, int count){
-        return monsterTable.listMonster(start, count);
-    }
-
-    public void addCribber(String id){
-        if(StringUtils.isNotEmpty(id) && cribber !=null){
-            LogHelper.info("add cribber: " + id);
-            ServerRecord record;
-            record = heroTable.getRecord(id);
-            String mac = record.getMac();
-            LogHelper.info("delete cribber: " + id);
-            heroTable.delete(id);
-            cribber.addToCribber(id ,StringUtils.isEmpty(mac)? "NAN" : mac, record.getData()!=null && record.getData().getHero()!=null  ? record.getData().getHero().getName() : "NAN");
-        }
-    }
-
-    public String exchangeJson(){
-        StringBuilder builder = new StringBuilder("{\"total\":").append(exchangeTable.getExchangeDb().size()).append(",\"rows\":[");
-        for(String id : exchangeTable.getExchangeDb().loadIds()){
-            String str = formatJson(exchangeTable.loadObject(id));
-            if(StringUtils.isNotEmpty(str)){
-                builder.append(str).append(",");
-            }
-        }
-        builder.replace(builder.lastIndexOf(","), builder.length(), "");
-        builder.append("]}");
-        return builder.toString();
-    }
-
-    public int getDebris(String ownerId){
-        ServerRecord record = heroTable.getRecord(ownerId);
-        if(record!=null){
-            return record.getDebris();
-        }
-        return 0;
-    }
-
-    public void addDebris(String ownerId, int count){
-        ServerRecord record = heroTable.getRecord(ownerId);
-        if(record!=null){
-            record.setDebris(record.getDebris() + count);
-        }
-    }
-
-    public List<DLCKey> queryDLCKeys(String ownerId){
-        ServerRecord record = heroTable.getRecord(ownerId);
-        if(record!=null){
-            return dlcTable.queryKeys(record.getDlcs());
-        }else{
-            return Collections.emptyList();
-        }
-    }
-
-    public DLC getDlc(String ownerId, String id){
-        DLC dlc = dlcTable.getDLC(id);
-        if(dlc!=null){
-            dlc = dlc.clone();
-            ServerRecord record = heroTable.getRecord(ownerId);
-            if(record.getDlcs().contains(id)){
-                dlc.setDebrisCost(0);
-            }
-            return dlc;
-        }
-        return null;
-    }
-
-    public boolean buyDlc(String ownerId, String id){
-        DLC dlc = dlcTable.getDLC(id);
-        if(dlc!=null){
-            ServerRecord record = heroTable.getRecord(ownerId);
-            if(!record.getDlcs().contains(id)){
-                if(record.getDebris() >= dlc.getDebrisCost()) {
-                    record.setDebris(record.getDebris() - dlc.getDebrisCost());
-                    record.getDlcs().add(dlc.getId());
-                }else{
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
-    }
-
-    public boolean storeIntoWarehouse(OwnedAble object){
-        ServerRecord record = heroTable.getRecord(object.getKeeperId());
-        if(record!=null && record.getDebris() > Data.WAREHOUSE_DEBRIS) {
-            warehouseTable.store(object);
-            record.setDebris(record.getDebris() - Data.WAREHOUSE_DEBRIS);
-            return true;
-        }
-        return false;
-    }
-
-    public OwnedAble deleteFromWarehouse(String id, int type, String ownerId){
-        OwnedAble object = warehouseTable.retrieve(id, type);
-        if(object!=null){
-            if(object.getKeeperId().equals(ownerId)){
-                warehouseTable.delete(object);
-                return object;
-            }
-        }
-        return null;
-    }
-
-    public List<OwnedAble> warehouseList(String ownerId, int type){
-        return warehouseTable.retrieveAll(ownerId, type);
-    }
-
-    public String getLatestReleaseNotes(){
-        if(releaseManager!=null)
-        return releaseManager.getReleaseNotes();
-        else
-            return StringUtils.EMPTY_STRING;
-    }
-
-    public int getReleaseVersion() {
-        if (releaseManager != null)
-            return releaseManager.getReleaseVersion();
-        else return 0;
-    }
-
-    public byte[] downloadApk(){
-        if(releaseManager!=null) {
-            return releaseManager.getApk(getReleaseVersion());
-        }else{
-            return new byte[0];
-        }
-    }
-
-    public String useCdkey(String cdId, String userId){
-        ServerRecord record = heroTable.getRecord(userId);
-        if(record.getCdkdys().contains(cdId)){
-            return "已经使用过该兑换码了";
-        }else{
-            CDKEYTable.UseResult us = cdkeyTable.use(cdId);
-            if(us.getVerify()){
-                record.setDebris(record.getDebris() + us.getDebris());
-                record.setGift(record.getGift()+ us.getGift());
-            }
-            return us.toString();
-        }
     }
 }

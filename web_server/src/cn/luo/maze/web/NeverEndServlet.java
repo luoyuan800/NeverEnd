@@ -3,6 +3,7 @@ package cn.luo.maze.web;
 import cn.luo.yuan.maze.model.ExchangeObject;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.OwnedAble;
+import cn.luo.yuan.maze.model.RangeAward;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.server.LogHelper;
@@ -164,6 +165,14 @@ public class NeverEndServlet extends HttpServlet {
             PrintWriter writer = null;
             Boolean success = null;
             switch (path) {
+                case QUERY_RANGE_AWARD:
+                    RangeAward ra = process.getRangeAward(ownerId);
+                    if(ra!=null){
+                        writeObject(response, ra);
+                    }else{
+                        success = false;
+                    }
+                    break;
                 case USE_KEY:
                     writer = writeMessage(response,process.useCdkey(request.getHeader(Field.ITEM_ID_FIELD), ownerId));
                     break;

@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model.goods.types
 
 import cn.luo.yuan.maze.model.Data
+import cn.luo.yuan.maze.model.Parameter
 import cn.luo.yuan.maze.model.goods.Goods
 import cn.luo.yuan.maze.model.goods.GoodsProperties
 import cn.luo.yuan.maze.model.goods.UsableGoods
@@ -27,7 +28,7 @@ class ResetSkill : UsableGoods() {
 
     override fun perform(properties: GoodsProperties): Boolean {
         if(getCount() > 0){
-            val context = properties[SkillParameter.CONTEXT] as InfoControlInterface
+            val context = properties[Parameter.CONTEXT] as InfoControlInterface
             val sp = SkillParameter(properties.hero)
             sp.set(SkillParameter.CONTEXT, context)
             val totalPoint = context.resetSkill(sp)

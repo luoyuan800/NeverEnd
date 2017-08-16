@@ -47,6 +47,8 @@ class ServerRecord : IDModel, Serializable {
 
     val cdkdys = mutableSetOf<String>()
 
+    var award = false
+
     override fun getId(): String? {
         return id
     }

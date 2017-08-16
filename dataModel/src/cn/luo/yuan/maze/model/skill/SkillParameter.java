@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model.skill;
 
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.Parameter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -8,7 +9,7 @@ import java.util.HashMap;
 /**
  * Created by gluo on 4/27/2017.
  */
-public class SkillParameter {
+public class SkillParameter extends Parameter {
     public static final String TARGET = "target";;
     public static final String CONTEXT = "context";;
     public static final String COUNT = "count";
