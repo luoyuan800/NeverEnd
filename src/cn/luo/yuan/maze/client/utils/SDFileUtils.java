@@ -196,7 +196,10 @@ public class SDFileUtils {
 
     public static void saveStringIntoSD(String folder, String file, String msg){
         List<String> list = SDFileUtils.getFilesListFromSD(folder);
-        if (list.size() > 10) {
+        if(list.size() > 10){
+            return ;
+        }
+        if (list.size() > 5) {
             SDFileUtils.deleteFile(folder, list.get(0));
         }
         File filfile = newFileInstance(SDFileUtils.SD_PATH + folder, file, true);
