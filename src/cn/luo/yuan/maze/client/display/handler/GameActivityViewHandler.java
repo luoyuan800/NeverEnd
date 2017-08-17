@@ -366,14 +366,10 @@ public class GameActivityViewHandler extends Handler {
 
     public void addDieMessage(List<String> msgs){
         try {
-            List<String> list = SDFileUtils.getFilesListFromSD("die");
-            if (list.size() > 10) {
-                SDFileUtils.deleteFile("die", list.get(0));
-            }
             String title = StringUtils.getCurrentTime();
             StringBuilder builder = new StringBuilder(title).append(": <br>");
             for (String s : msgs) {
-                builder.append(s);
+                builder.append(s).append("<br>");
             }
             SDFileUtils.saveStringIntoSD("die", title, builder.toString());
             refreshDieMessage();
@@ -390,22 +386,40 @@ public class GameActivityViewHandler extends Handler {
                 final StringAdapter<String> adapter = new StringAdapter<>(SDFileUtils.getFilesListFromSD("die"));
                 adapter.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        Object o = v.getTag(R.string.item);
-                        String s = SDFileUtils.readStringFromSD("die",o.toString());
-                        SimplerDialogBuilder.build(s, Resource.getString(R.string.close), context, null);
-                        SDFileUtils.deleteFile("die", o.toString());
-                        adapter.getData().remove(o.toString());
-                        adapter.notifyDataSetChanged();
-                        refreshDieMessage();
+                    public void onClick(final View v) {
+                        neverEnd.getExecutor().submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                Object o = v.getTag(R.string.item);
+                                final String s = SDFileUtils.readStringFromSD("die",o.toString());
+                                post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        SimplerDialogBuilder.build(s, Resource.getString(R.string.close), context, null);
+                                    }
+                                });
+                                SDFileUtils.deleteFile("die", o.toString());
+                                adapter.getData().remove(o.toString());
+                                adapter.notifyDataSetChanged();
+                                refreshDieMessage();
+                            }
+                        });
+
                     }
                 });
+                listView.setAdapter(adapter);
                 SimplerDialogBuilder.build(listView, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
-                }, context);
+                }, Resource.getString(R.string.clear), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SDFileUtils.getFilesListFromSD("die");
+                        dialog.dismiss();
+                    }
+                },context);
             }
         });
 

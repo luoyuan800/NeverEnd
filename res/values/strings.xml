@@ -115,4 +115,5 @@
     <string name="my_turn">%1$s的攻击回合</string>
     <string name="dialog">dialog</string>
     <string name="recycle">回收</string>
+    <string name="clear">清除</string>
 </resources>

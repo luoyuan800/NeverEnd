@@ -223,7 +223,7 @@ public class ServerService {
         }
     }
 
-    public String uploadSaveFile(String fileName) {
+    public Boolean uploadSaveFile(String fileName) {
         File file = new File(fileName);
         if (file.exists()) {
             try {
@@ -239,12 +239,12 @@ public class ServerService {
                 }
                 fis.close();
                 outputStream.write(baos.toByteArray());
-                return server.connect(connection).toString();
+                return Field.RESPONSE_RESULT_OK.equals(server.connect(connection).toString());
             } catch (IOException e) {
                 LogHelper.logException(e, "uploadSaveFile: " + fileName);
             }
         }
-        return null;
+        return false;
     }
 
     public File downloadSaveFile(String id) {

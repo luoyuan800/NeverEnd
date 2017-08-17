@@ -17,6 +17,7 @@ public class ClickSkillCheckThread implements Runnable {
         this.clickSkill = clickSkill;
         lastClick = clickSkill.getClick();
         this.context = context;
+        this.speed = speed;
     }
     @Override
     public void run() {

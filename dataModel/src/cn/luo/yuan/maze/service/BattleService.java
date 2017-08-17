@@ -99,9 +99,12 @@ public class BattleService {
             if(runninfService.getContext()!=null){
                 if(monster instanceof NameObject){
                     if(((NameObject) monster).getName().contains("龙")){
-                        if(runninfService.getContext().getDataManager().loadConfig().isLongKiller()){
-                            battleMessage.rowMessage("龙的传人！");
-                            monster.setHp(0);
+                        if(runninfService.getContext().getDataManager()!=null) {
+                            NeverEndConfig config = runninfService.getContext().getDataManager().loadConfig();
+                            if (config!=null && config.isLongKiller()) {
+                                battleMessage.rowMessage("龙的传人！");
+                                monster.setHp(0);
+                            }
                         }
                     }
                 }

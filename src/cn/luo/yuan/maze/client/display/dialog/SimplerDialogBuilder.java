@@ -61,9 +61,6 @@ public class SimplerDialogBuilder {
 
     public static Dialog build(String msg, String posivStr, Context context, Random random) {
         final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
-        if(dialogBuilder.isShowing()){
-            dialogBuilder.dismiss();
-        }
         if (random != null) {
             dialogBuilder.withEffect(random.randomItem(Effectstype.values()));
         }
@@ -121,7 +118,7 @@ public class SimplerDialogBuilder {
         final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
         dialogBuilder
                 .withDialogColor(Color.WHITE)
-                .setCustomView(view, context)                   //.withMessage(null)  no Msg
+                .setCustomView(view, context)
                 .withButton1Text(positiveStr)                                      //def gone
                 .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
                 .setButton1Click(new View.OnClickListener() {

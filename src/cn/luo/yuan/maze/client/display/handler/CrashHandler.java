@@ -31,19 +31,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("exception", true);
         editor.apply();
-        context.postTaskInUIThread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        SimplerDialogBuilder.build("发生了未知的错误，请重启游戏！", Resource.getString(R.string.conform),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        defaultHandler.uncaughtException(thread, ex);
-                                    }
-                                }, context.getContext(), null);
-                    }
-                }
-        );
+        defaultHandler.uncaughtException(thread, ex);
     }
 }

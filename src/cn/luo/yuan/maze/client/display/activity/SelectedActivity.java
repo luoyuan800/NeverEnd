@@ -137,8 +137,9 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
                                     + Build.VERSION.SDK_INT + ","
                                     + android.os.Build.VERSION.RELEASE + ".zip");
 
-                            new ServerService(getVersion()).uploadSaveFile(filePath);
-                            SDFileUtils.clearLog();
+                            if(new ServerService(getVersion()).uploadSaveFile(filePath)) {
+                                SDFileUtils.clearLog();
+                            }
                             SDFileUtils.deleteFile(filePath);
                         }
                     }).start();

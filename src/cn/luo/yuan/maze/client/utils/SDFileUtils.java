@@ -159,7 +159,7 @@ public class SDFileUtils {
     }
 
     public static void deleteFile(String folder, String name){
-        deleteFile(new File(new File(SD_PATH, folder), name));
+        deleteFile(new File(SD_PATH + folder, name));
     }
 
     public static void deleteFile(String filePath) {
@@ -195,7 +195,11 @@ public class SDFileUtils {
     }
 
     public static void saveStringIntoSD(String folder, String file, String msg){
-        File filfile = newFileInstance(folder, file, true);
+        List<String> list = SDFileUtils.getFilesListFromSD("die");
+        if (list.size() > 10) {
+            SDFileUtils.deleteFile("die", list.get(0));
+        }
+        File filfile = newFileInstance(SDFileUtils.SD_PATH + folder, file, true);
         try (FileWriter writer = new FileWriter(filfile)){
             writer.write(msg);
         } catch (IOException e) {

@@ -394,6 +394,16 @@ public class DataManager implements DataManagerInterface {
 
     }
 
+    public void close(){
+        e.shutdown();
+        try {
+            e.awaitTermination(1, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            LogHelper.logException(e, "Close Data manager");
+        }
+        fuseCache();
+    }
+
     public void save(IDModel object) {
         if(object instanceof OwnedAble){
             Hero hero = loadHero();

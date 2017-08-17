@@ -20,7 +20,7 @@ public class CdkeyDialog {
     }
 
     public void show(){
-        final EditText editText = new EditText(context);
+        final EditText editText = new EditText(context.getContext());
         editText.setHint("输入兑换码");
         SimplerDialogBuilder.build(editText, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
             @Override
