@@ -195,9 +195,9 @@ public class SDFileUtils {
     }
 
     public static void saveStringIntoSD(String folder, String file, String msg){
-        List<String> list = SDFileUtils.getFilesListFromSD("die");
+        List<String> list = SDFileUtils.getFilesListFromSD(folder);
         if (list.size() > 10) {
-            SDFileUtils.deleteFile("die", list.get(0));
+            SDFileUtils.deleteFile(folder, list.get(0));
         }
         File filfile = newFileInstance(SDFileUtils.SD_PATH + folder, file, true);
         try (FileWriter writer = new FileWriter(filfile)){
@@ -211,14 +211,21 @@ public class SDFileUtils {
         new File(new File(SD_PATH, folder), file).deleteOnExit();
     }
 
-    public static void deleteFolder(String folder) {
+    public static boolean deleteFolder(String folder) {
         try {
             File dir = new File(SD_PATH + folder);
             for (File f : dir.listFiles()) {
                 deleteFile(f);
             }
-        }catch (Exception e){
+            dir.delete();
+            if (dir.exists() && dir.list().length > 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception e) {
             LogHelper.logException(e, "delete folder");
         }
+        return true;
     }
 }

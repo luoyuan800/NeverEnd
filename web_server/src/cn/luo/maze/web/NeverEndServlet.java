@@ -174,7 +174,7 @@ public class NeverEndServlet extends HttpServlet {
                     }
                     break;
                 case USE_KEY:
-                    writer = writeMessage(response,process.useCdkey(request.getHeader(Field.ITEM_ID_FIELD), ownerId));
+                    writeObject(response,process.useCdkey(request.getHeader(Field.ITEM_ID_FIELD), ownerId));
                     break;
                 case DOWNLOAD_APK:
                     byte[] apk = process.downloadApk();

@@ -366,12 +366,12 @@ public class GameActivityViewHandler extends Handler {
 
     public void addDieMessage(List<String> msgs){
         try {
-            String title = StringUtils.getCurrentTime();
+            String title = StringUtils.getCurrentTime().replaceAll(":", "-");
             StringBuilder builder = new StringBuilder(title).append(": <br>");
             for (String s : msgs) {
                 builder.append(s).append("<br>");
             }
-            SDFileUtils.saveStringIntoSD("die", title, builder.toString());
+            SDFileUtils.saveStringIntoSD(String.valueOf(neverEnd.getIndex()), title, builder.toString());
             refreshDieMessage();
         }catch (Exception e){
             LogHelper.logException(e, "LogDie");
@@ -383,7 +383,7 @@ public class GameActivityViewHandler extends Handler {
             @Override
             public void run() {
                 ListView listView = new ListView(context);
-                final StringAdapter<String> adapter = new StringAdapter<>(SDFileUtils.getFilesListFromSD("die"));
+                final StringAdapter<String> adapter = new StringAdapter<>(SDFileUtils.getFilesListFromSD(String.valueOf(neverEnd.getIndex())));
                 adapter.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(final View v) {
@@ -391,14 +391,14 @@ public class GameActivityViewHandler extends Handler {
                             @Override
                             public void run() {
                                 Object o = v.getTag(R.string.item);
-                                final String s = SDFileUtils.readStringFromSD("die",o.toString());
+                                final String s = SDFileUtils.readStringFromSD(String.valueOf(neverEnd.getIndex()),o.toString());
                                 post(new Runnable() {
                                     @Override
                                     public void run() {
                                         SimplerDialogBuilder.build(s, Resource.getString(R.string.close), context, null);
                                     }
                                 });
-                                SDFileUtils.deleteFile("die", o.toString());
+                                SDFileUtils.deleteFile(String.valueOf(neverEnd.getIndex()), o.toString());
                                 adapter.getData().remove(o.toString());
                                 adapter.notifyDataSetChanged();
                                 refreshDieMessage();
@@ -416,7 +416,9 @@ public class GameActivityViewHandler extends Handler {
                 }, Resource.getString(R.string.clear), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        SDFileUtils.deleteFolder("die");
+                        if(!SDFileUtils.deleteFolder(String.valueOf(neverEnd.getIndex()))){
+                            neverEnd.showPopup("删除文件失败，您可以手动删除SD卡neverend目录下的" + neverEnd.getHero().getId() + "文件夹！");
+                        }
                         dialog.dismiss();
                     }
                 },context);

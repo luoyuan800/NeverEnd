@@ -19,7 +19,7 @@ class CDKEYTable(private val database:DatabaseConnection) {
             connection = database.getConnection()
             statement = connection.createStatement()
             statement.execute("create table IF NOT EXISTS cdkey(id varchar(100) NOT NULL, " +
-                    "gift integer, debris integer, used integer, single integer default 0, " +
+                    "gift integer, debris integer, mate integer, used integer, single integer default 0, " +
                     "primary key (id))")
         } catch (e: Exception) {
             LogHelper.error(e)
@@ -35,12 +35,13 @@ class CDKEYTable(private val database:DatabaseConnection) {
         var verify = false
         try{
             val stat = con.createStatement();
-            val rs = stat.executeQuery("select used, single, gift, debris from cdkey where id = '$id'")
+            val rs = stat.executeQuery("select * from cdkey where id = '$id'")
             var gift = 0
             var debris = 0
             if(rs.next()){
                 gift = rs.getInt("gift")
                 debris = rs.getInt("debris")
+               ur.mate = rs.getLong("mate")
                 if(rs.getBoolean("single")){
                     verify = rs.getInt("used") <= 0
                 }else{

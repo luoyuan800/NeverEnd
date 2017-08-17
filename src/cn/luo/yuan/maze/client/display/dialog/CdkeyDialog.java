@@ -6,6 +6,7 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.ServerService;
 import cn.luo.yuan.maze.client.utils.Resource;
+import cn.luo.yuan.maze.model.KeyResult;
 
 /**
  * Copyright @Luo
@@ -28,8 +29,13 @@ public class CdkeyDialog {
                 context.getExecutor().submit(new Runnable() {
                     @Override
                     public void run() {
-                        final String rs = server.useCdkey(editText.getText().toString(), context);
-                        context.showPopup(rs);
+                        Object rs = server.useCdkey(editText.getText().toString(), context);
+                        if(rs instanceof KeyResult){
+                            if(((KeyResult) rs).getMate() > 0){
+                                context.getHero().setMaterial(context.getHero().getMaterial() + ((KeyResult) rs).getMate());
+                            }
+                        }
+                        context.showPopup(rs.toString());
                     }
                 });
                 dialog.dismiss();

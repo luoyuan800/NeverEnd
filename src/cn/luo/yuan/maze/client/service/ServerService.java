@@ -373,17 +373,16 @@ public class ServerService {
         return false;
     }
 
-    public String useCdkey(String id, NeverEnd context) {
+    public Object useCdkey(String id, NeverEnd context) {
         try {
             HttpURLConnection connection = server.getHttpURLConnection(USE_KEY, RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
             connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
-            Object connect = server.connect(connection);
-            return connect.toString();
+            return server.connect(connection);
         } catch (Exception e) {
             LogHelper.logException(e, "ServiceService->useCdkey");
         }
-        return StringUtils.EMPTY_STRING;
+        return "校验失败, 稍后重试！";
     }
 
     public RangeAward postRangeAward(NeverEnd context) {

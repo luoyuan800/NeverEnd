@@ -928,17 +928,20 @@ public class MainProcess {
         }
     }
 
-    public String useCdkey(String cdId, String userId) {
+    public Object useCdkey(String cdId, String userId) {
         ServerRecord record = heroTable.getRecord(userId);
-        if (record.getCdkdys().contains(cdId)) {
+        if (record!=null && record.getCdkdys().contains(cdId)) {
             return "已经使用过该兑换码了";
         } else {
             KeyResult us = cdkeyTable.use(cdId);
-            if (us.getVerify()) {
+            if (us.getVerify() && record!=null) {
                 record.setDebris(record.getDebris() + us.getDebris());
                 record.setGift(record.getGift() + us.getGift());
+                record.getCdkdys().add(cdId);
+            }else{
+                return "至少进入战斗塔一次之后才能兑换";
             }
-            return us.toString();
+            return us;
         }
     }
 
