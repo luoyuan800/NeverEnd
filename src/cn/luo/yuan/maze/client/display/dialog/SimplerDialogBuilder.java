@@ -117,6 +117,7 @@ public class SimplerDialogBuilder {
                                String negativeStr, final DialogInterface.OnClickListener negative, Context context) {
         final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
         dialogBuilder
+                .withMessage(null)
                 .withDialogColor(Color.WHITE)
                 .setCustomView(view, context)
                 .withButton1Text(positiveStr)                                      //def gone

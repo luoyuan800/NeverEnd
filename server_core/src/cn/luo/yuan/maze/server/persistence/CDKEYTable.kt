@@ -49,7 +49,7 @@ class CDKEYTable(private val database:DatabaseConnection) {
             }
             rs.close()
             if(verify){
-                verify = stat.execute("update cdkey set used = used + 1 where id ='$id'")
+                stat.execute("update cdkey set used = used + 1 where id ='$id'")
                 if(verify){
                     val r = Random(System.currentTimeMillis())
                     if(gift > 0){

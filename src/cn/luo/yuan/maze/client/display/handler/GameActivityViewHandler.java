@@ -416,7 +416,7 @@ public class GameActivityViewHandler extends Handler {
                 }, Resource.getString(R.string.clear), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        SDFileUtils.getFilesListFromSD("die");
+                        SDFileUtils.deleteFolder("die");
                         dialog.dismiss();
                     }
                 },context);

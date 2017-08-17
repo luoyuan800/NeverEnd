@@ -33,19 +33,23 @@
     <item
             android:enabled="false"
             android:title="---联网功能---"/>
+
     <item
-            android:id="@+id/warehouse"
+            android:id="@+id/excahnge"
             android:icon="@android:drawable/ic_menu_agenda"
-            android:title="仓库"/>
+            android:title="交换"/>
     <item
             android:id="@+id/online_battle"
             android:icon="@android:drawable/ic_menu_agenda"
             android:title="战斗塔"/>
     <item
-            android:id="@+id/excahnge"
+            android:id="@+id/warehouse"
             android:icon="@android:drawable/ic_menu_agenda"
-            android:title="交换"/>
-
+            android:title="仓库"/>
+    <item
+            android:id="@+id/cdkey"
+            android:icon="@android:drawable/ic_menu_view"
+            android:title="兑换码"/>
     <item
             android:enabled="false"
             android:title="---其他---"/>
@@ -62,10 +66,7 @@
             android:id="@+id/update"
             android:icon="@android:drawable/ic_menu_info_details"
             android:title="更新"/>
-    <item
-            android:id="@+id/cdkey"
-            android:icon="@android:drawable/ic_menu_view"
-            android:title="兑换码"/>
+
     <item
             android:id="@+id/pay"
             android:icon="@android:drawable/ic_menu_view"
@@ -75,7 +76,7 @@
             android:icon="@android:drawable/ic_menu_share"
             android:title="分享"/>
     <item
-            android:visible="true"
+            android:visible="false"
             android:id="@+id/crash"
             android:icon="@android:drawable/ic_menu_share"
             android:title="测试"/>

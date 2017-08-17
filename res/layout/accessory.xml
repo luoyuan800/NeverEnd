@@ -108,7 +108,7 @@
 
     <cn.luo.yuan.maze.client.display.view.LoadMoreListView
             android:id="@+id/accessories_list"
-            android:layout_height="300sp"
+            android:layout_height="280sp"
             android:layout_width="match_parent"/>
     <Button
             android:text="@string/close"

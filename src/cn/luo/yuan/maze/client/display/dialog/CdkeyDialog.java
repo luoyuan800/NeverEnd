@@ -39,7 +39,7 @@ public class CdkeyDialog {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
-        }, context);
+        }, context.getContext());
     }
 
 }

@@ -8,9 +8,11 @@ import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
+import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.serialize.ObjectTable;
 import cn.luo.yuan.maze.server.LogHelper;
 import cn.luo.yuan.maze.service.AccessoryHelper;
+import cn.luo.yuan.maze.service.SkillHelper;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -182,6 +184,12 @@ public class HeroTable implements Runnable {
                 if (data.getPets() != null && hero.getPets().isEmpty()) {
                     for (Pet pet : data.getPets()) {
                         hero.getPets().add(pet);
+                    }
+                }
+
+                if(data.getSkills()!=null && hero.getSkills().length == 0){
+                    for(Skill skill : data.getSkills()){
+                        SkillHelper.mountSkill(skill, hero);
                     }
                 }
                 return hero;

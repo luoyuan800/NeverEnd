@@ -26,9 +26,11 @@ public class SkillHelper {
     }
 
     public static boolean mountSkill(Skill skill, Hero hero) {
-        int index = mountSkillIndex(hero);
-        if (index >= 0 && index < hero.getSkills().length) {
-            return mountSkill(skill, hero, index);
+        if(skill instanceof MountAble) {
+            int index = mountSkillIndex(hero);
+            if (index >= 0 && index < hero.getSkills().length) {
+                return mountSkill(skill, hero, index);
+            }
         }
         return false;
     }

@@ -210,4 +210,15 @@ public class SDFileUtils {
     public static void deleteFileFromSD(String folder, String file){
         new File(new File(SD_PATH, folder), file).deleteOnExit();
     }
+
+    public static void deleteFolder(String folder) {
+        try {
+            File dir = new File(SD_PATH + folder);
+            for (File f : dir.listFiles()) {
+                deleteFile(f);
+            }
+        }catch (Exception e){
+            LogHelper.logException(e, "delete folder");
+        }
+    }
 }
