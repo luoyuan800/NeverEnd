@@ -21,7 +21,8 @@ public class BuildDLC {
     public static File root = new File("dlc");
     public static void main(String... args) throws IOException {
         ObjectTable<MonsterDLC> dlcTable = new ObjectTable<MonsterDLC>(MonsterDLC.class, new File("dlc"));
-        buildAngel(dlcTable);
+        //buildAngel(dlcTable);
+        buildJiuwei(dlcTable);
     }
 
     private static byte[] readImage(String path) throws IOException {
@@ -42,7 +43,7 @@ public class BuildDLC {
     public static void buildJiuwei(ObjectTable<MonsterDLC> table) throws IOException {
         MonsterDLC dlc = new MonsterDLC();
         dlc.setTitle("九尾的传奇");
-        dlc.setDebrisCost(1);
+        dlc.setDebrisCost(20);
         dlc.setDesc("九尾，中国古代汉族神话传说中的奇兽。<br>古典传说中，九尾狐乃四脚怪兽，通体上下长有火红色的绒毛。善变化，蛊惑。九尾狐出，世间大乱。<br>购买这个DLC，如果你捕获到了红眼的九尾，那么你就可以开启九尾狐的拟人进化之路了！");
         Monster monster = new Monster();
         monster.setIndex(96);
@@ -62,7 +63,7 @@ public class BuildDLC {
         monster.setType("玉藻前");
         monster.setDesc("传说身受重伤的九尾逃到了日本，用仅存的妖力幻化成了人。不想却深受有受虐倾向的大和民族的崇拜，不小心成为了日本神话传说中的传奇妖怪。");
         dlc.getMonsters().add(monster);
-        dlc.getImage().add(readImage("D:\\NeverEnd\\assets\\monster\\jiuwei_yzq.png"));
+        dlc.getImage().add(readImage("E:\\NeverEnd\\assets\\monster\\jiuwei_yzq.png"));
         //---------//
         monster = new Monster();
         monster.setIndex(81);
@@ -83,7 +84,7 @@ public class BuildDLC {
         monster.setType("狐仙");
         monster.setDesc("九尾狐，中华古代汉族神话传说中的生物--青丘之山，有兽焉，其状如狐而九尾。这种形态的九尾狐拥有极高的智商，已然脱离妖的范畴。");
         dlc.getMonsters().add(monster);
-        dlc.getImage().add(readImage("D:\\NeverEnd\\assets\\monster\\jiuwei_kynei.png"));
+        dlc.getImage().add(readImage("E:\\NeverEnd\\assets\\monster\\jiuwei_kynei.png"));
         //---------//
         monster = new Monster();
         monster.setIndex(41);
@@ -104,13 +105,13 @@ public class BuildDLC {
         monster.setType("九尾狐");
         monster.setDesc("九尾狐，中华古代汉族神话传说中的生物--青丘之山，有兽焉，其状如狐而九尾。在迷宫创造者消失后才出现的生物。");
         dlc.getMonsters().add(monster);
-        dlc.getImage().add(readImage("D:\\NeverEnd\\assets\\monster\\jiuweihu_red.png"));
+        dlc.getImage().add(readImage("E:\\NeverEnd\\assets\\monster\\jiuweihu_red.png"));
         System.out.println(table.save(dlc));
     }
     public static void buildAngel(ObjectTable<MonsterDLC> table) throws IOException {
         MonsterDLC dlc = new MonsterDLC();
         dlc.setTitle("天降之物");
-        dlc.setDebrisCost(10);
+        dlc.setDebrisCost(68);
         dlc.setDesc("传说天使是圣洁的，是代表勇敢，代表智慧。但其实他们也有另一面，黑暗、堕落、淫乱。据说，天使是没有性别，那么，俊美的外表下到底是否有你想要的灵魂？此DLC包含全新的七种天使。");
         Monster monster = new Monster();
         monster.setIndex(68);
@@ -129,7 +130,7 @@ public class BuildDLC {
         monster.setType("天使");
         monster.setDesc("代表圣洁、良善，正直，保护平民不被恶魔侵扰。");
         dlc.getMonsters().add(monster);
-        dlc.getImage().add(readImage("D:\\NeverEnd\\assets\\monster\\angle_0.png"));
+        dlc.getImage().add(readImage("E:\\NeverEnd\\assets\\monster\\angle_0.png"));
         //---------//
         monster = new Monster();
         monster.setIndex(71);
@@ -147,7 +148,7 @@ public class BuildDLC {
         monster.setType("天使喵");
         monster.setDesc("它的眼神为何如此忧伤，或许只是因为你不再爱它。");
         dlc.getMonsters().add(monster);
-        dlc.getImage().add(readImage("D:\\NeverEnd\\assets\\monster\\angle_miao.png"));
+        dlc.getImage().add(readImage("E:\\NeverEnd\\assets\\monster\\angle_miao.png"));
         //---------//
         monster = new Monster();
         monster.setIndex(92);
@@ -165,7 +166,7 @@ public class BuildDLC {
         monster.setType("妮姆芙");
         monster.setDesc("β型号");
         dlc.getMonsters().add(monster);
-        dlc.getImage().add(readImage("D:\\NeverEnd\\assets\\monster\\nimufu.png"));
+        dlc.getImage().add(readImage("E:\\NeverEnd\\assets\\monster\\nimufu.png"));
         //---------//
         monster = new Monster();
         monster.setIndex(69);
@@ -183,7 +184,7 @@ public class BuildDLC {
         monster.setType("黑天使");
         monster.setDesc("被人性中最最邪恶的一面污染的天使就会进化为黑天使。");
         dlc.getMonsters().add(monster);
-        dlc.getImage().add(readImage("D:\\NeverEnd\\assets\\monster\\angle_1.png"));
+        dlc.getImage().add(readImage("E:\\NeverEnd\\assets\\monster\\angle_1.png"));
         //---------//
         monster = new Monster();
         monster.setIndex(70);
@@ -203,7 +204,7 @@ public class BuildDLC {
         monster.setType("辉天使");
         monster.setDesc("磐涅，重生，进化成更高级的生命。");
         dlc.getMonsters().add(monster);
-        dlc.getImage().add(readImage("D:\\NeverEnd\\assets\\monster\\Angel.png"));
+        dlc.getImage().add(readImage("E:\\NeverEnd\\assets\\monster\\Angel.png"));
         //---------//
         monster = new Monster();
         monster.setIndex(93);
@@ -221,7 +222,7 @@ public class BuildDLC {
         monster.setType("伊卡洛斯");
         monster.setDesc("α型号。攻击奇高，内心却很脆弱。");
         dlc.getMonsters().add(monster);
-        dlc.getImage().add(readImage("D:\\NeverEnd\\assets\\monster\\yikaluos.png"));
+        dlc.getImage().add(readImage("E:\\NeverEnd\\assets\\monster\\yikaluos.png"));
         //---------//
         monster = new Monster();
         monster.setIndex(95);
@@ -239,7 +240,7 @@ public class BuildDLC {
         monster.setType("CHISE");
         monster.setDesc("世界战争的\"最终兵器\"。");
         dlc.getMonsters().add(monster);
-        dlc.getImage().add(readImage("D:\\NeverEnd\\assets\\monster\\chisi.png"));
+        dlc.getImage().add(readImage("E:\\NeverEnd\\assets\\monster\\chisi.png"));
         System.out.println(table.save(dlc));
     }
 }

@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.model;
 import cn.luo.yuan.maze.utils.Field;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Created by gluo on 6/30/2017.

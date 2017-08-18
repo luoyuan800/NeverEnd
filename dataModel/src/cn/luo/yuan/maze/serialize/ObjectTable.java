@@ -259,7 +259,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
             return table.cast(o);
         } catch(InvalidClassException e){
             e.printStackTrace();
-            entry.deleteOnExit();
+            entry.delete();
         } catch (Exception e) {
             //e.printStackTrace();
         }

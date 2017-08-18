@@ -1,9 +1,12 @@
 package cn.luo.yuan.maze.model;
 
+import cn.luo.yuan.maze.utils.Field;
+
 /**
  * Created by luoyuan on 2017/6/29.
  */
 public class Egg extends Pet {
+    private static final long serialVersionUID = Field.SERVER_VERSION;
     public long step;
 
     public int getIndex(){

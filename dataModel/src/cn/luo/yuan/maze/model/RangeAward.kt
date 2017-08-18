@@ -21,10 +21,10 @@ class RangeAward: Serializable {
     var debris = 0
 
     override fun toString(): String {
-        return "<b>恭喜获得层数排名第 $range</b><br>" +
+        return "<b>恭喜获得层数排名第 $range</b>位<br>" +
                 "获得奖励：" + (if(mate > 0) "锻造 ${StringUtils.formatNumber(mate)}" else StringUtils.EMPTY_STRING) +
-                (if(gift > 0) "礼包 ${StringUtils.formatNumber(gift)}" else StringUtils.EMPTY_STRING) +
-                (if(debris > 0) "碎片 ${StringUtils.formatNumber(debris)}" else StringUtils.EMPTY_STRING) +
-                (if(goods.size > 0) "物品 ${goods}" else StringUtils.EMPTY_STRING)
+                (if(gift > 0) "， 礼包 ${StringUtils.formatNumber(gift)}" else StringUtils.EMPTY_STRING) +
+                (if(debris > 0) "， 碎片 ${StringUtils.formatNumber(debris)}" else StringUtils.EMPTY_STRING) +
+                (if(goods.size > 0) "， 物品 ${goods}" else StringUtils.EMPTY_STRING)
     }
 }

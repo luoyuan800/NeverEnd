@@ -965,9 +965,9 @@ public class MainProcess {
                             }
                         }
                     } else {
-                        ra.setDebris(3);
-                        ra.setGift(5);
-                        ra.setMate(10000);
+                        ra.setDebris(1);
+                        ra.setGift(1);
+                        ra.setMate(8000);
                     }
                     record.setDebris(record.getDebris() + ra.getDebris());
                     record.setGift(record.getGift() + ra.getGift());

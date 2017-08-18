@@ -21,6 +21,7 @@ import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.goods.Goods;
+import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.utils.Field;
 import org.jetbrains.annotations.NotNull;
 
@@ -67,6 +68,10 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                 case 4:
                     Object item = msg.obj;
                     Toast.makeText(context.getContext(), Html.fromHtml(item.toString()), Toast.LENGTH_SHORT).show();
+                    if(currentShowingDialog!=null){
+                        currentShowingDialog.dismiss();
+                        currentShowingDialog = null;
+                    }
                     break;
                 case 3:
                     currentShowingDialog = SimplerDialogBuilder.showSelectLocalItemDialog(ExchangeDialog.this, context);
@@ -93,6 +98,10 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Object item = parent.getItemAtPosition(position);
+        if(item instanceof MountAble && ((MountAble) item).isMounted()){
+            context.showPopup("装备（出战）中的无法操作！");
+            return;
+        }
         if (item instanceof Serializable) {
             if (currentShowingDialog != null) {
                 currentShowingDialog.dismiss();
@@ -114,7 +123,6 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
             root.addView(rbg);
             final EditText limit = new EditText(context.getContext());
             limit.setHint("输入你的限制条件");
-            limit.setText("测试");
             root.addView(limit);
             petType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -144,9 +152,12 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                 }
             });
             petType.setChecked(true);
-            Dialog dialog = SimplerDialogBuilder.build(root, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+            if(currentShowingDialog!=null && currentShowingDialog.isShowing()){
+                currentShowingDialog.dismiss();
+            }
+            currentShowingDialog = SimplerDialogBuilder.build(root, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(final DialogInterface dialog, int which) {
                     handler.sendEmptyMessage(8);
                     context.getExecutor().submit(new Runnable() {
                         @Override
@@ -157,6 +168,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                                 message.what = 4;
                                 message.obj = "成功上传" + (item instanceof NameObject ? ((NameObject) item).getName() : "");
                                 handler.sendMessage(message);
+                                dialog.dismiss();
                             } else {
                                 Message message = new Message();
                                 message.what = 4;
@@ -241,6 +253,10 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Object myItem = parent.getItemAtPosition(position);
+                if(myItem instanceof MountAble && ((MountAble) myItem).isMounted()){
+                    context.showPopup("出战（装备）中的无法交换！");
+                    return;
+                }
                 selectDialog.dismiss();
                 handler.sendEmptyMessage(8);
                 context.getExecutor().submit(new Runnable() {

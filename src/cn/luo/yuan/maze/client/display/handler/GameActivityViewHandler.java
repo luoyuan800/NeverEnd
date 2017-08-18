@@ -347,7 +347,7 @@ public class GameActivityViewHandler extends Handler {
     }
 
     private void refreshDieMessage(){
-        if(!SDFileUtils.getFilesListFromSD("die").isEmpty()){
+        if(!SDFileUtils.getFilesListFromSD(String.valueOf(neverEnd.getIndex())).isEmpty()){
             post(new Runnable() {
                 @Override
                 public void run() {
@@ -366,12 +366,20 @@ public class GameActivityViewHandler extends Handler {
 
     public void addDieMessage(List<String> msgs){
         try {
+            String folder = String.valueOf(neverEnd.getIndex());
+            List<String> list = SDFileUtils.getFilesListFromSDWithOrder(folder);
+            if (list.size() > 5) {
+                SDFileUtils.deleteFile(folder, list.get(list.size() - 1));
+            }
+            if(list.size() > 10){
+                return ;
+            }
             String title = StringUtils.getCurrentTime().replaceAll(":", "-");
             StringBuilder builder = new StringBuilder(title).append(": <br>");
             for (String s : msgs) {
                 builder.append(s).append("<br>");
             }
-            SDFileUtils.saveStringIntoSD(String.valueOf(neverEnd.getIndex()), title, builder.toString());
+            SDFileUtils.saveStringIntoSD(folder, title, builder.toString());
             refreshDieMessage();
         }catch (Exception e){
             LogHelper.logException(e, "LogDie");
@@ -383,7 +391,7 @@ public class GameActivityViewHandler extends Handler {
             @Override
             public void run() {
                 ListView listView = new ListView(context);
-                final StringAdapter<String> adapter = new StringAdapter<>(SDFileUtils.getFilesListFromSD(String.valueOf(neverEnd.getIndex())));
+                final StringAdapter<String> adapter = new StringAdapter<>(SDFileUtils.getFilesListFromSDWithOrder(String.valueOf(neverEnd.getIndex())));
                 adapter.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(final View v) {
@@ -417,7 +425,7 @@ public class GameActivityViewHandler extends Handler {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if(!SDFileUtils.deleteFolder(String.valueOf(neverEnd.getIndex()))){
-                            neverEnd.showPopup("删除文件失败，您可以手动删除SD卡neverend目录下的" + neverEnd.getHero().getId() + "文件夹！");
+                            neverEnd.showPopup("删除文件失败，您可以手动删除SD卡neverend目录下的" + neverEnd.getIndex() + "文件夹！");
                         }
                         dialog.dismiss();
                     }

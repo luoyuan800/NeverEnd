@@ -20,6 +20,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -37,6 +38,25 @@ public class SDFileUtils {
         File file = new File(SDFileUtils.SD_PATH, folder);
         if(file.exists()) {
             return Arrays.asList(file.list());
+        }else{
+            return Collections.emptyList();
+        }
+    }
+    public static List<String> getFilesListFromSDWithOrder(String folder){
+        File file = new File(SDFileUtils.SD_PATH, folder);
+        if(file.exists()) {
+            File[] fs = file.listFiles();
+            Arrays.sort(fs, new Comparator<File>() {
+                @Override
+                public int compare(File lhs, File rhs) {
+                    return Long.compare(rhs.lastModified(),lhs.lastModified());
+                }
+            });
+            ArrayList<String> rs = new ArrayList<>(fs.length);
+            for(File f : fs){
+                rs.add(f.getName());
+            }
+            return rs;
         }else{
             return Collections.emptyList();
         }
@@ -167,7 +187,7 @@ public class SDFileUtils {
     }
 
     public static void deleteFile(File file){
-        file.deleteOnExit();
+        file.delete();
     }
 
     public static String readStringFromSD(String folder, String name) {
@@ -195,13 +215,7 @@ public class SDFileUtils {
     }
 
     public static void saveStringIntoSD(String folder, String file, String msg){
-        List<String> list = SDFileUtils.getFilesListFromSD(folder);
-        if(list.size() > 10){
-            return ;
-        }
-        if (list.size() > 5) {
-            SDFileUtils.deleteFile(folder, list.get(0));
-        }
+
         File filfile = newFileInstance(SDFileUtils.SD_PATH + folder, file, true);
         try (FileWriter writer = new FileWriter(filfile)){
             writer.write(msg);
@@ -210,17 +224,16 @@ public class SDFileUtils {
         }
     }
 
-    public static void deleteFileFromSD(String folder, String file){
-        new File(new File(SD_PATH, folder), file).deleteOnExit();
+    public static boolean deleteFileFromSD(String folder, String file){
+        return new File(new File(SD_PATH, folder), file).delete();
     }
 
     public static boolean deleteFolder(String folder) {
         try {
             File dir = new File(SD_PATH + folder);
             for (File f : dir.listFiles()) {
-                deleteFile(f);
+                f.delete();
             }
-            dir.delete();
             if (dir.exists() && dir.list().length > 0) {
                 return false;
             } else {

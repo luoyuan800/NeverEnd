@@ -7,6 +7,7 @@ import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.ExchangeObject;
 import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.model.OwnedAble;
+import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -39,6 +40,9 @@ public class ExchangeManager {
     }
 
     public boolean submitExchange(Serializable object, String limit, int expectType) {
+        if(object instanceof MountAble && ((MountAble) object).isMounted()){
+            return false;
+        }
         if (object instanceof Accessory) {
             object = context.convertToServerObject(object);
         }

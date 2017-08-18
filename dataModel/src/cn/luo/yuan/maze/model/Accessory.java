@@ -1,6 +1,8 @@
 package cn.luo.yuan.maze.model;
 
 import cn.luo.yuan.maze.model.effect.Effect;
+import cn.luo.yuan.maze.model.skill.MountAble;
+import cn.luo.yuan.maze.model.skill.SkillParameter;
 import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -12,7 +14,7 @@ import java.util.List;
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, Cloneable {
+public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, Cloneable, MountAble {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private boolean delete;
     private int heroIndex;
@@ -94,6 +96,21 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, 
 
     public boolean isMounted() {
         return mounted;
+    }
+
+    @Override
+    public void mount() {
+
+    }
+
+    @Override
+    public void unMount() {
+
+    }
+
+    @Override
+    public boolean canMount(SkillParameter parameter) {
+        return true;
     }
 
     public void setMounted(boolean mounted) {

@@ -1,5 +1,7 @@
 package cn.luo.yuan.maze.model;
 
+import cn.luo.yuan.maze.model.skill.MountAble;
+import cn.luo.yuan.maze.model.skill.SkillParameter;
 import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -7,7 +9,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 /**
  * Created by gluo on 4/25/2017.
  */
-public class Pet extends Monster implements IDModel, OwnedAble {
+public class Pet extends Monster implements IDModel, OwnedAble, MountAble {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private boolean delete;
     private EncodeLong level = new EncodeLong(0);
@@ -61,6 +63,21 @@ public class Pet extends Monster implements IDModel, OwnedAble {
 
     public boolean isMounted() {
         return mounted;
+    }
+
+    @Override
+    public void mount() {
+
+    }
+
+    @Override
+    public void unMount() {
+
+    }
+
+    @Override
+    public boolean canMount(SkillParameter parameter) {
+        return true;
     }
 
     public void setMounted(boolean mounted) {

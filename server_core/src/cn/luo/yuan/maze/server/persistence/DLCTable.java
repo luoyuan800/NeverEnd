@@ -34,7 +34,7 @@ public class DLCTable {
             if (dlc != null) {
                 DLCKey key = new DLCKey();
                 key.setId(dlc.getId());
-                key.setCost(dlc instanceof MonsterDLC && filterOut.contains(dlc.getId()) ? 0 : dlc.getDebrisCost());
+                key.setCost(dlc instanceof MonsterDLC && filterOut.contains(dlc.getId()) ? dlc.getDebrisCost()/2 : dlc.getDebrisCost());
                 key.setDesc(dlc.getDesc());
                 keys.add(key);
             }

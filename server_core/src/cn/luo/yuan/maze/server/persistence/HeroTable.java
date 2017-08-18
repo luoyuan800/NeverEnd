@@ -211,7 +211,7 @@ public class HeroTable implements Runnable {
             if(record == null){
                 delete = true;
             }else{
-                if(record.getData() == null && System.currentTimeMillis() - record.getSubmitDate() > DAYEXTIME){
+                if((record.getData() == null || record.getDieCount() >= record.getRestoreLimit()) && System.currentTimeMillis() - record.getSubmitDate() > DAYEXTIME){
                     delete = true;
                 }else{
                     if(System.currentTimeMillis() - record.getSubmitDate() > WEEKEXTIME){

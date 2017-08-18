@@ -49,9 +49,21 @@ class ServerRecord : IDModel, Serializable, MessageReceiver {
         }
     var gift = 0
 
-    val dlcs = mutableSetOf<String>()
+    val dlcs:Set<String>? = mutableSetOf<String>()
+    get(){
+        if(field == null){
+            field = mutableSetOf<String>()
+        }
+        return field
+    }
 
-    val cdkdys = mutableSetOf<String>()
+    val cdkdys:Set<String>? = mutableSetOf<String>()
+    get(){
+        if(field == null){
+            field = mutableSetOf<String>()
+        }
+        return field
+    }
 
     var award = false
 
