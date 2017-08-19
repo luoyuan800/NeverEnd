@@ -305,7 +305,7 @@ public class GameActivity extends BaseActivity {
                             ((TextView) view.findViewById(R.id.monster_race)).setText(monster.getRace().getName());
                             NeverEndConfig config = dataManager.loadConfig();
                             boolean isCatched = config!=null ? config.isMonsterCatched(monster.getIndex()) : control.getDataManager().loadPets(0, 1, monster.getType(), null).isEmpty();
-                            if(isCatched) {
+                            if(!isCatched) {
                                 ((TextView) view.findViewById(R.id.monster_atk_value)).setText("?");
                                 ((TextView) view.findViewById(R.id.monster_def_value)).setText("?");
                                 ((TextView) view.findViewById(R.id.monster_hp_value)).setText("?");
