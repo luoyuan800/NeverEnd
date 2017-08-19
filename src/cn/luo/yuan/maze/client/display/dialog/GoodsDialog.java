@@ -24,6 +24,6 @@ public class GoodsDialog {
             }
         }
         list.setAdapter(new GoodsAdapter(context, rGoodes));
-        SimplerDialogBuilder.build(list, Resource.getString(R.string.close), null,context.getContext());
+        SimplerDialogBuilder.build(list, Resource.getString(R.string.close), null,context.getContext(), true);
     }
 }

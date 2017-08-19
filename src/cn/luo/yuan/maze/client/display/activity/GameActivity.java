@@ -303,19 +303,22 @@ public class GameActivity extends BaseActivity {
                             ((TextView) view.findViewById(R.id.monster_sex)).setText(monster.getSex() < 0 ? "♂♀" : (monster.getSex() == 0 ? "♂" : "♀"));
                             ((TextView) view.findViewById(R.id.monster_rank)).setText(StringUtils.formatStar(monster.getRank()));
                             ((TextView) view.findViewById(R.id.monster_race)).setText(monster.getRace().getName());
-                            if(control.getDataManager().loadPets(0, 1, monster.getType(), null).isEmpty()) {
+                            NeverEndConfig config = dataManager.loadConfig();
+                            boolean isCatched = config!=null ? config.isMonsterCatched(monster.getIndex()) : control.getDataManager().loadPets(0, 1, monster.getType(), null).isEmpty();
+                            if(isCatched) {
                                 ((TextView) view.findViewById(R.id.monster_atk_value)).setText("?");
                                 ((TextView) view.findViewById(R.id.monster_def_value)).setText("?");
                                 ((TextView) view.findViewById(R.id.monster_hp_value)).setText("?");
                                 ((TextView) view.findViewById(R.id.monster_egg_rate)).setText("?");
                                 ((TextView) view.findViewById(R.id.monster_pet_rate)).setText("?");
+                                view.findViewById(R.id.monster_cathced).setVisibility(View.INVISIBLE);
                             }else{
                                 ((TextView) view.findViewById(R.id.monster_atk_value)).setText(StringUtils.formatNumber(monster.getAtk(), false));
                                 ((TextView) view.findViewById(R.id.monster_def_value)).setText(StringUtils.formatNumber(monster.getDef(), false));
                                 ((TextView) view.findViewById(R.id.monster_hp_value)).setText(StringUtils.formatNumber(monster.getMaxHp(), false));
                                 ((TextView) view.findViewById(R.id.monster_egg_rate)).setText(StringUtils.formatPercentage(monster.getEggRate()));
                                 ((TextView) view.findViewById(R.id.monster_pet_rate)).setText(StringUtils.formatPercentage(monster.getPetRate()));
-
+                                view.findViewById(R.id.monster_cathced).setVisibility(View.VISIBLE);
                             }
                             ((TextView) view.findViewById(R.id.monster_desc)).setText(control.getPetMonsterHelper().getDescription(monster.getIndex(), monster.getType()));
                             ((ImageView) view.findViewById(R.id.monster_image)).setImageDrawable(ClientPetMonsterHelper.loadMonsterImage(monster.getIndex()));

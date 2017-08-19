@@ -75,4 +75,9 @@ public class GameContext implements InfoControlInterface{
     public void postTaskInUIThread(Runnable task) {
 
     }
+
+    @Override
+    public void refreshHead() {
+
+    }
 }

@@ -2,8 +2,11 @@ package cn.luo.yuan.maze.client.service;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.Html;
 import android.util.Log;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
@@ -23,7 +26,9 @@ import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.service.PetMonsterHelper;
 import cn.luo.yuan.maze.service.SkillHelper;
+import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -73,6 +78,35 @@ public class NeverEnd extends Application implements InfoControlInterface {
 
     public void refreshHead(){
         viewHandler.refreshHeadImage(getDataManager().loadConfig());
+    }
+
+    @Override
+    public void showEmptyAccessoryDialog() {
+        viewHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                EditText title = new EditText(context);
+                EditText tag = new EditText(context);
+                title.setHint("输入装备的名字");
+                tag.setHint("装备描述");
+                LinearLayout ly = new LinearLayout(context);
+                ly.setOrientation(LinearLayout.VERTICAL);
+                ly.addView(tag);
+                ly.addView(tag);
+                SimplerDialogBuilder.build(ly, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(StringUtils.isNotEmpty(title.getText().toString())){
+                            Accessory accessory = new Accessory();
+                            accessory.setName(title.getText().toString());
+                            accessory.setDesc(tag.getText().toString());
+                            accessory.setType(random.randomItem(new String[]{Field.HAT_TYPE, Field.RING_TYPE, Field.ARMOR_TYPR, Field.SWORD_TYPE, Field.NECKLACE_TYPE}));
+                            dialog.dismiss();
+                        }
+                    }
+                }, context, false);
+            }
+        });
     }
 
     public void setContext(Context context, DataManager dataManager) {

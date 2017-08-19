@@ -77,4 +77,9 @@ public class MockGameContext implements InfoControlInterface {
     public void postTaskInUIThread(Runnable task) {
 
     }
+
+    @Override
+    public void refreshHead() {
+
+    }
 }

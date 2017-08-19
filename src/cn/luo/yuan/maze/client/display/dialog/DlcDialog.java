@@ -117,7 +117,7 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                         }
-                    }, context.getContext());
+                    }, context.getContext(), true);
                 }
             }
         });

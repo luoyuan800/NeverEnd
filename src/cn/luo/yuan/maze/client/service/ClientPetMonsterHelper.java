@@ -8,16 +8,15 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.client.utils.RestConnection;
-import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.Element;
-import cn.luo.yuan.maze.model.Monster;
-import cn.luo.yuan.maze.model.Race;
+import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
+import cn.luo.yuan.maze.service.EffectHandler;
 import cn.luo.yuan.maze.service.PetMonsterHelper;
 import cn.luo.yuan.maze.utils.Field;
+import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -37,6 +36,28 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
     private ArrayMap<MonsterKey, WeakReference<Monster>> monsterCache = new ArrayMap<>();
     private RestConnection server;
     private SerializeLoader<Monster> monsterTable;
+
+    public String getLocalCatchPercent(){
+        NeverEndConfig config = control.getDataManager().loadConfig();
+        if(config!=null){
+            int size = monsterCache.size();
+            if(size > 0) {
+                return StringUtils.formatPercentage(((float) config.getCatchedCount() / size));
+            }
+        }
+        return StringUtils.formatPercentage(0f);
+    }
+    public String getGlobalCatchPercent(){
+        NeverEndConfig config = control.getDataManager().loadConfig();
+        if(config!=null){
+            int size = monsterCache.size();
+            int gSize = monsterTable.size();
+            if(gSize > 0 && size > 0) {
+                return StringUtils.formatPercentage(((float) config.getCatchedCount() / (size + gSize)));
+            }
+        }
+        return StringUtils.formatPercentage(0f);
+    }
 
     private ClientPetMonsterHelper(NeverEnd control) {
         this.control = control;
@@ -61,6 +82,26 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
     public static Drawable loadMonsterImage(int id) {
         String ids = String.valueOf(id);
         return loadMonsterImage(ids);
+    }
+
+    public  boolean isCatchAble(Monster monster, Hero hero, Random random, int petCount) {
+        if (monster.getPetRate() > 0 && (petCount < Data.MAX_PET_COUNT && monster.getRace().ordinal() != hero.getRace().ordinal() + 1 && monster.getRace().ordinal() != hero.getRace().ordinal() - 5)) {
+            NeverEndConfig config = control.getDataManager().loadConfig();
+            if(config!=null && config.isPetGift()){
+                petCount/=10;
+            }
+            float rate = (100 - monster.getPetRate()) + random.nextInt(petCount + 10);
+            if(rate > 100 && monster.getPetRate() > 0){
+                rate = 100 - monster.getPetRate() + random.nextFloat(petCount - 5);
+            }
+            float current = (random.nextInt(100) + random.nextFloat() + EffectHandler.getEffectAdditionFloatValue(EffectHandler.PET_RATE, hero.getEffects()))/Data.PET_RATE_REDUCE;
+            if (current >= 100) {
+                current = 99.5f;
+            }
+            return current > rate;
+        } else {
+            return false;
+        }
     }
 
     private List<String> availableSpecialMonsterIds(long level){

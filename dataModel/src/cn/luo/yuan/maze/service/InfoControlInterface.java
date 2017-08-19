@@ -36,4 +36,6 @@ public interface InfoControlInterface {
     void postTaskInUIThread(Runnable task);
 
     void refreshHead();
+
+    void showEmptyAccessoryDialog();
 }

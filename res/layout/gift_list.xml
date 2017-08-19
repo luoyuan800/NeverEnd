@@ -42,7 +42,7 @@
     </LinearLayout>
     <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:id="@+id/empty_layout" android:layout_weight="1" android:layout_gravity="center_vertical">
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="神奇宝贝" android:enabled="false"
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="神奇宝贝" android:enabled="true"
                 android:id="@+id/Pokemon" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
                 style="@android:style/Widget.Button.Inset"/>
         <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="火焰身躯" android:enabled="false"

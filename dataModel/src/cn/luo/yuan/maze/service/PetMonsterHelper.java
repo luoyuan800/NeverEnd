@@ -16,6 +16,8 @@ import java.util.Calendar;
  */
 public abstract class PetMonsterHelper implements PetMonsterHelperInterface, MonsterLoader {
     private Random random;
+    public abstract String getLocalCatchPercent();
+    public abstract String getGlobalCatchPercent();
 
     public Pet monsterToPet(Monster monster, Hero hero, long level) throws MonsterToPetException {
         Pet pet = new Pet();
@@ -52,23 +54,7 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
         pet.setKeeperName(hero.getName());
         return pet;
     }
-
-    public  boolean isCatchAble(Monster monster, Hero hero, Random random, int petCount) {
-        if (monster.getPetRate() > 0 && (petCount < Data.MAX_PET_COUNT && monster.getRace().ordinal() != hero.getRace().ordinal() + 1 && monster.getRace().ordinal() != hero.getRace().ordinal() - 5)) {
-            float rate = (100 - monster.getPetRate()) + random.nextInt(petCount + 10);
-            if(rate > 100 && monster.getPetRate() > 0){
-                rate = 100 - monster.getPetRate() + random.nextFloat(petCount - 5);
-            }
-            float current = (random.nextInt(100) + random.nextFloat() + EffectHandler.getEffectAdditionFloatValue(EffectHandler.PET_RATE, hero.getEffects()))/Data.PET_RATE_REDUCE;
-            if (current >= 100) {
-                current = 99.5f;
-            }
-            return current > rate;
-        } else {
-            return false;
-        }
-    }
-
+    public  abstract boolean isCatchAble(Monster monster, Hero hero, Random random, int petCount);
     public Monster randomMonster(long level) {
         return randomMonster(level, true);
     }

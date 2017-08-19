@@ -179,7 +179,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                         }
                     });
                 }
-            }, context.getContext());
+            }, context.getContext(), true);
 
         }
     }
@@ -214,7 +214,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
             }
         });
         linearLayout.addView(upload);
-        SimplerDialogBuilder.build(linearLayout, Resource.getString(R.string.close), null, context.getContext());
+        SimplerDialogBuilder.build(linearLayout, Resource.getString(R.string.close), null, context.getContext(), true);
     }
 
     private void showSelectExchangeDialog(final ExchangeObject eo) {
@@ -248,7 +248,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                 list.onLoadMoreComplete(true);
                 break;
         }
-        final Dialog selectDialog = SimplerDialogBuilder.build(list, Resource.getString(R.string.close), null, context.getContext());
+        final Dialog selectDialog = SimplerDialogBuilder.build(list, Resource.getString(R.string.close), null, context.getContext(), true);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -287,7 +287,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
         final EditText key = (EditText) view.findViewById(R.id.key_text);
         final LoadMoreListView list = (LoadMoreListView) view.findViewById(R.id.item_list);
         list.onLoadMoreComplete(true);
-        currentShowingDialog = SimplerDialogBuilder.build(view, Resource.getString(R.string.close), null, context.getContext());
+        currentShowingDialog = SimplerDialogBuilder.build(view, Resource.getString(R.string.close), null, context.getContext(), true);
         final Runnable updateTask = new Runnable() {
             @Override
             public void run() {
@@ -419,7 +419,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
         list.setAdapter(es);
         handler.sendEmptyMessage(9);
 
-        SimplerDialogBuilder.build(list, Resource.getString(R.string.close), null, context.getContext());
+        SimplerDialogBuilder.build(list, Resource.getString(R.string.close), null, context.getContext(), true);
     }
 
     private void showMyExchange() {

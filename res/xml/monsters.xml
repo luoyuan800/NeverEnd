@@ -126,6 +126,42 @@
         <evolution>140</evolution>
     </monster>
     <monster>
+        <index>9</index>
+        <meet meet_rate="35" min_level="50"/>
+        <name>老虎</name>
+        <desc>大型猫科动物，肚子饿的时候会假装亲近人类，肚子不饿的时候不具备攻击力。
+        </desc>
+        <atk>120</atk>
+        <def>120</def>
+        <hp>120</hp>
+        <hit>10</hit>
+        <silent>1</silent>
+        <egg_rate>15</egg_rate>
+        <pet_rate>37</pet_rate>
+        <sex>-1</sex>
+        <race>Nonsr</race>
+        <rank>1</rank>
+        <evolution>10</evolution>
+    </monster>
+    <monster>
+        <index>10</index>
+        <meet meet_rate="15" min_level="150"/>
+        <name>虎妖</name>
+        <desc>大型猫科动物的妖化变种，喜欢食人。
+        </desc>
+        <atk>220</atk>
+        <def>100</def>
+        <hp>100</hp>
+        <hit>30</hit>
+        <silent>15</silent>
+        <egg_rate>15</egg_rate>
+        <pet_rate>17</pet_rate>
+        <sex>-1</sex>
+        <race>Eviler</race>
+        <rank>2</rank>
+        <evolution>58</evolution>
+    </monster>
+    <monster>
         <index>12</index>
         <meet meet_rate="40" min_level="60"/>
         <name>变异蝎</name>

@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.model;
 import cn.luo.yuan.maze.utils.Field;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -19,6 +20,29 @@ public class NeverEndConfig implements IDModel, Serializable {
     private boolean exception;
     private boolean longKiller;
     private boolean elementer;
+    private Set<Integer> catchedMonsterIndex;
+    private boolean petGift;
+
+    public synchronized boolean isMonsterCatched(int index){
+        if(catchedMonsterIndex == null){
+            catchedMonsterIndex = new HashSet<>();
+        }
+        return catchedMonsterIndex.contains(index);
+    }
+
+    public synchronized  void addMonsterCatch(int index){
+        if(catchedMonsterIndex == null){
+            catchedMonsterIndex = new HashSet<>();
+        }
+        catchedMonsterIndex.add(index);
+    }
+
+    public int getCatchedCount(){
+        if(catchedMonsterIndex == null){
+            catchedMonsterIndex = new HashSet<>();
+        }
+        return catchedMonsterIndex.size();
+    }
 
     private  long MATERIAL_LIMIT = 3000000;//如果携带超过这个数量的锻造，就增加商店的价格和怪物的攻击
 
@@ -108,5 +132,13 @@ public class NeverEndConfig implements IDModel, Serializable {
 
     public void setElementer(boolean elementer) {
         this.elementer = elementer;
+    }
+
+    public boolean isPetGift() {
+        return petGift;
+    }
+
+    public void setPetGift(boolean petGift) {
+        this.petGift = petGift;
     }
 }

@@ -156,14 +156,14 @@ public class SimplerDialogBuilder {
         }
     }
 
-    public static Dialog build(View view, String posivStr, final DialogInterface.OnClickListener listener, Context context) {
+    public static Dialog build(View view, String posivStr, final DialogInterface.OnClickListener listener, Context context, boolean cancleable) {
             final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
             dialogBuilder
                     .withMessage(null)
                     .withDialogColor(Color.WHITE)
                     .setCustomView(view, context)                   //.withMessage(null)  no Msg
                     .withButton1Text(posivStr)                                      //def gone
-                    .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
+                    .isCancelableOnTouchOutside(cancleable)                           //def    | isCancelable(true)
                     .setButton1Click(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -302,7 +302,7 @@ public class SimplerDialogBuilder {
             }
         });
         petR.setChecked(true);
-        return build(view, Resource.getString(R.string.close), null, context.getContext());
+        return build(view, Resource.getString(R.string.close), null, context.getContext(), true);
     }
 
     public static Dialog buildClickWarnDialog(Context context, Random random) {

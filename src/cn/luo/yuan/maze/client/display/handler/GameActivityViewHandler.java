@@ -1,13 +1,11 @@
 package cn.luo.yuan.maze.client.display.handler;
 
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
-import android.os.Message;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +31,6 @@ import cn.luo.yuan.maze.model.skill.UpgradeAble;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.utils.StringUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -192,6 +189,11 @@ public class GameActivityViewHandler extends Handler {
             setNumberText((TextView) context.findViewById(R.id.hero_atk_addition), context.control.getHero().getAdditionAtk());
             setText((TextView) context.findViewById(R.id.hero_def),StringUtils.formatNumber(context.control.getHero().getDef(), false));
             setNumberText((TextView) context.findViewById(R.id.hero_def_addition),context.control.getHero().getAdditionDef());
+            View view = context.findViewById(R.id.monster_view);
+            if(view.getVisibility() == View.VISIBLE){
+                setText((TextView) view.findViewById(R.id.local_monster_percent), neverEnd.getPetMonsterHelper().getLocalCatchPercent());
+                setText((TextView) view.findViewById(R.id.global_monster_percent), neverEnd.getPetMonsterHelper().getGlobalCatchPercent());
+            }
         }
     };
 
