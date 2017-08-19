@@ -74,7 +74,10 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
             public void onClick(View v) {
                 if(main!=null){
                     context.showToast("拆解装备获得了%s锻造", StringUtils.formatNumber(context.getAccessoryHelper().recycle(main)));
-
+                    accessoryAdapter.getData().remove(main);
+                    accessoryAdapter.notifyDataSetChanged();
+                    main = null;
+                    refreshMainAccessoryView();
                 }
             }
         });

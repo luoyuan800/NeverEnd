@@ -324,6 +324,13 @@ public class AccessoryHelper extends cn.luo.yuan.maze.service.AccessoryHelper {
     }
 
     public long recycle(Accessory accessory){
+        if(accessory.isDelete()){
+            return 0;
+        }
+        if(accessory.isMounted()){
+            unMountAccessory(accessory,control.getHero(), control);
+        }
+        control.getDataManager().delete(accessory);
         long m = Data.RECYCLE_MATERIAL * (1 + accessory.getLevel());
         control.getHero().setMaterial(control.getHero().getMaterial() + m);
         return m;
