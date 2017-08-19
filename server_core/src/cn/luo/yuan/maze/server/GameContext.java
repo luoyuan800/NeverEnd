@@ -80,4 +80,9 @@ public class GameContext implements InfoControlInterface{
     public void refreshHead() {
 
     }
+
+    @Override
+    public void showEmptyAccessoryDialog() {
+
+    }
 }

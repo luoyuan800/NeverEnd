@@ -82,4 +82,9 @@ public class MockGameContext implements InfoControlInterface {
     public void refreshHead() {
 
     }
+
+    @Override
+    public void showEmptyAccessoryDialog() {
+
+    }
 }
