@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.client.display.handler;
 
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -24,6 +25,7 @@ import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.client.utils.SDFileUtils;
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
@@ -292,8 +294,18 @@ public class GameActivityViewHandler extends Handler {
         this.neverEnd = context;
     }
 
-    public void refreshHeadImage(Hero hero, Object target) {
-        ImageView heroHead = (ImageView) context.findViewById(R.id.hero_pic);
+    public void refreshHeadImage(final NeverEndConfig config) {
+        post(new Runnable() {
+            @Override
+            public void run() {
+                if (StringUtils.isNotEmpty(config.getHead())) {
+                    Drawable bitmap = Resource.loadImageFromAssets(config.getHead(), false);
+                    if (bitmap != null) {
+                        ((ImageView) context.findViewById(R.id.hero_pic)).setImageDrawable(bitmap);
+                    }
+                }
+            }
+        });
     }
 
     public void refreshSkill() {

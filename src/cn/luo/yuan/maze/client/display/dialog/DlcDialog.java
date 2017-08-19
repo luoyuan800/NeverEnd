@@ -82,7 +82,7 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
                         ((ImageView) view.findViewById(R.id.dlc_3)).setImageDrawable(null);
                     }
                     ((TextView) view.findViewById(R.id.dlc_title)).setText(Html.fromHtml(dlc.getTitle()));
-                    ((TextView) view.findViewById(R.id.dlc_desc)).setText(Html.fromHtml(dlc.getDesc()));
+                    ((TextView) view.findViewById(R.id.dlc_desc)).setText(Html.fromHtml(dlc.getDesc() + (dlc instanceof MonsterDLC ? "<br>注意：该资料片是扩充怪物资料，使得你在迷宫中可以遇到和捕获她们，并不是直接获取宠物。" : "")));
                     ((TextView) view.findViewById(R.id.dlc_cost)).setText(StringUtils.formatNumber(dlc.getDebrisCost()));
                     Dialog dialog = SimplerDialogBuilder.build(view, "详情", context.getContext(), context.getRandom());
                     view.findViewById(R.id.dlc_buy).setOnClickListener(DlcDialog.this);

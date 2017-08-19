@@ -71,6 +71,10 @@ public class NeverEnd extends Application implements InfoControlInterface {
         return executor;
     }
 
+    public void refreshHead(){
+        viewHandler.refreshHeadImage(getDataManager().loadConfig());
+    }
+
     public void setContext(Context context, DataManager dataManager) {
         this.context = context;
         executor = Executors.newScheduledThreadPool(5);
@@ -379,6 +383,11 @@ public class NeverEnd extends Application implements InfoControlInterface {
         for (Accessory accessory : new ArrayList<>(hero.getAccessories())) {
             AccessoryHelper.unMountAccessory(accessory, hero, this);
         }
+        getDataManager().cleanAccessories();
+        hero.getPets().clear();
+        getDataManager().cleanPets();
+        getDataManager().cleanGoods();
+        getDataManager().cleanPets();
         SkillParameter sp = new SkillParameter(hero);
         sp.set(SkillParameter.CONTEXT, this);
         long totalPoint = resetSkill(sp);

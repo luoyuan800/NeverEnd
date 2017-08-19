@@ -198,28 +198,40 @@ public class DataManager implements DataManagerInterface {
                 cursor.moveToNext();
             }
         }
-        for (Pet pet : new ArrayList<>(petLoader.loadAll())) {
-            if (pet.getHeroIndex() == index) {
-                petLoader.delete(pet.getId());
-            }
-        }
-        for (Accessory accessory : new ArrayList<>(accessoryLoader.loadAll())) {
-            if (accessory.getHeroIndex() == index) {
-                delete(accessory.getId());
-            }
-        }
+        cleanPets();
+        cleanAccessories();
         for (Skill skill : loadAllSkill()) {
             delete(skill);
         }
-        for (Goods goods : loadAllGoods(true)) {
-            goods.markDelete();
-            goodsLoader.delete(goods.getId());
-        }
+        cleanGoods();
         for (ClickSkill clickSkill : loadClickSkill()) {
             deleteClickSkill(clickSkill);
         }
         database.excuseSQLWithoutResult("delete from maze where hero_index = " + index);
         database.excuseSQLWithoutResult("delete from hero where hero_index = " + index);
+    }
+
+    public void cleanPets() {
+        for (Pet pet : new ArrayList<>(petLoader.loadAll())) {
+            if (pet.getHeroIndex() == index) {
+                petLoader.delete(pet.getId());
+            }
+        }
+    }
+
+    public void cleanGoods() {
+        for (Goods goods : loadAllGoods(true)) {
+            goods.markDelete();
+            goodsLoader.delete(goods.getId());
+        }
+    }
+
+    public void cleanAccessories() {
+        for (Accessory accessory : new ArrayList<>(accessoryLoader.loadAll())) {
+            if (accessory.getHeroIndex() == index) {
+                delete(accessory.getId());
+            }
+        }
     }
 
     public Pet loadPet(String id) {

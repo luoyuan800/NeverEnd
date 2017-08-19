@@ -22,6 +22,8 @@ class ChangeHead() : UsableGoods() {
             config.head = context.random.randomItem(Arrays.asList("Actor1_1.png", "Actor1_4.png", "Actor1_6.png",
                     "Actor2_1.png","Actor1_3.png", "Actor2_2.png", "Actor2_5.png", "Actor2_6.png",
                     "Actor1_2.png", "Actor3_1.png", "Actor3_6.png", "Actor3_2.png", "Actor2_4.png"))
+            context.dataManager.save(config);
+            context.refreshHead();
             return true
         }
         return false

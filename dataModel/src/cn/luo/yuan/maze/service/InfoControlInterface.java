@@ -34,4 +34,6 @@ public interface InfoControlInterface {
     void showPopup(String msg);
 
     void postTaskInUIThread(Runnable task);
+
+    void refreshHead();
 }
