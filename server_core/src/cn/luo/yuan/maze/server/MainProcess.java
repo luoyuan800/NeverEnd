@@ -185,6 +185,10 @@ public class MainProcess {
         return false;
     }
 
+    public String newCdKey(){
+        return cdkeyTable.newCdKey();
+    }
+
     public boolean submitHero(ServerData data) throws IOException, ClassNotFoundException, CribberException {
         checkCribber(data);
         data.getMaze().setId(data.getHero().getId());

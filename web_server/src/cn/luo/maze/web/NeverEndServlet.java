@@ -71,6 +71,9 @@ public class NeverEndServlet extends HttpServlet {
         response.setCharacterEncoding("utf-8");
         PrintWriter writer = response.getWriter();
         switch (path) {
+            case "new_cd_key":
+                writer = writeMessage(response, process.newCdKey());
+                break;
             case "get_exchange_list":
                 writer.write(process.exchangeJson());
                 break;

@@ -4,6 +4,7 @@ import cn.luo.yuan.maze.model.KeyResult
 import cn.luo.yuan.maze.server.LogHelper
 import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection
 import cn.luo.yuan.maze.utils.Random
+import cn.luo.yuan.maze.utils.StringUtils
 import java.sql.Connection
 import java.sql.Statement
 
@@ -67,6 +68,29 @@ class CDKEYTable(private val database:DatabaseConnection) {
         con.close()
         ur.verify = verify
         return ur
+    }
+
+    fun newCdKey():String{
+
+        val con = database.getConnection()
+        try{
+            val random = Random(System.currentTimeMillis())
+            val stat = con.createStatement()
+            val id = buildId(random)
+            stat.execute("insert into cdkey(id, gift, debris, mate, used, single) values('$id',5, 1,10000,0,1)")
+            stat.close();
+            return id;
+        }finally {
+            con?.close()
+        }
+    }
+
+    private fun buildId(random:Random):String{
+        val sb = StringBuilder()
+        while (sb.length < 5) {
+            sb.append((random.nextInt(25) + 97).toChar())
+        }
+       return sb.toString()
     }
 
 }
