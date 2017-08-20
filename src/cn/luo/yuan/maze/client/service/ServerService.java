@@ -65,15 +65,16 @@ public class ServerService {
         return false;
     }
 
-    public String postOnlineData(NeverEnd context) throws IOException {
-        return postOnlineData(context.getHero().getId());
-    }
-
     public String postOnlineRange(NeverEnd context) throws IOException {
         try {
             HttpURLConnection connection = server.getHttpURLConnection(HERO_RANGE, RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
-            return server.connect(connection).toString();
+            String rs = server.connect(connection).toString();
+            String verify = connection.getHeaderField(Field.VERIFY_RESULT);
+            if(StringUtils.isNotEmpty(verify) && Integer.parseInt(verify) <= 0){
+                context.showToast("版本错误，请更新到最新版本！");
+            }
+            return rs;
         } catch (Exception e) {
             LogHelper.logException(e, "ServiceService->postOnlineRange");
             if (e instanceof IOException) {
@@ -83,11 +84,16 @@ public class ServerService {
         return StringUtils.EMPTY_STRING;
     }
 
-    public String postOnlineData(String id) throws IOException {
+    public String postOnlineData(NeverEnd context) throws IOException {
         try {
             HttpURLConnection connection = server.getHttpURLConnection(POOL_ONLINE_DATA_MSG, RestConnection.POST);
-            connection.addRequestProperty(Field.OWNER_ID_FIELD, id);
-            return server.connect(connection).toString();
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            String rs = server.connect(connection).toString();
+            String verify = connection.getHeaderField(Field.VERIFY_RESULT);
+            if(StringUtils.isNotEmpty(verify) && Integer.parseInt(verify) <= 0){
+                context.showToast("版本错误，请更新到最新版本！");
+            }
+            return rs;
         } catch (Exception e) {
             LogHelper.logException(e, "ServiceService->postOnlineData");
             if (e instanceof IOException) {

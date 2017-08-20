@@ -117,7 +117,7 @@ public class MainProcess {
         root.delete();
     }
 
-    public boolean isSignVerify(String sign, String version) {
+    public int isSignVerify(String sign, String version) {
 //        return debug || !StringUtils.isNotEmpty(sign_match) || (sign_match.equalsIgnoreCase(sign) && (MainProcess.version.equals(version)||version_Dot.equals(version)));
         boolean verify = true;
         if (StringUtils.isNotEmpty(version) && StringUtils.isNotEmpty(this.version)) {
@@ -126,18 +126,18 @@ public class MainProcess {
                 int vm = Integer.parseInt(version);
                 if (vm < vi) {
                     LogHelper.info("Verify version: " + version + " not match " + this.version);
-                    return false;
+                    return -1;
                 }
             } catch (Exception e) {
                 LogHelper.error(e);
                 verify = this.version.equalsIgnoreCase(version);
                 if (!verify) {
                     LogHelper.info("Verify version: " + version + " not match " + this.version);
-                    return false;
+                    return -1;
                 }
             }
         }
-        return (StringUtils.isEmpty(sign) && StringUtils.isEmpty(version)) || debug || !StringUtils.isNotEmpty(sign_match) || (sign_match.equalsIgnoreCase(sign));
+        return ((StringUtils.isEmpty(sign) && StringUtils.isEmpty(version)) || debug || !StringUtils.isNotEmpty(sign_match) || (sign_match.equalsIgnoreCase(sign))) ? 0 : 1;
     }
 
     public String buildHeroRange() {

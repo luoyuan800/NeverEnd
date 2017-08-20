@@ -159,8 +159,10 @@ public class NeverEndServlet extends HttpServlet {
             String version = request.getHeader(Field.VERSION_FIELD);
             String sign = request.getHeader(Field.SIGN_FIELD);
             //LogHelper.info("sign: " + sign);
-            if (!process.isSignVerify(sign, version)) {
+           int verify = process.isSignVerify(sign, version);
+           if(verify <= 0){
                 LogHelper.info("Error verify:" + "Sign verify failed! sign: " + sign + ", version: " + version);
+                response.setIntHeader(Field.VERIFY_RESULT, verify);
                 return;
             }
             String limit = readEncodeHeader(request, Field.LIMIT_STRING);

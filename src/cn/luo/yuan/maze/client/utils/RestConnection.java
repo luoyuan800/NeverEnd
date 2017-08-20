@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.client.utils;
 
 import cn.luo.yuan.maze.utils.Field;
+import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
