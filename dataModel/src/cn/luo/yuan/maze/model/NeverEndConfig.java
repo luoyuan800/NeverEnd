@@ -23,6 +23,7 @@ public class NeverEndConfig implements IDModel, Serializable {
     private Set<Integer> catchedMonsterIndex;
     private boolean petGift;
 
+
     public synchronized boolean isMonsterCatched(int index){
         if(catchedMonsterIndex == null){
             catchedMonsterIndex = new HashSet<>();
@@ -44,7 +45,10 @@ public class NeverEndConfig implements IDModel, Serializable {
         return catchedMonsterIndex.size();
     }
 
-    private  long MATERIAL_LIMIT = 3000000;//如果携带超过这个数量的锻造，就增加商店的价格和怪物的攻击
+    private float PET_RATE_REDUCE = Data.PET_RATE_REDUCE; //宠物捕获率修正系数，越大率越低
+    private float EGG_RATE_REDUCE = Data.EGG_RATE_REDUCE; //宠物生蛋率修正系数，越大率越低
+
+    private  long MATERIAL_LIMIT = Data.MATERIAL_LIMIT;//如果携带超过这个数量的锻造，就增加商店的价格和怪物的攻击
 
     public void setMATERIAL_LIMIT(long limit){
         MATERIAL_LIMIT = limit;
@@ -140,5 +144,22 @@ public class NeverEndConfig implements IDModel, Serializable {
 
     public void setPetGift(boolean petGift) {
         this.petGift = petGift;
+    }
+
+    public float getPET_RATE_REDUCE() {
+        return PET_RATE_REDUCE;
+    }
+
+    public void setPET_RATE_REDUCE(float PET_RATE_REDUCE) {
+        this.PET_RATE_REDUCE = PET_RATE_REDUCE;
+        Data.PET_RATE_REDUCE = this.PET_RATE_REDUCE;
+    }
+
+    public float getEGG_RATE_REDUCE() {
+        return EGG_RATE_REDUCE;
+    }
+
+    public void setEGG_RATE_REDUCE(float EGG_RATE_REDUCE) {
+        this.EGG_RATE_REDUCE = EGG_RATE_REDUCE;
     }
 }

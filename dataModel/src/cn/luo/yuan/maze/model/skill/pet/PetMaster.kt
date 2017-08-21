@@ -9,7 +9,7 @@ import cn.luo.yuan.maze.model.skill.UpgradeAble
 /**
  * Created by luoyuan on 2017/7/23.
  */
-class PetMonster : PropertySkill(), UpgradeAble {
+class PetMaster : PropertySkill(), UpgradeAble {
     override fun canEnable(parameter: SkillParameter?): Boolean {
         return model.canEnable(parameter)
     }

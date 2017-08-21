@@ -34,8 +34,8 @@
                 style="@android:style/Widget.Button.Inset"
                 android:gravity="center"
                 android:textStyle="bold|italic"
-                android:id="@+id/pet_battle"
-                android:tag="PetBattle"
+                android:id="@+id/pet_trainer"
+                android:tag="Trainer"
                 android:layout_gravity="center"
                 android:visibility="visible"/>
         <ImageButton
@@ -46,8 +46,8 @@
                 style="@android:style/Widget.Button.Inset"
                 android:gravity="center"
                 android:textStyle="bold|italic"
-                android:id="@+id/pet_fight_back"
-                android:tag="PetFightBack"
+                android:id="@+id/pet_foster"
+                android:tag="Foster"
                 android:layout_gravity="center"
                 android:visibility="visible"/>
     </LinearLayout>

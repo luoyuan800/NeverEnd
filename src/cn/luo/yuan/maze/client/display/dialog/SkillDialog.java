@@ -70,7 +70,7 @@ public class SkillDialog implements View.OnClickListener {
         initSkillButton((ImageButton) dialog.findViewById(R.id.swindler), (ImageButton) dialog.findViewById(R.id.swindler_game), (ImageButton) dialog.findViewById(R.id.eat_harm));
         //Pet Skills
         tabHost1.addTab(tabHost1.newTabSpec("pet_skill").setIndicator(Resource.getString(R.string.pet_skill)).setContent(R.id.pet_skill));
-
+        initSkillButton((ImageButton) dialog.findViewById(R.id.pet_master),(ImageButton) dialog.findViewById(R.id.pet_trainer), (ImageButton) dialog.findViewById(R.id.pet_foster));
     }
 
     public void onClick(final View view) {

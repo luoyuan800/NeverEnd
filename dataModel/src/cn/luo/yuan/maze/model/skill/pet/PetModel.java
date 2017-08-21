@@ -16,7 +16,8 @@ public class PetModel extends SkillModel {
         super(skill);
     }
     public boolean canEnable(SkillParameter parameter){
-        return isEnablePointEnough(parameter);
+        InfoControlInterface context = parameter.get("context");
+        return (skill instanceof PetMaster || isSkillEnable("PetMaster", context)) && isEnablePointEnough(parameter);
     }
 
     public boolean canMount(SkillParameter parameter) {
