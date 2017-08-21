@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model;
 
 import cn.luo.yuan.maze.model.effect.Effect;
+import cn.luo.yuan.maze.service.AccessoryHelper;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +22,7 @@ public class SellItem implements Serializable {
         public List<Effect> effects;
         public String desc;
         public String color;
+    public String limit = StringUtils.EMPTY_STRING;
     @NotNull
     public String id;
 
@@ -31,6 +33,7 @@ public class SellItem implements Serializable {
                     + count + (special ? " 特价" : " 价格") + " : " + StringUtils.formatNumber(price, false)
                     + (StringUtils.isNotEmpty(author) ? "<br>" + author : "")
                     + (StringUtils.isNotEmpty(desc) ? "<br>" + desc : "")
-                    + "<br>" + StringUtils.formatEffectsAsHtml(effects);
+                    + "<br>" + StringUtils.formatEffectsAsHtml(effects) +
+                    "<br>" + limit;
         }
 }

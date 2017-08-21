@@ -85,8 +85,8 @@ public class NeverEnd extends Application implements InfoControlInterface {
         viewHandler.post(new Runnable() {
             @Override
             public void run() {
-                EditText title = new EditText(context);
-                EditText tag = new EditText(context);
+                final EditText title = new EditText(context);
+                final EditText tag = new EditText(context);
                 title.setHint("输入装备的名字");
                 tag.setHint("装备描述");
                 LinearLayout ly = new LinearLayout(context);

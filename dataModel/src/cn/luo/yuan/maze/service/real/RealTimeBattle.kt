@@ -1,4 +1,4 @@
-package cn.luo.yuan.maze.server.real
+package cn.luo.yuan.maze.service.real
 
 import cn.luo.yuan.maze.model.Hero
 import cn.luo.yuan.maze.model.real.RealTimeState
@@ -15,7 +15,7 @@ class RealTimeBattle {
     var actioner: Hero? = null
     var timer: TimerThread? = null
     var performed = mutableSetOf<String>()
-    var messager: Messager? = null
+    var messager: cn.luo.yuan.maze.server.model.Messager? = null
 
     fun action(action: RealTimeAction): Boolean {
         if (performed.contains(action.id)) {
@@ -27,7 +27,7 @@ class RealTimeBattle {
         return true
     }
 
-    fun pollState():RealTimeState{
+    fun pollState(): RealTimeState {
         val state = RealTimeState()
         state.actioner = actioner
         if(actioner == p1){
@@ -57,7 +57,7 @@ class RealTimeBattle {
         var cancel = false
         override fun run() {
             while (!cancel && time > 0) {
-                Thread.sleep(1000)
+                sleep(1000)
                 time--
             }
         }

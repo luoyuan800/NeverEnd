@@ -15,6 +15,7 @@ import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.SellItem;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.utils.Random;
+import kotlin.reflect.KProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,6 +103,7 @@ public class ShopDialog {
             item.price = accessory.getPrice();
             item.instance = accessory;
             item.type = accessory.getType();
+            item.limit = cn.luo.yuan.maze.service.AccessoryHelper.getLimitString(accessory,context.getHero());
             acces.add(item);
         }
         return acces;

@@ -39,7 +39,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
 
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            if(progress.isShowing()){
+            if(progress!=null){
                 progress.dismiss();
             }
             switch (msg.what) {

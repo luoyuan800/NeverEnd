@@ -23,6 +23,9 @@ class Pokemon:GiftHandler {
         if(config!=null){
             config.isPetGift = false
         }
-        control?.hero?.effects?.removeIf { it.tag == this.javaClass.simpleName }
+        val e = control?.hero?.effects?.find { it.tag == this.javaClass.simpleName }
+        if(e!=null){
+            control?.hero?.effects?.remove(e)
+        }
     }
 }
