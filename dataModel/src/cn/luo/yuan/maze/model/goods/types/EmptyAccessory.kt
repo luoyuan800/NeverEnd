@@ -29,4 +29,7 @@ class EmptyAccessory() : UsableGoods() {
     override var desc: String = "使用后可以获得一个空白无属性的，由你命名的装备。你可以通过升级空白装备来实现装备的属性自定义！"
     override var name: String = "装备卡"
     override var price = 330000L
+    override fun canLocalSell(): Boolean {
+        return false
+    }
 }

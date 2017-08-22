@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.model.skill.pet;
 
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.model.skill.*;
 import cn.luo.yuan.maze.model.skill.evil.EvilTalent;
 import cn.luo.yuan.maze.service.InfoControlInterface;
@@ -17,7 +18,8 @@ public class PetModel extends SkillModel {
     }
     public boolean canEnable(SkillParameter parameter){
         InfoControlInterface context = parameter.get("context");
-        return (skill instanceof PetMaster || isSkillEnable("PetMaster", context)) && isEnablePointEnough(parameter);
+        NeverEndConfig config = context.getDataManager().loadConfig();
+        return (config!=null && config.isPetGift()) && (skill instanceof PetMaster || isSkillEnable("PetMaster", context)) && isEnablePointEnough(parameter);
     }
 
     public boolean canMount(SkillParameter parameter) {

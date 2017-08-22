@@ -19,19 +19,25 @@ class Foster : PropertySkill() {
     }
 
     override fun enable(parameter: SkillParameter) {
-        val context: InfoControlInterface = parameter.get(Parameter.CONTEXT)
-        val config = context.dataManager.loadConfig()
-        config.peT_RATE_REDUCE += 0.5f
-        config.egG_RATE_REDUCE -= 0.5f
-        context.dataManager.save(config)
+        if(!isEnable) {
+            val context: InfoControlInterface = parameter.get(Parameter.CONTEXT)
+            val config = context.dataManager.loadConfig()
+            config.peT_RATE_REDUCE += 0.5f
+            config.egG_RATE_REDUCE -= 0.5f
+            context.dataManager.save(config)
+            isEnable = true
+        }
     }
 
     override fun disable(parameter: SkillParameter) {
-        val context: InfoControlInterface = parameter.get(Parameter.CONTEXT)
-        val config = context.dataManager.loadConfig()
-        config.peT_RATE_REDUCE -= 0.5f
-        config.egG_RATE_REDUCE += 0.5f
-        context.dataManager.save(config)
+        if(isEnable) {
+            val context: InfoControlInterface = parameter.get(Parameter.CONTEXT)
+            val config = context.dataManager.loadConfig()
+            config.peT_RATE_REDUCE -= 0.5f
+            config.egG_RATE_REDUCE += 0.5f
+            context.dataManager.save(config)
+            isEnable = false
+        }
     }
 
     override fun canEnable(parameter: SkillParameter?): Boolean {

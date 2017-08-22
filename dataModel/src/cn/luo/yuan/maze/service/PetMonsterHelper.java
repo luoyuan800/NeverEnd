@@ -9,6 +9,7 @@ import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -122,6 +123,9 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
                         return pet.getIndex();
             }
         }
+        if(pet.getIndex() == 101){
+            return getEvoevoIndex(pet, hero);
+        }
         return getEvolutionIndex(pet.getIndex());
     }
 
@@ -223,11 +227,9 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
     }
 
     private int getEvoevoIndex(Pet pet, Hero hero) {
-        return 0;
-       /* GoodsType evolution = GoodsType.Evolution;
-        evolution.load();
+        int next = 101;
         Calendar calendar = Calendar.getInstance();
-        if (getIntimacy() >= 240 && getHp() <= 0) {//Ghost
+        if (pet.getIntimacy() >= 240 && pet.getHp() <= 0) {//Ghost
             switch (getRandom().nextInt(3)) {
                 case 0:
                     next = 102;
@@ -239,7 +241,7 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
                     next = 130;
                     break;
             }
-        } else if (getIntimacy() < 10 && getHp() <= 0 && evolution.getCount() > 0) {//Dark
+        } else if (pet.getIntimacy() < 10 && pet.getHp() <= 0) {//Dark
             switch (getRandom().nextInt(2)) {
                 case 0:
                     next = 106;
@@ -248,22 +250,18 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
                     next = 131;
                     break;
             }
-            evolution.setCount(evolution.getCount() - 1);
-        } else if (getIntimacy() <= 5 && evolution.getCount() > 0) {
+        } else if (pet.getIntimacy() <= 5 ) {
             next = 103;
-            evolution.setCount(evolution.getCount() - 1);
-        } else if (getIntimacy() > 5 && getIntimacy() < 20 && evolution.getCount() > 0) {
+        } else if (pet.getIntimacy() > 5 && pet.getIntimacy() < 20) {
             next = 104;
-            evolution.setCount(evolution.getCount() - 1);
-        } else if (getIntimacy() >= 20 && getIntimacy() < 50 && evolution.getCount() > 0) {
+        } else if (pet.getIntimacy() >= 20 && pet.getIntimacy() < 50) {
             next = 105;
-            evolution.setCount(evolution.getCount() - 1);
-        } else if (getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
+        } else if (pet.getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
             next = 125;
-        } else if (getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY) {
+        } else if (pet.getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY) {
             boolean hasLong = false;
-            for (Pet pet : MazeContents.hero.getPets()) {
-                if (pet.getType().contains("龙")) {
+            for (Pet p : new ArrayList<>(hero.getPets())) {
+                if (p.getType().contains("龙")) {
                     hasLong = true;
                     break;
                 }
@@ -273,73 +271,68 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
             } else {
                 next = 110;
             }
-        } else if (getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY) {
+        } else if (pet.getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY) {
             next = 109;
-        } else if (getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY) {
+        } else if (pet.getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY) {
             next = 110;
-        } else if (getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) {
+        } else if (pet.getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) {
             next = 111;
-        } else if (getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+        } else if (pet.getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
             next = 113;
-        } else if (getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+        } else if (pet.getIntimacy() >= 240 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
             next = 112;
-        } else if (getIntimacy() >= 50 && getIntimacy() < 90 && evolution.getCount() > 0) {
+        } else if (pet.getIntimacy() >= 50 && pet.getIntimacy() < 90) {
             next = 114;
-            evolution.setCount(evolution.getCount() - 1);
-        } else if (getIntimacy() >= 90 && getIntimacy() < 120 && evolution.getCount() > 0) {
+        } else if (pet.getIntimacy() >= 90 && pet.getIntimacy() < 120) {
             next = 115;
-            evolution.setCount(evolution.getCount() - 1);
-        } else if (getIntimacy() >= 120 && getIntimacy() < 210 && evolution.getCount() > 0) {
+        } else if (pet.getIntimacy() >= 120 && pet.getIntimacy() < 210) {
             next = 116;
-            evolution.setCount(evolution.getCount() - 1);
-        } else if (getIntimacy() >= 210 && getIntimacy() < 240 && evolution.getCount() > 0) {
-            evolution.setCount(evolution.getCount() - 1);
+        } else if (pet.getIntimacy() >= 210 && pet.getIntimacy() < 240) {
             if (calendar.get(Calendar.HOUR_OF_DAY) > 6 && calendar.get(Calendar.HOUR_OF_DAY) < 18) {//Day
-                switch (MazeContents.hero.getElement()) {
-                    case 金:
+                switch (hero.getElement()) {
+                    case METAL:
                         next = 117;
                         break;
-                    case 木:
+                    case WOOD:
                         next = 118;
                         break;
-                    case 水:
+                    case WATER:
                         next = 119;
                         break;
-                    case 火:
+                    case FIRE:
                         next = 120;
                         break;
-                    case 土:
+                    case EARTH:
                         next = 121;
                         break;
-                    case 无:
+                    case NONE:
                         next = 122;
                         break;
                 }
             } else {//Night
-                switch (MazeContents.hero.getElement()) {
-                    case 金:
+                switch (hero.getElement()) {
+                    case METAL:
                         next = 123;
                         break;
-                    case 木:
+                    case WOOD:
                         next = 124;
                         break;
-                    case 水:
+                    case WATER:
                         next = 107;
                         break;
-                    case 火:
+                    case FIRE:
                         next = 126;
                         break;
-                    case 土:
+                    case EARTH:
                         next = 127;
                         break;
-                    case 无:
+                    case NONE:
                         next = 128;
                         break;
                 }
             }
         }
-        evolution.save();
-        return next;*/
+        return next;
     }
 
     public boolean evolution(Pet pet, int eveIndex) {
@@ -386,7 +379,9 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
                     float v = getRandom().nextFloat(p1.getEggRate() + p2.getEggRate()) +
                             getRandom().nextFloat(EffectHandler.getEffectAdditionFloatValue(EffectHandler.EGG, gameControl.getHero().getEffects()));
                     v/=Data.EGG_RATE_REDUCE;
-                    if (gameControl.getRandom().nextFloat(300) < v) {
+                    Monster m1 = loadMonsterByIndex(p1.getIndex());
+                    Monster m2 = loadMonsterByIndex(p2.getIndex());
+                    if (m1!=null && m2!=null && gameControl.getRandom().nextFloat(300) < v) {
                         Egg egg = new Egg();
                         egg.setType(p1.getSex() == 1 ? p1.getType() : p2.getType());
                         egg.setElement(gameControl.getRandom().randomItem(Element.values()));
@@ -405,15 +400,11 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
                         egg.setOwnerId(gameControl.getHero().getId());
                         egg.setOwnerName(gameControl.getHero().getName());
                         egg.setKeeperName(gameControl.getHero().getName());
-                        Monster m1 = loadMonsterByIndex(p1.getIndex());
-                        Monster m2 = loadMonsterByIndex(p2.getIndex());
-                        if (m1 != null && m2 != null) {
-                            egg.setMaxHp(gameControl.getRandom().nextLong(m1.getMaxHp()) + m2.getMaxHp() + getRandom().reduceToSpecialDigit(gameControl.getMaze().getLevel(),2));
-                            egg.setAtk(gameControl.getRandom().nextLong(m2.getAtk()) + m1.getAtk() + getRandom().reduceToSpecialDigit(gameControl.getMaze().getLevel(),2));
-                            egg.setDef(gameControl.getRandom().nextLong(m1.getDef()) + m2.getDef() + getRandom().reduceToSpecialDigit(gameControl.getMaze().getLevel(),2));
-                            egg.setHitRate(m1.getHitRate());
-                            egg.setEggRate(p1.getSex() == 1 ? m1.getEggRate() : m2.getEggRate());
-                        }
+                        egg.setMaxHp(gameControl.getRandom().nextLong(m1.getMaxHp()) + m2.getMaxHp() + getRandom().reduceToSpecialDigit(gameControl.getMaze().getLevel(),2));
+                        egg.setAtk(gameControl.getRandom().nextLong(m2.getAtk()) + m1.getAtk() + getRandom().reduceToSpecialDigit(gameControl.getMaze().getLevel(),2));
+                        egg.setDef(gameControl.getRandom().nextLong(m1.getDef()) + m2.getDef() + getRandom().reduceToSpecialDigit(gameControl.getMaze().getLevel(),2));
+                        egg.setHitRate(m1.getHitRate());
+                        egg.setEggRate(p1.getSex() == 1 ? m1.getEggRate() : m2.getEggRate());
                         egg.setFirstName(p1.getSex() == 0 ? p1.getFirstName() : p2.getFirstName());
                         egg.setSecondName(p1.getSex() == 0 ? p2.getSecondName() : p2.getSecondName());
                         egg.setIntimacy(30);

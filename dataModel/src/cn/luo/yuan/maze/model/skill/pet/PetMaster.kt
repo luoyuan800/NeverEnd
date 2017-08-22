@@ -42,18 +42,22 @@ class PetMaster : PropertySkill(), UpgradeAble {
     }
 
     override fun enable(parameter: SkillParameter) {
-        isEnable = true
-        val hero = parameter.owner
-        if (hero is Hero) {
-            hero.petCount += petCount
+        if(!isEnable) {
+            isEnable = true
+            val hero = parameter.owner
+            if (hero is Hero) {
+                hero.petCount += petCount
+            }
         }
     }
 
     override fun disable(parameter: SkillParameter) {
-        isEnable = false
-        val hero = parameter.owner
-        if (hero is Hero) {
-            hero.petCount -= petCount
+        if(isEnable) {
+            isEnable = false
+            val hero = parameter.owner
+            if (hero is Hero) {
+                hero.petCount -= petCount
+            }
         }
     }
 

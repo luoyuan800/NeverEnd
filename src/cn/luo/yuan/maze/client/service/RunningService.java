@@ -270,6 +270,7 @@ public class RunningService implements RunningServiceInterface {
     private Pet tryCatch(Monster monster, int petCount, long level) {
         try {
             if (gameContext.getPetMonsterHelper().isCatchAble(monster, hero, random, petCount)) {
+                dataManager.loadConfig().addMonsterCatch(monster.getIndex());
                 return gameContext.getPetMonsterHelper().monsterToPet(monster, hero, level);
             } else {
                 return null;

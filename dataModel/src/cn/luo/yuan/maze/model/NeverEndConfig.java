@@ -161,5 +161,6 @@ public class NeverEndConfig implements IDModel, Serializable {
 
     public void setEGG_RATE_REDUCE(float EGG_RATE_REDUCE) {
         this.EGG_RATE_REDUCE = EGG_RATE_REDUCE;
+        Data.EGG_RATE_REDUCE = this.EGG_RATE_REDUCE;
     }
 }

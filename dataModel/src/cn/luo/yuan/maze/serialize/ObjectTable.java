@@ -14,6 +14,7 @@ import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
 import java.nio.file.Files;
@@ -102,7 +103,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         return object;
     }
 
-    public List<T> loadAll() {
+    public synchronized List<T> loadAll() {
         List<T> list = new ArrayList<>();
         File file = new File(root);
         if (file.isDirectory()) {
@@ -130,7 +131,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         cache.clear();
     }
 
-    public void delete(String id) {
+    public synchronized void delete(String id) {
         if(StringUtils.isNotEmpty(id)) {
             buildFile(id).delete();
             cache.remove(id);
@@ -156,14 +157,17 @@ public class ObjectTable<T extends Serializable> implements Runnable {
 
     @Override
     public void run() {
-        T t = queue.poll().get();
-        if (t != null) {
-            if (t instanceof IDModel)
-                try {
-                    update(t, ((IDModel) t).getId());
-                } catch (IOException e) {
-                    //DO nothing
-                }
+        Reference<? extends T> poll = queue.poll();
+        if(poll!=null) {
+            T t = poll.get();
+            if (t != null) {
+                if (t instanceof IDModel)
+                    try {
+                        update(t, ((IDModel) t).getId());
+                    } catch (IOException e) {
+                        //DO nothing
+                    }
+            }
         }
     }
 
@@ -254,7 +258,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         return loadEntry(entry);
     }
 
-    private T loadEntry(File entry) {
+    private synchronized T loadEntry(File entry) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(entry))) {
             Object o = ois.readObject();
             return table.cast(o);

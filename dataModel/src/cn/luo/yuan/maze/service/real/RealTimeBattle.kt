@@ -3,7 +3,6 @@ package cn.luo.yuan.maze.service.real
 import cn.luo.yuan.maze.model.Hero
 import cn.luo.yuan.maze.model.real.RealTimeState
 import cn.luo.yuan.maze.model.real.action.RealTimeAction
-import cn.luo.yuan.maze.server.model.Messager
 
 /**
  * Copyright @Luo
@@ -15,7 +14,6 @@ class RealTimeBattle {
     var actioner: Hero? = null
     var timer: TimerThread? = null
     var performed = mutableSetOf<String>()
-    var messager: cn.luo.yuan.maze.server.model.Messager? = null
 
     fun action(action: RealTimeAction): Boolean {
         if (performed.contains(action.id)) {

@@ -1,9 +1,11 @@
 package cn.luo.yuan.maze.skill;
 
+import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
+import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.model.skill.AtkSkill;
 import cn.luo.yuan.maze.model.skill.DefSkill;
@@ -19,6 +21,9 @@ import cn.luo.yuan.maze.model.skill.evil.Stealth;
 import cn.luo.yuan.maze.model.skill.hero.Dodge;
 import cn.luo.yuan.maze.model.skill.hero.FightBack;
 import cn.luo.yuan.maze.model.skill.hero.HeroHit;
+import cn.luo.yuan.maze.model.skill.pet.Foster;
+import cn.luo.yuan.maze.model.skill.pet.PetMaster;
+import cn.luo.yuan.maze.model.skill.pet.Trainer;
 import cn.luo.yuan.maze.model.skill.result.DoNoThingResult;
 import cn.luo.yuan.maze.model.skill.result.HarmResult;
 import cn.luo.yuan.maze.model.skill.result.HasMessageResult;
@@ -37,8 +42,10 @@ import org.testng.annotations.Test;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -47,11 +54,49 @@ import static org.testng.Assert.assertTrue;
 public class TestSkill {
     BattleMessage battleMessage = new MockBattleMessage();
     MockGameContext context = new MockGameContext();
+    NeverEndConfig config = new NeverEndConfig();
     @BeforeTest
     public void init(){
-        context.dataManager = mock(DataManagerInterface.class);
+        DataManagerInterface dataManager = mock(DataManagerInterface.class);
+        when(dataManager.loadConfig()).thenReturn(config);
+        context.dataManager = dataManager;
         context.executor = mock(ScheduledThreadPoolExecutor.class);
     }
+
+    @Test
+    public void testPetMaster() {
+        Hero hero = new Hero();
+        int pc = hero.getPetCount();
+        SkillParameter parameter = getSkillParameter(hero);
+        PetMaster master = new PetMaster();
+        master.enable(parameter);
+        assertTrue(hero.getPetCount() > pc);
+    }
+
+    @Test
+    public void testPetTrainer() {
+        Hero hero = new Hero();
+        float pr = Data.PET_RATE_REDUCE;
+        float er = Data.EGG_RATE_REDUCE;
+        SkillParameter parameter = getSkillParameter(hero);
+        Trainer master = new Trainer();
+        master.enable(parameter);
+        assertTrue(Data.PET_RATE_REDUCE < pr);
+        assertTrue(Data.EGG_RATE_REDUCE > er);
+    }
+
+    @Test
+    public void testPetFoster() {
+        Hero hero = new Hero();
+        float pr = Data.PET_RATE_REDUCE;
+        float er = Data.EGG_RATE_REDUCE;
+        SkillParameter parameter = getSkillParameter(hero);
+        Foster master = new Foster();
+        master.enable(parameter);
+        assertTrue(Data.PET_RATE_REDUCE > pr);
+        assertTrue(Data.EGG_RATE_REDUCE < er);
+    }
+
     @Test
     public void testEvilTalent() {
         Hero hero = buildHero("QA");

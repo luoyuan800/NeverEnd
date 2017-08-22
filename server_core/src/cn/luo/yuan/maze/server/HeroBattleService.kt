@@ -180,7 +180,6 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
             } else {
                 inGroup = false
             }
-            break
         }
         if (inGroup) {
             return group

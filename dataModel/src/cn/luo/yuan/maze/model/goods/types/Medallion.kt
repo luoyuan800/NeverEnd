@@ -22,7 +22,7 @@ class Medallion() : Goods(){
     }
 
     override fun canLocalSell(): Boolean {
-        return true;
+        return false;
     }
 
     override fun load(properties: GoodsProperties) {
