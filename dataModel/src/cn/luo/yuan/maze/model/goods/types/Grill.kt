@@ -1,5 +1,7 @@
 package cn.luo.yuan.maze.model.goods.types
 
+import cn.luo.yuan.maze.model.Parameter
+import cn.luo.yuan.maze.model.goods.BatchUseGoods
 import cn.luo.yuan.maze.model.goods.GoodsProperties
 import cn.luo.yuan.maze.model.goods.UsableGoods
 import cn.luo.yuan.maze.service.InfoControlInterface
@@ -10,14 +12,17 @@ import cn.luo.yuan.maze.utils.Field
  *
  * Created by luoyuan on 2017/7/16.
  */
-class Grill() : UsableGoods() {
+class Grill() : UsableGoods(), BatchUseGoods {
     companion object {
         private const val serialVersionUID: Long = Field.SERVER_VERSION
     }
 
     override fun perform(properties: GoodsProperties): Boolean {
-        if (getCount() > 0) {
-            val context = properties["context"] as InfoControlInterface
+        var count = properties[Parameter.COUNT] as Int
+        var msg = ""
+        val context = properties["context"] as InfoControlInterface
+        while (getCount() >= count && count > 0) {
+            count -= 1
             var desc = "没有任何作用！"
             val random = context.random
             val hero = properties.hero
@@ -41,10 +46,10 @@ class Grill() : UsableGoods() {
                     RangePropertiesHelper.addAgi(value, context)
                 }
             }
-            context.showPopup(desc)
-            return true
+            msg += desc + "<br>"
         }
-        return false
+        context.showPopup(msg)
+        return true
     }
 
     override var desc: String = "一团黑乎乎的烤肉，不知道是什么味道。"

@@ -1,16 +1,11 @@
 package cn.luo.yuan.maze.client.display.adapter;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.NumberPicker;
-import android.widget.TextView;
+import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.model.goods.BatchUseGoods;
@@ -54,13 +49,13 @@ public class GoodsAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if (view == null) {
-            view = View.inflate(context.getContext(), R.layout.goods_item,null);
+            view = View.inflate(context.getContext(), R.layout.goods_item, null);
         }
         Button button = (Button) view.findViewById(R.id.good_buy_button);
         final Goods type = getItem(i);
         if (button != null) {
             button.setEnabled(type.getCount() > 0);
-            if(type instanceof UsableGoods){
+            if (type instanceof UsableGoods) {
                 button.setText("使用");
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -71,16 +66,16 @@ public class GoodsAdapter extends BaseAdapter {
                         LinearLayout linearLayout = new LinearLayout(dialog.getContext());
                         linearLayout.setOrientation(LinearLayout.VERTICAL);
                         final NumberPicker totalPicker = new NumberPicker(dialog.getContext());
-                        if(type instanceof BatchUseGoods) {
-                            totalPicker.setMinValue(1);
-                                totalPicker.setMaxValue(type.getCount());
+                        totalPicker.setMinValue(1);
+                        if (type instanceof BatchUseGoods) {
+                            totalPicker.setMaxValue(type.getCount());
                             linearLayout.addView(totalPicker);
                         }
                         TextView desc = new TextView(dialog.getContext());
                         desc.setText(Html.fromHtml(type.getDesc()));
                         linearLayout.addView(desc);
                         dialog.setView(linearLayout);
-                        dialog.setButton(DialogInterface.BUTTON_POSITIVE,"确认", new DialogInterface.OnClickListener(){
+                        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确认", new DialogInterface.OnClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -102,8 +97,8 @@ public class GoodsAdapter extends BaseAdapter {
                         dialog.show();
                     }
                 });
-            }else{
-                if(type.getLock()){
+            } else {
+                if (type.getLock()) {
                     button.setText("点击解锁");
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -112,7 +107,7 @@ public class GoodsAdapter extends BaseAdapter {
                             notifyDataSetChanged();
                         }
                     });
-                }else {
+                } else {
                     button.setText("点击锁定");
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override

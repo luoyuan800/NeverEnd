@@ -27,7 +27,7 @@ public class Material extends ClickSkill {
         long value = 1 + EffectHandler.getEffectAdditionLongValue(EffectHandler.CLICK_MATERIAL, hero.getEffects(), hero);
         hero.setMaterial(hero.getMaterial() + value);
         if(checkThread == null){
-            checkThread = new ClickSkillCheckThread(this, context, 45);
+            checkThread = new ClickSkillCheckThread(this, context, 35);
             context.getExecutor().scheduleAtFixedRate(checkThread, 10000, 10000, TimeUnit.MILLISECONDS);
         }
     }

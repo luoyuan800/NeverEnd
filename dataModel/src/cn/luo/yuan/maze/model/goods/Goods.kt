@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.model.goods
 
 import cn.luo.yuan.maze.model.IDModel
 import cn.luo.yuan.maze.model.OwnedAble
+import cn.luo.yuan.maze.model.Parameter
 import cn.luo.yuan.maze.utils.EncodeInteger
 import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.StringUtils
@@ -82,8 +83,12 @@ abstract class Goods : Serializable, IDModel, OwnedAble, Cloneable {
 
 
     open fun use(properties: GoodsProperties): Boolean {
-        if (!lock && getCount() > 0) {
-            setCount(getCount() - 1)
+        var count = 1
+        if(this is BatchUseGoods){
+            count = properties[Parameter.COUNT] as Int
+        }
+        if (!lock && getCount() >= count) {
+            setCount(getCount() - count)
             return true
         } else {
             return false;
