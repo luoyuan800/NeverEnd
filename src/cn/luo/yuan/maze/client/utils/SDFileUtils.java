@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.io.StringWriter;
@@ -82,7 +83,7 @@ public class SDFileUtils {
         return file;
     }
 
-    public static List<Serializable> unzipObjects(File zip, Context context) throws IOException {
+    public static List<Serializable> unzipObjects(String zip, Context context) throws IOException {
         List<Serializable> seris = new ArrayList<>();
         ZipInputStream zis = new ZipInputStream(new FileInputStream(zip));
         ObjectInputStream ois = new ObjectInputStream(zis);
@@ -99,7 +100,7 @@ public class SDFileUtils {
             entry = zis.getNextEntry();
         }
         zis.close();
-        zip.deleteOnExit();
+        new File(zip).delete();
         return seris;
     }
 

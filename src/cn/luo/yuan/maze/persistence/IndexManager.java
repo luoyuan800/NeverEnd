@@ -2,11 +2,17 @@ package cn.luo.yuan.maze.persistence;
 
 import android.content.Context;
 import android.database.Cursor;
+import cn.luo.yuan.maze.client.utils.LogHelper;
+import cn.luo.yuan.maze.client.utils.SDFileUtils;
 import cn.luo.yuan.maze.model.Element;
+import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.HeroIndex;
+import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +28,7 @@ public class IndexManager {
         database = Sqlite.getSqlite(context);
     }
 
-    public List<HeroIndex> getIndex(){
+    public List<HeroIndex> getIndex() {
         List<HeroIndex> indexs = new ArrayList<>();
         try (Cursor cursor = database.excuseSOL("select h.id, h.race, h.element, h.hero_index,h.name,h.last_update, h.created, m.level,m.max_level from hero h left join maze m on h.hero_index = m.hero_index order by h.last_update DESC")) {
             while (!cursor.isAfterLast()) {
@@ -41,6 +47,45 @@ public class IndexManager {
             }
         }
         return indexs;
+    }
+
+    public boolean restore(String file) {
+        try {
+            String[] ui = file.split("_");
+            if (ui.length > 1) {
+                List<Serializable> seris = SDFileUtils.unzipObjects(file, context);
+                int index = Integer.parseInt(ui[1]);
+                Hero hero = null;
+                Maze maze = null;
+                for (Serializable s : seris) {
+                    if (s instanceof Hero) {
+                        hero = (Hero) s;
+                    }
+                    if (s instanceof Maze) {
+                        maze = (Maze) s;
+                    }
+                    if (hero != null && maze != null) {
+                        break;
+                    }
+                }
+                DataManager manager = new DataManager(index, context);
+                manager.overrideCurrentSaveFile(seris);
+                manager.saveHero(hero);
+                manager.saveMaze(maze);
+                manager.close();
+                return true;
+            }
+        } catch (IOException e) {
+            LogHelper.logException(e, "restore save");
+        }
+        return false;
+    }
+
+    public String backup(HeroIndex index) {
+        DataManager manager = new DataManager(index.getIndex(), context);
+        String file = SDFileUtils.zipFiles(index.getId() + "_" + index.getIndex(), manager.retrieveAllSaveFile());
+        manager.close();
+        return file;
     }
 
     public void create() {
