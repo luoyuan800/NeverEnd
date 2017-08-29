@@ -11,6 +11,7 @@ import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -49,9 +50,10 @@ public class IndexManager {
         return indexs;
     }
 
-    public boolean restore(String file) {
+    public boolean restore(File file) {
         try {
-            String[] ui = file.split("_");
+            String fileName = file.getName();
+            String[] ui = fileName.split("_");
             if (ui.length > 1) {
                 List<Serializable> seris = SDFileUtils.unzipObjects(file, context);
                 int index = Integer.parseInt(ui[1]);

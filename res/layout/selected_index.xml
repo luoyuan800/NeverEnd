@@ -17,12 +17,28 @@
             android:layout_weight="1.5"
             android:id="@+id/selected_hero_index"
     />
-    <Button
-            android:id="@+id/new_index"
-            android:text="@string/create_index"
+
+    <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.2"
-            style="@android:style/Widget.Button.Inset"/>
+            android:layout_height="wrap_content">
+
+        <Button
+                android:id="@+id/new_index"
+                android:text="@string/create_index"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@android:style/Widget.Button.Inset"/>
+
+        <Button
+                style="@android:style/Widget.Button.Inset"
+                android:text="恢复存档"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recove_save"
+                android:layout_weight="1"/>
+    </LinearLayout>
+
 </LinearLayout>
 

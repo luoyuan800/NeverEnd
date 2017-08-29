@@ -187,6 +187,7 @@ public class SimplerDialogBuilder {
             dialogBuilder.withEffect(random.randomItem(Effectstype.values()));
         }
         dialogBuilder
+                .withMessage(null)
                 .withDialogColor(Color.WHITE)
                 .withTitleColor(Color.RED)
                 .withTitle(title)

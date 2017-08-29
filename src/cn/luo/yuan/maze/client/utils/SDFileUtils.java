@@ -83,7 +83,7 @@ public class SDFileUtils {
         return file;
     }
 
-    public static List<Serializable> unzipObjects(String zip, Context context) throws IOException {
+    public static List<Serializable> unzipObjects(File zip, Context context) throws IOException {
         List<Serializable> seris = new ArrayList<>();
         ZipInputStream zis = new ZipInputStream(new FileInputStream(zip));
         ObjectInputStream ois = new ObjectInputStream(zis);
@@ -100,7 +100,7 @@ public class SDFileUtils {
             entry = zis.getNextEntry();
         }
         zis.close();
-        new File(zip).delete();
+        zip.delete();
         return seris;
     }
 

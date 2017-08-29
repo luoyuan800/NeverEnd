@@ -1,11 +1,13 @@
 package cn.luo.yuan.maze.client.display.activity;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.*;
 import cn.luo.yuan.maze.R;
@@ -13,6 +15,7 @@ import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.dialog.GiftDialog;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
 import cn.luo.yuan.maze.client.service.ServerService;
+import cn.luo.yuan.maze.client.utils.RestConnection;
 import cn.luo.yuan.maze.client.utils.SDFileUtils;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.persistence.DataManager;
@@ -20,8 +23,14 @@ import cn.luo.yuan.maze.persistence.IndexManager;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.persistence.SaveFileManager;
+import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -54,7 +63,10 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
         adapter = new StringAdapter<>(indexList);
         adapter.setOnClickListener(this);
         adapter.setOnLongClickListener(this);
-        ((ListView)findViewById(R.id.selected_hero_index)).setAdapter(adapter);
+        ListView listView = (ListView) findViewById(R.id.selected_hero_index);
+        listView.setAdapter(adapter);
+        TextView et = new TextView(this);
+        et.setText(R.string.index_tip);
         findViewById(R.id.new_index).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,6 +126,72 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
                         }
                     }
                 });
+            }
+        });
+        findViewById(R.id.recove_save).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final EditText idText = new EditText(SelectedActivity.this);
+                idText.setHint(R.string.recover_tip);
+                SimplerDialogBuilder.build(idText, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                            String id = idText.getText().toString();
+                            if(StringUtils.isNotEmpty(id)){
+                                dialog.dismiss();
+                                ProgressDialog progress =new ProgressDialog(SelectedActivity.this);
+                                progress.show();
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        RestConnection server = new RestConnection(Field.SERVER_URL,getVersion(),Resource.getSingInfo());
+                                        try {
+                                            HttpURLConnection connection= server.getHttpURLConnection(Field.DOWNLOAD_SAVE,RestConnection.POST);
+                                            connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
+                                            server.connect(connection);
+                                            if(connection.getResponseCode() == 200) {
+                                                InputStream inputStream = connection.getInputStream();
+                                                File file = SDFileUtils.newFileInstance("save", connection.getHeaderField(Field.FILE_NAME), true);
+                                                FileOutputStream fos = new FileOutputStream(file);
+                                                int i = inputStream.read();
+                                                while (i != -1) {
+                                                    fos.write(i);
+                                                    i = inputStream.read();
+                                                }
+                                                fos.flush();
+                                                fos.close();
+                                                if(indexManager.restore(file)){
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            progress.dismiss();
+                                                            SimplerDialogBuilder.build("恢复存档成功，请重启游戏！",Resource.getString(R.string.conform), SelectedActivity.this,null);
+                                                        }
+                                                    });
+                                                }else{
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            progress.dismiss();
+                                                            SimplerDialogBuilder.build("恢复存档失败，请确认存档编号正确后重试！",Resource.getString(R.string.conform), SelectedActivity.this,null);
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        } catch (Exception e) {
+                                            LogHelper.logException(e, "Recover save!");
+                                        }
+                                    }
+                                }).start();
+
+                            }
+                    }
+                }, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }, SelectedActivity.this);
             }
         });
         showUploadException();

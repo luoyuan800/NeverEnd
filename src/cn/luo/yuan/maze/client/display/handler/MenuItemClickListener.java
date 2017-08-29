@@ -4,9 +4,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Message;
+import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
@@ -39,6 +42,46 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.help:
+                LinearLayout linearLayout = new LinearLayout(context);
+                linearLayout.setOrientation(LinearLayout.VERTICAL);
+                Button bas = new Button(context);
+                linearLayout.addView(bas);
+                bas.setText("基本术语");
+                bas.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TextView textView = new TextView(context);
+                        textView.setText(Html.fromHtml(Resource.readStringFromAssets("help","base")));
+                        ScrollView scrollView = new ScrollView(context);
+                        scrollView.addView(textView);
+                        AlertDialog cont = new AlertDialog.Builder(context).setTitle("基本术语介绍").setView(scrollView).setNeutralButton("退出", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create();
+                        cont.show();
+                    }
+                });
+
+                Button clickSkillHelp = new Button(context);
+                linearLayout.addView(clickSkillHelp);
+                clickSkillHelp.setText("点击技能说明");
+                clickSkillHelp.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ClickSkillDialog clickSkillDialog1 = new ClickSkillDialog(control);
+                        clickSkillDialog1.show(0, true);
+                    }
+                });
+                SimplerDialogBuilder.build(linearLayout, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                    }
+                }, context,true);
+                break;
             case R.id.cdkey:
                 new CdkeyDialog(control).show();
                 break;

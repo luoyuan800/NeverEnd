@@ -116,4 +116,6 @@
     <string name="dialog">dialog</string>
     <string name="recycle">回收</string>
     <string name="clear">清除</string>
+    <string name="index_tip">v欢迎光临！点击下方按钮创建你的角色！创建成功后长按存档可以进行删除操作。</string>
+    <string name="recover_tip">输入你备份的存档编号</string>
 </resources>
