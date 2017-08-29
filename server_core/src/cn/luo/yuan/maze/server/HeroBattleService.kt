@@ -1,7 +1,7 @@
 package cn.luo.yuan.maze.server
 
 import cn.luo.yuan.maze.model.*
-import cn.luo.yuan.maze.server.model.Messager
+import cn.luo.yuan.maze.model.Messager
 import cn.luo.yuan.maze.server.persistence.HeroTable
 import cn.luo.yuan.maze.server.persistence.NPCTable
 import cn.luo.yuan.maze.service.BattleService

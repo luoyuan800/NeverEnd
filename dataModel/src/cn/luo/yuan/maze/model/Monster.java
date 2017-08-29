@@ -281,6 +281,7 @@ public class Monster extends HarmObject implements IDModel, SilentAbleObject, Na
                 containsEffects = new ArrayList<>(2);
             }
         }
+
         return containsEffects;
     }
 

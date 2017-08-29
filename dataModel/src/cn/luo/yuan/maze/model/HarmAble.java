@@ -6,6 +6,9 @@ import cn.luo.yuan.maze.utils.Random;
  * Created by gluo on 4/27/2017.
  */
 public interface HarmAble {
+
+    String getId();
+
     long getAtk();
 
     long getDef();

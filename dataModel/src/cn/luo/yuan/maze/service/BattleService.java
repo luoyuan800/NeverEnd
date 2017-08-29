@@ -139,8 +139,13 @@ public class BattleService {
             }
         }
 
+        normalAtk(atker, defender, minHarm);
+    }
+
+    public long normalAtk(HarmAble atker, HarmAble defender, long minHarm) {
+        long harm = 0;
         if (!defender.isDodge(random)) {
-            long harm = BattleServiceBase.getHarm(atker, defender, minHarm, random, battleMessage);
+            harm = BattleServiceBase.getHarm(atker, defender, minHarm, random, battleMessage);
             defender.setHp(defender.getHp() - harm);
             if (atker instanceof NameObject && defender instanceof NameObject)
                 battleMessage.harm((NameObject) atker, (NameObject) defender, harm);
@@ -149,6 +154,7 @@ public class BattleService {
                 battleMessage.dodge((NameObject) atker, (NameObject) defender);
             }
         }
+        return harm;
     }
 
 
@@ -282,7 +288,9 @@ public class BattleService {
         atkPara.set(SkillParameter.DEFENDER, defender);
         atkPara.set(SkillParameter.MINHARM, level);
         atkPara.set(SkillParameter.MESSAGE, battleMessage);
-        atkPara.set(SkillParameter.CONTEXT, runninfService.getContext());
+        if(runninfService!=null) {
+            atkPara.set(SkillParameter.CONTEXT, runninfService.getContext());
+        }
         return atkPara;
     }
 }

@@ -95,7 +95,7 @@ public class BattleMessageImp implements BattleMessage {
         addMessage(String.format(Resource.getString(R.string.my_turn), displayName));
     }
 
-    private void addMessage(String format) {
+    public void addMessage(String format) {
         control.addMessage(format);
         messageCache.add(format);
     }

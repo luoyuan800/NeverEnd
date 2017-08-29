@@ -1,4 +1,4 @@
-package cn.luo.yuan.maze.server.model;
+package cn.luo.yuan.maze.model;
 
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.MessageReceiver;

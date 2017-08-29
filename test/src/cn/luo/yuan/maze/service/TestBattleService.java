@@ -12,7 +12,7 @@ import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.model.skill.hero.HeroHit;
 import cn.luo.yuan.maze.persistence.DataManagerInterface;
-import cn.luo.yuan.maze.server.model.Messager;
+import cn.luo.yuan.maze.model.Messager;
 import cn.luo.yuan.maze.utils.Random;
 import org.jetbrains.annotations.NotNull;
 import org.testng.annotations.BeforeTest;
