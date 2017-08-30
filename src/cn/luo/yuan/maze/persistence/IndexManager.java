@@ -52,16 +52,14 @@ public class IndexManager {
 
     public boolean restore(File file) {
         try {
-            String fileName = file.getName();
-            String[] ui = fileName.split("_");
-            if (ui.length > 1) {
                 List<Serializable> seris = SDFileUtils.unzipObjects(file, context);
-                int index = Integer.parseInt(ui[1]);
+                int index = -1;
                 Hero hero = null;
                 Maze maze = null;
                 for (Serializable s : seris) {
                     if (s instanceof Hero) {
                         hero = (Hero) s;
+                        index = hero.getIndex();
                     }
                     if (s instanceof Maze) {
                         maze = (Maze) s;
@@ -76,7 +74,6 @@ public class IndexManager {
                 manager.saveMaze(maze);
                 manager.close();
                 return true;
-            }
         } catch (IOException e) {
             LogHelper.logException(e, "restore save");
         }

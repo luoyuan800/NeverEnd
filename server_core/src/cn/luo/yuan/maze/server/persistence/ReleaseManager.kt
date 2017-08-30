@@ -1,17 +1,36 @@
 package cn.luo.yuan.maze.server.persistence
 
+import cn.luo.yuan.maze.server.LogHelper
 import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection
 import cn.luo.yuan.maze.utils.StringUtils
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
+import java.sql.Connection
+import java.sql.Statement
 
 /**
  * Copyright @Luo
  * Created by Gavin Luo on 8/10/2017.
  */
 class ReleaseManager(private val database: DatabaseConnection, private val apkFolder:File) {
+    init {
+        var statement: Statement? = null
+        var connection: Connection? = null
+        try {
+            connection = database.getConnection()
+            statement = connection.createStatement()
+            statement.execute("create table IF NOT EXISTS release(releasenotes text NOT NULL, " +
+                    "version int(10), download int(10), " +
+                    "primary key (version))")
+        } catch (e: Exception) {
+            LogHelper.error(e)
+        } finally {
+            statement?.close()
+            connection?.close()
+        }
+    }
 
     fun getReleaseNotes():String{
         val con = database.getConnection()

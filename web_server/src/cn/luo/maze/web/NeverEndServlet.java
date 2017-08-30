@@ -71,6 +71,15 @@ public class NeverEndServlet extends HttpServlet {
         response.setCharacterEncoding("utf-8");
         PrintWriter writer = response.getWriter();
         switch (path) {
+            case GET_CURRENT_VERSION:
+                writeMessage(response, String.valueOf(process.getReleaseVersion()));
+                break;
+            case GET_RELEASE_NOTE:
+                writeMessage(response, process.getLatestReleaseNotes());
+                break;
+            case DELETE_SAVE:
+                process.deleteSaveFile(request.getHeader(Field.ITEM_ID_FIELD));
+                break;
             case "new_cd_key":
                 writer = writeMessage(response, process.newCdKey());
                 break;
@@ -170,6 +179,10 @@ public class NeverEndServlet extends HttpServlet {
             PrintWriter writer = null;
             Boolean success = null;
             switch (path) {
+                case DOWNLOAD_SAVE:
+                    response.setStatus(200);
+                    response.getOutputStream().write(process.downloadSaveZip(request.getHeader(Field.ITEM_ID_FIELD)));
+                    break;
                 case QUERY_RANGE_AWARD:
                     RangeAward ra = process.getRangeAward(ownerId);
                     if(ra!=null){
@@ -186,11 +199,7 @@ public class NeverEndServlet extends HttpServlet {
                     response.getOutputStream().write(apk);
                     break;
                 case RETRIEVE_BACK_WAREHOUSE:
-                    if(null!=process.deleteFromWarehouse(request.getHeader(Field.ITEM_ID_FIELD), request.getIntHeader(Field.EXPECT_TYPE), ownerId)){
-                        success = true;
-                    }else{
-                        success = false;
-                    }
+                    success = null != process.deleteFromWarehouse(request.getHeader(Field.ITEM_ID_FIELD), request.getIntHeader(Field.EXPECT_TYPE), ownerId);
                     break;
                 case RETRIEVE_WAREHOUSE_LIST:
                     writeObject(response, process.warehouseList(ownerId, request.getIntHeader(Field.EXPECT_TYPE)));

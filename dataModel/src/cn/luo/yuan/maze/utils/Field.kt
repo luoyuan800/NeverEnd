@@ -6,7 +6,6 @@ package cn.luo.yuan.maze.utils
 class Field {
     //Use static file should define companion object
     companion object {
-        const val DOWNLOAD_SAVE: String = "download_save"
         const val VERIFY_RESULT: String = "verify_result"
         const val TASK_ID: String = "task_id"
         const val FILE_NAME: String = "fileName"

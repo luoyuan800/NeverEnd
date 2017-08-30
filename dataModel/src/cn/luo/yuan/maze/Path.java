@@ -4,6 +4,10 @@ package cn.luo.yuan.maze;
  * Created by gluo on 7/6/2017.
  */
 public class Path {
+    public static final String GET_CURRENT_VERSION = "get_current_version";
+    public static final String GET_RELEASE_NOTE = "get_release_note";
+    public static final String DELETE_SAVE = "delete_save";
+    public static final String DOWNLOAD_SAVE = "download_save";
     public static final String QUERY_RANGE_AWARD = "query_range_awarD";
     public static final String BUY_DLC = "BUY_DLC";
     public static final String QUERY_DLC_DETAIL = "query_dlc_detail";

@@ -17,12 +17,22 @@ import java.util.HashSet;
  */
 public class SaveService {
     public static File root;
-    public static SaveService instance = new SaveService();
+    private static SaveService instance;
     private HashSet<String> nameSet = new HashSet<>();
     private Random random = new Random(System.currentTimeMillis());
 
+    public synchronized static SaveService instance(){
+       if(instance ==null){
+           instance = new SaveService();
+       }
+        return instance;
+    }
+
+    public static void setRoot(File root){
+        SaveService.root = new File(root, "save");
+    }
+
     private SaveService() {
-        File root = new File("save");
         if (!root.exists() || !root.isDirectory()) {
             root.mkdirs();
         }
@@ -31,7 +41,7 @@ public class SaveService {
 
     public byte[] getSaveFile(String id) {
         try {
-            File file = new File("save/" + id);
+            File file = new File(SaveService.root, id);
             if (file.exists()) {
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 FileInputStream fis = new FileInputStream(file);
@@ -42,13 +52,16 @@ public class SaveService {
                 }
                 fis.close();
                 nameSet.remove(id);
-                file.deleteOnExit();
                 return bos.toByteArray();
             }
         } catch (Exception e) {
             LogHelper.error(e);
         }
         return null;
+    }
+
+    public void delete(String id){
+        new File(SaveService.root, id).delete();
     }
 
     public String saveFile(byte[] data) {

@@ -86,6 +86,7 @@ public class MainProcess {
     private cn.luo.yuan.maze.utils.Random random = new Random(System.currentTimeMillis());
     private ReleaseManager releaseManager;
     private CDKEYTable cdkeyTable;
+    private SaveService saveService;
 
     public MainProcess(String root) throws IOException, ClassNotFoundException {
         this.root = new File(root);
@@ -109,6 +110,8 @@ public class MainProcess {
                 LogHelper.error(e);
             }
         }
+        SaveService.setRoot(this.root);
+        saveService = SaveService.instance();
     }
 
     //Only use for unit test
@@ -766,8 +769,11 @@ public class MainProcess {
     }
 
     public String uploadFile(String name, InputStream stream) {
-        SaveService.root = root;
-        return SaveService.instance.saveFile(name, stream);
+        return saveService.saveFile(name, stream);
+    }
+
+    public void deleteSaveFile(String id){
+        saveService.delete(id);
     }
 
     public List<Task> queryTask(int start, int row, Set<String> filter) {
@@ -930,6 +936,10 @@ public class MainProcess {
         } else {
             return new byte[0];
         }
+    }
+
+    public byte[] downloadSaveZip(String id){
+        return saveService.getSaveFile(id);
     }
 
     public Object useCdkey(String cdId, String userId) {

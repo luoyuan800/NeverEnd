@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.*;
+import cn.luo.yuan.maze.Path;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.dialog.GiftDialog;
@@ -136,22 +137,22 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
                 SimplerDialogBuilder.build(idText, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                            String id = idText.getText().toString();
+                            final String id = idText.getText().toString();
                             if(StringUtils.isNotEmpty(id)){
                                 dialog.dismiss();
-                                ProgressDialog progress =new ProgressDialog(SelectedActivity.this);
+                                final ProgressDialog progress =new ProgressDialog(SelectedActivity.this);
                                 progress.show();
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
                                         RestConnection server = new RestConnection(Field.SERVER_URL,getVersion(),Resource.getSingInfo());
                                         try {
-                                            HttpURLConnection connection= server.getHttpURLConnection(Field.DOWNLOAD_SAVE,RestConnection.POST);
+                                            HttpURLConnection connection= server.getHttpURLConnection(Path.DOWNLOAD_SAVE,RestConnection.POST);
                                             connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
                                             server.connect(connection);
                                             if(connection.getResponseCode() == 200) {
                                                 InputStream inputStream = connection.getInputStream();
-                                                File file = SDFileUtils.newFileInstance("save", connection.getHeaderField(Field.FILE_NAME), true);
+                                                File file = SDFileUtils.newFileInstance("save", id + ".maze", true);
                                                 FileOutputStream fos = new FileOutputStream(file);
                                                 int i = inputStream.read();
                                                 while (i != -1) {
@@ -168,6 +169,9 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
                                                             SimplerDialogBuilder.build("恢复存档成功，请重启游戏！",Resource.getString(R.string.conform), SelectedActivity.this,null);
                                                         }
                                                     });
+                                                    connection = server.getHttpURLConnection(Path.DELETE_SAVE, RestConnection.POST);
+                                                    connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
+                                                    server.connect(connection);
                                                 }else{
                                                     runOnUiThread(new Runnable() {
                                                         @Override
