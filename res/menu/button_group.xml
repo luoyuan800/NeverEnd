@@ -51,6 +51,15 @@
             android:icon="@android:drawable/ic_menu_view"
             android:title="兑换码"/>
     <item
+            android:id="@+id/backup"
+            android:icon="@android:drawable/ic_menu_info_details"
+            android:title="备份存档"/>
+
+    <item
+            android:id="@+id/update"
+            android:icon="@android:drawable/ic_menu_info_details"
+            android:title="更新"/>
+    <item
             android:enabled="false"
             android:title="---其他---"/>
 
@@ -62,10 +71,6 @@
             android:id="@+id/help"
             android:icon="@android:drawable/ic_menu_help"
             android:title="帮助"/>
-    <item
-            android:id="@+id/update"
-            android:icon="@android:drawable/ic_menu_info_details"
-            android:title="更新"/>
 
     <item
             android:id="@+id/pay"

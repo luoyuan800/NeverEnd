@@ -772,6 +772,21 @@ public class MainProcess {
         return saveService.saveFile(name, stream);
     }
 
+    public String uploadSaveFile(InputStream is, String ownerId){
+        ServerRecord record = heroTable.getRecord(ownerId);
+        if(record!=null&& record.getDebris() >= Data.UPLOAD_SAVE_DEBRIS){
+            record.setDebris(record.getDebris() - Data.UPLOAD_SAVE_DEBRIS);
+            try {
+                heroTable.save(record);
+            } catch (IOException e) {
+                LogHelper.error(e);
+            }
+            return saveService.saveSave(is);
+        }else{
+            return StringUtils.EMPTY_STRING;
+        }
+    }
+
     public void deleteSaveFile(String id){
         saveService.delete(id);
     }

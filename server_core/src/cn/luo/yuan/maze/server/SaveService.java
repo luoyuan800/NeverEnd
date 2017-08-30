@@ -29,14 +29,14 @@ public class SaveService {
     }
 
     public static void setRoot(File root){
-        SaveService.root = new File(root, "save");
+        SaveService.root = new File(root, "file");
     }
 
     private SaveService() {
         if (!root.exists() || !root.isDirectory()) {
             root.mkdirs();
         }
-        Collections.addAll(nameSet, root.list());
+        Collections.addAll(nameSet, new File(root,"save").list());
     }
 
     public byte[] getSaveFile(String id) {
@@ -62,9 +62,14 @@ public class SaveService {
 
     public void delete(String id){
         new File(SaveService.root, id).delete();
+        nameSet.remove(id);
     }
 
-    public String saveFile(byte[] data) {
+    String saveSave(InputStream is){
+        File folder = new File(root, "save");
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
         try {
             StringBuilder sb = new StringBuilder();
             while (sb.length() < 4) {
@@ -75,12 +80,16 @@ public class SaveService {
                 name = name + (random.nextInt(9) + 1);
             }
             nameSet.add(name);
-            File file = new File("save/" + name);
+            File file = new File(folder, name);
             if (!file.exists()) {
                 file.createNewFile();
             }
             FileOutputStream fos = new FileOutputStream(file);
-            fos.write(data);
+            int data = is.read();
+            while (data != -1) {
+                fos.write(data);
+                data = is.read();
+            }
             fos.flush();
             fos.close();
             return name;
@@ -91,7 +100,7 @@ public class SaveService {
     }
 
     String saveFile(String name, InputStream is) {
-        File folder = new File(root, "save");
+        File folder = new File(root, "exception");
         if (!folder.exists()) {
             folder.mkdirs();
         }

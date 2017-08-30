@@ -179,6 +179,9 @@ public class NeverEndServlet extends HttpServlet {
             PrintWriter writer = null;
             Boolean success = null;
             switch (path) {
+                case UPLOAD_SAVE:
+                    writeMessage(response, process.uploadSaveFile(request.getInputStream(),ownerId));
+                    break;
                 case DOWNLOAD_SAVE:
                     response.setStatus(200);
                     response.getOutputStream().write(process.downloadSaveZip(request.getHeader(Field.ITEM_ID_FIELD)));
@@ -235,7 +238,7 @@ public class NeverEndServlet extends HttpServlet {
                     Set<String> filter = readObject(request);
                     writeObject(response, process.queryTask(start, row, filter));
                     break;
-                case UPLOAD_SAVE:
+                case UPLOAD_FILE:
                     String name = process.uploadFile(request.getHeader(Field.FILE_NAME), request.getInputStream());
                     writer = writeMessage(response, name);
                     break;

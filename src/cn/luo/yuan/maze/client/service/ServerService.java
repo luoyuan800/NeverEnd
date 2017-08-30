@@ -229,11 +229,11 @@ public class ServerService {
         }
     }
 
-    public Boolean uploadSaveFile(String fileName) {
+    public Boolean uploadLogFile(String fileName) {
         File file = new File(fileName);
         if (file.exists()) {
             try {
-                HttpURLConnection connection = server.getHttpURLConnection(UPLOAD_SAVE, RestConnection.POST);
+                HttpURLConnection connection = server.getHttpURLConnection(UPLOAD_FILE, RestConnection.POST);
                 connection.addRequestProperty(Field.FILE_NAME, file.getName());
                 FileInputStream fis = new FileInputStream(file);
                 int i = fis.read();
@@ -247,10 +247,33 @@ public class ServerService {
                 outputStream.write(baos.toByteArray());
                 return Field.RESPONSE_RESULT_OK.equals(server.connect(connection).toString());
             } catch (IOException e) {
-                LogHelper.logException(e, "uploadSaveFile: " + fileName);
+                LogHelper.logException(e, "uploadLogFile: " + fileName);
             }
         }
         return false;
+    }
+    public String uploadSaveFile(String fileName, String ownerId) {
+        File file = new File(fileName);
+        if (file.exists()) {
+            try {
+                HttpURLConnection connection = server.getHttpURLConnection(UPLOAD_SAVE, RestConnection.POST);
+                connection.addRequestProperty(Field.OWNER_ID_FIELD, ownerId);
+                FileInputStream fis = new FileInputStream(file);
+                int i = fis.read();
+                OutputStream outputStream = connection.getOutputStream();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                while (i != -1) {
+                    baos.write(i);
+                    i = fis.read();
+                }
+                fis.close();
+                outputStream.write(baos.toByteArray());
+                return server.connect(connection).toString();
+            } catch (IOException e) {
+                LogHelper.logException(e, "uploadLogFile: " + fileName);
+            }
+        }
+        return StringUtils.EMPTY_STRING;
     }
 
     public File downloadSaveFile(String id) {

@@ -1,10 +1,10 @@
 package cn.luo.yuan.maze.client.display.handler;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Message;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -17,8 +17,11 @@ import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.client.display.dialog.*;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.Resource;
+import cn.luo.yuan.maze.client.utils.SDFileUtils;
+import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.service.InfoControlInterface;
+import cn.luo.yuan.maze.utils.StringUtils;
 
 public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
     private Context context;
@@ -42,6 +45,38 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.backup:
+                SimplerDialogBuilder.build("备份存档到服务器上需要消耗" + Data.UPLOAD_SAVE_DEBRIS + "个碎片。备份成功后你可以在其他手机上恢复你的存档。", Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final  ProgressDialog progress = new ProgressDialog(context);
+                        progress.show();
+                        control.getExecutor().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                String path = SDFileUtils.zipFiles(control.getHero().getId(),control.getDataManager().retrieveAllSaveFile());
+                                String name = control.getServerService().uploadSaveFile(path, control.getHero().getId());
+                                if(StringUtils.isNotEmpty(name)){
+                                    control.getViewHandler().post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            progress.dismiss();
+                                            SimplerDialogBuilder.build("请牢记你的备份编号： " + name, "备份成功", Resource.getString(R.string.conform), context, control.getRandom());
+                                        }
+                                    });
+                                }else{
+                                    control.showPopup("备份失败，确认你有足够的碎片后重试！");
+                                }
+                            }
+                        });
+                    }
+                }, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }, context);
+                break;
             case R.id.help:
                 LinearLayout linearLayout = new LinearLayout(context);
                 linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -56,6 +91,50 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                         ScrollView scrollView = new ScrollView(context);
                         scrollView.addView(textView);
                         AlertDialog cont = new AlertDialog.Builder(context).setTitle("基本术语介绍").setView(scrollView).setNeutralButton("退出", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create();
+                        cont.show();
+                    }
+                });
+
+                Button elementRace = new Button(context);
+                linearLayout.addView(elementRace);
+                elementRace.setText("种族五行相克");
+                elementRace.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        LinearLayout ll= new LinearLayout(context);
+                        ll.setOrientation(LinearLayout.VERTICAL);
+                        ImageView iv = new ImageView(context);
+                        iv.setImageResource(R.drawable.race);
+                        ll.addView(iv);
+                        ImageView eiv =new ImageView(context);
+                        eiv.setImageResource(R.drawable.elements);
+                        ll.addView(eiv);
+                        AlertDialog cont = new AlertDialog.Builder(context).setTitle("种族五行介绍").setView(ll).setNeutralButton("退出", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create();
+                        cont.show();
+                    }
+                });
+
+                Button names = new Button(context);
+                linearLayout.addView(names);
+                names.setText("前后缀名");
+                names.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TextView textView = new TextView(context);
+                        textView.setText(Html.fromHtml(Resource.readStringFromAssets("help","names")));
+                        ScrollView scrollView = new ScrollView(context);
+                        scrollView.addView(textView);
+                        AlertDialog cont = new AlertDialog.Builder(context).setTitle("怪物/宠物前后缀介绍").setView(scrollView).setNeutralButton("退出", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();

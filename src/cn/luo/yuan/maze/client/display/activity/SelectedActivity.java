@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.*;
 import cn.luo.yuan.maze.Path;
@@ -29,7 +28,6 @@ import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.Arrays;
@@ -68,6 +66,7 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
         listView.setAdapter(adapter);
         TextView et = new TextView(this);
         et.setText(R.string.index_tip);
+        listView.setEmptyView(et);
         findViewById(R.id.new_index).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,7 +192,7 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
                 }, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        dialog.dismiss();
                     }
                 }, SelectedActivity.this);
             }
@@ -219,7 +218,7 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
                                     + Build.VERSION.SDK_INT + ","
                                     + android.os.Build.VERSION.RELEASE + ".zip");
 
-                            if(new ServerService(getVersion()).uploadSaveFile(filePath)) {
+                            if(new ServerService(getVersion()).uploadLogFile(filePath)) {
                                 SDFileUtils.clearLog();
                             }
                             SDFileUtils.deleteFile(filePath);

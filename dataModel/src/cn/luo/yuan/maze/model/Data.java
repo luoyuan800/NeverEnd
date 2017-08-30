@@ -45,6 +45,7 @@ public class Data {
     public static  float EGG_RATE_REDUCE = 1.1f; //宠物生蛋率修正系数，越大捕获率越低
     public static  long MATERIAL_LIMIT = 3000000;//如果携带超过这个数量的锻造，就增加商店的价格和怪物的攻击
     public static  int WAREHOUSE_DEBRIS = 2;//仓库需要消耗的碎片数量
+    public static  int UPLOAD_SAVE_DEBRIS = 20;//备份需要消耗的碎片数量
     public static  long RECYCLE_MATERIAL = 2000;//回收装备可以获得的锻造
 
     /**
