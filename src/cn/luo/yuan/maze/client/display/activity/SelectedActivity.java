@@ -139,54 +139,8 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
                             final String id = idText.getText().toString();
                             if(StringUtils.isNotEmpty(id)){
                                 dialog.dismiss();
-                                final ProgressDialog progress =new ProgressDialog(SelectedActivity.this);
-                                progress.show();
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        RestConnection server = new RestConnection(Field.SERVER_URL,getVersion(),Resource.getSingInfo());
-                                        try {
-                                            HttpURLConnection connection= server.getHttpURLConnection(Path.DOWNLOAD_SAVE,RestConnection.POST);
-                                            connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
-                                            server.connect(connection);
-                                            if(connection.getResponseCode() == 200) {
-                                                InputStream inputStream = connection.getInputStream();
-                                                File file = SDFileUtils.newFileInstance("save", id + ".maze", true);
-                                                FileOutputStream fos = new FileOutputStream(file);
-                                                int i = inputStream.read();
-                                                while (i != -1) {
-                                                    fos.write(i);
-                                                    i = inputStream.read();
-                                                }
-                                                fos.flush();
-                                                fos.close();
-                                                if(indexManager.restore(file)){
-                                                    runOnUiThread(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            progress.dismiss();
-                                                            SimplerDialogBuilder.build("恢复存档成功，请重启游戏！",Resource.getString(R.string.conform), SelectedActivity.this,null);
-                                                        }
-                                                    });
-                                                    connection = server.getHttpURLConnection(Path.DELETE_SAVE, RestConnection.POST);
-                                                    connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
-                                                    server.connect(connection);
-                                                }else{
-                                                    runOnUiThread(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            progress.dismiss();
-                                                            SimplerDialogBuilder.build("恢复存档失败，请确认存档编号正确后重试！",Resource.getString(R.string.conform), SelectedActivity.this,null);
-                                                        }
-                                                    });
-                                                }
-                                            }
-                                        } catch (Exception e) {
-                                            LogHelper.logException(e, "Recover save!");
-                                        }
-                                    }
-                                }).start();
-
+                                //recoverSave(id);
+                                doingRecover(id);
                             }
                     }
                 }, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
@@ -200,6 +154,74 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
         showUploadException();
     }
 
+    public boolean doingRecover(String fileName){
+        File file = SDFileUtils.getOrCreateFile("save", fileName);
+        if(indexManager.restore(file)){
+            Toast.makeText(this, "Finished", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
+        }
+        return true;
+    }
+
+    public void recoverSave(final String id) {
+        final ProgressDialog progress =new ProgressDialog(SelectedActivity.this);
+        progress.show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                RestConnection server = new RestConnection(Field.SERVER_URL,getVersion(), Resource.getSingInfo());
+                try {
+                    HttpURLConnection connection= server.getHttpURLConnection(Path.DOWNLOAD_SAVE,RestConnection.POST);
+                    connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
+                    server.connect(connection);
+                    if(connection.getResponseCode() == 200) {
+                        InputStream inputStream = connection.getInputStream();
+                        File file = SDFileUtils.getOrCreateFile("save", id + ".maze");
+                        FileOutputStream fos = new FileOutputStream(file);
+                        int i = inputStream.read();
+                        while (i != -1) {
+                            fos.write(i);
+                            i = inputStream.read();
+                        }
+                        fos.flush();
+                        fos.close();
+                        if(indexManager.restore(file)){
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progress.dismiss();
+                                    SimplerDialogBuilder.build("恢复存档成功，请重启游戏！",Resource.getString(R.string.conform), SelectedActivity.this,null);
+                                }
+                            });
+                            connection = server.getHttpURLConnection(Path.DELETE_SAVE, RestConnection.POST);
+                            connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
+                            server.connect(connection);
+                        }else{
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progress.dismiss();
+                                    SimplerDialogBuilder.build("恢复存档失败，请确认存档编号正确后重试！",Resource.getString(R.string.conform), SelectedActivity.this,null);
+                                }
+                            });
+                        }
+                    }
+                } catch (Exception e) {
+                    LogHelper.logException(e, "Recover save!");
+                }
+            }
+        }).start();
+    }
+
+
+
+    private void createSaveZip(){
+        for(HeroIndex index : indexManager.getIndex()){
+            indexManager.backup(index);
+        }
+        Toast.makeText(this, "保存成功！", Toast.LENGTH_LONG).show();
+    }
 
     private void showUploadException(){
         SharedPreferences sp = this.getSharedPreferences("mark", MODE_PRIVATE);

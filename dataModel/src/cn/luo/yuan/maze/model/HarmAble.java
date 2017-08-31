@@ -26,6 +26,8 @@ public interface HarmAble {
 
     Element getElement();
 
+    Race getRace();
+
     long getUpperDef();
 
     long getUpperHp();

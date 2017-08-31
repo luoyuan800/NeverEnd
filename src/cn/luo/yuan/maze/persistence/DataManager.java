@@ -67,7 +67,7 @@ public class DataManager implements DataManagerInterface {
         skillLoader = new SerializeLoader<>(Skill.class, context, index);
         clickSkillLoader = new SerializeLoader<>(ClickSkill.class, context, index);
         configDB = new ObjectTable<>(NeverEndConfig.class, context.getDir(String.valueOf(index), Context.MODE_PRIVATE));
-        defenderDB = new ObjectTable<>(Hero.class, context.getDir(String.valueOf(index), Context.MODE_PRIVATE));
+        defenderDB = new ObjectTable<>(Hero.class, context.getDir("defend", Context.MODE_PRIVATE));
         this.context = context;
         registerTable(accessoryLoader.getDb());
         registerTable(petLoader.getDb());
@@ -76,6 +76,8 @@ public class DataManager implements DataManagerInterface {
         registerTable(clickSkillLoader.getDb());
         registerTable(configDB);
         registerTable(defenderDB);
+        tables.add(heroLoader.getDb());
+        tables.add(mazeLoader.getDb());
     }
 
     public int getIndex() {
@@ -497,7 +499,7 @@ public class DataManager implements DataManagerInterface {
 
     public void addDefender(Hero hero, long level) {
         try {
-            defenderDB.save(hero, String.valueOf(level));
+            defenderDB.save(hero, hero.getId());
         } catch (IOException e1) {
             LogHelper.logException(e1, "addDefender");
         }

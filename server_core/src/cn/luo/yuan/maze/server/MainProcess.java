@@ -611,7 +611,9 @@ public class MainProcess {
                     Maze maze = heroTable.getMaze(heroId, level);
                     if (maze != null) {
                         if (Math.abs(maze.getMaxLevel() - level) < 50) {
-                            return hero;
+                            Hero clone = hero.clone();
+                            clone.setId(String.valueOf(maze.getMaxLevel()));
+                            return clone;
                         }
                     }
                 }

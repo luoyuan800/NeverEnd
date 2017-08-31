@@ -404,6 +404,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
             Toast.makeText(context, Resource.getString(R.string.need_level, level), Toast.LENGTH_SHORT).show();
             return hero.getReincarnate();
         }
+        dataManager.addDefender(hero, maze.getMaxLevel());
         hero.setMaterial(hero.getMaterial() - mate);
         hero.setReincarnate(hero.getReincarnate() + 1);
         if (hero.getGift() != null) {

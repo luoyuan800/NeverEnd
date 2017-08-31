@@ -30,7 +30,8 @@ public class BattleService {
         specialDetect();
         long round = 1;
         boolean heroAtk = random.nextBoolean();
-        battleMessage.startBattle(hero instanceof NameObject ? ((NameObject) hero).getDisplayName() : "", monster instanceof NameObject ? ((NameObject) monster).getDisplayName() : "");
+        battleMessage.startBattle(hero instanceof NameObject ? (((NameObject) hero).getDisplayName() + "(HP: " + hero.getCurrentHp() + ")") : "",
+                monster instanceof NameObject ? (((NameObject) monster).getDisplayName() + "(HP: " + monster.getCurrentHp() + ")") : "");
         while (hero.getCurrentHp() > 0 && monster.getCurrentHp() > 0) {
             if (runninfService != null && runninfService.isPause()) {
                 continue;

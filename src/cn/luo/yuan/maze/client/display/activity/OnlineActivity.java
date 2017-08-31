@@ -274,19 +274,22 @@ public class OnlineActivity extends Activity {
             }
         }, 20, Data.REFRESH_SPEED * 10, TimeUnit.MILLISECONDS);
         postGiftCount();
-        executor.scheduleAtFixedRate(new Runnable() {
+        executor.submit(new Runnable() {
             @Override
             public void run() {
                 postDefender();
             }
-        }, 30, Data.REFRESH_SPEED * 20, TimeUnit.MILLISECONDS);
+        });
     }
 
     private void postDefender() {
-        long level = gameContext.getRandom().randomRange(100, gameContext.getMaze().getMaxLevel() + 150);
-        Hero defender = service.postDefender(level);
-        if (defender != null) {
-            gameContext.getDataManager().addDefender(defender, level);
+        long maxLevel = gameContext.getMaze().getMaxLevel();
+        if(maxLevel > 100) {
+            long level = gameContext.getRandom().randomRange(100, maxLevel + 150);
+            Hero defender = service.postDefender(level);
+            if (defender != null) {
+                gameContext.getDataManager().addDefender(defender, level);
+            }
         }
     }
 

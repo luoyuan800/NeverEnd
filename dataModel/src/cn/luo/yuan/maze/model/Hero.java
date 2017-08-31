@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 /**
  * Created by luoyuan on 2017/3/18.
  */
-public class Hero extends HarmObject implements Serializable, IDModel, SkillAbleObject, NameObject, PetOwner {
+public class Hero extends HarmObject implements Serializable, IDModel, SkillAbleObject, NameObject, PetOwner, Cloneable {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private boolean delete;
     private int index;//存档编号
@@ -46,12 +46,12 @@ public class Hero extends HarmObject implements Serializable, IDModel, SkillAble
     transient private Skill[] skills = {EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL};//装备
     transient private ConcurrentLinkedDeque<Pet> pets = new ConcurrentLinkedDeque<>();
     transient private ArrayList<ClickSkill> clickSkills = new ArrayList<>(3);
-    private Element element;//五行元素
+    private Element element = Element.NONE;//五行元素
     private String id;
     private EncodeLong point = new EncodeLong(500);
     private Gift gift;
     private EncodeLong click = new EncodeLong(0);
-    private Race race;
+    private Race race = Race.Nonsr;
     private float elementRate = 0.5f;
     private int petCount = (int) Data.BASE_PET_COUNT;
     public Hero() {
@@ -404,5 +404,13 @@ public class Hero extends HarmObject implements Serializable, IDModel, SkillAble
     public long getAdditionHp(){
         return EffectHandler.getEffectAdditionLongValue(EffectHandler.HP, getEffects(), this) +
                 EffectHandler.getEffectAdditionLongValue(EffectHandler.STR, getEffects(), this) * getHpGrow();
+    }
+
+    public Hero clone(){
+        try {
+            return (Hero) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return this;
+        }
     }
 }

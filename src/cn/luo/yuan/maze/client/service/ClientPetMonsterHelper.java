@@ -85,7 +85,7 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
     }
 
     public  boolean isCatchAble(Monster monster, Hero hero, Random random, int petCount) {
-        if (monster.getPetRate() > 0 && (petCount < Data.MAX_PET_COUNT && monster.getRace().ordinal() != hero.getRace().ordinal() + 1 && monster.getRace().ordinal() != hero.getRace().ordinal() - 5)) {
+        if (monster.getPetRate() > 0 && (petCount < Data.MAX_PET_COUNT && !monster.getRace().isRestriction(hero.getRace()))) {
             NeverEndConfig config = control.getDataManager().loadConfig();
             if(config!=null && config.isPetGift()){
                 petCount/=10;

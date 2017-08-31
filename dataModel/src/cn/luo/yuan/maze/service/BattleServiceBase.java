@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.service;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.NameObject;
+import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.utils.Random;
 
 /**
@@ -34,6 +35,7 @@ public class BattleServiceBase {
             harm = random.nextLong(minHarm);
         }
         harm = elementAffectHarm(atker.getElement(), defender.getElement(), harm, atker.getElementRate(), defender.getElementRate());
+        harm = raceAffectHarm(atker.getRace(), defender.getRace(), harm, 0.5f, 0.5f);
         return harm;
     }
 
@@ -42,6 +44,15 @@ public class BattleServiceBase {
             baseHarm *= 1 + atkElementRate;
         } else if (defer.restriction(atker) || (atker == Element.NONE && defer != Element.NONE)) {
             baseHarm *= defElementRate;
+        }
+        return baseHarm;
+    }
+
+     public static long raceAffectHarm(Race atker, Race defer, long baseHarm, float atkRaceRate, float defRaceRate) {
+        if (atker.isRestriction(defer)) {
+            baseHarm *= 1 + atkRaceRate;
+        } else if (defer.isRestriction(atker)) {
+            baseHarm *= defRaceRate;
         }
         return baseHarm;
     }

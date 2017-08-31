@@ -32,7 +32,7 @@ import java.util.zip.ZipOutputStream;
  */
 public class SDFileUtils {
 
-    public static String SD_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/neverend/";
+    public static String SD_PATH = "" + "/neverend/";
     private static String DB_NAME = Sqlite.DB_NAME;
 
     public static List<String> getFilesListFromSD(String folder){
@@ -63,6 +63,10 @@ public class SDFileUtils {
         }
     }
 
+    public static File getOrCreateFile(String folder, String fileName){
+        return newFileInstance(SD_PATH + "/" + folder, fileName, false);
+    }
+
     public static File newFileInstance(String folder, String fileName, boolean delete) {
         File dir = new File(folder);
         if (!dir.exists()) {
@@ -86,21 +90,32 @@ public class SDFileUtils {
     public static List<Serializable> unzipObjects(File zip, Context context) throws IOException {
         List<Serializable> seris = new ArrayList<>();
         ZipInputStream zis = new ZipInputStream(new FileInputStream(zip));
-        ObjectInputStream ois = new ObjectInputStream(zis);
         ZipEntry entry = zis.getNextEntry();
         while (entry != null) {
             try {
-                Object o = ois.readObject();
-                if(o instanceof Serializable){
-                    seris.add((Serializable) o);
+                File file = new File(context.getCacheDir(), entry.getName());
+                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                int i = zis.read();
+                while (i >= 0) {
+                    fileOutputStream.write(i);
+                    i = zis.read();
                 }
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                fileOutputStream.flush();
+                fileOutputStream.close();
+                try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))){
+                    Object o = ois.readObject();
+                    if(o instanceof Serializable){
+                        seris.add((Serializable) o);
+                    }
+                }
+                file.deleteOnExit();
+            } catch (Exception e) {
+                LogHelper.logException(e, "Read object while unzip");
             }
             entry = zis.getNextEntry();
         }
         zis.close();
-        zip.delete();
+        //zip.delete();
         return seris;
     }
 
@@ -245,4 +260,5 @@ public class SDFileUtils {
         }
         return true;
     }
+
 }

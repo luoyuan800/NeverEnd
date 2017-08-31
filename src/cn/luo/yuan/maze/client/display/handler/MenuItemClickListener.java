@@ -55,7 +55,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                             @Override
                             public void run() {
                                 String path = SDFileUtils.zipFiles(control.getHero().getId(),control.getDataManager().retrieveAllSaveFile());
-                                String name = control.getServerService().uploadSaveFile(path, control.getHero().getId());
+                                final String name = control.getServerService().uploadSaveFile(path, control.getHero().getId());
                                 if(StringUtils.isNotEmpty(name)){
                                     control.getViewHandler().post(new Runnable() {
                                         @Override

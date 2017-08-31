@@ -30,4 +30,8 @@ public enum Race{
     public String getColor() {
         return color;
     }
+
+    public boolean isRestriction(Race race){
+        return race.ordinal() == ordinal() + 1 && race.ordinal() == ordinal() - 5;
+    }
 }

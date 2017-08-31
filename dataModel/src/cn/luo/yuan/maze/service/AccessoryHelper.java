@@ -133,12 +133,12 @@ public class AccessoryHelper {
             mounted.resetElementEffectEnable();
             if(isElement && hero.getElement().isReinforce(mounted.getElement())){
                 mounted.elementEffectEnable();
-                return;
+                continue;
             }
             for (Accessory other : hero.getAccessories()) {
                 if (other != mounted && other.getElement().isReinforce(mounted.getElement())) {
                     mounted.elementEffectEnable();
-                    return;
+                    break;
                 }
             }
         }
