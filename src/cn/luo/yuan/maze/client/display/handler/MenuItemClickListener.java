@@ -123,6 +123,25 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                         cont.show();
                     }
                 });
+                Button petCatch = new Button(context);
+                linearLayout.addView(petCatch);
+                petCatch.setText("宠物系统");
+                petCatch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TextView textView = new TextView(context);
+                        textView.setText(Html.fromHtml(Resource.readStringFromAssets("help","pet_catch")));
+                        ScrollView scrollView = new ScrollView(context);
+                        scrollView.addView(textView);
+                        AlertDialog cont = new AlertDialog.Builder(context).setTitle("宠物系统介绍").setView(scrollView).setNeutralButton("退出", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create();
+                        cont.show();
+                    }
+                });
 
                 Button names = new Button(context);
                 linearLayout.addView(names);
