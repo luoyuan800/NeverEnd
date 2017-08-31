@@ -9,6 +9,9 @@ import cn.luo.yuan.maze.model.skill.evil.Stealth;
 import cn.luo.yuan.maze.model.skill.hero.Dodge;
 import cn.luo.yuan.maze.model.skill.hero.FightBack;
 import cn.luo.yuan.maze.model.skill.hero.HeroHit;
+import cn.luo.yuan.maze.model.skill.pet.Foster;
+import cn.luo.yuan.maze.model.skill.pet.PetMaster;
+import cn.luo.yuan.maze.model.skill.pet.Trainer;
 import cn.luo.yuan.maze.model.skill.swindler.EatHarm;
 import cn.luo.yuan.maze.model.skill.swindler.Swindler;
 import cn.luo.yuan.maze.model.skill.swindler.SwindlerGame;
@@ -22,6 +25,15 @@ public class SkillFactory {
         Skill skill = dm.loadSkill(name);
         if(skill == null){
             switch (name){
+                case "Trainer":
+                    skill = new Trainer();
+                    break;
+                case "PetMaster":
+                    skill = new PetMaster();
+                    break;
+                case "Foster":
+                    skill = new Foster();
+                    break;
                 case "HeroHit":
                     skill = new HeroHit();
                     break;

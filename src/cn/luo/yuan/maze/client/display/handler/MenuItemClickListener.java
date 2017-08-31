@@ -163,6 +163,26 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                     }
                 });
 
+                Button tower = new Button(context);
+                linearLayout.addView(tower);
+                tower.setText("战斗塔");
+                tower.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TextView textView = new TextView(context);
+                        textView.setText(Html.fromHtml(Resource.readStringFromAssets("help","battle_tower")));
+                        ScrollView scrollView = new ScrollView(context);
+                        scrollView.addView(textView);
+                        AlertDialog cont = new AlertDialog.Builder(context).setTitle("战斗塔介绍").setView(scrollView).setNeutralButton("退出", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create();
+                        cont.show();
+                    }
+                });
+
                 Button clickSkillHelp = new Button(context);
                 linearLayout.addView(clickSkillHelp);
                 clickSkillHelp.setText("点击技能说明");

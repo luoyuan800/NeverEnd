@@ -11,11 +11,11 @@ import cn.luo.yuan.maze.service.InfoControlInterface
 class Trainer : PropertySkill() {
     private val model = PetModel(this)
     override fun getName(): String {
-        return "激活后增加捕获宠物的几率,，降低生蛋概率。不可和培育家一起激活!"
+        return "驯兽师"
     }
 
     override fun getDisplayName(): String {
-        return "驯兽师"
+        return "激活后增加捕获宠物的几率,，降低生蛋概率。不可和培育家一起激活!"
     }
 
     override fun enable(parameter: SkillParameter) {

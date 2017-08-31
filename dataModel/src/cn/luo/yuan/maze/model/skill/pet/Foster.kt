@@ -11,11 +11,11 @@ import cn.luo.yuan.maze.service.InfoControlInterface
 class Foster : PropertySkill() {
     private val model = PetModel(this)
     override fun getName(): String {
-        return "激活后增加获得宠物蛋的几率，降低捕获率。不可与驯兽师一起激活！"
+        return "培育家"
     }
 
     override fun getDisplayName(): String {
-        return "培育家"
+        return "激活后增加获得宠物蛋的几率，降低捕获率。不可与驯兽师一起激活！"
     }
 
     override fun enable(parameter: SkillParameter) {

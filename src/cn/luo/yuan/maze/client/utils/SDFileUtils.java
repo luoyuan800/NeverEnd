@@ -32,7 +32,7 @@ import java.util.zip.ZipOutputStream;
  */
 public class SDFileUtils {
 
-    public static String SD_PATH = "" + "/neverend/";
+    public static String SD_PATH = Environment.getExternalStorageDirectory() + "/neverend/";
     private static String DB_NAME = Sqlite.DB_NAME;
 
     public static List<String> getFilesListFromSD(String folder){

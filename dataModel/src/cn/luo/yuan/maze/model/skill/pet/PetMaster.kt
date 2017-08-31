@@ -14,7 +14,7 @@ class PetMaster : PropertySkill(), UpgradeAble {
         return model.canEnable(parameter)
     }
 
-    private var level = 0L
+    private var level = 1L
     var petCount = 3
     override fun upgrade(parameter: SkillParameter): Boolean {
         if (petCount < Data.MAX_PET_COUNT / 5) {
@@ -38,7 +38,7 @@ class PetMaster : PropertySkill(), UpgradeAble {
     }
 
     override fun getDisplayName(): String {
-        return "可携带出战宠物上限 + $petCount"
+        return "可携带出战宠物上限 + $petCount 。只有你的天赋是 <b>神奇宝贝</b>的时候才能激活这个技能！"
     }
 
     override fun enable(parameter: SkillParameter) {
@@ -67,6 +67,6 @@ class PetMaster : PropertySkill(), UpgradeAble {
 
     private val model = PetModel(this)
     override fun canUpgrade(parameter: SkillParameter?): Boolean {
-        return petCount < Data.MAX_PET_COUNT / 5 && model.canUpgrade(parameter)
+        return isEnable && petCount < Data.MAX_PET_COUNT / 5 && model.canUpgrade(parameter)
     }
 }

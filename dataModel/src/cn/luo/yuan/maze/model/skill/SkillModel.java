@@ -42,6 +42,6 @@ public class SkillModel implements Serializable {
     }
 
     public boolean canUpgrade(SkillParameter parameter){
-        return isUpgradePointEnough(parameter);
+        return skill.isEnable() && isUpgradePointEnough(parameter);
     }
 }
