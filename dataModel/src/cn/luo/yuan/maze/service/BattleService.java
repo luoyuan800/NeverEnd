@@ -6,6 +6,7 @@ import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.skill.*;
 import cn.luo.yuan.maze.model.skill.result.*;
 import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.maze.utils.StringUtils;
 
 import static cn.luo.yuan.maze.service.ListenerService.battleEndListeners;
 
@@ -30,8 +31,8 @@ public class BattleService {
         specialDetect();
         long round = 1;
         boolean heroAtk = random.nextBoolean();
-        battleMessage.startBattle(hero instanceof NameObject ? (((NameObject) hero).getDisplayName() + "(HP: " + hero.getCurrentHp() + ")") : "",
-                monster instanceof NameObject ? (((NameObject) monster).getDisplayName() + "(HP: " + monster.getCurrentHp() + ")") : "");
+        battleMessage.startBattle(hero instanceof NameObject ? (((NameObject) hero).getDisplayName() + "(HP: " + StringUtils.formatNumber(hero.getCurrentHp()) + ")") : "",
+                monster instanceof NameObject ? (((NameObject) monster).getDisplayName() + "(HP: " + StringUtils.formatNumber(monster.getCurrentHp()) + ")") : "");
         while (hero.getCurrentHp() > 0 && monster.getCurrentHp() > 0) {
             if (runninfService != null && runninfService.isPause()) {
                 continue;
@@ -189,6 +190,9 @@ public class BattleService {
                         battleMessage.petDefend(pet);
                         if (monster instanceof NameObject) {
                             battleMessage.harm((NameObject) monster, pet,  harm);
+                        }
+                        if(pet.getCurrentHp() <= 0){
+                            battleMessage.rowMessage(pet.getDisplayName() + "牺牲了！");
                         }
                     }
                     return true;

@@ -87,7 +87,7 @@ public class BattleMessageImp implements BattleMessage {
 
     @Override
     public void startBattle(String hero, String monster) {
-
+        addMessage(String.format(Resource.getString(R.string.start_battle), hero, monster));
     }
 
     @Override

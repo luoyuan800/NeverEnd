@@ -124,6 +124,14 @@ public class Pet extends Monster implements IDModel, OwnedAble, MountAble {
         this.farther = farther;
     }
 
+    @Override
+    public void setHp(long hp) {
+        super.setHp(hp);
+        if(getCurrentHp() <= 0){
+            setIntimacy(getIntimacy() - Data.INTIMACY_REDUCE);
+        }
+    }
+
     public String getDisplayNameWithLevel() {
         return (getHp() <= 0 ? "<font color='#b4a6b0'>" : "") + getDisplayName() + (getLevel() > 0 ? (" X" + getLevel()) : "") + (getHp() <= 0 ? "</font>" : "") + "[" + getRace() + "]";
     }

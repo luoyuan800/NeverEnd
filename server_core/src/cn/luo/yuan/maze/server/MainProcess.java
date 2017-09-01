@@ -188,7 +188,7 @@ public class MainProcess {
         return false;
     }
 
-    public String newCdKey(){
+    public String newCdKey() {
         return cdkeyTable.newCdKey();
     }
 
@@ -774,9 +774,9 @@ public class MainProcess {
         return saveService.saveFile(name, stream);
     }
 
-    public String uploadSaveFile(InputStream is, String ownerId){
+    public String uploadSaveFile(InputStream is, String ownerId) {
         ServerRecord record = heroTable.getRecord(ownerId);
-        if(record!=null&& record.getDebris() >= Data.UPLOAD_SAVE_DEBRIS){
+        if (record != null && record.getDebris() >= Data.UPLOAD_SAVE_DEBRIS) {
             record.setDebris(record.getDebris() - Data.UPLOAD_SAVE_DEBRIS);
             try {
                 heroTable.save(record);
@@ -784,12 +784,12 @@ public class MainProcess {
                 LogHelper.error(e);
             }
             return saveService.saveSave(is);
-        }else{
+        } else {
             return StringUtils.EMPTY_STRING;
         }
     }
 
-    public void deleteSaveFile(String id){
+    public void deleteSaveFile(String id) {
         saveService.delete(id);
     }
 
@@ -884,8 +884,8 @@ public class MainProcess {
         if (dlc != null) {
             dlc = dlc.clone();
             ServerRecord record = heroTable.getRecord(ownerId);
-            if (record.getDlcs().contains(id)) {
-                dlc.setDebrisCost(0);
+            if (dlc instanceof MonsterDLC && record.getDlcs().contains(id)) {
+                dlc.setDebrisCost(dlc.getDebrisCost() / 2);
             }
             return dlc;
         }
@@ -896,14 +896,16 @@ public class MainProcess {
         DLC dlc = dlcTable.getDLC(id);
         if (dlc != null) {
             ServerRecord record = heroTable.getRecord(ownerId);
-            if (!(dlc instanceof MonsterDLC) || !record.getDlcs().contains(id)) {
-                if (record.getDebris() >= dlc.getDebrisCost()) {
-                    record.setDebris(record.getDebris() - dlc.getDebrisCost());
-                    record.getDlcs().add(dlc.getId());
-                } else {
-                    return false;
-                }
+            if (dlc instanceof MonsterDLC && record.getDlcs().contains(id)) {
+                dlc.setDebrisCost(dlc.getDebrisCost() / 2);
             }
+            if (record.getDebris() >= dlc.getDebrisCost()) {
+                record.setDebris(record.getDebris() - dlc.getDebrisCost());
+                record.getDlcs().add(dlc.getId());
+            } else {
+                return false;
+            }
+
             return true;
         }
         return false;
@@ -955,21 +957,21 @@ public class MainProcess {
         }
     }
 
-    public byte[] downloadSaveZip(String id){
+    public byte[] downloadSaveZip(String id) {
         return saveService.getSaveFile(id);
     }
 
     public Object useCdkey(String cdId, String userId) {
         ServerRecord record = heroTable.getRecord(userId);
-        if (record!=null && record.getCdkdys().contains(cdId)) {
+        if (record != null && record.getCdkdys().contains(cdId)) {
             return "已经使用过该兑换码了";
         } else {
             KeyResult us = cdkeyTable.use(cdId);
-            if (us.getVerify() && record!=null) {
+            if (us.getVerify() && record != null) {
                 record.setDebris(record.getDebris() + us.getDebris());
                 record.setGift(record.getGift() + us.getGift());
                 record.getCdkdys().add(cdId);
-            }else{
+            } else {
                 return "至少进入战斗塔一次之后才能兑换";
             }
             return us;
@@ -991,7 +993,7 @@ public class MainProcess {
                                 ra.setDebris(rs.getInt("debris"));
                                 ra.setGift(rs.getInt("gift"));
                                 ra.setMate(rs.getInt("mate"));
-                            }else{
+                            } else {
                                 return null;
                             }
                         }
