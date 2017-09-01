@@ -94,21 +94,27 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
                 }
             });
         } else if(dlc instanceof SingleItemDLC){
-            SimplerDialogBuilder.build(String.format("%s X %s", dlc.getDesc(), StringUtils.formatNumber(dlc.getDebrisCost())), Resource.getString(R.string.buy_label), new DialogInterface.OnClickListener() {
+            handler.post(new Runnable() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    View view = new View(context.getContext());
-                    view.setId(R.id.dlc_buy);
-                    view.setTag(R.string.item, dlc);
-                    DlcDialog.this.onClick(view);
+                public void run() {
+                    SimplerDialogBuilder.build(String.format("%s X %s", dlc.getDesc(), StringUtils.formatNumber(dlc.getDebrisCost())), Resource.getString(R.string.buy_label), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            View view = new View(context.getContext());
+                            view.setId(R.id.dlc_buy);
+                            view.setTag(R.string.item, dlc);
+                            DlcDialog.this.onClick(view);
+                        }
+                    }, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }, context.getContext());
                 }
-            }, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            }, context.getContext());
+            });
+
         }
     }
 
@@ -165,7 +171,7 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
 
         if (o instanceof DLCKey) {
             DLCKey key = (DLCKey) o;
-            manager.queryMonsterDLC(key.getId(), this);
+            manager.queryDLC(key.getId(), this);
         }
 
     }

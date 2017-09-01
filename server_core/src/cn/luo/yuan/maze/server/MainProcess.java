@@ -140,7 +140,7 @@ public class MainProcess {
                 }
             }
         }
-        return ((StringUtils.isEmpty(sign) && StringUtils.isEmpty(version)) || debug || !StringUtils.isNotEmpty(sign_match) || (sign_match.equalsIgnoreCase(sign))) ? 0 : 1;
+        return ((StringUtils.isEmpty(sign) && StringUtils.isEmpty(version)) || debug || !StringUtils.isNotEmpty(sign_match) || (sign_match.equalsIgnoreCase(sign))) ? 1 : 0;
     }
 
     public String buildHeroRange() {

@@ -6,6 +6,7 @@ import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.client.utils.RestConnection;
 import cn.luo.yuan.maze.model.*;
+import cn.luo.yuan.maze.model.dlc.DLC;
 import cn.luo.yuan.maze.model.dlc.DLCKey;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
 import cn.luo.yuan.maze.utils.Field;
@@ -302,14 +303,14 @@ public class ServerService {
         return null;
     }
 
-    public MonsterDLC getMonsterDlcDetail(String id, NeverEnd context){
+    public DLC getDlcDetail(String id, NeverEnd context){
         try {
             HttpURLConnection connection = server.getHttpURLConnection(Path.QUERY_DLC_DETAIL, RestConnection.POST);
             connection.addRequestProperty(Field.ITEM_ID_FIELD, URLEncoder.encode(id, "utf-8"));
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
             Object o = server.connect(connection);
-            if(o instanceof MonsterDLC){
-                return (MonsterDLC) o;
+            if(o instanceof DLC){
+                return (DLC) o;
             }
         } catch (IOException e) {
             LogHelper.logException(e, "Query dlc details");
