@@ -383,6 +383,9 @@ public class GameActivityViewHandler extends Handler {
     }
 
     public void addDieMessage(List<String> msgs){
+        if(msgs == null || msgs.size() == 0){
+            return ;
+        }
         try {
             String folder = String.valueOf(neverEnd.getIndex());
             List<String> list = SDFileUtils.getFilesListFromSDWithOrder(folder);
