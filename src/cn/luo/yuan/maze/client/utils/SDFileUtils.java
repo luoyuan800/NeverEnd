@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.client.utils;
 
 import android.content.Context;
 import android.os.Environment;
+import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -32,7 +33,7 @@ import java.util.zip.ZipOutputStream;
  */
 public class SDFileUtils {
 
-    public static String SD_PATH = Environment.getExternalStorageDirectory() + "/neverend/";
+    public static String SD_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/neverend/";
     private static String DB_NAME = Sqlite.DB_NAME;
 
     public static List<String> getFilesListFromSD(String folder){
@@ -93,22 +94,32 @@ public class SDFileUtils {
         ZipEntry entry = zis.getNextEntry();
         while (entry != null) {
             try {
-                File file = new File(context.getCacheDir(), entry.getName());
-                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                int i = zis.read();
-                while (i >= 0) {
-                    fileOutputStream.write(i);
-                    i = zis.read();
-                }
-                fileOutputStream.flush();
-                fileOutputStream.close();
-                try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))){
-                    Object o = ois.readObject();
-                    if(o instanceof Serializable){
-                        seris.add((Serializable) o);
+                if(!entry.isDirectory()) {
+                    File file = new File(context.getCacheDir(), entry.getName());
+                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                    int i = zis.read();
+                    while (i >= 0) {
+                        fileOutputStream.write(i);
+                        i = zis.read();
+                    }
+                    fileOutputStream.flush();
+                    fileOutputStream.close();
+                    try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+                        Object o = ois.readObject();
+                        if (o instanceof IDModel) {
+                            ((IDModel) o).setId(file.getName());
+                        }
+                        if (o instanceof Serializable) {
+                            seris.add((Serializable) o);
+                        }
+                    }
+                    file.deleteOnExit();
+                }else{
+                    File file = new File(context.getCacheDir(), entry.getName());
+                    if(!file.exists()){
+                        file.mkdirs();
                     }
                 }
-                file.deleteOnExit();
             } catch (Exception e) {
                 LogHelper.logException(e, "Read object while unzip");
             }

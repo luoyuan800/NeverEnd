@@ -15,6 +15,7 @@ import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.NameObject;
+import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.model.skill.Skill;
@@ -270,7 +271,9 @@ public class RunningService implements RunningServiceInterface {
     private Pet tryCatch(Monster monster, int petCount, long level) {
         try {
             if (gameContext.getPetMonsterHelper().isCatchAble(monster, hero, random, petCount)) {
-                dataManager.loadConfig().addMonsterCatch(monster.getIndex());
+                NeverEndConfig config = dataManager.loadConfig();
+                config.addMonsterCatch(monster.getIndex());
+                dataManager.save(config);
                 return gameContext.getPetMonsterHelper().monsterToPet(monster, hero, level);
             } else {
                 return null;

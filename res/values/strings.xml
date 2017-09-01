@@ -8,7 +8,7 @@
     <string name="agi_effect">增加敏捷：</string>
     <string name="str_effect">增加力量：</string>
     <string name="meet_effect">增加遇见怪物几率：</string>
-    <string name="selected_hero_index">请选择或者创建一个存档</string>
+    <string name="selected_hero_index">请选择或者创建一个存档.长按存档进行删除操作</string>
     <string name="create_index">创建新存档</string>
     <string name="adapter">adapter</string>
     <string name="item">item</string>

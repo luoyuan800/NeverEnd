@@ -19,7 +19,6 @@ class EmptyAccessory() : UsableGoods() {
     override fun perform(properties: GoodsProperties): Boolean {
         if (getCount() > 0) {
             val context = properties["context"] as InfoControlInterface
-            val config = context.dataManager.loadConfig()
             context.showEmptyAccessoryDialog();
             return true
         }

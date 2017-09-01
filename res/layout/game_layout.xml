@@ -13,7 +13,7 @@
             android:layout_alignParentBottom="true"
             android:id="@+id/info_view"
             android:layout_toEndOf="@+id/pets"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:visibility="visible"
             android:background="@android:drawable/spinner_background"
             android:layout_below="@+id/skill_layout"/>
@@ -26,7 +26,7 @@
             android:layout_alignParentBottom="true"
             android:id="@+id/monster_view"
             android:layout_toEndOf="@+id/pets"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_below="@+id/skill_layout"/>
 
 
@@ -50,7 +50,7 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="生命:" android:layout_gravity="center_horizontal" android:gravity="center_horizontal"/>
+                    android:text="@string/hp_label" android:layout_gravity="center_horizontal" android:gravity="center_horizontal"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="攻击:"/>
+                    android:text="@string/atk_label"/>
 
             <TextView
                     android:layout_width="wrap_content"
@@ -114,7 +114,7 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="防御:"/>
+                    android:text="@string/def_label"/>
 
             <TextView
                     android:layout_width="wrap_content"

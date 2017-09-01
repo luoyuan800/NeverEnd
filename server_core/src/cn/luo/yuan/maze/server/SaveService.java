@@ -36,7 +36,10 @@ public class SaveService {
         if (!root.exists() || !root.isDirectory()) {
             root.mkdirs();
         }
-        Collections.addAll(nameSet, new File(root,"save").list());
+        String[] saves = new File(root, "save").list();
+        if(saves!=null) {
+            Collections.addAll(nameSet, saves);
+        }
     }
 
     public byte[] getSaveFile(String id) {
