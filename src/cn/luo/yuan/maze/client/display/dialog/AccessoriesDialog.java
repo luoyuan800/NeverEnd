@@ -113,9 +113,9 @@ public class AccessoriesDialog implements LoadMoreListView.OnRefreshLoadingMoreL
 
                     if (context.getAccessoryHelper().fuse(main, fuse)) {
                         context.getDataManager().save(main);
-                        SimplerDialogBuilder.build(main.toString(), "升级成功", Resource.getString(R.string.close),context.getContext(), context.getRandom());
+                        SimplerDialogBuilder.build(main.toString(), "升级成功", Resource.getString(R.string.close), null, context.getContext(), context.getRandom());
                     } else {
-                        SimplerDialogBuilder.build(main.toString(), "升级失败", Resource.getString(R.string.close),context.getContext(), context.getRandom());
+                        SimplerDialogBuilder.build(main.toString(), "升级失败", Resource.getString(R.string.close), null, context.getContext(), context.getRandom());
                     }
                     context.getDataManager().delete(fuse);
                     accessoryAdapter.getData().remove(fuse);

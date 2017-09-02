@@ -6,19 +6,7 @@ import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
 import cn.luo.yuan.maze.utils.StringUtils;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.InvalidClassException;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,6 +23,19 @@ public class SDFileUtils {
 
     public static String SD_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/neverend/";
     private static String DB_NAME = Sqlite.DB_NAME;
+
+    public static File saveFileIntoSD(InputStream inputStream, String folder, String name) throws IOException {
+        File file = SDFileUtils.getOrCreateFile(folder, name);
+        FileOutputStream fos = new FileOutputStream(file);
+        int i = inputStream.read();
+        while (i != -1) {
+            fos.write(i);
+            i = inputStream.read();
+        }
+        fos.flush();
+        fos.close();
+        return file;
+    }
 
     public static List<String> getFilesListFromSD(String folder){
         File file = new File(SDFileUtils.SD_PATH, folder);

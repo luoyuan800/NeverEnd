@@ -81,7 +81,7 @@ public class SimplerDialogBuilder {
         return dialogBuilder;
     }
 
-    public static Dialog build(String msg, String title, String posivStr, Context context, Random random) {
+    public static Dialog build(String msg, String title, String posivStr, final DialogInterface.OnClickListener posivClick, Context context, Random random) {
         final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
         if(dialogBuilder.isShowing()){
             dialogBuilder.dismiss();
@@ -100,7 +100,11 @@ public class SimplerDialogBuilder {
                 .setButton1Click(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        dialogBuilder.dismiss();
+                        if(posivClick!=null){
+                            posivClick.onClick(dialogBuilder, DialogInterface.BUTTON_POSITIVE);
+                        }else {
+                            dialogBuilder.dismiss();
+                        }
                     }
                 })
                 .show();
