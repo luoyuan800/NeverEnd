@@ -69,7 +69,7 @@ public class IndexManager {
             }
             DataManager manager = new DataManager(index, context);
             manager.overrideCurrentSaveFile(seris);
-            manager.save(hero);
+            manager.saveHero(hero);
             manager.close();
             return true;
         } catch (IOException e) {

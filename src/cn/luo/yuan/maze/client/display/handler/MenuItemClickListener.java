@@ -65,6 +65,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                                         }
                                     });
                                 }else{
+                                    progress.dismiss();
                                     control.showPopup("备份失败，确认你有足够的碎片后重试！");
                                 }
                             }

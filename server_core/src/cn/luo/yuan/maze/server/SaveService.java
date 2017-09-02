@@ -44,7 +44,7 @@ public class SaveService {
 
     public byte[] getSaveFile(String id) {
         try {
-            File file = new File(SaveService.root, id);
+            File file = new File(new File(SaveService.root, "save"), id);
             if (file.exists()) {
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 FileInputStream fis = new FileInputStream(file);
@@ -64,7 +64,7 @@ public class SaveService {
     }
 
     public void delete(String id){
-        new File(SaveService.root, id).delete();
+        new File(new File(SaveService.root, "save"), id).delete();
         nameSet.remove(id);
     }
 
