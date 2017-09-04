@@ -77,7 +77,7 @@ class CDKEYTable(private val database:DatabaseConnection) {
             val random = Random(System.currentTimeMillis())
             val stat = con.createStatement()
             val id = buildId(random)
-            stat.execute("insert into cdkey(id, gift, debris, mate, used, single) values('$id',5, 1,10000,0,1)")
+            stat.execute("insert into cdkey(id, gift, debris, mate, used, single) values('$id',1, 0,10000,0,1)")
             stat.close();
             return id;
         }finally {
