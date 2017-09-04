@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.persistence;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.ArraySet;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.SDFileUtils;
 import cn.luo.yuan.maze.model.Element;
@@ -52,28 +53,25 @@ public class IndexManager {
 
     public boolean restore(File file) {
         try {
-                List<Serializable> seris = SDFileUtils.unzipObjects(file, context);
-                int index = -1;
-                Hero hero = null;
-                Maze maze = null;
-                for (Serializable s : seris) {
-                    if (s instanceof Hero) {
-                        hero = (Hero) s;
-                        index = hero.getIndex();
+            List<Serializable> seris = SDFileUtils.unzipObjects(file, context);
+            int index = -1;
+            Hero hero = null;
+            for (Serializable s : new ArrayList<>(seris)) {
+                if (s instanceof Hero) {
+                    seris.remove(s);
+                    if (((Hero) s).getId().matches("\\d+")) {
+                        continue;
                     }
-                    if (s instanceof Maze) {
-                        maze = (Maze) s;
-                    }
-                    if (hero != null && maze != null) {
-                        break;
-                    }
+                    hero = (Hero) s;
+                    index = hero.getIndex();
                 }
-                DataManager manager = new DataManager(index, context);
-                manager.overrideCurrentSaveFile(seris);
-                manager.saveHero(hero);
-                manager.saveMaze(maze);
-                manager.close();
-                return true;
+
+            }
+            DataManager manager = new DataManager(index, context);
+            manager.overrideCurrentSaveFile(seris);
+            manager.saveHero(hero);
+            manager.close();
+            return true;
         } catch (IOException e) {
             LogHelper.logException(e, "restore save");
         }

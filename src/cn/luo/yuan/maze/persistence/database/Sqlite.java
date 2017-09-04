@@ -77,7 +77,12 @@ public class Sqlite {
     }
 
     public void updateById(String table, ContentValues values, String... ids) {
-        database.update(table, values, "id = ?", ids);
+        if(0 == database.update(table, values, "id = ?", ids)){
+            if(ids.length >=1 ) {
+                values.put("id", ids[0]);
+                insert(table, values);
+            }
+        }
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

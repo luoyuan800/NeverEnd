@@ -139,8 +139,8 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
                             final String id = idText.getText().toString();
                             if(StringUtils.isNotEmpty(id)){
                                 dialog.dismiss();
-                                //recoverSave(id);
-                                doingRecover(id);
+                                recoverSave(id);
+                                //doingRecover(id);
                             }
                     }
                 }, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
@@ -174,7 +174,7 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
                 try {
                     HttpURLConnection connection= server.getHttpURLConnection(Path.DOWNLOAD_SAVE,RestConnection.POST);
                     connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
-                    server.connect(connection);
+                    connection.connect();
                     if(connection.getResponseCode() == 200) {
                         InputStream inputStream = connection.getInputStream();
                         File file = SDFileUtils.getOrCreateFile("save", id + ".maze");
@@ -202,10 +202,18 @@ public class SelectedActivity extends BaseActivity implements View.OnClickListen
                                 @Override
                                 public void run() {
                                     progress.dismiss();
-                                    SimplerDialogBuilder.build("恢复存档失败，请确认存档编号正确后重试！",Resource.getString(R.string.conform), SelectedActivity.this,null);
+                                    SimplerDialogBuilder.build("恢复存档失败，请重试！",Resource.getString(R.string.conform), SelectedActivity.this,null);
                                 }
                             });
                         }
+                    }else{
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                progress.dismiss();
+                                SimplerDialogBuilder.build("恢复存档失败，请确认存档编号正确后重试！",Resource.getString(R.string.conform), SelectedActivity.this,null);
+                            }
+                        });
                     }
                 } catch (Exception e) {
                     LogHelper.logException(e, "Recover save!");

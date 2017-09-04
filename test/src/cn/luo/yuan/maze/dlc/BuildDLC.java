@@ -1,9 +1,12 @@
-package cn.luo.yuan.maze.test;
+package cn.luo.yuan.maze.dlc;
 
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Race;
+import cn.luo.yuan.maze.model.dlc.DLC;
+import cn.luo.yuan.maze.model.dlc.GoodsDLC;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
+import cn.luo.yuan.maze.model.goods.types.EmptyAccessory;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.serialize.ObjectTable;
@@ -20,9 +23,22 @@ import java.util.ArrayList;
 public class BuildDLC {
     public static File root = new File("dlc");
     public static void main(String... args) throws IOException {
-        ObjectTable<MonsterDLC> dlcTable = new ObjectTable<MonsterDLC>(MonsterDLC.class, new File("dlc"));
+        ObjectTable<DLC> dlcTable = new ObjectTable<DLC>(DLC.class, new File("dlc"));
         //buildAngel(dlcTable);
-        buildJiuwei(dlcTable);
+        //buildJiuwei(dlcTable);
+        buildEmprtyAccessory(dlcTable);
+    }
+
+    public static void buildEmprtyAccessory(ObjectTable<DLC> dlcTable) throws IOException {
+        GoodsDLC dlc = new GoodsDLC();
+        EmptyAccessory ea = new EmptyAccessory();
+        ea.setCount(1);
+        dlc.setGoods(ea);
+        dlc.setDebrisCost(500);
+        dlc.setId(ea.getName());
+        dlc.setDesc(ea.getDesc());
+        dlc.setTitle(ea.getName());
+        System.out.println(dlcTable.save(dlc));
     }
 
     private static byte[] readImage(String path) throws IOException {

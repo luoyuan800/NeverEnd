@@ -17,8 +17,9 @@ import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.exception.MountLimitException;
 import cn.luo.yuan.maze.model.*;
+import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.effect.Effect;
-import cn.luo.yuan.maze.model.gift.Gift;
+import cn.luo.yuan.maze.model.gift.*;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.GoodsProperties;
 import cn.luo.yuan.maze.model.skill.*;
@@ -91,7 +92,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
                 tag.setHint("装备描述");
                 LinearLayout ly = new LinearLayout(context);
                 ly.setOrientation(LinearLayout.VERTICAL);
-                ly.addView(tag);
+                ly.addView(title);
                 ly.addView(tag);
                 SimplerDialogBuilder.build(ly, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
                     @Override
@@ -101,7 +102,11 @@ public class NeverEnd extends Application implements InfoControlInterface {
                             accessory.setName(title.getText().toString());
                             accessory.setDesc(tag.getText().toString());
                             accessory.setType(random.randomItem(new String[]{Field.HAT_TYPE, Field.RING_TYPE, Field.ARMOR_TYPR, Field.SWORD_TYPE, Field.NECKLACE_TYPE}));
+                            accessory.setAuthor(getHero().getName());
+                            accessory.setElement(random.randomItem(Element.values()));
+                            dataManager.add(accessory);
                             dialog.dismiss();
+                            showToast("获得了%S", accessory.getDisplayName());
                         }
                     }
                 }, context, false);

@@ -183,8 +183,11 @@ public class NeverEndServlet extends HttpServlet {
                     writeMessage(response, process.uploadSaveFile(request.getInputStream(),ownerId));
                     break;
                 case DOWNLOAD_SAVE:
-                    response.setStatus(200);
-                    response.getOutputStream().write(process.downloadSaveZip(request.getHeader(Field.ITEM_ID_FIELD)));
+                    byte[] saveZip = process.downloadSaveZip(request.getHeader(Field.ITEM_ID_FIELD));
+                    if(saveZip!=null) {
+                        response.setStatus(200);
+                        response.getOutputStream().write(saveZip);
+                    }
                     break;
                 case QUERY_RANGE_AWARD:
                     RangeAward ra = process.getRangeAward(ownerId);

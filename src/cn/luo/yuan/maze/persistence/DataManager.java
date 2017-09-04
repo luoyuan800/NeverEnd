@@ -5,7 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
-import cn.luo.yuan.maze.model.*;
+import cn.luo.yuan.maze.model.Accessory;
+import cn.luo.yuan.maze.model.Element;
+import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.maze.model.Index;
+import cn.luo.yuan.maze.model.Maze;
+import cn.luo.yuan.maze.model.NeverEndConfig;
+import cn.luo.yuan.maze.model.OwnedAble;
+import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.GoodsProperties;
 import cn.luo.yuan.maze.model.skill.Skill;
@@ -108,7 +116,7 @@ public class DataManager implements DataManagerInterface {
     public List<Accessory> loadMountedAccessory(Hero hero) {
         List<Accessory> accessories = new ArrayList<>();
         for (Accessory accessory : accessoryLoader.loadAll()) {
-            if (accessory!=null && accessory.getHeroIndex() == index && accessory.isMounted()) {
+            if (accessory != null && accessory.getHeroIndex() == index && accessory.isMounted()) {
                 accessories.add(accessory);
             }
         }
@@ -119,10 +127,11 @@ public class DataManager implements DataManagerInterface {
         ContentValues values = new ContentValues();
         values.put("name", hero.getName());
         values.put("hero_index", hero.getIndex());
-        values.put("element", hero.getElement()!=null ? hero.getElement().name() : Element.NONE.name());
+        values.put("element", hero.getElement() != null ? hero.getElement().name() : Element.NONE.name());
         values.put("reincarnate", hero.getReincarnate());
         values.put("last_update", System.currentTimeMillis());
-        values.put("gift", hero.getGift().name());
+        if (hero.getGift() != null)
+            values.put("gift", hero.getGift().name());
         values.put("race", hero.getRace().name());
         if (StringUtils.isNotEmpty(hero.getId())) {
             heroLoader.update(hero);
@@ -304,7 +313,7 @@ public class DataManager implements DataManagerInterface {
         List<Accessory> accessories = accessoryLoader.loadLimit(0, 1, new Index<Accessory>() {
             @Override
             public boolean match(Accessory accessory) {
-                return accessory!=null && accessory.getName().equals(name);
+                return accessory != null && accessory.getName().equals(name);
             }
         }, null);
         if (!accessories.isEmpty()) {
@@ -343,7 +352,7 @@ public class DataManager implements DataManagerInterface {
         return accessoryLoader.loadLimit(start, row, new Index<Accessory>() {
             @Override
             public boolean match(Accessory accessory) {
-                return accessory!=null && accessory.getHeroIndex() == index && accessory.getName().contains(key);
+                return accessory != null && accessory.getHeroIndex() == index && accessory.getName().contains(key);
             }
         }, order);
     }
@@ -351,7 +360,7 @@ public class DataManager implements DataManagerInterface {
     public List<ClickSkill> loadClickSkill() {
         List<ClickSkill> clickSkills = clickSkillLoader.loadAll();
         for (ClickSkill skill : new ArrayList<>(clickSkills)) {
-            if (skill!=null && !skill.getId().endsWith("@" + index)) {
+            if (skill != null && !skill.getId().endsWith("@" + index)) {
                 clickSkills.remove(skill);
             }
         }
@@ -382,7 +391,7 @@ public class DataManager implements DataManagerInterface {
     public List<Pet> loadMountPets() {
         List<Pet> pets = new ArrayList<>();
         for (Pet pet : petLoader.loadAll()) {
-            if (pet!=null && pet.getHeroIndex() == index && pet.isMounted()) {
+            if (pet != null && pet.getHeroIndex() == index && pet.isMounted()) {
                 pets.add(pet);
             }
         }
@@ -408,7 +417,7 @@ public class DataManager implements DataManagerInterface {
 
     }
 
-    public void close(){
+    public void close() {
         e.shutdown();
         try {
             e.awaitTermination(1, TimeUnit.SECONDS);
@@ -419,12 +428,15 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void save(IDModel object) {
-        if(object instanceof OwnedAble){
+        if (object instanceof Maze) {
+            saveMaze((Maze) object);
+        }
+        if (object instanceof OwnedAble) {
             Hero hero = loadHero();
             ((OwnedAble) object).setKeeperName(hero.getName());
             ((OwnedAble) object).setKeeperId(hero.getId());
         }
-        if(object instanceof ClickSkill){
+        if (object instanceof ClickSkill) {
             saveClickSkill((ClickSkill) object);
         }
         if (object instanceof Skill) {
@@ -481,7 +493,7 @@ public class DataManager implements DataManagerInterface {
             if (StringUtils.isEmpty(config.getVersion())) {
                 config.setVersion(Resource.getVersion());
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             LogHelper.logException(e, "load config");
         }
         config.load();
@@ -505,6 +517,41 @@ public class DataManager implements DataManagerInterface {
         }
     }
 
+    public void registerTable(ObjectTable table) {
+        e.scheduleAtFixedRate(table, 100, 500, TimeUnit.SECONDS);
+        tables.add(table);
+    }
+
+    public List<File> retrieveAllSaveFile() {
+        List<File> files = new ArrayList<>();
+        List<ObjectTable> tables = new ArrayList<>(this.tables);
+        tables.remove(defenderDB);
+        for (ObjectTable table : tables) {
+            List<File> listFile = table.listFile();
+            if (listFile != null) {
+                files.addAll(listFile);
+            }
+        }
+        return files;
+    }
+
+    public void overrideCurrentSaveFile(List<Serializable> objs) {
+        clean();
+        for (Serializable obj : objs) {
+            if (obj instanceof IDModel) {
+                add((IDModel) obj);
+            }
+        }
+    }
+
+    public void cleanDefender() {
+        for (String h : heroLoader.getAllID()) {
+            if (h.matches("\\d+")) {
+                heroLoader.delete(h);
+            }
+        }
+    }
+
     @NotNull
     private String buildIdWithIndex(String name) {
         return name + "@" + index;
@@ -516,33 +563,6 @@ public class DataManager implements DataManagerInterface {
         maze.setLevel(1);
         maze.setMeetRate(99.9f);
         return maze;
-    }
-
-    public void registerTable(ObjectTable table){
-        e.scheduleAtFixedRate(table,100, 500, TimeUnit.SECONDS);
-        tables.add(table);
-    }
-
-    public List<File> retrieveAllSaveFile(){
-        List<File> files = new ArrayList<>();
-        List<ObjectTable> tables = new ArrayList<>(this.tables);
-        tables.remove(defenderDB);
-        for(ObjectTable table : tables){
-            List<File> listFile = table.listFile();
-            if(listFile!=null) {
-                files.addAll(listFile);
-            }
-        }
-        return files;
-    }
-
-    public void overrideCurrentSaveFile(List<Serializable> objs){
-        clean();
-        for(Serializable obj : objs){
-            if(obj instanceof IDModel){
-                add((IDModel) obj);
-            }
-        }
     }
 
 }

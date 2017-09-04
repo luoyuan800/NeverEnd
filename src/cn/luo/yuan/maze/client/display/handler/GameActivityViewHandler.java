@@ -287,7 +287,11 @@ public class GameActivityViewHandler extends Handler {
         @Override
         public void run() {
             ((TextView) context.findViewById(R.id.hero_name)).setText(Html.fromHtml(context.control.getHero().getDisplayName()));
-            ((TextView) context.findViewById(R.id.hero_gift)).setText(Html.fromHtml(context.control.getHero().getGift().getName()));
+            if(context.control.getHero().getGift()!=null) {
+                ((TextView) context.findViewById(R.id.hero_gift)).setText(Html.fromHtml(context.control.getHero().getGift().getName()));
+            }else{
+                ((TextView) context.findViewById(R.id.hero_gift)).setText(StringUtils.EMPTY_STRING);
+            }
         }
     };;
 
@@ -379,6 +383,9 @@ public class GameActivityViewHandler extends Handler {
     }
 
     public void addDieMessage(List<String> msgs){
+        if(msgs == null || msgs.size() == 0){
+            return ;
+        }
         try {
             String folder = String.valueOf(neverEnd.getIndex());
             List<String> list = SDFileUtils.getFilesListFromSDWithOrder(folder);
@@ -441,6 +448,7 @@ public class GameActivityViewHandler extends Handler {
                         if(!SDFileUtils.deleteFolder(String.valueOf(neverEnd.getIndex()))){
                             neverEnd.showPopup("删除文件失败，您可以手动删除SD卡neverend目录下的" + neverEnd.getIndex() + "文件夹！");
                         }
+                        refreshDieMessage();
                         dialog.dismiss();
                     }
                 },context);

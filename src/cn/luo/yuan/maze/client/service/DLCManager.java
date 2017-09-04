@@ -4,11 +4,9 @@ import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.dlc.DLC;
 import cn.luo.yuan.maze.model.dlc.DLCKey;
-import cn.luo.yuan.maze.model.dlc.EggDLC;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
 import cn.luo.yuan.maze.model.dlc.SingleItemDLC;
 import cn.luo.yuan.maze.utils.StringUtils;
-import cn.luo.yuan.maze.utils.annotation.StringValue;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
@@ -30,8 +28,9 @@ public class DLCManager {
         context.getExecutor().submit(new Runnable() {
             @Override
             public void run() {
-                MonsterDLC dlc = service.getMonsterDlcDetail(id, context);
-                saveMonsterDlc(dlc, callBack);
+                DLC dlc = service.getDlcDetail(id, context);
+                if(dlc instanceof MonsterDLC)
+                saveMonsterDlc((MonsterDLC) dlc, callBack);
             }
         });
     }
@@ -71,11 +70,11 @@ public class DLCManager {
         });
     }
 
-    public void queryMonsterDLC(final String id, final DetailCallBack callBack){
+    public void queryDLC(final String id, final DetailCallBack callBack){
         context.getExecutor().submit(new Runnable() {
             @Override
             public void run() {
-                callBack.onDetailSuccess(service.getMonsterDlcDetail(id, context));
+                callBack.onDetailSuccess(service.getDlcDetail(id, context));
             }
         });
     }

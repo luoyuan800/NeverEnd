@@ -36,12 +36,15 @@ public class SaveService {
         if (!root.exists() || !root.isDirectory()) {
             root.mkdirs();
         }
-        Collections.addAll(nameSet, new File(root,"save").list());
+        String[] saves = new File(root, "save").list();
+        if(saves!=null) {
+            Collections.addAll(nameSet, saves);
+        }
     }
 
     public byte[] getSaveFile(String id) {
         try {
-            File file = new File(SaveService.root, id);
+            File file = new File(new File(SaveService.root, "save"), id);
             if (file.exists()) {
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 FileInputStream fis = new FileInputStream(file);
@@ -61,7 +64,7 @@ public class SaveService {
     }
 
     public void delete(String id){
-        new File(SaveService.root, id).delete();
+        new File(new File(SaveService.root, "save"), id).delete();
         nameSet.remove(id);
     }
 

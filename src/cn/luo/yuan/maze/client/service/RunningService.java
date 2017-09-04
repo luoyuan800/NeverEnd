@@ -15,6 +15,7 @@ import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.NameObject;
+import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.model.skill.Skill;
@@ -118,7 +119,7 @@ public class RunningService implements RunningServiceInterface {
                         saveTime = System.currentTimeMillis();
                     }
                     maze.setStep(maze.getStep() + 1);
-                    if (random.nextLong(10000) > 9985 || random.nextLong(maze.getStep()) > 10 + random.nextLong(22) || (maze.getStep() > 6 && random.nextLong(maze.getStreaking() + 1) > 15 + maze.getLevel())) {
+                    if (random.nextLong(10000) > 9985 || random.nextLong(maze.getStep()) > 6 + random.nextLong(22) || (maze.getStep() > 4 && random.nextLong(maze.getStreaking() + 1) > 15 + maze.getLevel())) {
                         maze.setStep(0);
                         maze.setLevel(maze.getLevel() + 1);
                         Log.d("maze", "End to next level");
@@ -173,6 +174,9 @@ public class RunningService implements RunningServiceInterface {
                                 BattleMessageImp battleMessage = new BattleMessageImp(gameContext);
                                 battleService.setBattleMessage(battleMessage);
                                 long material = monster instanceof Monster ? ((Monster) monster).getMaterial() : maze.getLevel();
+                                if(hero.getHp() <= 0){
+                                    battleMessage.rowMessage(hero.getDisplayName() + "被吓傻了！");
+                                }
                                 if (hero.getHp() > 0 && battleService.battle(gameContext.getMaze().getLevel())) {
                                     Log.d("maze", "Battle win " + ((NameObject) monster).getDisplayName());
                                     maze.setStreaking(maze.getStreaking() + 1);
@@ -270,7 +274,9 @@ public class RunningService implements RunningServiceInterface {
     private Pet tryCatch(Monster monster, int petCount, long level) {
         try {
             if (gameContext.getPetMonsterHelper().isCatchAble(monster, hero, random, petCount)) {
-                dataManager.loadConfig().addMonsterCatch(monster.getIndex());
+                NeverEndConfig config = dataManager.loadConfig();
+                config.addMonsterCatch(monster.getIndex());
+                dataManager.save(config);
                 return gameContext.getPetMonsterHelper().monsterToPet(monster, hero, level);
             } else {
                 return null;

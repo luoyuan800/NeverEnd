@@ -5,23 +5,32 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
+import cn.luo.yuan.maze.Path;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.client.display.dialog.*;
 import cn.luo.yuan.maze.client.service.NeverEnd;
+import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
+import cn.luo.yuan.maze.client.utils.RestConnection;
 import cn.luo.yuan.maze.client.utils.SDFileUtils;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.service.InfoControlInterface;
+import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.HttpURLConnection;
 
 public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
     private Context context;
@@ -42,9 +51,37 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
         context.startActivity(chooser);
     }
 
+    private void installAPK(File apk) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(apk),
+                "application/vnd.android.package-archive");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//必须要加上这一句话才能保证安装完成后不会跳出到主界面
+        context.startActivity(intent);
+    }
+
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.update:
+                control.getExecutor().submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        final String version = Resource.getVersion();
+                        final RestConnection server = new RestConnection(Field.SERVER_URL, version,Resource.getSingInfo());
+                        try {
+                            HttpURLConnection con = server.getHttpURLConnection(Path.GET_RELEASE_NOTE, RestConnection.GET);
+                            final String rn = server.connect(con).toString();
+                            con = server.getHttpURLConnection(Path.GET_CURRENT_VERSION, RestConnection.GET);
+                            final String cv = server.connect(con).toString();
+
+                            showReleaseNote(version, server, rn, cv);
+                        } catch (Exception e) {
+                            LogHelper.logException(e, "Query Version");
+                        }
+                    }
+                });
+
+                break;
             case R.id.backup:
                 SimplerDialogBuilder.build("备份存档到服务器上需要消耗" + Data.UPLOAD_SAVE_DEBRIS + "个碎片。备份成功后你可以在其他手机上恢复你的存档。", Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
                     @Override
@@ -61,10 +98,11 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                                         @Override
                                         public void run() {
                                             progress.dismiss();
-                                            SimplerDialogBuilder.build("请牢记你的备份编号： " + name, "备份成功", Resource.getString(R.string.conform), context, control.getRandom());
+                                            SimplerDialogBuilder.build("请牢记你的备份编号： " + name, "备份成功", Resource.getString(R.string.conform), null, context, control.getRandom());
                                         }
                                     });
                                 }else{
+                                    progress.dismiss();
                                     control.showPopup("备份失败，确认你有足够的碎片后重试！");
                                 }
                             }
@@ -292,6 +330,44 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 dialog.show();
         }
         return false;
+    }
+
+    public void showReleaseNote(final String version, final RestConnection server, final String rn, final String cv) {
+        control.getViewHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                String msg = "";
+                if(cv.equals(version)){
+                    msg = "当前已经是最新版本了<br>" + rn;
+                }else{
+                    msg = "需要更新到： " + cv + "<br>" + rn;
+                }
+                SimplerDialogBuilder.build(msg, "当前版本" + version, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        final ProgressDialog progressDialog = new ProgressDialog(context);
+                        progressDialog.setMessage("下载中");
+                        progressDialog.show();
+                        control.getExecutor().submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                HttpURLConnection con = null;
+                                try {
+                                    con = server.getHttpURLConnection(Path.DOWNLOAD_APK, RestConnection.POST);
+                                    con.connect();
+                                    installAPK(SDFileUtils.saveFileIntoSD(con.getInputStream(), "update", cv + "apk"));
+                                    dialog.dismiss();
+                                } catch (IOException e) {
+                                    LogHelper.logException(e, "Download apk");
+                                }
+                            }
+                        });
+
+                    }
+                }, context, null);
+            }
+        });
     }
 
     private void showPayDialog() {

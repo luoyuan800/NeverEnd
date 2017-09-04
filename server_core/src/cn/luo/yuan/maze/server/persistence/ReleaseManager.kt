@@ -21,9 +21,9 @@ class ReleaseManager(private val database: DatabaseConnection, private val apkFo
         try {
             connection = database.getConnection()
             statement = connection.createStatement()
-            statement.execute("create table IF NOT EXISTS release(releasenotes text NOT NULL, " +
-                    "version int(10), download int(10), " +
-                    "primary key (version))")
+            statement.execute("create table IF NOT EXISTS `release`(releasenotes text NOT NULL, " +
+                    "`version` int(10), download int(10), " +
+                    "primary key (`version`))")
         } catch (e: Exception) {
             LogHelper.error(e)
         } finally {
@@ -37,7 +37,7 @@ class ReleaseManager(private val database: DatabaseConnection, private val apkFo
         try {
             var rn = StringUtils.EMPTY_STRING
             val sta = con.createStatement()
-            val rs = sta.executeQuery("select releasenotes from release")
+            val rs = sta.executeQuery("select releasenotes from `release`")
             if (rs.next()) {
                 rn = rs.getString(1)
             }
