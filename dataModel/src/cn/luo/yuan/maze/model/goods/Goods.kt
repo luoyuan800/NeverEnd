@@ -11,7 +11,7 @@ import java.io.Serializable
 /**
  * Created by gluo on 5/5/2017.
  */
-abstract class Goods : Serializable, IDModel, OwnedAble, Cloneable {
+abstract class Goods : Serializable, IDModel, OwnedAble,Cloneable {
     companion object {
         private const val serialVersionUID: Long = Field.SERVER_VERSION
     }

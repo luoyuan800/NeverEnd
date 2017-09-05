@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <LinearLayout
+            android:id="@+id/targer_layout"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true">
+
+        <ImageView
+                android:src="@drawable/jlh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/real_battle_targer_img"/>
+
+        <TextView
+                android:text="可恶的敌人"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/real_battle_targer_name"
+                android:textAlignment="center"
+                android:gravity="center_horizontal"/>
+
+        <TextView
+                android:text="黄金1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/real_battle_target_leve"
+                android:gravity="center_horizontal"/>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal">
+
+            <TextView
+                    android:text="10W"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/real_battle_target_hp"
+                    />
+
+            <TextView
+                    android:text="\"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView11"
+                    />
+
+            <TextView
+                    android:text="100W"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/real_battle_targer_maxhp"
+                    />
+        </LinearLayout>
+    </LinearLayout>
+
+    <cn.luo.yuan.maze.client.display.view.RollTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@id/targer_layout"
+            android:layout_toStartOf="@id/targer_layout"
+            android:id="@+id/real_battle_info"/>
+
+</RelativeLayout>
