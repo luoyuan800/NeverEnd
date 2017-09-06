@@ -29,7 +29,7 @@
                 android:text="黄金1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/real_battle_target_leve"
+                android:id="@+id/real_battle_target_level"
                 android:gravity="center_horizontal"/>
 
         <LinearLayout
@@ -67,5 +67,157 @@
             android:layout_alignBottom="@id/targer_layout"
             android:layout_toStartOf="@id/targer_layout"
             android:id="@+id/real_battle_info"/>
+
+    <TextView
+            android:text="10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/targer_layout"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/real_battle_timer"
+            android:gravity="center_horizontal"
+            android:textSize="34sp"
+            android:typeface="serif"
+            android:fontFamily="casual"
+            android:lineSpacingExtra="10sp"
+            android:textColor="@color/dialog_bg"/>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/real_battle_timer"
+            android:layout_alignParentStart="true"
+            android:gravity="center_horizontal"
+            android:id="@+id/my_layout">
+
+        <ImageView
+                android:src="@drawable/boyee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/real_battle_my_img"/>
+
+        <TextView
+                android:text="我的名字"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/real_battle_my_name"
+                android:gravity="center_horizontal"/>
+
+        <TextView
+                android:text="黄金2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/real_battle_my_level"
+                android:gravity="center_horizontal"/>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal">
+
+            <TextView
+                    android:text="100W"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/real_battle_my_hp"
+                    />
+
+            <TextView
+                    android:text="\"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView12"
+                    />
+
+            <TextView
+                    android:text="200W"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/real_battle_my_maxhp"
+                    />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/real_battle_timer"
+            android:layout_toEndOf="@+id/real_battle_info"
+            android:layout_alignBottom="@+id/my_layout"
+            android:gravity="bottom"
+            android:id="@+id/action_layout">
+
+        <TextView
+                android:text="100"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/real_battle_my_point"
+                android:gravity="center_horizontal"/>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <Button
+                    android:text="攻击"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button3"
+                    android:layout_weight="1"
+                    style="@android:style/Widget.Button.Inset"/>
+
+            <Button
+                    android:text="技能"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button"
+                    android:layout_weight="1"
+                    style="@android:style/Widget.Button.Inset"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <Button
+                    android:text="防御"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button5"
+                    android:layout_weight="1"
+                    style="@android:style/Widget.Button.Inset"/>
+
+            <Button
+                    android:text="物品"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button4"
+                    android:layout_weight="1"
+                    style="@android:style/Widget.Button.Inset"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+            android:src="@drawable/evo_an"
+            android:layout_width="80sp"
+            android:layout_height="80sp"
+            android:id="@+id/real_battle_target_pet"
+            android:layout_toEndOf="@+id/my_layout"
+            android:layout_above="@+id/real_battle_timer"/>
+
+    <ImageView
+            android:src="@drawable/evo_cao"
+            android:layout_width="80sp"
+            android:layout_height="80sp"
+            android:layout_below="@+id/real_battle_info"
+            android:layout_alignParentStart="true"
+            android:id="@+id/real_battle_my_pet"/>
 
 </RelativeLayout>
