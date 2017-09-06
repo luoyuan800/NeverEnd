@@ -1,5 +1,9 @@
 package cn.luo.yuan.maze.model;
 
+import cn.luo.yuan.maze.model.skill.AtkSkill;
+import cn.luo.yuan.maze.model.skill.DefSkill;
+import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.model.skill.UpgradeAble;
 import cn.luo.yuan.maze.utils.Random;
 
 /**
@@ -84,5 +88,19 @@ public class Data {
                 break;
         }
         return colorReduce;
+    }
+
+    public static int getSkillActionPoint(Skill skill){
+        Float rate  = 0F;
+        if(skill instanceof AtkSkill){
+            rate = 100 - ((AtkSkill) skill).getRate();
+        }else if(skill instanceof DefSkill){
+            rate = 100 -((DefSkill) skill).getRate();
+        }
+        Integer level = 1;
+        if(skill instanceof UpgradeAble){
+            level = (int)((UpgradeAble) skill).getLevel();
+        }
+        return rate.intValue() * level;
     }
 }

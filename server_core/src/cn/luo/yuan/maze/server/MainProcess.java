@@ -422,7 +422,11 @@ public class MainProcess {
                 for (String id : new ArrayList<String>(heroTable.getAllHeroIds())) {
                     ServerRecord record = heroTable.getRecord(id);
                     if (record != null) {
-                        record.setAward(true);
+                        if(record.getRange() < Integer.MAX_VALUE) {
+                            record.setAward(true);
+                        }else{
+                            record.setAward(false);
+                        }
                     }
                 }
             }

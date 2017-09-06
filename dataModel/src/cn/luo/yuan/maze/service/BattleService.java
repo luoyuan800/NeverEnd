@@ -231,58 +231,65 @@ public class BattleService {
             }
         }
         if (skill != null) {
-            if (atk) {
-                if (defender instanceof SilentAbleObject) {
-                    boolean silent = random.nextInt(100) + random.nextFloat() < ((SilentAbleObject) defender).getSilent();
-                    if (silent) {
-                        battleMessage.silent((SkillAbleObject) atker, defender, skill);
-                        return true;
-                    }
-                }
-            }else {
-                if (atker instanceof SilentAbleObject) {
-                    boolean silent = random.nextInt(100) + random.nextFloat() < ((SilentAbleObject) atker).getSilent();
-                    if (silent) {
-                        battleMessage.silent((SkillAbleObject) defender, atker, skill);
-                        return false;
-                    }
-                }
-            }
-            SkillResult result = skill.invoke(skillPara);
-            if (atk) {
-                battleMessage.releaseSkill(atker, skill);
-            } else {
-                battleMessage.releaseSkill(defender, skill);
-            }
-            if (result instanceof HasMessageResult) {
-                for (String msg : result.getMessages()) {
-                    battleMessage.rowMessage(msg);
-                }
-            }
-            if (result instanceof DoNoThingResult) {
-                return false;
-            }
-            if (result instanceof EndBattleResult) {
-                return true;
-            }
-            if (result instanceof SkipThisTurn) {
-                return true;
-            }
-            if (result instanceof HarmResult) {
-                if (atker instanceof NameObject && defender instanceof NameObject) {
-                    if (((HarmResult) result).isBack()) {
-                        ((HarmAble) atker).setHp(((HarmAble) atker).getHp() - ((HarmResult) result).getHarm());
-                        battleMessage.harm((NameObject) defender, (NameObject) atker, ((HarmResult) result).getHarm());
-                    } else {
-                        defender.setHp(defender.getHp() - ((HarmResult) result).getHarm());
-                        battleMessage.harm((NameObject) atker, (NameObject) defender, ((HarmResult) result).getHarm());
-                    }
-                }
-            }
-            return true;
+            return releaseSkill(atker, defender, random, atk, skill, level);
         }
 
         return false;
+    }
+
+    public boolean releaseSkill(HarmAble atker, HarmAble defender, Random random, boolean atk, Skill skill, long level) {
+        SkillParameter skillPara;
+        if (atk) {
+            skillPara = getSkillParameter((SkillAbleObject) atker, (HarmAble) atker, defender, random, level);
+            if (defender instanceof SilentAbleObject) {
+                boolean silent = random.nextInt(100) + random.nextFloat() < ((SilentAbleObject) defender).getSilent();
+                if (silent) {
+                    battleMessage.silent((SkillAbleObject) atker, defender, skill);
+                    return true;
+                }
+            }
+        }else {
+            skillPara = getSkillParameter((SkillAbleObject) defender, atker, (HarmAble) defender, random, level);
+            if (atker instanceof SilentAbleObject) {
+                boolean silent = random.nextInt(100) + random.nextFloat() < ((SilentAbleObject) atker).getSilent();
+                if (silent) {
+                    battleMessage.silent((SkillAbleObject) defender, atker, skill);
+                    return false;
+                }
+            }
+        }
+        SkillResult result = skill.invoke(skillPara);
+        if (atk) {
+            battleMessage.releaseSkill(atker, skill);
+        } else {
+            battleMessage.releaseSkill(defender, skill);
+        }
+        if (result instanceof HasMessageResult) {
+            for (String msg : result.getMessages()) {
+                battleMessage.rowMessage(msg);
+            }
+        }
+        if (result instanceof DoNoThingResult) {
+            return false;
+        }
+        if (result instanceof EndBattleResult) {
+            return true;
+        }
+        if (result instanceof SkipThisTurn) {
+            return true;
+        }
+        if (result instanceof HarmResult) {
+            if (atker instanceof NameObject && defender instanceof NameObject) {
+                if (((HarmResult) result).isBack()) {
+                    atker.setHp(atker.getHp() - ((HarmResult) result).getHarm());
+                    battleMessage.harm((NameObject) defender, (NameObject) atker, ((HarmResult) result).getHarm());
+                } else {
+                    defender.setHp(defender.getHp() - ((HarmResult) result).getHarm());
+                    battleMessage.harm((NameObject) atker, (NameObject) defender, ((HarmResult) result).getHarm());
+                }
+            }
+        }
+        return true;
     }
 
     private SkillParameter getSkillParameter(SkillAbleObject owner, HarmAble atker, HarmAble defender, Random random, long level) {

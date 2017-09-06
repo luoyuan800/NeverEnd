@@ -65,6 +65,8 @@ class ServerRecord : IDModel, Serializable, MessageReceiver {
         return field
     }
 
+    var updateTime = 0L
+
     var award = false
 
     override fun getId(): String? {

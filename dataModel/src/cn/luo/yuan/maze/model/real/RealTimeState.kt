@@ -13,4 +13,6 @@ class RealTimeState {
     var waiter:HarmAble?=null
     var action:RealTimeAction?=null
     val msg = mutableListOf<String>()
+    var actionerPoint = 0
+    var waiterPoint = 0
 }
