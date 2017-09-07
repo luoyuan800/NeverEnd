@@ -4,7 +4,6 @@ package cn.luo.yuan.maze.serialize;
 import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.model.Index;
 import cn.luo.yuan.maze.utils.StringUtils;
-import com.sun.xml.internal.bind.v2.model.core.ID;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,7 +49,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         File entry = buildFile(id);
         entry.setWritable(true);
         if (entry.exists()) {
-            return update(object, id);
+            return update(object, id, true);
         } else {
             if(object instanceof IDModel){
                 ((IDModel) object).setId(id);
@@ -61,13 +60,15 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         return id;
     }
 
-    public synchronized String update(T object, String id) throws IOException {
+    public synchronized String update(T object, String id, boolean addToCache) throws IOException {
         File file = buildFile(id);
         if (file.exists()) {
             file.delete();
         }
         saveObject(object, file);
-        cache.put(id, new SoftReference<T>(object, queue));
+        if(addToCache) {
+            cache.put(id, new SoftReference<T>(object, queue));
+        }
         return id;
     }
 
@@ -144,7 +145,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
                 T t = ref.get();
                 if (t != null) {
                     if (t instanceof IDModel && !((IDModel) t).isDelete()) {
-                        update(t, ((IDModel) t).getId());
+                        update(t, ((IDModel) t).getId(), true);
                     }
                 }
             }
@@ -156,18 +157,19 @@ public class ObjectTable<T extends Serializable> implements Runnable {
     }
 
     @Override
-    public void run() {
-        Reference<? extends T> poll = queue.poll();
-        if(poll!=null) {
-            T t = poll.get();
-            if (t != null) {
-                if (t instanceof IDModel)
-                    try {
-                        update(t, ((IDModel) t).getId());
-                    } catch (IOException e) {
-                        //DO nothing
+    public synchronized void run() {
+        try {
+            Reference<? extends T> poll = queue.poll();
+            if (poll != null) {
+                for (String id : cache.keySet()) {
+                    SoftReference<T> reference = cache.get(id);
+                    if (reference == null || reference.get() == null) {
+                        cache.remove(id);
                     }
+                }
             }
+        }catch (Exception e){
+            //Do nothing
         }
     }
 
@@ -243,6 +245,9 @@ public class ObjectTable<T extends Serializable> implements Runnable {
     }
 
     private synchronized void saveObject(T object, File entry) throws IOException {
+        if(object instanceof IDModel && ((IDModel) object).isDelete()){
+            return;
+        }
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(entry))) {
             oos.writeObject(object);
             oos.flush();

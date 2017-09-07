@@ -518,7 +518,7 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void registerTable(ObjectTable table) {
-        e.scheduleAtFixedRate(table, 100, 500, TimeUnit.SECONDS);
+        e.scheduleAtFixedRate(table, 10, 50, TimeUnit.SECONDS);
         tables.add(table);
     }
 
