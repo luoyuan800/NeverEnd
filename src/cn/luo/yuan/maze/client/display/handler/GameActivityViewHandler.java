@@ -174,48 +174,39 @@ public class GameActivityViewHandler extends Handler {
         @Override
         public void run() {
             //Hero properties
-            setText((TextView) context.findViewById(R.id.hero_level), StringUtils.formatNumber(context.control.getMaze().getLevel(), true));
-            setText((TextView) context.findViewById(R.id.hero_level_max), StringUtils.formatNumber(context.control.getMaze().getMaxLevel(), false));
-            setText((TextView) context.findViewById(R.id.hero_mate),StringUtils.formatNumber(context.control.getHero().getMaterial(), false));
-            setText((TextView) context.findViewById(R.id.hero_point),StringUtils.formatNumber(context.control.getHero().getPoint(), false));
-            setText((TextView) context.findViewById(R.id.hero_click),StringUtils.formatNumber(context.control.getHero().getClick(), false));
-            setText((TextView) context.findViewById(R.id.hero_streaking),StringUtils.formatNumber(context.control.getMaze().getStreaking(), false));
-            setText((TextView) context.findViewById(R.id.hero_hp),StringUtils.formatNumber(context.control.getHero().getCurrentHp(), false));
-            setText((TextView) context.findViewById(R.id.hero_max_hp),StringUtils.formatNumber(context.control.getHero().getMaxHp(), false));
+            ViewHandler.setText((TextView) context.findViewById(R.id.hero_level), StringUtils.formatNumber(context.control.getMaze().getLevel(), true));
+            ViewHandler.setText((TextView) context.findViewById(R.id.hero_level_max), StringUtils.formatNumber(context.control.getMaze().getMaxLevel(), false));
+            ViewHandler.setText((TextView) context.findViewById(R.id.hero_mate),StringUtils.formatNumber(context.control.getHero().getMaterial(), false));
+            ViewHandler.setText((TextView) context.findViewById(R.id.hero_point),StringUtils.formatNumber(context.control.getHero().getPoint(), false));
+            ViewHandler.setText((TextView) context.findViewById(R.id.hero_click),StringUtils.formatNumber(context.control.getHero().getClick(), false));
+            ViewHandler.setText((TextView) context.findViewById(R.id.hero_streaking),StringUtils.formatNumber(context.control.getMaze().getStreaking(), false));
+            ViewHandler.setText((TextView) context.findViewById(R.id.hero_hp),StringUtils.formatNumber(context.control.getHero().getCurrentHp(), false));
+            ViewHandler.setText((TextView) context.findViewById(R.id.hero_max_hp),StringUtils.formatNumber(context.control.getHero().getMaxHp(), false));
             TextView additionHp = (TextView) context.findViewById(R.id.hero_addition_hp);
             long additionHpValue = context.control.getHero().getAdditionHp();
             setNumberText(additionHp, additionHpValue);
-            setText((TextView) context.findViewById(R.id.hero_atk),StringUtils.formatNumber(context.control.getHero().getAtk(), false));
+            ViewHandler.setText((TextView) context.findViewById(R.id.hero_atk),StringUtils.formatNumber(context.control.getHero().getAtk(), false));
             setNumberText((TextView) context.findViewById(R.id.hero_atk_addition), context.control.getHero().getAdditionAtk());
-            setText((TextView) context.findViewById(R.id.hero_def),StringUtils.formatNumber(context.control.getHero().getDef(), false));
+            ViewHandler.setText((TextView) context.findViewById(R.id.hero_def),StringUtils.formatNumber(context.control.getHero().getDef(), false));
             setNumberText((TextView) context.findViewById(R.id.hero_def_addition),context.control.getHero().getAdditionDef());
             View view = context.findViewById(R.id.monster_view);
             if(view.getVisibility() == View.VISIBLE){
-                setText((TextView) view.findViewById(R.id.local_monster_percent), neverEnd.getPetMonsterHelper().getLocalCatchPercent());
-                setText((TextView) view.findViewById(R.id.global_monster_percent), neverEnd.getPetMonsterHelper().getGlobalCatchPercent());
+                ViewHandler.setText((TextView) view.findViewById(R.id.local_monster_percent), neverEnd.getPetMonsterHelper().getLocalCatchPercent());
+                ViewHandler.setText((TextView) view.findViewById(R.id.global_monster_percent), neverEnd.getPetMonsterHelper().getGlobalCatchPercent());
             }
         }
     };
 
     private void setNumberText(TextView textView, long value) {
         if(value >= 0) {
-            setText(textView, " + " + StringUtils.formatNumber(value, false));
+            ViewHandler.setText(textView, " + " + StringUtils.formatNumber(value, false));
             textView.setTextColor(Color.BLUE);
         }else{
-            setText(textView, " - " + StringUtils.formatNumber(value, false));
+            ViewHandler.setText(textView, " - " + StringUtils.formatNumber(value, false));
             textView.setTextColor(context.getResources().getColor(R.color.mobvista_reward_green));
         }
     }
 
-    private void setText(TextView view, String text){
-        if(text==null){
-            text = StringUtils.EMPTY_STRING;
-        }
-        if(!text.equals(view.getTag(R.string.item))){
-            view.setTag(R.string.item, text);
-            view.setText(text);
-        }
-    }
     private Runnable refreshPetTask = new Runnable() {
         @Override
         public void run() {

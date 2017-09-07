@@ -15,4 +15,11 @@ class RealTimeState {
     val msg = mutableListOf<String>()
     var actionerPoint = 0
     var waiterPoint = 0
+    var actionerLevel = 0L
+    var waiterLevel = 0L
+    var actionerPetIndex = 0
+    var waiterPetIndex = 0
+    var actionerHead = ""
+    var waiterHead = ""
+    var remainTime = 10
 }

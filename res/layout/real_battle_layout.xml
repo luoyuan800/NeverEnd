@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -152,6 +153,20 @@
             android:id="@+id/action_layout">
 
         <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/action_tip"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.DialogWindowTitle"/>
+
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/detail_action_scroll">
+
+        </ScrollView>
+
+        <TextView
                 android:text="100"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -167,7 +182,7 @@
                     android:text="攻击"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/button3"
+                    android:id="@+id/real_battle_atk_action"
                     android:layout_weight="1"
                     style="@android:style/Widget.Button.Inset"/>
 
@@ -175,7 +190,7 @@
                     android:text="技能"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/button"
+                    android:id="@+id/real_battle_skill_action"
                     android:layout_weight="1"
                     style="@android:style/Widget.Button.Inset"/>
         </LinearLayout>
@@ -189,7 +204,7 @@
                     android:text="防御"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/button5"
+                    android:id="@+id/real_battle_defend_action"
                     android:layout_weight="1"
                     style="@android:style/Widget.Button.Inset"/>
 
@@ -197,7 +212,7 @@
                     android:text="物品"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/button4"
+                    android:id="@+id/real_battle_goods_action"
                     android:layout_weight="1"
                     style="@android:style/Widget.Button.Inset"/>
         </LinearLayout>
@@ -219,5 +234,22 @@
             android:layout_below="@+id/real_battle_info"
             android:layout_alignParentStart="true"
             android:id="@+id/real_battle_my_pet"/>
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/real_battle_info"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="8dp"
+            android:id="@+id/start_text"
+            android:layout_alignParentEnd="true"
+            tools:text="开始！"
+            android:typeface="monospace"
+            android:fontFamily="cursive"
+            android:textSize="64sp"
+            android:textStyle="normal|bold"
+            android:textColor="@color/dialog_bg"
+            android:gravity="center"/>
 
 </RelativeLayout>

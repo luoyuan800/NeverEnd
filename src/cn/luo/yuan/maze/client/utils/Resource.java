@@ -301,4 +301,26 @@ public class Resource {
         }
     }
 
+    public static Drawable loadMonsterImage(int id) {
+        String ids = String.valueOf(id);
+        return loadMonsterImage(ids);
+    }
+
+    public static Drawable loadMonsterImage(String id) {
+        Drawable drawable = Resource.loadImageFromAssets("monster/" + id, false);
+        if (drawable == null) {
+            drawable = Resource.loadImageFromAssets("monster/" + id + ".jpg", false);
+        }
+        if (drawable == null) {
+            drawable = Resource.loadImageFromAssets("monster/" + id + ".png", false);
+        }
+        if(drawable == null){
+            drawable = Resource.loadImageFromAppFolder(id, false);
+        }
+        if (drawable == null) {
+            drawable = Resource.loadImageFromAssets("monster/wenhao.jpg", false);
+        }
+        return drawable;
+    }
+
 }

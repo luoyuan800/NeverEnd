@@ -80,8 +80,7 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
     }
 
     public static Drawable loadMonsterImage(int id) {
-        String ids = String.valueOf(id);
-        return loadMonsterImage(ids);
+        return Resource.loadMonsterImage(id);
     }
 
     public  boolean isCatchAble(Monster monster, Hero hero, Random random, int petCount) {
