@@ -218,6 +218,7 @@ public class Accessory implements Serializable, IDModel, NameObject, OwnedAble, 
     public Accessory clone() {
         try {
             Accessory a = (Accessory) super.clone();
+            a.level = new EncodeLong(a.getLevel());
             List<Effect> effects = new ArrayList<>(a.getEffects());
             a.getEffects().clear();
             for (Effect e : effects) {

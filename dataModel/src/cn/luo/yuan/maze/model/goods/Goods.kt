@@ -4,6 +4,7 @@ import cn.luo.yuan.maze.model.IDModel
 import cn.luo.yuan.maze.model.OwnedAble
 import cn.luo.yuan.maze.model.Parameter
 import cn.luo.yuan.maze.utils.EncodeInteger
+import cn.luo.yuan.maze.utils.EncodeLong
 import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.StringUtils
 import java.io.Serializable
@@ -103,8 +104,10 @@ abstract class Goods : Serializable, IDModel, OwnedAble,Cloneable {
         return false
     }
 
-    override fun clone(): Any {
-        return super.clone()
+    override fun clone(): Goods {
+        val clone = super.clone() as Goods
+        clone.count = EncodeInteger(getCount().toLong())
+        return clone
     }
 
     override fun toString(): String {

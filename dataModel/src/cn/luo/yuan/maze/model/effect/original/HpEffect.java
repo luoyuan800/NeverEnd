@@ -11,7 +11,6 @@ import cn.luo.yuan.maze.utils.StringUtils;
 public class HpEffect extends LongValueEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private String tag;
-    private long hp;
     private boolean enable = false;
     private boolean elementControl;
 
@@ -26,21 +25,11 @@ public class HpEffect extends LongValueEffect {
     }
 
     public long getHp() {
-        return hp;
+        return getValue();
     }
 
     public void setHp(long hp) {
-        this.hp = hp;
-    }
-
-    @Override
-    public Long getValue() {
-        return getHp();
-    }
-
-    @Override
-    public void setValue(long value) {
-        setHp(value);
+        setValue(hp);
     }
 
     @Override

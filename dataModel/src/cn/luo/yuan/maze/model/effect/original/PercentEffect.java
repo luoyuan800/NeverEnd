@@ -13,7 +13,6 @@ import cn.luo.yuan.maze.utils.MathUtils;
 public abstract class PercentEffect extends FloatValueEffect {
     private boolean enable;
     private boolean elementControl;
-    private EncodeFloat percent = new EncodeFloat(0f);
     private String tag;
 
     public String getTag() {
@@ -34,9 +33,6 @@ public abstract class PercentEffect extends FloatValueEffect {
         this.enable = enable;
     }
 
-    public Float getValue() {
-        return percent.getValue();
-    }
 
     @Override
     public boolean isElementControl() {
@@ -49,19 +45,15 @@ public abstract class PercentEffect extends FloatValueEffect {
     }
 
     public void setPercent(float percent) {
-        this.percent.setValue( percent);
+        this.setValue( percent);
     }
 
     public long getAdditionValue(long value) {
-        return (long) ((double) value * (percent.getValue() / 100d));
+        return (long) ((double) value * (getValue() / 100d));
     }
 
     public long getReduceValue(long value) {
-        return MathUtils.getPercentAdditionReduceValue(value, percent.getValue());
+        return MathUtils.getPercentAdditionReduceValue(value, getValue());
     }
 
-    @Override
-    public void setValue(float value) {
-        setPercent(value);
-    }
 }

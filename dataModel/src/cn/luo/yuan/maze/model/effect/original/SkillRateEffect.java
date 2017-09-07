@@ -12,7 +12,6 @@ import cn.luo.yuan.maze.utils.StringUtils;
 public class SkillRateEffect extends FloatValueEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private String tag;
-    private EncodeFloat skillRate = new EncodeFloat(0f);
     private boolean enable = false;
 
     private boolean elementControl;
@@ -27,22 +26,12 @@ public class SkillRateEffect extends FloatValueEffect {
         this.elementControl = elementControl;
     }
 
-    @Override
-    public Float getValue() {
-        return getSkillRate();
-    }
-
-    @Override
-    public void setValue(float value) {
-        setSkillRate(value);
-    }
-
     public float getSkillRate() {
-        return skillRate.getValue();
+        return getValue();
     }
 
     public void setSkillRate(float skillRate) {
-        this.skillRate.setValue(skillRate);
+        setValue(skillRate);
     }
 
     @Override

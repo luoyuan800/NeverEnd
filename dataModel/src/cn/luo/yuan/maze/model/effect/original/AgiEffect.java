@@ -10,7 +10,6 @@ import cn.luo.yuan.maze.utils.StringUtils;
 public class AgiEffect extends LongValueEffect{
     private String tag;
     private static final long serialVersionUID = Field.SERVER_VERSION;
-    private long agi;
     private boolean enable = false;
 
     private boolean elementControl;
@@ -24,21 +23,11 @@ public class AgiEffect extends LongValueEffect{
         this.elementControl = elementControl;
     }
     public long getAgi() {
-        return agi;
+        return getValue();
     }
 
     public void setAgi(long agi) {
-        this.agi = agi;
-    }
-
-    @Override
-    public Long getValue() {
-        return getAgi();
-    }
-
-    @Override
-    public void setValue(long value) {
-        setAgi(value);
+        setValue(agi);
     }
 
     @Override

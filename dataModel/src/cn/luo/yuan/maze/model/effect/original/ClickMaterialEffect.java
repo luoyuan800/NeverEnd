@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.model.effect.original;
 
+import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.LongValueEffect;
 import cn.luo.yuan.maze.utils.EncodeFloat;
 import cn.luo.yuan.maze.utils.EncodeLong;
@@ -12,7 +13,6 @@ import cn.luo.yuan.maze.utils.StringUtils;
 public class ClickMaterialEffect extends LongValueEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private String tag;
-    private EncodeLong material = new EncodeLong(0L);
 
     private boolean enable = false;
 
@@ -29,16 +29,6 @@ public class ClickMaterialEffect extends LongValueEffect {
     }
 
     @Override
-    public Long getValue() {
-        return material.getValue();
-    }
-
-    @Override
-    public void setValue(long value) {
-        this.material.setValue(value);
-    }
-
-    @Override
     public boolean isElementControl() {
         return elementControl;
     }
@@ -50,7 +40,7 @@ public class ClickMaterialEffect extends LongValueEffect {
 
     @Override
     public String toString() {
-        return "点击锻造奖励：" + StringUtils.formatNumber(material.getValue(), false);
+        return "点击锻造奖励：" + StringUtils.formatNumber(getValue(), false);
     }
 
     @Override
@@ -62,4 +52,5 @@ public class ClickMaterialEffect extends LongValueEffect {
     public void setTag(String tag) {
         this.tag = tag;
     }
+
 }

@@ -11,7 +11,6 @@ import cn.luo.yuan.maze.utils.StringUtils;
 public class AtkEffect extends LongValueEffect {
     private String tag;
     private static final long serialVersionUID = Field.SERVER_VERSION;
-    private long atk;
     private boolean enable = false;
 
     private boolean elementControl;
@@ -25,21 +24,11 @@ public class AtkEffect extends LongValueEffect {
         this.elementControl = elementControl;
     }
     public long getAtk() {
-        return atk;
+        return getValue();
     }
 
     public void setAtk(long atk) {
-        this.atk = atk;
-    }
-
-    @Override
-    public Long getValue() {
-        return getAtk();
-    }
-
-    @Override
-    public void setValue(long value) {
-        setAtk(value);
+        setValue(atk);
     }
 
     @Override

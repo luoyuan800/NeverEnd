@@ -9,14 +9,9 @@ import cn.luo.yuan.maze.utils.StringUtils;
  * Created by luoyuan on 2017/7/22.
  */
 public class DogeRateEffect extends FloatValueEffect {
-    private EncodeFloat doge = new EncodeFloat(0f);
     private boolean enable;
     private String tag;
     private boolean element;
-    @Override
-    public void setValue(float value) {
-        this.doge.setValue( value);
-    }
 
     @Override
     public boolean isEnable() {
@@ -36,11 +31,6 @@ public class DogeRateEffect extends FloatValueEffect {
     @Override
     public void setEnable(boolean enable) {
         this.enable = enable;
-    }
-
-    @Override
-    public Float getValue() {
-        return doge.getValue();
     }
 
     @Override

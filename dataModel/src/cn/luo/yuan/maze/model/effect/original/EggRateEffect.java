@@ -11,7 +11,6 @@ import cn.luo.yuan.maze.utils.Field;
 public class EggRateEffect extends FloatValueEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private String tag;
-    private EncodeFloat eggRate = new EncodeFloat(0f);
     private boolean enable = false;
 
     private boolean elementControl;
@@ -28,16 +27,6 @@ public class EggRateEffect extends FloatValueEffect {
 
 
     @Override
-    public Float getValue() {
-        return getEggRate();
-    }
-
-    @Override
-    public void setValue(float value) {
-        setEggRate(value);
-    }
-
-    @Override
     public boolean isElementControl() {
         return elementControl;
     }
@@ -48,15 +37,15 @@ public class EggRateEffect extends FloatValueEffect {
     }
 
     public float getEggRate() {
-        return eggRate.getValue();
+        return getValue();
     }
 
     public void setEggRate(float eggRate) {
-        this.eggRate.setValue(eggRate);
+        this.setValue(eggRate);
     }
 
     public String toString() {
-        return "增加生蛋率：" + eggRate;
+        return "增加生蛋率：" + getEggRate();
     }
 
     @Override

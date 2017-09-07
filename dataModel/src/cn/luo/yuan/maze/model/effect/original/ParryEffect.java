@@ -12,11 +12,10 @@ public class ParryEffect extends FloatValueEffect {
     private boolean enable;
     private String tag;
     private boolean elementControl;
-    private EncodeFloat parry = new EncodeFloat(0f);
 
     @Override
     public String toString() {
-        return "增加格挡：" + StringUtils.formatNumber(parry.getValue());
+        return "增加格挡：" + StringUtils.formatNumber(getValue());
     }
 
     @Override
@@ -46,16 +45,5 @@ public class ParryEffect extends FloatValueEffect {
     public void setTag(String tag) {
         this.tag = tag;
     }
-
-    @Override
-    public void setValue(float value) {
-        this.parry.setValue(value);
-    }
-
-    @Override
-    public Float getValue() {
-        return this.parry.getValue();
-    }
-
 
 }

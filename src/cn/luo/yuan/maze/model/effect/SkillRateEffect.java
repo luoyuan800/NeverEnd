@@ -18,7 +18,4 @@ public class SkillRateEffect extends cn.luo.yuan.maze.model.effect.original.Skil
         effect.setSkillRate(getSkillRate());
         return effect;
     }
-    public Effect clone(){
-        return (Effect) super.clone();
-    }
 }

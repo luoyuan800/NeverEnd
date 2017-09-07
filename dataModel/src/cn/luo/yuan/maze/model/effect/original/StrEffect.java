@@ -11,7 +11,6 @@ import cn.luo.yuan.maze.utils.StringUtils;
 public class StrEffect extends LongValueEffect{
     private String tag;
     private static final long serialVersionUID = Field.SERVER_VERSION;
-    private long str;
     private boolean enable = false;
     private boolean elementControl;
     @Override
@@ -24,21 +23,11 @@ public class StrEffect extends LongValueEffect{
         this.elementControl = elementControl;
     }
     public long getStr() {
-        return str;
+        return getValue();
     }
 
     public void setStr(long str) {
-        this.str = str;
-    }
-
-    @Override
-    public Long getValue() {
-        return getStr();
-    }
-
-    @Override
-    public void setValue(long value) {
-        setStr(value);
+        setValue(str);
     }
 
     @Override

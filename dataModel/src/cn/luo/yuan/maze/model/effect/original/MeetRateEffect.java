@@ -11,7 +11,6 @@ import cn.luo.yuan.maze.utils.StringUtils;
 public class MeetRateEffect extends FloatValueEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private String tag;
-    private float meetRate;
     private boolean enable = false;
 
     private boolean elementControl;
@@ -30,21 +29,11 @@ public class MeetRateEffect extends FloatValueEffect {
     }
 
     public float getMeetRate() {
-        return meetRate;
+        return getValue();
     }
 
     public void setMeetRate(float meetRate) {
-        this.meetRate = meetRate;
-    }
-
-    @Override
-    public Float getValue() {
-        return getMeetRate();
-    }
-
-    @Override
-    public void setValue(float value) {
-        setMeetRate(value);
+        setValue(meetRate);
     }
 
     @Override

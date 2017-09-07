@@ -11,7 +11,6 @@ import cn.luo.yuan.maze.utils.StringUtils;
 public class DefEffect extends LongValueEffect {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private String tag;
-    private long def;
     private boolean enable = false;
 
     private boolean elementControl;
@@ -27,21 +26,11 @@ public class DefEffect extends LongValueEffect {
     }
 
     public long getDef() {
-        return def;
+        return getValue();
     }
 
     public void setDef(long def) {
-        this.def = def;
-    }
-
-    @Override
-    public Long getValue() {
-        return getDef();
-    }
-
-    @Override
-    public void setValue(long value) {
-        setDef(value);
+        setValue(def);
     }
 
     @Override
