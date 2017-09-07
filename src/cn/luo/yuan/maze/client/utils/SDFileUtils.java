@@ -39,7 +39,7 @@ public class SDFileUtils {
 
     public static List<String> getFilesListFromSD(String folder){
         File file = new File(SDFileUtils.SD_PATH, folder);
-        if(file.exists()) {
+        if(file.exists() && file.list()!=null) {
             return Arrays.asList(file.list());
         }else{
             return Collections.emptyList();
@@ -49,20 +49,21 @@ public class SDFileUtils {
         File file = new File(SDFileUtils.SD_PATH, folder);
         if(file.exists()) {
             File[] fs = file.listFiles();
-            Arrays.sort(fs, new Comparator<File>() {
-                @Override
-                public int compare(File lhs, File rhs) {
-                    return Long.compare(rhs.lastModified(),lhs.lastModified());
+            if(fs!=null) {
+                Arrays.sort(fs, new Comparator<File>() {
+                    @Override
+                    public int compare(File lhs, File rhs) {
+                        return Long.compare(rhs.lastModified(), lhs.lastModified());
+                    }
+                });
+                ArrayList<String> rs = new ArrayList<>(fs.length);
+                for (File f : fs) {
+                    rs.add(f.getName());
                 }
-            });
-            ArrayList<String> rs = new ArrayList<>(fs.length);
-            for(File f : fs){
-                rs.add(f.getName());
+                return rs;
             }
-            return rs;
-        }else{
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 
     public static File getOrCreateFile(String folder, String fileName){
