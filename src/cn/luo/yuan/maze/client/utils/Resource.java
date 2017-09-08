@@ -161,7 +161,6 @@ public class Resource {
     public static void askWritePermissions(final BaseActivity.PermissionRequestListener listener) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context instanceof BaseActivity) {
             if (context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (((BaseActivity) context).shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     SimplerDialogBuilder.build("我需要获取读写外部存储卡的权限用于读取头像图片和记录游戏运行时发生的异常，您是否同意？", getString(R.string.conform), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -177,8 +176,6 @@ public class Resource {
                         }
                     }, context);
                 }
-
-            }
         }
     }
 

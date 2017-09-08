@@ -32,7 +32,7 @@ public class RealBattleDialog {
     private AlertDialog dialog;
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 
-    public RealBattleDialog(RealTimeManager manager, NeverEnd context) {
+    public RealBattleDialog(final RealTimeManager manager, NeverEnd context) {
         this.context = context;
         this.manager = manager;
         root = View.inflate(context.getContext(), R.layout.real_battle_layout, null);
@@ -46,7 +46,7 @@ public class RealBattleDialog {
             public void run() {
                 int i =3;
                 while ( i > 0){
-                    int finalI = i;
+                    final int finalI = i;
                     handler.post(new Runnable() {
                         @Override
                         public void run() {

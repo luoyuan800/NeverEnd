@@ -412,15 +412,15 @@ public class GameActivityViewHandler extends Handler {
                             public void run() {
                                 Object o = v.getTag(R.string.item);
                                 final String s = SDFileUtils.readStringFromSD(String.valueOf(neverEnd.getIndex()),o.toString());
+                                SDFileUtils.deleteFile(String.valueOf(neverEnd.getIndex()), o.toString());
+                                adapter.getData().remove(o.toString());
                                 post(new Runnable() {
                                     @Override
                                     public void run() {
+                                        adapter.notifyDataSetChanged();
                                         SimplerDialogBuilder.build(s, Resource.getString(R.string.close), context, null);
                                     }
                                 });
-                                SDFileUtils.deleteFile(String.valueOf(neverEnd.getIndex()), o.toString());
-                                adapter.getData().remove(o.toString());
-                                adapter.notifyDataSetChanged();
                                 refreshDieMessage();
                             }
                         });
