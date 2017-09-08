@@ -25,4 +25,6 @@ class RealTimeState {
     var loser: HarmAble? = null
     var winTip = ""
     var upgradeTip = ""
+    var awardMate = 0L
+    var awardPoint = 0L
 }

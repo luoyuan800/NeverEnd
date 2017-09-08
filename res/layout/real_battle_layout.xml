@@ -14,8 +14,8 @@
 
         <ImageView
                 android:src="@drawable/jlh"
-                android:layout_width="200sp"
-                android:layout_height="200sp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:id="@+id/real_battle_targer_img"/>
 
         <TextView
@@ -70,7 +70,7 @@
             android:id="@+id/real_battle_info"/>
 
     <TextView
-            android:text="10"
+            android:text="3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/targer_layout"
@@ -86,7 +86,7 @@
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/real_battle_timer"
             android:layout_alignParentStart="true"
             android:gravity="center_horizontal"
@@ -94,8 +94,8 @@
 
         <ImageView
                 android:src="@drawable/boyee"
-                android:layout_width="200sp"
-                android:layout_height="200sp"
+                android:layout_width="150sp"
+                android:layout_height="150sp"
                 android:id="@+id/real_battle_my_img"/>
 
         <TextView
@@ -142,22 +142,32 @@
         </LinearLayout>
     </LinearLayout>
 
+    <ImageView
+            android:src="@drawable/evo_cao"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:layout_below="@+id/real_battle_info"
+            android:layout_alignParentStart="true"
+            android:id="@+id/real_battle_my_pet"/>
+
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/real_battle_timer"
-            android:layout_toEndOf="@+id/real_battle_info"
-            android:layout_alignBottom="@+id/my_layout"
             android:gravity="bottom"
-            android:id="@+id/action_layout">
+            android:id="@+id/action_layout"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/my_layout"
+            android:layout_alignBottom="@+id/my_layout"
+            android:layout_below="@+id/real_battle_timer">
 
         <TextView
                 android:text="TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/action_tip"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.DialogWindowTitle"/>
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.DialogWindowTitle"
+                android:gravity="center_vertical|center_horizontal"/>
 
         <LinearLayout
                 android:orientation="vertical"
@@ -222,35 +232,37 @@
 
     <ImageView
             android:src="@drawable/evo_an"
-            android:layout_width="80sp"
-            android:layout_height="80sp"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
             android:id="@+id/real_battle_target_pet"
-            android:layout_toEndOf="@+id/my_layout"
-            android:layout_above="@+id/real_battle_timer"/>
-
-    <ImageView
-            android:src="@drawable/evo_cao"
-            android:layout_width="80sp"
-            android:layout_height="80sp"
-            android:layout_below="@+id/real_battle_info"
-            android:layout_alignParentStart="true"
-            android:id="@+id/real_battle_my_pet"/>
+            android:layout_above="@+id/real_battle_timer"
+            android:layout_toStartOf="@+id/targer_layout"/>
 
     <TextView
             android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/real_battle_info"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="8dp"
             android:id="@+id/start_text"
-            android:layout_alignParentEnd="true"
             tools:text="开始！"
             android:typeface="monospace"
             android:fontFamily="cursive"
             android:textSize="64sp"
             android:textStyle="normal|bold"
             android:textColor="@color/dialog_bg"
-            android:gravity="center" android:visibility="invisible"/>
+            android:gravity="center" android:visibility="invisible"
+            android:layout_above="@+id/my_layout"
+            android:layout_toEndOf="@+id/real_battle_my_pet"
+            android:layout_marginStart="15dp"/>
+
+    <ImageButton
+            android:src="@android:drawable/ic_delete"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/real_battle_close"
+            android:background="@color/toumin"
+            android:scaleType="fitCenter"
+            android:visibility="visible"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/targer_layout"/>
 
 </RelativeLayout>

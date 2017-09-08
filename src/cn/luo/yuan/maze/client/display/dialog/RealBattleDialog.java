@@ -45,7 +45,7 @@ public class RealBattleDialog implements View.OnClickListener {
     private RealTimeState currentState;
     private AlertDialog main;
     private HarmAble my;
-    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
 
     public RealBattleDialog(final RealTimeManager manager, NeverEnd context) {
         this.context = context;
@@ -61,6 +61,16 @@ public class RealBattleDialog implements View.OnClickListener {
         root.findViewById(R.id.real_battle_skill_action).setOnClickListener(this);
         root.findViewById(R.id.real_battle_goods_action).setOnClickListener(this);
         my = context.getHero();
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    updateState(manager.pollState());
+                }catch (Exception e){
+                    LogHelper.logException(e, "Poll state");
+                }
+            }
+        });
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -70,6 +80,7 @@ public class RealBattleDialog implements View.OnClickListener {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
+                            targetAction();
                             updateTimer(finalI);
                         }
                     });
@@ -83,16 +94,18 @@ public class RealBattleDialog implements View.OnClickListener {
                 showStartTip();
             }
         });
-        executor.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                updateState(manager.pollState());
-            }
-        }, 0, 600, TimeUnit.MILLISECONDS);
+
+        root.findViewById(R.id.real_battle_close).setOnClickListener(this);
     }
 
     public void stop() {
-        executor.shutdown();
+        try {
+            executor.shutdown();
+            executor.awaitTermination(2, TimeUnit.SECONDS);
+            manager.quit();
+        }catch (Exception e){
+            LogHelper.logException(e, "Stop real battle");
+        }
     }
 
     public void updateState(final RealTimeState state) {
@@ -100,28 +113,32 @@ public class RealBattleDialog implements View.OnClickListener {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                HarmAble winner = state.getWinner();
-                HarmAble loser = state.getLoser();
-                if (winner != null && loser != null) {
-                    if (winner.getId().equals(my.getId())) {
-                        IAmWinner(state);
+                try {
+                    HarmAble winner = state.getWinner();
+                    HarmAble loser = state.getLoser();
+                    if (winner != null && loser != null) {
+                        if (winner.getId().equals(my.getId())) {
+                            IAmWinner(state);
+                        } else {
+                            IAmLoser(state);
+                        }
+                        stop();
                     } else {
-                        IAmLoser(state);
+                        HarmAble actioner = state.getActioner();
+                        HarmAble waiter = state.getWaiter();
+                        ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_timer), StringUtils.formatNumber(state.getRemainTime() / 1000));
+                        if (actioner != null && waiter != null && actioner.getId().equals(my.getId())) {
+                            updateMyState(actioner, state.getActionerLevel(), state.getActionerPetIndex(), state.getActionerPoint(), state.getActionerHead());
+                            updateTargetState(waiter, state.getWaiterLevel(), state.getWaiterPetIndex(), state.getWaiterPoint(), state.getWaiterHead());
+                            myAction();
+                        } else if (actioner != null && waiter != null) {
+                            updateMyState(waiter, state.getWaiterLevel(), state.getWaiterPetIndex(), state.getWaiterPoint(), state.getWaiterHead());
+                            updateTargetState(actioner, state.getActionerLevel(), state.getActionerPetIndex(), state.getActionerPoint(), state.getActionerHead());
+                            targetAction();
+                        }
                     }
-                    stop();
-                }else {
-                    HarmAble actioner = state.getActioner();
-                    HarmAble waiter = state.getWaiter();
-                    ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_timer), StringUtils.formatNumber(state.getRemainTime() / 1000));
-                    if (actioner != null && waiter != null && actioner.getId().equals(my.getId())) {
-                        updateMyState(actioner, state.getActionerLevel(), state.getActionerPetIndex(), state.getActionerPoint(), state.getActionerHead());
-                        updateTargetState(waiter, state.getWaiterLevel(), state.getWaiterPetIndex(), state.getWaiterPoint(), state.getWaiterHead());
-                        myAction();
-                    } else if (actioner != null && waiter != null) {
-                        updateMyState(waiter, state.getWaiterLevel(), state.getWaiterPetIndex(), state.getWaiterPoint(), state.getWaiterHead());
-                        updateTargetState(actioner, state.getActionerLevel(), state.getActionerPetIndex(), state.getActionerPoint(), state.getActionerHead());
-                        targetAction();
-                    }
+                }catch (Exception e){
+                    LogHelper.logException(e, "update state");
                 }
                 updateMessage(state);
             }
@@ -131,8 +148,29 @@ public class RealBattleDialog implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.real_battle_close:
+                SimplerDialogBuilder.build("确认退出吗？如果战斗中强行退出会被判断失败！", Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        stop();
+                        dialog.dismiss();
+                        main.dismiss();
+
+                    }
+                }, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }, context.getContext());
+                break;
             case R.id.real_battle_atk_action:
-                manager.atkAction();
+                executor.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        manager.atkAction();
+                    }
+                });
                 targetAction();
                 break;
             case R.id.real_battle_skill_action:
@@ -199,7 +237,12 @@ public class RealBattleDialog implements View.OnClickListener {
                     DefSkill skill = defSkills.get(index);
                     if (skill != null) {
                         if (Data.getSkillActionPoint(skill) <= currentState.getActionerPoint()) {
-                            manager.useDefSkillAction(skill);
+                            executor.submit(new Runnable() {
+                                @Override
+                                public void run() {
+                                    manager.useDefSkillAction(skill);
+                                }
+                            });
                             targetAction();
                         }
                     }
@@ -237,12 +280,19 @@ public class RealBattleDialog implements View.OnClickListener {
                 }, 500);
             }
         });
+        executor.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                updateState(manager.pollState());
+            }
+        }, 0, 600, TimeUnit.MILLISECONDS);
     }
 
     private void IAmLoser(RealTimeState state) {
         TextView textView = (TextView) root.findViewById(R.id.start_text);
         textView.setVisibility(View.VISIBLE);
-        ViewHandler.setText(textView, "失败！");
+        ViewHandler.setText(textView, "战败！");
+        root.findViewById(R.id.real_battle_close).setVisibility(View.VISIBLE);
     }
 
     private void IAmWinner(final RealTimeState state) {
@@ -266,6 +316,12 @@ public class RealBattleDialog implements View.OnClickListener {
 
             }
         }, 100);
+        if(state.getAwardMate() > 0){
+            context.getHero().setMaterial(context.getHero().getMaterial() + state.getAwardMate());
+        }
+        if(state.getAwardPoint() > 0){
+            context.getHero().setPoint(context.getHero().getPoint() + state.getAwardPoint());
+        }
     }
 
 

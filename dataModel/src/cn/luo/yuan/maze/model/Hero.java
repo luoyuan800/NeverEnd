@@ -320,7 +320,7 @@ public class Hero extends HarmObject implements Serializable, IDModel, SkillAble
 
     public
     @NotNull
-    Collection<Pet> getPets() {
+    ConcurrentLinkedDeque<Pet> getPets() {
         if (pets == null) {
             synchronized (this) {
                 if (pets == null)

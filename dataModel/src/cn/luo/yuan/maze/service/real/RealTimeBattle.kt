@@ -12,12 +12,13 @@ import cn.luo.yuan.maze.model.skill.EmptySkill
 import cn.luo.yuan.maze.model.skill.SkillAbleObject
 import cn.luo.yuan.maze.service.BattleService
 import cn.luo.yuan.maze.utils.Random
+import cn.luo.yuan.maze.utils.StringUtils
 
 /**
  * Copyright @Luo
  * Created by Gavin Luo on 8/17/2017.
  */
-class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, var mateAward:Long, val random: Random, val endListener: RealBattleEndListener?) {
+class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, var mateAward:Long, val random: Random) {
     val battle: BattleService = BattleService(p1, p2, random, null)
     val messager = RealBattleMessage()
     var p1ActionPoint = 150
@@ -41,8 +42,8 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
     var levelPointAward = 0L
 
     constructor(p1: HarmAble, p2: HarmAble, p1Pet: Int, p2Pet: Int, p1Level: Long, p2Level: Long,
-                p1Head: String, p2Head: String, pointAward: Long, mateAward:Long, levelPointAward:Long, random: Random, endListener: RealBattleEndListener?) :
-            this(p1, p2, pointAward, mateAward, random, endListener) {
+                p1Head: String, p2Head: String, pointAward: Long, mateAward:Long, levelPointAward:Long, random: Random) :
+            this(p1, p2, pointAward, mateAward, random) {
         this.p1Level = p1Level
         this.p1Pet = p1Pet
         this.p2Pet = p2Pet
@@ -53,6 +54,8 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
     }
 
     init {
+        p1.hp = p1.maxHp
+        p2.hp = p2.maxHp
         battle.setBattleMessage(messager)
         if (random.nextBoolean()) {
             actioner = p1
@@ -80,68 +83,71 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
     }
 
     fun action(action: RealTimeAction): Boolean {
-        if (performed.contains(action.id)) {
-            return true
-        }
-        val defender = if (actioner == p1) p2 else p1
-        when (action) {
-            is AtkAction -> {
-                if (action.ownerId == actioner!!.id) {
-                    if (defender is SkillAbleObject && !defender.skills.isEmpty() && defender.skills[0] is DefSkill &&
-                            battle.releaseSkill(actioner, defender, random, false, defender.skills[0], getMinHarm())) {
-                        //Release skill
-                        defender.skills[0] = EmptySkill.EMPTY_SKILL
-                    } else {
-                        battle.normalAtk(actioner, if (actioner === p1) p2 else p1, turn)
+        if(running > 0) {
+            if (performed.contains(action.id)) {
+                return true
+            }
+            turn ++
+            val defender = if (actioner == p1) p2 else p1
+            when (action) {
+                is AtkAction -> {
+                    if (action.ownerId == actioner!!.id) {
+                        if (defender is SkillAbleObject && !defender.skills.isEmpty() && defender.skills[0] is DefSkill &&
+                                battle.releaseSkill(actioner, defender, random, false, defender.skills[0], getMinHarm())) {
+                            //Release skill
+                            defender.skills[0] = EmptySkill.EMPTY_SKILL
+                        } else {
+                            battle.normalAtk(actioner, if (actioner === p1) p2 else p1, if(actioner == p1) p1ActionPoint.toLong() else p2ActionPoint.toLong())
+                        }
+                    }
+                }
+                is AtkSkillAction -> {
+                    if (action.ownerId == actioner!!.id && actioner is SkillAbleObject) {
+                        val skill = action.skill
+                        val point = Data.getSkillActionPoint(skill)
+                        if (actioner == p1) {
+                            if (point > p1ActionPoint) {
+                                return false
+                            }
+                            p1ActionPoint -= point
+                        } else {
+                            if (point > p2ActionPoint) {
+                                return false
+                            }
+                            p2ActionPoint -= point
+                        }
+                        battle.releaseSkill(actioner, if (actioner == p1) p2 else p1, random, true, skill, getMinHarm())
+                    }
+                }
+                is DefSkillAction -> {
+                    if (action.ownerId == actioner!!.id && actioner is SkillAbleObject) {
+                        val skill = action.skill
+                        val point = Data.getSkillActionPoint(skill)
+                        if (actioner == p1) {
+                            if (point > p1ActionPoint) {
+                                return false
+                            }
+                            p1ActionPoint -= point
+                        } else {
+                            if (point > p2ActionPoint) {
+                                return false
+                            }
+                            p2ActionPoint -= point
+                        }
+                        (actioner!! as SkillAbleObject).skills[0] = skill
                     }
                 }
             }
-            is AtkSkillAction -> {
-                if (action.ownerId == actioner!!.id && actioner is SkillAbleObject) {
-                    val skill = action.skill
-                    val point = Data.getSkillActionPoint(skill)
-                    if (actioner == p1) {
-                        if (point > p1ActionPoint) {
-                            return false
-                        }
-                        p1ActionPoint -= point
-                    } else {
-                        if (point > p2ActionPoint) {
-                            return false
-                        }
-                        p2ActionPoint -= point
-                    }
-                    battle.releaseSkill(actioner, if (actioner == p1) p2 else p1, random, true, skill, getMinHarm())
-                }
+            if (actioner == p1) {
+                p2ActionPoint += 50
+            } else {
+                p1ActionPoint += 50
             }
-            is DefSkillAction -> {
-                if (action.ownerId == actioner!!.id && actioner is SkillAbleObject) {
-                    val skill = action.skill
-                    val point = Data.getSkillActionPoint(skill)
-                    if (actioner == p1) {
-                        if (point > p1ActionPoint) {
-                            return false
-                        }
-                        p1ActionPoint -= point
-                    } else {
-                        if (point > p2ActionPoint) {
-                            return false
-                        }
-                        p2ActionPoint -= point
-                    }
-                    (actioner!! as SkillAbleObject).skills[0] = skill
-                }
-            }
+            detectWinner()
+            changeActioner()
+            performed.add(action.id)
+            lastAction = action
         }
-        if (actioner == p1) {
-            p2ActionPoint += 50
-        } else {
-            p1ActionPoint += 50
-        }
-        detectWinner()
-        changeActioner()
-        performed.add(action.id)
-        lastAction = action
         return true
     }
 
@@ -164,7 +170,6 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
             }
         }
         if(winner!=null && loser!=null){
-            endListener?.end(winner, loser, pointAward.toInt(), mateAward.toInt())
         }
     }
 
@@ -175,6 +180,10 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
         if(winner!=null && loser!=null){
             state.winner = winner
             state.loser =loser
+            state.awardMate = mateAward
+            state.awardPoint = pointAward;
+            state.winTip =
+                    "获得了 ${if(pointAward > 0) "能力点：" + StringUtils.formatNumber(pointAward) else ""}   ${if(mateAward > 0) "锻造点" + StringUtils.formatNumber(mateAward) else ""}"
         }else {
             state.actioner = actioner
             if (actioner == p1) {
@@ -201,8 +210,9 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
             state.action = lastAction
         }
         var i = msgIndex
-        while (++i < messager.msg.size) {
+        while (i < messager.msg.size) {
             state.msg.add(messager.msg[i])
+            i++
         }
         state.remainTime = pollRemainTime()
 
