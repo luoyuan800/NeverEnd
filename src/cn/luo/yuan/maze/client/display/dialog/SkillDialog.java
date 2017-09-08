@@ -18,6 +18,9 @@ import cn.luo.yuan.maze.model.skill.SkillFactory;
 import cn.luo.yuan.maze.model.skill.SkillParameter;
 import cn.luo.yuan.maze.model.skill.UpgradeAble;
 import cn.luo.yuan.maze.service.SkillHelper;
+import com.huanglong.mylinearlayout.FixGridLayout;
+
+import java.util.List;
 
 /**
  * Created by luoyuan on 2017/5/28.
@@ -71,6 +74,23 @@ public class SkillDialog implements View.OnClickListener {
         //Pet Skills
         tabHost1.addTab(tabHost1.newTabSpec("pet_skill").setIndicator(Resource.getString(R.string.pet_skill)).setContent(R.id.pet_skill));
         initSkillButton((ImageButton) dialog.findViewById(R.id.pet_master),(ImageButton) dialog.findViewById(R.id.pet_trainer), (ImageButton) dialog.findViewById(R.id.pet_foster));
+
+        //Special Skill
+        List<Skill> skills = context.getDataManager().loadSpecialSkills();
+        if(skills.size() > 0) {
+            tabHost1.addTab(tabHost1.newTabSpec("special_skill").setIndicator(Resource.getString(R.string.special_skill)).setContent(R.id.special_skill));
+            FixGridLayout fgl = (FixGridLayout) dialog.findViewById(R.id.special_skill_detail);
+            ImageButton[] buttons = new ImageButton[skills.size()];
+            for (int i = 0; i < skills.size(); i++) {
+                ImageButton b = new ImageButton(context.getContext());
+                b.setTag(skills.get(i).getClass().getSimpleName());
+                buttons[i] = b;
+                fgl.addView(b);
+            }
+            initSkillButton(buttons);
+        }else{
+            dialog.findViewById(R.id.special_skill).setVisibility(View.GONE);
+        }
     }
 
     public void onClick(final View view) {

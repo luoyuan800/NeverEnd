@@ -120,6 +120,17 @@
                         layout="@layout/skill_layout_pet"
                         android:visibility="visible"/>
                 </ScrollView>
+                <ScrollView
+                        android:id="@+id/special_skill"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="visible">
+                <com.huanglong.mylinearlayout.FixGridLayout
+                        android:id="@+id/special_skill_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible"/>
+                </ScrollView>
 
             </FrameLayout>
 

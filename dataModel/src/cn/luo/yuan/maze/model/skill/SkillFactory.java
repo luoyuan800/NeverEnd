@@ -12,6 +12,12 @@ import cn.luo.yuan.maze.model.skill.hero.HeroHit;
 import cn.luo.yuan.maze.model.skill.pet.Foster;
 import cn.luo.yuan.maze.model.skill.pet.PetMaster;
 import cn.luo.yuan.maze.model.skill.pet.Trainer;
+import cn.luo.yuan.maze.model.skill.race.Alayer;
+import cn.luo.yuan.maze.model.skill.race.Chaos;
+import cn.luo.yuan.maze.model.skill.race.Decide;
+import cn.luo.yuan.maze.model.skill.race.Exorcism;
+import cn.luo.yuan.maze.model.skill.race.Masimm;
+import cn.luo.yuan.maze.model.skill.race.Painkiller;
 import cn.luo.yuan.maze.model.skill.swindler.EatHarm;
 import cn.luo.yuan.maze.model.skill.swindler.Swindler;
 import cn.luo.yuan.maze.model.skill.swindler.SwindlerGame;
@@ -69,6 +75,24 @@ public class SkillFactory {
                     break;
                 case "EatHarm":
                     skill = new EatHarm();
+                    break;
+                case "Alayer":
+                    skill = new Alayer();
+                    break;
+                case "Chaos":
+                    skill = new Chaos();
+                    break;
+                case "Decide":
+                    skill = new Decide();
+                    break;
+                case "Exorcism":
+                    skill = new Exorcism();
+                    break;
+                case "Masimm":
+                    skill = new Masimm();
+                    break;
+                case "Painkiller":
+                    skill = new Painkiller();
                     break;
             }
         }

@@ -408,7 +408,20 @@ public class Hero extends HarmObject implements Serializable, IDModel, SkillAble
 
     public Hero clone(){
         try {
-            return (Hero) super.clone();
+            Hero hero =  (Hero) super.clone();
+            hero.hp = new EncodeLong(getHp());
+            hero.atk = new EncodeLong(atk.getValue());
+            hero.def = new EncodeLong(def.getValue());
+            hero.agi = new EncodeLong(agi.getValue());
+            hero.str = new EncodeLong(str.getValue());
+            hero.maxHp = new EncodeLong(maxHp.getValue());
+            hero.atkGrow = new EncodeLong(atkGrow.getValue());
+            hero.defGrow = new EncodeLong(defGrow.getValue());
+            hero.hpGrow = new EncodeLong(hpGrow.getValue());
+            hero.material = new EncodeLong(material.getValue().longValue());
+            hero.point = new EncodeLong(point.getValue());
+            hero.reincarnate = new EncodeLong(reincarnate.getValue());
+            return hero;
         } catch (CloneNotSupportedException e) {
             return this;
         }

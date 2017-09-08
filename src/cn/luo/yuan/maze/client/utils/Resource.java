@@ -45,7 +45,11 @@ public class Resource {
     private static Context context;
 
     public static Drawable getSkillDrawable(Skill skill){
-        return loadImageFromAssets("skill/" + skill.getClass().getSimpleName() + ".png", false);
+        Drawable drawable = loadImageFromAssets("skill/" + skill.getClass().getSimpleName() + ".png", false);
+        if(drawable == null){
+            drawable = loadImageFromAppFolder(skill.getClass().getSimpleName(), false);
+        }
+        return drawable;
     }
 
     private static void addToCache(Object key, Drawable drawable) {

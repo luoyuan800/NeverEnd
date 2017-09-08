@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.model.skill.race
 
 import cn.luo.yuan.maze.model.skill.AtkSkill
 import cn.luo.yuan.maze.model.skill.SkillParameter
+import cn.luo.yuan.maze.model.skill.SpecialSkill
 import cn.luo.yuan.maze.model.skill.result.DoNoThingResult
 import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.model.skill.result.SkipThisTurn
@@ -9,7 +10,7 @@ import cn.luo.yuan.maze.model.skill.result.SkipThisTurn
 /**
  * Created by luoyuan on 2017/9/4.
  */
-class Alayer: AtkSkill() {
+class Alayer: AtkSkill(), SpecialSkill {
     private val model:RaceSkillModel = RaceSkillModel(this)
 
     override fun getName(): String {

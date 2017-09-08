@@ -14,8 +14,8 @@
 
         <ImageView
                 android:src="@drawable/jlh"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="200sp"
+                android:layout_height="200sp"
                 android:id="@+id/real_battle_targer_img"/>
 
         <TextView
@@ -51,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView11"
-                    />
+                    android:layout_marginLeft="5sp" android:layout_marginRight="5sp"/>
 
             <TextView
                     android:text="100W"
@@ -86,7 +86,7 @@
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_below="@+id/real_battle_timer"
             android:layout_alignParentStart="true"
             android:gravity="center_horizontal"
@@ -94,8 +94,8 @@
 
         <ImageView
                 android:src="@drawable/boyee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="200sp"
+                android:layout_height="200sp"
                 android:id="@+id/real_battle_my_img"/>
 
         <TextView
@@ -131,7 +131,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView12"
-                    />
+                    android:layout_marginLeft="5sp" android:layout_marginRight="5sp"/>
 
             <TextView
                     android:text="200W"
@@ -159,12 +159,13 @@
                 android:id="@+id/action_tip"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.DialogWindowTitle"/>
 
-        <ScrollView
+        <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/detail_action_scroll">
 
-        </ScrollView>
+        </LinearLayout>
 
         <TextView
                 android:text="100"
@@ -250,6 +251,6 @@
             android:textSize="64sp"
             android:textStyle="normal|bold"
             android:textColor="@color/dialog_bg"
-            android:gravity="center"/>
+            android:gravity="center" android:visibility="invisible"/>
 
 </RelativeLayout>

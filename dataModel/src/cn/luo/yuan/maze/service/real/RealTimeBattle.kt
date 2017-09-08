@@ -17,19 +17,40 @@ import cn.luo.yuan.maze.utils.Random
  * Copyright @Luo
  * Created by Gavin Luo on 8/17/2017.
  */
-class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, val random: Random) {
+class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, var mateAward:Long, val random: Random, val endListener: RealBattleEndListener?) {
     val battle: BattleService = BattleService(p1, p2, random, null)
     val messager = RealBattleMessage()
     var p1ActionPoint = 150
     var p2ActionPoint = 150
     var actionControlThread: ControlThread? = null
-    var running = -1;
-
+    var running = -1
+    var timeLimit = 30
+    var p1Head = ""
+    var p2Head = ""
+    var p1Level = -1L
+    var p2Level = -1L
+    var p1Pet = -1
+    var p2Pet = -1
     var actioner: HarmAble? = null
     var timer: TimerThread? = null
     var turn = 0L
     var performed = mutableSetOf<String>()
     var lastAction: RealTimeAction? = null
+    var winner: HarmAble? = null
+    var loser: HarmAble? = null
+    var levelPointAward = 0L
+
+    constructor(p1: HarmAble, p2: HarmAble, p1Pet: Int, p2Pet: Int, p1Level: Long, p2Level: Long,
+                p1Head: String, p2Head: String, pointAward: Long, mateAward:Long, levelPointAward:Long, random: Random, endListener: RealBattleEndListener?) :
+            this(p1, p2, pointAward, mateAward, random, endListener) {
+        this.p1Level = p1Level
+        this.p1Pet = p1Pet
+        this.p2Pet = p2Pet
+        this.p2Level = p2Level
+        this.p2Head = p2Head
+        this.p1Head = p1Head
+        this.levelPointAward = levelPointAward
+    }
 
     init {
         battle.setBattleMessage(messager)
@@ -43,7 +64,7 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, val random: Random) {
     fun start() {
         synchronized(running) {
             running += 1
-            if (actionControlThread == null) {
+            if (timeLimit > 0 && actionControlThread == null) {
                 actionControlThread = ControlThread()
                 actionControlThread!!.rtb = this
                 actionControlThread!!.start()
@@ -78,14 +99,14 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, val random: Random) {
             is AtkSkillAction -> {
                 if (action.ownerId == actioner!!.id && actioner is SkillAbleObject) {
                     val skill = action.skill
-                    var point = Data.getSkillActionPoint(skill);
+                    val point = Data.getSkillActionPoint(skill)
                     if (actioner == p1) {
-                        if(point > p1ActionPoint){
+                        if (point > p1ActionPoint) {
                             return false
                         }
                         p1ActionPoint -= point
                     } else {
-                        if(point > p2ActionPoint){
+                        if (point > p2ActionPoint) {
                             return false
                         }
                         p2ActionPoint -= point
@@ -96,14 +117,14 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, val random: Random) {
             is DefSkillAction -> {
                 if (action.ownerId == actioner!!.id && actioner is SkillAbleObject) {
                     val skill = action.skill
-                    var point = Data.getSkillActionPoint(skill);
+                    val point = Data.getSkillActionPoint(skill)
                     if (actioner == p1) {
-                        if(point > p1ActionPoint){
+                        if (point > p1ActionPoint) {
                             return false
                         }
                         p1ActionPoint -= point
                     } else {
-                        if(point > p2ActionPoint){
+                        if (point > p2ActionPoint) {
                             return false
                         }
                         p2ActionPoint -= point
@@ -113,35 +134,78 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, val random: Random) {
             }
         }
         if (actioner == p1) {
-            p2ActionPoint += 50;
+            p2ActionPoint += 50
         } else {
-            p1ActionPoint += 50;
+            p1ActionPoint += 50
         }
+        detectWinner()
         changeActioner()
         performed.add(action.id)
         lastAction = action
         return true
     }
 
+    private fun detectWinner() {
+        if (actioner == p1) {
+            if (p2.currentHp <= 0) {
+                winner = p1
+                loser = p2
+            } else if (p1.currentHp <= 0) {
+                winner = p2
+                loser = p1
+            }
+        } else {
+            if (p1.currentHp <= 0) {
+                winner = p2
+                loser = p1
+            } else if (p2.currentHp <= 0) {
+                winner = p1
+                loser = p2
+            }
+        }
+        if(winner!=null && loser!=null){
+            endListener?.end(winner, loser, pointAward.toInt(), mateAward.toInt())
+        }
+    }
+
     private fun getMinHarm() = if (actioner == p1) p1ActionPoint.toLong() else p2ActionPoint.toLong()
 
     fun pollState(msgIndex: Int): RealTimeState {
         val state = RealTimeState()
-        state.actioner = actioner
-        if (actioner == p1) {
-            state.waiter = p2
-            state.waiterPoint = p2ActionPoint
-            state.actionerPoint = p1ActionPoint
-        } else {
-            state.waiter = p1
-            state.waiterPoint = p1ActionPoint
-            state.actionerPoint = p2ActionPoint
+        if(winner!=null && loser!=null){
+            state.winner = winner
+            state.loser =loser
+        }else {
+            state.actioner = actioner
+            if (actioner == p1) {
+                state.waiter = p2
+                state.waiterPoint = p2ActionPoint
+                state.actionerPoint = p1ActionPoint
+                state.actionerHead = p1Head
+                state.waiterHead = p2Head
+                state.actionerLevel = p1Level
+                state.waiterLevel = p2Level
+                state.actionerPetIndex = p1Pet
+                state.waiterPetIndex = p2Pet
+            } else {
+                state.waiter = p1
+                state.waiterPoint = p1ActionPoint
+                state.actionerPoint = p2ActionPoint
+                state.actionerHead = p2Head
+                state.waiterHead = p1Head
+                state.actionerLevel = p2Level
+                state.waiterLevel = p1Level
+                state.actionerPetIndex = p2Pet
+                state.waiterPetIndex = p1Pet
+            }
+            state.action = lastAction
         }
-        state.action = lastAction
         var i = msgIndex
         while (++i < messager.msg.size) {
             state.msg.add(messager.msg[i])
         }
+        state.remainTime = pollRemainTime()
+
         return state
     }
 
@@ -183,7 +247,7 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, val random: Random) {
         override fun run() {
             if (rtb != null) {
                 while (rtb!!.running >= 0) {
-                    if (time > 30 && rtb!!.running == 0) {
+                    if (time > rtb!!.timeLimit && rtb!!.running == 0) {
                         rtb!!.running = 1;
                     }
                     if (rtb!!.timer != null) {
@@ -198,5 +262,8 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, val random: Random) {
         }
     }
 
+    interface RealBattleEndListener{
+        fun end(x: HarmAble?, y: HarmAble?, awardPoint:Int, awardMate:Int): Unit
+    }
 
 }

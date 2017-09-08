@@ -19,6 +19,8 @@ class SkillDLC : SingleItemDLC, Cloneable {
         private const val serialVersionUID = Field.SERVER_VERSION
     }
 
+    var img : ByteArray? = null
+
     var skill: Skill? = null
     private var delete = false
     override fun isDelete(): Boolean {

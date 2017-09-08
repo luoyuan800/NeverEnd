@@ -29,7 +29,7 @@ public class Data {
     public static  long BASE_PET_COUNT = 3;
     public static float MONSTER_MEET_RATE = 99f;//遇怪的概率
     public static float PORTAL_RATE = 0.05f;//传送门的概率
-    public static int LEVEL_BASE_POINT_REDUCE = 1000;//爬楼奖励的点数基数分母（random（level/reduce））
+    public static int LEVEL_BASE_POINT_REDUCE = 550;//爬楼奖励的点数基数分母（random（level/reduce））
     public static long REFRESH_SPEED = 500;//刷新间隔
     public static long MONSTER_ATK_RISE_PRE_LEVEL = 80;//怪物每层的攻击成长
     public static long MONSTER_HP_RISE_PRE_LEVEL = 200;//怪物每层的生命成长

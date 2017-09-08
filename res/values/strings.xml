@@ -119,4 +119,5 @@
     <string name="index_tip">欢迎光临！点击下方按钮创建你的角色！创建成功后长按存档可以进行删除操作。</string>
     <string name="recover_tip">输入你备份的存档编号</string>
     <string name="start_battle">%1$s 和 %2$s 开始战斗</string>
+    <string name="special_skill">特殊技能</string>
 </resources>

@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.client.display.handler;
 
 import android.graphics.drawable.Drawable;
+import android.text.Html;
 import android.widget.ImageView;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
@@ -17,7 +18,7 @@ public class ViewHandler {
         }
         if(!text.equals(view.getTag(R.string.item))){
             view.setTag(R.string.item, text);
-            view.setText(text);
+            view.setText(Html.fromHtml(text));
         }
     }
     public static void setImage(ImageView view, Drawable img){

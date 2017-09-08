@@ -17,6 +17,7 @@ import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.GoodsProperties;
 import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.model.skill.SpecialSkill;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
@@ -306,6 +307,15 @@ public class DataManager implements DataManagerInterface {
 
     public Skill loadSkill(String name) {
         return skillLoader.load(buildIdWithIndex(name));
+    }
+
+    public List<Skill> loadSpecialSkills(){
+        return skillLoader.loadLimit(0, -1, new Index<Skill>() {
+            @Override
+            public boolean match(Skill skill) {
+                return skill instanceof SpecialSkill;
+            }
+        }, null);
     }
 
     @Override

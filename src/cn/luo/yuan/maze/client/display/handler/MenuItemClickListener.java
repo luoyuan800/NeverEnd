@@ -17,12 +17,14 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.client.display.dialog.*;
+import cn.luo.yuan.maze.client.service.LocalRealTimeManager;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.client.utils.RestConnection;
 import cn.luo.yuan.maze.client.utils.SDFileUtils;
 import cn.luo.yuan.maze.model.Data;
+import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.utils.Field;
@@ -253,7 +255,13 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 }).show();
                 break;
             case R.id.crash:
-                throw new RuntimeException("test exception");
+//                throw new RuntimeException("test exception");
+                Monster monster = control.getPetMonsterHelper().randomMonster(100);
+                if(monster!=null){
+                    LocalRealTimeManager m = new LocalRealTimeManager(control, monster);
+                    new RealBattleDialog(m , control);
+                }
+                break;
             case R.id.skills:
                 new SkillDialog(control).show();
                 break;
@@ -261,7 +269,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 showPayDialog();
                 break;
             case R.id.reincarnation:
-                SimplerDialogBuilder.build("转生，慎重！增加难度，重新开始，除了仓库里的宠物和装备，其他都会被清除！。",
+                SimplerDialogBuilder.build("转生，慎重！增加难度，重新开始！除了仓库里的宠物和装备，其他都会被清除！。",
                         Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
