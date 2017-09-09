@@ -162,30 +162,24 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
         if (id == "npc") {
             return null
         }
-        var inGroup = false
-        val group = Group()
-        loop@ for (holder in main.groups) {
-            if (holder.isInGroup(id)) {
-                inGroup = true
-                for (hid in holder.heroIds) {
-                    val hero = if(hid == "npc") holder.npc else table.getHero(hid)
-                    if (hero != null) {
-                        group.heroes.add(hero)
-                    } else {
-                        main.removeGroup(id)
-                        inGroup = false
-                        break@loop
-                    }
+        val group = main.groups.find {
+            it.isInGroup(id)
+        }
+        if(group!=null){
+            val g = Group()
+            for(hid in group.heroIds){
+                val hero = table.getHero(hid)
+                if(hero!=null){
+                    g.heroes.add(hero)
                 }
-            } else {
-                inGroup = false
+            }
+            if(g.heroes.size >= 2){
+                return g
+            }else{
+                main.groups.remove(group)
             }
         }
-        if (inGroup) {
-            return group
-        } else {
-            return null
-        }
+        return null
     }
 
     private fun range() {

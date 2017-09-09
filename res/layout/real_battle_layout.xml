@@ -4,19 +4,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+    <ImageView
+            android:src="@drawable/evo_an"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:id="@+id/real_battle_target_pet"
+            android:layout_toEndOf="@+id/real_battle_close"
+            android:layout_alignStart="@+id/targer_layout"/>
+
     <LinearLayout
             android:id="@+id/targer_layout"
             android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true">
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/real_battle_close"
+            android:layout_marginStart="35dp"
+            android:gravity="center_horizontal">
 
         <ImageView
                 android:src="@drawable/jlh"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:id="@+id/real_battle_targer_img"/>
+                android:id="@+id/real_battle_targer_img"
+                android:contentDescription=""/>
 
         <TextView
                 android:text="可恶的敌人"
@@ -33,33 +45,10 @@
                 android:id="@+id/real_battle_target_level"
                 android:gravity="center_horizontal"/>
 
-        <LinearLayout
-                android:orientation="horizontal"
+        <cn.luo.yuan.maze.client.display.view.SpringProgressView
+                android:id="@+id/real_battle_target_hp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal">
-
-            <TextView
-                    android:text="10W"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/real_battle_target_hp"
-                    />
-
-            <TextView
-                    android:text="\"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView11"
-                    android:layout_marginLeft="5sp" android:layout_marginRight="5sp"/>
-
-            <TextView
-                    android:text="100W"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/real_battle_targer_maxhp"
-                    />
-        </LinearLayout>
+                android:layout_height="10dp"/>
     </LinearLayout>
 
     <cn.luo.yuan.maze.client.display.view.RollTextView
@@ -67,7 +56,9 @@
             android:layout_height="match_parent"
             android:layout_alignBottom="@id/targer_layout"
             android:layout_toStartOf="@id/targer_layout"
-            android:id="@+id/real_battle_info"/>
+            android:id="@+id/real_battle_info"
+            android:background="@android:drawable/gallery_thumb"
+            android:layout_marginEnd="3dp"/>
 
     <TextView
             android:text="3"
@@ -127,7 +118,7 @@
                     />
 
             <TextView
-                    android:text="\"
+                    android:text="/"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView12"
@@ -159,7 +150,8 @@
             android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/my_layout"
             android:layout_alignBottom="@+id/my_layout"
-            android:layout_below="@+id/real_battle_timer">
+            android:layout_below="@+id/real_battle_timer"
+            android:background="@android:drawable/gallery_thumb">
 
         <TextView
                 android:text="TextView"
@@ -172,7 +164,7 @@
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:id="@+id/detail_action_scroll"
                 android:layout_weight="1">
 
@@ -231,30 +223,6 @@
 
     </LinearLayout>
 
-    <ImageView
-            android:src="@drawable/evo_an"
-            android:layout_width="30sp"
-            android:layout_height="30sp"
-            android:id="@+id/real_battle_target_pet"
-            android:layout_above="@+id/real_battle_timer"
-            android:layout_toStartOf="@+id/targer_layout"/>
-
-    <TextView
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/start_text"
-            tools:text="开始！"
-            android:typeface="monospace"
-            android:fontFamily="cursive"
-            android:textSize="64sp"
-            android:textStyle="normal|bold"
-            android:textColor="@color/dialog_bg"
-            android:gravity="center" android:visibility="invisible"
-            android:layout_above="@+id/my_layout"
-            android:layout_toEndOf="@+id/real_battle_my_pet"
-            android:layout_marginStart="15dp"/>
-
     <ImageButton
             android:src="@android:drawable/ic_delete"
             android:layout_width="40dp"
@@ -263,7 +231,24 @@
             android:background="@color/toumin"
             android:scaleType="fitCenter"
             android:visibility="visible"
-            android:layout_alignParentTop="true"
-            android:layout_toStartOf="@+id/targer_layout"/>
+            android:layout_below="@+id/action_layout"
+            android:layout_centerHorizontal="true"/>
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/start_text"
+            tools:text="开始！"
+            android:typeface="serif"
+            android:fontFamily="cursive"
+            android:textSize="64sp"
+            android:textColor="@color/dialog_bg"
+            android:gravity="center" android:visibility="invisible"
+            android:textAllCaps="false"
+            android:textStyle="normal|bold|italic"
+            android:layout_marginTop="16dp"
+            android:layout_below="@+id/targer_layout"
+            android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>
