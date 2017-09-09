@@ -13,6 +13,7 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.handler.ViewHandler;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
+import cn.luo.yuan.maze.client.display.view.SpringProgressView;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
@@ -291,16 +292,18 @@ public class RealBattleDialog implements View.OnClickListener {
     }
 
     private void IAmLoser(RealTimeState state) {
+        root.findViewById(R.id.real_battle_timer).setVisibility(View.INVISIBLE);
         TextView textView = (TextView) root.findViewById(R.id.start_text);
         textView.setVisibility(View.VISIBLE);
-        ViewHandler.setText(textView, "战败！");
+        ViewHandler.setText(textView, R.string.real_lost);
         root.findViewById(R.id.real_battle_close).setVisibility(View.VISIBLE);
     }
 
     private void IAmWinner(final RealTimeState state) {
+        root.findViewById(R.id.real_battle_timer).setVisibility(View.INVISIBLE);
         TextView textView = (TextView) root.findViewById(R.id.start_text);
         textView.setVisibility(View.VISIBLE);
-        ViewHandler.setText(textView, "胜利！");
+        ViewHandler.setText(textView, R.string.real_win);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -348,7 +351,7 @@ public class RealBattleDialog implements View.OnClickListener {
         sv.setVisibility(View.GONE);
         TextView textView = (TextView) root.findViewById(R.id.action_tip);
         textView.setVisibility(View.VISIBLE);
-        ViewHandler.setText(textView, "等待对方行动");
+        ViewHandler.setText(textView, R.string.real_wait_action);
         root.findViewById(R.id.real_battle_atk_action).setEnabled(false);
         root.findViewById(R.id.real_battle_defend_action).setEnabled(false);
         root.findViewById(R.id.real_battle_skill_action).setEnabled(false);
@@ -363,7 +366,7 @@ public class RealBattleDialog implements View.OnClickListener {
             root.findViewById(R.id.real_battle_goods_action).setEnabled(true);
             TextView textView = (TextView) root.findViewById(R.id.action_tip);
             textView.setVisibility(View.VISIBLE);
-            ViewHandler.setText(textView, "选择你的行动！");
+            ViewHandler.setText(textView, R.string.real_my_action);
         }
     }
 
@@ -386,8 +389,9 @@ public class RealBattleDialog implements View.OnClickListener {
     }
 
     private void updateTargetState(HarmAble target, long level, int petIndex, long point, String head) {
-        ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_target_hp), StringUtils.formatNumber(target.getCurrentHp()));
-        ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_targer_maxhp), StringUtils.formatNumber(target.getUpperHp()));
+        SpringProgressView hpView = (SpringProgressView) root.findViewById(R.id.real_battle_target_hp);
+        hpView.setMaxCount(100);
+        hpView.setCurrentCount(target.getCurrentHp() * 100f/target.getUpperHp());
         ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_targer_name), my instanceof NameObject ? ((NameObject) target).getDisplayName() : target.toString());
         if (level >= 0) {
             ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_target_level), RealLevel.Companion.getLevel(level));
