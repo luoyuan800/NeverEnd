@@ -12,6 +12,9 @@ import cn.luo.yuan.maze.utils.StringUtils;
  * Created by luoyuan on 2017/9/7.
  */
 public class ViewHandler {
+    public static void setText(TextView view, int r){
+        setText(view, Resource.getString(r));
+    }
     public static void setText(TextView view, String text){
         if(text==null){
             text = StringUtils.EMPTY_STRING;

@@ -84,8 +84,11 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
     }
 
     public  boolean isCatchAble(Monster monster, Hero hero, Random random, int petCount) {
-        if (monster.getPetRate() > 0 && (petCount < Data.MAX_PET_COUNT && !monster.getRace().isRestriction(hero.getRace()))) {
-            NeverEndConfig config = control.getDataManager().loadConfig();
+        NeverEndConfig config = control.getDataManager().loadConfig();
+        if (monster.getPetRate() > 0 &&
+                (petCount < Data.MAX_PET_COUNT &&
+                !monster.getRace().isRestriction(hero.getRace())) &&
+                detectFilterAndRestrictor(monster, config)) {
             if(config!=null && config.isPetGift()){
                 petCount/=10;
             }
@@ -101,6 +104,20 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
         } else {
             return false;
         }
+    }
+
+    private boolean detectFilterAndRestrictor(Monster monster, NeverEndConfig config) {
+        if(StringUtils.isNotEmpty(config.getCatchFilter())){
+            if(monster.getName().contains(config.getCatchFilter())){
+                return false;
+            }
+        }
+        if(StringUtils.isNotEmpty(config.getCatchRestrictor())){
+            if(!monster.getName().contains(config.getCatchRestrictor())){
+                return false;
+            }
+        }
+        return true;
     }
 
     private List<String> availableSpecialMonsterIds(long level){

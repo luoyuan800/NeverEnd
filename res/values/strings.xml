@@ -120,4 +120,8 @@
     <string name="recover_tip">输入你备份的存档编号</string>
     <string name="start_battle">%1$s 和 %2$s 开始战斗</string>
     <string name="special_skill">特殊技能</string>
+    <string name="real_my_action">选择你的行动！</string>
+    <string name="real_wait_action">等待对方行动</string>
+    <string name="real_lost">败！</string>
+    <string name="real_win">胜！</string>
 </resources>

@@ -1,14 +1,32 @@
 package cn.luo.yuan.maze.model.goods.types
 
+import cn.luo.yuan.maze.model.Parameter
 import cn.luo.yuan.maze.model.goods.GoodsProperties
 import cn.luo.yuan.maze.model.goods.UsableGoods
+import cn.luo.yuan.maze.service.InfoControlInterface
+import cn.luo.yuan.maze.utils.StringUtils
 
 /**
  * Created by luoyuan on 2017/9/4.
  */
-class Filter : UsableGoods() {
+class Filter : UsableGoods(), InfoControlInterface.InputListener {
+    override fun input(input: String?, context:InfoControlInterface) {
+        val config = context.dataManager.loadConfig();
+        if(StringUtils.isNotEmpty(input) && config!=null){
+            config.catchFilter = input
+            config.catchRestrictor = StringUtils.EMPTY_STRING
+            context.dataManager.save(config)
+        }
+    }
+
     override fun perform(properties: GoodsProperties): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val context: InfoControlInterface? = properties[Parameter.CONTEXT] as InfoControlInterface
+        if (context != null) {
+            context.showInputPopup(this, "输入过滤条件")
+            return true;
+
+        }
+        return false
     }
 
     override var desc: String = "使用后可以设计一个捕捉过滤条件（和限定器相反，并且会覆盖限定器的效果），这样你就不会捕捉符合条件的怪物。" +

@@ -13,6 +13,7 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.handler.ViewHandler;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
+import cn.luo.yuan.maze.client.display.view.SpringProgressView;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
@@ -45,7 +46,7 @@ public class RealBattleDialog implements View.OnClickListener {
     private RealTimeState currentState;
     private AlertDialog main;
     private HarmAble my;
-    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
 
     public RealBattleDialog(final RealTimeManager manager, NeverEnd context) {
         this.context = context;
@@ -61,6 +62,16 @@ public class RealBattleDialog implements View.OnClickListener {
         root.findViewById(R.id.real_battle_skill_action).setOnClickListener(this);
         root.findViewById(R.id.real_battle_goods_action).setOnClickListener(this);
         my = context.getHero();
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    updateState(manager.pollState());
+                }catch (Exception e){
+                    LogHelper.logException(e, "Poll state");
+                }
+            }
+        });
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -70,6 +81,7 @@ public class RealBattleDialog implements View.OnClickListener {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
+                            targetAction();
                             updateTimer(finalI);
                         }
                     });
@@ -83,16 +95,18 @@ public class RealBattleDialog implements View.OnClickListener {
                 showStartTip();
             }
         });
-        executor.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                updateState(manager.pollState());
-            }
-        }, 0, 600, TimeUnit.MILLISECONDS);
+
+        root.findViewById(R.id.real_battle_close).setOnClickListener(this);
     }
 
     public void stop() {
-        executor.shutdown();
+        try {
+            executor.shutdown();
+            executor.awaitTermination(2, TimeUnit.SECONDS);
+            manager.quit();
+        }catch (Exception e){
+            LogHelper.logException(e, "Stop real battle");
+        }
     }
 
     public void updateState(final RealTimeState state) {
@@ -100,28 +114,32 @@ public class RealBattleDialog implements View.OnClickListener {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                HarmAble winner = state.getWinner();
-                HarmAble loser = state.getLoser();
-                if (winner != null && loser != null) {
-                    if (winner.getId().equals(my.getId())) {
-                        IAmWinner(state);
+                try {
+                    HarmAble winner = state.getWinner();
+                    HarmAble loser = state.getLoser();
+                    if (winner != null && loser != null) {
+                        if (winner.getId().equals(my.getId())) {
+                            IAmWinner(state);
+                        } else {
+                            IAmLoser(state);
+                        }
+                        stop();
                     } else {
-                        IAmLoser(state);
+                        HarmAble actioner = state.getActioner();
+                        HarmAble waiter = state.getWaiter();
+                        ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_timer), StringUtils.formatNumber(state.getRemainTime() / 1000));
+                        if (actioner != null && waiter != null && actioner.getId().equals(my.getId())) {
+                            updateMyState(actioner, state.getActionerLevel(), state.getActionerPetIndex(), state.getActionerPoint(), state.getActionerHead());
+                            updateTargetState(waiter, state.getWaiterLevel(), state.getWaiterPetIndex(), state.getWaiterPoint(), state.getWaiterHead());
+                            myAction();
+                        } else if (actioner != null && waiter != null) {
+                            updateMyState(waiter, state.getWaiterLevel(), state.getWaiterPetIndex(), state.getWaiterPoint(), state.getWaiterHead());
+                            updateTargetState(actioner, state.getActionerLevel(), state.getActionerPetIndex(), state.getActionerPoint(), state.getActionerHead());
+                            targetAction();
+                        }
                     }
-                    stop();
-                }else {
-                    HarmAble actioner = state.getActioner();
-                    HarmAble waiter = state.getWaiter();
-                    ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_timer), StringUtils.formatNumber(state.getRemainTime() / 1000));
-                    if (actioner != null && waiter != null && actioner.getId().equals(my.getId())) {
-                        updateMyState(actioner, state.getActionerLevel(), state.getActionerPetIndex(), state.getActionerPoint(), state.getActionerHead());
-                        updateTargetState(waiter, state.getWaiterLevel(), state.getWaiterPetIndex(), state.getWaiterPoint(), state.getWaiterHead());
-                        myAction();
-                    } else if (actioner != null && waiter != null) {
-                        updateMyState(waiter, state.getWaiterLevel(), state.getWaiterPetIndex(), state.getWaiterPoint(), state.getWaiterHead());
-                        updateTargetState(actioner, state.getActionerLevel(), state.getActionerPetIndex(), state.getActionerPoint(), state.getActionerHead());
-                        targetAction();
-                    }
+                }catch (Exception e){
+                    LogHelper.logException(e, "update state");
                 }
                 updateMessage(state);
             }
@@ -131,8 +149,29 @@ public class RealBattleDialog implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.real_battle_close:
+                SimplerDialogBuilder.build("确认退出吗？如果战斗中强行退出会被判断失败！", Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        stop();
+                        dialog.dismiss();
+                        main.dismiss();
+
+                    }
+                }, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }, context.getContext());
+                break;
             case R.id.real_battle_atk_action:
-                manager.atkAction();
+                executor.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        manager.atkAction();
+                    }
+                });
                 targetAction();
                 break;
             case R.id.real_battle_skill_action:
@@ -148,7 +187,7 @@ public class RealBattleDialog implements View.OnClickListener {
         final List<AtkSkill> atkSkills = new ArrayList<>(6);
         final List<String> skillName = new ArrayList<>(6);
         for (Skill skill : context.getHero().getSkills()) {
-            if (skill instanceof DefSkill) {
+            if (skill instanceof AtkSkill) {
                 atkSkills.add((AtkSkill) skill);
                 int skillActionPoint = Data.getSkillActionPoint(skill);
                 skillName.add("<font color='" + (skillActionPoint <= currentState.getActionerPoint() ? "" : "#b4a6b0") + "'>" + skill.getName() + "</font> - " + skillActionPoint);
@@ -173,6 +212,7 @@ public class RealBattleDialog implements View.OnClickListener {
             }
         });
         LinearLayout sv = (LinearLayout) root.findViewById(R.id.detail_action_scroll);
+        sv.removeAllViews();
         ListView listView = new ListView(context.getContext());
         listView.setAdapter(adapter);
         sv.addView(listView);
@@ -199,7 +239,12 @@ public class RealBattleDialog implements View.OnClickListener {
                     DefSkill skill = defSkills.get(index);
                     if (skill != null) {
                         if (Data.getSkillActionPoint(skill) <= currentState.getActionerPoint()) {
-                            manager.useDefSkillAction(skill);
+                            executor.submit(new Runnable() {
+                                @Override
+                                public void run() {
+                                    manager.useDefSkillAction(skill);
+                                }
+                            });
                             targetAction();
                         }
                     }
@@ -209,6 +254,7 @@ public class RealBattleDialog implements View.OnClickListener {
             }
         });
         LinearLayout sv = (LinearLayout) root.findViewById(R.id.detail_action_scroll);
+        sv.removeAllViews();
         ListView listView = new ListView(context.getContext());
         listView.setAdapter(adapter);
         sv.addView(listView);
@@ -237,18 +283,27 @@ public class RealBattleDialog implements View.OnClickListener {
                 }, 500);
             }
         });
+        executor.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                updateState(manager.pollState());
+            }
+        }, 0, 600, TimeUnit.MILLISECONDS);
     }
 
     private void IAmLoser(RealTimeState state) {
+        root.findViewById(R.id.real_battle_timer).setVisibility(View.INVISIBLE);
         TextView textView = (TextView) root.findViewById(R.id.start_text);
         textView.setVisibility(View.VISIBLE);
-        ViewHandler.setText(textView, "失败！");
+        ViewHandler.setText(textView, R.string.real_lost);
+        root.findViewById(R.id.real_battle_close).setVisibility(View.VISIBLE);
     }
 
     private void IAmWinner(final RealTimeState state) {
+        root.findViewById(R.id.real_battle_timer).setVisibility(View.INVISIBLE);
         TextView textView = (TextView) root.findViewById(R.id.start_text);
         textView.setVisibility(View.VISIBLE);
-        ViewHandler.setText(textView, "胜利！");
+        ViewHandler.setText(textView, R.string.real_win);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -266,6 +321,12 @@ public class RealBattleDialog implements View.OnClickListener {
 
             }
         }, 100);
+        if(state.getAwardMate() > 0){
+            context.getHero().setMaterial(context.getHero().getMaterial() + state.getAwardMate());
+        }
+        if(state.getAwardPoint() > 0){
+            context.getHero().setPoint(context.getHero().getPoint() + state.getAwardPoint());
+        }
     }
 
 
@@ -275,7 +336,9 @@ public class RealBattleDialog implements View.OnClickListener {
             for (String s : state.getMsg()) {
                 sb.append(s).append("<br>");
             }
-            ((RollTextView) root.findViewById(R.id.real_battle_info)).addMessage(sb.toString());
+            RollTextView rollTextView = (RollTextView) root.findViewById(R.id.real_battle_info);
+            rollTextView.addMessage(sb.toString());
+
         }
     }
 
@@ -288,7 +351,7 @@ public class RealBattleDialog implements View.OnClickListener {
         sv.setVisibility(View.GONE);
         TextView textView = (TextView) root.findViewById(R.id.action_tip);
         textView.setVisibility(View.VISIBLE);
-        ViewHandler.setText(textView, "等待对方行动");
+        ViewHandler.setText(textView, R.string.real_wait_action);
         root.findViewById(R.id.real_battle_atk_action).setEnabled(false);
         root.findViewById(R.id.real_battle_defend_action).setEnabled(false);
         root.findViewById(R.id.real_battle_skill_action).setEnabled(false);
@@ -303,7 +366,7 @@ public class RealBattleDialog implements View.OnClickListener {
             root.findViewById(R.id.real_battle_goods_action).setEnabled(true);
             TextView textView = (TextView) root.findViewById(R.id.action_tip);
             textView.setVisibility(View.VISIBLE);
-            ViewHandler.setText(textView, "选择你的行动！");
+            ViewHandler.setText(textView, R.string.real_my_action);
         }
     }
 
@@ -326,8 +389,9 @@ public class RealBattleDialog implements View.OnClickListener {
     }
 
     private void updateTargetState(HarmAble target, long level, int petIndex, long point, String head) {
-        ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_target_hp), StringUtils.formatNumber(target.getCurrentHp()));
-        ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_targer_maxhp), StringUtils.formatNumber(target.getUpperHp()));
+        SpringProgressView hpView = (SpringProgressView) root.findViewById(R.id.real_battle_target_hp);
+        hpView.setMaxCount(100);
+        hpView.setCurrentCount(target.getCurrentHp() * 100f/target.getUpperHp());
         ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_targer_name), my instanceof NameObject ? ((NameObject) target).getDisplayName() : target.toString());
         if (level >= 0) {
             ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_target_level), RealLevel.Companion.getLevel(level));

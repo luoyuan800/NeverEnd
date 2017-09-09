@@ -256,7 +256,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 break;
             case R.id.crash:
 //                throw new RuntimeException("test exception");
-                Monster monster = control.getPetMonsterHelper().randomMonster(100);
+                Monster monster = control.getPetMonsterHelper().randomMonster(5);
                 if(monster!=null){
                     LocalRealTimeManager m = new LocalRealTimeManager(control, monster);
                     new RealBattleDialog(m , control);

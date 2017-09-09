@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -320,7 +321,7 @@ public class Hero extends HarmObject implements Serializable, IDModel, SkillAble
 
     public
     @NotNull
-    Collection<Pet> getPets() {
+    ConcurrentLinkedDeque<Pet> getPets() {
         if (pets == null) {
             synchronized (this) {
                 if (pets == null)
@@ -421,6 +422,7 @@ public class Hero extends HarmObject implements Serializable, IDModel, SkillAble
             hero.material = new EncodeLong(material.getValue().longValue());
             hero.point = new EncodeLong(point.getValue());
             hero.reincarnate = new EncodeLong(reincarnate.getValue());
+            hero.skills = Arrays.copyOf(getSkills(), getSkills().length);
             return hero;
         } catch (CloneNotSupportedException e) {
             return this;

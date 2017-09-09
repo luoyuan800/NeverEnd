@@ -160,7 +160,7 @@ public class BattleService {
     }
 
 
-    private void petActionOnAtk(PetOwner hero, HarmAble monster) {
+    public void petActionOnAtk(PetOwner hero, HarmAble monster) {
         for (Pet pet : hero.getPets()) {
             if (isPetWork(pet, random, true)) {
                 if (monster instanceof Monster && ((Monster) monster).getRank() > pet.getRank() && random.nextInt(5) < 1) {
@@ -178,7 +178,7 @@ public class BattleService {
         }
     }
 
-    private boolean petActionOnDef(PetOwner hero, HarmAble monster) {
+    public boolean petActionOnDef(PetOwner hero, HarmAble monster) {
         for (Pet pet : hero.getPets()) {
             if (isPetWork(pet, random, true)) {
                 if (monster instanceof Monster && ((Monster) monster).getRank() > pet.getRank() && random.nextInt(5) < 1) {

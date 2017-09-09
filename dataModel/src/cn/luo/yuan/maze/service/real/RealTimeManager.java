@@ -17,4 +17,6 @@ public interface RealTimeManager {
     void useGoodsAction(Goods goods);
     void useAtkSkillAction(AtkSkill skill);
     void useDefSkillAction(DefSkill skill);
+
+    void quit();
 }

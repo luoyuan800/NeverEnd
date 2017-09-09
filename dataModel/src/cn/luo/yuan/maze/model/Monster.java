@@ -199,6 +199,8 @@ public class Monster extends HarmObject implements IDModel, SilentAbleObject, Na
         return "<font color='" + color + "'>" + firstName.getName() + "的" + secondName.getName() + type + "(" + element.getCn() + ")" + StringUtils.formatSex(getSex()) + "</font>";
     }
 
+
+
     public String getName(){
         return firstName.getName() + "的" + secondName.getName() + type;
     }

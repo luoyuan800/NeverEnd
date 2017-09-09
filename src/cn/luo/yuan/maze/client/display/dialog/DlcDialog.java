@@ -14,10 +14,7 @@ import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
 import cn.luo.yuan.maze.client.service.DLCManager;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.Resource;
-import cn.luo.yuan.maze.model.dlc.DLC;
-import cn.luo.yuan.maze.model.dlc.DLCKey;
-import cn.luo.yuan.maze.model.dlc.MonsterDLC;
-import cn.luo.yuan.maze.model.dlc.SingleItemDLC;
+import cn.luo.yuan.maze.model.dlc.*;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.List;
@@ -66,18 +63,18 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
                 public void run() {
                     View view = View.inflate(context.getContext(), R.layout.monster_dlc, null);
                     view.setTag(R.string.item, dlc);
-                    if (((MonsterDLC)dlc).getImage().size() > 0) {
-                        ((ImageView) view.findViewById(R.id.dlc_1)).setImageDrawable(Resource.loadDrawableFromBytes(((MonsterDLC)dlc).getImage().get(0)));
+                    if (((MonsterDLC) dlc).getImage().size() > 0) {
+                        ((ImageView) view.findViewById(R.id.dlc_1)).setImageDrawable(Resource.loadDrawableFromBytes(((MonsterDLC) dlc).getImage().get(0)));
                     } else {
                         ((ImageView) view.findViewById(R.id.dlc_1)).setImageDrawable(null);
                     }
-                    if (((MonsterDLC)dlc).getImage().size() > 1) {
-                        ((ImageView) view.findViewById(R.id.dlc_2)).setImageDrawable(Resource.loadDrawableFromBytes(((MonsterDLC)dlc).getImage().get(1)));
+                    if (((MonsterDLC) dlc).getImage().size() > 1) {
+                        ((ImageView) view.findViewById(R.id.dlc_2)).setImageDrawable(Resource.loadDrawableFromBytes(((MonsterDLC) dlc).getImage().get(1)));
                     } else {
                         ((ImageView) view.findViewById(R.id.dlc_2)).setImageDrawable(null);
                     }
-                    if (((MonsterDLC)dlc).getImage().size() > 2) {
-                        ((ImageView) view.findViewById(R.id.dlc_3)).setImageDrawable(Resource.loadDrawableFromBytes(((MonsterDLC)dlc).getImage().get(2)));
+                    if (((MonsterDLC) dlc).getImage().size() > 2) {
+                        ((ImageView) view.findViewById(R.id.dlc_3)).setImageDrawable(Resource.loadDrawableFromBytes(((MonsterDLC) dlc).getImage().get(2)));
                     } else {
                         ((ImageView) view.findViewById(R.id.dlc_3)).setImageDrawable(null);
                     }
@@ -93,7 +90,26 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
                     view.findViewById(R.id.close).setTag(R.string.dialog, dialog);
                 }
             });
-        } else if(dlc instanceof SingleItemDLC){
+        } else if (dlc instanceof SkillDLC) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    View view = View.inflate(context.getContext(), R.layout.monster_dlc, null);
+                    view.setTag(R.string.item, dlc);
+                    ((ImageView) view.findViewById(R.id.dlc_2)).setImageDrawable(Resource.getSkillDrawable(((SkillDLC) dlc).getSkill()));
+                    ((TextView) view.findViewById(R.id.dlc_title)).setText(Html.fromHtml(dlc.getTitle()));
+                    ((TextView) view.findViewById(R.id.dlc_desc)).setText(Html.fromHtml(dlc.getDesc()));
+                    ((TextView) view.findViewById(R.id.dlc_cost)).setText(StringUtils.formatNumber(dlc.getDebrisCost()));
+                    Dialog dialog = SimplerDialogBuilder.build(view, "详情", context.getContext(), context.getRandom());
+                    view.findViewById(R.id.dlc_buy).setOnClickListener(DlcDialog.this);
+                    view.findViewById(R.id.dlc_buy).setTag(R.string.item, dlc);
+                    view.findViewById(R.id.dlc_buy).setTag(R.string.dialog, dialog);
+                    view.findViewById(R.id.close).setOnClickListener(DlcDialog.this);
+                    view.findViewById(R.id.close).setTag(R.string.item, dlc);
+                    view.findViewById(R.id.close).setTag(R.string.dialog, dialog);
+                }
+            });
+        } else if (dlc instanceof SingleItemDLC) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -155,9 +171,9 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
         Object o = v.getTag(R.string.item);
         switch (v.getId()) {
             case R.id.dlc_buy:
-                if(o instanceof MonsterDLC) {
+                if (o instanceof MonsterDLC) {
                     manager.buyMonsterDlc((MonsterDLC) o, this);
-                }else if(o instanceof SingleItemDLC){
+                } else if (o instanceof SingleItemDLC) {
                     manager.buySingleItemDlc((SingleItemDLC) o, this);
                 }
                 break;
