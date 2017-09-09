@@ -2,6 +2,8 @@ package cn.luo.yuan.maze.service.real
 
 import cn.luo.yuan.maze.model.Data
 import cn.luo.yuan.maze.model.HarmAble
+import cn.luo.yuan.maze.model.NameObject
+import cn.luo.yuan.maze.model.PetOwner
 import cn.luo.yuan.maze.model.real.RealTimeState
 import cn.luo.yuan.maze.model.real.action.AtkAction
 import cn.luo.yuan.maze.model.real.action.AtkSkillAction
@@ -21,8 +23,8 @@ import cn.luo.yuan.maze.utils.StringUtils
 class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, var mateAward:Long, val random: Random) {
     val battle: BattleService = BattleService(p1, p2, random, null)
     val messager = RealBattleMessage()
-    var p1ActionPoint = 150
-    var p2ActionPoint = 150
+    var p1ActionPoint = 110
+    var p2ActionPoint = 110
     var actionControlThread: ControlThread? = null
     var running = -1
     var timeLimit = 30
@@ -97,7 +99,12 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
                             //Release skill
                             defender.skills[0] = EmptySkill.EMPTY_SKILL
                         } else {
-                            battle.normalAtk(actioner, if (actioner === p1) p2 else p1, if(actioner == p1) p1ActionPoint.toLong() else p2ActionPoint.toLong())
+                            if(!(defender is PetOwner && battle.petActionOnDef(defender, actioner))){
+                                if(actioner is PetOwner){
+                                    battle.petActionOnAtk(actioner as PetOwner,defender);
+                                }
+                                battle.normalAtk(actioner, if (actioner === p1) p2 else p1, if(actioner == p1) p1ActionPoint.toLong() else p2ActionPoint.toLong())
+                            }
                         }
                     }
                 }
@@ -170,6 +177,9 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
             }
         }
         if(winner!=null && loser!=null){
+            if(winner is NameObject && loser is NameObject) {
+                messager.rowMessage("${(winner as NameObject).displayName} 击败了 ${(loser as NameObject).displayName}")
+            }
         }
     }
 

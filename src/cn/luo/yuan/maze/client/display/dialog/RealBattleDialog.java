@@ -186,7 +186,7 @@ public class RealBattleDialog implements View.OnClickListener {
         final List<AtkSkill> atkSkills = new ArrayList<>(6);
         final List<String> skillName = new ArrayList<>(6);
         for (Skill skill : context.getHero().getSkills()) {
-            if (skill instanceof DefSkill) {
+            if (skill instanceof AtkSkill) {
                 atkSkills.add((AtkSkill) skill);
                 int skillActionPoint = Data.getSkillActionPoint(skill);
                 skillName.add("<font color='" + (skillActionPoint <= currentState.getActionerPoint() ? "" : "#b4a6b0") + "'>" + skill.getName() + "</font> - " + skillActionPoint);
@@ -211,6 +211,7 @@ public class RealBattleDialog implements View.OnClickListener {
             }
         });
         LinearLayout sv = (LinearLayout) root.findViewById(R.id.detail_action_scroll);
+        sv.removeAllViews();
         ListView listView = new ListView(context.getContext());
         listView.setAdapter(adapter);
         sv.addView(listView);
@@ -252,6 +253,7 @@ public class RealBattleDialog implements View.OnClickListener {
             }
         });
         LinearLayout sv = (LinearLayout) root.findViewById(R.id.detail_action_scroll);
+        sv.removeAllViews();
         ListView listView = new ListView(context.getContext());
         listView.setAdapter(adapter);
         sv.addView(listView);
@@ -331,7 +333,9 @@ public class RealBattleDialog implements View.OnClickListener {
             for (String s : state.getMsg()) {
                 sb.append(s).append("<br>");
             }
-            ((RollTextView) root.findViewById(R.id.real_battle_info)).addMessage(sb.toString());
+            RollTextView rollTextView = (RollTextView) root.findViewById(R.id.real_battle_info);
+            rollTextView.addMessage(sb.toString());
+
         }
     }
 
