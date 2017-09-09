@@ -7,6 +7,7 @@ import cn.luo.yuan.maze.model.Hero
 import cn.luo.yuan.maze.model.NameObject
 import cn.luo.yuan.maze.model.goods.Goods
 import cn.luo.yuan.maze.model.goods.GoodsProperties
+import cn.luo.yuan.maze.model.goods.RealBattleUsAble
 import cn.luo.yuan.maze.service.InfoControlInterface
 import cn.luo.yuan.maze.service.ListenerService
 import cn.luo.yuan.maze.utils.Field
@@ -16,7 +17,7 @@ import cn.luo.yuan.maze.utils.StringUtils
 /**
  * Created by gluo on 5/5/2017.
  */
-class HPM() : Goods(){
+class HPM() : Goods(), RealBattleUsAble{
     companion object {
         private const val serialVersionUID: Long = Field.SERVER_VERSION
     }

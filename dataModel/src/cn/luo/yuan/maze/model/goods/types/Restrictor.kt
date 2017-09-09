@@ -1,14 +1,32 @@
 package cn.luo.yuan.maze.model.goods.types
 
+import cn.luo.yuan.maze.model.Parameter
 import cn.luo.yuan.maze.model.goods.GoodsProperties
 import cn.luo.yuan.maze.model.goods.UsableGoods
+import cn.luo.yuan.maze.service.InfoControlInterface
+import cn.luo.yuan.maze.utils.StringUtils
 
 /**
  * Created by luoyuan on 2017/9/4.
  */
-class Restrictor: UsableGoods() {
+class Restrictor: UsableGoods(), InfoControlInterface.InputListener {
+    override fun input(input: String?, context: InfoControlInterface) {
+        val config = context.dataManager.loadConfig();
+        if(StringUtils.isNotEmpty(input) && config!=null){
+            config.catchRestrictor = input
+            config.catchFilter = StringUtils.EMPTY_STRING
+            context.dataManager.save(config)
+        }
+    }
+
     override fun perform(properties: GoodsProperties): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val context: InfoControlInterface? = properties[Parameter.CONTEXT] as InfoControlInterface
+        if (context != null) {
+            context.showInputPopup(this, "输入限定条件")
+            return true;
+
+        }
+        return false
     }
 
     override var desc: String = "限定只捕获符合条件的宠物（和过滤器相反，并且会覆盖过滤器的作用）。" +

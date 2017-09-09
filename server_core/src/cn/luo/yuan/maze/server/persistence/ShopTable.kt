@@ -4,9 +4,9 @@ import cn.luo.yuan.maze.model.Accessory
 import cn.luo.yuan.maze.model.Element
 import cn.luo.yuan.maze.model.SellItem
 import cn.luo.yuan.maze.model.goods.Goods
+import cn.luo.yuan.maze.serialize.ObjectTable
 import cn.luo.yuan.maze.server.LogHelper
 import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection
-import cn.luo.yuan.maze.serialize.ObjectTable
 import cn.luo.yuan.maze.utils.Random
 import java.io.File
 import java.sql.Connection
@@ -45,8 +45,8 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
     }
 
     fun getAllSelling(): List<SellItem> {
-        var con:Connection? = null
-        var stat:Statement? = null
+        var con: Connection? = null
+        var stat: Statement? = null
         val list = mutableListOf<SellItem>()
         try {
             con = database.getConnection()
@@ -58,19 +58,23 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
             while (rs.next() && list.size < 15) {
                 val type = rs.getString("type")
                 val sellItem = SellItem()
+                sellItem.id = rs.getString("id")
+                sellItem.price = rs.getLong("cost")
+                sellItem.special = rs.getBoolean("special")
                 when (type) {
                     "goods" -> {
-                            val ins = Class.forName(rs.getString("ref")).newInstance()
-                            (ins as Goods).setCount(1)
-                            sellItem.count = 4
-                            sellItem.instance = ins
-                            sellItem.desc = ins.desc
-                            sellItem.type = "物品"
-                            sellItem.name = ins.name
-                            list.add(sellItem)
+                        val ins = Class.forName(rs.getString("ref")).newInstance()
+                        (ins as Goods).setCount(1)
+                        ins.price = sellItem.price
+                        sellItem.count = 4
+                        sellItem.instance = ins
+                        sellItem.desc = ins.desc
+                        sellItem.type = "物品"
+                        sellItem.name = ins.name
+                        list.add(sellItem)
                     }
                     "accessory" -> {
-                        if(random.nextBoolean()) {
+                        if (random.nextBoolean()) {
                             val acc = accessoryDb!!.loadObject(rs.getString("ref"))
                             if (acc != null) {
                                 acc.element = random.randomItem(Element.values())
@@ -87,12 +91,10 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
                         }
                     }
                 }
-                sellItem.id = rs.getString("id")
-                sellItem.price = rs.getLong("cost")
-                sellItem.special = rs.getBoolean("special")
+
                 LogHelper.debug("return shop item result: " + list)
             }
-        }finally {
+        } finally {
             stat?.close()
             con?.close()
         }
@@ -107,23 +109,23 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
         conn.close()
     }
 
-    fun add(item:Any){
+    fun add(item: Any) {
         val conn = database.getConnection()
-        try{
-        when(item){
-            is Accessory ->{
-                accessoryDb?.save(item)
-                val state = conn.prepareStatement("insert into shop(id, type, cost, count,ref) values(?,?,?,?,?)")
-                state.setString(1, item.id)
-                state.setString(2, "accessory")
-                state.setLong(3, 1000000)
-                state.setLong(4, 100)
-                state.setString(5, item.id)
-                state.execute()
-                state.close()
+        try {
+            when (item) {
+                is Accessory -> {
+                    accessoryDb?.save(item)
+                    val state = conn.prepareStatement("insert into shop(id, type, cost, count,ref) values(?,?,?,?,?)")
+                    state.setString(1, item.id)
+                    state.setString(2, "accessory")
+                    state.setLong(3, 1000000)
+                    state.setLong(4, 100)
+                    state.setString(5, item.id)
+                    state.execute()
+                    state.close()
+                }
             }
-        }
-        }catch (e:Exception) {
+        } catch (e: Exception) {
             LogHelper.error(e)
         }
         conn.close()

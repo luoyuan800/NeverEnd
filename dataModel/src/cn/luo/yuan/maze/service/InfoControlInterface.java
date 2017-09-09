@@ -38,4 +38,10 @@ public interface InfoControlInterface {
     void refreshHead();
 
     void showEmptyAccessoryDialog();
+
+    void showInputPopup(InputListener listener, String hint);
+
+    interface InputListener{
+        void input(String input, InfoControlInterface context);
+    }
 }

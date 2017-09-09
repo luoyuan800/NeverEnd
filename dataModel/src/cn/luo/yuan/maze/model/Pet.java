@@ -24,6 +24,7 @@ public class Pet extends Monster implements IDModel, OwnedAble, MountAble {
     private String keeperName = StringUtils.EMPTY_STRING;
     private String mother = StringUtils.EMPTY_STRING;
     private String farther = StringUtils.EMPTY_STRING;
+    private String myFirstName;
 
     @Override
     public boolean isDelete() {
@@ -136,6 +137,12 @@ public class Pet extends Monster implements IDModel, OwnedAble, MountAble {
         return (getHp() <= 0 ? "<font color='#b4a6b0'>" : "") + getDisplayName() + (getLevel() > 0 ? (" X" + getLevel()) : "") + (getHp() <= 0 ? "</font>" : "") + "[" + getRace() + "]";
     }
 
+
+    public String getDisplayName() {
+        return "<font color='" + getColor() + "'>" + (StringUtils.isNotEmpty(myFirstName) ? myFirstName : getFirstName().getName()) +
+                "的" + getSecondName().getName() + getType() + "(" + getElement().getCn() + ")" + StringUtils.formatSex(getSex()) + "</font>";
+    }
+
     @Override
     public String getKeeperId() {
         return keeperId;
@@ -161,5 +168,13 @@ public class Pet extends Monster implements IDModel, OwnedAble, MountAble {
     @Override
     public void setHeroIndex(int heroIndex) {
         this.heroIndex = heroIndex;
+    }
+
+    public String getMyFirstName() {
+        return myFirstName;
+    }
+
+    public void setMyFirstName(String myFirstName) {
+        this.myFirstName = myFirstName;
     }
 }

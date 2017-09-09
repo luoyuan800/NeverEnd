@@ -22,6 +22,8 @@ public class NeverEndConfig implements IDModel, Serializable {
     private boolean elementer;
     private Set<Integer> catchedMonsterIndex;
     private boolean petGift;
+    private String catchFilter;
+    private String catchRestrictor;
 
 
     public synchronized boolean isMonsterCatched(int index){
@@ -59,7 +61,9 @@ public class NeverEndConfig implements IDModel, Serializable {
     }
 
     public void load(){
-        Data.MATERIAL_LIMIT = this.MATERIAL_LIMIT;
+        setMATERIAL_LIMIT(getMATERIAL_LIMIT());
+        setEGG_RATE_REDUCE(this.getEGG_RATE_REDUCE());
+        setPET_RATE_REDUCE(this.getPET_RATE_REDUCE());
     }
 
     @Override
@@ -162,5 +166,21 @@ public class NeverEndConfig implements IDModel, Serializable {
     public void setEGG_RATE_REDUCE(float EGG_RATE_REDUCE) {
         this.EGG_RATE_REDUCE = EGG_RATE_REDUCE;
         Data.EGG_RATE_REDUCE = this.EGG_RATE_REDUCE;
+    }
+
+    public String getCatchFilter() {
+        return catchFilter;
+    }
+
+    public void setCatchFilter(String catchFilter) {
+        this.catchFilter = catchFilter;
+    }
+
+    public String getCatchRestrictor() {
+        return catchRestrictor;
+    }
+
+    public void setCatchRestrictor(String catchRestrictor) {
+        this.catchRestrictor = catchRestrictor;
     }
 }

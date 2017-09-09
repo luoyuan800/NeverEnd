@@ -114,6 +114,22 @@ public class NeverEnd extends Application implements InfoControlInterface {
         });
     }
 
+    @Override
+    public void showInputPopup(InputListener listener, String hint) {
+        final EditText et = new EditText(context);
+        et.setHint(hint);
+        SimplerDialogBuilder.build(et, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String ip = et.getText().toString();
+                if(listener!=null){
+                    listener.input(ip, NeverEnd.this);
+                }
+                dialog.dismiss();
+            }
+        }, context, false);
+    }
+
     public void setContext(Context context, DataManager dataManager) {
         this.context = context;
         executor = Executors.newScheduledThreadPool(5);
