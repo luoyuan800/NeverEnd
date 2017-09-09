@@ -35,13 +35,18 @@
             android:title="---联网功能---"/>
 
     <item
-            android:id="@+id/excahnge"
-            android:icon="@android:drawable/ic_menu_agenda"
-            android:title="交换"/>
-    <item
             android:id="@+id/online_battle"
             android:icon="@android:drawable/ic_menu_agenda"
             android:title="战斗塔"/>
+    <item
+            android:id="@+id/palace"
+            android:icon="@android:drawable/ic_menu_agenda"
+            android:title="殿堂"/>
+    <item
+            android:id="@+id/excahnge"
+            android:icon="@android:drawable/ic_menu_agenda"
+            android:title="交换"/>
+
     <item
             android:id="@+id/warehouse"
             android:icon="@android:drawable/ic_menu_agenda"

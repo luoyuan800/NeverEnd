@@ -58,7 +58,7 @@ public class LocalRealTimeManager implements RealTimeManager{
             HarmAble actioner = state.getActioner();
             if (actioner != null) {
                 if (target.getId().equals(actioner.getId())) {
-                    monsterAction();
+                    targetAction(state);
                 }
                 state = realTimeBattle.pollState(msgIndex);
             }
@@ -91,7 +91,7 @@ public class LocalRealTimeManager implements RealTimeManager{
 
     }
 
-    public synchronized void monsterAction(){
+    public synchronized void targetAction(RealTimeState state){
         realTimeBattle.action(new AtkAction(UUID.randomUUID().toString(), target.getId()));
     }
 
