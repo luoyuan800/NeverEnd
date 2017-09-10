@@ -124,4 +124,8 @@
     <string name="real_wait_action">等待对方行动</string>
     <string name="real_lost">败！</string>
     <string name="real_win">胜！</string>
+    <string name="palcae_tip">消耗3块碎片随机匹配和你排位等级相近的玩家进行对战，对战胜利后可以积累排位积分进而提升排位等级</string>
+    <string name="palace_npc_battle_tip">消耗3块碎片和游戏内置人物对战（NPC）。无法获得排位积分，但是可以获得锻造点奖励。</string>
+    <string name="palace_challenge_tip">消耗20块碎片挑战已经进入殿堂的玩家（离线）。战斗方式为车轮战！获胜后可以获得大量锻造点和能力点奖励</string>
+    <string name="palace_legacy_tip">消耗30块碎片挑战老版本的玩家！获胜后可以获得大量锻造点奖励！</string>
 </resources>

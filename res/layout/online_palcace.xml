@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:id="@+id/online_view_container"
+              tools:context=".client.display.activity.OnlineActivity"
+        >
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:elevation="1dp">
+
+            <TextView
+                    android:text=""
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/online_palace_msg"
+                    />
+
+            <ImageView
+                    android:src="@drawable/huoyan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView"
+                    android:elevation="1dp"
+                    android:scaleType="fitXY"/>
+
+            <TextView
+                    android:text="排位"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView"
+                    android:textStyle="normal|bold"
+                    />
+
+            <TextView
+                    android:text="等待中……"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/online_palace_range"
+                    android:background="@android:drawable/spinner_background"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:id="@+id/nam_pic_layout"
+                android:layout_weight="2"
+                android:gravity="center">
+
+            <TextView
+                    android:id="@+id/online_palace_level"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:text="黄金 1"
+                    android:textSize="34sp"
+                    android:textStyle="normal|bold"
+                    android:typeface="serif"
+                    android:fontFamily="cursive"/>
+
+            <ImageView
+                    android:layout_width="180dp"
+                    android:id="@+id/hero_pic"
+                    android:src="@drawable/baizee"
+                    android:onClick="onClick"
+                    android:layout_gravity="center"
+                    android:layout_height="180dp"/>
+
+            <TextView
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:id="@+id/hero_name"
+                    android:textSize="20sp"
+                    android:text="名字"/>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="胜率"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:textSize="20sp"/>
+
+                <TextView
+                        android:text="100%"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/online_palace_rate"
+                        android:layout_weight="1"
+                        android:textSize="21sp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/online_palace_battle"
+            android:onClick="onClick"
+            android:text="匹配玩家对战"
+            style="@android:style/Widget.Button.Inset"
+            android:textSize="18dp"
+            android:layout_marginTop="10dp"/>
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="@string/palcae_tip"
+            android:textColor="@color/active"
+            android:textSize="14dp"/>
+
+    <Button
+            android:text="匹配NPC对战"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/online_palace_npc"
+            android:onClick="onClick"
+            style="@android:style/Widget.Button.Inset"
+            android:textSize="18dp"
+            android:layout_marginTop="15dp"/>
+
+    <TextView
+            android:text="@string/palace_npc_battle_tip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/active"
+            android:textSize="14dp"/>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            <Button
+                    android:text="挑战殿堂"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/online_palace_challenge"
+                    android:enabled="true"
+                    android:onClick="onClick"
+                    style="@android:style/Widget.Button.Inset"
+                    android:textSize="18dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="1"/>
+
+            <TextView
+                    android:text="@string/palace_challenge_tip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/active"
+                    android:textSize="14dp"
+                    android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp">
+
+            <Button
+                    android:text="挑战经典殿堂"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/online_palace_legacy"
+                    android:onClick="onClick"
+                    style="@android:style/Widget.Button.Inset"
+                    android:textSize="18dp"
+                    android:layout_marginTop="15dp"/>
+
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="@string/palace_legacy_tip"
+                    android:textColor="@color/active"
+                    android:textSize="14dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+            android:text="@string/close"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/close_button"
+            android:onClick="onClick"
+            style="@android:style/Widget.Button.Inset"
+            android:layout_marginTop="15dp"/>
+</LinearLayout>
