@@ -9,6 +9,12 @@ import java.io.Serializable
  * Created by Gavin Luo on 9/11/2017.
  */
 class LevelRecord(val id:String):Serializable {
+    constructor(hero: Hero):this(hero.id){
+        this.hero = hero
+        this.skills.addAll(hero.skills.toList())
+        this.accessories.addAll(hero.accessories)
+        this.pets.addAll(hero.pets)
+    }
     companion object {
         private const val serialVersionUID: Long = Field.SERVER_VERSION
     }

@@ -1,13 +1,6 @@
 package cn.luo.maze.web;
 
-import cn.luo.yuan.maze.model.Accessory;
-import cn.luo.yuan.maze.model.ExchangeObject;
-import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.model.OwnedAble;
-import cn.luo.yuan.maze.model.Pet;
-import cn.luo.yuan.maze.model.RangeAward;
-import cn.luo.yuan.maze.model.ServerData;
-import cn.luo.yuan.maze.model.ServerRecord;
+import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.server.LogHelper;
 import cn.luo.yuan.maze.server.MainProcess;
@@ -195,10 +188,10 @@ public class NeverEndServlet extends HttpServlet {
             Boolean success = null;
             switch (path) {
                 case UPDATE_REAL_RECORD:
-                    List<Object> objects = readObjects(request);
-                    if(objects.size() == 5){
-                        process.updateRealData((Hero)objects.get(0), (List<Pet>)objects.get(1),
-                                (List<Accessory>)objects.get(2), (List<Skill>)objects.get(3), objects.get(4).toString());
+                    LevelRecord record = readObject(request);
+                    if(record!=null){
+                        process.updateRealData(record);
+                        success = true;
                     }
                     break;
                 case POLL_REAL_BATTLE_STATE:

@@ -1031,12 +1031,13 @@ public class MainProcess {
         return realService.pollState(id, msgIndex);
     }
 
-    public void updateRealData(Hero hero, List<Pet> pets, List<Accessory> accessories, List<Skill> skills, String head) {
-        realService.newOrUpdateRecord(hero, pets, accessories, skills, head);
+    public void updateRealData(LevelRecord record) {
+        realService.newOrUpdateRecord(record);
     }
 
     public LevelRecord pollRealRecord(String id){
-        return realService.queryRecord(id);
+        LevelRecord levelRecord = realService.queryRecord(id);
+        return levelRecord;
     }
 
     private String buildEffectString(Map.Entry<String, MyJSONValue> entry, boolean isElement) {

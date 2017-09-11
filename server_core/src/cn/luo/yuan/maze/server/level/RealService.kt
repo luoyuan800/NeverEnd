@@ -66,19 +66,31 @@ class RealService(val mainProcess: MainProcess) {
         }
     }
 
-    fun newOrUpdateRecord(hero: Hero, pets: List<Pet>, accessories: List<Accessory>, skills: List<Skill>, head: String) {
+    fun newOrUpdateRecord(record: LevelRecord){
+        if(record.hero!=null){
+            newOrUpdateRecord(record.hero as Hero, record.pets, record.accessories, record.skills, record.head)
+        }
+    }
+
+    fun newOrUpdateRecord(hero: Hero, pets: List<Pet>?, accessories: List<Accessory>?, skills: List<Skill>?, head: String) {
         var record = recordDb.loadObject(hero.id)
         if (record == null) {
             record = LevelRecord(hero.id)
         }
         record.hero = hero
         record.head = head
-        record.pets.clear()
-        record.pets.addAll(pets)
-        record.accessories.clear()
-        record.accessories.addAll(accessories)
-        record.skills.clear()
-        record.skills.addAll(skills)
+        if(pets!=null) {
+            record.pets.clear()
+            record.pets.addAll(pets)
+        }
+        if(accessories!=null) {
+            record.accessories.clear()
+            record.accessories.addAll(accessories)
+        }
+        if(skills!=null) {
+            record.skills.clear()
+            record.skills.addAll(skills)
+        }
         recordDb.save(record, record.id)
     }
 

@@ -5,7 +5,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:id="@+id/online_view_container"
-              tools:context=".client.display.activity.OnlineActivity"
+              tools:context=".client.display.activity.PalaceActivity"
         >
 
     <LinearLayout
@@ -142,7 +142,8 @@
             android:onClick="onClick"
             style="@android:style/Widget.Button.Inset"
             android:textSize="18dp"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:enabled="false"/>
 
     <TextView
             android:text="@string/palace_npc_battle_tip"
@@ -167,7 +168,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/online_palace_challenge"
-                    android:enabled="true"
+                    android:enabled="false"
                     android:onClick="onClick"
                     style="@android:style/Widget.Button.Inset"
                     android:textSize="18dp"
@@ -199,7 +200,8 @@
                     android:onClick="onClick"
                     style="@android:style/Widget.Button.Inset"
                     android:textSize="18dp"
-                    android:layout_marginTop="15dp"/>
+                    android:layout_marginTop="15dp"
+                    android:enabled="false"/>
 
             <TextView
                     android:text="TextView"
@@ -218,7 +220,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/close_button"
-            android:onClick="onClick"
+            android:onClick="onExit"
             style="@android:style/Widget.Button.Inset"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            />
 </LinearLayout>

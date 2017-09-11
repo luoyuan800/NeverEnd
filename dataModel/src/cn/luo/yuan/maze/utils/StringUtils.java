@@ -288,19 +288,20 @@ public class StringUtils {
     }
 
     public static String formatRealLevel(long point, Race race){
+        String format = "<font color='%s'>%s</font>";
         switch (race){
             case Wizardsr:
-                return WizardsrRealLevel.Companion.getLevel(point);
+                return String.format(format, Race.Wizardsr.getColor(), WizardsrRealLevel.Companion.getLevel(point));
             case Nonsr:
-                return NonsrRealLevel.Companion.getLevel(point);
+                return String.format(format, Race.Nonsr.getColor(), NonsrRealLevel.Companion.getLevel(point));
             case Ghosr:
-                return GhosrRealLevel.Companion.getLevel(point);
+                return String.format(format, Race.Ghosr.getColor(), GhosrRealLevel.Companion.getLevel(point));
             case Orger:
-                return OrgerRealLevel.Companion.getLevel(point);
+                return String.format(format, Race.Orger.getColor(), OrgerRealLevel.Companion.getLevel(point));
             case Eviler:
-                return EvilerRealLevel.Companion.getLevel(point);
+                return String.format(format, Race.Eviler.getColor(), EvilerRealLevel.Companion.getLevel(point));
             case Elyosr:
-                return ElyosrRealLevel.Companion.getLevel(point);
+                return String.format(format, Race.Elyosr.getColor(), ElyosrRealLevel.Companion.getLevel(point));
         }
         return StringUtils.EMPTY_STRING;
     }
