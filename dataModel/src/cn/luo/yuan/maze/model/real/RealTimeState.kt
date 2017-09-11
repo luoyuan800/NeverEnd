@@ -16,8 +16,8 @@ class RealTimeState {
     var waiterPoint = 0
     var actionerLevel = -1L
     var waiterLevel = -1L
-    var actionerPetIndex = 0
-    var waiterPetIndex = 0
+    var actionerPetIndex = listOf<Int>()
+    var waiterPetIndex = listOf<Int>()
     var actionerHead = ""
     var waiterHead = ""
     var remainTime = 10L

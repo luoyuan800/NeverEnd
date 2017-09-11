@@ -12,7 +12,9 @@ import cn.luo.yuan.maze.model.skill.result.SkipThisTurn
  */
 class Painkiller: AtkSkill(), SpecialSkill {
     private val model:RaceSkillModel = RaceSkillModel(this)
-
+    init {
+        rate = 3f
+    }
     override fun getName(): String {
         return "斩妖"
     }
@@ -26,11 +28,7 @@ class Painkiller: AtkSkill(), SpecialSkill {
     }
 
     override fun invoke(parameter: SkillParameter): SkillResult {
-        if(model.perform(parameter)){
-            return SkipThisTurn()
-        }else{
-            return DoNoThingResult()
-        }
+        return model.perform(parameter)
     }
 
     override fun enable(parameter: SkillParameter?) {

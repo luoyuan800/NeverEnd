@@ -24,10 +24,12 @@ import cn.luo.yuan.maze.model.skill.hero.HeroHit;
 import cn.luo.yuan.maze.model.skill.pet.Foster;
 import cn.luo.yuan.maze.model.skill.pet.PetMaster;
 import cn.luo.yuan.maze.model.skill.pet.Trainer;
+import cn.luo.yuan.maze.model.skill.race.Decide;
 import cn.luo.yuan.maze.model.skill.result.DoNoThingResult;
 import cn.luo.yuan.maze.model.skill.result.HarmResult;
 import cn.luo.yuan.maze.model.skill.result.HasMessageResult;
 import cn.luo.yuan.maze.model.skill.result.SkillResult;
+import cn.luo.yuan.maze.model.skill.result.SkipThisTurn;
 import cn.luo.yuan.maze.model.skill.swindler.EatHarm;
 import cn.luo.yuan.maze.model.skill.swindler.SwindlerGame;
 import cn.luo.yuan.maze.persistence.DataManagerInterface;
@@ -267,6 +269,30 @@ public class TestSkill {
         printlnMessage(rs);
         assertTrue(rs instanceof HarmResult);
         assertTrue(((HarmResult)rs).getHarm() > 0);
+    }
+
+    @Test
+    public void testRace() {
+        Hero hero = buildHero("QA");
+        Hero monster = buildHero("QA_2");
+        context.hero = hero;
+        Decide skill = new Decide();
+        SkillParameter parameter = getSkillParameter(hero,monster,hero, context.random,10);
+        skill.enable(parameter);
+        hero.setElement(Element.FIRE.getRestriction());
+        monster.setElement(Element.FIRE);
+        hero.setRace(Race.Eviler.ordinal());
+        monster.setRace(Race.Elyosr.ordinal());
+        int effect = 0;
+        for(int i =0; i< 100; i++) {
+            SkillResult rs = testSkillInvoke(skill, hero, monster);
+            printlnMessage(rs);
+            if(rs instanceof SkipThisTurn){
+                effect ++;
+            }
+        }
+        System.out.println(effect);
+
     }
 
     @NotNull

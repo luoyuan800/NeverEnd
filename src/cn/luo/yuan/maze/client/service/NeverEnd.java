@@ -115,7 +115,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
     }
 
     @Override
-    public void showInputPopup(InputListener listener, String hint) {
+    public void showInputPopup(final InputListener listener, String hint) {
         final EditText et = new EditText(context);
         et.setHint(hint);
         SimplerDialogBuilder.build(et, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {

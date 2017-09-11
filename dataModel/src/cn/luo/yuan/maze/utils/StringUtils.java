@@ -1,6 +1,13 @@
 package cn.luo.yuan.maze.utils;
 
+import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.model.effect.Effect;
+import cn.luo.yuan.maze.model.real.level.ElyosrRealLevel;
+import cn.luo.yuan.maze.model.real.level.EvilerRealLevel;
+import cn.luo.yuan.maze.model.real.level.GhosrRealLevel;
+import cn.luo.yuan.maze.model.real.level.NonsrRealLevel;
+import cn.luo.yuan.maze.model.real.level.OrgerRealLevel;
+import cn.luo.yuan.maze.model.real.level.WizardsrRealLevel;
 
 import java.math.RoundingMode;
 import java.text.DateFormat;
@@ -278,5 +285,23 @@ public class StringUtils {
         }
         source += "</font>";
         return source;
+    }
+
+    public static String formatRealLevel(long point, Race race){
+        switch (race){
+            case Wizardsr:
+                return WizardsrRealLevel.Companion.getLevel(point);
+            case Nonsr:
+                return NonsrRealLevel.Companion.getLevel(point);
+            case Ghosr:
+                return GhosrRealLevel.Companion.getLevel(point);
+            case Orger:
+                return OrgerRealLevel.Companion.getLevel(point);
+            case Eviler:
+                return EvilerRealLevel.Companion.getLevel(point);
+            case Elyosr:
+                return ElyosrRealLevel.Companion.getLevel(point);
+        }
+        return StringUtils.EMPTY_STRING;
     }
 }

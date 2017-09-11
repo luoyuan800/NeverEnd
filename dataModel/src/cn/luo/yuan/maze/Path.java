@@ -4,6 +4,9 @@ package cn.luo.yuan.maze;
  * Created by gluo on 7/6/2017.
  */
 public class Path {
+    public static final String UPDATE_REAL_RECORD = "update_real_record";
+    public static final String POLL_REAL_BATTLE_STATE = "poll_real_battle_state";
+    public static final String POLL_REAL_RECORD = "poll_real_record";
     public static final String GET_CURRENT_VERSION = "get_current_version";
     public static final String GET_RELEASE_NOTE = "get_release_note";
     public static final String DELETE_SAVE = "delete_save";

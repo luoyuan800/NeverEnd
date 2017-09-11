@@ -87,4 +87,9 @@ public class MockGameContext implements InfoControlInterface {
     public void showEmptyAccessoryDialog() {
 
     }
+
+    @Override
+    public void showInputPopup(InputListener listener, String hint) {
+
+    }
 }

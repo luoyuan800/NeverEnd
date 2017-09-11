@@ -13,6 +13,8 @@ import cn.luo.yuan.maze.model.goods.types.HPM;
 import cn.luo.yuan.maze.model.goods.types.HalfSafe;
 import cn.luo.yuan.maze.model.goods.types.Omelet;
 import cn.luo.yuan.maze.model.goods.types.ResetSkill;
+import cn.luo.yuan.maze.model.real.RealTimeState;
+import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.task.Scene;
 import cn.luo.yuan.maze.model.task.Task;
 import cn.luo.yuan.maze.serialize.ObjectTable;
@@ -20,6 +22,7 @@ import cn.luo.yuan.maze.server.bomb.BombRestConnection;
 import cn.luo.yuan.maze.server.bomb.json.MyJSON;
 import cn.luo.yuan.maze.server.bomb.json.MyJSONValue;
 import cn.luo.yuan.maze.server.bomb.json.SimpleToken;
+import cn.luo.yuan.maze.server.level.RealService;
 import cn.luo.yuan.maze.server.model.User;
 import cn.luo.yuan.maze.server.persistence.CDKEYTable;
 import cn.luo.yuan.maze.server.persistence.CribberTable;
@@ -87,6 +90,7 @@ public class MainProcess {
     private ReleaseManager releaseManager;
     private CDKEYTable cdkeyTable;
     private SaveService saveService;
+    private RealService realService;
 
     public MainProcess(String root) throws IOException, ClassNotFoundException {
         this.root = new File(root);
@@ -112,6 +116,7 @@ public class MainProcess {
         }
         SaveService.setRoot(this.root);
         saveService = SaveService.instance();
+        realService = new RealService(this);
     }
 
     //Only use for unit test
@@ -422,9 +427,9 @@ public class MainProcess {
                 for (String id : new ArrayList<String>(heroTable.getAllHeroIds())) {
                     ServerRecord record = heroTable.getRecord(id);
                     if (record != null) {
-                        if(record.getRange() < Integer.MAX_VALUE) {
+                        if (record.getRange() < Integer.MAX_VALUE) {
                             record.setAward(true);
-                        }else{
+                        } else {
                             record.setAward(false);
                         }
                     }
@@ -1020,6 +1025,18 @@ public class MainProcess {
             LogHelper.error(e);
         }
         return null;
+    }
+
+    public RealTimeState pollCurrentState(String id, int msgIndex) {
+        return realService.pollState(id, msgIndex);
+    }
+
+    public void updateRealData(Hero hero, List<Pet> pets, List<Accessory> accessories, List<Skill> skills, String head) {
+        realService.newOrUpdateRecord(hero, pets, accessories, skills, head);
+    }
+
+    public LevelRecord pollRealRecord(String id){
+        return realService.queryRecord(id);
     }
 
     private String buildEffectString(Map.Entry<String, MyJSONValue> entry, boolean isElement) {

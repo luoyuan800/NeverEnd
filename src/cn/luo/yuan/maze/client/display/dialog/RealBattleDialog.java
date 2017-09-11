@@ -20,7 +20,7 @@ import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.NameObject;
-import cn.luo.yuan.maze.model.real.RealLevel;
+import cn.luo.yuan.maze.model.real.level.WizardsrRealLevel;
 import cn.luo.yuan.maze.model.real.RealTimeState;
 import cn.luo.yuan.maze.model.skill.AtkSkill;
 import cn.luo.yuan.maze.model.skill.DefSkill;
@@ -236,7 +236,7 @@ public class RealBattleDialog implements View.OnClickListener {
             public void onClick(View v) {
                 try {
                     int index = (Integer) v.getTag(R.string.position);
-                    DefSkill skill = defSkills.get(index);
+                    final DefSkill skill = defSkills.get(index);
                     if (skill != null) {
                         if (Data.getSkillActionPoint(skill) <= currentState.getActionerPoint()) {
                             executor.submit(new Runnable() {
@@ -370,31 +370,31 @@ public class RealBattleDialog implements View.OnClickListener {
         }
     }
 
-    private void updateMyState(HarmAble my, long level, int petIndex, long point, String head) {
+    private void updateMyState(HarmAble my, long level, List<Integer> petIndex, long point, String head) {
         ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_my_hp), StringUtils.formatNumber(my.getCurrentHp()));
         ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_my_maxhp), StringUtils.formatNumber(my.getUpperHp()));
         ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_my_point), StringUtils.formatNumber(point));
         ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_my_name), my instanceof NameObject ? ((NameObject) my).getDisplayName() : my.toString());
         if (level >= 0) {
-            ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_my_level), RealLevel.Companion.getLevel(level));
+            ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_my_level), WizardsrRealLevel.Companion.getLevel(level));
         } else {
             root.findViewById(R.id.real_battle_my_level).setVisibility(View.INVISIBLE);
         }
         ViewHandler.setImage((ImageView) root.findViewById(R.id.real_battle_my_img), Resource.loadImageFromAssets(head, true));
-        if (petIndex > 0)
-            ViewHandler.setImage((ImageView) root.findViewById(R.id.real_battle_my_pet), Resource.loadMonsterImage(petIndex));
+        if (petIndex.size()> 0)
+            ViewHandler.setImage((ImageView) root.findViewById(R.id.real_battle_my_pet), Resource.loadMonsterImage(petIndex.get(0)));
         else{
             root.findViewById(R.id.real_battle_my_pet).setVisibility(View.INVISIBLE);
         }
     }
 
-    private void updateTargetState(HarmAble target, long level, int petIndex, long point, String head) {
+    private void updateTargetState(HarmAble target, long level, List<Integer> petIndex, long point, String head) {
         SpringProgressView hpView = (SpringProgressView) root.findViewById(R.id.real_battle_target_hp);
         hpView.setMaxCount(100);
         hpView.setCurrentCount(target.getCurrentHp() * 100f/target.getUpperHp());
         ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_targer_name), my instanceof NameObject ? ((NameObject) target).getDisplayName() : target.toString());
         if (level >= 0) {
-            ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_target_level), RealLevel.Companion.getLevel(level));
+            ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_target_level), WizardsrRealLevel.Companion.getLevel(level));
         } else {
             root.findViewById(R.id.real_battle_target_level).setVisibility(View.INVISIBLE);
         }
@@ -403,8 +403,8 @@ public class RealBattleDialog implements View.OnClickListener {
             img = Resource.loadMonsterImage(head);
         }
         ViewHandler.setImage((ImageView) root.findViewById(R.id.real_battle_targer_img), img);
-        if (petIndex > 0) {
-            ViewHandler.setImage((ImageView) root.findViewById(R.id.real_battle_target_pet), Resource.loadMonsterImage(petIndex));
+        if (petIndex.size() > 0) {
+            ViewHandler.setImage((ImageView) root.findViewById(R.id.real_battle_target_pet), Resource.loadMonsterImage(petIndex.get(0)));
         }else{
             root.findViewById(R.id.real_battle_target_pet).setVisibility(View.INVISIBLE);
         }

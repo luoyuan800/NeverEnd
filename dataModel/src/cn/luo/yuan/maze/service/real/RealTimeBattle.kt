@@ -1,9 +1,6 @@
 package cn.luo.yuan.maze.service.real
 
-import cn.luo.yuan.maze.model.Data
-import cn.luo.yuan.maze.model.HarmAble
-import cn.luo.yuan.maze.model.NameObject
-import cn.luo.yuan.maze.model.PetOwner
+import cn.luo.yuan.maze.model.*
 import cn.luo.yuan.maze.model.real.RealTimeState
 import cn.luo.yuan.maze.model.real.action.AtkAction
 import cn.luo.yuan.maze.model.real.action.AtkSkillAction
@@ -32,8 +29,8 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
     var p2Head = ""
     var p1Level = -1L
     var p2Level = -1L
-    var p1Pet = -1
-    var p2Pet = -1
+    var p1Pet = mutableListOf<Int>()
+    var p2Pet = mutableListOf<Int>()
     var actioner: HarmAble? = null
     var timer: TimerThread? = null
     var turn = 0L
@@ -42,13 +39,32 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
     var winner: HarmAble? = null
     var loser: HarmAble? = null
     var levelPointAward = 0L
+    var levelPointReduce = 0L
+    var p1Record:LevelRecord? = null
+    var p2Record:LevelRecord? = null
+    val quiter = mutableListOf<String>()
 
-    constructor(p1: HarmAble, p2: HarmAble, p1Pet: Int, p2Pet: Int, p1Level: Long, p2Level: Long,
-                p1Head: String, p2Head: String, pointAward: Long, mateAward:Long, levelPointAward:Long, random: Random) :
+    constructor(p1:LevelRecord, p2:LevelRecord, pointAward: Long, mateAward: Long, levelPointAward: Long, levelPointReduce: Long):
+            this(p1.hero!!, p2.hero!!, p1.point, p2.point, p1.head, p2.head, pointAward, mateAward,levelPointAward,levelPointReduce, Random(System.currentTimeMillis())){
+        p1Record = p1
+        p2Record = p2
+    }
+    constructor(p1: HarmAble, p2: HarmAble, p1Level: Long, p2Level: Long,
+                p1Head: String, p2Head: String, pointAward: Long, mateAward:Long, levelPointAward:Long, levelPointReduce:Long, random: Random) :
             this(p1, p2, pointAward, mateAward, random) {
         this.p1Level = p1Level
-        this.p1Pet = p1Pet
-        this.p2Pet = p2Pet
+        if(p1 is PetOwner) {
+            p1Pet = mutableListOf<Int>()
+            for (pet in p1.pets) {
+                p1Pet.add(pet.index)
+            }
+        }
+        if(p2 is PetOwner) {
+            p2Pet = mutableListOf<Int>()
+            for (pet in p2.pets) {
+                p2Pet.add(pet.index)
+            }
+        }
         this.p2Level = p2Level
         this.p2Head = p2Head
         this.p1Head = p1Head
@@ -64,6 +80,10 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
         } else {
             actioner = p2
         }
+    }
+
+    fun quit(id:String){
+        quiter.add(id)
     }
 
     fun start() {
@@ -163,6 +183,12 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
             if (p2.currentHp <= 0) {
                 winner = p1
                 loser = p2
+                if(p1Record!=null) {
+                    p1Record!!.point += levelPointAward
+                }
+                if(p2Record!=null) {
+                    p2Record!!.point -= levelPointReduce
+                }
             } else if (p1.currentHp <= 0) {
                 winner = p2
                 loser = p1
