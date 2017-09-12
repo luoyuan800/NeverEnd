@@ -54,21 +54,24 @@ public class PalaceActivity extends BaseActivity {
     public void rangeBattle(View view) {
         final RemoteRealTimeManager manager = new RemoteRealTimeManager(server, gameContext);
         showProgressDialog(Resource.getString(R.string.ranging));
-        progress.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        progress.setButton(DialogInterface.BUTTON_POSITIVE, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
+            public void onClick(DialogInterface dialog, int which) {
                 executor.execute(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            HttpURLConnection con = server.getHttpURLConnection(Path.REAL_BATTLE_QUIT, RestConnection.POST);
-                            con.addRequestProperty(Field.OWNER_ID_FIELD, gameContext.getHero().getId());
-                            server.connect(con);
-                        } catch (IOException e) {
+                            synchronized (progress) {
+                                HttpURLConnection con = server.getHttpURLConnection(Path.REAL_BATTLE_QUIT, RestConnection.POST);
+                                con.addRequestProperty(Field.OWNER_ID_FIELD, gameContext.getHero().getId());
+                                server.connect(con);
+                            }
+                        } catch (Exception e) {
                             LogHelper.logException(e, "Quit wait");
                         }
                     }
                 });
+                dialog.dismiss();
             }
         });
         executor.execute(new Runnable() {
@@ -76,15 +79,17 @@ public class PalaceActivity extends BaseActivity {
             public void run() {
                 boolean stop = false;
                 while (!stop && progress.isShowing()) {
-                    RealTimeState state = manager.pollState();
-                    if(state!=null) {
-                        if (state instanceof NoDebrisState) {
-                            gameContext.showPopup(Resource.getString(R.string.not_debris));
-                        } else {
-                            battleDialog = new RealBattleDialog(manager, gameContext);
+                    synchronized (progress) {
+                        RealTimeState state = manager.pollState();
+                        if (state != null) {
+                            if (state instanceof NoDebrisState) {
+                                gameContext.showPopup(Resource.getString(R.string.not_debris));
+                            } else {
+                                battleDialog = new RealBattleDialog(manager, gameContext);
+                            }
+                            stop = true;
+                            hideProgress();
                         }
-                        stop = true;
-                        hideProgress();
                     }
                 }
             }
@@ -95,7 +100,6 @@ public class PalaceActivity extends BaseActivity {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-
                 try {
                     HttpURLConnection con = server.getHttpURLConnection(Path.POLL_REAL_RECORD, RestConnection.POST);
                     con.addRequestProperty(Field.OWNER_ID_FIELD, gameContext.getHero().getId());
