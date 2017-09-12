@@ -234,6 +234,7 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
     fun pollState(msgIndex: Int): RealTimeState {
         val state = RealTimeState()
         if(winner!=null && loser!=null){
+            running = -1
             state.winner = winner
             state.loser =loser
             state.awardMate = mateAward

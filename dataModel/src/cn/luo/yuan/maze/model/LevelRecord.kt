@@ -21,7 +21,11 @@ class LevelRecord(val id:String):Serializable, Cloneable {
     var point:Long = 0
         set(value){
             priorPoint = field
-            field = value
+            if(value < 0){
+                field = 0
+            }else {
+                field = value
+            }
         }
     var priorPoint:Long = 0
     var win = 0L
