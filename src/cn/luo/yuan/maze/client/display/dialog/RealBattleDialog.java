@@ -102,13 +102,19 @@ public class RealBattleDialog implements View.OnClickListener {
     }
 
     public void stop() {
-        try {
-            executor.shutdown();
-            executor.awaitTermination(2, TimeUnit.SECONDS);
-            manager.quit();
-        }catch (Exception e){
-            LogHelper.logException(e, "Stop real battle");
-        }
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    executor.shutdown();
+                    manager.quit();
+                    executor.awaitTermination(2, TimeUnit.SECONDS);
+                }catch (Exception e){
+                    LogHelper.logException(e, "Stop real battle");
+                }
+            }
+        });
+
     }
 
     public void updateState(final RealTimeState state) {
