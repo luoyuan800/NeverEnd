@@ -387,7 +387,7 @@ public class RealBattleDialog implements View.OnClickListener {
         ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_my_point), StringUtils.formatNumber(point));
         ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_my_name), my instanceof NameObject ? ((NameObject) my).getDisplayName() : my.toString());
         if (level >= 0) {
-            ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_my_level), WizardsrRealLevel.Companion.getLevel(level));
+            ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_my_level), StringUtils.formatRealLevel(level, my.getRace()));
         } else {
             root.findViewById(R.id.real_battle_my_level).setVisibility(View.INVISIBLE);
         }
@@ -405,7 +405,7 @@ public class RealBattleDialog implements View.OnClickListener {
         hpView.setCurrentCount(target.getCurrentHp() * 100f/target.getUpperHp());
         ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_targer_name), my instanceof NameObject ? ((NameObject) target).getDisplayName() : target.toString());
         if (level >= 0) {
-            ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_target_level), WizardsrRealLevel.Companion.getLevel(level));
+            ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_target_level), StringUtils.formatRealLevel(level, target.getRace()));
         } else {
             root.findViewById(R.id.real_battle_target_level).setVisibility(View.INVISIBLE);
         }
