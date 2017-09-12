@@ -194,7 +194,8 @@ public class NeverEndServlet extends HttpServlet {
             Boolean success = null;
             switch (path) {
                 case REAL_BATTLE_QUIT:
-                    process.quitRealBattle(ownerId, request.getHeader(Field.ONLY_QUIT_RANGE).equals("1"));
+                    String onlyQuit = request.getHeader(Field.ONLY_QUIT_RANGE);
+                    process.quitRealBattle(ownerId, onlyQuit!=null && onlyQuit.equals("1"));
                     success = true;
                     break;
                 case REAL_BATTLE_ACTION:
