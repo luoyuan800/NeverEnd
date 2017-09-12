@@ -42,6 +42,10 @@ class RealService(val mainProcess: MainProcess) {
     fun pollState(id: String, msgIndex: Int): RealTimeState? {
         val record = recordDb.loadObject(id)
         if (record != null) {
+            val rtb = battling[record.id]
+            if(rtb!=null) {
+                return rtb.pollState(msgIndex)
+            }
             if (!waiting.isQueue(record)) {
                 val serverRecord = mainProcess.heroTable.getRecord(id)
                 if (serverRecord != null && serverRecord.debris >= Data.PALACE_RANGE_COST) {
@@ -52,8 +56,7 @@ class RealService(val mainProcess: MainProcess) {
                     return NoDebrisState()
                 }
             }
-            val rtb = battling[record.id]
-            return rtb?.pollState(msgIndex)
+
         }
         return null
     }
