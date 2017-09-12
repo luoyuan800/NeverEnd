@@ -15,7 +15,6 @@ import cn.luo.yuan.maze.model.goods.types.Omelet;
 import cn.luo.yuan.maze.model.goods.types.ResetSkill;
 import cn.luo.yuan.maze.model.real.RealTimeState;
 import cn.luo.yuan.maze.model.real.action.RealTimeAction;
-import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.task.Scene;
 import cn.luo.yuan.maze.model.task.Task;
 import cn.luo.yuan.maze.serialize.ObjectTable;
@@ -1060,8 +1059,8 @@ public class MainProcess {
         }
     }
 
-    public void quitRealBattle(String id){
-        realService.singleQuit(id);
+    public void quitRealBattle(String id, boolean onlyQuit){
+        realService.singleQuit(id, onlyQuit);
     }
 
     private String buildEffectString(Map.Entry<String, MyJSONValue> entry, boolean isElement) {

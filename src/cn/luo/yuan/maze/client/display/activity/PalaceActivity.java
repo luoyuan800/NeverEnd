@@ -53,10 +53,11 @@ public class PalaceActivity extends BaseActivity {
 
     public void rangeBattle(View view) {
         final RemoteRealTimeManager manager = new RemoteRealTimeManager(server, gameContext);
-        showProgressDialog(Resource.getString(R.string.ranging));
-        progress.setButton(DialogInterface.BUTTON_POSITIVE, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
+        final ProgressDialog progress = new ProgressDialog(this);
+        progress.setMessage(Resource.getString(R.string.ranging));
+        progress.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onDismiss(DialogInterface dialog) {
                 executor.execute(new Runnable() {
                     @Override
                     public void run() {
@@ -64,6 +65,7 @@ public class PalaceActivity extends BaseActivity {
                             synchronized (progress) {
                                 HttpURLConnection con = server.getHttpURLConnection(Path.REAL_BATTLE_QUIT, RestConnection.POST);
                                 con.addRequestProperty(Field.OWNER_ID_FIELD, gameContext.getHero().getId());
+                                con.addRequestProperty(Field.ONLY_QUIT_RANGE, "1");
                                 server.connect(con);
                             }
                         } catch (Exception e) {
@@ -74,6 +76,7 @@ public class PalaceActivity extends BaseActivity {
                 dialog.dismiss();
             }
         });
+        progress.show();
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -88,7 +91,7 @@ public class PalaceActivity extends BaseActivity {
                                 battleDialog = new RealBattleDialog(manager, gameContext);
                             }
                             stop = true;
-                            hideProgress();
+                            progress.dismiss();
                         }
                     }
                 }

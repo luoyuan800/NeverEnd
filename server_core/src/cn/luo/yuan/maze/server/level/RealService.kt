@@ -92,9 +92,11 @@ class RealService(val mainProcess: MainProcess) {
         return false
     }
 
-    fun singleQuit(id: String) {
-        val rtb = battling[id]
-        rtb?.quit(id)
+    fun singleQuit(id: String, onlyQuit: Boolean) {
+        if(!onlyQuit) {
+            val rtb = battling[id]
+            rtb?.quit(id)
+        }
         val record = recordDb.loadObject(id);
         if(record!=null) {
             waiting.removeQueue(record)
