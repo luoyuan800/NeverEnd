@@ -99,6 +99,7 @@ class RealService(val mainProcess: MainProcess) {
         if(!onlyQuit) {
             val rtb = battling[id]
             rtb?.quit(id)
+            battling.remove(id)
         }
         val record = recordDb.loadObject(id);
         if(record!=null) {
