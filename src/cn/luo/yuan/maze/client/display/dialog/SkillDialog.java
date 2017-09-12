@@ -7,6 +7,7 @@ import android.os.Build;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TabHost;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.service.NeverEnd;
@@ -80,9 +81,16 @@ public class SkillDialog implements View.OnClickListener {
         if(skills.size() > 0) {
             tabHost1.addTab(tabHost1.newTabSpec("special_skill").setIndicator(Resource.getString(R.string.special_skill)).setContent(R.id.special_skill));
             FixGridLayout fgl = (FixGridLayout) dialog.findViewById(R.id.special_skill_detail);
+            fgl.setmCellHeight(150);
+            fgl.setmCellWidth(150);
+            fgl.removeAllViews();
             ImageButton[] buttons = new ImageButton[skills.size()];
             for (int i = 0; i < skills.size(); i++) {
                 ImageButton b = new ImageButton(context.getContext());
+                b.setMinimumWidth(150);
+                b.setMinimumHeight(150);
+                b.setBackgroundResource(0);
+                b.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 b.setTag(skills.get(i).getClass().getSimpleName());
                 buttons[i] = b;
                 fgl.addView(b);

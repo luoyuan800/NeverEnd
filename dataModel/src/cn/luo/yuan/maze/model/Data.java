@@ -52,6 +52,8 @@ public class Data {
     public static  int WAREHOUSE_DEBRIS = 2;//仓库需要消耗的碎片数量
     public static  int UPLOAD_SAVE_DEBRIS = 20;//备份需要消耗的碎片数量
     public static  long RECYCLE_MATERIAL = 2000;//回收装备可以获得的锻造
+    public static float ABE_BASE = 2;//变异的基础纪律 （万分之）
+    public static final int PALACE_RANGE_COST = 3;
 
     /**
      * 计算击败一个怪物可以获得的锻造点

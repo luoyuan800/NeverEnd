@@ -6,9 +6,17 @@ import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.model.dlc.DLC;
 import cn.luo.yuan.maze.model.dlc.GoodsDLC;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
+import cn.luo.yuan.maze.model.dlc.SkillDLC;
 import cn.luo.yuan.maze.model.goods.types.EmptyAccessory;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
+import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.model.skill.race.Alayer;
+import cn.luo.yuan.maze.model.skill.race.Chaos;
+import cn.luo.yuan.maze.model.skill.race.Decide;
+import cn.luo.yuan.maze.model.skill.race.Exorcism;
+import cn.luo.yuan.maze.model.skill.race.Masimm;
+import cn.luo.yuan.maze.model.skill.race.Painkiller;
 import cn.luo.yuan.maze.serialize.ObjectTable;
 
 import java.io.File;
@@ -24,9 +32,15 @@ public class BuildDLC {
     public static File root = new File("dlc");
     public static void main(String... args) throws IOException {
         ObjectTable<DLC> dlcTable = new ObjectTable<DLC>(DLC.class, new File("dlc"));
-        //buildAngel(dlcTable);
-        //buildJiuwei(dlcTable);
-        buildEmprtyAccessory(dlcTable);
+        /*buildAngel(dlcTable);
+        buildJiuwei(dlcTable);
+        buildEmprtyAccessory(dlcTable);*/
+        buildSkillDlc(new Alayer(), dlcTable);
+        buildSkillDlc(new Chaos(), dlcTable);
+        buildSkillDlc(new Decide(), dlcTable);
+        buildSkillDlc(new Exorcism(), dlcTable);
+        buildSkillDlc(new Masimm(), dlcTable);
+        buildSkillDlc(new Painkiller(), dlcTable);
     }
 
     public static void buildEmprtyAccessory(ObjectTable<DLC> dlcTable) throws IOException {
@@ -56,10 +70,10 @@ public class BuildDLC {
         return bytes;
     }
 
-    public static void buildJiuwei(ObjectTable<MonsterDLC> table) throws IOException {
+    public static void buildJiuwei(ObjectTable<DLC> table) throws IOException {
         MonsterDLC dlc = new MonsterDLC();
         dlc.setTitle("九尾的传奇");
-        dlc.setDebrisCost(20);
+        dlc.setDebrisCost(50);
         dlc.setDesc("九尾，中国古代汉族神话传说中的奇兽。<br>古典传说中，九尾狐乃四脚怪兽，通体上下长有火红色的绒毛。善变化，蛊惑。九尾狐出，世间大乱。<br>购买这个DLC，如果你捕获到了红眼的九尾，那么你就可以开启九尾狐的拟人进化之路了！");
         Monster monster = new Monster();
         monster.setIndex(96);
@@ -124,10 +138,10 @@ public class BuildDLC {
         dlc.getImage().add(readImage("E:\\NeverEnd\\assets\\monster\\jiuweihu_red.png"));
         System.out.println(table.save(dlc));
     }
-    public static void buildAngel(ObjectTable<MonsterDLC> table) throws IOException {
+    public static void buildAngel(ObjectTable<DLC> table) throws IOException {
         MonsterDLC dlc = new MonsterDLC();
         dlc.setTitle("天降之物");
-        dlc.setDebrisCost(68);
+        dlc.setDebrisCost(100);
         dlc.setDesc("传说天使是圣洁的，是代表勇敢，代表智慧。但其实他们也有另一面，黑暗、堕落、淫乱。据说，天使是没有性别，那么，俊美的外表下到底是否有你想要的灵魂？此DLC包含全新的七种天使。");
         Monster monster = new Monster();
         monster.setIndex(68);
@@ -257,6 +271,13 @@ public class BuildDLC {
         monster.setDesc("世界战争的\"最终兵器\"。");
         dlc.getMonsters().add(monster);
         dlc.getImage().add(readImage("E:\\NeverEnd\\assets\\monster\\chisi.png"));
+        System.out.println(table.save(dlc));
+    }
+
+    public static void buildSkillDlc(Skill skill, ObjectTable<DLC> table) throws IOException {
+        SkillDLC dlc = new SkillDLC();
+        dlc.setSkill(skill);
+        dlc.setDebrisCost(20);
         System.out.println(table.save(dlc));
     }
 }

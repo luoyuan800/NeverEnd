@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.client.service;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Monster;
+import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.real.RealTimeState;
 import cn.luo.yuan.maze.model.real.action.AtkAction;
@@ -14,13 +15,15 @@ import cn.luo.yuan.maze.model.skill.DefSkill;
 import cn.luo.yuan.maze.service.real.RealTimeBattle;
 import cn.luo.yuan.maze.service.real.RealTimeManager;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
  * Copyright @Luo
  * Created by Gavin Luo on 9/4/2017.
  */
-public class LocalRealTimeManager implements RealTimeManager{
+public class LocalRealTimeManager implements RealTimeManager {
     private NeverEnd context;
     private HarmAble target;
     private RealTimeBattle realTimeBattle;
@@ -33,8 +36,13 @@ public class LocalRealTimeManager implements RealTimeManager{
         realTimeBattle.setTimeLimit(-1);
         realTimeBattle.setP1Head(context.getDataManager().loadConfig().getHead());
         realTimeBattle.setP2Head(target.getId());
-        if(context.getHero().getPets().size() > 0){
-            realTimeBattle.setP1Pet(context.getHero().getPets().getFirst().getIndex());
+        if (context.getHero().getPets().size() > 0) {
+            List<Integer> pets = new ArrayList<>(context.getHero().getPets().size());
+            for (Pet pet : context.getHero().getPets()) {
+                pets.add(pet.getIndex());
+            }
+            realTimeBattle.setP1Pet(pets);
+
         }
         realTimeBattle.start();//Monster ready
     }
@@ -47,7 +55,7 @@ public class LocalRealTimeManager implements RealTimeManager{
         try {
             RealTimeAction action = new AtkAction(UUID.randomUUID().toString(), context.getHero().getId());
             realTimeBattle.action(action);
-        }catch (Exception e){
+        } catch (Exception e) {
             LogHelper.logException(e, "Atk action");
         }
     }
@@ -64,7 +72,7 @@ public class LocalRealTimeManager implements RealTimeManager{
             }
             msgIndex += state.getMsg().size();
             return state;
-        }catch (Exception e){
+        } catch (Exception e) {
             LogHelper.logException(e, "Poll State");
         }
         return new RealTimeState();
@@ -91,7 +99,7 @@ public class LocalRealTimeManager implements RealTimeManager{
 
     }
 
-    public synchronized void targetAction(RealTimeState state){
+    public synchronized void targetAction(RealTimeState state) {
         realTimeBattle.action(new AtkAction(UUID.randomUUID().toString(), target.getId()));
     }
 

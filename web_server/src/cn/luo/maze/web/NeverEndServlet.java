@@ -1,7 +1,13 @@
 package cn.luo.maze.web;
 
-import cn.luo.yuan.maze.model.*;
-import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.model.ExchangeObject;
+import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.LevelRecord;
+import cn.luo.yuan.maze.model.OwnedAble;
+import cn.luo.yuan.maze.model.RangeAward;
+import cn.luo.yuan.maze.model.ServerData;
+import cn.luo.yuan.maze.model.ServerRecord;
+import cn.luo.yuan.maze.model.real.action.RealTimeAction;
 import cn.luo.yuan.maze.server.LogHelper;
 import cn.luo.yuan.maze.server.MainProcess;
 import cn.luo.yuan.maze.server.persistence.HeroTable;
@@ -36,9 +42,9 @@ import static cn.luo.yuan.maze.Path.*;
 @WebServlet("/app/*")
 public class NeverEndServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private static int count = 0;
     private final String root = "E:\\www1\\luoyuan800-0b44449e5d24473a015d30fddbd602dd\\webapp\\data";
     private MainProcess process = new MainProcess(root);
-    private static int count = 0;
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -79,7 +85,7 @@ public class NeverEndServlet extends HttpServlet {
                 writer = writeMessage(response, "responsed:  " + count++);
                 break;
             case GET_CURRENT_VERSION:
-                writer= writeMessage(response, String.valueOf(process.getReleaseVersion()));
+                writer = writeMessage(response, String.valueOf(process.getReleaseVersion()));
                 break;
             case GET_RELEASE_NOTE:
                 writer = writeMessage(response, process.getLatestReleaseNotes());
@@ -104,7 +110,7 @@ public class NeverEndServlet extends HttpServlet {
                         "</html>");
                 break;
             case "get_hero_list":
-                writer = writeMessage(response,process.getOnlineHeroList());
+                writer = writeMessage(response, process.getOnlineHeroList());
                 break;
             case "add_file":
                 String file = request.getParameter("file");
@@ -117,10 +123,10 @@ public class NeverEndServlet extends HttpServlet {
                     bw.write(request.getRemoteHost());
                     bw.flush();
                     bw.close();
-                }catch (Exception e){
+                } catch (Exception e) {
                     writer = writeMessage(response, "\n error:\n" + e.getMessage());
                     LogHelper.error(e);
-                    if(!f.exists()){
+                    if (!f.exists()) {
                         //writer.write("File (" + f.getAbsolutePath() + ") create result: " + f.createNewFile());
                     }
                 }
@@ -128,9 +134,9 @@ public class NeverEndServlet extends HttpServlet {
             case ADD_LIMIT:
                 String id = request.getParameter("id");
                 HeroTable table = process.heroTable;
-                if(table!=null){
+                if (table != null) {
                     ServerRecord record = table.getRecord(id);
-                    if(record!=null){
+                    if (record != null) {
                         record.setRestoreLimit(record.getRestoreLimit() + Integer.parseInt(request.getParameter("r_l_c")));
                         process.updateRecord(record);
                     }
@@ -138,7 +144,7 @@ public class NeverEndServlet extends HttpServlet {
                 break;
             case STOP:
                 process.stop();
-                writer = writeMessage(response,Field.RESPONSE_RESULT_OK);
+                writer = writeMessage(response, Field.RESPONSE_RESULT_OK);
                 break;
             case START:
                 process.start();
@@ -150,7 +156,7 @@ public class NeverEndServlet extends HttpServlet {
             default:
                 throw new IOException("Not Mapping for " + path);
         }
-        if(writer!=null) {
+        if (writer != null) {
             writer.flush();
             writer.close();
         }
@@ -158,7 +164,7 @@ public class NeverEndServlet extends HttpServlet {
 
     private String getPathInfo(HttpServletRequest request) {
         String path = request.getPathInfo();
-        if(path.startsWith("/")){
+        if (path.startsWith("/")) {
             path = path.replaceFirst("/", StringUtils.EMPTY_STRING);
         }
         return path;
@@ -176,8 +182,8 @@ public class NeverEndServlet extends HttpServlet {
             String version = request.getHeader(Field.VERSION_FIELD);
             String sign = request.getHeader(Field.SIGN_FIELD);
             //LogHelper.info("sign: " + sign);
-           int verify = process.isSignVerify(sign, version);
-           if(verify <= 0){
+            int verify = process.isSignVerify(sign, version);
+            if (verify <= 0) {
                 LogHelper.info("Error verify:" + "Sign verify failed! sign: " + sign + ", version: " + version);
                 response.setIntHeader(Field.VERIFY_RESULT, verify);
                 return;
@@ -187,9 +193,21 @@ public class NeverEndServlet extends HttpServlet {
             PrintWriter writer = null;
             Boolean success = null;
             switch (path) {
+                case REAL_BATTLE_QUIT:
+                    process.quitRealBattle(ownerId);
+                    success = true;
+                    break;
+                case REAL_BATTLE_ACTION:
+                    RealTimeAction action = readObject(request);
+                    success = action != null && process.realBattleAction(action);
+                    break;
+                case REAL_BATTLE_READY:
+                    process.realBattleReady(ownerId);
+                    success = true;
+                    break;
                 case UPDATE_REAL_RECORD:
                     LevelRecord record = readObject(request);
-                    if(record!=null){
+                    if (record != null) {
                         process.updateRealData(record);
                         success = true;
                     }
@@ -198,28 +216,28 @@ public class NeverEndServlet extends HttpServlet {
                     writeObject(response, process.pollCurrentState(ownerId, request.getIntHeader(Field.INDEX)));
                     break;
                 case POLL_REAL_RECORD:
-                    writeObject(response,process.pollRealRecord(ownerId));
+                    writeObject(response, process.pollRealRecord(ownerId));
                     break;
                 case UPLOAD_SAVE:
-                    writer = writeMessage(response, process.uploadSaveFile(request.getInputStream(),ownerId));
+                    writer = writeMessage(response, process.uploadSaveFile(request.getInputStream(), ownerId));
                     break;
                 case DOWNLOAD_SAVE:
                     byte[] saveZip = process.downloadSaveZip(request.getHeader(Field.ITEM_ID_FIELD));
-                    if(saveZip!=null) {
+                    if (saveZip != null) {
                         response.setStatus(200);
                         response.getOutputStream().write(saveZip);
                     }
                     break;
                 case QUERY_RANGE_AWARD:
                     RangeAward ra = process.getRangeAward(ownerId);
-                    if(ra!=null){
+                    if (ra != null) {
                         writeObject(response, ra);
-                    }else{
+                    } else {
                         success = false;
                     }
                     break;
                 case USE_KEY:
-                    writeObject(response,process.useCdkey(request.getHeader(Field.ITEM_ID_FIELD), ownerId));
+                    writeObject(response, process.useCdkey(request.getHeader(Field.ITEM_ID_FIELD), ownerId));
                     break;
                 case DOWNLOAD_APK:
                     byte[] apk = process.downloadApk();
@@ -446,7 +464,7 @@ public class NeverEndServlet extends HttpServlet {
                 writer.flush();
                 writer.close();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             LogHelper.error(e);
             response.sendError(403, e.getMessage());
         }
@@ -479,9 +497,9 @@ public class NeverEndServlet extends HttpServlet {
     private List<Object> readObjects(HttpServletRequest request) throws IOException {
         List<Object> objects = new ArrayList<>();
         try (ObjectInputStream ois = new ObjectInputStream(request.getInputStream())) {
-            try{
+            try {
                 objects.add(ois.readObject());
-            }catch (EOFException eof){
+            } catch (EOFException eof) {
                 //Do Nothing
             }
         } catch (Exception e) {

@@ -120,8 +120,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/online_palace_battle"
-            android:onClick="onClick"
-            android:text="匹配玩家对战"
+            android:onClick="rangeBattle"
+            android:text="@string/palace_range"
             style="@android:style/Widget.Button.Inset"
             android:textSize="18dp"
             android:layout_marginTop="10dp"/>
@@ -135,7 +135,7 @@
             android:textSize="14dp"/>
 
     <Button
-            android:text="匹配NPC对战"
+            android:text="@string/palace_npc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/online_palace_npc"

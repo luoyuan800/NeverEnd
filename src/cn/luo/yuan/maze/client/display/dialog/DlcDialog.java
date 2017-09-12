@@ -97,8 +97,10 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
                     View view = View.inflate(context.getContext(), R.layout.monster_dlc, null);
                     view.setTag(R.string.item, dlc);
                     ((ImageView) view.findViewById(R.id.dlc_2)).setImageDrawable(Resource.getSkillDrawable(((SkillDLC) dlc).getSkill()));
+                    view.findViewById(R.id.dlc_1).setVisibility(View.INVISIBLE);
+                    view.findViewById(R.id.dlc_3).setVisibility(View.INVISIBLE);
                     ((TextView) view.findViewById(R.id.dlc_title)).setText(Html.fromHtml(dlc.getTitle()));
-                    ((TextView) view.findViewById(R.id.dlc_desc)).setText(Html.fromHtml(dlc.getDesc()));
+                    ((TextView) view.findViewById(R.id.dlc_desc)).setText(Html.fromHtml(dlc.getDesc() + "<br>兑换技能后你可以在技能界面激活并且装备该技能！"));
                     ((TextView) view.findViewById(R.id.dlc_cost)).setText(StringUtils.formatNumber(dlc.getDebrisCost()));
                     Dialog dialog = SimplerDialogBuilder.build(view, "详情", context.getContext(), context.getRandom());
                     view.findViewById(R.id.dlc_buy).setOnClickListener(DlcDialog.this);

@@ -1,13 +1,13 @@
 package cn.luo.yuan.maze.server.level
 
-import cn.luo.yuan.maze.model.Accessory
-import cn.luo.yuan.maze.model.Hero
-import cn.luo.yuan.maze.model.LevelRecord
-import cn.luo.yuan.maze.model.Pet
+import cn.luo.yuan.maze.model.*
+import cn.luo.yuan.maze.model.real.NoDebrisState
 import cn.luo.yuan.maze.model.real.RealTimeState
+import cn.luo.yuan.maze.model.real.action.RealTimeAction
 import cn.luo.yuan.maze.model.real.level.ElyosrRealLevel
 import cn.luo.yuan.maze.model.skill.Skill
 import cn.luo.yuan.maze.serialize.ObjectTable
+import cn.luo.yuan.maze.server.LogHelper
 import cn.luo.yuan.maze.server.MainProcess
 import cn.luo.yuan.maze.service.real.RealTimeBattle
 import java.util.concurrent.ConcurrentHashMap
@@ -34,11 +34,23 @@ class RealService(val mainProcess: MainProcess) {
         }, 0, 100, TimeUnit.MILLISECONDS)
     }
 
+    fun stop() {
+        executor.shutdown()
+        executor.awaitTermination(20, TimeUnit.MILLISECONDS)
+    }
+
     fun pollState(id: String, msgIndex: Int): RealTimeState? {
         val record = recordDb.loadObject(id)
         if (record != null) {
             if (!waiting.isQueue(record)) {
-                waiting.addQueue(record)
+                val serverRecord = mainProcess.heroTable.getRecord(id)
+                if (serverRecord != null && serverRecord.debris >= Data.PALACE_RANGE_COST) {
+                    serverRecord.debris -= Data.PALACE_RANGE_COST
+                    waiting.addQueue(record)
+                    LogHelper.info(record.hero?.name + " into range")
+                }else{
+                    return NoDebrisState()
+                }
             }
             val rtb = battling[record.id]
             return rtb?.pollState(msgIndex)
@@ -60,14 +72,38 @@ class RealService(val mainProcess: MainProcess) {
                         }
                     }
                 }, 1, 100, TimeUnit.MILLISECONDS)
+                LogHelper.info(record.hero?.name + " & " + targetRecord.hero?.name + " start range battle")
+
             } else {
                 waiting.addQueue(record)
             }
         }
     }
 
-    fun newOrUpdateRecord(record: LevelRecord){
-        if(record.hero!=null){
+    fun ready(id: String) {
+        battling[id]?.start()
+    }
+
+    fun action(action: RealTimeAction): Boolean {
+        val rtb = battling[action.ownerId]
+        if (rtb != null) {
+            return rtb.action(action)
+        }
+        return false
+    }
+
+    fun singleQuit(id: String) {
+        val rtb = battling[id]
+        rtb?.quit(id)
+        val record = recordDb.loadObject(id);
+        if(record!=null) {
+            waiting.removeQueue(record)
+            LogHelper.info(record.hero?.name + " out range")
+        }
+    }
+
+    fun newOrUpdateRecord(record: LevelRecord) {
+        if (record.hero != null) {
             newOrUpdateRecord(record.hero as Hero, record.pets, record.accessories, record.skills, record.head)
         }
     }
@@ -79,15 +115,15 @@ class RealService(val mainProcess: MainProcess) {
         }
         record.hero = hero
         record.head = head
-        if(pets!=null) {
+        if (pets != null) {
             record.pets.clear()
             record.pets.addAll(pets)
         }
-        if(accessories!=null) {
+        if (accessories != null) {
             record.accessories.clear()
             record.accessories.addAll(accessories)
         }
-        if(skills!=null) {
+        if (skills != null) {
             record.skills.clear()
             record.skills.addAll(skills)
         }

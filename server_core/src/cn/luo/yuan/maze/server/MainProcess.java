@@ -14,6 +14,7 @@ import cn.luo.yuan.maze.model.goods.types.HalfSafe;
 import cn.luo.yuan.maze.model.goods.types.Omelet;
 import cn.luo.yuan.maze.model.goods.types.ResetSkill;
 import cn.luo.yuan.maze.model.real.RealTimeState;
+import cn.luo.yuan.maze.model.real.action.RealTimeAction;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.task.Scene;
 import cn.luo.yuan.maze.model.task.Task;
@@ -355,7 +356,7 @@ public class MainProcess {
     public void stop() {
         save();
         executor.shutdown();
-
+        realService.stop();
     }
 
     public void save() {
@@ -392,6 +393,7 @@ public class MainProcess {
             }
             releaseManager = new ReleaseManager(database, new File(root, "apk"));
         }
+        realService.run();
         dlcTable = new DLCTable(this);
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
@@ -1037,7 +1039,29 @@ public class MainProcess {
 
     public LevelRecord pollRealRecord(String id){
         LevelRecord levelRecord = realService.queryRecord(id);
+        //Clone it and clean not use data to save bandwidth
+        levelRecord = levelRecord.clone();
+        levelRecord.setHero(null);
+        levelRecord.getPets().clear();
+        levelRecord.getAccessories().clear();
+        levelRecord.getSkills().clear();
         return levelRecord;
+    }
+
+    public void realBattleReady(String id){
+        realService.ready(id);
+    }
+
+    public boolean realBattleAction(RealTimeAction action){
+        if(action!=null) {
+            return realService.action(action);
+        }else{
+            return false;
+        }
+    }
+
+    public void quitRealBattle(String id){
+        realService.singleQuit(id);
     }
 
     private String buildEffectString(Map.Entry<String, MyJSONValue> entry, boolean isElement) {

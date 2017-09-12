@@ -470,7 +470,11 @@ public class DataManager implements DataManagerInterface {
     public void add(IDModel object) {
         if (object instanceof Goods) {
             addGoods((Goods) object);
-        } else {
+        } else if(object instanceof Skill){
+            if(skillLoader.load(object.getId())==null){
+                saveSkill((Skill) object);
+            }
+        }else {
             save(object);
         }
     }

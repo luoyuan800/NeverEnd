@@ -84,6 +84,14 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
 
     fun quit(id:String){
         quiter.add(id)
+        if(running > 0 && quiter.size == 1){
+            if(p1.id == id){
+                p1.hp -= p1.currentHp
+            }else if(p2.id == id){
+                p2.hp -= p2.currentHp
+            }
+            detectWinner()
+        }
     }
 
     fun start() {
@@ -181,30 +189,41 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
     private fun detectWinner() {
         if (actioner == p1) {
             if (p2.currentHp <= 0) {
-                winner = p1
-                loser = p2
-                if(p1Record!=null) {
-                    p1Record!!.point += levelPointAward
-                }
-                if(p2Record!=null) {
-                    p2Record!!.point -= levelPointReduce
-                }
+                battleEnd(p1, p2)
             } else if (p1.currentHp <= 0) {
-                winner = p2
-                loser = p1
+                battleEnd(p2, p1)
             }
         } else {
             if (p1.currentHp <= 0) {
-                winner = p2
-                loser = p1
+               battleEnd(p2,p1)
             } else if (p2.currentHp <= 0) {
-                winner = p1
-                loser = p2
+                battleEnd(p1, p2)
             }
         }
         if(winner!=null && loser!=null){
+            stop()
             if(winner is NameObject && loser is NameObject) {
                 messager.rowMessage("${(winner as NameObject).displayName} 击败了 ${(loser as NameObject).displayName}")
+            }
+        }
+    }
+
+    private fun battleEnd(win:HarmAble, lost:HarmAble) {
+        winner = win
+        loser = lost
+        if(winner == p1){
+            if(p1Record!=null){
+                p1Record!!.point += levelPointAward
+            }
+            if(p2Record!=null){
+                p2Record!!.point -= levelPointReduce
+            }
+        }else{
+            if(p2Record!=null){
+                p2Record!!.point += levelPointAward
+            }
+            if(p1Record!=null){
+                p1Record!!.point -= levelPointReduce
             }
         }
     }

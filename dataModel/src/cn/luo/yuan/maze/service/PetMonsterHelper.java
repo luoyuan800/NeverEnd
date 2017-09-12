@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.exception.MonsterToPetException;
 import cn.luo.yuan.maze.model.*;
+import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.utils.MathUtils;
@@ -384,6 +385,18 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
                     Monster m2 = loadMonsterByIndex(p2.getIndex());
                     if (m1!=null && m2!=null && gameControl.getRandom().nextFloat(300) < v) {
                         Egg egg = new Egg();
+                        float abe = Data.ABE_BASE + EffectHandler.getEffectAdditionFloatValue(EffectHandler.ABE, gameControl.getHero().getEffects());
+                        if(random.nextFloat(10000) < abe){
+                            Monster monster = randomMonster();
+                            if(m1.getSex() == 1){
+                                m1 = monster;
+                            }
+                            if(m2.getSex() == 1){
+                                m2 = monster;
+                            }
+                            egg.setColor(Data.ORANGE_COLOR);
+                            egg.setMyFirstName("变异");
+                        }
                         egg.setType(p1.getSex() == 1 ? p1.getType() : p2.getType());
                         egg.setElement(gameControl.getRandom().randomItem(Element.values()));
                         egg.setRace(gameControl.getRandom().randomItem(new Integer[]{p1.getRace().ordinal(), p2.getRace().ordinal()}));

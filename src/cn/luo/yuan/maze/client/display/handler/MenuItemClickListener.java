@@ -15,6 +15,7 @@ import android.widget.*;
 import cn.luo.yuan.maze.Path;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
+import cn.luo.yuan.maze.client.display.activity.PalaceActivity;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.client.display.dialog.*;
 import cn.luo.yuan.maze.client.service.LocalRealTimeManager;
@@ -64,6 +65,10 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.palace:
+                Intent palaceIntent = new Intent(context, PalaceActivity.class);
+                context.startActivity(palaceIntent);
+                break;
             case R.id.update:
                 control.getExecutor().submit(new Runnable() {
                     @Override

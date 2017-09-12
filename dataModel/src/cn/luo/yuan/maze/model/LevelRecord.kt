@@ -8,7 +8,7 @@ import java.io.Serializable
  * Copyright @Luo
  * Created by Gavin Luo on 9/11/2017.
  */
-class LevelRecord(val id:String):Serializable {
+class LevelRecord(val id:String):Serializable, Cloneable {
     constructor(hero: Hero):this(hero.id){
         this.hero = hero
         this.skills.addAll(hero.skills.toList())
@@ -31,4 +31,8 @@ class LevelRecord(val id:String):Serializable {
     val accessories = mutableListOf<Accessory>()
     val skills = mutableListOf<Skill>()
     var head:String = ""
+
+    override fun clone(): LevelRecord {
+        return super.clone() as LevelRecord
+    }
 }

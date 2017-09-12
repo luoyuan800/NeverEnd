@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.client.display.activity.PalaceActivity;
 import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.handler.ViewHandler;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
@@ -20,6 +21,7 @@ import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.NameObject;
+import cn.luo.yuan.maze.model.real.NoDebrisState;
 import cn.luo.yuan.maze.model.real.level.WizardsrRealLevel;
 import cn.luo.yuan.maze.model.real.RealTimeState;
 import cn.luo.yuan.maze.model.skill.AtkSkill;
@@ -111,39 +113,48 @@ public class RealBattleDialog implements View.OnClickListener {
 
     public void updateState(final RealTimeState state) {
         currentState = state;
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    HarmAble winner = state.getWinner();
-                    HarmAble loser = state.getLoser();
-                    if (winner != null && loser != null) {
-                        if (winner.getId().equals(my.getId())) {
-                            IAmWinner(state);
-                        } else {
-                            IAmLoser(state);
-                        }
-                        stop();
-                    } else {
-                        HarmAble actioner = state.getActioner();
-                        HarmAble waiter = state.getWaiter();
-                        ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_timer), StringUtils.formatNumber(state.getRemainTime() / 1000));
-                        if (actioner != null && waiter != null && actioner.getId().equals(my.getId())) {
-                            updateMyState(actioner, state.getActionerLevel(), state.getActionerPetIndex(), state.getActionerPoint(), state.getActionerHead());
-                            updateTargetState(waiter, state.getWaiterLevel(), state.getWaiterPetIndex(), state.getWaiterPoint(), state.getWaiterHead());
-                            myAction();
-                        } else if (actioner != null && waiter != null) {
-                            updateMyState(waiter, state.getWaiterLevel(), state.getWaiterPetIndex(), state.getWaiterPoint(), state.getWaiterHead());
-                            updateTargetState(actioner, state.getActionerLevel(), state.getActionerPetIndex(), state.getActionerPoint(), state.getActionerHead());
-                            targetAction();
-                        }
-                    }
-                }catch (Exception e){
-                    LogHelper.logException(e, "update state");
+        if(state instanceof NoDebrisState){
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+
                 }
-                updateMessage(state);
-            }
-        });
+            });
+        }else {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        HarmAble winner = state.getWinner();
+                        HarmAble loser = state.getLoser();
+                        if (winner != null && loser != null) {
+                            if (winner.getId().equals(my.getId())) {
+                                IAmWinner(state);
+                            } else {
+                                IAmLoser(state);
+                            }
+                            stop();
+                        } else {
+                            HarmAble actioner = state.getActioner();
+                            HarmAble waiter = state.getWaiter();
+                            ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_timer), StringUtils.formatNumber(state.getRemainTime() / 1000));
+                            if (actioner != null && waiter != null && actioner.getId().equals(my.getId())) {
+                                updateMyState(actioner, state.getActionerLevel(), state.getActionerPetIndex(), state.getActionerPoint(), state.getActionerHead());
+                                updateTargetState(waiter, state.getWaiterLevel(), state.getWaiterPetIndex(), state.getWaiterPoint(), state.getWaiterHead());
+                                myAction();
+                            } else if (actioner != null && waiter != null) {
+                                updateMyState(waiter, state.getWaiterLevel(), state.getWaiterPetIndex(), state.getWaiterPoint(), state.getWaiterHead());
+                                updateTargetState(actioner, state.getActionerLevel(), state.getActionerPetIndex(), state.getActionerPoint(), state.getActionerHead());
+                                targetAction();
+                            }
+                        }
+                    } catch (Exception e) {
+                        LogHelper.logException(e, "update state");
+                    }
+                    updateMessage(state);
+                }
+            });
+        }
     }
 
     @Override

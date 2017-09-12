@@ -20,6 +20,11 @@ class SkillDLC : SingleItemDLC, Cloneable {
     }
     
     var skill: Skill? = null
+        set(value){
+            field = value
+            title = skill!!.name
+            desc = skill!!.displayName
+        }
     private var delete = false
     override fun isDelete(): Boolean {
         return delete
