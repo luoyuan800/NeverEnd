@@ -88,10 +88,20 @@ public class PalaceActivity extends BaseActivity {
                             if (state instanceof NoDebrisState) {
                                 gameContext.showPopup(Resource.getString(R.string.not_debris));
                             } else {
-                                battleDialog = new RealBattleDialog(manager, gameContext);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        battleDialog = new RealBattleDialog(manager, gameContext);
+                                    }
+                                });
                             }
                             stop = true;
-                            progress.dismiss();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progress.dismiss();
+                                }
+                            });
                         }
                     }
                 }

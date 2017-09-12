@@ -69,6 +69,7 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
         this.p2Head = p2Head
         this.p1Head = p1Head
         this.levelPointAward = levelPointAward
+        this.levelPointReduce = levelPointReduce
     }
 
     init {
