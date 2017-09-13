@@ -21,9 +21,7 @@ class ReleaseManager(private val database: DatabaseConnection, private val apkFo
         try {
             connection = database.getConnection()
             statement = connection.createStatement()
-            statement.execute("create table IF NOT EXISTS `release`(releasenotes text NOT NULL, " +
-                    "`version` int(10), download int(10), " +
-                    "primary key (`version`))")
+            statement.execute("CREATE TABLE IF NOT EXISTS `release` ( `version` INT(10) UNSIGNED NOT NULL, `releasenotes` TEXT NOT NULL, `download` INT(10) UNSIGNED NOT NULL, PRIMARY KEY (`version`)) ENGINE = InnoDB;")
         } catch (e: Exception) {
             LogHelper.error(e)
         } finally {

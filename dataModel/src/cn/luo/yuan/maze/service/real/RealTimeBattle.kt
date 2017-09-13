@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.service.real
 
+import cn.luo.yuan.maze.listener.BattleEndListener
 import cn.luo.yuan.maze.model.*
 import cn.luo.yuan.maze.model.real.RealTimeState
 import cn.luo.yuan.maze.model.real.action.AtkAction
@@ -12,12 +13,14 @@ import cn.luo.yuan.maze.model.skill.SkillAbleObject
 import cn.luo.yuan.maze.service.BattleService
 import cn.luo.yuan.maze.utils.Random
 import cn.luo.yuan.maze.utils.StringUtils
+import java.util.*
 
 /**
  * Copyright @Luo
  * Created by Gavin Luo on 8/17/2017.
  */
 class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, var mateAward:Long, val random: Random) {
+    val id = UUID.randomUUID().toString()
     val battle: BattleService = BattleService(p1, p2, random, null)
     val messager = RealBattleMessage()
     var p1ActionPoint = 110
@@ -42,6 +45,7 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
     var p1Record:LevelRecord? = null
     var p2Record:LevelRecord? = null
     val quiter = mutableListOf<String>()
+    val battleEndListener:RealBattleEndListener? = null
 
     constructor(p1:LevelRecord, p2:LevelRecord, pointAward: Long, mateAward: Long, levelPointAward: Long, levelPointReduce: Long):
             this(p1.hero!!, p2.hero!!, p1.point, p2.point, p1.head, p2.head, pointAward, mateAward,levelPointAward,levelPointReduce, Random(System.currentTimeMillis())){
@@ -211,18 +215,23 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
         if(winner == p1){
             if(p1Record!=null){
                 p1Record!!.point += levelPointAward
+                p1Record!!.win ++
             }
             if(p2Record!=null){
                 p2Record!!.point -= levelPointReduce
+                p2Record!!.lost ++
             }
         }else{
             if(p2Record!=null){
                 p2Record!!.point += levelPointAward
+                p2Record!!.win ++
             }
             if(p1Record!=null){
                 p1Record!!.point -= levelPointReduce
+                p1Record!!.lost ++
             }
         }
+        battleEndListener?.end(p1Record, p2Record, p1, p2)
     }
 
     private fun getMinHarm() = if (actioner == p1) p1ActionPoint.toLong() else p2ActionPoint.toLong()
@@ -268,7 +277,7 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
             i++
         }
         state.remainTime = pollRemainTime()
-
+        state.id = id
         return state
     }
 
@@ -305,7 +314,7 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
     }
 
     interface RealBattleEndListener{
-        fun end(x: HarmAble?, y: HarmAble?, awardPoint:Int, awardMate:Int): Unit
+        fun end(r1:LevelRecord?, r2:LevelRecord?, p1: HarmAble?, p2: HarmAble?): Unit
     }
 
 }

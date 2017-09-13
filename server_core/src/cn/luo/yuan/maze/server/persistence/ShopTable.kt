@@ -31,10 +31,7 @@ class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
         try {
             connection = database.getConnection()
             statement = connection.createStatement()
-            statement.execute("create table IF NOT EXISTS shop(id varchar(100) NOT NULL, " +
-                    "type varchar(100) NOT NULL, cost INT default 0, count INT default 0, " +
-                    "sold INT default 0 , on_sell TINYINT default 0, ref varchar(255), special TINYINT default 0, " +
-                    "primary key (id))")
+            statement.execute("CREATE TABLE IF NOT EXISTS `shop` ( `id` VARCHAR(100) NOT NULL, `type` VARCHAR(100) NOT NULL, `cost` INTEGER UNSIGNED DEFAULT 0, `count` INTEGER UNSIGNED DEFAULT 0, `sold` INTEGER UNSIGNED DEFAULT 0, `on_sell` TINYINT UNSIGNED DEFAULT 0, `ref` VARCHAR(255), `special` TINYINT UNSIGNED DEFAULT 0, PRIMARY KEY (`id`)) ENGINE = InnoDB;")
         } catch (e: Exception) {
             LogHelper.error(e)
         } finally {

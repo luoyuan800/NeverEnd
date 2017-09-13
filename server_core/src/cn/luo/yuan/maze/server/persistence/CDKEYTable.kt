@@ -19,9 +19,7 @@ class CDKEYTable(private val database:DatabaseConnection) {
         try {
             connection = database.getConnection()
             statement = connection.createStatement()
-            statement.execute("create table IF NOT EXISTS cdkey(id varchar(100) NOT NULL, " +
-                    "gift integer, debris integer, mate integer, used integer, single integer default 0, " +
-                    "primary key (id))")
+            statement.execute("CREATE TABLE IF NOT EXISTS `cdkey` (`id` VARCHAR(100) NOT NULL, `gift` INT(11), `debris` INT(11), `mate` INT(11), `used` INT(11), `single` INT(11), PRIMARY KEY (`id`)) ENGINE = InnoDB;");
         } catch (e: Exception) {
             LogHelper.error(e)
         } finally {

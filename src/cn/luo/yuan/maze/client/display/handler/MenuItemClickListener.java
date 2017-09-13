@@ -264,7 +264,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 Monster monster = control.getPetMonsterHelper().randomMonster(5);
                 if(monster!=null){
                     LocalRealTimeManager m = new LocalRealTimeManager(control, monster);
-                    new RealBattleDialog(m , control);
+                    new RealBattleDialog(m , control, "");
                 }
                 break;
             case R.id.skills:

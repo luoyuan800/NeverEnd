@@ -8,11 +8,16 @@ import cn.luo.yuan.maze.model.dlc.MonsterDLC;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.types.ChangeHead;
+import cn.luo.yuan.maze.model.goods.types.Evolution;
+import cn.luo.yuan.maze.model.goods.types.Filter;
 import cn.luo.yuan.maze.model.goods.types.Grill;
 import cn.luo.yuan.maze.model.goods.types.HPM;
 import cn.luo.yuan.maze.model.goods.types.HalfSafe;
+import cn.luo.yuan.maze.model.goods.types.Mirror;
 import cn.luo.yuan.maze.model.goods.types.Omelet;
 import cn.luo.yuan.maze.model.goods.types.ResetSkill;
+import cn.luo.yuan.maze.model.goods.types.Restrictor;
+import cn.luo.yuan.maze.model.goods.types.Scalpel;
 import cn.luo.yuan.maze.model.real.RealTimeState;
 import cn.luo.yuan.maze.model.real.action.RealTimeAction;
 import cn.luo.yuan.maze.model.task.Scene;
@@ -236,7 +241,7 @@ public class MainProcess {
         ServerRecord record = heroTable.getRecord(ownerId);
         if (record != null && record.getGift() > 0) {
             try {
-                switch (random.nextInt(14)) {
+                switch (random.nextInt(16)) {
                     case 0:
                         HalfSafe medallion = new HalfSafe();
                         medallion.setCount(1);
@@ -279,6 +284,31 @@ public class MainProcess {
                     case 9:
                         record.setDebris(record.getDebris() + 1);
                         return "获得一块碎片";
+                    case 10:
+                        Evolution evolution = new Evolution();
+                        evolution.setCount(1);
+                        return evolution;
+                    case 11:
+                        if(random.nextInt(3) == 0) {
+                            Filter filter = new Filter();
+                            filter.setCount(1);
+                            return filter;
+                        } else if(random.nextInt(2) == 0){
+                            Restrictor restrictor = new Restrictor();
+                            restrictor.setCount(1);
+                            return restrictor;
+                        } else return null;
+                    case 12:
+                        int mi = random.nextInt(100);
+                        if(mi == 1){
+                            Mirror mirror = new Mirror();
+                            mirror.setCount(0);
+                            return mirror;
+                        }else if(mi <=5){
+                            Scalpel scalpel = new Scalpel();
+                            scalpel.setCount(0);
+                            return scalpel;
+                        } else return null;
                     default:
                         return null;
                 }
@@ -373,6 +403,7 @@ public class MainProcess {
             cdkeyTable = new CDKEYTable(database);
             try (Connection connection = database.getConnection()) {
                 Statement statement = connection.createStatement();
+                statement.execute("CREATE TABLE IF NOT EXISTS `verify` ( `id` INTEGER UNSIGNED NOT NULL DEFAULT 0, `sign` TEXT, `version` VARCHAR(10), PRIMARY KEY (`id`)) ENGINE = InnoDB;");
                 ResultSet rs = statement.executeQuery("select sign,version from verify");
                 if (rs.next()) {
                     sign_match = rs.getString("sign");
@@ -418,7 +449,7 @@ public class MainProcess {
         executor.scheduleAtFixedRate(sceneTable, 111, 3000, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(userDb, 111, 300, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(heroTable.getDb(), 99, 200, TimeUnit.MILLISECONDS);
-        executor.scheduleAtFixedRate(heroTable, 1, 1, TimeUnit.DAYS);
+        executor.scheduleAtFixedRate(heroTable, 20, 20, TimeUnit.HOURS);
         executor.scheduleAtFixedRate(exchangeTable.getExchangeDb(), 120, 200, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(monsterTable.getMonsterTable(), 120, 500, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(dlcTable.getDLCTable(), 525, 1500, TimeUnit.MILLISECONDS);
@@ -1028,8 +1059,12 @@ public class MainProcess {
         return null;
     }
 
-    public RealTimeState pollCurrentState(String id, int msgIndex) {
-        return realService.pollState(id, msgIndex);
+    public List<LevelRecord> pollTopNPalaceRecords(int n){
+        return realService.pollTopNRecord(n);
+    }
+
+    public RealTimeState pollCurrentState(String id, int msgIndex, String battleId) {
+        return realService.pollState(id, msgIndex, battleId);
     }
 
     public void updateRealData(LevelRecord record) {

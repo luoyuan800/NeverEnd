@@ -127,12 +127,11 @@
             android:layout_marginTop="10dp"/>
 
     <TextView
-            android:text="TextView"
+            android:text="@string/palcae_tip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="@string/palcae_tip"
             android:textColor="@color/active"
-            android:textSize="14dp"/>
+            android:textSize="11dp"/>
 
     <Button
             android:text="@string/palace_npc"
@@ -150,7 +149,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/active"
-            android:textSize="14dp"/>
+            android:textSize="11dp"/>
 
     <LinearLayout
             android:orientation="horizontal"
@@ -180,7 +179,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/active"
-                    android:textSize="14dp"
+                    android:textSize="11dp"
                     android:layout_weight="1"/>
 
         </LinearLayout>
@@ -204,12 +203,11 @@
                     android:enabled="false"/>
 
             <TextView
-                    android:text="TextView"
+                    android:text="@string/palace_legacy_tip"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:text="@string/palace_legacy_tip"
                     android:textColor="@color/active"
-                    android:textSize="14dp"/>
+                    android:textSize="11dp"/>
 
         </LinearLayout>
 

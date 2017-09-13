@@ -32,4 +32,5 @@ open class RealTimeState:Serializable {
     var upgradeTip = ""
     var awardMate = 0L
     var awardPoint = 0L
+    var id:String = ""
 }

@@ -173,6 +173,9 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
                     g.heroes.add(hero)
                 }
             }
+            if(group.npc!=null){
+                g.heroes.add(group.npc!!)
+            }
             if(g.heroes.size >= 2){
                 return g
             }else{

@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.client.display.dialog;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -10,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
-import cn.luo.yuan.maze.client.display.activity.PalaceActivity;
 import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.handler.ViewHandler;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
@@ -21,8 +21,6 @@ import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.NameObject;
-import cn.luo.yuan.maze.model.real.NoDebrisState;
-import cn.luo.yuan.maze.model.real.level.WizardsrRealLevel;
 import cn.luo.yuan.maze.model.real.RealTimeState;
 import cn.luo.yuan.maze.model.skill.AtkSkill;
 import cn.luo.yuan.maze.model.skill.DefSkill;
@@ -49,8 +47,11 @@ public class RealBattleDialog implements View.OnClickListener {
     private AlertDialog main;
     private HarmAble my;
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
+    private Dialog currentShowingSubDialog;
+    private String id;
 
-    public RealBattleDialog(final RealTimeManager manager, NeverEnd context) {
+    public RealBattleDialog(final RealTimeManager manager, NeverEnd context, String battleId) {
+        this.id = battleId;
         this.context = context;
         this.manager = manager;
         root = View.inflate(context.getContext(), R.layout.real_battle_layout, null);
@@ -102,6 +103,7 @@ public class RealBattleDialog implements View.OnClickListener {
     }
 
     public void stop() {
+        targetAction();
         if(!executor.isShutdown()) {
             executor.execute(new Runnable() {
                 @Override
@@ -119,10 +121,8 @@ public class RealBattleDialog implements View.OnClickListener {
     }
 
     public void updateState(final RealTimeState state) {
-        currentState = state;
-        if(state instanceof NoDebrisState){
-
-        }else {
+        if(state!=null){
+            currentState = state;
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -139,7 +139,7 @@ public class RealBattleDialog implements View.OnClickListener {
                         } else {
                             HarmAble actioner = state.getActioner();
                             HarmAble waiter = state.getWaiter();
-                            ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_timer), StringUtils.formatNumber(state.getRemainTime() / 1000));
+                            ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_timer), StringUtils.formatNumber(state.getRemainTime()));
                             if (actioner != null && waiter != null && actioner.getId().equals(my.getId())) {
                                 updateMyState(actioner, state.getActionerLevel(), state.getActionerPetIndex(), state.getActionerPoint(), state.getActionerHead());
                                 updateTargetState(waiter, state.getWaiterLevel(), state.getWaiterPetIndex(), state.getWaiterPoint(), state.getWaiterHead());
@@ -313,32 +313,34 @@ public class RealBattleDialog implements View.OnClickListener {
     }
 
     private void IAmWinner(final RealTimeState state) {
-        root.findViewById(R.id.real_battle_timer).setVisibility(View.INVISIBLE);
-        TextView textView = (TextView) root.findViewById(R.id.start_text);
-        textView.setVisibility(View.VISIBLE);
-        ViewHandler.setText(textView, R.string.real_win);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (StringUtils.isNotEmpty(state.getUpgradeTip())) {
-                    SimplerDialogBuilder.build(state.getUpgradeTip(), Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            main.dismiss();
-                        }
-                    }, context.getContext(), context.getRandom());
-                } else if (StringUtils.isNotEmpty(state.getWinTip())) {
-                    SimplerDialogBuilder.build(state.getWinTip(), Resource.getString(R.string.conform), context.getContext(), context.getRandom());
-                }
+        if(currentShowingSubDialog == null) {
+            root.findViewById(R.id.real_battle_timer).setVisibility(View.INVISIBLE);
+            TextView textView = (TextView) root.findViewById(R.id.start_text);
+            textView.setVisibility(View.VISIBLE);
+            ViewHandler.setText(textView, R.string.real_win);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (StringUtils.isNotEmpty(state.getUpgradeTip())) {
+                        currentShowingSubDialog = SimplerDialogBuilder.build(state.getUpgradeTip(), Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                main.dismiss();
+                            }
+                        }, context.getContext(), context.getRandom());
+                    } else if (StringUtils.isNotEmpty(state.getWinTip())) {
+                        currentShowingSubDialog = SimplerDialogBuilder.build(state.getWinTip(), Resource.getString(R.string.conform), context.getContext(), context.getRandom());
+                    }
 
+                }
+            }, 100);
+            if (state.getAwardMate() > 0) {
+                context.getHero().setMaterial(context.getHero().getMaterial() + state.getAwardMate());
             }
-        }, 100);
-        if(state.getAwardMate() > 0){
-            context.getHero().setMaterial(context.getHero().getMaterial() + state.getAwardMate());
-        }
-        if(state.getAwardPoint() > 0){
-            context.getHero().setPoint(context.getHero().getPoint() + state.getAwardPoint());
+            if (state.getAwardPoint() > 0) {
+                context.getHero().setPoint(context.getHero().getPoint() + state.getAwardPoint());
+            }
         }
     }
 

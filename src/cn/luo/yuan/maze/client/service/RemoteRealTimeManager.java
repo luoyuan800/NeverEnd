@@ -31,6 +31,7 @@ public class RemoteRealTimeManager implements RealTimeManager {
     private List<String> actionId = new ArrayList<>();
     private List<RealTimeAction> actions = new ArrayList<>();
     private int msgIndex = 0;
+    private String id;
     public RemoteRealTimeManager(RestConnection server, NeverEnd context){
         this.server =server;
         this.context = context;
@@ -75,6 +76,7 @@ public class RemoteRealTimeManager implements RealTimeManager {
             HttpURLConnection con = server.getHttpURLConnection(Path.POLL_REAL_BATTLE_STATE, RestConnection.POST);
             con.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
             con.addRequestProperty(Field.INDEX, String.valueOf(msgIndex));
+            con.addRequestProperty(Field.REAL_MSG_ID, getId());
             Object o = server.connect(con);
             if(o instanceof RealTimeState){
                 msgIndex += ((RealTimeState) o).getMsg().size();
@@ -115,5 +117,15 @@ public class RemoteRealTimeManager implements RealTimeManager {
         if(context.getContext() instanceof PalaceActivity){
             ((PalaceActivity) context.getContext()).updateLevel();
         }
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
     }
 }

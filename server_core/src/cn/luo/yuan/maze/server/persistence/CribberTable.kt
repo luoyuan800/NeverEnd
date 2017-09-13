@@ -19,9 +19,7 @@ class CribberTable(private val database: DatabaseConnection) {
         try {
             connection = database.getConnection()
             statement = connection.createStatement()
-            statement.execute("create table IF NOT EXISTS cribber(uuid varchar(100) NOT NULL, " +
-                    "mac varchar(100), name varchar(45), " +
-                    "primary key (uuid))")
+            statement.execute("CREATE TABLE IF NOT EXISTS `cribber` (`mac` VARCHAR(100),`uuid` VARCHAR(100) NOT NULL,`name` VARCHAR(45), PRIMARY KEY  USING BTREE(`uuid`) ) ENGINE = InnoDB;")
         } catch (e: Exception) {
             LogHelper.error(e)
         } finally {

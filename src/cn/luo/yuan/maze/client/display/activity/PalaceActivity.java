@@ -30,6 +30,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -83,7 +84,7 @@ public class PalaceActivity extends BaseActivity {
                 boolean stop = false;
                 while (!stop && progress.isShowing()) {
                     synchronized (progress) {
-                        RealTimeState state = manager.pollState();
+                        final RealTimeState state = manager.pollState();
                         if (state != null) {
                             if (state instanceof NoDebrisState) {
                                 gameContext.showPopup(Resource.getString(R.string.not_debris));
@@ -91,7 +92,8 @@ public class PalaceActivity extends BaseActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        battleDialog = new RealBattleDialog(manager, gameContext);
+                                        manager.setId(state.getId());
+                                        battleDialog = new RealBattleDialog(manager, gameContext, state.getId());
                                     }
                                 });
                             }
@@ -182,6 +184,32 @@ public class PalaceActivity extends BaseActivity {
         Resource.init(this);
         server = new RestConnection(Field.SERVER_URL, getVersion(), Resource.getSingInfo());
         submitRecord();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    HttpURLConnection con = server.getHttpURLConnection(Path.TOP_N_PALACE, RestConnection.POST);
+                    con.addRequestProperty(Field.COUNT, String.valueOf(5));
+                    Object o = server.connect(con);
+                    if (o instanceof List) {
+                        final StringBuilder sb = new StringBuilder();
+                        for (LevelRecord record : (List<LevelRecord>) o) {
+                            if (record.getHero() != null)
+                                sb.append(record.getHero().getDisplayName()).append("<br>").append(" ")
+                                        .append(StringUtils.formatRealLevel(record.getPoint(), record.getHero().getRace())).append("<br>");
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ViewHandler.setText((TextView)findViewById(R.id.online_palace_range), sb.toString());
+                            }
+                        });
+                    }
+                } catch (IOException e) {
+                    LogHelper.logException(e, "query top n palace");
+                }
+            }
+        });
     }
 
     private void submitRecord() {
@@ -218,7 +246,7 @@ public class PalaceActivity extends BaseActivity {
                 } else if (progress == null) {
                     progress = new ProgressDialog(PalaceActivity.this);
                 }
-                if(StringUtils.isNotEmpty(tip)){
+                if (StringUtils.isNotEmpty(tip)) {
                     progress.setMessage(tip);
                 }
                 progress.setOnDismissListener(null);

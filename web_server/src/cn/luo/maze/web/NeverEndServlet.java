@@ -43,7 +43,7 @@ import static cn.luo.yuan.maze.Path.*;
 public class NeverEndServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static int count = 0;
-    private final String root = "E:\\www1\\luoyuan800-0b44449e5d24473a015d30fddbd602dd\\webapp\\data";
+    private final String root = Field.SERVER_DIR;
     private MainProcess process = new MainProcess(root);
 
     /**
@@ -193,6 +193,9 @@ public class NeverEndServlet extends HttpServlet {
             PrintWriter writer = null;
             Boolean success = null;
             switch (path) {
+                case TOP_N_PALACE:
+                    writeObject(response, process.pollTopNPalaceRecords(request.getIntHeader(Field.COUNT)));
+                    break;
                 case REAL_BATTLE_QUIT:
                     String onlyQuit = request.getHeader(Field.ONLY_QUIT_RANGE);
                     process.quitRealBattle(ownerId, onlyQuit!=null && onlyQuit.equals("1"));
@@ -214,7 +217,7 @@ public class NeverEndServlet extends HttpServlet {
                     }
                     break;
                 case POLL_REAL_BATTLE_STATE:
-                    writeObject(response, process.pollCurrentState(ownerId, request.getIntHeader(Field.INDEX)));
+                    writeObject(response, process.pollCurrentState(ownerId, request.getIntHeader(Field.INDEX), request.getHeader(Field.REAL_MSG_ID)));
                     break;
                 case POLL_REAL_RECORD:
                     writeObject(response, process.pollRealRecord(ownerId));
