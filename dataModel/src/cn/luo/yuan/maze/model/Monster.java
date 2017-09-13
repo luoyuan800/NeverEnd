@@ -234,6 +234,11 @@ public class Monster extends HarmObject implements IDModel, SilentAbleObject, Na
         return new Skill[]{skill};
     }
 
+    @Override
+    public void setSkills(Skill[] skills) {
+        //
+    }
+
     public Monster clone() {
         try {
             Monster clone =  (Monster) super.clone();

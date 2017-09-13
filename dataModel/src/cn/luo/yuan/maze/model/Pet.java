@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.model;
 
 import cn.luo.yuan.maze.model.skill.MountAble;
+import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillParameter;
 import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Field;
@@ -176,5 +177,10 @@ public class Pet extends Monster implements IDModel, OwnedAble, MountAble {
 
     public void setMyFirstName(String myFirstName) {
         this.myFirstName = myFirstName;
+    }
+
+    @Override
+    public void setSkills(Skill[] skills) {
+        //
     }
 }

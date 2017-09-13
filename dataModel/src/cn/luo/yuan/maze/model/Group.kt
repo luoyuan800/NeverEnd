@@ -12,6 +12,10 @@ import java.io.Serializable
  * Created by Gavin Luo on 7/7/2017.
  */
 class Group : HarmObject(), SkillAbleObject, NameObject, PetOwner, Serializable {
+    override fun setSkills(skills: Array<out Skill>?) {
+        //
+    }
+
     override fun getRace(): Race {
         if(currentHero!=null) return currentHero!!.race else return Race.Nonsr;
     }

@@ -213,10 +213,15 @@ public class RealBattleDialog implements View.OnClickListener {
             public void onClick(View v) {
                 try {
                     int index = (Integer) v.getTag(R.string.position);
-                    AtkSkill skill = atkSkills.get(index);
+                    final AtkSkill skill = atkSkills.get(index);
                     if (skill != null) {
                         if (Data.getSkillActionPoint(skill) <= currentState.getActionerPoint()) {
-                            manager.useAtkSkillAction(skill);
+                            executor.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    manager.useAtkSkillAction(skill);
+                                }
+                            });
                             targetAction();
                         }
                     }

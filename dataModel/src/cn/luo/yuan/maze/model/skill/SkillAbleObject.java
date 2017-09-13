@@ -5,4 +5,5 @@ package cn.luo.yuan.maze.model.skill;
  */
 public interface SkillAbleObject {
     Skill[] getSkills();
+    void setSkills(Skill[] skills);
 }

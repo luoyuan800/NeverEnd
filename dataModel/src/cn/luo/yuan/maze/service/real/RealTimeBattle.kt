@@ -170,7 +170,7 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
                             }
                             p2ActionPoint -= point
                         }
-                        (actioner!! as SkillAbleObject).skills[0] = skill
+                        (actioner!! as SkillAbleObject).skills = arrayOf(skill)
                     }
                 }
             }
