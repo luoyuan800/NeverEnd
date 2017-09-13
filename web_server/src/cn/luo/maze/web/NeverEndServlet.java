@@ -217,7 +217,8 @@ public class NeverEndServlet extends HttpServlet {
                     }
                     break;
                 case POLL_REAL_BATTLE_STATE:
-                    writeObject(response, process.pollCurrentState(ownerId, request.getIntHeader(Field.INDEX), request.getHeader(Field.REAL_MSG_ID)));
+                    String header = request.getHeader(Field.REAL_MSG_ID);
+                    writeObject(response, process.pollCurrentState(ownerId, request.getIntHeader(Field.INDEX), header));
                     break;
                 case POLL_REAL_RECORD:
                     writeObject(response, process.pollRealRecord(ownerId));

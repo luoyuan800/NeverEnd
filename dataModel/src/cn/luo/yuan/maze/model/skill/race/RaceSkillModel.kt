@@ -28,6 +28,7 @@ class RaceSkillModel(private val s:Skill): SkillModel(s) {
             is Decide -> race = Race.Elyosr
             is Exorcism -> race = Race.Ghosr
             is Masimm -> race = Race.Wizardsr
+            is Painkiller -> race = Race.Eviler
         }
         return race
     }

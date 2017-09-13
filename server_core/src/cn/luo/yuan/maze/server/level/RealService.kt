@@ -76,7 +76,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
         executor.awaitTermination(20, TimeUnit.MILLISECONDS)
     }
 
-    fun pollState(id: String, msgIndex: Int, battleId: String): RealTimeState? {
+    fun pollState(id: String, msgIndex: Int, battleId: String?): RealTimeState? {
         val record = queryRecord(id)
         if (record != null) {
             val rtb = battling[record.id]
@@ -84,7 +84,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
                 return rtb.pollState(msgIndex)
             } else {
                 LogHelper.info("Wrong battle!")
-                battling.remove(record.id, rtb)
+                battling.remove(record.id, rtb!!)
             }
             if (StringUtils.isEmpty(battleId)) {
                 synchronized(waiting) {
