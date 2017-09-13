@@ -386,6 +386,7 @@ public class MainProcess {
         save();
         executor.shutdown();
         realService.stop();
+        database.close();
     }
 
     public void save() {

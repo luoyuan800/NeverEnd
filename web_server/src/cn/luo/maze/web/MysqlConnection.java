@@ -1,28 +1,24 @@
 package cn.luo.maze.web;
 
 import cn.luo.yuan.maze.server.LogHelper;
-import com.sun.istack.internal.NotNull;
 
-import java.sql.*;
-
-import java.util.Properties;
-
-import javax.naming.*;
-
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NameNotFoundException;
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Properties;
 
 public class MysqlConnection implements cn.luo.yuan.maze.server.persistence.db.DatabaseConnection {
 
     Context IC_ictx = null;
 
 
-
     String jndi = "java:comp/env/jdbc/mysql";
 
 
-
     DataSource dataSource = null;
-
 
 
     public MysqlConnection() {
@@ -30,17 +26,10 @@ public class MysqlConnection implements cn.luo.yuan.maze.server.persistence.db.D
     }
 
 
-
     /**
-
      * 取得数据库源;
-
      *
-
      * @return
-
-     *
-
      */
 
     public DataSource getDataSource() {
@@ -50,19 +39,11 @@ public class MysqlConnection implements cn.luo.yuan.maze.server.persistence.db.D
     }
 
 
-
     /**
-
      * 取得连接
-
      *
-
      * @return
-
      * @throws Exception
-
-     *
-
      */
 
     @Override
@@ -101,21 +82,11 @@ public class MysqlConnection implements cn.luo.yuan.maze.server.persistence.db.D
     }
 
 
-
-
-
     /**
-
      * 初始化连接;
-
      *
-
      * @return
-
      * @throws Exception
-
-     *
-
      */
 
     public DataSource init() throws Exception {
@@ -125,7 +96,6 @@ public class MysqlConnection implements cn.luo.yuan.maze.server.persistence.db.D
             Properties p = new Properties();
 
             IC_ictx = new InitialContext(p);
-
             dataSource = (DataSource) IC_ictx.lookup(jndi);
 
             return dataSource;
@@ -142,7 +112,14 @@ public class MysqlConnection implements cn.luo.yuan.maze.server.persistence.db.D
 
     }
 
-
+    public void close() {
+        try {
+            if (IC_ictx != null)
+                IC_ictx.close();
+        } catch (Exception e) {
+            LogHelper.error(e);
+        }
+    }
 
     public String getJndi() {
 

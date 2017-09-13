@@ -9,4 +9,5 @@ import java.sql.Connection
 interface DatabaseConnection {
     @Throws(Exception::class)
     fun getConnection(): Connection
+    fun close()
 }
