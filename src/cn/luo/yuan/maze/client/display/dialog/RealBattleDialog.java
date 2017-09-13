@@ -123,6 +123,7 @@ public class RealBattleDialog implements View.OnClickListener {
     public void updateState(final RealTimeState state) {
         if(state!=null){
             currentState = state;
+            manager.setId(state.getId());
             handler.post(new Runnable() {
                 @Override
                 public void run() {

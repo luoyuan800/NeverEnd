@@ -19,12 +19,7 @@ import cn.luo.yuan.maze.model.LevelRecord;
 import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.model.real.NoDebrisState;
 import cn.luo.yuan.maze.model.real.RealTimeState;
-import cn.luo.yuan.maze.model.real.level.ElyosrRealLevel;
-import cn.luo.yuan.maze.model.real.level.EvilerRealLevel;
-import cn.luo.yuan.maze.model.real.level.GhosrRealLevel;
-import cn.luo.yuan.maze.model.real.level.NonsrRealLevel;
-import cn.luo.yuan.maze.model.real.level.OrgerRealLevel;
-import cn.luo.yuan.maze.model.real.level.WizardsrRealLevel;
+import cn.luo.yuan.maze.model.real.level.*;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -83,9 +78,9 @@ public class PalaceActivity extends BaseActivity {
             public void run() {
                 boolean stop = false;
                 while (!stop && progress.isShowing()) {
-                    synchronized (progress) {
-                        final RealTimeState state = manager.pollState();
-                        if (state != null) {
+                    final RealTimeState state = manager.pollState();
+                    if (state != null) {
+                        synchronized (progress) {
                             if (state instanceof NoDebrisState) {
                                 gameContext.showPopup(Resource.getString(R.string.not_debris));
                             } else {
@@ -104,6 +99,12 @@ public class PalaceActivity extends BaseActivity {
                                     progress.dismiss();
                                 }
                             });
+                        }
+                    } else {
+                        try {
+                            Thread.sleep(600);
+                        } catch (InterruptedException e) {
+                            LogHelper.logException(e, "Ranging");
                         }
                     }
                 }
@@ -201,7 +202,7 @@ public class PalaceActivity extends BaseActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                ViewHandler.setText((TextView)findViewById(R.id.online_palace_range), sb.toString());
+                                ViewHandler.setText((TextView) findViewById(R.id.online_palace_range), sb.toString());
                             }
                         });
                     }

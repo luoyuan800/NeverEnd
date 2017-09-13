@@ -80,17 +80,12 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
         val record = queryRecord(id)
         if (record != null) {
             val rtb = battling[record.id]
-            if (rtb != null && rtb.id == battleId) {
+            if (rtb != null) {
                 return rtb.pollState(msgIndex)
-            } else {
-                LogHelper.info("Wrong battle!")
-                if(rtb!=null) {
-                    battling.remove(record.id, rtb)
-                }
             }
             if (StringUtils.isEmpty(battleId)) {
                 synchronized(waiting) {
-                    if (!waiting.isQueue(record)) {
+                    if (battling[record.id] == null && !waiting.isQueue(record)) {
                         val serverRecord = mainProcess.heroTable.getRecord(id)
                         if (serverRecord != null && serverRecord.debris >= Data.PALACE_RANGE_COST) {
                             waiting.addQueue(record)
