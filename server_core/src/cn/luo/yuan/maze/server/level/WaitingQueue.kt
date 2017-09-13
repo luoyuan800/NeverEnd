@@ -1,7 +1,6 @@
 package cn.luo.yuan.maze.server.level
 
 import cn.luo.yuan.maze.model.LevelRecord
-import cn.luo.yuan.maze.model.Race
 import cn.luo.yuan.maze.model.real.level.ElyosrRealLevel
 import cn.luo.yuan.maze.utils.Random
 
@@ -14,10 +13,7 @@ class WaitingQueue {
     private val random = Random(System.currentTimeMillis())
     fun addQueue(record: LevelRecord): Boolean {
         if (record.hero != null) {
-            val level: Int = when (record.hero!!.race) {
-                Race.Elyosr -> ElyosrRealLevel.getCurrentLevel(record.point).ordinal
-                else -> 0
-            }
+            val level: Int = ElyosrRealLevel.getCurrentLevel(record.point).ordinal
             synchronized(queues) {
                 var list: MutableList<LevelRecord>? = queues[level]
                 if (list == null) {
@@ -35,12 +31,9 @@ class WaitingQueue {
 
     fun removeQueue(record: LevelRecord): Boolean {
         if (record.hero != null) {
-            val level: Int = when (record.hero!!.race) {
-                Race.Elyosr -> ElyosrRealLevel.getCurrentLevel(record.point).ordinal
-                else -> 0
-            }
+            val level: Int = ElyosrRealLevel.getCurrentLevel(record.point).ordinal
             synchronized(queues) {
-                var list: MutableList<LevelRecord>? = queues[level]
+                val list: MutableList<LevelRecord>? = queues[level]
                 if (list != null && list.find { it.id == record.id } != null) {
                     list.removeAll { it.id == record.id }
                 }
@@ -54,7 +47,7 @@ class WaitingQueue {
         if (record.hero != null) {
             val level: Int = calculateLevel(record)
             synchronized(queues) {
-                var list: MutableList<LevelRecord>? = queues[level]
+                val list: MutableList<LevelRecord>? = queues[level]
                 if (list != null) {
                     val item = random.randomItem(list)
                     if (item != null) {
@@ -68,10 +61,7 @@ class WaitingQueue {
     }
 
     private fun calculateLevel(record: LevelRecord): Int {
-        val level: Int = when (record.hero!!.race) {
-            Race.Elyosr -> ElyosrRealLevel.getCurrentLevel(record.point).ordinal
-            else -> 0
-        }
+        val level: Int = ElyosrRealLevel.getCurrentLevel(record.point).ordinal
         return level
     }
 

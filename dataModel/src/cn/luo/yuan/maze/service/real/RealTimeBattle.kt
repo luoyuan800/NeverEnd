@@ -24,7 +24,7 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
     var p2ActionPoint = 110
     var actionControlThread: ControlThread? = null
     var running = -1
-    var timeLimit = 30
+    var timeLimit = 30L
     var p1Head = ""
     var p2Head = ""
     var p1Level = -1L
@@ -32,7 +32,6 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
     var p1Pet = mutableListOf<Int>()
     var p2Pet = mutableListOf<Int>()
     var actioner: HarmAble? = null
-    var timer: TimerThread? = null
     var turn = 0L
     var performed = mutableSetOf<String>()
     var lastAction: RealTimeAction? = null
@@ -108,9 +107,6 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
 
     fun stop() {
         running = -1
-        if (timer != null && timer!!.cancel) {
-            (timer as TimerThread).cancel = true
-        }
     }
 
     fun action(action: RealTimeAction): Boolean {
@@ -277,10 +273,7 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
     }
 
     fun pollRemainTime(): Long {
-        if (timer != null && !(timer as TimerThread).cancel) {
-            return (timer as TimerThread).time
-        }
-        return 0L
+        return timeLimit
     }
 
     private fun changeActioner() {
@@ -289,40 +282,22 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
         } else {
             actioner = p1
         }
-        if (timer != null) {
-            (timer as TimerThread).cancel = true
-        }
-        timer = TimerThread()
-        (timer as TimerThread).start()
-
-    }
-
-    class TimerThread : Thread() {
-        var time = 60L
-        var cancel = false
-        override fun run() {
-            while (!cancel && time > 0) {
-                sleep(1000)
-                time--
-            }
-        }
+        timeLimit = 30
     }
 
     class ControlThread : Thread() {
         var rtb: RealTimeBattle? = null
-        var time = 0L
         override fun run() {
             if (rtb != null) {
                 while (rtb!!.running >= 0) {
-                    if (time > rtb!!.timeLimit && rtb!!.running == 0) {
-                        rtb!!.running = 1;
-                    }
-                    if (rtb!!.timer != null) {
-                        if (!(rtb!!.timer as TimerThread).cancel && (rtb!!.timer as TimerThread).time <= 0) {
+                    if (rtb!!.timeLimit <= 0) {
+                        if(rtb!!.running == 0) {
+                            rtb!!.running = 1;
+                        }else{
                             rtb!!.changeActioner()
                         }
                     }
-                    time++
+                    rtb!!.timeLimit--;
                     sleep(1000)
                 }
             }

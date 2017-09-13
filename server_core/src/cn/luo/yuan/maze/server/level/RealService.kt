@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit
  */
 class RealService(val mainProcess: MainProcess) {
     val waiting = WaitingQueue()
-    val executor = Executors.newScheduledThreadPool(3)
+    val executor = Executors.newScheduledThreadPool(3)!!
     val battling = ConcurrentHashMap<String, RealTimeBattle>()
     val recordDb = ObjectTable<LevelRecord>(LevelRecord::class.java, mainProcess.root)
     fun run() {
@@ -40,7 +40,7 @@ class RealService(val mainProcess: MainProcess) {
     }
 
     fun pollState(id: String, msgIndex: Int): RealTimeState? {
-        val record = recordDb.loadObject(id)
+        val record = queryRecord(id)
         if (record != null) {
             val rtb = battling[record.id]
             if(rtb!=null) {
@@ -65,7 +65,7 @@ class RealService(val mainProcess: MainProcess) {
         executor.execute {
             val targetRecord = waiting.findTarget(record)
             if (targetRecord != null) {
-                val rtb = RealTimeBattle(record, targetRecord, 1000, 0, 5, 2)
+                val rtb = RealTimeBattle(record, targetRecord, 2, 1000, 5, 2)
                 battling.put(record.id, rtb)
                 battling.put(targetRecord.id, rtb)
                 executor.scheduleAtFixedRate({
@@ -101,7 +101,7 @@ class RealService(val mainProcess: MainProcess) {
             rtb?.quit(id)
             battling.remove(id)
         }
-        val record = recordDb.loadObject(id);
+        val record = queryRecord(id)
         if(record!=null) {
             waiting.removeQueue(record)
             LogHelper.info(record.hero?.name + " out range")
@@ -115,7 +115,7 @@ class RealService(val mainProcess: MainProcess) {
     }
 
     fun newOrUpdateRecord(hero: Hero, pets: List<Pet>?, accessories: List<Accessory>?, skills: List<Skill>?, head: String) {
-        var record = recordDb.loadObject(hero.id)
+        var record = queryRecord(hero.id)
         if (record == null) {
             record = LevelRecord(hero.id)
         }
@@ -136,8 +136,14 @@ class RealService(val mainProcess: MainProcess) {
         recordDb.save(record, record.id)
     }
 
-    fun queryRecord(id: String): LevelRecord {
-        return recordDb.loadObject(id)
+    fun queryRecord(id: String): LevelRecord? {
+        val record = recordDb.loadObject(id)
+        if(record!=null) {
+            record.hero!!.pets.addAll(record.pets)
+            record.hero!!.accessories.addAll(record.accessories)
+            record.hero!!.skills = record.skills.toTypedArray()
+        }
+        return record
     }
 
 }
