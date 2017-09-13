@@ -84,7 +84,9 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
                 return rtb.pollState(msgIndex)
             } else {
                 LogHelper.info("Wrong battle!")
-                battling.remove(record.id, rtb!!)
+                if(rtb!=null) {
+                    battling.remove(record.id, rtb)
+                }
             }
             if (StringUtils.isEmpty(battleId)) {
                 synchronized(waiting) {
