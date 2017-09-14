@@ -9,7 +9,9 @@ import cn.luo.yuan.maze.model.skill.Skill
 import cn.luo.yuan.maze.serialize.ObjectTable
 import cn.luo.yuan.maze.server.LogHelper
 import cn.luo.yuan.maze.server.MainProcess
+import cn.luo.yuan.maze.service.AccessoryHelper
 import cn.luo.yuan.maze.service.real.RealTimeBattle
+import cn.luo.yuan.maze.utils.Random
 import cn.luo.yuan.maze.utils.StringUtils
 import java.io.File
 import java.util.*
@@ -29,12 +31,14 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
         }
     }
 
+    val random = Random(System.currentTimeMillis())
     val waiting = WaitingQueue()
     val executor = Executors.newScheduledThreadPool(3)!!
     val battling = ConcurrentHashMap<String, RealTimeBattle>()
     val recordDb = ObjectTable<LevelRecord>(LevelRecord::class.java, mainProcess.root)
     val palaceDb = ObjectTable<LevelRecord>(LevelRecord::class.java, File(mainProcess.root, "palace"))
     val legacyDb = ObjectTable<LevelRecord>(LevelRecord::class.java, File(mainProcess.root, "legacy"))
+    val waitingTime = mutableMapOf<String, Long>()
     fun run() {
         executor.scheduleAtFixedRate({
             for (i in (0..ElyosrRealLevel.values().size - 1)) {
@@ -105,7 +109,6 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
         executor.execute {
             val targetRecord = waiting.findTarget(record)
             if (targetRecord != null) {
-                val rtb = RealTimeBattle(record, targetRecord, 2, 1000, 5, 2)
                 val serverRecord = mainProcess.heroTable.getRecord(record.id)
                 if (serverRecord != null) {
                     serverRecord.debris -= Data.PALACE_RANGE_COST
@@ -116,19 +119,31 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
                     targetServerRecord.debris -= Data.PALACE_RANGE_COST
                     mainProcess.heroTable.save(targetServerRecord)
                 }
+                val rtb = RealTimeBattle(record, targetRecord, 2, 1000, 5, 2)
                 battling.put(record.id, rtb)
                 battling.put(targetRecord.id, rtb)
-                executor.scheduleAtFixedRate({
-                    if (rtb.quiter.size >= 2) {
-                        for (i in rtb.quiter) {
-                            battling.remove(i)
-                        }
-                    }
-                }, 1, 100, TimeUnit.MILLISECONDS)
                 LogHelper.info(record.hero?.name + " & " + targetRecord.hero?.name + " start range battle")
-
             } else {
-                waiting.addQueue(record)
+                val l = waitingTime[record.id]
+                if(l !=null && l >= 45000){
+                    val npc = randomLegacyNPC(record.point)
+                    if(npc!=null) {
+                        val serverRecord = mainProcess.heroTable.getRecord(record.id)
+                        if (serverRecord != null) {
+                            serverRecord.debris -= Data.PALACE_RANGE_COST
+                            mainProcess.heroTable.save(serverRecord)
+                        }
+                        val rtb = RealTimeBattle(record, npc, 2, 1000, 5, 2)
+                        battling.put(record.id, rtb)
+                        LogHelper.info(record.hero?.name + " & " + npc.hero?.name + " start range battle")
+                    }else{
+                        waitingTime[record.id] = l + 1
+                        waiting.addQueue(record)
+                    }
+                }else{
+                    waitingTime[record.id] = l!! + 1
+                    waiting.addQueue(record)
+                }
             }
         }
     }
@@ -190,10 +205,31 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
 
     fun queryRecord(id: String): LevelRecord? {
         val record = recordDb.loadObject(id)
-        if (record != null) {
-            record.hero!!.pets.addAll(record.pets)
-            record.hero!!.accessories.addAll(record.accessories)
-            record.hero!!.skills = record.skills.toTypedArray()
+        initRecord(record)
+        return record
+    }
+
+    private fun initRecord(record: LevelRecord?) {
+        if (record != null && record.hero != null) {
+            if (record.hero!!.pets.isEmpty()) {
+                record.hero!!.pets.addAll(record.pets)
+            }
+            if (record.hero!!.skills.isEmpty()) {
+                for (acc in record.accessories) {
+                    AccessoryHelper.mountAccessory(acc, record.hero!!, false, null)
+                }
+                AccessoryHelper.judgeElementEnable(record.hero!!, record.isElementer)
+            }
+        }
+    }
+
+    fun randomLegacyNPC(point:Long): LevelRecord? {
+        val c = ElyosrRealLevel.getCurrentLevel(point);
+        val record =  random.randomItem(legacyDb.loadAll().filter {
+            ElyosrRealLevel.getCurrentLevel(it.point) == c
+        })
+        if(record!=null){
+            initRecord(record)
         }
         return record
     }

@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.model.skill;
 
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.skill.result.SkillResult;
 import cn.luo.yuan.maze.service.EffectHandler;
 import cn.luo.yuan.maze.utils.Random;
 
@@ -14,6 +15,7 @@ public abstract class DefSkill implements Skill, MountAble {
     private float rate = 5;
     private String id;
     private boolean delete;
+    private long useTime = 0L;
     @Override
     public boolean isDelete() {
         return delete;
@@ -33,6 +35,17 @@ public abstract class DefSkill implements Skill, MountAble {
     public void disable(){
         this.enable = false;
 
+    }
+
+    @Override
+    public SkillResult perform(SkillParameter parameter) {
+        useTime ++;
+        if(this instanceof UpgradeAble){
+            if(useTime > ((UpgradeAble)this).getLevel() * Data.SKILL_ENABLE_COST * 10){
+                ((UpgradeAble)this).upgrade(parameter);
+            }
+        }
+        return invoke(parameter);
     }
 
     public boolean isEnable(){
@@ -67,5 +80,13 @@ public abstract class DefSkill implements Skill, MountAble {
     @Override
     public void setId(String id) {
         this.id = id;
+    }
+
+    public long getUseTime() {
+        return useTime;
+    }
+
+    public void setUseTime(long useTime) {
+        this.useTime = useTime;
     }
 }

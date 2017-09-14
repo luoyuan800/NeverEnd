@@ -16,6 +16,7 @@ public interface Skill extends Serializable, NameObject, IDModel {
     long serialVersionUID = Field.SERVER_VERSION;
 
     SkillResult invoke(SkillParameter parameter);
+    SkillResult perform(SkillParameter parameter);
 
     void enable(SkillParameter parameter);
 

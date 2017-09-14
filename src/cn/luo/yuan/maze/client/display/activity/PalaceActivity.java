@@ -225,6 +225,7 @@ public class PalaceActivity extends BaseActivity {
                     NeverEndConfig config = gameContext.getDataManager().loadConfig();
                     if (config != null) {
                         record.setHead(config.getHead());
+                        record.setElementer(config.isElementer());
                     }
                     final Object o = server.connect(record, con);
                     if (o.equals(Field.RESPONSE_RESULT_OK)) {

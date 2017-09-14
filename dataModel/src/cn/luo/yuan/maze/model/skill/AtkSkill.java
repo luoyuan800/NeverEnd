@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.model.skill;
 
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.skill.result.SkillResult;
 import cn.luo.yuan.maze.service.EffectHandler;
 import cn.luo.yuan.maze.utils.Random;
 
@@ -21,6 +22,7 @@ public abstract class AtkSkill implements Skill, MountAble {
     private boolean mounted;
     private boolean enable;
     private float rate = 5f;
+    private long useTime = 0L;
     public boolean isMounted(){
         return mounted;
     }
@@ -60,6 +62,17 @@ public abstract class AtkSkill implements Skill, MountAble {
     }
 
     @Override
+    public SkillResult perform(SkillParameter parameter) {
+        useTime ++;
+        if(this instanceof UpgradeAble){
+            if(useTime > ((UpgradeAble)this).getLevel() * Data.SKILL_ENABLE_COST * 10){
+                ((UpgradeAble)this).upgrade(parameter);
+            }
+        }
+        return invoke(parameter);
+    }
+
+    @Override
     public String getId() {
         return id;
     }
@@ -67,5 +80,13 @@ public abstract class AtkSkill implements Skill, MountAble {
     @Override
     public void setId(String id) {
         this.id = id;
+    }
+
+    public long getUseTime() {
+        return useTime;
+    }
+
+    public void setUseTime(long useTime) {
+        this.useTime = useTime;
     }
 }

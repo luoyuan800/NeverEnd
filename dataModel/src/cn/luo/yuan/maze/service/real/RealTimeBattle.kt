@@ -48,7 +48,7 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
     val battleEndListener:RealBattleEndListener? = null
 
     constructor(p1:LevelRecord, p2:LevelRecord, pointAward: Long, mateAward: Long, levelPointAward: Long, levelPointReduce: Long):
-            this(p1.hero!!, p2.hero!!, p1.point, p2.point, p1.head, p2.head, pointAward, mateAward,levelPointAward,levelPointReduce, Random(System.currentTimeMillis())){
+            this(p1.hero!!.clone(), p2.hero!!.clone(), p1.point, p2.point, p1.head, p2.head, pointAward, mateAward,levelPointAward,levelPointReduce, Random(System.currentTimeMillis())){
         p1Record = p1
         p2Record = p2
     }

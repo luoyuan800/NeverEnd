@@ -129,6 +129,10 @@ public class AccessoryHelper {
             NeverEndConfig config = context.getDataManager().loadConfig();
             isElement = config.isElementer();
         }
+        judgeElementEnable(hero, isElement);
+    }
+
+    public static void judgeElementEnable(Hero hero, boolean isElement) {
         for (Accessory mounted : hero.getAccessories()) {
             mounted.resetElementEffectEnable();
             if(isElement && hero.getElement().isReinforce(mounted.getElement())){

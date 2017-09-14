@@ -32,6 +32,11 @@ public abstract class PropertySkill implements Skill {
     }
 
     @Override
+    public SkillResult perform(SkillParameter parameter) {
+        return invoke(parameter);
+    }
+
+    @Override
     public String getId() {
         return id;
     }

@@ -35,6 +35,7 @@ class LevelRecord(val id:String):Serializable, Cloneable {
     val accessories = mutableListOf<Accessory>()
     val skills = mutableListOf<Skill>()
     var head:String = ""
+    var isElementer = false
 
     override fun clone(): LevelRecord {
         return super.clone() as LevelRecord

@@ -258,7 +258,7 @@ public class BattleService {
                 }
             }
         }
-        SkillResult result = skill.invoke(skillPara);
+        SkillResult result = skill.perform(skillPara);
         if (atk) {
             battleMessage.releaseSkill(atker, skill);
         } else {
