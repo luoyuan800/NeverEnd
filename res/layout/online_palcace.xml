@@ -133,24 +133,6 @@
             android:textColor="@color/active"
             android:textSize="11dp"/>
 
-    <Button
-            android:text="@string/palace_npc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/online_palace_npc"
-            android:onClick="onClick"
-            style="@android:style/Widget.Button.Inset"
-            android:textSize="18dp"
-            android:layout_marginTop="15dp"
-            android:enabled="false"/>
-
-    <TextView
-            android:text="@string/palace_npc_battle_tip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/active"
-            android:textSize="11dp"/>
-
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"

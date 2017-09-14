@@ -22,6 +22,11 @@ public class EmptySkill implements Skill {
     }
 
     @Override
+    public SkillResult perform(SkillParameter parameter) {
+        return null;
+    }
+
+    @Override
     public void enable(SkillParameter parameter) {
 
     }

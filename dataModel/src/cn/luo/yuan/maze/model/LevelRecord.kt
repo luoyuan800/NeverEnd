@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.model
 
+import cn.luo.yuan.maze.model.skill.EmptySkill
 import cn.luo.yuan.maze.model.skill.Skill
 import cn.luo.yuan.maze.utils.Field
 import java.io.Serializable
@@ -8,10 +9,10 @@ import java.io.Serializable
  * Copyright @Luo
  * Created by Gavin Luo on 9/11/2017.
  */
-class LevelRecord(val id:String):Serializable, Cloneable {
+open class LevelRecord(val id:String):Serializable, Cloneable {
     constructor(hero: Hero):this(hero.id){
         this.hero = hero
-        this.skills.addAll(hero.skills.toList())
+        this.skills.addAll(hero.skills.toList().filter { it !is EmptySkill })
         this.accessories.addAll(hero.accessories)
         this.pets.addAll(hero.pets)
     }

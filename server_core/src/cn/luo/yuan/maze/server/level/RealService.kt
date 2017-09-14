@@ -1,6 +1,8 @@
 package cn.luo.yuan.maze.server.level
 
 import cn.luo.yuan.maze.model.*
+import cn.luo.yuan.maze.model.real.Battling
+import cn.luo.yuan.maze.model.real.InQueued
 import cn.luo.yuan.maze.model.real.NoDebrisState
 import cn.luo.yuan.maze.model.real.RealTimeState
 import cn.luo.yuan.maze.model.real.action.RealTimeAction
@@ -83,26 +85,35 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
     fun pollState(id: String, msgIndex: Int, battleId: String?): RealTimeState? {
         val record = queryRecord(id)
         if (record != null) {
+            if(StringUtils.isEmpty(battleId)){
+                return inQueue(id, record)
+            }
             val rtb = battling[record.id]
             if (rtb != null) {
                 return rtb.pollState(msgIndex)
             }
-            if (StringUtils.isEmpty(battleId)) {
-                synchronized(waiting) {
-                    if (battling[record.id] == null && !waiting.isQueue(record)) {
-                        val serverRecord = mainProcess.heroTable.getRecord(id)
-                        if (serverRecord != null && serverRecord.debris >= Data.PALACE_RANGE_COST) {
-                            waiting.addQueue(record)
-                            LogHelper.info(record.hero?.name + " into range")
-                        } else {
-                            return NoDebrisState()
-                        }
-                    }
-                }
-            }
-
         }
         return null
+    }
+
+    fun inQueue(id: String, record: LevelRecord):RealTimeState {
+        synchronized(waiting) {
+            if (battling[record.id] == null ) {
+                if(!waiting.isQueue(record)) {
+                    val serverRecord = mainProcess.heroTable.getRecord(id)
+                    if (serverRecord != null && serverRecord.debris >= Data.PALACE_RANGE_COST) {
+                        waiting.addQueue(record)
+                        LogHelper.info(record.hero?.name + " into range")
+                    } else {
+                        return NoDebrisState()
+                    }
+                }
+                return InQueued()
+            }
+            val battling1 = Battling()
+            battling1.id = battling[record.id]!!.id
+            return battling1
+        }
     }
 
     private fun findBattleTarget(record: LevelRecord) {

@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.client.display.activity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import cn.luo.yuan.maze.Path;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.dialog.RealBattleDialog;
+import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
 import cn.luo.yuan.maze.client.display.handler.ViewHandler;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.RemoteRealTimeManager;
@@ -17,6 +19,8 @@ import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.client.utils.RestConnection;
 import cn.luo.yuan.maze.model.LevelRecord;
 import cn.luo.yuan.maze.model.NeverEndConfig;
+import cn.luo.yuan.maze.model.real.Battling;
+import cn.luo.yuan.maze.model.real.InQueued;
 import cn.luo.yuan.maze.model.real.NoDebrisState;
 import cn.luo.yuan.maze.model.real.RealTimeState;
 import cn.luo.yuan.maze.model.real.level.*;
@@ -47,69 +51,66 @@ public class PalaceActivity extends BaseActivity {
         this.finish();
     }
 
+    boolean ranging = false;
     public void rangeBattle(View view) {
         final RemoteRealTimeManager manager = new RemoteRealTimeManager(server, gameContext);
-        final ProgressDialog progress = new ProgressDialog(this);
-        progress.setMessage(Resource.getString(R.string.ranging));
-        progress.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        ranging = true;
+        final Dialog progressDialog = SimplerDialogBuilder.build("匹配中……", Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
-                executor.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            synchronized (progress) {
-                                HttpURLConnection con = server.getHttpURLConnection(Path.REAL_BATTLE_QUIT, RestConnection.POST);
-                                con.addRequestProperty(Field.OWNER_ID_FIELD, gameContext.getHero().getId());
-                                con.addRequestProperty(Field.ONLY_QUIT_RANGE, "1");
-                                server.connect(con);
-                            }
-                        } catch (Exception e) {
-                            LogHelper.logException(e, "Quit wait");
+            public void onClick(final DialogInterface dialog, int which) {
+                synchronized (manager) {
+                    ranging = false;
+                    dialog.dismiss();
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            queryRangingState(manager, dialog);
                         }
-                    }
-                });
-                dialog.dismiss();
+                    });
+                }
             }
-        });
-        progress.show();
+        }, this, gameContext.getRandom());
+        progressDialog.setCancelable(false);
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                boolean stop = false;
-                while (!stop && progress.isShowing()) {
-                    final RealTimeState state = manager.pollState();
-                    if (state != null) {
-                        synchronized (progress) {
-                            if (state instanceof NoDebrisState) {
-                                gameContext.showPopup(Resource.getString(R.string.not_debris));
-                            } else {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        manager.setId(state.getId());
-                                        battleDialog = new RealBattleDialog(manager, gameContext, state.getId());
-                                    }
-                                });
-                            }
-                            stop = true;
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    progress.dismiss();
-                                }
-                            });
-                        }
-                    } else {
-                        try {
-                            Thread.sleep(600);
-                        } catch (InterruptedException e) {
-                            LogHelper.logException(e, "Ranging");
+                while (ranging) {
+                    synchronized (manager) {
+                        if(queryRangingState(manager, progressDialog)) {
+                            break;
                         }
                     }
                 }
             }
         });
+    }
+
+    public boolean queryRangingState(final RemoteRealTimeManager manager, final DialogInterface progressDialog) {
+        final RealTimeState state = manager.pollState();
+        if (state instanceof NoDebrisState) {
+            gameContext.showPopup(Resource.getString(R.string.not_debris));
+        }
+        if (state instanceof InQueued) {
+            try {
+                Thread.sleep(600);
+            } catch (InterruptedException e) {
+                LogHelper.logException(e, "Ranging");
+            }
+            return false;
+        }
+        if(state !=null){
+            manager.setId(state.getId());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new RealBattleDialog(manager, gameContext, state.getId());
+                    progressDialog.dismiss();
+                }
+            });
+            ranging = false;
+            return true;
+        }
+        return false;
     }
 
     public void updateLevel() {

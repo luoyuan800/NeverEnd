@@ -81,8 +81,14 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
         battle.setBattleMessage(messager)
         if (random.nextBoolean()) {
             actioner = p1
+            if(p1Record!=null && p1Record is NPCLevelRecord){
+                actioner = p2
+            }
         } else {
             actioner = p2
+            if(p2Record!=null && p2Record is NPCLevelRecord){
+                actioner = p1
+            }
         }
     }
 
@@ -107,6 +113,10 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
                 actionControlThread!!.start()
             }
         }
+    }
+
+    fun test(){
+        changeActioner()
     }
 
     fun stop() {
@@ -286,10 +296,19 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
     }
 
     private fun changeActioner() {
+        val ar: LevelRecord?
         if (actioner == p1) {
             actioner = p2
+            ar = p2Record
         } else {
             actioner = p1
+            ar = p1Record
+        }
+        if(ar!=null && ar is NPCLevelRecord){
+            Thread({
+                Thread.sleep(3000)
+                action(ar.randomAction(random, if(actioner == p1) p1ActionPoint else p2ActionPoint))
+            }).start()
         }
         timeLimit = 30
     }
