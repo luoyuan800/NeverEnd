@@ -280,4 +280,26 @@ public class BuildDLC {
         dlc.setDebrisCost(20);
         System.out.println(table.save(dlc));
     }
+
+    private static void buildEveoo(ObjectTable<DLC> table){
+        /*MonsterDLC evodlc = new MonsterDLC();
+        Monster monster = null;
+        monster = new Monster();
+        monster.setIndex(95);
+        monster.setHp(125);
+        monster.setMaxHp(125);
+        monster.setAtk(255);
+        monster.setDef(99);
+        monster.setEggRate(0);
+        monster.setPetRate(20);
+        monster.setSilent(47);
+        monster.setHitRate(38);
+        monster.setSex(1);
+        monster.setRank(5);
+        monster.setRace(Race.Nonsr);
+        monster.setType("CHISE");
+        monster.setDesc("世界战争的\"最终兵器\"。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("E:\\NeverEnd\\assets\\monster\\chisi.png"));*/
+    }
 }

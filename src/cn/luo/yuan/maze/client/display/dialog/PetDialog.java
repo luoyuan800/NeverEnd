@@ -13,7 +13,13 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
 import cn.luo.yuan.maze.model.Data;
+import cn.luo.yuan.maze.model.Egg;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.gift.Epicure;
+import cn.luo.yuan.maze.model.gift.Gift;
+import cn.luo.yuan.maze.model.goods.Goods;
+import cn.luo.yuan.maze.model.goods.types.Grill;
+import cn.luo.yuan.maze.model.goods.types.Omelet;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.service.PetMonsterHelper;
@@ -136,17 +142,32 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                 SimplerDialogBuilder.build(text, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        int count = 0;
+                        int petCount = 0;
+                        int eggCount = 0;
                         if(StringUtils.isNotEmpty(text.getText().toString())){
                             for(Pet pet : control.getDataManager().loadPets(0, -1,text.getText().toString(), null)){
                                 if(!pet.isMounted() && StringUtils.isEmpty(pet.getTag())){
                                     control.getDataManager().deletePet(pet);
                                     adapter.removePet(pet);
-                                    count ++;
+                                    if(pet instanceof Egg && ((Egg)pet).step > 0){
+                                        eggCount ++;
+                                    }else{
+                                        petCount ++;
+                                    }
                                 }
                             }
                         }
-                        Toast.makeText(control.getContext(),"丢弃了" + count + "个宠物（蛋）",Toast.LENGTH_SHORT).show();
+                        if(control.getHero().getGift() == Gift.Epicure){
+                            Goods grill = control.getDataManager().loadGoods(Grill.class.getSimpleName());
+                            grill.setCount(grill.getCount() + petCount);
+                            control.getDataManager().saveGoods(grill);
+                            Omelet omelet = new Omelet();
+                            omelet.setCount(eggCount);
+                            control.getDataManager().addGoods(omelet);
+                            Toast.makeText(control.getContext(), "获得了" + petCount+ "个烤肉和" + eggCount + "个煎蛋", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(control.getContext(), "丢弃了" + (petCount + eggCount) + "个宠物（蛋）", Toast.LENGTH_SHORT).show();
+                        }
                         adapter.notifyDataSetChanged();
                     }
                 }, Resource.getString(R.string.close), null, control.getContext());
