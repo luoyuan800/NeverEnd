@@ -21,7 +21,11 @@ import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.NameObject;
+import cn.luo.yuan.maze.model.real.BattleEnd;
+import cn.luo.yuan.maze.model.real.Battling;
+import cn.luo.yuan.maze.model.real.RealState;
 import cn.luo.yuan.maze.model.real.RealTimeState;
+import cn.luo.yuan.maze.model.real.action.RealTimeAction;
 import cn.luo.yuan.maze.model.skill.AtkSkill;
 import cn.luo.yuan.maze.model.skill.DefSkill;
 import cn.luo.yuan.maze.model.skill.Skill;
@@ -43,12 +47,13 @@ public class RealBattleDialog implements View.OnClickListener {
     private NeverEnd context;
     private View root;
     private Handler handler;
-    private RealTimeState currentState;
+    private RealState currentState;
     private AlertDialog main;
     private HarmAble my;
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
     private Dialog currentShowingSubDialog;
     private String id;
+    private String lastActionId;
 
     public RealBattleDialog(final RealTimeManager manager, NeverEnd context, String battleId) {
         this.id = battleId;
@@ -70,7 +75,7 @@ public class RealBattleDialog implements View.OnClickListener {
             public void run() {
                 try {
                     updateState(manager.pollState());
-                }catch (Exception e){
+                } catch (Exception e) {
                     LogHelper.logException(e, "Poll state");
                 }
             }
@@ -104,7 +109,7 @@ public class RealBattleDialog implements View.OnClickListener {
 
     public void stop() {
         targetAction();
-        if(!executor.isShutdown()) {
+        if (!executor.isShutdown()) {
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -120,43 +125,53 @@ public class RealBattleDialog implements View.OnClickListener {
         }
     }
 
-    public void updateState(final RealTimeState state) {
-        if(state!=null){
+    public void updateState(final RealState state) {
+        if (state instanceof RealTimeState) {
+            RealTimeAction action = ((RealTimeState) state).getAction();
+            if(action!=null && action.getId().equals(lastActionId)){
+                return;
+            }
             currentState = state;
+            lastActionId = state.getId();
             manager.setId(state.getId());
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        HarmAble winner = state.getWinner();
-                        HarmAble loser = state.getLoser();
-                        if (winner != null && loser != null) {
-                            if (winner.getId().equals(my.getId())) {
-                                IAmWinner(state);
-                            } else {
-                                IAmLoser(state);
+                        if (state instanceof BattleEnd) {
+                            HarmAble winner = ((BattleEnd) state).getWinner();
+                            HarmAble loser = ((BattleEnd) state).getLoser();
+                            if (winner != null && loser != null) {
+                                if (winner.getId().equals(my.getId())) {
+                                    IAmWinner((BattleEnd) state);
+                                } else {
+                                    IAmLoser((BattleEnd) state);
+                                }
+                                stop();
                             }
-                            stop();
-                        } else {
-                            HarmAble actioner = state.getActioner();
-                            HarmAble waiter = state.getWaiter();
-                            ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_timer), StringUtils.formatNumber(state.getRemainTime()));
+                        } else if (state instanceof Battling) {
+                            HarmAble actioner = ((Battling) state).getActioner();
+                            HarmAble waiter = ((Battling) state).getWaiter();
+                            ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_timer), StringUtils.formatNumber(((Battling) state).getRemainTime()));
                             if (actioner != null && waiter != null && actioner.getId().equals(my.getId())) {
-                                updateMyState(actioner, state.getActionerLevel(), state.getActionerPetIndex(), state.getActionerPoint(), state.getActionerHead());
-                                updateTargetState(waiter, state.getWaiterLevel(), state.getWaiterPetIndex(), state.getWaiterPoint(), state.getWaiterHead());
+                                updateMyState(actioner, ((Battling) state).getActionerLevel(), ((Battling) state).getActionerPetIndex(), ((Battling) state).getActionerPoint(), ((Battling) state).getActionerHead());
+                                updateTargetState(waiter, ((Battling) state).getWaiterLevel(), ((Battling) state).getWaiterPetIndex(), ((Battling) state).getWaiterPoint(), ((Battling) state).getWaiterHead());
                                 myAction();
                             } else if (actioner != null && waiter != null) {
-                                updateMyState(waiter, state.getWaiterLevel(), state.getWaiterPetIndex(), state.getWaiterPoint(), state.getWaiterHead());
-                                updateTargetState(actioner, state.getActionerLevel(), state.getActionerPetIndex(), state.getActionerPoint(), state.getActionerHead());
+                                updateMyState(waiter, ((Battling) state).getWaiterLevel(), ((Battling) state).getWaiterPetIndex(), ((Battling) state).getWaiterPoint(), ((Battling) state).getWaiterHead());
+                                updateTargetState(actioner, ((Battling) state).getActionerLevel(), ((Battling) state).getActionerPetIndex(), ((Battling) state).getActionerPoint(), ((Battling) state).getActionerHead());
                                 targetAction();
                             }
                         }
                     } catch (Exception e) {
                         LogHelper.logException(e, "update state");
                     }
-                    updateMessage(state);
+                    updateMessage((RealTimeState) state);
                 }
             });
+        }else {
+            stop();
+            main.dismiss();
         }
     }
 
@@ -198,87 +213,91 @@ public class RealBattleDialog implements View.OnClickListener {
     }
 
     private void showAtkSkill() {
-        final List<AtkSkill> atkSkills = new ArrayList<>(6);
-        final List<String> skillName = new ArrayList<>(6);
-        for (Skill skill : context.getHero().getSkills()) {
-            if (skill instanceof AtkSkill) {
-                atkSkills.add((AtkSkill) skill);
-                int skillActionPoint = Data.getSkillActionPoint(skill);
-                skillName.add("<font color='" + (skillActionPoint <= currentState.getActionerPoint() ? "" : "#b4a6b0") + "'>" + skill.getName() + "</font> - " + skillActionPoint);
-            }
-        }
-        StringAdapter<String> adapter = new StringAdapter<>(skillName);
-        adapter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    int index = (Integer) v.getTag(R.string.position);
-                    final AtkSkill skill = atkSkills.get(index);
-                    if (skill != null) {
-                        if (Data.getSkillActionPoint(skill) <= currentState.getActionerPoint()) {
-                            executor.execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    manager.useAtkSkillAction(skill);
-                                }
-                            });
-                            targetAction();
-                        }
-                    }
-                } catch (Exception e) {
-                    LogHelper.logException(e, "action skill");
+        if(currentState instanceof RealTimeState) {
+            final List<AtkSkill> atkSkills = new ArrayList<>(6);
+            final List<String> skillName = new ArrayList<>(6);
+            for (Skill skill : context.getHero().getSkills()) {
+                if (skill instanceof AtkSkill) {
+                    atkSkills.add((AtkSkill) skill);
+                    int skillActionPoint = Data.getSkillActionPoint(skill);
+                    skillName.add("<font color='" + (skillActionPoint <= ((RealTimeState)currentState).getActionerPoint() ? "" : "#b4a6b0") + "'>" + skill.getName() + "</font> - " + skillActionPoint);
                 }
             }
-        });
-        LinearLayout sv = (LinearLayout) root.findViewById(R.id.detail_action_scroll);
-        sv.removeAllViews();
-        ListView listView = new ListView(context.getContext());
-        listView.setAdapter(adapter);
-        sv.addView(listView);
-        sv.setVisibility(View.VISIBLE);
-        root.findViewById(R.id.action_tip).setVisibility(View.GONE);
+            StringAdapter<String> adapter = new StringAdapter<>(skillName);
+            adapter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        int index = (Integer) v.getTag(R.string.position);
+                        final AtkSkill skill = atkSkills.get(index);
+                        if (skill != null) {
+                            if (Data.getSkillActionPoint(skill) <= ((RealTimeState)currentState).getActionerPoint()) {
+                                executor.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        manager.useAtkSkillAction(skill);
+                                    }
+                                });
+                                targetAction();
+                            }
+                        }
+                    } catch (Exception e) {
+                        LogHelper.logException(e, "action skill");
+                    }
+                }
+            });
+            LinearLayout sv = (LinearLayout) root.findViewById(R.id.detail_action_scroll);
+            sv.removeAllViews();
+            ListView listView = new ListView(context.getContext());
+            listView.setAdapter(adapter);
+            sv.addView(listView);
+            sv.setVisibility(View.VISIBLE);
+            root.findViewById(R.id.action_tip).setVisibility(View.GONE);
+        }
     }
 
     private void showDefSkill() {
-        final List<DefSkill> defSkills = new ArrayList<>(6);
-        final List<String> skillName = new ArrayList<>(6);
-        for (Skill skill : context.getHero().getSkills()) {
-            if (skill instanceof DefSkill) {
-                defSkills.add((DefSkill) skill);
-                int skillActionPoint = Data.getSkillActionPoint(skill);
-                skillName.add("<font color='" + (skillActionPoint <= currentState.getActionerPoint() ? "" : "#b4a6b0") + "'>" + skill.getName() + "</font> - " + skillActionPoint);
-            }
-        }
-        StringAdapter<String> adapter = new StringAdapter<>(skillName);
-        adapter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    int index = (Integer) v.getTag(R.string.position);
-                    final DefSkill skill = defSkills.get(index);
-                    if (skill != null) {
-                        if (Data.getSkillActionPoint(skill) <= currentState.getActionerPoint()) {
-                            executor.submit(new Runnable() {
-                                @Override
-                                public void run() {
-                                    manager.useDefSkillAction(skill);
-                                }
-                            });
-                            targetAction();
-                        }
-                    }
-                } catch (Exception e) {
-                    LogHelper.logException(e, "action skill");
+        if(currentState instanceof RealTimeState) {
+            final List<DefSkill> defSkills = new ArrayList<>(6);
+            final List<String> skillName = new ArrayList<>(6);
+            for (Skill skill : context.getHero().getSkills()) {
+                if (skill instanceof DefSkill) {
+                    defSkills.add((DefSkill) skill);
+                    int skillActionPoint = Data.getSkillActionPoint(skill);
+                    skillName.add("<font color='" + (skillActionPoint <= ((RealTimeState)currentState).getActionerPoint() ? "" : "#b4a6b0") + "'>" + skill.getName() + "</font> - " + skillActionPoint);
                 }
             }
-        });
-        LinearLayout sv = (LinearLayout) root.findViewById(R.id.detail_action_scroll);
-        sv.removeAllViews();
-        ListView listView = new ListView(context.getContext());
-        listView.setAdapter(adapter);
-        sv.addView(listView);
-        sv.setVisibility(View.VISIBLE);
-        root.findViewById(R.id.action_tip).setVisibility(View.GONE);
+            StringAdapter<String> adapter = new StringAdapter<>(skillName);
+            adapter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        int index = (Integer) v.getTag(R.string.position);
+                        final DefSkill skill = defSkills.get(index);
+                        if (skill != null) {
+                            if (Data.getSkillActionPoint(skill) <= ((RealTimeState)currentState).getActionerPoint()) {
+                                executor.submit(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        manager.useDefSkillAction(skill);
+                                    }
+                                });
+                                targetAction();
+                            }
+                        }
+                    } catch (Exception e) {
+                        LogHelper.logException(e, "action skill");
+                    }
+                }
+            });
+            LinearLayout sv = (LinearLayout) root.findViewById(R.id.detail_action_scroll);
+            sv.removeAllViews();
+            ListView listView = new ListView(context.getContext());
+            listView.setAdapter(adapter);
+            sv.addView(listView);
+            sv.setVisibility(View.VISIBLE);
+            root.findViewById(R.id.action_tip).setVisibility(View.GONE);
+        }
     }
 
     private void showStartTip() {
@@ -310,7 +329,7 @@ public class RealBattleDialog implements View.OnClickListener {
         }, 0, 600, TimeUnit.MILLISECONDS);
     }
 
-    private void IAmLoser(RealTimeState state) {
+    private void IAmLoser(BattleEnd state) {
         root.findViewById(R.id.real_battle_timer).setVisibility(View.INVISIBLE);
         TextView textView = (TextView) root.findViewById(R.id.start_text);
         textView.setVisibility(View.VISIBLE);
@@ -318,8 +337,8 @@ public class RealBattleDialog implements View.OnClickListener {
         root.findViewById(R.id.real_battle_close).setVisibility(View.VISIBLE);
     }
 
-    private void IAmWinner(final RealTimeState state) {
-        if(currentShowingSubDialog == null) {
+    private void IAmWinner(final BattleEnd state) {
+        if (currentShowingSubDialog == null) {
             root.findViewById(R.id.real_battle_timer).setVisibility(View.INVISIBLE);
             TextView textView = (TextView) root.findViewById(R.id.start_text);
             textView.setVisibility(View.VISIBLE);
@@ -402,9 +421,9 @@ public class RealBattleDialog implements View.OnClickListener {
             root.findViewById(R.id.real_battle_my_level).setVisibility(View.INVISIBLE);
         }
         ViewHandler.setImage((ImageView) root.findViewById(R.id.real_battle_my_img), Resource.loadImageFromAssets(head, true));
-        if (petIndex.size()> 0)
+        if (petIndex.size() > 0)
             ViewHandler.setImage((ImageView) root.findViewById(R.id.real_battle_my_pet), Resource.loadMonsterImage(petIndex.get(0)));
-        else{
+        else {
             root.findViewById(R.id.real_battle_my_pet).setVisibility(View.INVISIBLE);
         }
     }
@@ -412,7 +431,7 @@ public class RealBattleDialog implements View.OnClickListener {
     private void updateTargetState(HarmAble target, long level, List<Integer> petIndex, long point, String head) {
         SpringProgressView hpView = (SpringProgressView) root.findViewById(R.id.real_battle_target_hp);
         hpView.setMaxCount(100);
-        hpView.setCurrentCount(target.getCurrentHp() * 100f/target.getUpperHp());
+        hpView.setCurrentCount(target.getCurrentHp() * 100f / target.getUpperHp());
         ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_targer_name), my instanceof NameObject ? ((NameObject) target).getDisplayName() : target.toString());
         if (level >= 0) {
             ViewHandler.setText((TextView) root.findViewById(R.id.real_battle_target_level), StringUtils.formatRealLevel(level, target.getRace()));
@@ -420,13 +439,13 @@ public class RealBattleDialog implements View.OnClickListener {
             root.findViewById(R.id.real_battle_target_level).setVisibility(View.INVISIBLE);
         }
         Drawable img = Resource.loadImageFromAssets(head, true);
-        if(img == null){
+        if (img == null) {
             img = Resource.loadMonsterImage(head);
         }
         ViewHandler.setImage((ImageView) root.findViewById(R.id.real_battle_targer_img), img);
         if (petIndex.size() > 0) {
             ViewHandler.setImage((ImageView) root.findViewById(R.id.real_battle_target_pet), Resource.loadMonsterImage(petIndex.get(0)));
-        }else{
+        } else {
             root.findViewById(R.id.real_battle_target_pet).setVisibility(View.INVISIBLE);
         }
     }

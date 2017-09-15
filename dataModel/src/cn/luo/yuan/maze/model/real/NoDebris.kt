@@ -4,9 +4,9 @@ import cn.luo.yuan.maze.utils.Field
 
 /**
  * Copyright @Luo
- * Created by Gavin Luo on 9/14/2017.
+ * Created by Gavin Luo on 9/12/2017.
  */
-class InQueued:RealTimeState() {
+class NoDebris : RealState() {
     companion object {
         private const val serialVersionUID: Long = Field.SERVER_VERSION
     }

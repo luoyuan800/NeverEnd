@@ -3,7 +3,7 @@ package cn.luo.yuan.maze.server.level
 import cn.luo.yuan.maze.model.*
 import cn.luo.yuan.maze.model.real.Battling
 import cn.luo.yuan.maze.model.real.InQueued
-import cn.luo.yuan.maze.model.real.NoDebrisState
+import cn.luo.yuan.maze.model.real.NoDebris
 import cn.luo.yuan.maze.model.real.RealTimeState
 import cn.luo.yuan.maze.model.real.action.RealTimeAction
 import cn.luo.yuan.maze.model.real.level.ElyosrRealLevel
@@ -105,7 +105,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
                         waiting.addQueue(record)
                         LogHelper.info(record.hero?.name + " into range")
                     } else {
-                        return NoDebrisState()
+                        return NoDebris()
                     }
                 }
                 return InQueued()

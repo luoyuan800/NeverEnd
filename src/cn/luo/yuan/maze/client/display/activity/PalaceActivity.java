@@ -19,10 +19,12 @@ import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.client.utils.RestConnection;
 import cn.luo.yuan.maze.model.LevelRecord;
 import cn.luo.yuan.maze.model.NeverEndConfig;
+import cn.luo.yuan.maze.model.real.BattleEnd;
 import cn.luo.yuan.maze.model.real.Battling;
-import cn.luo.yuan.maze.model.real.InQueued;
-import cn.luo.yuan.maze.model.real.NoDebrisState;
-import cn.luo.yuan.maze.model.real.RealTimeState;
+import cn.luo.yuan.maze.model.real.NoDebris;
+import cn.luo.yuan.maze.model.real.Quit;
+import cn.luo.yuan.maze.model.real.RealState;
+import cn.luo.yuan.maze.model.real.Waiting;
 import cn.luo.yuan.maze.model.real.level.*;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -51,7 +53,7 @@ public class PalaceActivity extends BaseActivity {
         this.finish();
     }
 
-    boolean ranging = false;
+    private boolean ranging = false;
     public void rangeBattle(View view) {
         final RemoteRealTimeManager manager = new RemoteRealTimeManager(server, gameContext);
         ranging = true;
@@ -60,13 +62,6 @@ public class PalaceActivity extends BaseActivity {
             public void onClick(final DialogInterface dialog, int which) {
                 synchronized (manager) {
                     ranging = false;
-                    dialog.dismiss();
-                    executor.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            queryRangingState(manager, dialog);
-                        }
-                    });
                 }
             }
         }, this, gameContext.getRandom());
@@ -81,33 +76,39 @@ public class PalaceActivity extends BaseActivity {
                         }
                     }
                 }
+                if(ranging){
+                    ranging = false;
+                    queryRangingState(manager, progressDialog);
+                }
             }
         });
     }
 
     public boolean queryRangingState(final RemoteRealTimeManager manager, final DialogInterface progressDialog) {
-        final RealTimeState state = manager.pollState();
-        if (state instanceof NoDebrisState) {
-            gameContext.showPopup(Resource.getString(R.string.not_debris));
-        }
-        if (state instanceof InQueued) {
-            try {
-                Thread.sleep(600);
-            } catch (InterruptedException e) {
-                LogHelper.logException(e, "Ranging");
-            }
+        final RealState state = manager.pollState();
+        if(state instanceof Waiting){
             return false;
         }
-        if(state !=null){
+        if (state instanceof NoDebris) {
+            ranging = false;
+            gameContext.showPopup(Resource.getString(R.string.not_debris));
+            return true;
+        }
+        if(state instanceof Battling){
+            ranging = false;
             manager.setId(state.getId());
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    new RealBattleDialog(manager, gameContext, state.getId());
+                    battleDialog = new RealBattleDialog(manager, gameContext, state.getId());
                     progressDialog.dismiss();
                 }
             });
-            ranging = false;
+            return true;
+        }
+        if(state instanceof BattleEnd || state instanceof Quit){
+            updateLevel();
+            ranging= false;
             return true;
         }
         return false;

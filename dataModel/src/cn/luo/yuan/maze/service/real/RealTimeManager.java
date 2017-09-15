@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.service.real;
 
 import cn.luo.yuan.maze.model.goods.Goods;
+import cn.luo.yuan.maze.model.real.RealState;
 import cn.luo.yuan.maze.model.real.RealTimeState;
 import cn.luo.yuan.maze.model.skill.AtkSkill;
 import cn.luo.yuan.maze.model.skill.DefSkill;
@@ -13,7 +14,7 @@ import cn.luo.yuan.maze.model.skill.Skill;
 public interface RealTimeManager {
     void ready();
     void atkAction();
-    RealTimeState pollState();
+    RealState pollState();
     void useGoodsAction(Goods goods);
     void useAtkSkillAction(AtkSkill skill);
     void useDefSkillAction(DefSkill skill);

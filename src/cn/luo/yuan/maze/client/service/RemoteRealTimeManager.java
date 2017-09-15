@@ -5,6 +5,7 @@ import cn.luo.yuan.maze.client.display.activity.PalaceActivity;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.RestConnection;
 import cn.luo.yuan.maze.model.goods.Goods;
+import cn.luo.yuan.maze.model.real.RealState;
 import cn.luo.yuan.maze.model.real.RealTimeState;
 import cn.luo.yuan.maze.model.real.action.AtkAction;
 import cn.luo.yuan.maze.model.real.action.AtkSkillAction;
@@ -32,6 +33,7 @@ public class RemoteRealTimeManager implements RealTimeManager {
     private List<RealTimeAction> actions = new ArrayList<>();
     private int msgIndex = 0;
     private String id;
+    private RealState currentState;
     public RemoteRealTimeManager(RestConnection server, NeverEnd context){
         this.server =server;
         this.context = context;
@@ -71,16 +73,19 @@ public class RemoteRealTimeManager implements RealTimeManager {
     }
 
     @Override
-    public RealTimeState pollState() {
+    public RealState pollState() {
         try {
             HttpURLConnection con = server.getHttpURLConnection(Path.POLL_REAL_BATTLE_STATE, RestConnection.POST);
             con.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
             con.addRequestProperty(Field.INDEX, String.valueOf(msgIndex));
             con.addRequestProperty(Field.REAL_MSG_ID, getId());
-            Object o = server.connect(con);
-            if(o instanceof RealTimeState){
-                msgIndex += ((RealTimeState) o).getMsg().size();
-                return (RealTimeState) o;
+            Object o = server.connect(currentState.newEmptyInstance(), con);
+            if(o instanceof RealState){
+                if(o instanceof RealTimeState) {
+                    msgIndex += ((RealTimeState) o).getMsg().size();
+                }
+                currentState = (RealState) o;
+                return (RealState) o;
             }
         } catch (IOException e) {
             LogHelper.logException(e, "Poll remote real state");

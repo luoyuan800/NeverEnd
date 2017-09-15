@@ -9,7 +9,7 @@ import java.io.Serializable
  * Copyright @Luo
  * Created by Gavin Luo on 8/17/2017.
  */
-open class RealTimeState:Serializable {
+open class RealTimeState:RealState() {
     companion object {
         private const val serialVersionUID: Long = Field.SERVER_VERSION
     }
@@ -32,5 +32,4 @@ open class RealTimeState:Serializable {
     var upgradeTip = ""
     var awardMate = 0L
     var awardPoint = 0L
-    var id:String = ""
 }
