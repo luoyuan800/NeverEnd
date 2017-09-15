@@ -62,17 +62,17 @@ public class GiftDialog implements View.OnClickListener {
         giftButton.setTag(Gift.Pokemon);
         giftButton.setOnClickListener(this);
 
-        giftButton = (Button) mainDialog.findViewById(R.id.FireBody);
 
         giftButton = (Button) mainDialog.findViewById(R.id.SkillMaster);
+        giftButton.setTag(Gift.SkillMaster);
+        giftButton.setOnClickListener(this);
 
         giftButton = (Button) mainDialog.findViewById(R.id.RandomMaster);
 
-        giftButton = (Button) mainDialog.findViewById(R.id.ElementReject);
-
-        giftButton = (Button) mainDialog.findViewById(R.id.Maker);
 
         giftButton = (Button) mainDialog.findViewById(R.id.Epicure);
+        giftButton.setTag(Gift.Epicure);
+        giftButton.setOnClickListener(this);
 
         giftButton = (Button) mainDialog.findViewById(R.id.Daddy);
 

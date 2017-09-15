@@ -30,6 +30,8 @@ import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * Created by luoyuan on 2017/3/29.
@@ -40,6 +42,7 @@ public class GameActivity extends BaseActivity {
     private PopupMenu popupMenu;
     private Thread updateMonsterThread;
     private boolean updateRandomMonster;
+    private boolean birthDay;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +106,16 @@ public class GameActivity extends BaseActivity {
                 }
             }
         });
+
+        GregorianCalendar date = new GregorianCalendar();
+        date.setTimeInMillis(control.getHero().getBirthDay());
+        GregorianCalendar current = new GregorianCalendar();
+        if (date.get(Calendar.MONTH) == current.get(Calendar.MONTH) && date.get(Calendar.DAY_OF_MONTH) == current.get(Calendar.DAY_OF_MONTH)) {
+            birthDay = true;
+            control.showPopup(Resource.getString(R.string.birthday_tip));
+        } else {
+            birthDay = false;
+        }
     }
 
     @Override

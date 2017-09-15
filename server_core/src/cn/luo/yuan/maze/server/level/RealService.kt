@@ -2,8 +2,8 @@ package cn.luo.yuan.maze.server.level
 
 import cn.luo.yuan.maze.model.*
 import cn.luo.yuan.maze.model.real.Battling
-import cn.luo.yuan.maze.model.real.InQueued
 import cn.luo.yuan.maze.model.real.NoDebris
+import cn.luo.yuan.maze.model.real.RealState
 import cn.luo.yuan.maze.model.real.RealTimeState
 import cn.luo.yuan.maze.model.real.action.RealTimeAction
 import cn.luo.yuan.maze.model.real.level.ElyosrRealLevel
@@ -82,7 +82,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
         executor.awaitTermination(20, TimeUnit.MILLISECONDS)
     }
 
-    fun pollState(id: String, msgIndex: Int, battleId: String?): RealTimeState? {
+    fun pollState(id: String, msgIndex: Int, battleId: String?): RealState? {
         val record = queryRecord(id)
         if (record != null) {
             if(StringUtils.isEmpty(battleId)){
@@ -96,7 +96,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
         return null
     }
 
-    fun inQueue(id: String, record: LevelRecord):RealTimeState {
+    fun inQueue(id: String, record: LevelRecord): RealState {
         synchronized(waiting) {
             if (battling[record.id] == null ) {
                 if(!waiting.isQueue(record)) {
@@ -108,7 +108,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
                         return NoDebris()
                     }
                 }
-                return InQueued()
+                return RealTimeState()
             }
             val battling1 = Battling()
             battling1.id = battling[record.id]!!.id

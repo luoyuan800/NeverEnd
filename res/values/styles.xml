@@ -1,5 +1,10 @@
 <resources >
-
+		<style name="msg_dialog" parent="@android:style/Theme.Material.Dialog.Alert">
+			<item name="android:windowIsTranslucent">true</item><!--半透明-->
+			<item name="android:windowNoTitle">false</item><!--无标题-->
+			<item name="android:windowBackground">@color/transparent</item><!--背景透明-->
+			<item name="android:backgroundDimEnabled">true</item><!--模糊-->
+		</style>
 	<!--
 		Base application theme, dependent on API level. This theme is replaced
 		by AppBaseTheme from res/values-vXX/styles.xml on newer devices.

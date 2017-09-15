@@ -18,6 +18,7 @@ import cn.luo.yuan.maze.model.goods.types.Omelet;
 import cn.luo.yuan.maze.model.goods.types.ResetSkill;
 import cn.luo.yuan.maze.model.goods.types.Restrictor;
 import cn.luo.yuan.maze.model.goods.types.Scalpel;
+import cn.luo.yuan.maze.model.real.RealState;
 import cn.luo.yuan.maze.model.real.RealTimeState;
 import cn.luo.yuan.maze.model.real.action.RealTimeAction;
 import cn.luo.yuan.maze.model.task.Scene;
@@ -1064,7 +1065,7 @@ public class MainProcess {
         return realService.pollTopNRecord(n);
     }
 
-    public RealTimeState pollCurrentState(String id, int msgIndex, String battleId) {
+    public RealState pollCurrentState(String id, int msgIndex, String battleId) {
         return realService.pollState(id, msgIndex, battleId);
     }
 

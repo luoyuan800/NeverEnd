@@ -9,8 +9,7 @@ import android.net.Uri;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
 import android.widget.*;
 import cn.luo.yuan.maze.Path;
 import cn.luo.yuan.maze.R;
@@ -174,17 +173,22 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 petCatch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        TextView textView = new TextView(context);
+                        View view = View.inflate(context, R.layout.message_dialog, null);
+                        TextView textView = (TextView) view.findViewById(R.id.tell_message);
                         textView.setText(Html.fromHtml(Resource.readStringFromAssets("help","pet_catch")));
-                        ScrollView scrollView = new ScrollView(context);
-                        scrollView.addView(textView);
-                        AlertDialog cont = new AlertDialog.Builder(context).setTitle("宠物系统介绍").setView(scrollView).setNeutralButton("退出", new DialogInterface.OnClickListener() {
+                        final AlertDialog dialog = new AlertDialog.Builder(context, R.style.msg_dialog).setView(view).setTitle("宠物系统介绍").create();
+                        view.findViewById(R.id.close_button).setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            public void onClick(View v) {
                                 dialog.dismiss();
                             }
-                        }).create();
-                        cont.show();
+                        });
+                        dialog.show();
+                        Window win = dialog.getWindow();
+                        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+                        params.x = -80;//设置x坐标
+                        params.y = 560;//设置y坐标
+                        win.setAttributes(params);
                     }
                 });
 
@@ -314,18 +318,6 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
             case R.id.pause:
                 boolean pause = control.pauseGame();
                 item.setTitle(pause ? "继续" : "暂停");
-                break;
-            case R.id.share:
-                final AlertDialog sharingTip = new AlertDialog.Builder(context).create();
-                sharingTip.setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.conform), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        sharingTip.dismiss();
-                        shareToNet();
-                    }
-                });
-                sharingTip.setMessage("如果你觉得这个游戏好玩，不妨帮忙分享到你的圈子中，让更多的人参与到我们的游戏建设中来，一起享受放置的快乐。欢迎关注作者的的微信订阅号：某鸟碎碎。 分享后发送截图到公众号，可以获得兑换码奖励。");
-                sharingTip.show();
                 break;
             case R.id.save:
                 control.save(true);
