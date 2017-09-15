@@ -27,6 +27,7 @@ class SwindlerGame:AtkSkill(),UpgradeAble {
         val builder = StringBuilder()
         builder.append("玩的就是心跳。<br>攻击时抛一次硬币，如果为正面，对敌人造成 $level 倍的攻击伤害。否则自己受到敌人攻击的 $level 倍伤害。")
         builder.append(StringUtils.formatPercentage(rate)).append("的概率释放。")
+        builder.append("<br>已经使用：${StringUtils.formatNumber(useTime)}次")
         return builder.toString()
     }
 

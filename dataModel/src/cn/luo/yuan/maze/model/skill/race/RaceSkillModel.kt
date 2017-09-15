@@ -4,6 +4,7 @@ import cn.luo.yuan.maze.model.HarmAble
 import cn.luo.yuan.maze.model.NameObject
 import cn.luo.yuan.maze.model.Parameter
 import cn.luo.yuan.maze.model.Race
+import cn.luo.yuan.maze.model.skill.AtkSkill
 import cn.luo.yuan.maze.model.skill.Skill
 import cn.luo.yuan.maze.model.skill.SkillModel
 import cn.luo.yuan.maze.model.skill.SkillParameter
@@ -12,13 +13,15 @@ import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.model.skill.result.SkipThisTurn
 import cn.luo.yuan.maze.service.BattleMessage
 import cn.luo.yuan.maze.utils.Random
+import cn.luo.yuan.maze.utils.StringUtils
 
 /**
  * Created by luoyuan on 2017/9/4.
  */
 class RaceSkillModel(private val s:Skill): SkillModel(s) {
     fun getDesc():String{
-        return "当对战的敌人是 ${race().getName()} 时，攻击有50%的几率秒杀对方。"
+        return "当对战的敌人是 ${race().getName()} 时，攻击有50%的几率秒杀对方。"  +    "<br>已经使用：${StringUtils.formatNumber((skill as AtkSkill).useTime)}次"
+
     }
 
     private fun race(): Race {

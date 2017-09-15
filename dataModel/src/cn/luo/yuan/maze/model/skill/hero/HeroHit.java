@@ -103,6 +103,7 @@ public class HeroHit extends AtkSkill implements UpgradeAble {
                 StringUtils.DecimalFormatRound(getRate(), 2) + "%概率释放<br>" +
                 "造成额外的" + StringUtils.formatNumber(minHarm, false) + " - " +
                 StringUtils.formatNumber(maxHarm, false) + "伤害" + "<br>" +
-                "不可与魔王、元素使技能同时激活";
+                "不可与魔王、元素使技能同时激活"+ "<br>" +
+                "已经使用：" + StringUtils.formatNumber(getUseTime()) + "次";
     }
 }

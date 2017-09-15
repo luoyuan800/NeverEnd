@@ -55,6 +55,7 @@ class FightBack() : DefSkill(), UpgradeAble {
         val builder = StringBuilder()
         builder.append("防御技能<br>")
         builder.append(StringUtils.formatPercentage(rate)).append("概率反弹").append(StringUtils.formatPercentage(percent)).append("的攻击伤害")
+        builder.append("<br>已经使用：${StringUtils.formatNumber(useTime)}次")
         return builder.toString()
     }
 

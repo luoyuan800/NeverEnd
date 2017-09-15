@@ -34,6 +34,7 @@ class ElementBomb :AtkSkill(),UpgradeAble {
         val builder = StringBuilder()
         builder.append("用你的优雅，亮瞎敌人的双眼。当敌人的属性被你克制时，秒杀敌人！<br>")
         builder.append(StringUtils.formatPercentage(rate)).append("概率释放<br>")
+        builder.append("已经使用：${StringUtils.formatNumber(useTime)}次")
         return builder.toString()
     }
 

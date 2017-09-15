@@ -36,6 +36,7 @@ class Reinforce() : AtkSkill(), UpgradeAble {
     override fun getDisplayName(): String {
         val builder = StringBuilder()
         builder.append(StringUtils.formatPercentage(rate)).append("的概率释放，自身生命值上限增加").append(StringUtils.formatPercentage(percen)).append("。强化效果结束时，HP会重置。")
+        builder.append("已经使用：${StringUtils.formatNumber(useTime)}次")
         return builder.toString()
     }
 

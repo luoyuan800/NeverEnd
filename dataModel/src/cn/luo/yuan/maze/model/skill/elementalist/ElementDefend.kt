@@ -45,6 +45,7 @@ class ElementDefend():DefSkill(),UpgradeAble {
         val builder = StringBuilder()
         builder.append("用你的高冷藐视敌人！<br>抵消50%的伤害，当攻击的你的敌人的属性被你的五行属性克制的时候，免疫那个敌人的攻击。")
         builder.append(StringUtils.formatPercentage(rate)).append("概率释放<br>")
+        builder.append("<br>已经使用：${StringUtils.formatNumber(useTime)}次")
         return builder.toString()
     }
 

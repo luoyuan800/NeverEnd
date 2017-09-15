@@ -27,7 +27,9 @@ public class EvilTalent extends DefSkill implements UpgradeAble {
         return "魔本天性，吾欲入魔，谁人可挡。<br>" +
                 "被攻击的时候有" + getRate() +
                 "%概率将伤害转换为HP恢复。" +
-                "不可与勇者、元素使技能同时激活";
+                "不可与勇者、元素使技能同时激活" + "<br>" +
+                "已经使用：" + StringUtils.formatNumber(getUseTime()) + "次"
+                ;
     }
 
     @Override
