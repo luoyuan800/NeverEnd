@@ -16,6 +16,7 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.GameActivity;
 import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.dialog.GiftDialog;
+import cn.luo.yuan.maze.client.display.dialog.MessageDialog;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.ClientPetMonsterHelper;
@@ -32,6 +33,7 @@ import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -289,6 +291,12 @@ public class GameActivityViewHandler extends Handler {
     public GameActivityViewHandler(GameActivity activity, NeverEnd context) {
         this.context = activity;
         this.neverEnd = context;
+    }
+
+    public void showStartTip(){
+        List<String> msg = Arrays.asList(Resource.readStringFromAssets("help", "start_tip").split("<br>"));
+        MessageDialog dialog = new MessageDialog(context, msg);
+        dialog.show();
     }
 
     public void refreshHeadImage(final NeverEndConfig config) {

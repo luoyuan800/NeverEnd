@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.client.display.handler;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -173,22 +174,19 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 petCatch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        View view = View.inflate(context, R.layout.message_dialog, null);
-                        TextView textView = (TextView) view.findViewById(R.id.tell_message);
+                        final  Dialog dialog = new Dialog(context, R.style.popupDialog);
+                        dialog.setContentView(R.layout.message_dialog);
+                        dialog.show();
+                        Window win = dialog.getWindow();
+                        win.setGravity(Gravity.BOTTOM);
+                        TextView textView = (TextView) dialog.findViewById(R.id.tell_message);
                         textView.setText(Html.fromHtml(Resource.readStringFromAssets("help","pet_catch")));
-                        final AlertDialog dialog = new AlertDialog.Builder(context, R.style.msg_dialog).setView(view).setTitle("宠物系统介绍").create();
-                        view.findViewById(R.id.close_button).setOnClickListener(new View.OnClickListener() {
+                        dialog.findViewById(R.id.close_button).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 dialog.dismiss();
                             }
                         });
-                        dialog.show();
-                        Window win = dialog.getWindow();
-                        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
-                        params.x = -80;//设置x坐标
-                        params.y = 560;//设置y坐标
-                        win.setAttributes(params);
                     }
                 });
 
