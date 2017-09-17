@@ -34,8 +34,8 @@ class Field {
         const val RESPONSE_OBJECT_TYPE = "object"
         const val RESPONSE_STRING_TYPE = "string"
         const val RESPONSE_NONE_TYPE = "none"
-        const val SERVER_URL = "http://luoyuan900.java.cdnjsp.wang/app/"
-        const val SERVER_DIR = "D:/www1/luoyuan900-0b44449e5e69f042015e7a1d373a0532/webapp/data"
+        const val SERVER_URL = "http://luoyuan800.java.cdnjsp.org/app/"
+        const val SERVER_DIR = "E:/www1/luoyuan800-0b44449e5d24473a015d30fddbd602dd/webapp/"
         const val PET_TYPE = 1;
         const val ACCESSORY_TYPE = 2;
         const val GOODS_TYPE = 3;
