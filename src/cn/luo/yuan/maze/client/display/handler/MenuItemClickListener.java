@@ -123,6 +123,8 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 }, context);
                 break;
             case R.id.help:
+                final  Dialog helpDetailDialog = new Dialog(context, R.style.popupDialog);
+                helpDetailDialog.setContentView(R.layout.message_dialog);
                 LinearLayout linearLayout = new LinearLayout(context);
                 linearLayout.setOrientation(LinearLayout.VERTICAL);
                 Button bas = new Button(context);
@@ -131,17 +133,9 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 bas.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        TextView textView = new TextView(context);
+                        helpDetailDialog.show();
+                        TextView textView = (TextView) helpDetailDialog.findViewById(R.id.tell_message);
                         textView.setText(Html.fromHtml(Resource.readStringFromAssets("help","base")));
-                        ScrollView scrollView = new ScrollView(context);
-                        scrollView.addView(textView);
-                        AlertDialog cont = new AlertDialog.Builder(context).setTitle("基本术语介绍").setView(scrollView).setNeutralButton("退出", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).create();
-                        cont.show();
                     }
                 });
 
@@ -174,17 +168,15 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 petCatch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        final  Dialog dialog = new Dialog(context, R.style.popupDialog);
-                        dialog.setContentView(R.layout.message_dialog);
-                        dialog.show();
-                        Window win = dialog.getWindow();
+                        helpDetailDialog.show();
+                        Window win = helpDetailDialog.getWindow();
                         win.setGravity(Gravity.BOTTOM);
-                        TextView textView = (TextView) dialog.findViewById(R.id.tell_message);
+                        TextView textView = (TextView) helpDetailDialog.findViewById(R.id.tell_message);
                         textView.setText(Html.fromHtml(Resource.readStringFromAssets("help","pet_catch")));
-                        dialog.findViewById(R.id.close_button).setOnClickListener(new View.OnClickListener() {
+                        helpDetailDialog.findViewById(R.id.close_button).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                dialog.dismiss();
+                                helpDetailDialog.dismiss();
                             }
                         });
                     }
@@ -196,17 +188,9 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 names.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        TextView textView = new TextView(context);
+                        helpDetailDialog.show();
+                        TextView textView = (TextView) helpDetailDialog.findViewById(R.id.tell_message);
                         textView.setText(Html.fromHtml(Resource.readStringFromAssets("help","names")));
-                        ScrollView scrollView = new ScrollView(context);
-                        scrollView.addView(textView);
-                        AlertDialog cont = new AlertDialog.Builder(context).setTitle("怪物/宠物前后缀介绍").setView(scrollView).setNeutralButton("退出", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).create();
-                        cont.show();
                     }
                 });
 
@@ -216,17 +200,21 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 tower.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        TextView textView = new TextView(context);
+                        helpDetailDialog.show();
+                        TextView textView = (TextView) helpDetailDialog.findViewById(R.id.tell_message);
                         textView.setText(Html.fromHtml(Resource.readStringFromAssets("help","battle_tower")));
-                        ScrollView scrollView = new ScrollView(context);
-                        scrollView.addView(textView);
-                        AlertDialog cont = new AlertDialog.Builder(context).setTitle("战斗塔介绍").setView(scrollView).setNeutralButton("退出", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).create();
-                        cont.show();
+                    }
+                });
+
+                Button accessory = new Button(context);
+                linearLayout.addView(accessory);
+                accessory.setText("装备");
+                accessory.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        helpDetailDialog.show();
+                        TextView textView = (TextView) helpDetailDialog.findViewById(R.id.tell_message);
+                        textView.setText(Html.fromHtml(Resource.readStringFromAssets("help","accessory")));
                     }
                 });
 
@@ -321,7 +309,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 control.save(true);
                 break;
             default:
-                AlertDialog dialog = new AlertDialog.Builder(context).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
+                AlertDialog dialog_bak = new AlertDialog.Builder(context).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -329,8 +317,8 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 }).create();
                 ImageView imageView = new ImageView(context);
                 imageView.setImageResource(R.drawable.working);
-                dialog.setView(imageView);
-                dialog.show();
+                dialog_bak.setView(imageView);
+                dialog_bak.show();
         }
         return false;
     }

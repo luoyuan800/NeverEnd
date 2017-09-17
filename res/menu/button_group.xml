@@ -4,6 +4,10 @@
       tools:context=".activity.SimpleMainActivity"
         >
     <item
+            android:id="@+id/help"
+            android:icon="@android:drawable/ic_menu_help"
+            android:title="帮助"/>
+    <item
             android:id="@+id/save"
             android:icon="@android:drawable/ic_menu_save"
             android:title="@string/save_label"/>
@@ -39,6 +43,7 @@
             android:icon="@android:drawable/ic_menu_agenda"
             android:title="战斗塔"/>
     <item
+            android:visible="false"
             android:id="@+id/palace"
             android:icon="@android:drawable/ic_menu_agenda"
             android:title="殿堂"/>
@@ -73,18 +78,14 @@
             android:id="@+id/theme"
             android:icon="@android:drawable/ic_menu_help"
             android:title="主题"/>
-    <item
-            android:id="@+id/help"
-            android:icon="@android:drawable/ic_menu_help"
-            android:title="帮助"/>
 
     <item
             android:id="@+id/pay"
             android:icon="@android:drawable/ic_menu_view"
             android:title="点赞"/>
     <item
-            android:visible="true"
+            android:visible="false"
             android:id="@+id/crash"
             android:icon="@android:drawable/ic_menu_share"
-            android:title="测试"/>
+            android:title="实验室"/>
 </menu>

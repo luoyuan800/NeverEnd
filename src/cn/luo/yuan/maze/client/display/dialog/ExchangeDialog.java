@@ -264,9 +264,15 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                     public void run() {
                         if (manager.requestExchange((Serializable) myItem, eo)) {
                             context.getDataManager().add(eo.getExchange());
-                            if (currentShowingDialog != null && currentShowingDialog.isShowing()) {
-                                currentShowingDialog.dismiss();
-                            }
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (currentShowingDialog != null && currentShowingDialog.isShowing()) {
+                                        currentShowingDialog.dismiss();
+                                    }
+                                }
+                            });
+
                             Message message = new Message();
                             message.what = 4;
                             message.obj = "交换成功！获得了" + (eo.getExchange() instanceof NameObject ? ((NameObject) eo.getExchange()).getDisplayName() : "");
@@ -406,7 +412,7 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                             context.getDataManager().add(model);
                         }
                         if (model instanceof NameObject) {
-                            context.showToast("取回" + ((NameObject) model).getName());
+                            context.showToast("取回" + ((NameObject) model).getDisplayName());
                         }
                     }
                 });
