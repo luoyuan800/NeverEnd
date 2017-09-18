@@ -139,14 +139,14 @@ public class MainProcess {
                 int vi = Integer.parseInt(this.version);
                 int vm = Integer.parseInt(version);
                 if (vm < vi) {
-                    LogHelper.info("Verify version: " + version + " not match " + this.version);
+                    //LogHelper.info("Verify version: " + version + " not match " + this.version);
                     return -1;
                 }
             } catch (Exception e) {
                 LogHelper.error(e);
                 verify = this.version.equalsIgnoreCase(version);
                 if (!verify) {
-                    LogHelper.info("Verify version: " + version + " not match " + this.version);
+                    //LogHelper.info("Verify version: " + version + " not match " + this.version);
                     return -1;
                 }
             }

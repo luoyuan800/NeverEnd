@@ -17,7 +17,7 @@ class SkillMaster:GiftHandler {
     override fun unHandler(control: InfoControlInterface?) {
         val e = control?.hero?.effects?.find { it.tag == this.javaClass.simpleName }
         if(e!=null){
-            control.hero?.effects?.remove(e)
+            control?.hero?.effects?.remove(e)
         }
     }
 }

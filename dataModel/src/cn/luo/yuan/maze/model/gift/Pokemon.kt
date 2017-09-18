@@ -25,7 +25,7 @@ class Pokemon:GiftHandler {
         }
         val e = control?.hero?.effects?.find { it.tag == this.javaClass.simpleName }
         if(e!=null){
-            control.hero?.effects?.remove(e)
+            control?.hero?.effects?.remove(e)
         }
     }
 }

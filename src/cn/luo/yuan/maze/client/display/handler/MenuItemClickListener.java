@@ -123,7 +123,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 }, context);
                 break;
             case R.id.help:
-                final  Dialog helpDetailDialog = new Dialog(context, R.style.popupDialog);
+                final  Dialog helpDetailDialog = new MessageDialog(context);
                 helpDetailDialog.setContentView(R.layout.message_dialog);
                 LinearLayout linearLayout = new LinearLayout(context);
                 linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -169,16 +169,8 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                     @Override
                     public void onClick(View v) {
                         helpDetailDialog.show();
-                        Window win = helpDetailDialog.getWindow();
-                        win.setGravity(Gravity.BOTTOM);
                         TextView textView = (TextView) helpDetailDialog.findViewById(R.id.tell_message);
                         textView.setText(Html.fromHtml(Resource.readStringFromAssets("help","pet_catch")));
-                        helpDetailDialog.findViewById(R.id.close_button).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                helpDetailDialog.dismiss();
-                            }
-                        });
                     }
                 });
 

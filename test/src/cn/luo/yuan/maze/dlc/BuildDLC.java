@@ -32,9 +32,9 @@ public class BuildDLC {
     public static File root = new File("dlc");
     public static void main(String... args) throws IOException {
         ObjectTable<DLC> dlcTable = new ObjectTable<DLC>(DLC.class, new File("dlc"));
-        /*buildAngel(dlcTable);
+        buildAngel(dlcTable);
         buildJiuwei(dlcTable);
-        buildEmprtyAccessory(dlcTable);*/
+        buildEmprtyAccessory(dlcTable);
         buildSkillDlc(new Alayer(), dlcTable);
         buildSkillDlc(new Chaos(), dlcTable);
         buildSkillDlc(new Decide(), dlcTable);

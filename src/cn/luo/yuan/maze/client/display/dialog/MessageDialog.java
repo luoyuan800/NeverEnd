@@ -18,18 +18,22 @@ public class MessageDialog extends Dialog {
     private List<String> msg;
     private int index;
     private TextView showing;
+    private boolean button;
 
     public MessageDialog(Context context, List<String> msg){
         this(context, R.style.popupDialog);
         setContentView(R.layout.message_dialog);
         setCancelable(false);
         this.msg = msg;
+        button = true;
     }
 
     public void show(){
         super.show();
-        Window win = getWindow();
-        win.setGravity(Gravity.BOTTOM);
+        if(button) {
+            Window win = getWindow();
+            win.setGravity(Gravity.BOTTOM);
+        }
         findViewById(R.id.close_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

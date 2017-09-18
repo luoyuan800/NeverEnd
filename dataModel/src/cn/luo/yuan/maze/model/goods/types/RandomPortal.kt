@@ -4,12 +4,16 @@ import cn.luo.yuan.maze.model.Parameter
 import cn.luo.yuan.maze.model.goods.GoodsProperties
 import cn.luo.yuan.maze.model.goods.UsableGoods
 import cn.luo.yuan.maze.service.InfoControlInterface
+import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.StringUtils
 
 /**
  * Created by luoyuan on 2017/9/4.
  */
 class RandomPortal: UsableGoods() {
+    companion object {
+        private const val serialVersionUID: Long = Field.SERVER_VERSION
+    }
     override fun perform(properties: GoodsProperties): Boolean {
         val context:InfoControlInterface? = properties[Parameter.CONTEXT] as InfoControlInterface
         if(context!=null){
