@@ -643,7 +643,7 @@
         <sex>-1</sex>
         <race>Eviler</race>
         <rank>1</rank>
-        <evolution>15</evolution>
+        <evolution>79</evolution>
     </monster>
     <monster>
         <index>16</index>
@@ -1060,6 +1060,24 @@
         <race>Ghosr</race>
         <rank>4</rank>
         <effect value="10">HPPercentEffect</effect>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>79</index>
+        <meet meet_rate="10" min_level="1050"/>
+        <name>黑羽</name>
+        <desc>看看你抓到什么？一团黑乎乎战斗力为渣的未知生物。
+        </desc>
+        <atk>1</atk>
+        <def>1</def>
+        <hp>1</hp>
+        <hit>1</hit>
+        <silent>1</silent>
+        <egg_rate>1</egg_rate>
+        <pet_rate>1</pet_rate>
+        <sex>-1</sex>
+        <race>Ghosr</race>
+        <rank>5</rank>
         <evolution></evolution>
     </monster>
 </monsters>
