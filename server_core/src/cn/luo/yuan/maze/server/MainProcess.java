@@ -307,7 +307,7 @@ public class MainProcess {
                             return mirror;
                         }else if(mi <=5){
                             Scalpel scalpel = new Scalpel();
-                            scalpel.setCount(0);
+                            scalpel.setCount(1);
                             return scalpel;
                         } else return null;
                     default:
@@ -1065,8 +1065,8 @@ public class MainProcess {
         return realService.pollTopNRecord(n);
     }
 
-    public RealState pollCurrentState(String id, int msgIndex, String battleId) {
-        return realService.pollState(id, msgIndex, battleId);
+    public RealState pollCurrentState(String id, int msgIndex, String battleId, RealState cstate) {
+        return realService.pollState(id, msgIndex, battleId, cstate);
     }
 
     public void updateRealData(LevelRecord record) {
@@ -1096,8 +1096,8 @@ public class MainProcess {
         }
     }
 
-    public void quitRealBattle(String id, boolean onlyQuit){
-        realService.singleQuit(id, onlyQuit);
+    public RealState quitRealBattle(String id, RealState cstate){
+        return realService.singleQuit(id, cstate);
     }
 
     private String buildEffectString(Map.Entry<String, MyJSONValue> entry, boolean isElement) {

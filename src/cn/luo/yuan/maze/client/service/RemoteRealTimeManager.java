@@ -115,7 +115,7 @@ public class RemoteRealTimeManager implements RealTimeManager {
         try {
             HttpURLConnection connection = server.getHttpURLConnection(Path.REAL_BATTLE_QUIT, RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
-            server.connect(connection);
+            server.connect(currentState.newEmptyInstance(), connection);
         } catch (IOException e) {
             LogHelper.logException(e, "Quit remote battle");
         }

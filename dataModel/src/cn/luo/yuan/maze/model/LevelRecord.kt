@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.model
 
 import cn.luo.yuan.maze.model.skill.EmptySkill
 import cn.luo.yuan.maze.model.skill.Skill
+import cn.luo.yuan.maze.service.AccessoryHelper
 import cn.luo.yuan.maze.utils.Field
 import java.io.Serializable
 
@@ -32,6 +33,20 @@ open class LevelRecord(val id:String):Serializable, Cloneable {
     var win = 0L
     var lost = 0L
     var hero:Hero? = null
+        get() {
+            if(field!=null){
+                if(field!!.pets.isEmpty()){
+                    field!!.pets.addAll(pets)
+                }
+                if(field!!.accessories.isEmpty()){
+                    for(acc in accessories){
+                        AccessoryHelper.mountAccessory(acc, field, false, null)
+                    }
+                    AccessoryHelper.judgeElementEnable(field, isElementer)
+                }
+            }
+            return field
+        }
     val pets = mutableListOf<Pet>()
     val accessories = mutableListOf<Accessory>()
     val skills = mutableListOf<Skill>()
@@ -41,4 +56,5 @@ open class LevelRecord(val id:String):Serializable, Cloneable {
     override fun clone(): LevelRecord {
         return super.clone() as LevelRecord
     }
+
 }

@@ -2,7 +2,9 @@ package cn.luo.yuan.maze.client.service;
 
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.model.HarmAble;
+import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Monster;
+import cn.luo.yuan.maze.model.NPCLevelRecord;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.real.RealTimeState;
@@ -26,16 +28,19 @@ import java.util.UUID;
 public class LocalRealTimeManager implements RealTimeManager {
     private NeverEnd context;
     private HarmAble target;
+    private NPCLevelRecord targetRecord;
     private RealTimeBattle realTimeBattle;
     private int msgIndex = 0;
 
     public LocalRealTimeManager(NeverEnd context, HarmAble target) {
         this.context = context;
         this.target = target;
-        realTimeBattle = new RealTimeBattle(context.getHero().clone(), target, 0, (target instanceof Monster ? ((Monster) target).getMaterial() : 0), context.getRandom());
+        realTimeBattle = new RealTimeBattle(context.getHero().clone(), target, 0, 2000, context.getRandom());
         realTimeBattle.setTimeLimit(-1);
         realTimeBattle.setP1Head(context.getDataManager().loadConfig().getHead());
-        realTimeBattle.setP2Head(target.getId());
+        if(target instanceof Monster) {
+            realTimeBattle.setP2Head(target.getId());
+        }
         if (context.getHero().getPets().size() > 0) {
             List<Integer> pets = new ArrayList<>(context.getHero().getPets().size());
             for (Pet pet : context.getHero().getPets()) {
@@ -110,7 +115,18 @@ public class LocalRealTimeManager implements RealTimeManager {
     }
 
     public synchronized void targetAction(RealTimeState state) {
-        realTimeBattle.action(new AtkAction(UUID.randomUUID().toString(), target.getId()));
+        if(targetRecord!=null){
+            realTimeBattle.action(targetRecord.randomAction(context.getRandom(), realTimeBattle.getP2ActionPoint()));
+        }else {
+            realTimeBattle.action(new AtkAction(UUID.randomUUID().toString(), target.getId()));
+        }
+    }
+
+    public void setTargetRecord(NPCLevelRecord record){
+        targetRecord = record;
+        if(record!=null){
+            realTimeBattle.setP2Head(record.getHead());
+        }
     }
 
 }

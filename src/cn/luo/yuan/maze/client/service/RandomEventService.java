@@ -1,9 +1,16 @@
-package cn.luo.yuan.maze.service;
+package cn.luo.yuan.maze.client.service;
 
+import cn.luo.yuan.maze.client.display.dialog.RealBattleDialog;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Egg;
 import cn.luo.yuan.maze.model.Element;
+import cn.luo.yuan.maze.model.HarmAble;
+import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.LevelRecord;
+import cn.luo.yuan.maze.model.NPCLevelRecord;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.service.InfoControlInterface;
+import cn.luo.yuan.maze.service.real.RealTimeBattle;
 
 import java.util.ArrayList;
 
@@ -11,8 +18,9 @@ import java.util.ArrayList;
  * Created by gluo on 5/25/2017.
  */
 public class RandomEventService {
-    private InfoControlInterface gameControl;
-    public RandomEventService(InfoControlInterface gameControl){
+    private NeverEnd gameControl;
+    private NPCLevelRecord meetNpc;
+    public RandomEventService(NeverEnd gameControl){
         this.gameControl = gameControl;
     }
     public void random(){
@@ -119,4 +127,21 @@ public class RandomEventService {
     }
 
 
+    public NPCLevelRecord getMeetNpc() {
+        return meetNpc;
+    }
+
+    public void showNPCBattling(){
+        Hero hero = gameControl.getHero().clone();
+        hero.setHp(hero.getMaxHp());
+        LevelRecord lr = new LevelRecord(hero);
+        final LocalRealTimeManager manager = new LocalRealTimeManager(gameControl, meetNpc.getHero());
+        manager.setTargetRecord(meetNpc);
+        gameControl.getViewHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                new RealBattleDialog(manager, gameControl, "local");
+            }
+        });
+    }
 }

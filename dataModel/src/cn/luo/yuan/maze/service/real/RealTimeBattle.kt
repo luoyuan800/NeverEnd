@@ -2,6 +2,8 @@ package cn.luo.yuan.maze.service.real
 
 import cn.luo.yuan.maze.listener.BattleEndListener
 import cn.luo.yuan.maze.model.*
+import cn.luo.yuan.maze.model.real.BattleEnd
+import cn.luo.yuan.maze.model.real.Battling
 import cn.luo.yuan.maze.model.real.RealTimeState
 import cn.luo.yuan.maze.model.real.action.AtkAction
 import cn.luo.yuan.maze.model.real.action.AtkSkillAction
@@ -10,6 +12,7 @@ import cn.luo.yuan.maze.model.real.action.RealTimeAction
 import cn.luo.yuan.maze.model.skill.DefSkill
 import cn.luo.yuan.maze.model.skill.EmptySkill
 import cn.luo.yuan.maze.model.skill.SkillAbleObject
+import cn.luo.yuan.maze.model.skill.result.EndBattleResult
 import cn.luo.yuan.maze.service.BattleService
 import cn.luo.yuan.maze.utils.Random
 import cn.luo.yuan.maze.utils.StringUtils
@@ -247,9 +250,10 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
     private fun getMinHarm() = if (actioner == p1) p1ActionPoint.toLong() else p2ActionPoint.toLong()
 
     fun pollState(msgIndex: Int): RealTimeState {
-        val state = RealTimeState()
+        var state:RealTimeState
         if(winner!=null && loser!=null){
             running = -1
+            state = BattleEnd()
             state.winner = winner
             state.loser =loser
             state.awardMate = mateAward
@@ -257,6 +261,7 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
             state.winTip =
                     "获得了 ${if(pointAward > 0) "能力点：" + StringUtils.formatNumber(pointAward) else ""}   ${if(mateAward > 0) "锻造点" + StringUtils.formatNumber(mateAward) else ""}"
         }else {
+            state = Battling()
             state.actioner = actioner
             if (actioner == p1) {
                 state.waiter = p2

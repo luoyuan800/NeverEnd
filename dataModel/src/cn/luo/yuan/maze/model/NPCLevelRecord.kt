@@ -6,6 +6,7 @@ import cn.luo.yuan.maze.model.real.action.DefSkillAction
 import cn.luo.yuan.maze.model.real.action.RealTimeAction
 import cn.luo.yuan.maze.model.skill.AtkSkill
 import cn.luo.yuan.maze.model.skill.DefSkill
+import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.Random
 import java.util.*
 
@@ -14,6 +15,10 @@ import java.util.*
  * Created by Gavin Luo on 9/14/2017.
  */
 class NPCLevelRecord(hero:Hero):LevelRecord(hero) {
+    companion object {
+        private const val serialVersionUID: Long = Field.SERVER_VERSION
+    }
+    var sex = 0
     fun randomAction(random: Random, actionPoint:Int):RealTimeAction{
         var index = 5 + skills.size + actionPoint/100
         index = random.nextInt(index)

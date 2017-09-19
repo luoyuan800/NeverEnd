@@ -1,10 +1,7 @@
 package cn.luo.yuan.maze.server.level
 
 import cn.luo.yuan.maze.model.*
-import cn.luo.yuan.maze.model.real.Battling
-import cn.luo.yuan.maze.model.real.NoDebris
-import cn.luo.yuan.maze.model.real.RealState
-import cn.luo.yuan.maze.model.real.RealTimeState
+import cn.luo.yuan.maze.model.real.*
 import cn.luo.yuan.maze.model.real.action.RealTimeAction
 import cn.luo.yuan.maze.model.real.level.ElyosrRealLevel
 import cn.luo.yuan.maze.model.skill.Skill
@@ -43,7 +40,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
     val waitingTime = mutableMapOf<String, Long>()
     fun run() {
         executor.scheduleAtFixedRate({
-            for (i in (0..ElyosrRealLevel.values().size - 1)) {
+            for (i in (0 until ElyosrRealLevel.values().size)) {
                 val record = waiting.poolFirst(0)
                 if (record != null) {
                     findBattleTarget(record)
@@ -82,11 +79,13 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
         executor.awaitTermination(20, TimeUnit.MILLISECONDS)
     }
 
-    fun pollState(id: String, msgIndex: Int, battleId: String?): RealState? {
+    fun pollState(id: String, msgIndex: Int, battleId: String?, cstate: RealState?): RealState? {
         val record = queryRecord(id)
         if (record != null) {
-            if(StringUtils.isEmpty(battleId)){
-                return inQueue(id, record)
+            if(cstate!=null) {
+                if(cstate is Waiting && (cstate.priorState == null || cstate.priorState is Waiting)) {
+                    return inQueue(id, record)
+                }
             }
             val rtb = battling[record.id]
             if (rtb != null) {
@@ -108,7 +107,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
                         return NoDebris()
                     }
                 }
-                return RealTimeState()
+                return Waiting()
             }
             val battling1 = Battling()
             battling1.id = battling[record.id]!!.id
@@ -171,19 +170,23 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
         return false
     }
 
-    fun singleQuit(id: String, onlyQuit: Boolean) {
-        if (!onlyQuit) {
-            val rtb = battling[id]
-            rtb?.quit(id)
-            battling.remove(id)
-        }
-        val record = queryRecord(id)
-        if (record != null) {
-            synchronized(waiting) {
-                waiting.removeQueue(record)
+    fun singleQuit(id: String, cstate: RealState):RealState {
+        val state = Quit()
+        val record = recordDb.loadObject(id)
+        if(cstate is Waiting){
+            waiting.removeQueue(record)
+            if(battling[id]!=null){
+                state.nextState = battling[id]?.pollState(0)
+                LogHelper.info(record.hero?.displayName + " want out range, but he already in battling!")
+            }else{
+                LogHelper.info(record.hero?.displayName + " out range")
             }
-            LogHelper.info(record.hero?.name + " out range")
+        } else if(cstate is Battling || cstate is BattleEnd){
+            battling[id]?.quit(id)
+            LogHelper.info(record.hero?.displayName + " quit battling")
         }
+        battling.remove(id)
+        return state
     }
 
     fun newOrUpdateRecord(record: LevelRecord) {
@@ -225,7 +228,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
             if (record.hero!!.pets.isEmpty()) {
                 record.hero!!.pets.addAll(record.pets)
             }
-            if (record.hero!!.skills.isEmpty()) {
+            if (record.hero!!.accessories.isEmpty()) {
                 for (acc in record.accessories) {
                     AccessoryHelper.mountAccessory(acc, record.hero!!, false, null)
                 }

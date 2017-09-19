@@ -7,6 +7,7 @@ import cn.luo.yuan.maze.model.OwnedAble;
 import cn.luo.yuan.maze.model.RangeAward;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
+import cn.luo.yuan.maze.model.real.RealState;
 import cn.luo.yuan.maze.model.real.action.RealTimeAction;
 import cn.luo.yuan.maze.server.LogHelper;
 import cn.luo.yuan.maze.server.MainProcess;
@@ -197,9 +198,8 @@ public class NeverEndServlet extends HttpServlet {
                     writeObject(response, process.pollTopNPalaceRecords(request.getIntHeader(Field.COUNT)));
                     break;
                 case REAL_BATTLE_QUIT:
-                    String onlyQuit = request.getHeader(Field.ONLY_QUIT_RANGE);
-                    process.quitRealBattle(ownerId, onlyQuit!=null && onlyQuit.equals("1"));
-                    success = true;
+                    RealState state = readObject(request);
+                    writeObject(response, process.quitRealBattle(ownerId, state));
                     break;
                 case REAL_BATTLE_ACTION:
                     RealTimeAction action = readObject(request);
@@ -217,8 +217,8 @@ public class NeverEndServlet extends HttpServlet {
                     }
                     break;
                 case POLL_REAL_BATTLE_STATE:
-                    String header = request.getHeader(Field.REAL_MSG_ID);
-                    writeObject(response, process.pollCurrentState(ownerId, request.getIntHeader(Field.INDEX), header));
+                    String msgId = request.getHeader(Field.REAL_MSG_ID);
+                    writeObject(response, process.pollCurrentState(ownerId, request.getIntHeader(Field.INDEX), msgId, readObject(request)));
                     break;
                 case POLL_REAL_RECORD:
                     writeObject(response, process.pollRealRecord(ownerId));
