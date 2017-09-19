@@ -9,13 +9,14 @@ import android.view.Window;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by luoyuan on 2017/9/16.
  */
 public class MessageDialog extends Dialog {
-    private List<String> msg;
+    private List<String> msg = Collections.emptyList();
     private int index;
     private TextView showing;
     private boolean button;

@@ -136,4 +136,8 @@ public class Messager implements BattleMessage {
     public void buildGroup(@Nullable String hero_1, @NotNull String hero_2) {
         notification(hero_1 + "与" + hero_2 + "组成了一个新队伍");
     }
+
+    public void leaveGroup(@Nullable String displayName) {
+        notification(displayName + "离开了队伍");
+    }
 }

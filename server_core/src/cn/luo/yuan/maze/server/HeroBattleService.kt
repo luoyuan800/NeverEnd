@@ -110,6 +110,9 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
                     } else {
                         if (record.dieCount > record.restoreLimit) {
                             messager.restoreLimit(hero.displayName)
+                            if(group!=null){
+                                messager.leaveGroup(hero.displayName)
+                            }
                             main.removeGroup(id)
                         } else {
                             val period = Data.RESTOREPERIOD - (System.currentTimeMillis() - record.dieTime)

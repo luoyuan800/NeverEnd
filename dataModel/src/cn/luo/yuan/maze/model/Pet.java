@@ -103,7 +103,7 @@ public class Pet extends Monster implements IDModel, OwnedAble, MountAble {
     }
 
     public String getOwnerName() {
-        return ownerName;
+        return ownerName!=null ? ownerName : StringUtils.EMPTY_STRING;
     }
 
     public void setOwnerName(String ownerName) {
