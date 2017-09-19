@@ -17,6 +17,9 @@ import cn.luo.yuan.maze.utils.StringUtils
  * Created by Gavin Luo on 7/21/2017.
  */
 class ElementBomb :AtkSkill(),UpgradeAble {
+    init {
+        rate = 2.5f
+    }
      fun setLevel(level: Long) {
         this.level = level
     }

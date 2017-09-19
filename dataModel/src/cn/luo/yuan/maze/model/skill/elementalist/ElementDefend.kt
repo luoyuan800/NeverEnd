@@ -22,6 +22,9 @@ class ElementDefend():DefSkill(),UpgradeAble {
     companion object {
         private const val serialVersionUID = Field.SERVER_VERSION
     }
+    init {
+        rate = 3f
+    }
     override fun upgrade(parameter: SkillParameter?): Boolean {
         if(rate + 0.5 < Data.RATE_MAX){
             rate += 0.5f

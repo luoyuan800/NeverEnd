@@ -151,7 +151,7 @@ public class Hero extends HarmObject implements Serializable, IDModel, SkillAble
     }
 
     public String getName() {
-        return name;
+        return name!=null ? name : StringUtils.EMPTY_STRING;
     }
 
     public void setName(String name) {
