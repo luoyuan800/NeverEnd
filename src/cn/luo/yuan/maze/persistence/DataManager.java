@@ -355,6 +355,7 @@ public class DataManager implements DataManagerInterface {
                 skills.add(skill);
             }
         }
+        skills.addAll(loadSpecialSkills());
         return skills;
     }
 

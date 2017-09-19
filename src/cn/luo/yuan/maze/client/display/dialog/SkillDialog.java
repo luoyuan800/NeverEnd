@@ -13,11 +13,7 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.skill.MountAble;
-import cn.luo.yuan.maze.model.skill.Skill;
-import cn.luo.yuan.maze.model.skill.SkillFactory;
-import cn.luo.yuan.maze.model.skill.SkillParameter;
-import cn.luo.yuan.maze.model.skill.UpgradeAble;
+import cn.luo.yuan.maze.model.skill.*;
 import cn.luo.yuan.maze.service.SkillHelper;
 import com.huanglong.mylinearlayout.FixGridLayout;
 
@@ -108,7 +104,8 @@ public class SkillDialog implements View.OnClickListener {
             parameter.set(SkillParameter.CONTEXT, context);
             parameter.set(SkillParameter.RANDOM, context.getRandom());
             AlertDialog detail = new AlertDialog.Builder(context.getContext())
-                    .setTitle(skill.getName())
+                    .setTitle(skill.getName() +
+                            "<" + (skill instanceof AtkSkill ? "攻击" : (skill instanceof DefSkill ? "防御" : "属性")) + ">")
                     .setMessage(Html.fromHtml(skill.getDisplayName()))
                     .setNegativeButton(Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
                         @Override

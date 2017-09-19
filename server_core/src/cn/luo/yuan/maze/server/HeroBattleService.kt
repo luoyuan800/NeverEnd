@@ -4,6 +4,8 @@ import cn.luo.yuan.maze.model.*
 import cn.luo.yuan.maze.model.Messager
 import cn.luo.yuan.maze.server.persistence.HeroTable
 import cn.luo.yuan.maze.server.persistence.NPCTable
+import cn.luo.yuan.maze.server.servcie.ServerDataManager
+import cn.luo.yuan.maze.server.servcie.ServerGameContext
 import cn.luo.yuan.maze.service.BattleService
 import cn.luo.yuan.maze.service.InfoControlInterface
 import cn.luo.yuan.maze.service.RunningServiceInterface
@@ -77,6 +79,8 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
                                 continue@loop
                             }
                             val bs = BattleService(group ?: hero, ogroup ?: ohero, random, this)
+                            bs.heroContext = buildGameContext(record);
+                            bs.monsterContext = buildGameContext(otherRecord);
                             bs.setBattleMessage(messager)
                             if (StringUtils.isNotEmpty(record.data!!.helloMsg["meet"])) {
                                 messager.speak(hero.displayName, record.data!!.helloMsg["meet"])
@@ -135,6 +139,16 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
         } catch (exp: Exception) {
             LogHelper.error(exp)
         }
+    }
+
+    private fun buildGameContext(record: ServerRecord): ServerGameContext {
+        val heroConfig = NeverEndConfig()
+        heroConfig.isElementer = record.data!!.isElementer
+        heroConfig.isLongKiller = record.data!!.isLong
+        val hdm = ServerDataManager(record.data!!.hero, heroConfig);
+        val hContext = ServerGameContext(record.data!!.hero, hdm, record.data!!.maze)
+        hContext.executor = main.executor
+        return hContext
     }
 
     private fun lost(otherReciod: ServerRecord) {

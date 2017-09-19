@@ -22,11 +22,9 @@ import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.ServerService;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
-import cn.luo.yuan.maze.model.Accessory;
-import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.model.RangeAward;
-import cn.luo.yuan.maze.model.ServerData;
+import cn.luo.yuan.maze.model.*;
+import cn.luo.yuan.maze.model.skill.PropertySkill;
+import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.io.IOException;
@@ -216,8 +214,18 @@ public class OnlineActivity extends Activity {
             uploadData.getAccessories().add((Accessory) gameContext.convertToServerObject(accessory));
         }
         uploadData.setPets(new ArrayList<>(gameContext.getHero().getPets()));
-        uploadData.setSkills(Arrays.asList(gameContext.getHero().getSkills()));
+        ArrayList<Skill> skills = new ArrayList<>();
+        skills.addAll(Arrays.asList(gameContext.getHero().getSkills()));
+        for(Skill skill : gameContext.getDataManager().loadAllSkill()){
+            if(skill instanceof PropertySkill && skill.isEnable()){
+                skills.add(skill);
+            }
+        }
+        uploadData.setSkills(skills);
         uploadData.setMaze(gameContext.getMaze());
+        NeverEndConfig config = gameContext.getDataManager().loadConfig();
+        uploadData.setElementer(config.isElementer());
+        uploadData.setLong(config.isLongKiller());
         final AlertDialog uploadDialog = new AlertDialog.Builder(OnlineActivity.this).setMessage("上传中……").setCancelable(true).setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {

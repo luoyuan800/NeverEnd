@@ -11,11 +11,12 @@ import java.io.Serializable
  * Created by luoyuan on 2017/6/24.
  */
 class ServerData : Serializable {
-
+    var isLong = false;
+    var isElementer = false
     var mac: String? = StringUtils.EMPTY_STRING
     var hero: Hero? = null
     var maze: Maze? = null
-    var accessories: List<Accessory>? = null
+    var accessories: List<Accessory> = ArrayList<Accessory>()
     var awardAccessories: List<Accessory>? = null
     var pets: List<Pet>? = null
     var awardPets: List<Pet>? = null

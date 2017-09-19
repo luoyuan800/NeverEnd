@@ -19,12 +19,17 @@ public class BattleService {
     private Random random;
     private BattleMessage battleMessage;
     private RunningServiceInterface runninfService;
+    private InfoControlInterface heroContext;
+    private InfoControlInterface monsterContext;
 
     public BattleService(HarmAble hero, HarmAble monster, Random random, RunningServiceInterface runningService) {
         this.monster = monster;
         this.random = random;
         this.hero = hero;
         this.runninfService = runningService;
+        if(runningService!=null) {
+            heroContext = runningService.getContext();
+        }
     }
 
     public boolean battle(long level) {
@@ -96,16 +101,44 @@ public class BattleService {
         }
     }
 
+    public InfoControlInterface getMonsterContext() {
+        return monsterContext;
+    }
+
+    public void setMonsterContext(InfoControlInterface monsterContext) {
+        this.monsterContext = monsterContext;
+    }
+
+    public InfoControlInterface getHeroContext() {
+        return heroContext;
+    }
+
+    public void setHeroContext(InfoControlInterface heroContext) {
+        this.heroContext = heroContext;
+    }
+
     private void specialDetect() {
         if(runninfService!=null){
-            if(runninfService.getContext()!=null){
+            if(heroContext!=null){
                 if(monster instanceof NameObject){
                     if(((NameObject) monster).getName().contains("龙")){
-                        if(runninfService.getContext().getDataManager()!=null) {
-                            NeverEndConfig config = runninfService.getContext().getDataManager().loadConfig();
+                        if(heroContext.getDataManager()!=null) {
+                            NeverEndConfig config = heroContext.getDataManager().loadConfig();
                             if (config!=null && config.isLongKiller()) {
                                 battleMessage.rowMessage("龙的传人！");
                                 monster.setHp(0);
+                            }
+                        }
+                    }
+                }
+            }else if(monsterContext!=null){
+                if(hero instanceof NameObject){
+                    if(((NameObject) hero).getName().contains("龙")){
+                        if(monsterContext.getDataManager()!=null) {
+                            NeverEndConfig config = monsterContext.getDataManager().loadConfig();
+                            if (config!=null && config.isLongKiller()) {
+                                battleMessage.rowMessage("龙的传人！");
+                                hero.setHp(0);
                             }
                         }
                     }
@@ -240,6 +273,11 @@ public class BattleService {
     public boolean releaseSkill(HarmAble atker, HarmAble defender, Random random, boolean atk, Skill skill, long level) {
         SkillParameter skillPara;
         if (atk) {
+            battleMessage.releaseSkill(atker, skill);
+        } else {
+            battleMessage.releaseSkill(defender, skill);
+        }
+        if (atk) {
             skillPara = getSkillParameter((SkillAbleObject) atker, (HarmAble) atker, defender, random, level);
             if (defender instanceof SilentAbleObject) {
                 boolean silent = random.nextInt(100) + random.nextFloat() < ((SilentAbleObject) defender).getSilent();
@@ -259,11 +297,7 @@ public class BattleService {
             }
         }
         SkillResult result = skill.perform(skillPara);
-        if (atk) {
-            battleMessage.releaseSkill(atker, skill);
-        } else {
-            battleMessage.releaseSkill(defender, skill);
-        }
+
         if (result instanceof HasMessageResult) {
             for (String msg : result.getMessages()) {
                 battleMessage.rowMessage(msg);
@@ -300,8 +334,10 @@ public class BattleService {
         atkPara.set(SkillParameter.DEFENDER, defender);
         atkPara.set(SkillParameter.MINHARM, level);
         atkPara.set(SkillParameter.MESSAGE, battleMessage);
-        if(runninfService!=null) {
-            atkPara.set(SkillParameter.CONTEXT, runninfService.getContext());
+        if(heroContext!=null && owner == hero) {
+            atkPara.set(SkillParameter.CONTEXT, heroContext);
+        }else if(monsterContext!=null && owner == monster){
+            atkPara.set(SkillParameter.CONTEXT, monsterContext);
         }
         return atkPara;
     }
