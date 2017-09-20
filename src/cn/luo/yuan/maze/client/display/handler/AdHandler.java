@@ -26,6 +26,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     private boolean yomob = false;
     private boolean debug = false;
     private boolean isCPA = false;
+    private boolean isAward = false;
 
     public AdHandler(OnlineActivity a) {
         this.context = a;
@@ -67,6 +68,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     @Override
     public void onShowSuccess(String s) {
+
     }
 
     @Override
@@ -76,7 +78,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     @Override
     public void onADComplete(String s) {
-        context.handler.addOnlineGift(1);
+        isAward = true;
     }
 
     @Override
@@ -86,14 +88,21 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     @Override
     public void onADClose(String s) {
-
+        if(isAward){
+            award();
+        }
     }
 
     @Override
     public void onADAwardSuccess(String s) {
+       isAward = true;
+    }
+
+    private void award() {
         context.handler.showToast("获得一个礼包和一个碎片");
         context.handler.addOnlineGift(1);
         context.handler.addDebris(1);
+        isAward = false;
     }
 
     @Override
@@ -133,6 +142,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     }
 
     public void showAd() {
+        isAward = false;
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {

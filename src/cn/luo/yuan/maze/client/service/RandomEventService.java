@@ -18,9 +18,8 @@ import java.util.ArrayList;
  * Created by gluo on 5/25/2017.
  */
 public class RandomEventService {
-    private NeverEnd gameControl;
-    private NPCLevelRecord meetNpc;
-    public RandomEventService(NeverEnd gameControl){
+    private InfoControlInterface gameControl;
+    public RandomEventService(InfoControlInterface gameControl){
         this.gameControl = gameControl;
     }
     public void random(){
@@ -126,22 +125,4 @@ public class RandomEventService {
         }
     }
 
-
-    public NPCLevelRecord getMeetNpc() {
-        return meetNpc;
-    }
-
-    public void showNPCBattling(){
-        Hero hero = gameControl.getHero().clone();
-        hero.setHp(hero.getMaxHp());
-        LevelRecord lr = new LevelRecord(hero);
-        final LocalRealTimeManager manager = new LocalRealTimeManager(gameControl, meetNpc.getHero());
-        manager.setTargetRecord(meetNpc);
-        gameControl.getViewHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                new RealBattleDialog(manager, gameControl, "local");
-            }
-        });
-    }
 }

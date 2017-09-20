@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
+import cn.luo.yuan.maze.model.NPCLevelRecord;
 import cn.luo.yuan.maze.model.skill.SkillParameter;
 import cn.luo.yuan.maze.persistence.DataManagerInterface;
 import cn.luo.yuan.maze.utils.Random;
@@ -40,6 +41,8 @@ public interface InfoControlInterface {
     void showEmptyAccessoryDialog();
 
     void showInputPopup(InputListener listener, String hint);
+
+    void setRandomNPC(NPCLevelRecord npc);
 
     interface InputListener{
         void input(String input, InfoControlInterface context);

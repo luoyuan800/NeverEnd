@@ -5,6 +5,7 @@ import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.StringUtils
 
 import java.io.Serializable
+import java.util.*
 
 /**
  *
@@ -16,7 +17,7 @@ class ServerData : Serializable {
     var mac: String? = StringUtils.EMPTY_STRING
     var hero: Hero? = null
     var maze: Maze? = null
-    var accessories: List<Accessory> = ArrayList<Accessory>()
+    var accessories: List<Accessory>? = ArrayList<Accessory>()
     var awardAccessories: List<Accessory>? = null
     var pets: List<Pet>? = null
     var awardPets: List<Pet>? = null

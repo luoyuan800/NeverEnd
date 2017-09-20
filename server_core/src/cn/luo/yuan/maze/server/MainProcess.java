@@ -1229,4 +1229,12 @@ public class MainProcess {
         exMy.setSubmitTime(System.currentTimeMillis());
         return exMy;
     }
+
+    public long pollRealBattleTurn(String myId){
+        return realService.pollBattleTurn(myId);
+    }
+
+    public LevelRecord pollBattleTargetRecord(String myId){
+        return realService.pollTargetRecord(myId);
+    }
 }

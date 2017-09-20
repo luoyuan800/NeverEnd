@@ -32,7 +32,7 @@ public class BuildDLC {
     public static File root = new File("dlc");
     public static void main(String... args) throws IOException {
         ObjectTable<DLC> dlcTable = new ObjectTable<DLC>(DLC.class, new File("dlc"));
-        buildAngel(dlcTable);
+        /*buildAngel(dlcTable);
         buildJiuwei(dlcTable);
         buildEmprtyAccessory(dlcTable);
         buildSkillDlc(new Alayer(), dlcTable);
@@ -40,7 +40,8 @@ public class BuildDLC {
         buildSkillDlc(new Decide(), dlcTable);
         buildSkillDlc(new Exorcism(), dlcTable);
         buildSkillDlc(new Masimm(), dlcTable);
-        buildSkillDlc(new Painkiller(), dlcTable);
+        buildSkillDlc(new Painkiller(), dlcTable);*/
+        buildEveoo(dlcTable);
     }
 
     public static void buildEmprtyAccessory(ObjectTable<DLC> dlcTable) throws IOException {
@@ -481,5 +482,9 @@ public class BuildDLC {
         monster.setDesc("传说主人的五行属性为金的时候，伊布可以吸收雷电的力量进化成电精灵。");
         dlc.getMonsters().add(monster);
         dlc.getImage().add(readImage("pics/evee/evo_dian.png"));
+        dlc.setTitle("伊布伊布I");
+        dlc.setDesc("解锁伊布12种进化形态，电、鬼、魂、毒、草、虫、月、绿、木、暗、冰、角。");
+        dlc.setDebrisCost(200);
+        System.out.println(table.save(dlc));
     }
 }

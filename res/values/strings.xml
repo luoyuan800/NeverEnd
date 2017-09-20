@@ -133,4 +133,10 @@
     <string name="not_debris">没有足够的碎片！在战斗塔中观看广告可以获得碎片。</string>
     <string name="ranging">匹配中</string>
     <string name="birthday_tip">生日快乐！今天是你的生日，感谢你愿意在这个宝贵的时间里继续陪伴我们！</string>
+    <string name="npc_accept">搞起</string>
+    <string name="npc_man">怪蜀黍</string>
+    <string name="npc_gril">小姐姐</string>
+    <string name="npc_refuse">不约</string>
+    <string name="npc_tip">有个%1$s想和你约架&lt;br&gt;消耗1000点锻造，表现良好的话可以获得最多3倍奖励</string>
+    <string name="eqicure_drop_pet">一键烤肉/煎蛋</string>
 </resources>

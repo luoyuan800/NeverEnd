@@ -13,8 +13,10 @@ public class BattleServiceBase {
 
      public static long getHarm(HarmAble atker, HarmAble defender, long minHarm, Random random, BattleMessageInterface battleMessage) {
         long atk = atker.getUpperAtk();
-        atk = atk / 3;
-        atk = atk * 2 + random.nextLong(atk);
+        if(atk > 4) {
+            atk = atk / 3;
+            atk = atk * 2 + random.nextLong(atk);
+        }
         boolean isHit = atker.isHit(random);
         if (isHit) {
             if (atker instanceof NameObject)
@@ -23,8 +25,10 @@ public class BattleServiceBase {
         }
         boolean isParry = defender.isParry(random);
         long defend = defender.getUpperDef();
-        defend = defend / 2;
-        defend = defend + random.nextLong(defend);
+        if(defend > 4) {
+            defend = defend / 3;
+            defend = defend * 2 + random.nextLong(defend);
+        }
         if (isParry) {
             battleMessage.parry((NameObject)defender);
             //格挡，生效防御力三倍

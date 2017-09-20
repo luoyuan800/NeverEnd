@@ -194,6 +194,12 @@ public class NeverEndServlet extends HttpServlet {
             PrintWriter writer = null;
             Boolean success = null;
             switch (path) {
+                case REAL_BATTLE_TARGET_RECORD:
+                    writeObject(response, process.pollBattleTargetRecord(ownerId));
+                    break;
+                case REAL_BATTLE_TURN:
+                    writeObject(response, process.pollRealBattleTurn(ownerId));
+                    break;
                 case TOP_N_PALACE:
                     writeObject(response, process.pollTopNPalaceRecords(request.getIntHeader(Field.COUNT)));
                     break;
@@ -218,7 +224,8 @@ public class NeverEndServlet extends HttpServlet {
                     break;
                 case POLL_REAL_BATTLE_STATE:
                     String msgId = request.getHeader(Field.REAL_MSG_ID);
-                    writeObject(response, process.pollCurrentState(ownerId, request.getIntHeader(Field.INDEX), msgId, readObject(request)));
+                    RealState cstate = readObject(request);
+                    writeObject(response, process.pollCurrentState(ownerId, request.getIntHeader(Field.INDEX), msgId, cstate));
                     break;
                 case POLL_REAL_RECORD:
                     writeObject(response, process.pollRealRecord(ownerId));

@@ -248,4 +248,24 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
         return record
     }
 
+    fun pollTargetRecord(id:String):LevelRecord?{
+        val rtb = battling[id]
+        if(rtb!=null){
+            if(rtb.p1.id == id){
+                return rtb.p2Record!!
+            }else{
+                return rtb.p1Record!!
+            }
+        }
+        return null
+    }
+
+    fun pollBattleTurn(id:String):Long{
+        val rtb = battling[id]
+        if(rtb!=null){
+           return rtb.turn
+        }
+        return 0
+    }
+
 }

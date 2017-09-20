@@ -19,6 +19,15 @@ class NPCLevelRecord(hero:Hero):LevelRecord(hero) {
         private const val serialVersionUID: Long = Field.SERVER_VERSION
     }
     var sex = 0
+    val message = mutableListOf<String>()
+        get(){
+            if(field == null){
+                field = mutableListOf<String>()
+            }
+            return field
+        }
+
+    val tips = mutableMapOf("win1" to "渣渣！")
     fun randomAction(random: Random, actionPoint:Int):RealTimeAction{
         var index = 5 + skills.size + actionPoint/100
         index = random.nextInt(index)

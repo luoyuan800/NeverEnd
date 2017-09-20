@@ -53,7 +53,7 @@ class ReleaseManager(private val database: DatabaseConnection, private val apkFo
         try {
             var version = 0
             val sta = con.createStatement();
-            val rs = sta.executeQuery("select version from release")
+            val rs = sta.executeQuery("select `version` from `release`")
             if (rs.next()) {
                 version = rs.getInt(1)
             }

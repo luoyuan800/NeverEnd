@@ -5,7 +5,6 @@
                 android:layout_height="match_parent">
 
     <ImageView
-            android:src="@drawable/evo_an"
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:id="@+id/real_battle_target_pet"
@@ -134,7 +133,6 @@
     </LinearLayout>
 
     <ImageView
-            android:src="@drawable/evo_cao"
             android:layout_width="40sp"
             android:layout_height="40sp"
             android:layout_below="@+id/real_battle_info"

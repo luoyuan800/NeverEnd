@@ -102,7 +102,11 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
         dialog.findViewById(R.id.sort_color).setOnClickListener(this);
         dialog.findViewById(R.id.close).setOnClickListener(this);
         dialog.findViewById(R.id.pet_evolution).setOnClickListener(this);
-        dialog.findViewById(R.id.batch_drop).setOnClickListener(this);
+        View batchDrop = dialog.findViewById(R.id.batch_drop);
+        batchDrop.setOnClickListener(this);
+        if(control.getHero().getGift() == Gift.Epicure){
+            ((Button)batchDrop).setText(Resource.getString(R.string.eqicure_drop_pet));
+        }
     }
 
     public void refreshDetailView(View detailView) {

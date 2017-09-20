@@ -1,9 +1,11 @@
 package cn.luo.yuan.maze.client.service;
 
+import android.widget.ImageView;
 import cn.luo.yuan.maze.Path;
 import cn.luo.yuan.maze.client.display.activity.PalaceActivity;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.RestConnection;
+import cn.luo.yuan.maze.model.LevelRecord;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.real.RealState;
 import cn.luo.yuan.maze.model.real.RealTimeState;
@@ -122,6 +124,36 @@ public class RemoteRealTimeManager implements RealTimeManager {
         if(context.getContext() instanceof PalaceActivity){
             ((PalaceActivity) context.getContext()).updateLevel();
         }
+    }
+
+    @Override
+    public LevelRecord getTargetRecord() {
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(Path.REAL_BATTLE_TARGET_RECORD, RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            Object o = server.connect(connection);
+            if(o instanceof LevelRecord){
+                return (LevelRecord) o;
+            }
+        } catch (IOException e) {
+            LogHelper.logException(e, "Quit remote battle");
+        }
+        return null;
+    }
+
+    @Override
+    public long getTurn() {
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(Path.REAL_BATTLE_TURN, RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            Object o = server.connect(connection);
+            if(o instanceof Long){
+                return (Long) o;
+            }
+        } catch (IOException e) {
+            LogHelper.logException(e, "Quit remote battle");
+        }
+        return 0;
     }
 
     @Override

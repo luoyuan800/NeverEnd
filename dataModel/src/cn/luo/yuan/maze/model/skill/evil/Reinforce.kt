@@ -56,6 +56,9 @@ class Reinforce() : AtkSkill(), UpgradeAble {
         val hero = parameter!!.owner
         val rs = SkipThisTurn()
         if (hero is Hero) {
+            hero.effects.removeAll {
+                it!=null && it.tag == id
+            }
             val hppe = HPPercentEffect()
             hppe.tag = this.id
             hppe.setPercent(percen)

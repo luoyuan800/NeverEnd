@@ -4,6 +4,8 @@ package cn.luo.yuan.maze;
  * Created by gluo on 7/6/2017.
  */
 public class Path {
+    public static final String REAL_BATTLE_TURN = "real_battle_turn";
+    public static final String REAL_BATTLE_TARGET_RECORD = "real_battle_target_record";
     public static final String TOP_N_PALACE = "top_n_palace";
     public static final String REAL_BATTLE_QUIT = "real_battle_quit";
     public static final String REAL_BATTLE_ACTION = "real_battle_acton";

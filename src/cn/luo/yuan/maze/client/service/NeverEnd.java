@@ -130,6 +130,11 @@ public class NeverEnd extends Application implements InfoControlInterface {
         }, context, false);
     }
 
+    @Override
+    public void setRandomNPC(NPCLevelRecord npc) {
+        viewHandler.showNPCIcon(npc);
+    }
+
     public void setContext(Context context, DataManager dataManager) {
         this.context = context;
         executor = Executors.newScheduledThreadPool(5);

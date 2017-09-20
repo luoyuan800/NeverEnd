@@ -5,7 +5,6 @@
               android:layout_height="wrap_content">
 
     <ImageView
-            android:src="@drawable/evo_an"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:id="@+id/pet_image"

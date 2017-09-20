@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.client.service;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.LevelRecord;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.NPCLevelRecord;
 import cn.luo.yuan.maze.model.Pet;
@@ -129,4 +130,12 @@ public class LocalRealTimeManager implements RealTimeManager {
         }
     }
 
+    public NPCLevelRecord getTargetRecord() {
+        return targetRecord;
+    }
+
+    @Override
+    public long getTurn() {
+        return realTimeBattle.getTurn();
+    }
 }

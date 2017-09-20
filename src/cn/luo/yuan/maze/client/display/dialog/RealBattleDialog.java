@@ -20,6 +20,8 @@ import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.HarmAble;
+import cn.luo.yuan.maze.model.LevelRecord;
+import cn.luo.yuan.maze.model.NPCLevelRecord;
 import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.real.BattleEnd;
 import cn.luo.yuan.maze.model.real.Battling;
@@ -33,6 +35,8 @@ import cn.luo.yuan.maze.service.real.RealTimeManager;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -143,9 +147,19 @@ public class RealBattleDialog implements View.OnClickListener {
                             HarmAble loser = ((BattleEnd) state).getLoser();
                             if (winner != null && loser != null) {
                                 if (winner.getId().equals(my.getId())) {
-                                    IAmWinner((BattleEnd) state);
+                                    executor.execute(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            IAmWinner((BattleEnd) state);
+                                        }
+                                    });
                                 } else {
-                                    IAmLoser((BattleEnd) state);
+                                    executor.execute(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            IAmLoser((BattleEnd) state);
+                                        }
+                                    });
                                 }
                                 stop();
                             }
@@ -330,36 +344,102 @@ public class RealBattleDialog implements View.OnClickListener {
     }
 
     private void IAmLoser(BattleEnd state) {
-        root.findViewById(R.id.real_battle_timer).setVisibility(View.INVISIBLE);
-        TextView textView = (TextView) root.findViewById(R.id.start_text);
-        textView.setVisibility(View.VISIBLE);
-        ViewHandler.setText(textView, R.string.real_lost);
-        root.findViewById(R.id.real_battle_close).setVisibility(View.VISIBLE);
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                root.findViewById(R.id.real_battle_timer).setVisibility(View.INVISIBLE);
+                TextView textView = (TextView) root.findViewById(R.id.start_text);
+                textView.setVisibility(View.VISIBLE);
+                ViewHandler.setText(textView, R.string.real_lost);
+                root.findViewById(R.id.real_battle_close).setVisibility(View.VISIBLE);
+            }
+        });
+
+        LevelRecord targetRecord = manager.getTargetRecord();
+        if(targetRecord instanceof NPCLevelRecord){
+            long turn = manager.getTurn();
+            if(turn < 3){
+                final String s = ((NPCLevelRecord) targetRecord).getTips().get("win1");
+                if(StringUtils.isNotEmpty(s)) {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            MessageDialog dialog = new MessageDialog(context, Collections.singletonList(s));
+                            dialog.show();
+                        }
+                    });
+                }
+            }else {
+                final String s = ((NPCLevelRecord) targetRecord).getTips().get("win");
+                if(StringUtils.isNotEmpty(s)){
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            MessageDialog dialog = new MessageDialog(context, Collections.singletonList(s));
+                            dialog.show();
+                        }
+                    });
+                }
+            }
+        }
     }
 
     private void IAmWinner(final BattleEnd state) {
         if (currentShowingSubDialog == null) {
-            root.findViewById(R.id.real_battle_timer).setVisibility(View.INVISIBLE);
-            TextView textView = (TextView) root.findViewById(R.id.start_text);
-            textView.setVisibility(View.VISIBLE);
-            ViewHandler.setText(textView, R.string.real_win);
-            handler.postDelayed(new Runnable() {
+            handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (StringUtils.isNotEmpty(state.getUpgradeTip())) {
-                        currentShowingSubDialog = SimplerDialogBuilder.build(state.getUpgradeTip(), Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                main.dismiss();
-                            }
-                        }, context.getContext(), context.getRandom());
-                    } else if (StringUtils.isNotEmpty(state.getWinTip())) {
-                        currentShowingSubDialog = SimplerDialogBuilder.build(state.getWinTip(), Resource.getString(R.string.conform), context.getContext(), context.getRandom());
-                    }
-
+                    root.findViewById(R.id.real_battle_timer).setVisibility(View.INVISIBLE);
+                    TextView textView = (TextView) root.findViewById(R.id.start_text);
+                    textView.setVisibility(View.VISIBLE);
+                    ViewHandler.setText(textView, R.string.real_win);
                 }
-            }, 100);
+            });
+
+            LevelRecord targetRecord = manager.getTargetRecord();
+            if(targetRecord instanceof NPCLevelRecord) {
+                long turn = manager.getTurn();
+                final String s;
+                if (turn < 3) {
+                    s = ((NPCLevelRecord) targetRecord).getTips().get("lost1");
+                    state.setAwardMate(3000);
+                } else {
+                    s = ((NPCLevelRecord) targetRecord).getTips().get("lost");
+                    state.setAwardMate(2000);
+                }
+                if (StringUtils.isNotEmpty(s)) {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            MessageDialog dialog = new MessageDialog(context, Collections.singletonList(s));
+                            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                @Override
+                                public void onDismiss(DialogInterface dialog) {
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (StringUtils.isNotEmpty(state.getUpgradeTip())) {
+                                                currentShowingSubDialog = SimplerDialogBuilder.build(state.getUpgradeTip(), Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        dialog.dismiss();
+                                                        main.dismiss();
+                                                    }
+                                                }, context.getContext(), context.getRandom());
+                                            } else if (StringUtils.isNotEmpty(state.getWinTip())) {
+                                                currentShowingSubDialog = SimplerDialogBuilder.build(state.getWinTip(), Resource.getString(R.string.conform), context.getContext(), context.getRandom());
+                                            }
+
+                                        }
+                                    }, 100);
+                                }
+                            });
+                            dialog.show();
+                        }
+                    });
+                }
+            }
+
             if (state.getAwardMate() > 0) {
                 context.getHero().setMaterial(context.getHero().getMaterial() + state.getAwardMate());
             }

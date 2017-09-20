@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.text.Html;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,13 +18,17 @@ import cn.luo.yuan.maze.client.display.activity.GameActivity;
 import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.dialog.GiftDialog;
 import cn.luo.yuan.maze.client.display.dialog.MessageDialog;
+import cn.luo.yuan.maze.client.display.dialog.RealBattleDialog;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
+import cn.luo.yuan.maze.client.service.LocalRealTimeManager;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.ClientPetMonsterHelper;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.client.utils.SDFileUtils;
 import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.LevelRecord;
+import cn.luo.yuan.maze.model.NPCLevelRecord;
 import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
@@ -454,6 +459,77 @@ public class GameActivityViewHandler extends Handler {
             }
         });
 
+    }
+
+    public void showNPCIcon(final NPCLevelRecord npcLevelRecord){
+        post(new Runnable() {
+            @Override
+            public void run(){
+                View npc = context.findViewById(R.id.npc_button);
+                npc.setVisibility(View.VISIBLE);
+                npc.setTag(npcLevelRecord);
+            }
+        });
+    }
+
+    public void hidNPCIcon(){
+        post(new Runnable() {
+            @Override
+            public void run(){
+                View npc = context.findViewById(R.id.npc_button);
+                npc.setVisibility(View.INVISIBLE);
+                npc.setTag(null);
+            }
+        });
+    }
+
+    public void showNPCDialog(){
+        final NPCLevelRecord record = (NPCLevelRecord) context.findViewById(R.id.npc_button).getTag();
+        if(record!=null) {
+            SimplerDialogBuilder.build(Resource.getString(
+                    R.string.npc_tip, record.getSex() == 0 ? Resource.getString(R.string.npc_man) : Resource.getString(R.string.npc_gril)),
+                    Resource.getString(R.string.npc_accept), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            if(record.getMessage().isEmpty()){
+                                npcbattle(record);
+                            }else {
+                                MessageDialog msgD = new MessageDialog(context, record.getMessage());
+                                msgD.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialog) {
+                                        npcbattle(record);
+                                    }
+                                });
+                                msgD.setPic(Resource.loadImageFromAssets(record.getHead(), true));
+                                msgD.setPosition(Gravity.CENTER_VERTICAL);
+                                msgD.show();
+                            }
+                        }
+                    }, Resource.getString(R.string.npc_refuse), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            hidNPCIcon();
+                            dialog.dismiss();
+                        }
+                    }, context);
+
+        }
+    }
+
+    public void npcbattle(NPCLevelRecord record) {
+        Hero hero = neverEnd.getHero().clone();
+        hero.setHp(hero.getMaxHp());
+        LevelRecord lr = new LevelRecord(hero);
+        final LocalRealTimeManager manager = new LocalRealTimeManager(neverEnd, record.getHero());
+        manager.setTargetRecord(record);
+        post(new Runnable() {
+            @Override
+            public void run() {
+                new RealBattleDialog(manager, neverEnd, "local");
+            }
+        });
     }
 }
 

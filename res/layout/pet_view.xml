@@ -100,7 +100,6 @@
 
         <ImageView
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/evo_an"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:id="@+id/pet_image"

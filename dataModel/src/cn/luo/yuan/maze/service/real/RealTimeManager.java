@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.service.real;
 
+import cn.luo.yuan.maze.model.LevelRecord;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.real.RealState;
 import cn.luo.yuan.maze.model.real.RealTimeState;
@@ -21,4 +22,8 @@ public interface RealTimeManager {
     void setId(String id);
     String getId();
     void quit();
+
+    LevelRecord getTargetRecord();
+
+    long getTurn();
 }
