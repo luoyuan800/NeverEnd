@@ -445,6 +445,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
             AccessoryHelper.unMountAccessory(accessory, hero, this);
         }
         getDataManager().cleanAccessories();
+        hero.getEffects().clear();
         hero.getPets().clear();
         getDataManager().cleanPets();
         getDataManager().cleanGoods();

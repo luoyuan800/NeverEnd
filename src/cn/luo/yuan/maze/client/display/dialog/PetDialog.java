@@ -316,8 +316,7 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                 buttonView.setChecked(false);
             }
         } else if (!isChecked && currentPet.isMounted()) {
-            control.getHero().getPets().remove(currentPet);
-            currentPet.setMounted(false);
+            control.getPetMonsterHelper().unMountPet(currentPet, control.getHero());
         }
         adapter.notifyDataSetChanged();
         control.getDataManager().savePet(currentPet);

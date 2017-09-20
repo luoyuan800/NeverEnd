@@ -188,8 +188,7 @@ public class RunningService implements RunningServiceInterface {
                                                 listener.catchPet(pet);
                                             }
                                             if (hero.getPets().size() < 1) {
-                                                hero.getPets().add(pet);
-                                                pet.setMounted(true);
+                                                gameContext.getPetMonsterHelper().mountPet(pet, hero);
                                                 gameContext.getViewHandler().refreshPets(hero);
                                             }
                                             dataManager.savePet(pet);

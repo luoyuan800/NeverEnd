@@ -374,6 +374,15 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
         }
     }
 
+    public void unMountPet(Pet pet, Hero hero){
+        for(Pet pet1 : new ArrayList<>(hero.getPets())){
+            if(pet.getId().equals(pet1.getId())){
+                hero.getPets().remove(pet1);
+            }
+        }
+        pet.setMounted(false);
+    }
+
     public Egg buildEgg(Pet p1, Pet p2, InfoControlInterface gameControl) {
         if (!p1.getId().equals(p2.getId())) {
             if (p1.getSex() != p2.getSex()) {
