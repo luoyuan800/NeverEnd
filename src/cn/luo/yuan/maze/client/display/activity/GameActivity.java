@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.client.display.activity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -64,7 +65,7 @@ public class GameActivity extends BaseActivity {
         control.setTextView((RollTextView) findViewById(R.id.info_view));
         if (StringUtils.isEmpty(config.getHead())) {
             config.setHead(control.getRandom().randomItem(Arrays.asList("Actor1_1.png", "Actor2_1.png", "Actor2_2.png", "Actor2_5.png", "Actor2_6.png", "Actor1_2.png", "Actor3_1.png", "Actor3_6.png")));
-            control.getViewHandler().showStartTip();
+            control.getViewHandler().showFirstInTip();
         }
         dataManager.save(config);
         Resource.askWritePermissions(new PermissionRequestListener() {
@@ -267,6 +268,10 @@ public class GameActivity extends BaseActivity {
                 break;
 
         }
+    }
+
+    public void npcImgClick(View view){
+        control.getViewHandler().showNPCDialog();
     }
 
     private void updateMonsterControlButton() {

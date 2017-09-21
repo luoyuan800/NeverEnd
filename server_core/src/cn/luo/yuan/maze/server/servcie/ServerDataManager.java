@@ -4,6 +4,7 @@ import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.persistence.DataManagerInterface;
+import cn.luo.yuan.maze.serialize.ObjectTable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -18,6 +19,12 @@ public class ServerDataManager implements DataManagerInterface {
         this.hero = hero;
         this.config = config;
     }
+
+    @Override
+    public ObjectTable<NPCLevelRecord> getNPCTable() {
+        return null;
+    }
+
     @Override
     public Goods loadGoods(String name) {
         return null;

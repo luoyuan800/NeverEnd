@@ -525,7 +525,7 @@
     <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onClick"
+            android:onClick="npcImgClick"
             android:id="@+id/npc_button"
             android:src="@android:drawable/ic_dialog_alert" android:background="@color/red" android:visibility="invisible"
             android:alpha="0.3"

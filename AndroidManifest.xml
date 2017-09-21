@@ -38,6 +38,7 @@
         <activity android:name="cn.luo.yuan.maze.client.display.activity.GameActivity"/>
         <activity android:name="cn.luo.yuan.maze.client.display.activity.OnlineActivity"/>
         <activity android:name="cn.luo.yuan.maze.client.display.activity.PalaceActivity"/>
+        <activity android:name="cn.luo.yuan.maze.client.display.activity.ImageActivity"/>
 
 
         <!-- Vungle -->

@@ -41,6 +41,7 @@ public class PropertiesDialog implements View.OnClickListener, SeekBar.OnSeekBar
 
     public void show() {
         dialog = SimplerDialogBuilder.build(View.inflate(context.getContext(), R.layout.properties_view, null), Resource.getString(R.string.properties_view_title), context.getContext(), null);
+        dialog.setCancelable(false);
         dialog.findViewById(R.id.range_close).setOnClickListener(this);
         dialog.findViewById(R.id.range_conform).setOnClickListener(this);
         Hero hero = context.getHero();

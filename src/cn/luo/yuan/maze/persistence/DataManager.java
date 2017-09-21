@@ -5,15 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
-import cn.luo.yuan.maze.model.Accessory;
-import cn.luo.yuan.maze.model.Element;
-import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.model.IDModel;
-import cn.luo.yuan.maze.model.Index;
-import cn.luo.yuan.maze.model.Maze;
-import cn.luo.yuan.maze.model.NeverEndConfig;
-import cn.luo.yuan.maze.model.OwnedAble;
-import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.GoodsProperties;
 import cn.luo.yuan.maze.model.skill.Skill;
@@ -57,6 +49,7 @@ public class DataManager implements DataManagerInterface {
     private SerializeLoader<Skill> skillLoader;
     private SerializeLoader<ClickSkill> clickSkillLoader;
     private ObjectTable<NeverEndConfig> configDB;
+    private ObjectTable<NPCLevelRecord> npcLevelRecordObjectTable;
     private ObjectTable<Hero> defenderDB;
     private List<ObjectTable> tables = new ArrayList<>();
 
@@ -77,6 +70,7 @@ public class DataManager implements DataManagerInterface {
         clickSkillLoader = new SerializeLoader<>(ClickSkill.class, context, index);
         configDB = new ObjectTable<>(NeverEndConfig.class, context.getDir(String.valueOf(index), Context.MODE_PRIVATE));
         defenderDB = new ObjectTable<>(Hero.class, context.getDir("defend", Context.MODE_PRIVATE));
+        npcLevelRecordObjectTable = new ObjectTable<>(NPCLevelRecord.class, context.getDir("npc", Context.MODE_PRIVATE));
         this.context = context;
         registerTable(accessoryLoader.getDb());
         registerTable(petLoader.getDb());
@@ -87,6 +81,10 @@ public class DataManager implements DataManagerInterface {
         registerTable(defenderDB);
         tables.add(heroLoader.getDb());
         tables.add(mazeLoader.getDb());
+    }
+
+    public ObjectTable<NPCLevelRecord> getNPCTable(){
+        return npcLevelRecordObjectTable;
     }
 
     public int getIndex() {
@@ -241,7 +239,7 @@ public class DataManager implements DataManagerInterface {
     public void cleanAccessories() {
         for (Accessory accessory : new ArrayList<>(accessoryLoader.loadAll())) {
             if (accessory.getHeroIndex() == index) {
-                delete(accessory.getId());
+                delete(accessory);
             }
         }
     }

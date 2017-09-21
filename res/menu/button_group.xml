@@ -85,7 +85,7 @@
             android:icon="@android:drawable/ic_menu_view"
             android:title="点赞"/>
     <item
-            android:visible="false"
+            android:visible="true"
             android:id="@+id/crash"
             android:icon="@android:drawable/ic_menu_share"
             android:title="实验室"/>

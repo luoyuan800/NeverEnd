@@ -1,18 +1,15 @@
 package cn.luo.yuan.maze.client.service;
 
-import cn.luo.yuan.maze.client.display.dialog.RealBattleDialog;
+import android.nfc.NfcEvent;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Egg;
-import cn.luo.yuan.maze.model.Element;
-import cn.luo.yuan.maze.model.HarmAble;
-import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.model.LevelRecord;
 import cn.luo.yuan.maze.model.NPCLevelRecord;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.serialize.ObjectTable;
 import cn.luo.yuan.maze.service.InfoControlInterface;
-import cn.luo.yuan.maze.service.real.RealTimeBattle;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by gluo on 5/25/2017.
@@ -56,7 +53,7 @@ public class RandomEventService {
             gameControl.addMessage( gameControl.getHero().getDisplayName() + "踩到了传送门，被传送到了迷宫第" + levJ + "层");
             gameControl.getMaze().setLevel(levJ);
         } else {
-            switch (gameControl.getRandom().nextInt(6)) {
+            switch (gameControl.getRandom().nextInt(7)) {
                 case 0:
                     gameControl.addMessage(gameControl.getHero().getDisplayName() + "思考了一下人生...");
                     if (gameControl.getHero().getReincarnate() > 0) {
@@ -119,6 +116,15 @@ public class RandomEventService {
                             }
                         }
                     });
+                case 7:
+                    ObjectTable<NPCLevelRecord> table = gameControl.getDataManager().getNPCTable();
+                    List<String> ids = table.loadIds();
+                    if(ids.size() > 0){
+                        NPCLevelRecord record = table.loadObject(gameControl.getRandom().randomItem(ids));
+                        if(record!=null && gameControl instanceof NeverEnd){
+                            ((NeverEnd) gameControl).getViewHandler().showNPCIcon(record);
+                        }
+                    }
 
                     break;
             }

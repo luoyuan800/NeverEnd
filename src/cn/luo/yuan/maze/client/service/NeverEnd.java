@@ -30,7 +30,6 @@ import cn.luo.yuan.maze.service.SkillHelper;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -482,7 +481,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
         });
     }
 
-    public long resetSkill(@NotNull SkillParameter sp) {
+    public long resetSkill(SkillParameter sp) {
         long totalPoint = 0L;
         sp.set(SkillParameter.CONTEXT, this);
         for (Skill skill : dataManager.loadAllSkill()) {

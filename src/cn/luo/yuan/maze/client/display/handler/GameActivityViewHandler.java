@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.client.display.handler;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -15,9 +16,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.GameActivity;
+import cn.luo.yuan.maze.client.display.activity.ImageActivity;
 import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.dialog.GiftDialog;
-import cn.luo.yuan.maze.client.display.dialog.ImageDialog;
 import cn.luo.yuan.maze.client.display.dialog.MessageDialog;
 import cn.luo.yuan.maze.client.display.dialog.RealBattleDialog;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
@@ -302,12 +303,6 @@ public class GameActivityViewHandler extends Handler {
     public void showStartTip(){
         List<String> msg = Arrays.asList(Resource.readStringFromAssets("help", "start_tip").split("<br>"));
         MessageDialog dialog = new MessageDialog(context, msg);
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                showFirstInTip();
-            }
-        });
         dialog.show();
     }
 
@@ -525,7 +520,7 @@ public class GameActivityViewHandler extends Handler {
         }
     }
 
-    public void npcbattle(NPCLevelRecord record) {
+    private void npcbattle(NPCLevelRecord record) {
         Hero hero = neverEnd.getHero().clone();
         hero.setHp(hero.getMaxHp());
         LevelRecord lr = new LevelRecord(hero);
@@ -543,13 +538,8 @@ public class GameActivityViewHandler extends Handler {
         post(new Runnable() {
             @Override
             public void run() {
-                List<Drawable> drawables = new ArrayList<>();
-                drawables.add(Resource.loadImageFromAssets("/help/base_properties.png", true));
-                drawables.add(Resource.loadImageFromAssets("/help/pet_view.png", true));
-                drawables.add(Resource.loadImageFromAssets("/help/button.png", true));
-                ImageDialog id = new ImageDialog(context,drawables);
-                id.setCancelable(false);
-                id.show();
+                Intent gameIntent = new Intent(context, ImageActivity.class);
+                context.startActivity(gameIntent);
             }
         });
     }

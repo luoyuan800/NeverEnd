@@ -24,9 +24,7 @@ import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.client.utils.RestConnection;
 import cn.luo.yuan.maze.client.utils.SDFileUtils;
-import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.Monster;
-import cn.luo.yuan.maze.model.NeverEndConfig;
+import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -243,11 +241,18 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 break;
             case R.id.crash:
 //                throw new RuntimeException("test exception");
-                Monster monster = control.getPetMonsterHelper().randomMonster(5);
+                /*Monster monster = control.getPetMonsterHelper().randomMonster(5);
                 if(monster!=null){
                     LocalRealTimeManager m = new LocalRealTimeManager(control, monster);
                     new RealBattleDialog(m , control, "");
-                }
+                }*/
+                Hero hero = control.getHero().clone();
+                hero.setName("Clone * " + hero.getName());
+                hero.setId("123");
+                NPCLevelRecord record = new NPCLevelRecord(hero);
+                LocalRealTimeManager m = new LocalRealTimeManager(control, hero);
+                m.setTargetRecord(record);
+                new RealBattleDialog(m , control, "");
                 break;
             case R.id.skills:
                 new SkillDialog(control).show();
@@ -256,7 +261,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 showPayDialog();
                 break;
             case R.id.reincarnation:
-                SimplerDialogBuilder.build("转生，慎重！增加难度，重新开始！除了仓库里的宠物和装备，其他都会被清除！。",
+                SimplerDialogBuilder.build("转生，所有属性和技能重置，人物的基础成长会有少许增加。转生后<b>除了</b>仓库里的宠物、物品和装备，背包中的所有东西（宠物、物品和装备）都会被<b>清空</b>！转生后会增加难度，会出现更多的强力怪物！这是给那些想挑战更高难度玩家准备的！一定要慎重！",
                         Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

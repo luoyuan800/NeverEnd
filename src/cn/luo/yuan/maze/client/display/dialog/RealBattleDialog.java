@@ -184,8 +184,7 @@ public class RealBattleDialog implements View.OnClickListener {
                 }
             });
         }else {
-            stop();
-            main.dismiss();
+            quit();
         }
     }
 
@@ -193,20 +192,23 @@ public class RealBattleDialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.real_battle_close:
-                SimplerDialogBuilder.build("确认退出吗？如果战斗中强行退出会被判断失败！", Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        stop();
-                        dialog.dismiss();
-                        main.dismiss();
+                if(currentState instanceof BattleEnd){
+                    quit();
+                }else {
+                    SimplerDialogBuilder.build("确认退出吗？如果战斗中强行退出会被判断失败！", Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            quit();
 
-                    }
-                }, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }, context.getContext());
+                        }
+                    }, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }, context.getContext());
+                }
                 break;
             case R.id.real_battle_atk_action:
                 executor.submit(new Runnable() {
@@ -224,6 +226,11 @@ public class RealBattleDialog implements View.OnClickListener {
                 showDefSkill();
                 break;
         }
+    }
+
+    private void quit() {
+        stop();
+        main.dismiss();
     }
 
     private void showAtkSkill() {

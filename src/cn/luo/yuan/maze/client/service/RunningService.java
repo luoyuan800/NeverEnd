@@ -167,7 +167,7 @@ public class RunningService implements RunningServiceInterface {
                             if (monster != null) {
                                 monster.setHp(monster.getMaxHp());
                                 meet = true;
-                                gameContext.addMessage("遇见了 " + ((NameObject) monster).getDisplayName() + "<br>" + hero.getDisplayName() + ", HP: " + hero.getCurrentHp() + " VS. " + ((NameObject) monster).getDisplayName() + ", HP: " + monster.getCurrentHp());
+                                gameContext.addMessage("遇见了 " + ((NameObject) monster).getDisplayName());
                                 BattleService battleService = new BattleService(hero, monster, gameContext.getRandom(), this);
                                 BattleMessageImp battleMessage = new BattleMessageImp(gameContext);
                                 battleService.setBattleMessage(battleMessage);
