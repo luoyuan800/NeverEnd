@@ -17,6 +17,7 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.GameActivity;
 import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.dialog.GiftDialog;
+import cn.luo.yuan.maze.client.display.dialog.ImageDialog;
 import cn.luo.yuan.maze.client.display.dialog.MessageDialog;
 import cn.luo.yuan.maze.client.display.dialog.RealBattleDialog;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
@@ -301,6 +302,12 @@ public class GameActivityViewHandler extends Handler {
     public void showStartTip(){
         List<String> msg = Arrays.asList(Resource.readStringFromAssets("help", "start_tip").split("<br>"));
         MessageDialog dialog = new MessageDialog(context, msg);
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                showFirstInTip();
+            }
+        });
         dialog.show();
     }
 
@@ -528,6 +535,21 @@ public class GameActivityViewHandler extends Handler {
             @Override
             public void run() {
                 new RealBattleDialog(manager, neverEnd, "local");
+            }
+        });
+    }
+
+    public void showFirstInTip(){
+        post(new Runnable() {
+            @Override
+            public void run() {
+                List<Drawable> drawables = new ArrayList<>();
+                drawables.add(Resource.loadImageFromAssets("/help/base_properties.png", true));
+                drawables.add(Resource.loadImageFromAssets("/help/pet_view.png", true));
+                drawables.add(Resource.loadImageFromAssets("/help/button.png", true));
+                ImageDialog id = new ImageDialog(context,drawables);
+                id.setCancelable(false);
+                id.show();
             }
         });
     }

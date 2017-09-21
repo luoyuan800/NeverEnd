@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <ImageView
+            android:src="@drawable/bak_0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/image_view"
+            android:scaleType="fitXY" android:layout_alignParentTop="true" android:layout_alignParentStart="true"/>
+    <ImageButton
+            android:src="@drawable/mobvista_cm_forward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true" android:id="@+id/next_button"/>
+    <ImageButton
+            android:src="@drawable/mobvista_cm_backward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/prior_button" android:layout_alignTop="@+id/next_button"
+            android:layout_alignParentStart="true"/>
+    <ImageButton
+            android:src="@drawable/mobvista_cm_exits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" android:id="@+id/close_button"/>
+</RelativeLayout>
