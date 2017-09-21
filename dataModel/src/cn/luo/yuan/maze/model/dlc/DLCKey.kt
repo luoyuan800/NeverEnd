@@ -13,10 +13,15 @@ class DLCKey:Serializable {
         private const val serialVersionUID = Field.SERVER_VERSION
     }
     var id = StringUtils.EMPTY_STRING
-    var desc = StringUtils.EMPTY_STRING
+    var type = StringUtils.EMPTY_STRING
     var cost:Int = 0
 
     override fun toString(): String {
-        return "$id - ${StringUtils.formatNumber(cost)}碎片"
+        val typeStr = when(type){
+            MonsterDLC::class.java.simpleName -> "怪物扩展包"
+            SkillDLC::class.java.simpleName -> "技能扩展包"
+            else -> ""
+        }
+        return "($typeStr) $id - ${StringUtils.formatNumber(cost)}碎片"
     }
 }

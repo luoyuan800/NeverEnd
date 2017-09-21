@@ -65,7 +65,7 @@ public abstract class AtkSkill implements Skill, MountAble {
     public SkillResult perform(SkillParameter parameter) {
         useTime ++;
         if(this instanceof UpgradeAble){
-            if(useTime > ((UpgradeAble)this).getLevel() * Data.SKILL_ENABLE_COST * 10){
+            if(useTime > ((UpgradeAble)this).getLevel() * Data.SKILL_ENABLE_COST * 5){
                 ((UpgradeAble)this).upgrade(parameter);
             }
         }

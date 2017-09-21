@@ -93,10 +93,10 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
             if (maxHP > 0) {
                 major.setMaxHp(maxHP);
             }
-            major.setIntimacy(major.getIntimacy() + 3);
+            major.setIntimacy(major.getIntimacy() + 5);
             return true;
         }
-        major.setIntimacy(major.getIntimacy() + 5);
+        major.setIntimacy(major.getIntimacy() + 8);
         return false;
     }
 
