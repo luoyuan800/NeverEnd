@@ -17,6 +17,16 @@ public class TestConnection {
     @Test
     public void testBomb() throws IOException, ClassNotFoundException {
         BombRestConnection connection = new BombRestConnection();
+        //accessory(connection);
+        MyJSON json = connection.queryObjects("NPCPlaceObject", "createAt",8,1);
+        json.parse();
+        List<SimpleToken> tokens  = json.getTokens();
+        for(SimpleToken token : tokens){
+            System.out.println(token);
+        }
+    }
+
+    public void accessory(BombRestConnection connection) {
         System.out.println("count : " + connection.getRowCount("SelfAccessory"));
         MyJSON json = connection.queryObjects("SelfAccessory", "createAt",8,1);
         json.parse();
@@ -32,6 +42,5 @@ public class TestConnection {
         for(Map.Entry<String, MyJSONValue> entry:  effectToken.getData().entrySet()){
             System.out.println(entry.getKey() + ": " + entry.getValue().getValue());
         }
-
     }
 }

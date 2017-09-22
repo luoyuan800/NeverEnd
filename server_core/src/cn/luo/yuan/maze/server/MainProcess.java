@@ -1183,6 +1183,10 @@ public class MainProcess {
             builder.append("\"mac\":\"").append(record.getMac()).append("\",");
             if (record.getData() != null && record.getData().getHero() != null) {
                 builder.append("\"data\":\"").append(record.getData().getHero().toString().replaceAll("\"", "'")).append("\"");
+                if(record.getData().getMaze()!=null) {
+                    builder.append(",");
+                    builder.append("\"level\":").append(record.getData().getMaze().getMaxLevel());
+                }
             } else {
                 builder.append("\"data\":\"").append("NAN").append("\"");
             }
