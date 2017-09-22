@@ -81,15 +81,16 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
         }
         if (major != minor && random.nextLong(major.getLevel()) + random.nextLong(minor.getLevel() / 10) < petUpgradeLimit) {
             major.setLevel(major.getLevel() + 1);
-            long atk = major.getAtk() + random.nextLong(minor.getAtk() * (minor.getLevel() + 1) / 2);
+            float colorReduce = Data.getColorReduce(major.getColor());
+            long atk = major.getAtk() + random.nextLong(minor.getAtk() * (minor.getLevel() + 1)) + (long)(major.getAtk() * colorReduce);
             if (atk > 0) {
                 major.setAtk(atk);
             }
-            long def = major.getDef() + random.nextLong(minor.getDef() * (minor.getLevel() + 1) / 2);
+            long def = major.getDef() + random.nextLong(minor.getDef() * (minor.getLevel() + 1))  + (long)(major.getDef() * colorReduce);
             if (def > 0) {
                 major.setDef(def);
             }
-            long maxHP = major.getMaxHp() + random.nextLong(minor.getMaxHp() * (minor.getLevel() + 1) / 2);
+            long maxHP = major.getMaxHp() + random.nextLong(minor.getMaxHp() * (minor.getLevel() + 1))  + (long)(major.getMaxHp() * colorReduce);
             if (maxHP > 0) {
                 major.setMaxHp(maxHP);
             }
