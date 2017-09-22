@@ -1,11 +1,14 @@
 package cn.luo.yuan.maze.dlc;
 
 import cn.luo.yuan.maze.model.Element;
+import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Monster;
+import cn.luo.yuan.maze.model.NPCLevelRecord;
 import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.model.dlc.DLC;
 import cn.luo.yuan.maze.model.dlc.GoodsDLC;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
+import cn.luo.yuan.maze.model.dlc.NPCDLC;
 import cn.luo.yuan.maze.model.dlc.SkillDLC;
 import cn.luo.yuan.maze.model.goods.types.EmptyAccessory;
 import cn.luo.yuan.maze.model.names.FirstName;
@@ -23,6 +26,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Copyright @Luo
@@ -32,7 +36,7 @@ public class BuildDLC {
     public static File root = new File("dlc");
     public static void main(String... args) throws IOException {
         ObjectTable<DLC> dlcTable = new ObjectTable<DLC>(DLC.class, new File("dlc"));
-        /*buildAngel(dlcTable);
+        buildAngel(dlcTable);
         buildJiuwei(dlcTable);
         buildEmprtyAccessory(dlcTable);
         buildSkillDlc(new Alayer(), dlcTable);
@@ -40,8 +44,56 @@ public class BuildDLC {
         buildSkillDlc(new Decide(), dlcTable);
         buildSkillDlc(new Exorcism(), dlcTable);
         buildSkillDlc(new Masimm(), dlcTable);
-        buildSkillDlc(new Painkiller(), dlcTable);*/
+        buildSkillDlc(new Painkiller(), dlcTable);
         buildEveoo(dlcTable);
+        buildNPC(dlcTable);
+    }
+
+    public static void buildNPC(ObjectTable<DLC> dlcObjectTable) throws IOException{
+        chuyin(dlcObjectTable);
+    }
+
+    public static void chuyin(ObjectTable<DLC> dlcObjectTable) throws IOException {
+        Hero hero = new Hero();
+        hero.setHp(120000);
+        hero.setMaxHp(hero.getHp());
+        hero.setAtk(150000);
+        hero.setDef(180000);
+        hero.setRace(Race.Wizardsr.ordinal());
+        hero.setElement(Element.FIRE);
+        hero.setName("初音未来");
+        hero.setId(hero.getName());
+        NPCLevelRecord record = new NPCLevelRecord(hero);
+        record.setSex(1);
+        record.setLevel(300);
+        record.setHead("chuyin");
+        NPCDLC npcdlc = new NPCDLC();
+        npcdlc.setDebrisCost(1);
+        npcdlc.setDesc("你想邂逅小姐姐吗？那就兑换这个攻击高达10W的小姐姐陪你玩哦！兑换后有一定机率在迷宫中遇见小姐姐。");
+        npcdlc.setNpc(record);
+        npcdlc.setTitle(hero.getName());
+        dlcObjectTable.save(npcdlc);
+    }
+    public static void yuanshuxion(ObjectTable<DLC> dlcObjectTable) throws IOException {
+        Hero hero = new Hero();
+        hero.setHp(4000);
+        hero.setMaxHp(hero.getHp());
+        hero.setAtk(3000);
+        hero.setDef(5000);
+        hero.setRace(Race.Ghosr.ordinal());
+        hero.setElement(Element.FIRE);
+        hero.setName("龙剑森");
+        hero.setId(hero.getName());
+        NPCLevelRecord record = new NPCLevelRecord(hero);
+        record.setSex(1);
+        record.setLevel(100);
+        record.setHead("Actor2_1");
+        NPCDLC npcdlc = new NPCDLC();
+        npcdlc.setDebrisCost(1);
+        npcdlc.setDesc("这是迷失的朋友！我在这迷宫中晃荡多年，对各种怪异早已经见怪不怪了。或许你这个仿佛没有尽头的迷宫产生了绝望，但是外面的世界或许早已……<br>相信在这个世界里，你并不是孤独一人的。<br>继续往上爬吧，总有一天你会找到这个世界的真谛。<br>");
+        npcdlc.setNpc(record);
+        npcdlc.setTitle(hero.getName());
+        dlcObjectTable.save(npcdlc);
     }
 
     public static void buildEmprtyAccessory(ObjectTable<DLC> dlcTable) throws IOException {

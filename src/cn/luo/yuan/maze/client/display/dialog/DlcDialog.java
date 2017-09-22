@@ -115,7 +115,7 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    SimplerDialogBuilder.build(String.format("%s X %s", dlc.getDesc(), StringUtils.formatNumber(dlc.getDebrisCost())), Resource.getString(R.string.buy_label), new DialogInterface.OnClickListener() {
+                    SimplerDialogBuilder.build(String.format("%s - %s碎片", dlc.getDesc(), StringUtils.formatNumber(dlc.getDebrisCost())), Resource.getString(R.string.buy_label), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();

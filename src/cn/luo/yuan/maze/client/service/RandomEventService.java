@@ -122,7 +122,9 @@ public class RandomEventService {
                     if(ids.size() > 0){
                         NPCLevelRecord record = table.loadObject(gameControl.getRandom().randomItem(ids));
                         if(record!=null && gameControl instanceof NeverEnd){
-                            ((NeverEnd) gameControl).getViewHandler().showNPCIcon(record);
+                            if(Math.abs(gameControl.getMaze().getMaxLevel() - record.getLevel()) < 100) {
+                                ((NeverEnd) gameControl).getViewHandler().showNPCIcon(record);
+                            }
                         }
                     }
 

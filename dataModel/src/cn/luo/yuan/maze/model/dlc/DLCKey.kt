@@ -20,6 +20,8 @@ class DLCKey:Serializable {
         val typeStr = when(type){
             MonsterDLC::class.java.simpleName -> "怪物扩展包"
             SkillDLC::class.java.simpleName -> "技能扩展包"
+            NPCDLC::class.java.simpleName -> "随机人物包"
+            GoodsDLC::class.java.simpleName -> "物品包"
             else -> ""
         }
         return "($typeStr) $id - ${StringUtils.formatNumber(cost)}碎片"

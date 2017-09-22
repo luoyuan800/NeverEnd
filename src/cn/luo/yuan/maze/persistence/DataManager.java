@@ -467,7 +467,13 @@ public class DataManager implements DataManagerInterface {
     }
 
     public void add(IDModel object) {
-        if (object instanceof Goods) {
+        if(object instanceof NPCLevelRecord){
+            try {
+                npcLevelRecordObjectTable.save((NPCLevelRecord) object);
+            }catch (Exception e){
+                LogHelper.logException(e, "Save NPC");
+            }
+        }else if (object instanceof Goods) {
             addGoods((Goods) object);
         } else if(object instanceof Skill){
             if(skillLoader.load(object.getId())==null){

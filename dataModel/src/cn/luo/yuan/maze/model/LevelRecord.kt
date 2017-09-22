@@ -10,7 +10,22 @@ import java.io.Serializable
  * Copyright @Luo
  * Created by Gavin Luo on 9/11/2017.
  */
-open class LevelRecord(val id:String):Serializable, Cloneable {
+open class LevelRecord(private var id:String):IDModel, Serializable, Cloneable {
+    override fun getId(): String {
+        return id
+    }
+
+    override fun isDelete(): Boolean {
+        return delete
+    }
+
+    override fun markDelete() {
+        this.delete = true
+    }
+
+    override fun setId(id: String) {
+        this.id = id
+    }
     constructor(hero: Hero):this(hero.id){
         this.hero = hero
         this.skills.addAll(hero.skills.toList().filter { it !is EmptySkill })
@@ -20,6 +35,7 @@ open class LevelRecord(val id:String):Serializable, Cloneable {
     companion object {
         private const val serialVersionUID: Long = Field.SERVER_VERSION
     }
+    private var delete = false
     var point:Long = 0
         set(value){
             priorPoint = field

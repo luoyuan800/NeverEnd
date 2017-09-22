@@ -15,6 +15,7 @@ import java.util.*
  * Created by Gavin Luo on 9/14/2017.
  */
 class NPCLevelRecord(hero:Hero):LevelRecord(hero) {
+
     companion object {
         private const val serialVersionUID: Long = Field.SERVER_VERSION
     }
@@ -28,6 +29,7 @@ class NPCLevelRecord(hero:Hero):LevelRecord(hero) {
         }
 
     val tips = mutableMapOf("win1" to "渣渣！")
+    var level= 300
     fun randomAction(random: Random, actionPoint:Int):RealTimeAction{
         var index = 5 + skills.size + actionPoint/100
         index = random.nextInt(index)

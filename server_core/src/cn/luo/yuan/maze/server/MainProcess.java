@@ -71,7 +71,6 @@ import java.util.concurrent.TimeUnit;
 public class MainProcess {
     public static boolean debug = false;
     public static MainProcess process;
-    public String sing = StringUtils.EMPTY_STRING;
     public ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
     public User user;
     public String heroRange = StringUtils.EMPTY_STRING;
