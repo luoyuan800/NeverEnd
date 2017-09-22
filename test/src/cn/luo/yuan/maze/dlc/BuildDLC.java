@@ -36,7 +36,7 @@ public class BuildDLC {
     public static File root = new File("dlc");
     public static void main(String... args) throws IOException {
         ObjectTable<DLC> dlcTable = new ObjectTable<DLC>(DLC.class, new File("dlc"));
-        buildAngel(dlcTable);
+        /*buildAngel(dlcTable);
         buildJiuwei(dlcTable);
         buildEmprtyAccessory(dlcTable);
         buildSkillDlc(new Alayer(), dlcTable);
@@ -45,12 +45,13 @@ public class BuildDLC {
         buildSkillDlc(new Exorcism(), dlcTable);
         buildSkillDlc(new Masimm(), dlcTable);
         buildSkillDlc(new Painkiller(), dlcTable);
-        buildEveoo(dlcTable);
+        buildEveoo(dlcTable);*/
         buildNPC(dlcTable);
     }
 
     public static void buildNPC(ObjectTable<DLC> dlcObjectTable) throws IOException{
         chuyin(dlcObjectTable);
+        yuanshuxion(dlcObjectTable);
     }
 
     public static void chuyin(ObjectTable<DLC> dlcObjectTable) throws IOException {
@@ -85,9 +86,9 @@ public class BuildDLC {
         hero.setName("龙剑森");
         hero.setId(hero.getName());
         NPCLevelRecord record = new NPCLevelRecord(hero);
-        record.setSex(1);
+        record.setSex(0);
         record.setLevel(100);
-        record.setHead("Actor2_1");
+        record.setHead("Actor2_1.png");
         NPCDLC npcdlc = new NPCDLC();
         npcdlc.setDebrisCost(1);
         npcdlc.setDesc("这是迷失的朋友！我在这迷宫中晃荡多年，对各种怪异早已经见怪不怪了。或许你这个仿佛没有尽头的迷宫产生了绝望，但是外面的世界或许早已……<br>相信在这个世界里，你并不是孤独一人的。<br>继续往上爬吧，总有一天你会找到这个世界的真谛。<br>");
