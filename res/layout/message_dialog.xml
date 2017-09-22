@@ -15,13 +15,23 @@
             android:layout_alignParentBottom="true"
             android:layout_alignTop="@+id/teller_img">
 
-        <TextView
-                android:text="TextView"
+        <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/tell_message"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:gravity="bottom"
-                android:background="@color/toumin"/>
+                >
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/tell_message"
+                    android:gravity="bottom"
+                    android:background="@color/toumin"/>
+        </LinearLayout>
+
+
     </ScrollView>
 
     <ImageView

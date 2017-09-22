@@ -13,6 +13,7 @@
     <color name="toumin">#00000000</color>
     <color name="text_color">#FFFFFF</color>
     <color name="divider_color">#11000000</color>
+    <color name="divider_color_a">#02000000</color>
     <color name="msg_color">#FFFFFFFF</color>
     <color name="dialog_bg">#e74c3c</color>
 

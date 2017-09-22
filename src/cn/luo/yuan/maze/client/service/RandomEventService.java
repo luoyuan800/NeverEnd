@@ -1,10 +1,7 @@
 package cn.luo.yuan.maze.client.service;
 
 import android.nfc.NfcEvent;
-import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.Egg;
-import cn.luo.yuan.maze.model.NPCLevelRecord;
-import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.serialize.ObjectTable;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 
@@ -121,8 +118,9 @@ public class RandomEventService {
                     List<String> ids = table.loadIds();
                     if(ids.size() > 0){
                         NPCLevelRecord record = table.loadObject(gameControl.getRandom().randomItem(ids));
-                        if(record!=null && gameControl instanceof NeverEnd){
+                        if(record!=null && record.getHero()!=null &&  gameControl instanceof NeverEnd){
                             if(Math.abs(gameControl.getMaze().getMaxLevel() - record.getLevel()) < 100) {
+                                record.getHero().setElement(gameControl.getRandom().randomItem(Element.values()));
                                 ((NeverEnd) gameControl).getViewHandler().showNPCIcon(record);
                             }
                         }

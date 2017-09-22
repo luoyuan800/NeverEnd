@@ -1,5 +1,7 @@
 package cn.luo.yuan.maze.client.display.handler;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -488,12 +490,14 @@ public class GameActivityViewHandler extends Handler {
     public void showNPCDialog(){
         final NPCLevelRecord record = (NPCLevelRecord) context.findViewById(R.id.npc_button).getTag();
         if(record!=null) {
-            SimplerDialogBuilder.build(Resource.getString(
+            AlertDialog dialog = SimplerDialogBuilder.build(Resource.getString(
                     R.string.npc_tip, record.getSex() == 0 ? Resource.getString(R.string.npc_man) : Resource.getString(R.string.npc_gril)),
                     Resource.getString(R.string.npc_accept), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
+                            hidNPCIcon();
+                            neverEnd.getHero().setMaterial(neverEnd.getHero().getMaterial() - 1000);
                             if(record.getMessage().isEmpty()){
                                 npcbattle(record);
                             }else {
@@ -516,7 +520,10 @@ public class GameActivityViewHandler extends Handler {
                             dialog.dismiss();
                         }
                     }, context);
-
+            Button pb = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            if(pb!=null && neverEnd.getHero().getMaterial() < 1000){
+                pb.setEnabled(false);
+            }
         }
     }
 

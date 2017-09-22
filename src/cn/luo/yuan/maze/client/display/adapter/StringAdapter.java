@@ -71,8 +71,8 @@ public class StringAdapter <T> extends BaseAdapter {
         }
         T item = getItem(position);
         ((TextView)convertView).setText(Html.fromHtml(item instanceof NameObject ? ((NameObject) item).getDisplayName() : item.toString()));
-        if(position!=0 && position%2 != 0){
-            convertView.setBackgroundColor(R.color.divider_color);
+        if(position%2 == 0){
+            convertView.setBackgroundColor(R.color.divider_color_a);
         }
         convertView.setTag(R.string.adapter, this);
         convertView.setTag(R.string.item, item);

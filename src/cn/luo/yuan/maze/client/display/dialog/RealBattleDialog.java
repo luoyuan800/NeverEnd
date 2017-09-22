@@ -118,14 +118,13 @@ public class RealBattleDialog implements View.OnClickListener {
                 @Override
                 public void run() {
                     try {
-                        executor.shutdown();
                         manager.quit();
-                        executor.awaitTermination(2, TimeUnit.SECONDS);
                     } catch (Exception e) {
                         LogHelper.logException(e, "Stop real battle");
                     }
                 }
             });
+            executor.shutdown();
         }
     }
 
@@ -142,7 +141,7 @@ public class RealBattleDialog implements View.OnClickListener {
                 @Override
                 public void run() {
                     try {
-                        if (state instanceof BattleEnd) {
+                        if (state instanceof BattleEnd && !executor.isShutdown()) {
                             HarmAble winner = ((BattleEnd) state).getWinner();
                             HarmAble loser = ((BattleEnd) state).getLoser();
                             if (winner != null && loser != null) {
@@ -229,8 +228,8 @@ public class RealBattleDialog implements View.OnClickListener {
     }
 
     private void quit() {
-        stop();
         main.dismiss();
+        stop();
     }
 
     private void showAtkSkill() {
@@ -362,7 +361,7 @@ public class RealBattleDialog implements View.OnClickListener {
             }
         });
 
-        LevelRecord targetRecord = manager.getTargetRecord();
+        final LevelRecord targetRecord = manager.getTargetRecord();
         if(targetRecord instanceof NPCLevelRecord){
             long turn = manager.getTurn();
             if(turn < 3){
@@ -371,7 +370,8 @@ public class RealBattleDialog implements View.OnClickListener {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            MessageDialog dialog = new MessageDialog(context, Collections.singletonList(s));
+                            MessageDialog dialog = new MessageDialog(context.getContext(), Collections.singletonList(s));
+                            dialog.setPic(Resource.loadImageFromAssets(targetRecord.getHead(), true));
                             dialog.show();
                         }
                     });
@@ -382,7 +382,8 @@ public class RealBattleDialog implements View.OnClickListener {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            MessageDialog dialog = new MessageDialog(context, Collections.singletonList(s));
+                            MessageDialog dialog = new MessageDialog(context.getContext(), Collections.singletonList(s));
+                            dialog.setPic(Resource.loadImageFromAssets(targetRecord.getHead(), true));
                             dialog.show();
                         }
                     });
@@ -403,7 +404,7 @@ public class RealBattleDialog implements View.OnClickListener {
                 }
             });
 
-            LevelRecord targetRecord = manager.getTargetRecord();
+            final LevelRecord targetRecord = manager.getTargetRecord();
             if(targetRecord instanceof NPCLevelRecord) {
                 long turn = manager.getTurn();
                 final String s;
@@ -418,7 +419,8 @@ public class RealBattleDialog implements View.OnClickListener {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            MessageDialog dialog = new MessageDialog(context, Collections.singletonList(s));
+                            MessageDialog dialog = new MessageDialog(context.getContext(), Collections.singletonList(s));
+                            dialog.setPic(Resource.loadImageFromAssets(targetRecord.getHead(), true));
                             dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                                 @Override
                                 public void onDismiss(DialogInterface dialog) {
