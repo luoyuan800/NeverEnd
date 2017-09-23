@@ -141,6 +141,7 @@ public class HeroTable implements Runnable {
             record = new ServerRecord();
             record.setId(data.getHero().getId());
         }
+        record.setAward(false);
         record.setMac(data.getMac());
         record.setSubmitDate(System.currentTimeMillis());
         record.setRange(Integer.MAX_VALUE);

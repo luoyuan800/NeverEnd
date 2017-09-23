@@ -45,8 +45,8 @@ public class BuildDLC {
         buildSkillDlc(new Exorcism(), dlcTable);
         buildSkillDlc(new Masimm(), dlcTable);
         buildSkillDlc(new Painkiller(), dlcTable);*/
-        buildEveoo(dlcTable);
-        //buildNPC(dlcTable);
+        //buildEveoo(dlcTable);
+        buildNPC(dlcTable);
     }
 
     public static void buildNPC(ObjectTable<DLC> dlcObjectTable) throws IOException{
@@ -69,7 +69,7 @@ public class BuildDLC {
         record.setLevel(300);
         record.setHead("chuyin");
         NPCDLC npcdlc = new NPCDLC();
-        npcdlc.setDebrisCost(1);
+        npcdlc.setDebrisCost(15);
         npcdlc.setDesc("你想邂逅小姐姐吗？那就兑换这个攻击高达100W的小姐姐陪你玩哦！兑换后有一定机率在迷宫中遇见小姐姐。");
         npcdlc.setNpc(record);
         npcdlc.setTitle(hero.getName());
@@ -90,7 +90,7 @@ public class BuildDLC {
         record.setLevel(100);
         record.setHead("Actor2_1.png");
         NPCDLC npcdlc = new NPCDLC();
-        npcdlc.setDebrisCost(1);
+        npcdlc.setDebrisCost(5);
         npcdlc.setDesc("这是迷失的朋友！我在这迷宫中晃荡多年，对各种怪异早已经见怪不怪了。或许你这个仿佛没有尽头的迷宫产生了绝望，但是外面的世界或许早已……<br>相信在这个世界里，你并不是孤独一人的。<br>继续往上爬吧，总有一天你会找到这个世界的真谛。<br>");
         npcdlc.setNpc(record);
         npcdlc.setTitle(hero.getName());

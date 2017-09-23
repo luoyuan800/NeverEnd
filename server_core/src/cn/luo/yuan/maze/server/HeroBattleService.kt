@@ -156,7 +156,9 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
         otherReciod.dieCount++
         otherReciod.dieTime = System.currentTimeMillis()
         otherReciod.data!!.material += (awardMaterial/2)
-        messager.materialGet(otherReciod.data!!.hero!!.displayName, awardMaterial/2)
+        if(otherReciod.data?.hero!=null) {
+            messager.materialGet(otherReciod.data!!.hero!!.displayName, awardMaterial / 2)
+        }
     }
 
     private fun win(awardMaterial: Long, hero: Hero, messager: Messager, record: ServerRecord) {

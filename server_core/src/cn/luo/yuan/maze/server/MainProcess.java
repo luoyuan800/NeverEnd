@@ -460,7 +460,7 @@ public class MainProcess {
                 for (String id : new ArrayList<String>(heroTable.getAllHeroIds())) {
                     ServerRecord record = heroTable.getRecord(id);
                     if (record != null) {
-                        if (record.getRange() < Integer.MAX_VALUE) {
+                        if (record.getRange() < 150) {
                             record.setAward(true);
                         } else {
                             record.setAward(false);
