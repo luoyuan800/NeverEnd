@@ -50,10 +50,55 @@ public class BuildDLC {
     }
 
     public static void buildNPC(ObjectTable<DLC> dlcObjectTable) throws IOException{
-        chuyin(dlcObjectTable);
-        yuanshuxion(dlcObjectTable);
+        /*chuyin(dlcObjectTable);
+        yuanshuxion(dlcObjectTable);*/
+        leierdan(dlcObjectTable);
+        yuanxiaomei(dlcObjectTable);
     }
 
+    public static void yuanxiaomei(ObjectTable<DLC> dlcObjectTable) throws IOException {
+        Hero hero = new Hero();
+        hero.setMaxHp(500000);
+        hero.setHp(hero.getMaxHp());
+        hero.setAtk(700000);
+        hero.setDef(4000000);
+        hero.setRace(Race.Elyosr.ordinal());
+        hero.setElement(Element.FIRE);
+        hero.setName("袁小梅");
+        hero.setId(hero.getName());
+        NPCLevelRecord record = new NPCLevelRecord(hero);
+        record.setSex(1);
+        record.setLevel(500);
+        record.setHead("Succubus.png");
+        NPCDLC npcdlc = new NPCDLC();
+        npcdlc.setDebrisCost(25);
+        npcdlc.setDesc("不需要钥匙你也可以敲开我的门哦……");
+        npcdlc.setNpc(record);
+        npcdlc.setTitle(hero.getName());
+        dlcObjectTable.save(npcdlc);
+    }
+
+    public static void leierdan(ObjectTable<DLC> dlcObjectTable) throws IOException {
+        Hero hero = new Hero();
+        hero.setMaxHp(7000000);
+        hero.setHp(hero.getMaxHp());
+        hero.setAtk(9000000);
+        hero.setDef(7000000);
+        hero.setRace(Race.Orger.ordinal());
+        hero.setElement(Element.FIRE);
+        hero.setName("雷二蛋");
+        hero.setId(hero.getName());
+        NPCLevelRecord record = new NPCLevelRecord(hero);
+        record.setSex(0);
+        record.setLevel(1000);
+        record.setHead("General_m.png");
+        NPCDLC npcdlc = new NPCDLC();
+        npcdlc.setDebrisCost(5);
+        npcdlc.setDesc("曾经，我很喜欢偷钥匙，但是你们这些混蛋在这个版本竟然都不再需要钥匙了，气死我了！！");
+        npcdlc.setNpc(record);
+        npcdlc.setTitle(hero.getName());
+        dlcObjectTable.save(npcdlc);
+    }
     public static void chuyin(ObjectTable<DLC> dlcObjectTable) throws IOException {
         Hero hero = new Hero();
         hero.setMaxHp(1200000);
