@@ -424,7 +424,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
             Toast.makeText(context, Resource.getString(R.string.need_mate, mate), Toast.LENGTH_SHORT).show();
             return hero.getReincarnate();
         }
-        long level = Data.REINCARNATE_LEVEL + hero.getReincarnate() * Data.REINCARNATE_LEVEL * 2;
+        long level = Data.REINCARNATE_LEVEL + hero.getReincarnate() * Data.REINCARNATE_LEVEL * 3;
         if (maze.getMaxLevel() < level) {
             Toast.makeText(context, Resource.getString(R.string.need_level, level), Toast.LENGTH_SHORT).show();
             return hero.getReincarnate();

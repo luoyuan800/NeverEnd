@@ -44,9 +44,9 @@ public class BuildDLC {
         buildSkillDlc(new Decide(), dlcTable);
         buildSkillDlc(new Exorcism(), dlcTable);
         buildSkillDlc(new Masimm(), dlcTable);
-        buildSkillDlc(new Painkiller(), dlcTable);
-        buildEveoo(dlcTable);*/
-        buildNPC(dlcTable);
+        buildSkillDlc(new Painkiller(), dlcTable);*/
+        buildEveoo(dlcTable);
+        //buildNPC(dlcTable);
     }
 
     public static void buildNPC(ObjectTable<DLC> dlcObjectTable) throws IOException{
@@ -56,9 +56,9 @@ public class BuildDLC {
 
     public static void chuyin(ObjectTable<DLC> dlcObjectTable) throws IOException {
         Hero hero = new Hero();
-        hero.setHp(120000);
+        hero.setHp(1200000);
         hero.setMaxHp(hero.getHp());
-        hero.setAtk(150000);
+        hero.setAtk(1050000);
         hero.setDef(180000);
         hero.setRace(Race.Wizardsr.ordinal());
         hero.setElement(Element.FIRE);
@@ -70,7 +70,7 @@ public class BuildDLC {
         record.setHead("chuyin");
         NPCDLC npcdlc = new NPCDLC();
         npcdlc.setDebrisCost(1);
-        npcdlc.setDesc("你想邂逅小姐姐吗？那就兑换这个攻击高达10W的小姐姐陪你玩哦！兑换后有一定机率在迷宫中遇见小姐姐。");
+        npcdlc.setDesc("你想邂逅小姐姐吗？那就兑换这个攻击高达100W的小姐姐陪你玩哦！兑换后有一定机率在迷宫中遇见小姐姐。");
         npcdlc.setNpc(record);
         npcdlc.setTitle(hero.getName());
         dlcObjectTable.save(npcdlc);

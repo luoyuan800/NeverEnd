@@ -105,13 +105,7 @@
                 android:id="@+id/pet_image"
                 android:scaleType="fitXY"/>
 
-        <TextView
-                android:text="技能"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/pet_skill"/>
-
-        <LinearLayout
+            <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -226,7 +220,35 @@
                     android:id="@+id/pet_farther"
                     android:layout_weight="1"/>
         </LinearLayout>
-        <LinearLayout
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/pet_skill_layout" android:layout_weight="1">
+                <TextView
+                        android:text="技能"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:id="@+id/textView7" android:layout_weight="1"/>
+                <TextView
+                        android:text="技能"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/pet_skill" android:layout_weight="1"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/pet_effect_layout" android:layout_weight="1">
+                <TextView
+                        android:text="增益"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:layout_weight="1"/>
+                <TextView
+                        android:text="增加攻击：100"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/pet_effect" android:effectlayout_weight="1"/>
+            </LinearLayout>
+            <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -244,7 +266,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/pet_intimacy"
                     android:layout_weight="1"/>
-        </LinearLayout>
+            </LinearLayout>
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"

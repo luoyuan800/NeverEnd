@@ -121,8 +121,18 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
             ((TextView) detailView.findViewById(R.id.pet_def)).setText(StringUtils.formatNumber(currentPet.getDef(), false));
             ((TextView) detailView.findViewById(R.id.pet_hp)).setText(StringUtils.formatNumber(currentPet.getHp(), false) + "/" + StringUtils.formatNumber(currentPet.getMaxHp(), false));
             Skill skill = currentPet.getSkills()[0];
-            ((TextView) detailView.findViewById(R.id.pet_skill)).setText(skill != null ? skill.getName() : StringUtils.EMPTY_STRING);
-            ((TextView) detailView.findViewById(R.id.pet_owner)).setText(Html.fromHtml(currentPet.getOwnerName()));
+            if(skill!=null) {
+                detailView.findViewById(R.id.pet_skill_layout).setVisibility(View.VISIBLE);
+                ((TextView) detailView.findViewById(R.id.pet_effect)).setText(Html.fromHtml(StringUtils.formatEffectsAsHtml(currentPet.getContainsEffects())));
+            }else{
+                detailView.findViewById(R.id.pet_skill_layout).setVisibility(View.INVISIBLE);
+            }
+            if(currentPet.getContainsEffects()!=null && !currentPet.getContainsEffects().isEmpty()) {
+                detailView.findViewById(R.id.pet_effect_layout).setVisibility(View.VISIBLE);
+                ((TextView) detailView.findViewById(R.id.pet_owner)).setText(Html.fromHtml(currentPet.getOwnerName()));
+            }else{
+                detailView.findViewById(R.id.pet_effect_layout).setVisibility(View.INVISIBLE);
+            }
             ((TextView) detailView.findViewById(R.id.pet_mother)).setText(Html.fromHtml(currentPet.getMother()));
             ((TextView) detailView.findViewById(R.id.pet_farther)).setText(Html.fromHtml(currentPet.getFarther()));
             ((TextView) detailView.findViewById(R.id.pet_intimacy)).setText(Html.fromHtml(StringUtils.formatIntimacyString(currentPet.getIntimacy())));

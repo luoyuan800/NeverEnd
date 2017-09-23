@@ -11,7 +11,7 @@ import java.io.Serializable
 class ServerRecord : IDModel, Serializable, MessageReceiver {
     override fun receive(msg: String?) {
         if (msg != null)
-            if(messages.isNotEmpty() && (msg.contains("重生次数已经达到上限") || msg.contains("下一场战斗")) && messages.last().contains("重生次数已经达到上限")){
+            if(messages.isNotEmpty() && (msg.contains("重生次数已经达到上限") || msg.contains("下一场战斗")) && (messages.last().contains("重生次数已经达到上限") || messages.last().contains("下一场战斗"))){
                 return
             }else {
                 messages.add(msg)
