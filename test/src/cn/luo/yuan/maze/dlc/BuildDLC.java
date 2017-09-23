@@ -56,8 +56,8 @@ public class BuildDLC {
 
     public static void chuyin(ObjectTable<DLC> dlcObjectTable) throws IOException {
         Hero hero = new Hero();
-        hero.setHp(1200000);
-        hero.setMaxHp(hero.getHp());
+        hero.setMaxHp(1200000);
+        hero.setHp(hero.getMaxHp());
         hero.setAtk(1050000);
         hero.setDef(180000);
         hero.setRace(Race.Wizardsr.ordinal());
@@ -77,8 +77,8 @@ public class BuildDLC {
     }
     public static void yuanshuxion(ObjectTable<DLC> dlcObjectTable) throws IOException {
         Hero hero = new Hero();
-        hero.setHp(4000);
-        hero.setMaxHp(hero.getHp());
+        hero.setMaxHp(4000);
+        hero.setHp(hero.getMaxHp());
         hero.setAtk(3000);
         hero.setDef(5000);
         hero.setRace(Race.Ghosr.ordinal());

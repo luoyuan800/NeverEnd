@@ -97,7 +97,7 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
                                     messager.speak(ohero.displayName, otherRecord.data!!.helloMsg["lost"])
                                 }
                                 win(awardMaterial, hero, messager, record)
-                                lost(otherRecord)
+                                lost(otherRecord, awardMaterial, messager)
                             } else {
                                 if (StringUtils.isNotEmpty(record.data!!.helloMsg["lost"])) {
                                     messager.speak(hero.displayName, record.data!!.helloMsg["lost"])
@@ -105,7 +105,7 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
                                 if (StringUtils.isNotEmpty(otherRecord.data!!.helloMsg["win"])) {
                                     messager.speak(ohero.displayName, otherRecord.data!!.helloMsg["win"])
                                 }
-                                lost(record)
+                                lost(record, awardMaterial, messager)
                                 win(awardMaterial, ohero, messager, otherRecord)
                             }
                             continue@loop
@@ -133,7 +133,7 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
             range()
             table.allHeroIds
                     .mapNotNull { table.getRecord(it) }
-                    .forEach { if(it.data!=null) it.messages.add("下一场战斗 ${main.user.battleInterval} 分钟后开始") }
+                    .forEach { if(it.data!=null && it.dieCount < it.restoreLimit) it.messages.add("下一场战斗 ${main.user.battleInterval} 分钟后开始") }
             table.save()
             LogHelper.info("Finished battle!")
         } catch (exp: Exception) {
@@ -151,10 +151,12 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
         return hContext
     }
 
-    private fun lost(otherReciod: ServerRecord) {
+    private fun lost(otherReciod: ServerRecord, awardMaterial: Long, messager: Messager) {
         otherReciod.lostCount++
         otherReciod.dieCount++
         otherReciod.dieTime = System.currentTimeMillis()
+        otherReciod.data!!.material += (awardMaterial/2)
+        messager.materialGet(otherReciod.data!!.hero!!.displayName, awardMaterial/2)
     }
 
     private fun win(awardMaterial: Long, hero: Hero, messager: Messager, record: ServerRecord) {
