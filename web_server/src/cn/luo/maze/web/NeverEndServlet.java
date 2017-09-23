@@ -222,6 +222,10 @@ public class NeverEndServlet extends HttpServlet {
                         success = true;
                     }
                     break;
+                case UPDATE_REAL_RECORD_PRIOR_POINT:
+                    process.updateRealRecordPriorPoint(ownerId);
+                    success = true;
+                    break;
                 case POLL_REAL_BATTLE_STATE:
                     String msgId = request.getHeader(Field.REAL_MSG_ID);
                     RealState cstate = readObject(request);

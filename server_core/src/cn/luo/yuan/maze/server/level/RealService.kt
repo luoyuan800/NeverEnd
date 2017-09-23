@@ -11,7 +11,6 @@ import cn.luo.yuan.maze.server.MainProcess
 import cn.luo.yuan.maze.service.AccessoryHelper
 import cn.luo.yuan.maze.service.real.RealTimeBattle
 import cn.luo.yuan.maze.utils.Random
-import cn.luo.yuan.maze.utils.StringUtils
 import java.io.File
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -41,9 +40,11 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
     fun run() {
         executor.scheduleAtFixedRate({
             for (i in (0 until ElyosrRealLevel.values().size)) {
-                val record = waiting.poolFirst(0)
-                if (record != null) {
-                    findBattleTarget(record)
+                synchronized(waiting) {
+                    val record = waiting.poolFirst(0)
+                    if (record != null) {
+                        findBattleTarget(record)
+                    }
                 }
             }
         }, 0, 100, TimeUnit.MILLISECONDS)
@@ -69,9 +70,12 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
 
     fun pollTopNRecord(n: Int): List<LevelRecord> {
         val sortRecords = recordDb.loadAll().toMutableList()
+        if (sortRecords.isEmpty()) {
+            return sortRecords
+        }
         sortRecords.sortByDescending { it.point }
 
-        return sortRecords.subList(0, if (n < sortRecords.size) n else sortRecords.size - 1).toList()
+        return sortRecords.subList(0, if (n <= sortRecords.size) n else sortRecords.size).toList()
     }
 
     fun stop() {
@@ -79,11 +83,19 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
         executor.awaitTermination(20, TimeUnit.MILLISECONDS)
     }
 
+    fun updateRealRecordPriorPoint(id:String){
+        val record = queryRecord(id)
+        if(record!=null){
+            record.priorPoint = record.point
+            recordDb.save(record)
+        }
+    }
+
     fun pollState(id: String, msgIndex: Int, battleId: String?, cstate: RealState?): RealState? {
         val record = queryRecord(id)
         if (record != null) {
-            if(cstate!=null) {
-                if(cstate is Waiting && (cstate.priorState == null || cstate.priorState is Waiting)) {
+            if (cstate != null) {
+                if (cstate is Waiting && (cstate.priorState == null || cstate.priorState is Waiting)) {
                     return inQueue(id, record)
                 }
             }
@@ -97,12 +109,12 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
 
     fun inQueue(id: String, record: LevelRecord): RealState {
         synchronized(waiting) {
-            if (battling[record.id] == null ) {
-                if(!waiting.isQueue(record)) {
+            if (battling[record.id] == null) {
+                if (!waiting.isQueue(record)) {
                     val serverRecord = mainProcess.heroTable.getRecord(id)
                     if (serverRecord != null && serverRecord.debris >= Data.PALACE_RANGE_COST) {
                         waiting.addQueue(record)
-                        LogHelper.info(record.hero?.name + " into range")
+                        //LogHelper.info(record.hero?.name + " into range")
                     } else {
                         return NoDebris()
                     }
@@ -118,7 +130,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
     private fun findBattleTarget(record: LevelRecord) {
         executor.execute {
             val targetRecord = waiting.findTarget(record)
-            if (targetRecord != null) {
+            if (targetRecord != null && targetRecord.id != record.id) {
                 val serverRecord = mainProcess.heroTable.getRecord(record.id)
                 if (serverRecord != null) {
                     serverRecord.debris -= Data.PALACE_RANGE_COST
@@ -135,9 +147,9 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
                 LogHelper.info(record.hero?.name + " & " + targetRecord.hero?.name + " start range battle")
             } else {
                 val l = waitingTime[record.id]
-                if(l !=null && l >= 45000){
+                if (l != null && l >= 45000) {
                     val npc = randomLegacyNPC(record.point)
-                    if(npc!=null) {
+                    if (npc != null) {
                         val serverRecord = mainProcess.heroTable.getRecord(record.id)
                         if (serverRecord != null) {
                             serverRecord.debris -= Data.PALACE_RANGE_COST
@@ -146,11 +158,11 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
                         val rtb = RealTimeBattle(record, npc, 2, 1000, 5, 2)
                         battling.put(record.id, rtb)
                         LogHelper.info(record.hero?.name + " & " + npc.hero?.name + " start range battle")
-                    }else{
+                    } else {
                         waitingTime[record.id] = l + 1
                         waiting.addQueue(record)
                     }
-                }else{
+                } else {
                     waitingTime[record.id] = l!! + 1
                     waiting.addQueue(record)
                 }
@@ -170,18 +182,18 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
         return false
     }
 
-    fun singleQuit(id: String, cstate: RealState):RealState {
+    fun singleQuit(id: String, cstate: RealState): RealState {
         val state = Quit()
         val record = recordDb.loadObject(id)
-        if(cstate is Waiting){
+        if (cstate is Waiting) {
             waiting.removeQueue(record)
-            if(battling[id]!=null){
+            if (battling[id] != null) {
                 state.nextState = battling[id]?.pollState(0)
                 LogHelper.info(record.hero?.displayName + " want out range, but he already in battling!")
-            }else{
+            } else {
                 LogHelper.info(record.hero?.displayName + " out range")
             }
-        } else if(cstate is Battling || cstate is BattleEnd){
+        } else if (cstate is Battling || cstate is BattleEnd) {
             battling[id]?.quit(id)
             LogHelper.info(record.hero?.displayName + " quit battling")
         }
@@ -237,33 +249,33 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
         }
     }
 
-    fun randomLegacyNPC(point:Long): LevelRecord? {
+    fun randomLegacyNPC(point: Long): LevelRecord? {
         val c = ElyosrRealLevel.getCurrentLevel(point);
-        val record =  random.randomItem(legacyDb.loadAll().filter {
+        val record = random.randomItem(legacyDb.loadAll().filter {
             ElyosrRealLevel.getCurrentLevel(it.point) == c
         })
-        if(record!=null){
+        if (record != null) {
             initRecord(record)
         }
         return record
     }
 
-    fun pollTargetRecord(id:String):LevelRecord?{
+    fun pollTargetRecord(id: String): LevelRecord? {
         val rtb = battling[id]
-        if(rtb!=null){
-            if(rtb.p1.id == id){
+        if (rtb != null) {
+            if (rtb.p1.id == id) {
                 return rtb.p2Record!!
-            }else{
+            } else {
                 return rtb.p1Record!!
             }
         }
         return null
     }
 
-    fun pollBattleTurn(id:String):Long{
+    fun pollBattleTurn(id: String): Long {
         val rtb = battling[id]
-        if(rtb!=null){
-           return rtb.turn
+        if (rtb != null) {
+            return rtb.turn
         }
         return 0
     }

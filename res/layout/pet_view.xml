@@ -21,14 +21,14 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/sort_intimacy"
                     android:textSize="10sp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" style="@android:style/Widget.DeviceDefault.Button.Inset"/>
             <Button
                     android:text="@string/sort_type_up"
                     android:textSize="10sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/sort_type"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" style="@android:style/Widget.DeviceDefault.Light.Button.Inset"/>
 
             <Button
                     android:text="@string/sort_name_up"
@@ -36,7 +36,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/sort_name"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" style="@android:style/Widget.DeviceDefault.Light.Button.Inset"/>
 
             <Button
                     android:text="@string/sort_color_up"
@@ -44,7 +44,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/sort_color"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" style="@android:style/Widget.DeviceDefault.Light.Button.Inset"/>
         </LinearLayout>
 
         <cn.luo.yuan.maze.client.display.view.LoadMoreListView
@@ -223,6 +223,25 @@
             <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:text="亲密度"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/pet_intimacy_labe"
+                        android:layout_weight="1"/>
+
+                <TextView
+                        android:text="0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/pet_intimacy"
+                        android:layout_weight="1"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent" android:id="@+id/pet_skill_layout" android:layout_weight="1">
                 <TextView
                         android:text="技能"
@@ -246,28 +265,9 @@
                         android:text="增加攻击：100"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/pet_effect" android:effectlayout_weight="1"/>
+                        android:id="@+id/pet_effect" android:layout_weight="1"/>
             </LinearLayout>
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            <TextView
-                    android:text="亲密度"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/pet_intimacy_labe"
-                    android:layout_weight="1"/>
-
-            <TextView
-                    android:text="0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/pet_intimacy"
-                    android:layout_weight="1"/>
-            </LinearLayout>
-        <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

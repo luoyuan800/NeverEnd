@@ -92,6 +92,12 @@ public class PalaceActivity extends BaseActivity {
         if (state instanceof NoDebris) {
             ranging = false;
             gameContext.showPopup(Resource.getString(R.string.not_debris));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.dismiss();
+                }
+            });
             return true;
         }
         if(state instanceof Battling){
@@ -108,6 +114,7 @@ public class PalaceActivity extends BaseActivity {
         }
         if(state instanceof BattleEnd || state instanceof Quit){
             updateLevel();
+            updateTopN();
             ranging= false;
             return true;
         }
@@ -163,9 +170,22 @@ public class PalaceActivity extends BaseActivity {
                                         break;
                                 }
                                 if (isUpgrade) {
-                                    gameContext.showPopup(String.format("恭喜升级为%s", realLevel));
+                                    gameContext.showPopup(String.format("恭喜！升级为%s<br>获得了500点能力点奖励", realLevel));
+                                    gameContext.getHero().setPoint(gameContext.getHero().getPoint() + 500);
+                                    executor.execute(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                HttpURLConnection con = server.getHttpURLConnection(Path.UPDATE_REAL_RECORD_PRIOR_POINT, RestConnection.POST);
+                                                con.addRequestProperty(Field.OWNER_ID_FIELD, gameContext.getHero().getId());
+                                                server.connect(con);
+                                            }catch (Exception e){
+                                                LogHelper.logException(e, "update state prior score");
+                                            }
+                                        }
+                                    });
                                 } else if (isDowngrade) {
-                                    gameContext.showPopup(String.format("抱歉降级为%s", realLevel));
+                                    gameContext.showPopup(String.format("抱歉，降级为%s", realLevel));
                                 }
                             }
                         });
@@ -187,6 +207,10 @@ public class PalaceActivity extends BaseActivity {
         Resource.init(this);
         server = new RestConnection(Field.SERVER_URL, getVersion(), Resource.getSingInfo());
         submitRecord();
+        updateTopN();
+    }
+
+    private void updateTopN() {
         executor.execute(new Runnable() {
             @Override
             public void run() {

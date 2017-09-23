@@ -43,7 +43,6 @@
             android:icon="@android:drawable/ic_menu_agenda"
             android:title="战斗塔"/>
     <item
-            android:visible="false"
             android:id="@+id/palace"
             android:icon="@android:drawable/ic_menu_agenda"
             android:title="殿堂"/>

@@ -121,8 +121,13 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 }, context);
                 break;
             case R.id.help:
-                final  Dialog helpDetailDialog = new MessageDialog(context);
-                helpDetailDialog.setContentView(R.layout.message_dialog);
+                final AlertDialog helpDetailDialog = new AlertDialog.Builder(context).create();
+                helpDetailDialog.setButton(DialogInterface.BUTTON_POSITIVE, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
                 LinearLayout linearLayout = new LinearLayout(context);
                 linearLayout.setOrientation(LinearLayout.VERTICAL);
                 Button bas = new Button(context);
@@ -131,9 +136,8 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 bas.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        helpDetailDialog.setMessage(Html.fromHtml(Resource.readStringFromAssets("help","base")));
                         helpDetailDialog.show();
-                        TextView textView = (TextView) helpDetailDialog.findViewById(R.id.tell_message);
-                        textView.setText(Html.fromHtml(Resource.readStringFromAssets("help","base")));
                     }
                 });
 
@@ -166,9 +170,8 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 petCatch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        helpDetailDialog.setMessage(Html.fromHtml(Resource.readStringFromAssets("help","pet_catch")));
                         helpDetailDialog.show();
-                        TextView textView = (TextView) helpDetailDialog.findViewById(R.id.tell_message);
-                        textView.setText(Html.fromHtml(Resource.readStringFromAssets("help","pet_catch")));
                     }
                 });
 
@@ -178,9 +181,8 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 names.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        helpDetailDialog.setMessage(Html.fromHtml(Resource.readStringFromAssets("help","names")));
                         helpDetailDialog.show();
-                        TextView textView = (TextView) helpDetailDialog.findViewById(R.id.tell_message);
-                        textView.setText(Html.fromHtml(Resource.readStringFromAssets("help","names")));
                     }
                 });
 
@@ -190,9 +192,8 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 tower.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        helpDetailDialog.setMessage(Html.fromHtml(Resource.readStringFromAssets("help","battle_tower")));
                         helpDetailDialog.show();
-                        TextView textView = (TextView) helpDetailDialog.findViewById(R.id.tell_message);
-                        textView.setText(Html.fromHtml(Resource.readStringFromAssets("help","battle_tower")));
                     }
                 });
 
@@ -202,9 +203,8 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 accessory.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        helpDetailDialog.setMessage(Html.fromHtml(Resource.readStringFromAssets("help","accessory")));
                         helpDetailDialog.show();
-                        TextView textView = (TextView) helpDetailDialog.findViewById(R.id.tell_message);
-                        textView.setText(Html.fromHtml(Resource.readStringFromAssets("help","accessory")));
                     }
                 });
 

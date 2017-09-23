@@ -1099,6 +1099,10 @@ public class MainProcess {
         return realService.singleQuit(id, cstate);
     }
 
+    public void updateRealRecordPriorPoint(String id) {
+        realService.updateRealRecordPriorPoint(id);
+    }
+
     private String buildEffectString(Map.Entry<String, MyJSONValue> entry, boolean isElement) {
         String key = entry.getKey();
         Object value = entry.getValue().getValue();

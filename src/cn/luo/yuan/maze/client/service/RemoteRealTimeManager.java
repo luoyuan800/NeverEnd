@@ -9,6 +9,7 @@ import cn.luo.yuan.maze.model.LevelRecord;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.real.RealState;
 import cn.luo.yuan.maze.model.real.RealTimeState;
+import cn.luo.yuan.maze.model.real.Waiting;
 import cn.luo.yuan.maze.model.real.action.AtkAction;
 import cn.luo.yuan.maze.model.real.action.AtkSkillAction;
 import cn.luo.yuan.maze.model.real.action.DefSkillAction;
@@ -39,6 +40,7 @@ public class RemoteRealTimeManager implements RealTimeManager {
     public RemoteRealTimeManager(RestConnection server, NeverEnd context){
         this.server =server;
         this.context = context;
+        currentState = new Waiting();
     }
     @Override
     public void ready() {
@@ -89,7 +91,7 @@ public class RemoteRealTimeManager implements RealTimeManager {
                 currentState = (RealState) o;
                 return (RealState) o;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             LogHelper.logException(e, "Poll remote real state");
         }
         return null;
