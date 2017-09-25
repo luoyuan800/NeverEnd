@@ -1,11 +1,14 @@
 package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.exception.MonsterToPetException;
-import cn.luo.yuan.maze.model.*;
-import cn.luo.yuan.maze.model.names.FirstName;
+import cn.luo.yuan.maze.model.Data;
+import cn.luo.yuan.maze.model.Egg;
+import cn.luo.yuan.maze.model.Element;
+import cn.luo.yuan.maze.model.Hero;
+import cn.luo.yuan.maze.model.Monster;
+import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
-import cn.luo.yuan.maze.utils.MathUtils;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 
@@ -18,7 +21,9 @@ import java.util.Calendar;
  */
 public abstract class PetMonsterHelper implements PetMonsterHelperInterface, MonsterLoader {
     private Random random;
+
     public abstract String getLocalCatchPercent();
+
     public abstract String getGlobalCatchPercent();
 
     public Pet monsterToPet(Monster monster, Hero hero, long level) throws MonsterToPetException {
@@ -28,7 +33,7 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
                 try {
                     Method set = Pet.class.getMethod(method.getName().replaceFirst("get", "set"), method.getReturnType());
                     set.invoke(pet, method.invoke(monster));
-                }catch (Exception e){
+                } catch (Exception e) {
                     //Ignore
                 }
 
@@ -42,9 +47,9 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
         pet.setDef(monster.getDef());
         pet.setSecondName(null);
         pet.setFirstName(null);
-        long atk_l = level * Data.MONSTER_ATK_RISE_PRE_LEVEL * (hero.getReincarnate() + 1)  + monster.getAtkAddition();
-        long def_l = level * Data.MONSTER_DEF_RISE_PRE_LEVEL  * (hero.getReincarnate() + 1) ;
-        long hp_l = level * Data.MONSTER_HP_RISE_PRE_LEVEL  * (hero.getReincarnate() + 1)  + monster.getHpAddition();
+        long atk_l = level * Data.MONSTER_ATK_RISE_PRE_LEVEL * (hero.getReincarnate() + 1) + monster.getAtkAddition();
+        long def_l = level * Data.MONSTER_DEF_RISE_PRE_LEVEL * (hero.getReincarnate() + 1);
+        long hp_l = level * Data.MONSTER_HP_RISE_PRE_LEVEL * (hero.getReincarnate() + 1) + monster.getHpAddition();
         pet.setAtk(pet.getAtk() - atk_l + getRandom().nextLong(getRandom().reduceToSpecialDigit(atk_l, 3)));
         pet.setDef(pet.getDef() - def_l + getRandom().nextLong(getRandom().reduceToSpecialDigit(def_l, 3)));
         pet.setMaxHp(pet.getMaxHp() - hp_l + getRandom().nextLong(getRandom().reduceToSpecialDigit(hp_l, 3)));
@@ -57,12 +62,14 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
         pet.setKeeperName(hero.getName());
         return pet;
     }
-    public  abstract boolean isCatchAble(Monster monster, Hero hero, Random random, int petCount);
+
+    public abstract boolean isCatchAble(Monster monster, Hero hero, Random random, int petCount);
+
     public Monster randomMonster(long level) {
         return randomMonster(level, true);
     }
 
-    public abstract  Monster randomMonster(long level, boolean addKey);
+    public abstract Monster randomMonster(long level, boolean addKey);
 
     public Monster randomMonster() {
         return randomMonster(99999, false);
@@ -72,25 +79,25 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
     public abstract String getDescription(int index, String type);
 
     public boolean upgrade(Pet major, Pet minor) {
-        if(major.isDelete() || minor.isDelete()){
+        if (major.isDelete() || minor.isDelete()) {
             return false;
         }
         int petUpgradeLimit = Data.PET_UPGRADE_LIMIT;
-        if(major.getIndex() != minor.getIndex()){
+        if (major.getIndex() != minor.getIndex()) {
             petUpgradeLimit /= 2;
         }
         if (major != minor && random.nextLong(major.getLevel()) + random.nextLong(minor.getLevel() / 10) < petUpgradeLimit) {
             major.setLevel(major.getLevel() + 1);
             float colorReduce = Data.getColorReduce(major.getColor());
-            long atk = major.getAtk() + random.nextLong(minor.getAtk() * (minor.getLevel() + 1)) + (long)(major.getAtk() * colorReduce);
+            long atk = major.getAtk() + random.nextLong(minor.getAtk() * (minor.getLevel() + 1)) + (long) (major.getAtk() * colorReduce);
             if (atk > 0) {
                 major.setAtk(atk);
             }
-            long def = major.getDef() + random.nextLong(minor.getDef() * (minor.getLevel() + 1))  + (long)(major.getDef() * colorReduce);
+            long def = major.getDef() + random.nextLong(minor.getDef() * (minor.getLevel() + 1)) + (long) (major.getDef() * colorReduce);
             if (def > 0) {
                 major.setDef(def);
             }
-            long maxHP = major.getMaxHp() + random.nextLong(minor.getMaxHp() * (minor.getLevel() + 1))  + (long)(major.getMaxHp() * colorReduce);
+            long maxHP = major.getMaxHp() + random.nextLong(minor.getMaxHp() * (minor.getLevel() + 1)) + (long) (major.getMaxHp() * colorReduce);
             if (maxHP > 0) {
                 major.setMaxHp(maxHP);
             }
@@ -102,18 +109,140 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
     }
 
     public boolean evolution(Pet pet, Hero hero) {
-        if(pet.getIntimacy() > 100) {
+        if (pet.getIntimacy() > 100) {
             int eveIndex = getEvolutionIndex(pet, hero);
             eveIndex = shiershengiaoDetect(eveIndex, hero);
             return evolution(pet, eveIndex);
-        }else{
+        } else {
             return false;
         }
     }
 
+    public abstract int getEvolutionIndex(int index);
+
+    public boolean evolution(Pet pet, int eveIndex) {
+        if (eveIndex != pet.getIndex()) {
+            Monster eveMonster = loadMonsterByIndex(eveIndex);
+            if (eveMonster != null && (eveMonster.getSex() == -1 || eveMonster.getSex() == pet.getSex())) {
+                pet.setIndex(eveMonster.getIndex());
+                pet.setType(eveMonster.getType());
+                pet.setAtk(pet.getAtk() + random.nextLong(eveMonster.getAtk() / 3));
+                pet.setDef(pet.getDef() + random.nextLong(eveMonster.getDef() / 3));
+                pet.setMaxHp(pet.getMaxHp() + random.nextLong(eveMonster.getMaxHp() / 3));
+                pet.setHitRate((pet.getHitRate() + eveMonster.getHitRate()) / 2);
+                pet.setEggRate((pet.getEggRate() + eveMonster.getEggRate()) / 2);
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public Random getRandom() {
+        return random;
+    }
+
+    public void setRandom(Random random) {
+        this.random = random;
+    }
+
+    public boolean mountPet(Pet pet, Hero hero) {
+        if (hero.getPets().size() >= hero.getPetCount() + hero.getReincarnate()) {
+            return false;
+        } else {
+            pet.setMounted(true);
+            hero.getPets().add(pet);
+            hero.getEffects().addAll(pet.getContainsEffects());
+            return true;
+        }
+    }
+
+    public void unMountPet(Pet pet, Hero hero) {
+        for (Pet pet1 : new ArrayList<>(hero.getPets())) {
+            if (pet.getId().equals(pet1.getId())) {
+                hero.getPets().remove(pet1);
+            }
+        }
+        pet.setMounted(false);
+    }
+
+    public Egg buildEgg(Pet p1, Pet p2, InfoControlInterface gameControl) {
+        if (!p1.getId().equals(p2.getId())) {
+            if (p1.getSex() != p2.getSex()) {
+                if (p1.getElement().isReinforce(p2.getElement())) {
+                    float v = getRandom().nextFloat(p1.getEggRate() + p2.getEggRate()) +
+                            getRandom().nextFloat(EffectHandler.getEffectAdditionFloatValue(EffectHandler.EGG, gameControl.getHero().getEffects()));
+                    v /= Data.EGG_RATE_REDUCE;
+                    Monster m1 = loadMonsterByIndex(p1.getIndex());
+                    Monster m2 = loadMonsterByIndex(p2.getIndex());
+                    if (m1 != null && m2 != null && gameControl.getRandom().nextFloat(300) < v) {
+                        Egg egg = new Egg();
+                        egg.setColor(p1.getSex() == 0 ? p1.getColor() : p2.getColor());
+                        float abe = Data.ABE_BASE + EffectHandler.getEffectAdditionFloatValue(EffectHandler.ABE, gameControl.getHero().getEffects()) + (m1.getIndex() != m2.getIndex() ? Data.ABE_BASE : 0);
+                        if (random.nextFloat(10000) < abe) {
+                            Monster monster = randomMonster();
+                            monster.setSex(1);
+                            if (m1.getSex() == 1) {
+                                m1 = monster;
+                            }
+                            if (m2.getSex() == 1) {
+                                m2 = monster;
+                            }
+                            egg.setColor(Data.ORANGE_COLOR);
+                            egg.setMyFirstName("变异");
+                        } else if (((m1.getSex() == 1 && m1.getIndex() == 101) || (m2.getSex() == 1 && m2.getIndex() == 101)) && random.nextFloat(500) < abe) {
+                            int index = getEveeABEIndex(m1.getIndex() == 101? m2.getIndex() : m1.getIndex());
+                            if(index > 0){
+                                Monster monster = loadMonsterByIndex(index);
+                                if(monster!=null){
+                                    if(m1.getSex() == 1){
+                                        m1 = monster;
+                                        m1.setSex(1);
+                                    }else{
+                                        m2 = monster;
+                                        m2.setSex(1);
+                                    }
+                                }
+                            }
+                        }
+                        egg.setType(m1.getSex() == 1 ? m1.getType() : m2.getType());
+                        egg.setElement(gameControl.getRandom().randomItem(Element.values()));
+                        egg.setRace(gameControl.getRandom().randomItem(new Integer[]{m1.getRace().ordinal(), m2.getRace().ordinal()}));
+                        egg.setRank(m1.getSex() == 1 ? m1.getRank() : m2.getRank());
+                        egg.setIndex(m1.getSex() == 1 ? m1.getIndex() : m2.getIndex());
+                        Skill skill = gameControl.getRandom().randomItem(new Skill[]{p1.getSkill(), p2.getSkill(), EmptySkill.EMPTY_SKILL});
+                        if (skill != EmptySkill.EMPTY_SKILL) {
+                            egg.setSkill(skill);
+                        }
+                        egg.step = (m1.getRank() + m2.getRank()) * 10;
+                        egg.setFarther(p1.getSex() == 0 ? p1.getDisplayName() : p2.getDisplayName());
+                        egg.setMother(p1.getSex() == 1 ? p1.getDisplayName() : p2.getDisplayName());
+                        egg.setKeeperId(gameControl.getHero().getId());
+                        egg.setOwnerId(gameControl.getHero().getId());
+                        egg.setOwnerName(gameControl.getHero().getName());
+                        egg.setKeeperName(gameControl.getHero().getName());
+                        egg.setMaxHp(gameControl.getRandom().nextLong(m1.getMaxHp()) + m2.getMaxHp() + getRandom().reduceToSpecialDigit(gameControl.getMaze().getLevel(), 2));
+                        egg.setAtk(gameControl.getRandom().nextLong(m2.getAtk()) + m1.getAtk() + getRandom().reduceToSpecialDigit(gameControl.getMaze().getLevel(), 2));
+                        egg.setDef(gameControl.getRandom().nextLong(m1.getDef()) + m2.getDef() + getRandom().reduceToSpecialDigit(gameControl.getMaze().getLevel(), 2));
+                        egg.setHitRate(m1.getHitRate());
+                        egg.setEggRate(m1.getSex() == 1 ? m1.getEggRate() : m2.getEggRate());
+                        egg.setFirstName(p1.getSex() == 0 ? p1.getFirstName() : p2.getFirstName());
+                        egg.setSecondName(p1.getSex() == 0 ? p2.getSecondName() : p2.getSecondName());
+                        egg.setIntimacy(30);
+                        egg.setSex(getRandom().nextInt(2));
+                        return egg;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public abstract Monster loadMonsterByIndex(int index);
+
     private int getEvolutionIndex(Pet pet, Hero hero) {
-        if(pet.getIndex() == 399){
-            switch (hero.getElement()){
+        if (pet.getIndex() == 399) {
+            switch (hero.getElement()) {
                 case FIRE:
                     return 401;
                 case WATER:
@@ -122,17 +251,15 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
                     return 403;
                 case EARTH:
                     return 400;
-                    default:
-                        return pet.getIndex();
+                default:
+                    return pet.getIndex();
             }
         }
-        if(pet.getIndex() == 101){
+        if (pet.getIndex() == 101) {
             return getEvoevoIndex(pet, hero);
         }
         return getEvolutionIndex(pet.getIndex());
     }
-
-    public abstract int getEvolutionIndex(int index);
 
     private int shiershengiaoDetect(int next, Hero hero) {
         if (next >= 139 && next <= 150) {
@@ -253,7 +380,7 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
                     next = 131;
                     break;
             }
-        } else if (pet.getIntimacy() <= 5 ) {
+        } else if (pet.getIntimacy() <= 5) {
             next = 103;
         } else if (pet.getIntimacy() > 5 && pet.getIntimacy() < 20) {
             next = 104;
@@ -338,109 +465,21 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
         return next;
     }
 
-    public boolean evolution(Pet pet, int eveIndex) {
-        if (eveIndex != pet.getIndex()) {
-            Monster eveMonster = loadMonsterByIndex(eveIndex);
-            if (eveMonster != null && (eveMonster.getSex() == -1 || eveMonster.getSex() == pet.getSex())) {
-                pet.setIndex(eveMonster.getIndex());
-                pet.setType(eveMonster.getType());
-                pet.setAtk(pet.getAtk() + random.nextLong(eveMonster.getAtk() / 3));
-                pet.setDef(pet.getDef() + random.nextLong(eveMonster.getDef() / 3));
-                pet.setMaxHp(pet.getMaxHp() + random.nextLong(eveMonster.getMaxHp() / 3));
-                pet.setHitRate((pet.getHitRate() + eveMonster.getHitRate()) / 2);
-                pet.setEggRate((pet.getEggRate() + eveMonster.getEggRate()) / 2);
-                return true;
-            }
-            return false;
-        }
-        return false;
-    }
-
-    public Random getRandom() {
-        return random;
-    }
-
-    public void setRandom(Random random) {
-        this.random = random;
-    }
-
-    public boolean mountPet(Pet pet, Hero hero){
-        if(hero.getPets().size() >= hero.getPetCount() + hero.getReincarnate()){
-            return false;
-        }else{
-            pet.setMounted(true);
-            hero.getPets().add(pet);
-            hero.getEffects().addAll(pet.getContainsEffects());
-            return true;
+    private int getEveeABEIndex(int o) {
+        switch (o) {
+            case 402:
+                return 107;//Water
+            case 401:
+                return 120;//Fire
+            case 400:
+                return 121;//Earth
+            case 29:
+                return 130;//Ghost
+            case 3:
+                return 110;//Chong
+            default:
+                return 0;
         }
     }
-
-    public void unMountPet(Pet pet, Hero hero){
-        for(Pet pet1 : new ArrayList<>(hero.getPets())){
-            if(pet.getId().equals(pet1.getId())){
-                hero.getPets().remove(pet1);
-            }
-        }
-        pet.setMounted(false);
-    }
-
-    public Egg buildEgg(Pet p1, Pet p2, InfoControlInterface gameControl) {
-        if (!p1.getId().equals(p2.getId())) {
-            if (p1.getSex() != p2.getSex()) {
-                if (p1.getElement().isReinforce(p2.getElement())) {
-                    float v = getRandom().nextFloat(p1.getEggRate() + p2.getEggRate()) +
-                            getRandom().nextFloat(EffectHandler.getEffectAdditionFloatValue(EffectHandler.EGG, gameControl.getHero().getEffects()));
-                    v/=Data.EGG_RATE_REDUCE;
-                    Monster m1 = loadMonsterByIndex(p1.getIndex());
-                    Monster m2 = loadMonsterByIndex(p2.getIndex());
-                    if (m1!=null && m2!=null && gameControl.getRandom().nextFloat(300) < v) {
-                        Egg egg = new Egg();
-                        float abe = Data.ABE_BASE + EffectHandler.getEffectAdditionFloatValue(EffectHandler.ABE, gameControl.getHero().getEffects());
-                        if(random.nextFloat(10000) < abe){
-                            Monster monster = randomMonster();
-                            if(m1.getSex() == 1){
-                                m1 = monster;
-                            }
-                            if(m2.getSex() == 1){
-                                m2 = monster;
-                            }
-                            egg.setColor(Data.ORANGE_COLOR);
-                            egg.setMyFirstName("变异");
-                        }
-                        egg.setType(p1.getSex() == 1 ? p1.getType() : p2.getType());
-                        egg.setElement(gameControl.getRandom().randomItem(Element.values()));
-                        egg.setRace(gameControl.getRandom().randomItem(new Integer[]{p1.getRace().ordinal(), p2.getRace().ordinal()}));
-                        egg.setRank(p1.getSex() == 1 ? p1.getRank() : p2.getRank());
-                        egg.setIndex(p1.getSex() == 1 ? p1.getIndex() : p2.getIndex());
-                        Skill skill = gameControl.getRandom().randomItem(new Skill[]{p1.getSkill(), p2.getSkill(), EmptySkill.EMPTY_SKILL});
-                        if (skill != EmptySkill.EMPTY_SKILL) {
-                            egg.setSkill(skill);
-                        }
-                        egg.setColor(p1.getSex() == 0 ? p1.getColor() : p2.getColor());
-                        egg.step = (p1.getRank() + p2.getRank()) * 10;
-                        egg.setFarther(p1.getSex() == 0? p1.getDisplayName() : p2.getDisplayName());
-                        egg.setMother(p1.getSex() == 1? p1.getDisplayName() : p2.getDisplayName());
-                        egg.setKeeperId(gameControl.getHero().getId());
-                        egg.setOwnerId(gameControl.getHero().getId());
-                        egg.setOwnerName(gameControl.getHero().getName());
-                        egg.setKeeperName(gameControl.getHero().getName());
-                        egg.setMaxHp(gameControl.getRandom().nextLong(m1.getMaxHp()) + m2.getMaxHp() + getRandom().reduceToSpecialDigit(gameControl.getMaze().getLevel(),2));
-                        egg.setAtk(gameControl.getRandom().nextLong(m2.getAtk()) + m1.getAtk() + getRandom().reduceToSpecialDigit(gameControl.getMaze().getLevel(),2));
-                        egg.setDef(gameControl.getRandom().nextLong(m1.getDef()) + m2.getDef() + getRandom().reduceToSpecialDigit(gameControl.getMaze().getLevel(),2));
-                        egg.setHitRate(m1.getHitRate());
-                        egg.setEggRate(p1.getSex() == 1 ? m1.getEggRate() : m2.getEggRate());
-                        egg.setFirstName(p1.getSex() == 0 ? p1.getFirstName() : p2.getFirstName());
-                        egg.setSecondName(p1.getSex() == 0 ? p2.getSecondName() : p2.getSecondName());
-                        egg.setIntimacy(30);
-                        egg.setSex(getRandom().nextInt(2));
-                        return egg;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    public abstract Monster loadMonsterByIndex(int index);
 
 }
