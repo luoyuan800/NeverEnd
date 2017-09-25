@@ -136,9 +136,9 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
             when (action) {
                 is AtkAction -> {
                     if (action.ownerId == actioner!!.id) {
-                        if (defender is SkillAbleObject && !defender.skills.isEmpty() && defender.skills[0] is DefSkill &&
-                                battle.releaseSkill(actioner, defender, random, false, defender.skills[0], getMinHarm())) {
+                        if (defender is SkillAbleObject && !defender.skills.isEmpty() && defender.skills[0] is DefSkill) {
                             //Release skill
+                            battle.releaseSkill(actioner, defender, random, false, defender.skills[0], getMinHarm())
                             defender.skills[0] = EmptySkill.EMPTY_SKILL
                         } else {
                             if(!(defender is PetOwner && battle.petActionOnDef(defender, actioner))){
