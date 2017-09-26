@@ -191,6 +191,7 @@ public class GameActivityViewHandler extends Handler {
             ViewHandler.setText((TextView) context.findViewById(R.id.hero_point),StringUtils.formatNumber(context.control.getHero().getPoint(), false));
             ViewHandler.setText((TextView) context.findViewById(R.id.hero_click),StringUtils.formatNumber(context.control.getHero().getClick(), false));
             ViewHandler.setText((TextView) context.findViewById(R.id.hero_streaking),StringUtils.formatNumber(context.control.getMaze().getStreaking(), false));
+            ViewHandler.setText((TextView) context.findViewById(R.id.hero_die_count),StringUtils.formatNumber(context.control.getMaze().getDie(), false));
             ViewHandler.setText((TextView) context.findViewById(R.id.hero_hp),StringUtils.formatNumber(context.control.getHero().getCurrentHp(), false));
             ViewHandler.setText((TextView) context.findViewById(R.id.hero_max_hp),StringUtils.formatNumber(context.control.getHero().getMaxHp(), false));
             TextView additionHp = (TextView) context.findViewById(R.id.hero_addition_hp);

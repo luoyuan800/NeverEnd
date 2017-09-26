@@ -41,35 +41,42 @@
             android:layout_above="@+id/pet_layout">
 
         <LinearLayout
-                android:layout_weight="1"
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:layout_weight="1">
+
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/hp_label" android:layout_gravity="center_horizontal" android:gravity="center_horizontal"/>
+                    android:text="@string/hp_label"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal"/>
+
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/hero_hp"
-                    android:text="10W" android:singleLine="true" android:layout_gravity="center_horizontal"
+                    android:text="10W"
+                    android:singleLine="true"
+                    android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"/>
 
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="/"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/hero_max_hp"
-                android:text="10000000W"/>
 
             <TextView
-                    android:text="+1000W"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/hero_max_hp"
+                    android:text="10000000W"/>
+
+            <TextView
+                    android:text="+100000000000000999988W"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/hero_addition_hp"
@@ -79,11 +86,12 @@
         </LinearLayout>
 
         <LinearLayout
-                android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:layout_gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -96,7 +104,7 @@
                     android:text="100000W"/>
 
             <TextView
-                    android:text="+100W"
+                    android:text="+10888767755570W"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/hero_atk_addition"
@@ -107,10 +115,11 @@
 
         <LinearLayout
                 android:gravity="center_horizontal"
-                android:layout_weight="1"
                 android:layout_gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -131,12 +140,14 @@
                     android:elevation="1dp"
                     android:textColor="@color/mobvista_reward_green"/>
         </LinearLayout>
+
         <LinearLayout
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -152,18 +163,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="/"/>
+
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/hero_level_max"
                     android:text="10000000W"/>
         </LinearLayout>
+
         <LinearLayout
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -175,12 +189,14 @@
                     android:id="@+id/hero_click"
                     android:text="10000000W"/>
         </LinearLayout>
+
         <LinearLayout
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -194,32 +210,64 @@
                     android:id="@+id/hero_streaking"
                     android:text="10000000W"/>
         </LinearLayout>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1">
+
+            <TextView
+                    android:text="死亡："
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/hero_die_count"
+                    android:layout_weight="1"
+                    android:layout_gravity="fill_horizontal"
+                    android:gravity="fill_horizontal"/>
+
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView6"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+
         <LinearLayout
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/mate_label"/>
+
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/hero_mate"
                     android:text="10000000W"/>
         </LinearLayout>
+
         <LinearLayout
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/point_label"/>
+
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
