@@ -70,6 +70,7 @@ public class RunningService implements RunningServiceInterface {
     private RandomEventService randomEventService;
     private PetMonsterHelper monsterHelper;
     private long saveTime = 0L;
+    private boolean invincible;
 
     public RunningService(Hero hero, Maze maze, NeverEnd gameContext, DataManager dataManager, long fps) {
         startTime = System.currentTimeMillis();
@@ -211,6 +212,7 @@ public class RunningService implements RunningServiceInterface {
                                             pet.setHp(pet.getMaxHp());
                                         }
                                         maze.setLevel(1);
+                                        maze.setDie(maze.getDie() + 1);
                                     }
                                     Log.d("maze", "Battle failed restore");
                                 }
@@ -240,6 +242,14 @@ public class RunningService implements RunningServiceInterface {
 
     public HarmAble getTarget() {
         return target;
+    }
+
+    public void setInvincible(boolean invincible) {
+        this.invincible = invincible;
+    }
+
+    public boolean isInvincible() {
+        return invincible;
     }
 
     private void mazeLevelCalculate() {

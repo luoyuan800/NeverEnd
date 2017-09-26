@@ -22,6 +22,7 @@ public class Maze implements IDModel, Serializable {
     private EncodeLong level = new EncodeLong(1);
     private float meetRate = Data.MONSTER_MEET_RATE;
     private long streaking;//连胜次数
+    private long die;//死亡次数
     private long step;//连续前进步数
     private Set<Effect> effects = new HashSet<>();
 
@@ -89,5 +90,13 @@ public class Maze implements IDModel, Serializable {
 
     public void setStep(long step) {
         this.step = step;
+    }
+
+    public long getDie() {
+        return die;
+    }
+
+    public void setDie(long die) {
+        this.die = die;
     }
 }

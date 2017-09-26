@@ -506,4 +506,42 @@ public class NeverEnd extends Application implements InfoControlInterface {
         }
         return totalPoint;
     }
+
+    public boolean dieCountClear(){
+        long t = maze.getDie() / 2;
+        if(t > 0 && t > 1000){
+            if(t > 60000){
+                t = 30000;
+            }
+            startInvincible(t);
+            maze.setDie(0);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean streakingClear(){
+        long t = maze.getStreaking();
+        if(t > 0 && t > 1000){
+            if(t > 30000){
+                t = 30000;
+            }
+            startInvincible(t);
+            maze.setStreaking(0);
+            return true;
+        }
+        return false;
+    }
+
+     private void startInvincible(long mill){
+        runningService.setInvincible(true);
+        showToast(Resource.getString(R.string.invincible), mill/1000);
+        executor.schedule(new Runnable() {
+            @Override
+            public void run() {
+                runningService.setInvincible(false);
+                showToast(Resource.getString(R.string.quit_invincible));
+            }
+        }, mill, TimeUnit.MILLISECONDS);
+    }
 }

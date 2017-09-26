@@ -139,4 +139,6 @@
     <string name="npc_refuse">不约</string>
     <string name="npc_tip">有个%1$s想和你约架&lt;br&gt;消耗1000点锻造，表现良好的话可以获得最多3倍奖励</string>
     <string name="eqicure_drop_pet">一键烤肉/煎蛋</string>
+    <string name="invincible">开启%1$s的无敌时间！</string>
+    <string name="quit_invincible">结束无敌状态</string>
 </resources>
