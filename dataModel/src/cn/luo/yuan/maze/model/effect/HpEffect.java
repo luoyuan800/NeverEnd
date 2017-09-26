@@ -1,7 +1,5 @@
 package cn.luo.yuan.maze.model.effect;
 
-import cn.luo.yuan.maze.R;
-import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.Field;
 
 /**
@@ -18,9 +16,6 @@ public class HpEffect extends cn.luo.yuan.maze.model.effect.original.HpEffect {
         this.setValue(hp);
     }
 
-    public String toString() {
-        return Resource.getString(R.string.hp_effect) + getValue();
-    }
 
     public cn.luo.yuan.maze.model.effect.original.HpEffect covertToOriginal() {
         cn.luo.yuan.maze.model.effect.original.HpEffect effect = new cn.luo.yuan.maze.model.effect.original.HpEffect();

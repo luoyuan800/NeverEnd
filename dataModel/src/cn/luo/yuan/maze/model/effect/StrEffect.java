@@ -1,7 +1,5 @@
 package cn.luo.yuan.maze.model.effect;
 
-import cn.luo.yuan.maze.R;
-import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.Field;
 
 /**
@@ -16,10 +14,6 @@ public class StrEffect extends cn.luo.yuan.maze.model.effect.original.StrEffect 
 
     public void setStr(long str) {
         this.setValue(str);
-    }
-
-    public String toString() {
-        return Resource.getString(R.string.str_effect) + getValue();
     }
 
     public cn.luo.yuan.maze.model.effect.original.StrEffect covertToOriginal() {

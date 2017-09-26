@@ -1,7 +1,5 @@
 package cn.luo.yuan.maze.model.effect;
 
-import cn.luo.yuan.maze.R;
-import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.Field;
 
 /**
@@ -16,10 +14,6 @@ public class DefEffect extends cn.luo.yuan.maze.model.effect.original.DefEffect 
 
     public void setDef(long def) {
         setValue(def);
-    }
-
-    public String toString() {
-        return Resource.getString(R.string.def_effect) + getValue();
     }
 
     public cn.luo.yuan.maze.model.effect.original.DefEffect covertToOriginal() {

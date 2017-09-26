@@ -1,7 +1,5 @@
 package cn.luo.yuan.maze.model.effect;
 
-import cn.luo.yuan.maze.R;
-import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.Field;
 
 /**
@@ -16,10 +14,6 @@ public class AgiEffect extends cn.luo.yuan.maze.model.effect.original.AgiEffect 
 
     public void setAgi(long agi) {
         setValue(agi);
-    }
-
-    public String toString() {
-        return Resource.getString(R.string.agi_effect) + getValue();
     }
 
     public cn.luo.yuan.maze.model.effect.original.AgiEffect covertToOriginal() {

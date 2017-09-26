@@ -1,7 +1,5 @@
 package cn.luo.yuan.maze.model.effect;
 
-import cn.luo.yuan.maze.R;
-import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.Field;
 
 /**
@@ -16,10 +14,6 @@ public class AtkEffect extends cn.luo.yuan.maze.model.effect.original.AtkEffect 
 
     public void setAtk(long atk) {
         this.setValue(atk);
-    }
-
-    public String toString() {
-        return Resource.getString(R.string.atk_effect) + getValue();
     }
 
     public cn.luo.yuan.maze.model.effect.original.AtkEffect covertToOriginal() {
