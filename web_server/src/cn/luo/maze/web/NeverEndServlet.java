@@ -260,7 +260,16 @@ public class NeverEndServlet extends HttpServlet {
                     response.getOutputStream().write(apk);
                     break;
                 case RETRIEVE_BACK_WAREHOUSE:
-                    success = null != process.deleteFromWarehouse(request.getHeader(Field.ITEM_ID_FIELD), request.getIntHeader(Field.EXPECT_TYPE), ownerId);
+                    int warehouseType = request.getIntHeader(Field.EXPECT_TYPE);
+                    List<String> ids = readObject(request);
+                    if(ids!=null){
+                        for(String id : ids){
+                            process.deleteFromWarehouse(id, warehouseType, ownerId);
+                        }
+                        success = true;
+                    }else {
+                        success = null != process.deleteFromWarehouse(request.getHeader(Field.ITEM_ID_FIELD), warehouseType, ownerId);
+                    }
                     break;
                 case RETRIEVE_WAREHOUSE_LIST:
                     writeObject(response, process.warehouseList(ownerId, request.getIntHeader(Field.EXPECT_TYPE)));

@@ -402,6 +402,19 @@ public class ServerService {
         }
         return false;
     }
+    public boolean batchGetBackWarehouse(ArrayList<String> ids, int type, NeverEnd context){
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(RETRIEVE_BACK_WAREHOUSE, RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            connection.addRequestProperty(Field.EXPECT_TYPE, String.valueOf(type));
+            Object connect = server.connect(ids, connection);
+            return Field.RESPONSE_RESULT_SUCCESS.equals(connect);
+
+        } catch (Exception e) {
+            LogHelper.logException(e, "ServiceService->queryWarehouse");
+        }
+        return false;
+    }
 
     public Object useCdkey(String id, NeverEnd context) {
         try {
