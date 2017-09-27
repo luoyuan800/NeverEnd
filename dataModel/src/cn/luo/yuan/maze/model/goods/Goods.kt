@@ -1,10 +1,9 @@
 package cn.luo.yuan.maze.model.goods
 
-import cn.luo.yuan.maze.model.IDModel
+import cn.luo.yuan.`object`.IDModel
 import cn.luo.yuan.maze.model.OwnedAble
 import cn.luo.yuan.maze.model.Parameter
-import cn.luo.yuan.maze.utils.EncodeInteger
-import cn.luo.yuan.maze.utils.EncodeLong
+import cn.luo.yuan.encode.number.EncodeInteger
 import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.StringUtils
 import java.io.Serializable
@@ -20,7 +19,7 @@ abstract class Goods : Serializable, IDModel, OwnedAble,Cloneable {
     var lock = false;
     var index = 0
     var medId: String = "";
-    private var count: EncodeInteger = EncodeInteger(0)
+    private var count: EncodeInteger = EncodeInteger(0,StringUtils.NUMBER_STRING_FORMATTER)
     abstract var desc: String
     abstract var name: String
     abstract var price: Long
@@ -106,7 +105,7 @@ abstract class Goods : Serializable, IDModel, OwnedAble,Cloneable {
 
     override fun clone(): Goods {
         val clone = super.clone() as Goods
-        clone.count = EncodeInteger(getCount().toLong())
+        clone.count = EncodeInteger(getCount().toLong(),StringUtils.NUMBER_STRING_FORMATTER)
         return clone
     }
 

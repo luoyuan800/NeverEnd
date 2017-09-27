@@ -4,7 +4,7 @@ import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.skill.result.SkillResult;
 import cn.luo.yuan.maze.service.EffectHandler;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 
 /**
  * Created by gluo on 4/27/2017.

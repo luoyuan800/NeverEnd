@@ -1,6 +1,6 @@
 package cn.luo.yuan.maze.model.dlc
 
-import cn.luo.yuan.maze.model.IDModel
+import cn.luo.yuan.`object`.IDModel
 import cn.luo.yuan.maze.model.NPCLevelRecord
 import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.StringUtils

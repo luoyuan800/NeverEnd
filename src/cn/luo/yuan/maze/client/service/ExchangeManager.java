@@ -5,7 +5,7 @@ import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.client.utils.RestConnection;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.ExchangeObject;
-import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.object.IDModel;
 import cn.luo.yuan.maze.model.OwnedAble;
 import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.utils.Field;

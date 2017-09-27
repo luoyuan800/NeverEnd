@@ -11,13 +11,8 @@ import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
-import cn.luo.yuan.maze.utils.Random;
-import cn.luo.yuan.maze.utils.StringUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;

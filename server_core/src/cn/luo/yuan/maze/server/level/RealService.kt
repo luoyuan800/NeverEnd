@@ -5,12 +5,12 @@ import cn.luo.yuan.maze.model.real.*
 import cn.luo.yuan.maze.model.real.action.RealTimeAction
 import cn.luo.yuan.maze.model.real.level.ElyosrRealLevel
 import cn.luo.yuan.maze.model.skill.Skill
-import cn.luo.yuan.maze.serialize.ObjectTable
+import cn.luo.yuan.`object`.serializable.ObjectTable
 import cn.luo.yuan.maze.server.LogHelper
 import cn.luo.yuan.maze.server.MainProcess
 import cn.luo.yuan.maze.service.AccessoryHelper
 import cn.luo.yuan.maze.service.real.RealTimeBattle
-import cn.luo.yuan.maze.utils.Random
+import cn.luo.yuan.utils.Random
 import java.io.File
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap

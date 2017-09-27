@@ -3,7 +3,7 @@ package cn.luo.yuan.maze.service;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.skill.*;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 
 import java.util.Arrays;
 

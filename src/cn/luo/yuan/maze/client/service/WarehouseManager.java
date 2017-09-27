@@ -1,7 +1,7 @@
 package cn.luo.yuan.maze.client.service;
 
 import cn.luo.yuan.maze.client.utils.Resource;
-import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.object.IDModel;
 import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.client.utils.RestConnection;

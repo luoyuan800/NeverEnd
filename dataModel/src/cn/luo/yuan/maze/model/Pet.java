@@ -3,9 +3,10 @@ package cn.luo.yuan.maze.model;
 import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillParameter;
-import cn.luo.yuan.maze.utils.EncodeLong;
+import cn.luo.yuan.encode.number.EncodeLong;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
+import cn.luo.yuan.object.IDModel;
 
 /**
  * Created by gluo on 4/25/2017.
@@ -13,12 +14,12 @@ import cn.luo.yuan.maze.utils.StringUtils;
 public class Pet extends Monster implements IDModel, OwnedAble, MountAble {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private boolean delete;
-    private EncodeLong level = new EncodeLong(0);
+    private EncodeLong level = new EncodeLong(0,StringUtils.NUMBER_STRING_FORMATTER);
     private String id = StringUtils.EMPTY_STRING;
     private String tag = StringUtils.EMPTY_STRING;
     private int heroIndex;
     private boolean mounted;
-    private EncodeLong intimacy = new EncodeLong(0);
+    private EncodeLong intimacy = new EncodeLong(0,StringUtils.NUMBER_STRING_FORMATTER);
     private String ownerId = StringUtils.EMPTY_STRING;
     private String ownerName = StringUtils.EMPTY_STRING;
     private String keeperId = StringUtils.EMPTY_STRING;

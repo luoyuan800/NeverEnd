@@ -14,7 +14,7 @@ import cn.luo.yuan.maze.model.skill.EmptySkill
 import cn.luo.yuan.maze.model.skill.SkillAbleObject
 import cn.luo.yuan.maze.model.skill.result.EndBattleResult
 import cn.luo.yuan.maze.service.BattleService
-import cn.luo.yuan.maze.utils.Random
+import cn.luo.yuan.utils.Random
 import cn.luo.yuan.maze.utils.StringUtils
 import java.util.*
 

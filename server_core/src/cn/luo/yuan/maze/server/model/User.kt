@@ -1,6 +1,6 @@
 package cn.luo.yuan.maze.server.model
 
-import cn.luo.yuan.maze.utils.EncodeLong
+import cn.luo.yuan.encode.number.EncodeLong
 import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.StringUtils
 
@@ -13,7 +13,7 @@ class User : Serializable {
     companion object {
         private const val serialVersionUID: Long = Field.SERVER_VERSION
     }
-    private val pass = EncodeLong(111)
+    private val pass = EncodeLong(111,StringUtils.NUMBER_STRING_FORMATTER)
 
     fun getPass():Long{
             return pass.value

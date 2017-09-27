@@ -13,8 +13,10 @@ import cn.luo.yuan.maze.model.skill.SpecialSkill;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
-import cn.luo.yuan.maze.serialize.ObjectTable;
+import cn.luo.yuan.object.serializable.ObjectTable;
 import cn.luo.yuan.maze.utils.StringUtils;
+import cn.luo.yuan.object.IDModel;
+import cn.luo.yuan.object.Index;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

@@ -1,7 +1,7 @@
 package cn.luo.yuan.maze.service;
 
 import cn.luo.yuan.maze.model.Monster;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

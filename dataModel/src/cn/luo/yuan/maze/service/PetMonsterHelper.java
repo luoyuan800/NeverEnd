@@ -9,7 +9,7 @@ import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.lang.reflect.Method;

@@ -1,8 +1,7 @@
 package cn.luo.yuan.maze.client.service;
 
-import android.nfc.NfcEvent;
 import cn.luo.yuan.maze.model.*;
-import cn.luo.yuan.maze.serialize.ObjectTable;
+import cn.luo.yuan.object.serializable.ObjectTable;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 
 import java.util.ArrayList;

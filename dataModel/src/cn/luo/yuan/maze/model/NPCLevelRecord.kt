@@ -7,7 +7,7 @@ import cn.luo.yuan.maze.model.real.action.RealTimeAction
 import cn.luo.yuan.maze.model.skill.AtkSkill
 import cn.luo.yuan.maze.model.skill.DefSkill
 import cn.luo.yuan.maze.utils.Field
-import cn.luo.yuan.maze.utils.Random
+import cn.luo.yuan.utils.Random
 import java.util.*
 
 /**

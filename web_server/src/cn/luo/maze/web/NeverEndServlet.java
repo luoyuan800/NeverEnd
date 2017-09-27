@@ -194,6 +194,9 @@ public class NeverEndServlet extends HttpServlet {
             PrintWriter writer = null;
             Boolean success = null;
             switch (path) {
+                case RETRIEVE_ALL_WAREHOUSE:
+                    writeObject(response, process.retrieveAllWarehouse(ownerId));
+                    break;
                 case REAL_BATTLE_TARGET_RECORD:
                     writeObject(response, process.pollBattleTargetRecord(ownerId));
                     break;
@@ -260,7 +263,16 @@ public class NeverEndServlet extends HttpServlet {
                     response.getOutputStream().write(apk);
                     break;
                 case RETRIEVE_BACK_WAREHOUSE:
-                    success = null != process.deleteFromWarehouse(request.getHeader(Field.ITEM_ID_FIELD), request.getIntHeader(Field.EXPECT_TYPE), ownerId);
+                    Object o = readObject(request);
+                    int deleterType = request.getIntHeader(Field.EXPECT_TYPE);
+                    if(o instanceof List){
+                        for(String id : (List<String>) o){
+                            process.deleteFromWarehouse(id, deleterType, ownerId);
+                        }
+                        success = true;
+                    }else {
+                        success = null != process.deleteFromWarehouse(request.getHeader(Field.ITEM_ID_FIELD), deleterType, ownerId);
+                    }
                     break;
                 case RETRIEVE_WAREHOUSE_LIST:
                     writeObject(response, process.warehouseList(ownerId, request.getIntHeader(Field.EXPECT_TYPE)));

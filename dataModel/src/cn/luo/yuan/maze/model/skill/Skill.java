@@ -1,8 +1,6 @@
 package cn.luo.yuan.maze.model.skill;
 
-import cn.luo.yuan.maze.model.Data;
-import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.object.IDModel;
 import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.skill.result.SkillResult;
 import cn.luo.yuan.maze.utils.Field;

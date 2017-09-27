@@ -1,6 +1,7 @@
 package cn.luo.yuan.maze.utils;
 
 
+import cn.luo.yuan.encode.number.EncodeLong;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;

@@ -9,7 +9,7 @@ import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.model.skill.Skill;
-import cn.luo.yuan.maze.serialize.ObjectTable;
+import cn.luo.yuan.object.serializable.ObjectTable;
 import cn.luo.yuan.maze.server.LogHelper;
 import cn.luo.yuan.maze.service.AccessoryHelper;
 import cn.luo.yuan.maze.service.SkillHelper;

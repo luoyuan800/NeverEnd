@@ -8,7 +8,7 @@ import cn.luo.yuan.maze.model.skill.result.HarmResult
 import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.service.BattleServiceBase
 import cn.luo.yuan.maze.service.InfoControlInterface
-import cn.luo.yuan.maze.utils.Random
+import cn.luo.yuan.utils.Random
 import cn.luo.yuan.maze.utils.StringUtils
 
 /**
@@ -55,7 +55,7 @@ class EatHarm:DefSkill() {
     }
 
     override fun enable(parameter: SkillParameter) {
-        val random:Random = parameter[SkillParameter.RANDOM]
+        val random: Random = parameter[SkillParameter.RANDOM]
         if(model.canEnable(parameter) && random.nextBoolean()) {
             isEnable = true
         }

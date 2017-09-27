@@ -8,7 +8,7 @@ import cn.luo.yuan.maze.model.skill.result.HarmResult;
 import cn.luo.yuan.maze.model.skill.result.SkillResult;
 import cn.luo.yuan.maze.service.SkillHelper;
 import cn.luo.yuan.maze.utils.Field;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 

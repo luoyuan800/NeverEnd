@@ -12,7 +12,7 @@ import cn.luo.yuan.maze.model.skill.result.DoNoThingResult
 import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.model.skill.result.SkipThisTurn
 import cn.luo.yuan.maze.service.BattleMessage
-import cn.luo.yuan.maze.utils.Random
+import cn.luo.yuan.utils.Random
 import cn.luo.yuan.maze.utils.StringUtils
 
 /**

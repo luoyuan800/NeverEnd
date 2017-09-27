@@ -1,7 +1,7 @@
 package cn.luo.yuan.maze.server;
 
 
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

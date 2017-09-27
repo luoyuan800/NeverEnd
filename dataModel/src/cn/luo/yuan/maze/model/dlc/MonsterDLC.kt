@@ -1,11 +1,8 @@
 package cn.luo.yuan.maze.model.dlc
 
-import cn.luo.yuan.maze.model.IDModel
 import cn.luo.yuan.maze.model.Monster
 import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.StringUtils
-
-import java.io.Serializable
 
 /**
  * Copyright @Luo

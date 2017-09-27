@@ -9,7 +9,7 @@ import cn.luo.yuan.maze.server.servcie.ServerGameContext
 import cn.luo.yuan.maze.service.BattleService
 import cn.luo.yuan.maze.service.InfoControlInterface
 import cn.luo.yuan.maze.service.RunningServiceInterface
-import cn.luo.yuan.maze.utils.Random
+import cn.luo.yuan.utils.Random
 import cn.luo.yuan.maze.utils.StringUtils
 import java.io.File
 import java.util.*

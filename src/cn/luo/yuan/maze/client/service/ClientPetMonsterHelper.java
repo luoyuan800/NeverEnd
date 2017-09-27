@@ -16,7 +16,7 @@ import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
 import cn.luo.yuan.maze.service.EffectHandler;
 import cn.luo.yuan.maze.service.PetMonsterHelper;
 import cn.luo.yuan.maze.utils.Field;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;

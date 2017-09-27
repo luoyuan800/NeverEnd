@@ -2,7 +2,7 @@ package cn.luo.yuan.maze.persistence.serialize;
 
 import android.content.Context;
 import android.util.ArrayMap;
-import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.object.IDModel;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;

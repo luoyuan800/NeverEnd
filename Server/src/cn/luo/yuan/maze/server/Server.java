@@ -241,7 +241,7 @@ public class Server {
             return Field.RESPONSE_RESULT_SUCCESS;
         }));
 
-        post(RETRIEVE_WAREHOUSE, ((request, response) -> {
+        post(RETRIEVE_ALL_WAREHOUSE, ((request, response) -> {
             writeObject(response, process.warehouseTable.retrieveAll(request.headers(Field.OWNER_ID_FIELD)));
             return Field.RESPONSE_RESULT_SUCCESS;
         }));

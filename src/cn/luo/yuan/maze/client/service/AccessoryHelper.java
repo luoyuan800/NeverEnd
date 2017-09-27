@@ -11,7 +11,7 @@ import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.effect.*;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.model.effect.original.ClickMaterialEffect;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 

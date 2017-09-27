@@ -1,5 +1,7 @@
 package cn.luo.yuan.maze.utils;
 
+import cn.luo.yuan.encode.number.EncodeFloat;
+import cn.luo.yuan.utils.Random;
 import org.testng.annotations.Test;
 
 import static org.testng.AssertJUnit.assertEquals;

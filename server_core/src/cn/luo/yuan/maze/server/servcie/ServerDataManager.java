@@ -4,7 +4,8 @@ import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.persistence.DataManagerInterface;
-import cn.luo.yuan.maze.serialize.ObjectTable;
+import cn.luo.yuan.object.serializable.ObjectTable;
+import cn.luo.yuan.object.IDModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;

@@ -28,7 +28,7 @@ import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.service.PetMonsterHelper;
 import cn.luo.yuan.maze.service.SkillHelper;
 import cn.luo.yuan.maze.utils.Field;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.io.Serializable;

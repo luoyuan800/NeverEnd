@@ -10,7 +10,7 @@ import cn.luo.yuan.maze.model.skill.UpgradeAble
 import cn.luo.yuan.maze.model.skill.result.HarmResult
 import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.service.BattleServiceBase
-import cn.luo.yuan.maze.utils.Random
+import cn.luo.yuan.utils.Random
 import cn.luo.yuan.maze.utils.StringUtils
 
 /**
@@ -47,7 +47,7 @@ class SwindlerGame:AtkSkill(),UpgradeAble {
         val hr = HarmResult()
         val hero: HarmAble = parameter[SkillParameter.ATKER]
         val target :HarmAble = parameter[SkillParameter.TARGET]
-        val random:Random = parameter[SkillParameter.RANDOM]
+        val random: Random = parameter[SkillParameter.RANDOM]
         var side = random.nextBoolean()
         val min: Long = parameter[SkillParameter.MINHARM]
         hr.addMessage((hero as NameObject).displayName + "开启欺诈游戏， 抛了一次硬币，结果为：" + if(side) "正" else "反")

@@ -5,7 +5,7 @@ import cn.luo.yuan.maze.listener.HarmListener;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.skill.*;
 import cn.luo.yuan.maze.model.skill.result.*;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import static cn.luo.yuan.maze.service.ListenerService.battleEndListeners;

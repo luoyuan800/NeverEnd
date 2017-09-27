@@ -2,7 +2,7 @@ package cn.luo.yuan.maze.model.names;
 
 
 import cn.luo.yuan.maze.utils.MathUtils;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 
 /**
  * Copyright 2015 luoyuan.

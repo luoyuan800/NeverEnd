@@ -1,5 +1,7 @@
 package cn.luo.yuan.maze.utils;
 
+import cn.luo.yuan.encode.number.EncodeLong;
+
 /**
  * Created by luoyuan on 2017/6/17.
  */

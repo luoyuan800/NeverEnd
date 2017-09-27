@@ -1,6 +1,6 @@
 package cn.luo.yuan.maze.model;
 
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 
 /**
  * Created by gluo on 4/27/2017.

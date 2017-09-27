@@ -4,7 +4,7 @@ import cn.luo.yuan.maze.model.skill.AtkSkill;
 import cn.luo.yuan.maze.model.skill.DefSkill;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.UpgradeAble;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 
 /**
  * 定义一些基本的游戏数据，这些数据只是根据经验和个人喜欢设计的，所以特意抽取出来放到一起方便修改

@@ -19,11 +19,10 @@ import cn.luo.yuan.maze.model.goods.types.ResetSkill;
 import cn.luo.yuan.maze.model.goods.types.Restrictor;
 import cn.luo.yuan.maze.model.goods.types.Scalpel;
 import cn.luo.yuan.maze.model.real.RealState;
-import cn.luo.yuan.maze.model.real.RealTimeState;
 import cn.luo.yuan.maze.model.real.action.RealTimeAction;
 import cn.luo.yuan.maze.model.task.Scene;
 import cn.luo.yuan.maze.model.task.Task;
-import cn.luo.yuan.maze.serialize.ObjectTable;
+import cn.luo.yuan.object.serializable.ObjectTable;
 import cn.luo.yuan.maze.server.bomb.BombRestConnection;
 import cn.luo.yuan.maze.server.bomb.json.MyJSON;
 import cn.luo.yuan.maze.server.bomb.json.MyJSONValue;
@@ -43,7 +42,9 @@ import cn.luo.yuan.maze.server.persistence.WarehouseTable;
 import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection;
 import cn.luo.yuan.maze.service.EffectHandler;
 import cn.luo.yuan.maze.utils.Field;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.object.IDModel;
+import cn.luo.yuan.object.Index;
+import cn.luo.yuan.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -91,7 +92,7 @@ public class MainProcess {
     private ShopTable shop;
     private CribberTable cribber;
     private DLCTable dlcTable;
-    private cn.luo.yuan.maze.utils.Random random = new Random(System.currentTimeMillis());
+    private Random random = new Random(System.currentTimeMillis());
     private ReleaseManager releaseManager;
     private CDKEYTable cdkeyTable;
     private SaveService saveService;
@@ -1243,5 +1244,9 @@ public class MainProcess {
 
     public LevelRecord pollBattleTargetRecord(String myId){
         return realService.pollTargetRecord(myId);
+    }
+
+    public List<OwnedAble> retrieveAllWarehouse(String keeperId){
+        return warehouseTable.retrieveAll(keeperId);
     }
 }

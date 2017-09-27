@@ -12,7 +12,7 @@ import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Accessory;
-import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.object.IDModel;
 import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.ServerData;

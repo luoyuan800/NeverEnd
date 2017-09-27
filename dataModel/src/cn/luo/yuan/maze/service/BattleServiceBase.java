@@ -4,7 +4,7 @@ import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.Race;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 
 /**
  * Created by luoyuan on 2017/7/16.

@@ -12,7 +12,7 @@ import cn.luo.yuan.maze.model.skill.result.SkipThisTurn
 import cn.luo.yuan.maze.service.BattleMessageInterface
 import cn.luo.yuan.maze.service.BattleServiceBase
 import cn.luo.yuan.maze.utils.Field
-import cn.luo.yuan.maze.utils.Random
+import cn.luo.yuan.utils.Random
 import cn.luo.yuan.maze.utils.StringUtils
 
 /**
@@ -62,7 +62,7 @@ class ElementDefend():DefSkill(),UpgradeAble {
         val defender:HarmAble = parameter.owner as HarmAble
         val minHarm:Long = parameter[SkillParameter.MINHARM]
         val messager:BattleMessageInterface = parameter[SkillParameter.MESSAGE]
-        val random:Random = parameter[SkillParameter.RANDOM]
+        val random: Random = parameter[SkillParameter.RANDOM]
         var harm = BattleServiceBase.getHarm(atker, defender,minHarm, random,messager)
         if(defender.element.restriction(atker.element)){
             rs.messages.add((defender as NameObject).displayName + "免疫了" + (atker as NameObject).displayName + "的" + StringUtils.formatNumber(harm, false) + "点伤害(100%)")

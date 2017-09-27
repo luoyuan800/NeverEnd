@@ -21,7 +21,7 @@ import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.goods.Goods;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 

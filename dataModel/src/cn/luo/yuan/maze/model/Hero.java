@@ -7,18 +7,18 @@ import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillAbleObject;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.service.EffectHandler;
-import cn.luo.yuan.maze.utils.EncodeInteger;
-import cn.luo.yuan.maze.utils.EncodeLong;
-import cn.luo.yuan.maze.utils.EncodeNumber;
+import cn.luo.yuan.encode.number.EncodeInteger;
+import cn.luo.yuan.encode.number.EncodeLong;
+import cn.luo.yuan.encode.number.EncodeNumber;
 import cn.luo.yuan.maze.utils.Field;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.object.IDModel;
+import cn.luo.yuan.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
@@ -30,18 +30,18 @@ public class Hero extends HarmObject implements Serializable, IDModel, SkillAble
     private boolean delete;
     private int index;//存档编号
     private String name;//名字
-    private EncodeLong maxHp = new EncodeLong(20);//血上限
-    private EncodeLong hp = new EncodeLong(20);//当前血量
-    private EncodeLong atk = new EncodeLong(15);//基础攻击
-    private EncodeLong def = new EncodeLong(5);//基础防御
-    private EncodeLong agi = new EncodeLong(0);//敏捷
-    private EncodeLong str = new EncodeLong(0);//力量
-    private EncodeLong hpGrow = new EncodeLong(2);//血量成长（每点力量）
-    private EncodeLong defGrow = new EncodeLong(3);//防御成长（每点敏捷）
-    private EncodeLong atkGrow = new EncodeLong(1);//攻击成长（每点力量）
+    private EncodeLong maxHp = new EncodeLong(20,StringUtils.NUMBER_STRING_FORMATTER);//血上限
+    private EncodeLong hp = new EncodeLong(20,StringUtils.NUMBER_STRING_FORMATTER);//当前血量
+    private EncodeLong atk = new EncodeLong(15,StringUtils.NUMBER_STRING_FORMATTER);//基础攻击
+    private EncodeLong def = new EncodeLong(5,StringUtils.NUMBER_STRING_FORMATTER);//基础防御
+    private EncodeLong agi = new EncodeLong(0,StringUtils.NUMBER_STRING_FORMATTER);//敏捷
+    private EncodeLong str = new EncodeLong(0,StringUtils.NUMBER_STRING_FORMATTER);//力量
+    private EncodeLong hpGrow = new EncodeLong(2,StringUtils.NUMBER_STRING_FORMATTER);//血量成长（每点力量）
+    private EncodeLong defGrow = new EncodeLong(3,StringUtils.NUMBER_STRING_FORMATTER);//防御成长（每点敏捷）
+    private EncodeLong atkGrow = new EncodeLong(1,StringUtils.NUMBER_STRING_FORMATTER);//攻击成长（每点力量）
     private long birthDay;//生日
-    private EncodeLong reincarnate = new EncodeLong(0);//转生次数
-    private EncodeNumber material = new EncodeInteger(0);//锻造点（货币）
+    private EncodeLong reincarnate = new EncodeLong(0,StringUtils.NUMBER_STRING_FORMATTER);//转生次数
+    private EncodeNumber material = new EncodeInteger(0,StringUtils.NUMBER_STRING_FORMATTER);//锻造点（货币）
     transient private HashSet<Effect> effects = new HashSet<>(3);//附加的效果
     transient private HashSet<Accessory> accessories = new HashSet<>(3);//装备
     transient private Skill[] skills = {EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL, EmptySkill.EMPTY_SKILL};//装备
@@ -49,9 +49,9 @@ public class Hero extends HarmObject implements Serializable, IDModel, SkillAble
     transient private ArrayList<ClickSkill> clickSkills = new ArrayList<>(3);
     private Element element = Element.NONE;//五行元素
     private String id;
-    private EncodeLong point = new EncodeLong(500);
+    private EncodeLong point = new EncodeLong(500,StringUtils.NUMBER_STRING_FORMATTER);
     private Gift gift;
-    private EncodeLong click = new EncodeLong(0);
+    private EncodeLong click = new EncodeLong(0,StringUtils.NUMBER_STRING_FORMATTER);
     private Race race = Race.Nonsr;
     private float elementRate = 0.5f;
     private int petCount = (int) Data.BASE_PET_COUNT;

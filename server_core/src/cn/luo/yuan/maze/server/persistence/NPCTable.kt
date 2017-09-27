@@ -1,8 +1,8 @@
 package cn.luo.yuan.maze.server.persistence
 
 import cn.luo.yuan.maze.model.*
-import cn.luo.yuan.maze.serialize.ObjectTable
-import cn.luo.yuan.maze.utils.Random
+import cn.luo.yuan.`object`.serializable.ObjectTable
+import cn.luo.yuan.utils.Random
 import java.io.File
 import java.io.IOException
 
@@ -11,7 +11,7 @@ import java.io.IOException
  */
 class NPCTable @Throws(IOException::class, ClassNotFoundException::class)
 constructor(root: File) : HeroTable(root) {
-    val heroDb = ObjectTable<Hero>(Hero::class.java,root)
+    val heroDb = ObjectTable<Hero>(Hero::class.java, root)
     val name = arrayOf("袁酥兄","龙剑森","小梅","雷二蛋", "某鸟")
     val major = arrayOf("伯爵","贱客","诗人","骑士", "流氓")
     val random = Random(System.currentTimeMillis())

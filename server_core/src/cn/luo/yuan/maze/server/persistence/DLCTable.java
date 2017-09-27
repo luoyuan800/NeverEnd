@@ -3,7 +3,7 @@ package cn.luo.yuan.maze.server.persistence;
 import cn.luo.yuan.maze.model.dlc.DLC;
 import cn.luo.yuan.maze.model.dlc.DLCKey;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
-import cn.luo.yuan.maze.serialize.ObjectTable;
+import cn.luo.yuan.object.serializable.ObjectTable;
 import cn.luo.yuan.maze.server.MainProcess;
 
 import java.util.ArrayList;

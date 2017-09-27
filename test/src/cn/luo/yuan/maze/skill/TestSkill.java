@@ -36,7 +36,7 @@ import cn.luo.yuan.maze.persistence.DataManagerInterface;
 import cn.luo.yuan.maze.service.BattleMessage;
 import cn.luo.yuan.maze.service.MockBattleMessage;
 import cn.luo.yuan.maze.service.MockGameContext;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 import org.jetbrains.annotations.NotNull;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;

@@ -2,7 +2,7 @@ package cn.luo.yuan.maze.client.utils;
 
 import android.content.Context;
 import android.os.Environment;
-import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.object.IDModel;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
 import cn.luo.yuan.maze.utils.StringUtils;
 

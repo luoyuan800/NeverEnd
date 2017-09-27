@@ -13,6 +13,7 @@ import cn.luo.yuan.maze.client.service.ClientPetMonsterHelper;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
+import cn.luo.yuan.object.IDModel;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package cn.luo.yuan.maze.server.level
 
 import cn.luo.yuan.maze.model.LevelRecord
 import cn.luo.yuan.maze.model.real.level.ElyosrRealLevel
-import cn.luo.yuan.maze.utils.Random
+import cn.luo.yuan.utils.Random
 
 /**
  * Copyright @Luo

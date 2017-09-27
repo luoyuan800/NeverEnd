@@ -14,6 +14,7 @@ import cn.luo.yuan.maze.client.service.ServerService;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.utils.Field;
+import cn.luo.yuan.object.IDModel;
 
 import java.io.Serializable;
 import java.util.List;

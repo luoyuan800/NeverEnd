@@ -4,7 +4,7 @@ import cn.luo.yuan.maze.model.Accessory
 import cn.luo.yuan.maze.model.OwnedAble
 import cn.luo.yuan.maze.model.Pet
 import cn.luo.yuan.maze.model.goods.Goods
-import cn.luo.yuan.maze.serialize.ObjectTable
+import cn.luo.yuan.`object`.serializable.ObjectTable
 import cn.luo.yuan.maze.utils.Field
 import java.io.File
 

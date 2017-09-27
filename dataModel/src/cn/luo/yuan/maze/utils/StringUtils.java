@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.utils;
 
+import cn.luo.yuan.encode.number.ValueStringFormatter;
 import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.real.level.ElyosrRealLevel;
@@ -32,6 +33,14 @@ public class StringUtils {
                 word.contains("SB") || word.contains("sb") || word.contains("我日") ||
                 word.toLowerCase().contains("fuck") || word.contains("傻逼") || word.contains("粪") || word.contains("屎") || word.contains("屁"));
     }
+
+
+    public static final ValueStringFormatter NUMBER_STRING_FORMATTER = new ValueStringFormatter() {
+        @Override
+        public String formatNumber(Number number) {
+            return StringUtils.formatNumber(number);
+        }
+    };
 
     public static String formatNumber(long num, boolean exquisite) {
         Double value;

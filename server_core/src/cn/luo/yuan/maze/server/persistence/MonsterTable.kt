@@ -1,8 +1,7 @@
 package cn.luo.yuan.maze.server.persistence
 
-import cn.luo.yuan.maze.model.Index
 import cn.luo.yuan.maze.model.Monster
-import cn.luo.yuan.maze.serialize.ObjectTable
+import cn.luo.yuan.`object`.serializable.ObjectTable
 
 import java.io.File
 import java.util.*

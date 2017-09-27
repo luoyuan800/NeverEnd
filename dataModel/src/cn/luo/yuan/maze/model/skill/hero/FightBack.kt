@@ -12,7 +12,7 @@ import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.service.BattleMessageInterface
 import cn.luo.yuan.maze.service.BattleServiceBase
 import cn.luo.yuan.maze.utils.Field
-import cn.luo.yuan.maze.utils.Random
+import cn.luo.yuan.utils.Random
 import cn.luo.yuan.maze.utils.StringUtils
 
 

@@ -5,8 +5,8 @@ import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.client.utils.RestConnection;
 import cn.luo.yuan.maze.model.Accessory;
-import cn.luo.yuan.maze.model.IDModel;
-import cn.luo.yuan.maze.model.Index;
+import cn.luo.yuan.object.IDModel;
+import cn.luo.yuan.object.Index;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.task.Scene;
@@ -16,7 +16,6 @@ import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Collections;

@@ -7,8 +7,7 @@ import cn.luo.yuan.maze.model.skill.SkillParameter;
 import cn.luo.yuan.maze.persistence.DataManagerInterface;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.service.PetMonsterHelperInterface;
-import cn.luo.yuan.maze.service.TaskManager;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executors;

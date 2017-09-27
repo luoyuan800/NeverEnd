@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.model
 
+import cn.luo.yuan.`object`.IDModel
 import cn.luo.yuan.maze.model.skill.EmptySkill
 import cn.luo.yuan.maze.model.skill.Skill
 import cn.luo.yuan.maze.service.AccessoryHelper
@@ -10,7 +11,7 @@ import java.io.Serializable
  * Copyright @Luo
  * Created by Gavin Luo on 9/11/2017.
  */
-open class LevelRecord(private var id:String):IDModel, Serializable, Cloneable {
+open class LevelRecord(private var id:String): IDModel, Serializable, Cloneable {
     override fun getId(): String {
         return id
     }

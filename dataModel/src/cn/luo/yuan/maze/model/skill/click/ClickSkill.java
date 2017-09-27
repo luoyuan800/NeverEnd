@@ -2,7 +2,7 @@ package cn.luo.yuan.maze.model.skill.click;
 
 import cn.luo.yuan.maze.model.HarmAble;
 import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.model.IDModel;
+import cn.luo.yuan.object.IDModel;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.utils.Field;
 

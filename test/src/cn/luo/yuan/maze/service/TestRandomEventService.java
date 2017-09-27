@@ -5,7 +5,7 @@ import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.gift.Gift;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 import org.testng.annotations.Test;
 
 import java.util.concurrent.ScheduledExecutorService;

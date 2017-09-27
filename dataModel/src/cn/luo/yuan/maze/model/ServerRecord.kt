@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.model
 
+import cn.luo.yuan.`object`.IDModel
 import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.LimitConcurrentLinkedQueue
 import cn.luo.yuan.maze.utils.StringUtils

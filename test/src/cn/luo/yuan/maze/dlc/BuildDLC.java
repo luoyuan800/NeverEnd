@@ -14,19 +14,12 @@ import cn.luo.yuan.maze.model.goods.types.EmptyAccessory;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.model.skill.Skill;
-import cn.luo.yuan.maze.model.skill.race.Alayer;
-import cn.luo.yuan.maze.model.skill.race.Chaos;
-import cn.luo.yuan.maze.model.skill.race.Decide;
-import cn.luo.yuan.maze.model.skill.race.Exorcism;
-import cn.luo.yuan.maze.model.skill.race.Masimm;
-import cn.luo.yuan.maze.model.skill.race.Painkiller;
-import cn.luo.yuan.maze.serialize.ObjectTable;
+import cn.luo.yuan.object.serializable.ObjectTable;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
  * Copyright @Luo

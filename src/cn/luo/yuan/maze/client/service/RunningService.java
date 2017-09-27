@@ -27,7 +27,7 @@ import cn.luo.yuan.maze.service.EffectHandler;
 import cn.luo.yuan.maze.service.PetMonsterHelper;
 import cn.luo.yuan.maze.service.RunningServiceInterface;
 import cn.luo.yuan.maze.service.SkillHelper;
-import cn.luo.yuan.maze.utils.Random;
+import cn.luo.yuan.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.ArrayList;

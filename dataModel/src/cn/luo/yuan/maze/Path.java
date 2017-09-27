@@ -49,7 +49,7 @@ public class Path {
     public static final String RETRIEVE_BACK_WAREHOUSE = "retrieve_back_warehouse";
     public static final String DOWNLOAD_APK = "download_apk";
     public static final String USE_KEY = "use_cd_key";
-    public static final String RETRIEVE_WAREHOUSE = "retrieve_warehouse";
+    public static final String RETRIEVE_ALL_WAREHOUSE = "retrieve_warehouse";
     public static final String SUBMIT_HERO = "submit_hero";
     public static final String GET_BACK_HERO = "get_back_hero";
     public static final String QUERY_HERO_DATA = "query_hero_data";

@@ -2,7 +2,6 @@ package cn.luo.yuan.maze.model.index;
 
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Race;
-import cn.luo.yuan.maze.utils.Random;
 
 /**
  * Created by luoyuan on 2017/3/19.

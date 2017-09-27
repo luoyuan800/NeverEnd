@@ -14,8 +14,7 @@ import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.SellItem;
 import cn.luo.yuan.maze.model.goods.Goods;
-import cn.luo.yuan.maze.utils.Random;
-import kotlin.reflect.KProperty;
+import cn.luo.yuan.utils.Random;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -4,7 +4,7 @@ import cn.luo.yuan.maze.model.skill.EmptySkill
 import cn.luo.yuan.maze.model.skill.Skill
 import cn.luo.yuan.maze.model.skill.SkillAbleObject
 import cn.luo.yuan.maze.utils.Field
-import cn.luo.yuan.maze.utils.Random
+import cn.luo.yuan.utils.Random
 import java.io.Serializable
 
 /**

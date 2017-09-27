@@ -23,6 +23,7 @@ import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.utils.Field;
+import cn.luo.yuan.object.IDModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;

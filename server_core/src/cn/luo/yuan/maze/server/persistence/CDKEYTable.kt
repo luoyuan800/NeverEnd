@@ -3,7 +3,7 @@ package cn.luo.yuan.maze.server.persistence
 import cn.luo.yuan.maze.model.KeyResult
 import cn.luo.yuan.maze.server.LogHelper
 import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection
-import cn.luo.yuan.maze.utils.Random
+import cn.luo.yuan.utils.Random
 import cn.luo.yuan.maze.utils.StringUtils
 import java.sql.Connection
 import java.sql.Statement
@@ -83,7 +83,7 @@ class CDKEYTable(private val database:DatabaseConnection) {
         }
     }
 
-    private fun buildId(random:Random):String{
+    private fun buildId(random: Random):String{
         val sb = StringBuilder()
         while (sb.length < 5) {
             sb.append((random.nextInt(25) + 97).toChar())

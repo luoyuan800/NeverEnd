@@ -1,8 +1,10 @@
 package cn.luo.yuan.maze.model;
 
 import cn.luo.yuan.maze.model.effect.Effect;
-import cn.luo.yuan.maze.utils.EncodeLong;
+import cn.luo.yuan.encode.number.EncodeLong;
 import cn.luo.yuan.maze.utils.Field;
+import cn.luo.yuan.maze.utils.StringUtils;
+import cn.luo.yuan.object.IDModel;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -18,8 +20,8 @@ public class Maze implements IDModel, Serializable {
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private boolean delete;
     private String id;
-    private EncodeLong maxLevel = new EncodeLong(1);
-    private EncodeLong level = new EncodeLong(1);
+    private EncodeLong maxLevel = new EncodeLong(1, StringUtils.NUMBER_STRING_FORMATTER);
+    private EncodeLong level = new EncodeLong(1,StringUtils.NUMBER_STRING_FORMATTER);
     private float meetRate = Data.MONSTER_MEET_RATE;
     private long streaking;//连胜次数
     private long die;//死亡次数

@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.utils;
 
+import cn.luo.yuan.utils.Random;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertTrue;
