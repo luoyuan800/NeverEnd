@@ -42,7 +42,7 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
         if(config!=null){
             int size = monsterCache.size();
             if(size > 0) {
-                return StringUtils.formatPercentage(((float) config.getCatchedCount() / size));
+                return StringUtils.formatPercentage(((float) config.getCatchedCount()* 100f / size));
             }
         }
         return StringUtils.formatPercentage(0f);
@@ -53,7 +53,7 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
             int size = monsterCache.size();
             int gSize = monsterTable.size();
             if(gSize > 0 && size > 0) {
-                return StringUtils.formatPercentage(((float) config.getCatchedCount() / (size + gSize)));
+                return StringUtils.formatPercentage(((float) config.getCatchedCount()*100f / (size + gSize)));
             }
         }
         return StringUtils.formatPercentage(0f);
