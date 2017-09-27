@@ -149,6 +149,10 @@ public class RunningService implements RunningServiceInterface {
                             hero.setHp(heroHp + restore);
                             gameContext.addMessage(String.format(Resource.getString(R.string.restore_hp), hero.getDisplayName(), StringUtils.formatNumber(restore, false)));
                         }
+                        if(maze.getStreaking() > 0){
+                            hero.setMaterial(hero.getMaterial() + maze.getStreaking());
+                            gameContext.addMessage(String.format(Resource.getString(R.string.add_mate_for_streaking), StringUtils.formatNumber(maze.getStreaking())));
+                        }
                         mazeLevelCalculate();
                         hero.setPoint(hero.getPoint() + point);
                         gameContext.addMessage(msg);
@@ -173,10 +177,14 @@ public class RunningService implements RunningServiceInterface {
                                 BattleMessageImp battleMessage = new BattleMessageImp(gameContext);
                                 battleService.setBattleMessage(battleMessage);
                                 long material = monster instanceof Monster ? ((Monster) monster).getMaterial() : maze.getLevel();
-                                if(hero.getHp() <= 0){
+                                if(!isInvincible() && hero.getHp() <= 0){
                                     battleMessage.rowMessage(hero.getDisplayName() + "被吓傻了！");
                                 }
-                                if (hero.getHp() > 0 && battleService.battle(gameContext.getMaze().getLevel())) {
+
+                                if (isInvincible() || (hero.getHp() > 0 && battleService.battle(gameContext.getMaze().getLevel()))) {
+                                    if(isInvincible()){
+                                        gameContext.addMessage(String.format(Resource.getString(R.string.invincible_win), ((NameObject) monster).getDisplayName()));
+                                    }
                                     Log.d("maze", "Battle win " + ((NameObject) monster).getDisplayName());
                                     maze.setStreaking(maze.getStreaking() + 1);
                                     hero.setMaterial(hero.getMaterial() + material);

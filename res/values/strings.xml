@@ -141,4 +141,6 @@
     <string name="eqicure_drop_pet">一键烤肉/煎蛋</string>
     <string name="invincible">开启%1$s的无敌时间！</string>
     <string name="quit_invincible">结束无敌状态</string>
+    <string name="add_mate_for_streaking">连胜奖励！获得锻造%1$s</string>
+    <string name="invincible_win">无敌状态！击杀%1$s</string>
 </resources>

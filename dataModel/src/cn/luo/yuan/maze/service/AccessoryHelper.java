@@ -103,6 +103,7 @@ public class AccessoryHelper {
                     }
                 }
                 uMount.setMounted(false);
+                context.getDataManager().save(uMount);
                 break;
             }
             uMount = null;
@@ -110,6 +111,7 @@ public class AccessoryHelper {
         if (hero.getAccessories().add(accessory)) {
             hero.getEffects().addAll(accessory.getEffects());
             accessory.setMounted(true);
+            context.getDataManager().save(accessory);
             judgeEffectEnable(hero, context);
         }
         return uMount;
