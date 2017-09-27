@@ -136,6 +136,12 @@ public class GameActivity extends BaseActivity {
         control.getHero().setClick(control.getHero().getClick() + 1);
         HarmAble currentBattleTarget = control.getCurrentBattleTarget();
         switch (v.getId()) {
+            case R.id.into_invicible:
+                if(control.dieCountClear()){
+                    findViewById(R.id.show_invicible).setVisibility(View.VISIBLE);
+                    findViewById(R.id.into_invicible).setVisibility(View.INVISIBLE);
+                }
+                break;
             case R.id.die_msg_button:
                 control.getViewHandler().showDieList();
                 break;

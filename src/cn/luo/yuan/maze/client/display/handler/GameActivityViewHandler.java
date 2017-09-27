@@ -61,6 +61,15 @@ public class GameActivityViewHandler extends Handler {
         }
     };
 
+    public void disableInvincible() {
+        post(new Runnable() {
+            @Override
+            public void run() {
+                context.findViewById(R.id.show_invicible).setVisibility(View.INVISIBLE);
+            }
+        });
+    }
+
     private void updateSkillButton(Button button, Skill skill){
         Skill skillE = (Skill)button.getTag(R.string.item);
         if(skillE == null || !skillE.getId().equals(skill.getId())){
@@ -205,6 +214,9 @@ public class GameActivityViewHandler extends Handler {
             if(view.getVisibility() == View.VISIBLE){
                 ViewHandler.setText((TextView) view.findViewById(R.id.local_monster_percent), neverEnd.getPetMonsterHelper().getLocalCatchPercent());
                 ViewHandler.setText((TextView) view.findViewById(R.id.global_monster_percent), neverEnd.getPetMonsterHelper().getGlobalCatchPercent());
+            }
+            if(neverEnd.getMaze().getDie() > 2000){
+                context.findViewById(R.id.into_invicible).setVisibility(View.VISIBLE);
             }
         }
     };

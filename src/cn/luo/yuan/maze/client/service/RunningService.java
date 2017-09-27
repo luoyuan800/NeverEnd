@@ -224,6 +224,8 @@ public class RunningService implements RunningServiceInterface {
                                     }
                                     Log.d("maze", "Battle failed restore");
                                 }
+                                hero.setMaterial(battleService.round + hero.getMaterial());
+                                gameContext.addMessage("战斗回合数奖励！" + String.format(Resource.getString(R.string.add_mate), StringUtils.formatNumber(battleService.round)));
                                 gameContext.getViewHandler().refreshPets(hero);
                             }
                             target = null;

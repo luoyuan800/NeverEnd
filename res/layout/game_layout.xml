@@ -221,7 +221,6 @@
                     android:text="死亡："
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/hero_die_count"
                     android:layout_weight="1"
                     android:layout_gravity="fill_horizontal"
                     android:gravity="fill_horizontal"/>
@@ -230,9 +229,20 @@
                     android:text="TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView6"
+                    android:id="@+id/hero_die_count"
                     android:layout_weight="1"
                     android:layout_gravity="center_horizontal"/>
+
+            <ImageButton
+                    android:src="@android:drawable/btn_star_big_on"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:visibility="invisible"
+                    android:id="@+id/into_invicible"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:background="@color/toumin"
+                    android:layout_marginLeft="15dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -317,7 +327,8 @@
                     android:src="@drawable/baizee"
                     android:onClick="onClick"
                     android:layout_gravity="center"
-                    android:layout_height="220dp"/>
+                    android:layout_height="220dp"
+                    />
 
             <TextView
                     android:gravity="center_horizontal"
@@ -586,6 +597,14 @@
             android:layout_alignParentEnd="true"
             android:onClick="onClick"
             android:id="@+id/pause"/>
+
+    <ImageView
+            android:src="@android:drawable/btn_star_big_on"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/show_invicible"
+            android:visibility="invisible"
+            android:layout_alignParentTop="true"/>
 
 
 </RelativeLayout>

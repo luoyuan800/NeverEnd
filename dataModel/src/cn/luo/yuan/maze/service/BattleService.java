@@ -31,10 +31,9 @@ public class BattleService {
             heroContext = runningService.getContext();
         }
     }
-
+public long round = 1;
     public boolean battle(long level) {
         specialDetect();
-        long round = 1;
         boolean heroAtk = random.nextBoolean();
         battleMessage.startBattle(hero instanceof NameObject ? (((NameObject) hero).getDisplayName() + "(HP: " + StringUtils.formatNumber(hero.getCurrentHp()) + ")") : "",
                 monster instanceof NameObject ? (((NameObject) monster).getDisplayName() + "(HP: " + StringUtils.formatNumber(monster.getCurrentHp()) + ")") : "");
@@ -78,6 +77,7 @@ public class BattleService {
             }
 
         }
+
         if (monster.getCurrentHp() <= 0) {
             if (hero instanceof NameObject && monster instanceof NameObject) {
                 battleMessage.win((NameObject) hero, (NameObject) monster);
