@@ -5,6 +5,7 @@ import cn.luo.yuan.maze.model.skill.Skill
 import cn.luo.yuan.maze.service.AccessoryHelper
 import cn.luo.yuan.maze.utils.Field
 import java.io.Serializable
+import java.util.concurrent.locks.ReentrantReadWriteLock
 
 /**
  * Copyright @Luo
@@ -36,6 +37,8 @@ open class LevelRecord(private var id:String):IDModel, Serializable, Cloneable {
         private const val serialVersionUID: Long = Field.SERVER_VERSION
     }
     private var delete = false
+    val lock = id
+    var waitTrun = 0
     var point:Long = 0
         set(value){
             priorPoint = field

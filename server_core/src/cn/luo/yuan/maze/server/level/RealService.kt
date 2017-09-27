@@ -40,10 +40,11 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
     fun run() {
         executor.scheduleAtFixedRate({
             for (i in (0 until ElyosrRealLevel.values().size)) {
-                synchronized(waiting) {
-                    val record = waiting.poolFirst(0)
-                    if (record != null) {
-                        findBattleTarget(record)
+                var record: LevelRecord? = waiting.poolFirst(0)
+                if (record != null) {
+                    synchronized(record.lock) {
+                        record.waitTrun ++
+                        findBattleTarget(record!!)
                     }
                 }
             }
@@ -83,9 +84,9 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
         executor.awaitTermination(20, TimeUnit.MILLISECONDS)
     }
 
-    fun updateRealRecordPriorPoint(id:String){
+    fun updateRealRecordPriorPoint(id: String) {
         val record = queryRecord(id)
-        if(record!=null){
+        if (record != null) {
             record.priorPoint = record.point
             recordDb.save(record)
         }
@@ -108,7 +109,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
     }
 
     fun inQueue(id: String, record: LevelRecord): RealState {
-        synchronized(waiting) {
+        synchronized(record.lock) {
             if (battling[record.id] == null) {
                 if (!waiting.isQueue(record)) {
                     val serverRecord = mainProcess.heroTable.getRecord(id)
@@ -131,20 +132,24 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
         executor.execute {
             val targetRecord = waiting.findTarget(record)
             if (targetRecord != null && targetRecord.id != record.id) {
-                val serverRecord = mainProcess.heroTable.getRecord(record.id)
-                if (serverRecord != null) {
-                    serverRecord.debris -= Data.PALACE_RANGE_COST
-                    mainProcess.heroTable.save(serverRecord)
+                synchronized(targetRecord.lock) {
+                    val serverRecord = mainProcess.heroTable.getRecord(record.id)
+                    if (serverRecord != null) {
+                        serverRecord.debris -= Data.PALACE_RANGE_COST
+                        mainProcess.heroTable.save(serverRecord)
+                    }
+                    val targetServerRecord = mainProcess.heroTable.getRecord(targetRecord.id)
+                    if (targetServerRecord != null) {
+                        targetServerRecord.debris -= Data.PALACE_RANGE_COST
+                        mainProcess.heroTable.save(targetServerRecord)
+                    }
+                    val rtb = RealTimeBattle(record, targetRecord, 2, 1000, 5, 2)
+                    battling.put(record.id, rtb)
+                    battling.put(targetRecord.id, rtb)
+                    targetRecord.waitTrun = 0
+                    record.waitTrun = 0
+                    LogHelper.info(record.hero?.name + " & " + targetRecord.hero?.name + " start range battle")
                 }
-                val targetServerRecord = mainProcess.heroTable.getRecord(targetRecord.id)
-                if (targetServerRecord != null) {
-                    targetServerRecord.debris -= Data.PALACE_RANGE_COST
-                    mainProcess.heroTable.save(targetServerRecord)
-                }
-                val rtb = RealTimeBattle(record, targetRecord, 2, 1000, 5, 2)
-                battling.put(record.id, rtb)
-                battling.put(targetRecord.id, rtb)
-                LogHelper.info(record.hero?.name + " & " + targetRecord.hero?.name + " start range battle")
             } else {
                 val l = waitingTime[record.id]
                 if (l != null && l >= 45000) {
@@ -236,7 +241,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
     }
 
     private fun initRecord(record: LevelRecord?) {
-        if (record != null && record.hero != null) {
+        if (record?.hero != null) {
             if (record.hero!!.pets.isEmpty()) {
                 record.hero!!.pets.addAll(record.pets)
             }
