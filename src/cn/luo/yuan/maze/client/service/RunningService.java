@@ -71,6 +71,7 @@ public class RunningService implements RunningServiceInterface {
     private PetMonsterHelper monsterHelper;
     private long saveTime = 0L;
     private boolean invincible;
+    private boolean weakling;
 
     public RunningService(Hero hero, Maze maze, NeverEnd gameContext, DataManager dataManager, long fps) {
         startTime = System.currentTimeMillis();
@@ -260,6 +261,14 @@ public class RunningService implements RunningServiceInterface {
 
     public boolean isInvincible() {
         return invincible;
+    }
+
+    public boolean isWeakling() {
+        return weakling;
+    }
+
+    public void setWeakling(boolean weakling) {
+        this.weakling = weakling;
     }
 
     private void mazeLevelCalculate() {

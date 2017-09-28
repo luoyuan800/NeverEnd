@@ -143,4 +143,5 @@
     <string name="quit_invincible">结束无敌状态</string>
     <string name="add_mate_for_streaking">连胜奖励！获得锻造%1$s</string>
     <string name="invincible_win">无敌状态！击杀%1$s</string>
+    <string name="weaking">你正处于虚弱状态</string>
 </resources>

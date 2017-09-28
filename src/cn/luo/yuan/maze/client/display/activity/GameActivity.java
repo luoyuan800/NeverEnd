@@ -138,7 +138,6 @@ public class GameActivity extends BaseActivity {
         switch (v.getId()) {
             case R.id.into_invicible:
                 if(control.dieCountClear()){
-                    findViewById(R.id.show_invicible).setVisibility(View.VISIBLE);
                     findViewById(R.id.into_invicible).setVisibility(View.INVISIBLE);
                 }
                 break;

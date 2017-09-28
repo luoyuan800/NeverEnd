@@ -69,6 +69,35 @@ public class GameActivityViewHandler extends Handler {
             }
         });
     }
+    public void disableWeakling() {
+        disableInvincible();
+    }
+
+    public void showInvincible() {
+        post(new Runnable() {
+            @Override
+            public void run() {
+                View vicible = context.findViewById(R.id.show_invicible);
+                ((ImageView)vicible).setImageResource(android.R.drawable.btn_star_big_on);
+                vicible.setVisibility(View.VISIBLE);
+            }
+        });
+
+    }
+
+    public void showWeakling() {
+        post(new Runnable() {
+            @Override
+            public void run() {
+                View invicible = context.findViewById(R.id.show_invicible);
+                ((ImageView)invicible).setImageResource(android.R.drawable.btn_star_big_off);
+                invicible.setVisibility(View.VISIBLE);
+            }
+        });
+
+    }
+
+
 
     private void updateSkillButton(Button button, Skill skill){
         Skill skillE = (Skill)button.getTag(R.string.item);

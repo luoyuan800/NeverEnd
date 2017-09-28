@@ -45,7 +45,7 @@
     <item
             android:id="@+id/palace"
             android:icon="@android:drawable/ic_menu_agenda"
-            android:title="殿堂"/>
+            android:title="殿堂（试验）"/>
     <item
             android:id="@+id/excahnge"
             android:icon="@android:drawable/ic_menu_agenda"

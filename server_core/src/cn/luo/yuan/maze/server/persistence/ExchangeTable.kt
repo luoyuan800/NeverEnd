@@ -39,12 +39,12 @@ class ExchangeTable(root: File) {
         if (ref != null) {
             return false
         }
-
-        cache.put(key(exchange.id, exchange.type, exchange.expectedType), SoftReference(exchange))
+        synchronized(cache) {
+            cache.put(key(exchange.id, exchange.type, exchange.expectedType), SoftReference(exchange))
+        }
         exchangeDb.save(exchange)
         return true
     }
-
 
 
     fun loadAll(type: Int, limit: String?, keeper: String): List<ExchangeObject> {
@@ -60,7 +60,9 @@ class ExchangeTable(root: File) {
                     val eo = exchangeDb.loadObject(key.id)
                     if (eo != null) {
                         addToResult(eo, limitWaord, result, type, keeper)
-                        cache.put(key, SoftReference(eo))
+                        synchronized(cache) {
+                            cache.put(key, SoftReference(eo))
+                        }
                     }
                 }
             }
@@ -68,7 +70,9 @@ class ExchangeTable(root: File) {
             for (id in exchangeDb.loadIds()) {
                 val eo = exchangeDb.loadObject(id);
                 if (eo != null) {
-                    cache.put(key(eo.id, eo.type, eo.expectedType), SoftReference(eo))
+                    synchronized(cache) {
+                        cache.put(key(eo.id, eo.type, eo.expectedType), SoftReference(eo))
+                    }
                     addToResult(eo, limitWaord, result, type, keeper)
                 }
             }
@@ -79,8 +83,8 @@ class ExchangeTable(root: File) {
     private fun addToResult(exchangeObject: ExchangeObject, limitWaord: String, result: MutableList<ExchangeObject>, type: Int, keeper: String) {
         if (exchangeObject.type == type && exchangeObject.changed == null) {
             val exchange = exchangeObject.exchange
-            if(exchange is OwnedAble){
-                if(exchange.keeperId == keeper){
+            if (exchange is OwnedAble) {
+                if (exchange.keeperId == keeper) {
                     return;
                 }
             }
@@ -107,7 +111,9 @@ class ExchangeTable(root: File) {
                         if (eo.ownerId == ownerId && !eo.acknowledge) {
                             result.add(eo);
                         }
-                        cache.put(key, SoftReference(eo))
+                        synchronized(cache) {
+                            cache.put(key, SoftReference(eo))
+                        }
                     }
                 }
             }
@@ -115,7 +121,9 @@ class ExchangeTable(root: File) {
             for (exchangeId in exchangeDb.loadIds()) {
                 val eo = exchangeDb.loadObject(exchangeId);
                 if (eo != null) {
-                    cache.put(key(eo.id, eo.type, eo.expectedType), SoftReference(eo))
+                    synchronized(cache) {
+                        cache.put(key(eo.id, eo.type, eo.expectedType), SoftReference(eo))
+                    }
                     if (eo.ownerId == ownerId && !eo.acknowledge) {
                         result.add(eo)
                     }
@@ -131,7 +139,9 @@ class ExchangeTable(root: File) {
     }
 
     fun removeObject(eo: ExchangeObject) {
-        cache.remove(key(eo.id, eo.type, eo.expectedType));
+        synchronized(cache) {
+            cache.remove(key(eo.id, eo.type, eo.expectedType));
+        }
         exchangeDb.delete(eo.id);
     }
 }
