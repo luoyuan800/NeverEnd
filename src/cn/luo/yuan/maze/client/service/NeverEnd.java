@@ -19,6 +19,9 @@ import cn.luo.yuan.maze.exception.MountLimitException;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.effect.Effect;
+import cn.luo.yuan.maze.model.effect.original.AtkPercentEffect;
+import cn.luo.yuan.maze.model.effect.original.DefPercentEffect;
+import cn.luo.yuan.maze.model.effect.original.HPPercentEffect;
 import cn.luo.yuan.maze.model.gift.*;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.GoodsProperties;
@@ -33,6 +36,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -517,7 +521,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
             if(t > 60000){
                 t = 30000;
             }
-            startInvincible(t);
+            startInvincible(t, -1);
             maze.setDie(0);
             return true;
         }
@@ -530,24 +534,60 @@ public class NeverEnd extends Application implements InfoControlInterface {
             if(t > 30000){
                 t = 30000;
             }
-            startInvincible(t);
+            startInvincible(t, -1);
             maze.setStreaking(0);
             return true;
         }
         return false;
     }
 
-     private void startInvincible(long mill){
+     public void startInvincible(long mill, final long weakling){
         runningService.setInvincible(true);
         showToast(Resource.getString(R.string.invincible), mill/1000);
          viewHandler.showInvincible();
          executor.schedule(new Runnable() {
             @Override
             public void run() {
-                runningService.setInvincible(false);
-                showToast(Resource.getString(R.string.quit_invincible));
-                viewHandler.disableInvincible();
+                try {
+                    runningService.setInvincible(false);
+                    showToast(Resource.getString(R.string.quit_invincible));
+                    viewHandler.disableInvincible();
+                    if (weakling > 0) {
+                        runningService.setWeakling(true);
+                        viewHandler.showWeakling();
+                        final AtkPercentEffect atkE = new AtkPercentEffect();
+                        atkE.setTag("weakling");
+                        atkE.setValue(-50);
+                        hero.getEffects().add(atkE);
+                        final DefPercentEffect defE = new DefPercentEffect();
+                        defE.setTag("weakling");
+                        defE.setValue(-50);
+                        hero.getEffects().add(defE);
+                        final HPPercentEffect hpE = new HPPercentEffect();
+                        hpE.setTag("weakling");
+                        hpE.setValue(-50);
+                        hero.getEffects().add(hpE);
+                        executor.schedule(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    runningService.setWeakling(false);
+                                    viewHandler.disableWeakling();
+                                    hero.getEffects().removeAll(Arrays.asList(atkE, hpE, defE));
+                                }catch (Exception e){
+                                    LogHelper.logException(e, "Remove weakling");
+                                }
+                            }
+                        }, weakling, TimeUnit.MILLISECONDS);
+                    }
+                }catch (Exception e){
+                    LogHelper.logException(e, "Cancel Invincible");
+                }
             }
         }, mill, TimeUnit.MILLISECONDS);
+    }
+
+    public boolean isWeakling(){
+         return runningService.isWeakling();
     }
 }

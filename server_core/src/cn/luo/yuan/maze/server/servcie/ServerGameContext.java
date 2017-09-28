@@ -30,6 +30,16 @@ public class ServerGameContext implements InfoControlInterface {
     }
 
     @Override
+    public boolean isWeakling() {
+        return false;
+    }
+
+    @Override
+    public void startInvincible(long mill, long weakling) {
+
+    }
+
+    @Override
     public Hero getHero() {
         return hero;
     }

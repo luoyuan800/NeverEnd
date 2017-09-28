@@ -23,6 +23,7 @@ import cn.luo.yuan.maze.client.service.ServerService;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.*;
+import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.skill.PropertySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -254,6 +255,9 @@ public class OnlineActivity extends Activity {
                 RangeAward ra = service.postRangeAward(gameContext);
                 if(ra!=null){
                     gameContext.showPopup(ra.toString());
+                    for(Goods goods:ra.getGoods()){
+                        gameContext.getDataManager().add(goods);
+                    }
                 }
             }
         });

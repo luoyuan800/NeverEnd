@@ -13,6 +13,7 @@ import cn.luo.yuan.maze.model.goods.types.Filter;
 import cn.luo.yuan.maze.model.goods.types.Grill;
 import cn.luo.yuan.maze.model.goods.types.HPM;
 import cn.luo.yuan.maze.model.goods.types.HalfSafe;
+import cn.luo.yuan.maze.model.goods.types.Invincible;
 import cn.luo.yuan.maze.model.goods.types.Mirror;
 import cn.luo.yuan.maze.model.goods.types.Omelet;
 import cn.luo.yuan.maze.model.goods.types.ResetSkill;
@@ -1040,9 +1041,15 @@ public class MainProcess {
                             }
                         }
                     } else {
-                        ra.setDebris(1);
-                        ra.setGift(1);
-                        ra.setMate(8000);
+                        if(range < 30) {
+                            ra.setDebris(1);
+                            ra.setGift(5);
+                            ra.setMate(8000);
+                        }else{
+                            Invincible invincible = new Invincible();
+                            invincible.setCount(1);
+                            ra.getGoods().add(invincible);
+                        }
                     }
                     record.setDebris(record.getDebris() + ra.getDebris());
                     record.setGift(record.getGift() + ra.getGift());

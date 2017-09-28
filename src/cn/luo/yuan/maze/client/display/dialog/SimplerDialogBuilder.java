@@ -196,7 +196,7 @@ public class SimplerDialogBuilder {
                 .withTitleColor(Color.RED)
                 .withTitle(title)
                 .setCustomView(view, context)                   //.withMessage(null)  no Msg
-                .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
+                .isCancelableOnTouchOutside(false)                           //def    | isCancelable(true)
                 .show();
         return dialogBuilder;
 

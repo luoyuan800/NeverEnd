@@ -7,7 +7,6 @@ import cn.luo.yuan.maze.model.skill.SkillParameter;
 import cn.luo.yuan.maze.persistence.DataManagerInterface;
 import cn.luo.yuan.maze.service.InfoControlInterface;
 import cn.luo.yuan.maze.service.PetMonsterHelperInterface;
-import cn.luo.yuan.maze.service.TaskManager;
 import cn.luo.yuan.maze.utils.Random;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,6 +20,17 @@ import java.util.concurrent.ScheduledExecutorService;
 public class GameContext implements InfoControlInterface{
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(5);
     private Random random = new Random(System.currentTimeMillis());
+
+    @Override
+    public boolean isWeakling() {
+        return false;
+    }
+
+    @Override
+    public void startInvincible(long mill, long weakling) {
+
+    }
+
     @Override
     public Hero getHero() {
         return null;

@@ -8,7 +8,6 @@ import cn.luo.yuan.maze.persistence.DataManagerInterface;
 import cn.luo.yuan.maze.utils.Random;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
@@ -20,6 +19,17 @@ public class MockGameContext implements InfoControlInterface {
     public DataManagerInterface dataManager;
     public ScheduledExecutorService executor;
     public Maze maze;
+
+    @Override
+    public boolean isWeakling() {
+        return false;
+    }
+
+    @Override
+    public void startInvincible(long mill, long weakling) {
+
+    }
+
     @Override
     public Hero getHero() {
         return hero;

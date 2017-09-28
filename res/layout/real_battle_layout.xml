@@ -168,12 +168,15 @@
 
         </LinearLayout>
 
-        <TextView
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/action_point"/>
+            <TextView
                 android:text="100"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/real_battle_my_point"
                 android:gravity="center_horizontal"/>
+        </LinearLayout>
 
         <LinearLayout
                 android:orientation="horizontal"
@@ -181,7 +184,7 @@
                 android:layout_height="wrap_content">
 
             <Button
-                    android:text="攻击"
+                    android:text="直接攻击"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/real_battle_atk_action"
@@ -189,7 +192,7 @@
                     style="@android:style/Widget.Button.Inset"/>
 
             <Button
-                    android:text="技能"
+                    android:text="攻击技能"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/real_battle_skill_action"
@@ -203,7 +206,7 @@
                 android:layout_height="wrap_content">
 
             <Button
-                    android:text="防御"
+                    android:text="防御技能"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/real_battle_defend_action"
@@ -211,7 +214,7 @@
                     style="@android:style/Widget.Button.Inset"/>
 
             <Button
-                    android:text="物品"
+                    android:text="使用物品"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/real_battle_goods_action"

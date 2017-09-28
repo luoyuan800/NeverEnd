@@ -15,6 +15,8 @@ import java.util.concurrent.ScheduledExecutorService;
  * Created by gluo on 5/12/2017.
  */
 public interface InfoControlInterface {
+    boolean isWeakling();
+    void startInvincible(long mill, long weakling);
     Hero getHero();
 
     Random getRandom();
