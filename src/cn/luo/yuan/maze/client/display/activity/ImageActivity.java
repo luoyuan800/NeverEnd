@@ -31,6 +31,8 @@ public class ImageActivity extends Activity {
         setContentView(R.layout.images_list);
         drawables = new ArrayList<>();
         drawables.add(Resource.loadImageFromAssets("help/base_properties.png", true));
+        drawables.add(Resource.loadImageFromAssets("help/wudi.jpg", true));
+        drawables.add(Resource.loadImageFromAssets("help/range_properties.jpg", true));
         drawables.add(Resource.loadImageFromAssets("help/pet_view.png", true));
         drawables.add(Resource.loadImageFromAssets("help/skill.jpg", true));
         drawables.add(Resource.loadImageFromAssets("help/button.jpg", true));

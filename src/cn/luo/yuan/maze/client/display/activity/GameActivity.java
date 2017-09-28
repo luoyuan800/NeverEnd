@@ -13,10 +13,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
-import cn.luo.yuan.maze.client.display.dialog.ClickSkillDialog;
-import cn.luo.yuan.maze.client.display.dialog.PetDialog;
-import cn.luo.yuan.maze.client.display.dialog.PropertiesDialog;
-import cn.luo.yuan.maze.client.display.dialog.SkillDialog;
+import cn.luo.yuan.maze.client.display.dialog.*;
 import cn.luo.yuan.maze.client.display.handler.AdHandler;
 import cn.luo.yuan.maze.client.display.handler.GameActivityViewHandler;
 import cn.luo.yuan.maze.client.display.handler.MenuItemClickListener;
@@ -26,12 +23,14 @@ import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.model.*;
+import cn.luo.yuan.maze.model.goods.types.Invincible;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.persistence.DataManager;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 
 /**
@@ -66,7 +65,15 @@ public class GameActivity extends BaseActivity {
         if (StringUtils.isEmpty(config.getHead())) {
             config.setHead(control.getRandom().randomItem(Arrays.asList("Actor1_1.png", "Actor2_1.png", "Actor2_2.png", "Actor2_5.png", "Actor2_6.png", "Actor1_2.png", "Actor3_1.png", "Actor3_6.png")));
             control.getViewHandler().showFirstInTip();
+        }else if(!getVersion().equals(config.getCurrentVersion())){
+            config.setCurrentVersion(getVersion());
+            MessageDialog md = new MessageDialog(this, Collections.singletonList("感谢您的支持，送您一瓶无敌药水。祝你快乐！"));
+            md.show();
+            Invincible invincible = new Invincible();
+            invincible.setCount(1);
+            dataManager.add(invincible);
         }
+
         dataManager.save(config);
         Resource.askWritePermissions(new PermissionRequestListener() {
             @Override

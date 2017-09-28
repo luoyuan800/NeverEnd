@@ -15,6 +15,7 @@ public class NeverEndConfig implements IDModel, Serializable {
     private int theme = 0;
     private static final long serialVersionUID = Field.SERVER_VERSION;
     private String version;
+    private String currentVersion;
     private String head;
     private String sign;
     private boolean exception;
@@ -100,6 +101,7 @@ public class NeverEndConfig implements IDModel, Serializable {
 
     public void setVersion(String version) {
         this.version = version;
+        setCurrentVersion(version);
     }
 
     public String getHead() {
@@ -182,5 +184,13 @@ public class NeverEndConfig implements IDModel, Serializable {
 
     public void setCatchRestrictor(String catchRestrictor) {
         this.catchRestrictor = catchRestrictor;
+    }
+
+    public String getCurrentVersion() {
+        return currentVersion;
+    }
+
+    public void setCurrentVersion(String currentVersion) {
+        this.currentVersion = currentVersion;
     }
 }

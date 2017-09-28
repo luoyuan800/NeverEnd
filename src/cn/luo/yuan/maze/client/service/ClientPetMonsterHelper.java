@@ -203,12 +203,12 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
                     clone.setSex(getRandom().nextInt(2));
                 }
                 int addPercent = Math.getExponent(level + control.getMaze().getStreaking());
-                long atkAddition = (getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT) + 1) * getRandom().nextInt(addPercent);
+                long atkAddition = (getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT) + 1) * (getRandom().nextInt(addPercent) + control.getMaze().getLevel()/1000);
                 clone.setAtk(clone.getAtk() + level * Data.MONSTER_ATK_RISE_PRE_LEVEL * (control.getHero().getReincarnate() * Data.GROW_INCRESE + 1) +
                         atkAddition);
                 clone.setAtkAddition(atkAddition);
                 clone.setDef(clone.getDef() + level * Data.MONSTER_DEF_RISE_PRE_LEVEL * (control.getHero().getReincarnate() * Data.GROW_INCRESE + 1));
-                long hpAddition = (getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT) + 1) * getRandom().nextInt(addPercent);
+                long hpAddition = (getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT) + 1) * (getRandom().nextInt(addPercent)  + control.getMaze().getLevel()/1000);
                 clone.setMaxHp(clone.getMaxHp() + level * Data.MONSTER_HP_RISE_PRE_LEVEL * (control.getHero().getReincarnate() * Data.GROW_INCRESE + 1) +
                         hpAddition);
                 clone.setHpAddition(hpAddition);

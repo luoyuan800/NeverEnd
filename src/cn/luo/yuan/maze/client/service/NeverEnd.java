@@ -512,6 +512,9 @@ public class NeverEnd extends Application implements InfoControlInterface {
     }
 
     public boolean dieCountClear(){
+        if(runningService.isInvincible()){
+            return false;
+        }
         if(runningService.isWeakling()){
             showToast(Resource.getString(R.string.weaking));
             return false;
@@ -519,7 +522,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
         long t = maze.getDie();
         if(t > 0 && t > 1000){
             if(t > 60000){
-                t = 30000;
+                t = 60000;
             }
             startInvincible(t, -1);
             maze.setDie(0);

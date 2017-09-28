@@ -240,7 +240,7 @@ public class RealBattleDialog implements View.OnClickListener {
                 if (skill instanceof AtkSkill) {
                     atkSkills.add((AtkSkill) skill);
                     int skillActionPoint = Data.getSkillActionPoint(skill);
-                    skillName.add("<font color='" + (skillActionPoint <= ((RealTimeState)currentState).getActionerPoint() ? "" : "#b4a6b0") + "'>" + skill.getName() + "</font> - " + skillActionPoint);
+                    skillName.add("<font color='" + (skillActionPoint <= ((RealTimeState)currentState).getActionerPoint() ? "" : "#b4a6b0") + "'>" + skill.getName() + "</font> - " + skillActionPoint + "行动点");
                 }
             }
             StringAdapter<String> adapter = new StringAdapter<>(skillName);
@@ -284,7 +284,7 @@ public class RealBattleDialog implements View.OnClickListener {
                 if (skill instanceof DefSkill) {
                     defSkills.add((DefSkill) skill);
                     int skillActionPoint = Data.getSkillActionPoint(skill);
-                    skillName.add("<font color='" + (skillActionPoint <= ((RealTimeState)currentState).getActionerPoint() ? "" : "#b4a6b0") + "'>" + skill.getName() + "</font> - " + skillActionPoint);
+                    skillName.add("<font color='" + (skillActionPoint <= ((RealTimeState)currentState).getActionerPoint() ? "" : "#b4a6b0") + "'>" + skill.getName() + "</font> - " + skillActionPoint+ "行动点");
                 }
             }
             StringAdapter<String> adapter = new StringAdapter<>(skillName);

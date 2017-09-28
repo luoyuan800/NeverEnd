@@ -39,6 +39,7 @@ open class LevelRecord(private var id:String):IDModel, Serializable, Cloneable {
     private var delete = false
     val lock = id
     var waitTrun = 0
+    var heardBeat = 0L
     var point:Long = 0
         set(value){
             priorPoint = field

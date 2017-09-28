@@ -40,11 +40,13 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
     fun run() {
         executor.scheduleAtFixedRate({
             for (i in (0 until ElyosrRealLevel.values().size)) {
-                var record: LevelRecord? = waiting.poolFirst(0)
+                val record: LevelRecord? = waiting.poolFirst(0)
                 if (record != null) {
-                    synchronized(record.lock) {
-                        record.waitTrun ++
-                        findBattleTarget(record!!)
+                    if (System.currentTimeMillis() - record.heardBeat < 600000) {
+                        synchronized(record.lock) {
+                            record.waitTrun++
+                            findBattleTarget(record!!)
+                        }
                     }
                 }
             }
@@ -95,6 +97,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
     fun pollState(id: String, msgIndex: Int, battleId: String?, cstate: RealState?): RealState? {
         val record = queryRecord(id)
         if (record != null) {
+            record.heardBeat = System.currentTimeMillis();
             if (cstate != null) {
                 if (cstate is Waiting && (cstate.priorState == null || cstate.priorState is Waiting)) {
                     return inQueue(id, record)
