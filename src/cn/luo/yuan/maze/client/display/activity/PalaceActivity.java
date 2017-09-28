@@ -60,9 +60,8 @@ public class PalaceActivity extends BaseActivity {
         final Dialog progressDialog = SimplerDialogBuilder.build("匹配中……", Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialog, int which) {
-                synchronized (manager) {
                     ranging = false;
-                }
+                    dialog.dismiss();
             }
         }, this, gameContext.getRandom());
         progressDialog.setCancelable(false);

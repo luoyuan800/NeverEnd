@@ -143,7 +143,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
                         targetServerRecord.debris -= Data.PALACE_RANGE_COST
                         mainProcess.heroTable.save(targetServerRecord)
                     }
-                    val rtb = RealTimeBattle(record, targetRecord, 2, 1000, 5, 2)
+                    val rtb = RealTimeBattle(record, targetRecord, 5, 1000, 5, 2)
                     battling.put(record.id, rtb)
                     battling.put(targetRecord.id, rtb)
                     targetRecord.waitTrun = 0
@@ -242,7 +242,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
 
     private fun initRecord(record: LevelRecord?) {
         if (record?.hero != null) {
-            if (record.hero!!.pets.isEmpty()) {
+            if (record!!.hero!!.pets.isEmpty()) {
                 record.hero!!.pets.addAll(record.pets)
             }
             if (record.hero!!.accessories.isEmpty()) {

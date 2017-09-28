@@ -45,7 +45,7 @@ public class SimplerDialogBuilder {
                 .withButton1Text(posivStr)                                      //def gone
                 .withDuration(700)
                 .withDialogColor(Color.WHITE)
-                .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
+                .isCancelableOnTouchOutside(false)                           //def    | isCancelable(true)
                 .setButton1Click(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

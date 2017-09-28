@@ -448,13 +448,16 @@ public class RealBattleDialog implements View.OnClickListener {
                     });
                 }
             }
-
+            StringBuilder builder = new StringBuilder("获得奖励,");
             if (state.getAwardMate() > 0) {
                 context.getHero().setMaterial(context.getHero().getMaterial() + state.getAwardMate());
+                builder.append("锻造：").append(StringUtils.formatNumber(state.getAwardMate()));
             }
             if (state.getAwardPoint() > 0) {
                 context.getHero().setPoint(context.getHero().getPoint() + state.getAwardPoint());
+                builder.append("; 能力点：").append(StringUtils.formatNumber(state.getAwardPoint()));
             }
+            context.showPopup(builder.toString());
         }
     }
 

@@ -558,14 +558,17 @@ public class NeverEnd extends Application implements InfoControlInterface {
                         final AtkPercentEffect atkE = new AtkPercentEffect();
                         atkE.setTag("weakling");
                         atkE.setValue(-50);
+                        atkE.setEnable(true);
                         hero.getEffects().add(atkE);
                         final DefPercentEffect defE = new DefPercentEffect();
                         defE.setTag("weakling");
                         defE.setValue(-50);
+                        defE.setEnable(true);
                         hero.getEffects().add(defE);
                         final HPPercentEffect hpE = new HPPercentEffect();
                         hpE.setTag("weakling");
                         hpE.setValue(-50);
+                        hpE.setEnable(true);
                         hero.getEffects().add(hpE);
                         executor.schedule(new Runnable() {
                             @Override
@@ -589,5 +592,10 @@ public class NeverEnd extends Application implements InfoControlInterface {
 
     public boolean isWeakling(){
          return runningService.isWeakling();
+    }
+
+    @Override
+    public boolean isInvincible() {
+        return runningService.isInvincible();
     }
 }

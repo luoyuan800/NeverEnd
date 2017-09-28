@@ -16,6 +16,7 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 public interface InfoControlInterface {
     boolean isWeakling();
+    boolean isInvincible();
     void startInvincible(long mill, long weakling);
     Hero getHero();
 

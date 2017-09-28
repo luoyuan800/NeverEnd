@@ -2,6 +2,9 @@ package cn.luo.yuan.maze.utils;
 
 import org.testng.annotations.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -41,7 +44,20 @@ public class TestRandom {
     public void testRandomItems() {
         Random r = new Random(System.currentTimeMillis());
         String[] strings = {"1", "2", "3", "4", "5", "6"};
-        for (int i = 0; i < 100; i++)
-            System.out.println(r.randomItem(strings));
+        Map<String, Long> rate = new HashMap<>();
+        for (int i = 0; i < 10; i++) {
+            String v = r.randomItem(strings);
+            Long l = rate.get(v);
+            if(l == null){
+                rate.put(v, 1L);
+            }else{
+                l= l+1;
+                rate.put(v, l);
+            }
+        }
+
+        for(Map.Entry<String, Long> entry : rate.entrySet()){
+            System.out.println(entry.getKey() + ": " + entry.getValue()*100/10 + "%");
+        }
     }
 }

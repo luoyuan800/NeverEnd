@@ -15,6 +15,7 @@ class Pokemon:GiftHandler {
         val pre = PetRateEffect()
         pre.petRate = 5f
         pre.tag = this.javaClass.simpleName
+        pre.isEnable = true
         control?.hero?.effects?.add(pre)
     }
 

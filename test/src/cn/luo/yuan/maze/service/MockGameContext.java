@@ -26,6 +26,11 @@ public class MockGameContext implements InfoControlInterface {
     }
 
     @Override
+    public boolean isInvincible() {
+        return false;
+    }
+
+    @Override
     public void startInvincible(long mill, long weakling) {
 
     }
