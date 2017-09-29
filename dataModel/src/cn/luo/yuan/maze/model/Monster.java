@@ -42,6 +42,7 @@ public class Monster extends HarmObject implements IDModel, SilentAbleObject, Na
     private List<Effect> containsEffects = new ArrayList<>(2);
     private long atkAddition;
     private long hpAddition;
+    private long defAddition;
     private String desc;
     private boolean delete;
 
@@ -350,5 +351,13 @@ public class Monster extends HarmObject implements IDModel, SilentAbleObject, Na
 
     public void setNext(int next) {
         this.next = next;
+    }
+
+    public long getDefAddition() {
+        return defAddition;
+    }
+
+    public void setDefAddition(long defAddition) {
+        this.defAddition = defAddition;
     }
 }

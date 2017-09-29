@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.client.service;
 
 import android.util.Log;
 import cn.luo.yuan.maze.R;
+import cn.luo.yuan.maze.client.display.activity.GameActivity;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.exception.MonsterToPetException;
@@ -135,14 +136,14 @@ public class RunningService implements RunningServiceInterface {
                             point /= 2;
                         }
                         String msg;
-                        if (point > 0 && (maze.getLevel() > maze.getMaxLevel() || random.nextBoolean())) {
-                            msg = String.format(gameContext.getContext().getString(R.string.move_to_next_level),
-                                    hero.getDisplayName(), StringUtils.formatNumber(maze.getLevel(), true), StringUtils.formatNumber(point, false));
-                        } else {
+                        if (point <= 0 || (maze.getLevel() <= maze.getMaxLevel() && !random.nextBoolean())) {
                             point = 1;
-                            msg = String.format(gameContext.getContext().getString(R.string.move_to_next_level),
-                                    hero.getDisplayName(), StringUtils.formatNumber(maze.getLevel(), true), StringUtils.formatNumber(point, false));
                         }
+                        if(gameContext.getContext() instanceof GameActivity && ((GameActivity) gameContext.getContext()).isBirthDay()){
+                            point *= 2;
+                        }
+                        msg = String.format(gameContext.getContext().getString(R.string.move_to_next_level),
+                                hero.getDisplayName(), StringUtils.formatNumber(maze.getLevel(), true), StringUtils.formatNumber(point, false));
                         long heroHp = hero.getHp();
                         long maxHp = (long) (hero.getMaxHp() * (1 + EffectHandler.getEffectAdditionFloatValue(EffectHandler.RESTORE_RATE, hero.getEffects()) / 100));
                         if (heroHp < maxHp && random.nextLong(hero.getAgi()) > random.nextLong(hero.getStr())) {
@@ -178,6 +179,9 @@ public class RunningService implements RunningServiceInterface {
                                 BattleMessageImp battleMessage = new BattleMessageImp(gameContext);
                                 battleService.setBattleMessage(battleMessage);
                                 long material = monster instanceof Monster ? ((Monster) monster).getMaterial() : maze.getLevel();
+                                if(gameContext.getContext() instanceof GameActivity && ((GameActivity) gameContext.getContext()).isBirthDay()){
+                                    material *= 2;
+                                }
                                 if(!isInvincible() && hero.getCurrentHp() <= 0){
                                     battleMessage.rowMessage(hero.getDisplayName() + "被吓傻了！");
                                 }

@@ -286,6 +286,10 @@ public class GameActivity extends BaseActivity {
         control.getViewHandler().showNPCDialog();
     }
 
+    public boolean isBirthDay() {
+        return birthDay;
+    }
+
     private void updateMonsterControlButton() {
         if(updateRandomMonster){
             ((ImageView)findViewById(R.id.monster_random)).setImageResource(R.drawable.mobvista_cm_refresh);

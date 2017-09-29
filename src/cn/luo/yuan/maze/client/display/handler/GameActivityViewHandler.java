@@ -255,7 +255,7 @@ public class GameActivityViewHandler extends Handler {
             ViewHandler.setText(textView, " + " + StringUtils.formatNumber(value, false));
             textView.setTextColor(Color.BLUE);
         }else{
-            ViewHandler.setText(textView, " - " + StringUtils.formatNumber(value, false));
+            ViewHandler.setText(textView, StringUtils.formatNumber(value, false));
             textView.setTextColor(context.getResources().getColor(R.color.mobvista_reward_green));
         }
     }
@@ -500,6 +500,10 @@ public class GameActivityViewHandler extends Handler {
                         }
                         refreshDieMessage();
                         dialog.dismiss();
+                        if(adapter.getCount() > 0 && neverEnd.getRandom().nextBoolean()) {
+                            neverEnd.getHero().setPoint(neverEnd.getHero().getPoint() + adapter.getCount());
+                            neverEnd.showToast("获得了%d点能力点", adapter.getCount());
+                        }
                     }
                 },context);
             }

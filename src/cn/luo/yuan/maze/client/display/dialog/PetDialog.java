@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.*;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
+import cn.luo.yuan.maze.client.display.handler.ViewHandler;
 import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Egg;
@@ -129,10 +130,10 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
             }
             if(currentPet.getContainsEffects()!=null && !currentPet.getContainsEffects().isEmpty()) {
                 detailView.findViewById(R.id.pet_effect_layout).setVisibility(View.VISIBLE);
-                ((TextView) detailView.findViewById(R.id.pet_owner)).setText(Html.fromHtml(currentPet.getOwnerName()));
             }else{
                 detailView.findViewById(R.id.pet_effect_layout).setVisibility(View.INVISIBLE);
             }
+            ViewHandler.setText((TextView) detailView.findViewById(R.id.pet_owner), currentPet.getOwnerName());
             ((TextView) detailView.findViewById(R.id.pet_mother)).setText(Html.fromHtml(currentPet.getMother()));
             ((TextView) detailView.findViewById(R.id.pet_farther)).setText(Html.fromHtml(currentPet.getFarther()));
             ((TextView) detailView.findViewById(R.id.pet_intimacy)).setText(Html.fromHtml(StringUtils.formatIntimacyString(currentPet.getIntimacy())));

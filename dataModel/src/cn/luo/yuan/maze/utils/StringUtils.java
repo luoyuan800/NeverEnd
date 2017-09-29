@@ -34,6 +34,8 @@ public class StringUtils {
     }
 
     public static String formatNumber(long num, boolean exquisite) {
+        boolean neg = num < 0;
+        num = Math.abs(num);
         Double value;
         if (num > 100000000) {
             value = num / 100000000d;
@@ -49,7 +51,7 @@ public class StringUtils {
                 return String.format(Locale.CHINA, "%.1f", value) + "万";
             }
         }
-        return num + "";
+        return (neg? "-" : "") + num + "";
     }
 
     public static String formatNumber(Number number){

@@ -21,7 +21,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/sort_intimacy"
                     android:textSize="10sp"
-                    android:layout_weight="1" style="@android:style/Widget.DeviceDefault.Button.Inset"/>
+                    android:layout_weight="1"
+                    style="@android:style/Widget.DeviceDefault.Light.Button.Inset"/>
             <Button
                     android:text="@string/sort_type_up"
                     android:textSize="10sp"

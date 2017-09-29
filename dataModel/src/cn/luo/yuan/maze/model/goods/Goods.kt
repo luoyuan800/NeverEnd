@@ -64,15 +64,17 @@ abstract class Goods : Serializable, IDModel, OwnedAble,Cloneable {
         //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun setKeeperId(id: String) {
-        keeper = id
+    override fun setKeeperId(id: String?) {
+        if(id !=null) {
+            keeper = id
+        }
     }
 
     override fun setOwnerId(id: String) {
         keeper = id
     }
 
-    var keeper = StringUtils.EMPTY_STRING;
+    var keeper:String = StringUtils.EMPTY_STRING;
     override fun getOwnerId(): String {
         return keeper
     }
