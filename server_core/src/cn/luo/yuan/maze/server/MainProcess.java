@@ -20,7 +20,6 @@ import cn.luo.yuan.maze.model.goods.types.ResetSkill;
 import cn.luo.yuan.maze.model.goods.types.Restrictor;
 import cn.luo.yuan.maze.model.goods.types.Scalpel;
 import cn.luo.yuan.maze.model.real.RealState;
-import cn.luo.yuan.maze.model.real.RealTimeState;
 import cn.luo.yuan.maze.model.real.action.RealTimeAction;
 import cn.luo.yuan.maze.model.task.Scene;
 import cn.luo.yuan.maze.model.task.Task;
@@ -916,7 +915,7 @@ public class MainProcess {
     public List<DLCKey> queryDLCKeys(String ownerId) {
         ServerRecord record = heroTable.getRecord(ownerId);
         if (record != null) {
-            return dlcTable.queryKeys(record.getDlcs());
+            return dlcTable.queryKeys(record.getDlcs(), ownerId);
         } else {
             return Collections.emptyList();
         }

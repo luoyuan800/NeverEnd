@@ -26,4 +26,6 @@ public interface BattleMessage extends BattleMessageInterface {
     void startBattle(String hero, String monster);
 
     void myTurn(String displayName);
+
+    void dieHarm(String dier, String hero, long harm);
 }

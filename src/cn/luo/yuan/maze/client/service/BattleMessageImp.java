@@ -95,6 +95,11 @@ public class BattleMessageImp implements BattleMessage {
         addMessage(String.format(Resource.getString(R.string.my_turn), displayName));
     }
 
+    @Override
+    public void dieHarm(String dier, String hero, long harm) {
+        addMessage(String.format(Resource.getString(R.string.dieHarm), dier, hero, StringUtils.formatNumber(harm)));
+    }
+
     public void addMessage(String format) {
         control.addMessage(format);
         messageCache.add(format);

@@ -178,11 +178,11 @@ public class RunningService implements RunningServiceInterface {
                                 BattleMessageImp battleMessage = new BattleMessageImp(gameContext);
                                 battleService.setBattleMessage(battleMessage);
                                 long material = monster instanceof Monster ? ((Monster) monster).getMaterial() : maze.getLevel();
-                                if(!isInvincible() && hero.getHp() <= 0){
+                                if(!isInvincible() && hero.getCurrentHp() <= 0){
                                     battleMessage.rowMessage(hero.getDisplayName() + "被吓傻了！");
                                 }
 
-                                if (isInvincible() || (hero.getHp() > 0 && battleService.battle(gameContext.getMaze().getLevel()))) {
+                                if (isInvincible() || (hero.getCurrentHp() > 0 && battleService.battle(gameContext.getMaze().getLevel()))) {
                                     if(isInvincible()){
                                         gameContext.addMessage(String.format(Resource.getString(R.string.invincible_win), ((NameObject) monster).getDisplayName()));
                                     }
@@ -213,7 +213,7 @@ public class RunningService implements RunningServiceInterface {
                                     for (LostListener lostListener : lostListeners.values()) {
                                         lostListener.lost(hero, monster, gameContext);
                                     }
-                                    if (hero.getHp() <= 0) {
+                                    if (hero.getCurrentHp() <= 0) {
                                         gameContext.addMessage(String.format(gameContext.getContext().getString(R.string.lost), hero.getDisplayName()));
                                         gameContext.getViewHandler().addDieMessage(battleMessage.getMessageCache());
                                         hero.setHp(hero.getMaxHp());

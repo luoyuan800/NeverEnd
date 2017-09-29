@@ -65,6 +65,11 @@ public class MockBattleMessage implements BattleMessage {
     }
 
     @Override
+    public void dieHarm(String dier, String hero, long harm) {
+
+    }
+
+    @Override
     public void hit(NameObject hero) {
         println("hit %s", hero.getDisplayName());
     }

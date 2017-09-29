@@ -8,6 +8,8 @@ import cn.luo.yuan.maze.model.skill.result.*;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
 
+import javax.xml.ws.Holder;
+
 import static cn.luo.yuan.maze.service.ListenerService.battleEndListeners;
 
 /**
@@ -85,6 +87,15 @@ public long round = 1;
             if (hero instanceof Hero) {
                 for (BattleEndListener endListener : battleEndListeners.values()) {
                     endListener.end((Hero) hero, monster);
+                }
+            }
+            if(monster instanceof Monster && hero instanceof Hero){
+                if(random.nextInt(((Monster) monster).getIndex()) + ((Hero) hero).getReincarnate() > random.nextInt(80)){
+                    long harm = random.nextLong((long)(monster.getUpperAtk() * 0.5)) + ((Monster) monster).getIndex();
+                    hero.setHp(hero.getHp() - harm);
+                    if (hero instanceof NameObject && monster instanceof NameObject) {
+                        battleMessage.dieHarm(((NameObject)monster).getDisplayName(), ((NameObject)hero).getDisplayName(),harm );
+                    }
                 }
             }
             return true;

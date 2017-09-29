@@ -145,4 +145,5 @@
     <string name="invincible_win">无敌状态！击杀%1$s</string>
     <string name="weaking">你正处于虚弱状态</string>
     <string name="action_point">行动点：</string>
+    <string name="dieHarm">%1$s临死反击对%2$s造成了%3$s的伤害</string>
 </resources>

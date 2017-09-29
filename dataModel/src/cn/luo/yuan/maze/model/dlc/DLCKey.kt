@@ -15,6 +15,7 @@ class DLCKey:Serializable {
     var id = StringUtils.EMPTY_STRING
     var type = StringUtils.EMPTY_STRING
     var cost:Int = 0
+    var buy = false
 
     override fun toString(): String {
         val typeStr = when(type){
@@ -24,6 +25,6 @@ class DLCKey:Serializable {
             GoodsDLC::class.java.simpleName -> "物品包"
             else -> ""
         }
-        return "($typeStr) $id - ${StringUtils.formatNumber(cost)}碎片"
+        return "($typeStr) $id - ${StringUtils.formatNumber(cost)}碎片 ${if(buy) "<已购买>" else ""}"
     }
 }

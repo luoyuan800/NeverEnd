@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.server.persistence;
 
+import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.model.dlc.DLC;
 import cn.luo.yuan.maze.model.dlc.DLCKey;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
@@ -27,8 +28,9 @@ public class DLCTable {
         return dlcTable;
     }
 
-    public List<DLCKey> queryKeys(Set<String> filterOut) {
+    public List<DLCKey> queryKeys(Set<String> filterOut, String ownerId) {
         List<DLCKey> keys = new ArrayList<>();
+        ServerRecord record = process.heroTable.getRecord(ownerId);
         for (String title : dlcTable.loadIds()) {
             DLC dlc = dlcTable.loadObject(title);
             if (dlc != null) {
@@ -36,6 +38,9 @@ public class DLCTable {
                 key.setId(dlc.getId());
                 key.setCost(dlc instanceof MonsterDLC && filterOut.contains(dlc.getId()) ? dlc.getDebrisCost()/2 : dlc.getDebrisCost());
                 key.setType(dlc.getClass().getSimpleName());
+                if(record!=null && record.getDlcs()!=null){
+                    key.setBuy(record.getDlcs().contains(dlc.getId()));
+                }
                 keys.add(key);
             }
         }
