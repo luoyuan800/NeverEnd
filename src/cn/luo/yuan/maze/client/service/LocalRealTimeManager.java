@@ -116,9 +116,7 @@ public class LocalRealTimeManager implements RealTimeManager {
     }
 
     public synchronized void targetAction(RealTimeState state) {
-        if(targetRecord!=null){
-            realTimeBattle.action(targetRecord.randomAction(context.getRandom(), realTimeBattle.getP2ActionPoint()));
-        }else {
+        if(targetRecord==null){
             realTimeBattle.action(new AtkAction(UUID.randomUUID().toString(), target.getId()));
         }
     }
