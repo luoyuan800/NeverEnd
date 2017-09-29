@@ -5,12 +5,16 @@ import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
+import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.serialize.ObjectTable;
 import cn.luo.yuan.maze.server.LogHelper;
+import cn.luo.yuan.maze.server.MainProcess;
+import cn.luo.yuan.maze.server.servcie.ServerDataManager;
+import cn.luo.yuan.maze.server.servcie.ServerGameContext;
 import cn.luo.yuan.maze.service.AccessoryHelper;
 import cn.luo.yuan.maze.service.SkillHelper;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -27,6 +31,7 @@ public class HeroTable implements Runnable {
     private ObjectTable<ServerRecord> recordDb;
     private long maxLevel = 1;
     private File root;
+    public MainProcess process;
 
     public HeroTable(File root) throws IOException, ClassNotFoundException {
         this.root = root;
@@ -176,7 +181,7 @@ public class HeroTable implements Runnable {
                 if (data.getAccessories() != null && hero.getAccessories().isEmpty()) {
                     for (Accessory accessory : data.getAccessories()) {
                         try {
-                            AccessoryHelper.mountAccessory(accessory, hero, false, null);
+                            AccessoryHelper.mountAccessory(accessory, hero, false, process.buildGameContext(record));
                         } catch (MountLimitException e) {
                             LogHelper.error(e);
                         }

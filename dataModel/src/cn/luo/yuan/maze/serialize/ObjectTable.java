@@ -170,6 +170,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
             }
         }catch (Exception e){
             //Do nothing
+            e.printStackTrace();
         }
     }
 
@@ -240,6 +241,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
             }
         } catch (Exception e) {
             //Do nothing
+            e.printStackTrace();
         }
         return deleted;
     }
@@ -271,7 +273,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
             e.printStackTrace();
             entry.delete();
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         return null;
 

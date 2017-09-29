@@ -113,6 +113,11 @@ public class Messager implements BattleMessage {
         notification(String.format("%s的攻击回合", displayName));
     }
 
+    @Override
+    public void dieHarm(String dier, String hero, long harm) {
+
+    }
+
     public void restore(@Nullable String hero) {
         notification(hero + "生命值已经恢复！");
     }

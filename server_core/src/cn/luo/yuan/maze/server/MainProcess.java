@@ -41,6 +41,8 @@ import cn.luo.yuan.maze.server.persistence.ReleaseManager;
 import cn.luo.yuan.maze.server.persistence.ShopTable;
 import cn.luo.yuan.maze.server.persistence.WarehouseTable;
 import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection;
+import cn.luo.yuan.maze.server.servcie.ServerDataManager;
+import cn.luo.yuan.maze.server.servcie.ServerGameContext;
 import cn.luo.yuan.maze.service.EffectHandler;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.Random;
@@ -105,6 +107,7 @@ public class MainProcess {
         taskTable = new ObjectTable<>(Task.class, this.root);
         sceneTable = new ObjectTable<>(Scene.class, this.root);
         heroTable = new HeroTable(heroDir);
+        heroTable.process = this;
         userDb = new ObjectTable<User>(User.class, this.root);
         monsterTable = new MonsterTable(this.root);
         process = this;
@@ -535,6 +538,7 @@ public class MainProcess {
         hero.setAtkGrow(Integer.parseInt(atkG));
         try {
             NPCTable table = new NPCTable(new File("data/npc"));
+            table.process = this;
             table.save(hero);
         } catch (IOException e) {
             e.printStackTrace();
@@ -1249,5 +1253,15 @@ public class MainProcess {
 
     public LevelRecord pollBattleTargetRecord(String myId){
         return realService.pollTargetRecord(myId);
+    }
+
+    public ServerGameContext buildGameContext(ServerRecord record)  {
+        NeverEndConfig heroConfig = new NeverEndConfig();
+        heroConfig.setElementer(record.getData().isElementer());
+        heroConfig.setLongKiller(record.getData().isLong());
+        ServerDataManager hdm = new ServerDataManager(record.getData().getHero(), heroConfig);
+        ServerGameContext hContext = new ServerGameContext(record.getData().getHero(), hdm, record.getData().getMaze());
+        hContext.setExecutor(executor);
+        return hContext;
     }
 }

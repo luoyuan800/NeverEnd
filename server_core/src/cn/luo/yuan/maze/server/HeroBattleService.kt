@@ -32,6 +32,7 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
         try {
             LogHelper.info("Start battle, number:" + table.size())
             val npc = NPCTable(File("npc"))
+            npc.process = main;
             loop@ for (id in table.allHeroIds) {
                 if (id == "npc") {
                     continue
