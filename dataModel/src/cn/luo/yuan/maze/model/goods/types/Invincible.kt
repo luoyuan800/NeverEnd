@@ -4,12 +4,17 @@ import cn.luo.yuan.maze.model.Parameter
 import cn.luo.yuan.maze.model.goods.GoodsProperties
 import cn.luo.yuan.maze.model.goods.UsableGoods
 import cn.luo.yuan.maze.service.InfoControlInterface
+import cn.luo.yuan.maze.utils.Field
 
 /**
  * Copyright @Luo
  * Created by Gavin Luo on 9/28/2017.
  */
 class Invincible : UsableGoods() {
+    companion object {
+        private const val serialVersionUID: Long = Field.SERVER_VERSION
+    }
+
     override fun perform(properties: GoodsProperties): Boolean {
         val context = properties[Parameter.CONTEXT] as InfoControlInterface
         if(!context.isWeakling && !context.isInvincible){

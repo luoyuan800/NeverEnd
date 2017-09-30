@@ -50,8 +50,10 @@ public class BuildDLC {
         buildSkillDlc(new Painkiller(), dlcTable);*/
         //buildEveoo(dlcTable);
         //buildNPC(dlcTable);
-        buildSkillDlc(new Mass(), dlcTable);
+        //buildSkillDlc(new Mass(), dlcTable);
         buildGoodsDlc(new Invincible(), 50, dlcTable);
+        //buildEveoo(dlcTable);
+        //buildEveooII(dlcTable);
     }
 
     public static void buildNPC(ObjectTable<DLC> dlcObjectTable) throws IOException{
@@ -597,7 +599,7 @@ public class BuildDLC {
         dlc.getImage().add(readImage("pics/evee/evo_dian.png"));
         dlc.setTitle("伊布伊布I");
         dlc.setDesc("解锁伊布12种进化形态，电、鬼、魂、草、虫、月、绿、木、暗、冰、角。");
-        dlc.setDebrisCost(200);
+        dlc.setDebrisCost(100);
         System.out.println(table.save(dlc));
     }
 
@@ -801,9 +803,9 @@ public class BuildDLC {
         monster.setDesc("伊布满亲密度的时候死亡，它会舍不得主人化身为鬼魂萦绕在主人的身边。");
         dlc.getMonsters().add(monster);
         dlc.getImage().add(readImage("pics/evee/evo_ling.png"));
-        dlc.setTitle("伊布伊布I");
+        dlc.setTitle("伊布伊布II");
         dlc.setDesc("解锁伊布12种进化形态，毒、黑、飞、轻、羽、钢、武、斗、火、烈、灵。");
-        dlc.setDebrisCost(200);
+        dlc.setDebrisCost(100);
         System.out.println(table.save(dlc));
     }
 }
