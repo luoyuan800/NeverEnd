@@ -10,6 +10,7 @@ import cn.luo.yuan.maze.model.skill.hero.Dodge;
 import cn.luo.yuan.maze.model.skill.hero.FightBack;
 import cn.luo.yuan.maze.model.skill.hero.HeroHit;
 import cn.luo.yuan.maze.model.skill.pet.Foster;
+import cn.luo.yuan.maze.model.skill.pet.Mass;
 import cn.luo.yuan.maze.model.skill.pet.PetMaster;
 import cn.luo.yuan.maze.model.skill.pet.Trainer;
 import cn.luo.yuan.maze.model.skill.race.Alayer;
@@ -31,6 +32,9 @@ public class SkillFactory {
         Skill skill = dm.loadSkill(name);
         if(skill == null){
             switch (name){
+                case "Mass":
+                    skill = new Mass();
+                    break;
                 case "Trainer":
                     skill = new Trainer();
                     break;

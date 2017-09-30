@@ -10,10 +10,13 @@ import cn.luo.yuan.maze.model.dlc.GoodsDLC;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
 import cn.luo.yuan.maze.model.dlc.NPCDLC;
 import cn.luo.yuan.maze.model.dlc.SkillDLC;
+import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.types.EmptyAccessory;
+import cn.luo.yuan.maze.model.goods.types.Invincible;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.model.skill.Skill;
+import cn.luo.yuan.maze.model.skill.pet.Mass;
 import cn.luo.yuan.maze.model.skill.race.Alayer;
 import cn.luo.yuan.maze.model.skill.race.Chaos;
 import cn.luo.yuan.maze.model.skill.race.Decide;
@@ -46,7 +49,9 @@ public class BuildDLC {
         buildSkillDlc(new Masimm(), dlcTable);
         buildSkillDlc(new Painkiller(), dlcTable);*/
         //buildEveoo(dlcTable);
-        buildNPC(dlcTable);
+        //buildNPC(dlcTable);
+        buildSkillDlc(new Mass(), dlcTable);
+        buildGoodsDlc(new Invincible(), 50, dlcTable);
     }
 
     public static void buildNPC(ObjectTable<DLC> dlcObjectTable) throws IOException{
@@ -54,6 +59,16 @@ public class BuildDLC {
         yuanshuxion(dlcObjectTable);*/
         leierdan(dlcObjectTable);
         yuanxiaomei(dlcObjectTable);
+    }
+
+    public static void buildGoodsDlc(Goods goods, int cost, ObjectTable<DLC> dlcObjectTable) throws IOException {
+        goods.setCount(1);
+        GoodsDLC dlc = new GoodsDLC();
+        dlc.setGoods(goods);
+        dlc.setDebrisCost(cost);
+        dlc.setTitle(goods.getName());
+        dlc.setDesc(goods.getDesc());
+        System.out.println(dlcObjectTable.save(dlc));
     }
 
     public static void yuanxiaomei(ObjectTable<DLC> dlcObjectTable) throws IOException {
@@ -581,7 +596,213 @@ public class BuildDLC {
         dlc.getMonsters().add(monster);
         dlc.getImage().add(readImage("pics/evee/evo_dian.png"));
         dlc.setTitle("伊布伊布I");
-        dlc.setDesc("解锁伊布12种进化形态，电、鬼、魂、毒、草、虫、月、绿、木、暗、冰、角。");
+        dlc.setDesc("解锁伊布12种进化形态，电、鬼、魂、草、虫、月、绿、木、暗、冰、角。");
+        dlc.setDebrisCost(200);
+        System.out.println(table.save(dlc));
+    }
+
+    private static void buildEveooII(ObjectTable<DLC> table) throws IOException {
+        MonsterDLC dlc = new MonsterDLC();
+        Monster monster = null;
+        monster = new Monster();
+        monster.setIndex(113);
+        monster.setAtk(128);
+        monster.setMaxHp(134);
+        monster.setHp(monster.getMaxHp());
+        monster.setDef(170);
+        monster.setPetRate(0);
+        monster.setEggRate(50);
+        monster.setSilent(59);
+        monster.setHitRate(18);
+        monster.setSex(-1);
+        monster.setRank(3);
+        monster.setRace(Race.Orger);
+        monster.setType("毒伊布");
+        monster.setDesc("筋疲力尽的玩耍了一个周末，一想到明天就要上班了，伊布就会吸收主人的怨念进化成了饱含毒性毒伊布。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("pics/evee/evo_du.png"));
+
+        monster = new Monster();
+        monster.setIndex(131);
+        monster.setAtk(218);
+        monster.setMaxHp(79);
+        monster.setHp(monster.getMaxHp());
+        monster.setDef(165);
+        monster.setPetRate(0);
+        monster.setEggRate(50);
+        monster.setSilent(19);
+        monster.setHitRate(90);
+        monster.setSex(-1);
+        monster.setRank(3);
+        monster.setRace(Race.Orger);
+        monster.setType("黑暗伊布");
+        monster.setDesc("如果一个亲密度低的伊布死亡，它会化身为黑暗寻找害死它的人进行报复。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("pics/evee/evo_er_1.png"));
+
+        monster = new Monster();
+        monster.setIndex(115);
+        monster.setAtk(28);
+        monster.setMaxHp(40);
+        monster.setHp(monster.getMaxHp());
+        monster.setDef(250);
+        monster.setPetRate(0);
+        monster.setEggRate(50);
+        monster.setSilent(29);
+        monster.setHitRate(9);
+        monster.setSex(-1);
+        monster.setRank(3);
+        monster.setRace(Race.Eviler);
+        monster.setType("飞伊布");
+        monster.setDesc("亲密度也会影响伊布的体重，体重轻的时候就会进化了会飞的伊布了");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("pics/evee/evo_fei.png"));
+
+        monster = new Monster();
+        monster.setIndex(116);
+        monster.setAtk(128);
+        monster.setMaxHp(40);
+        monster.setHp(monster.getMaxHp());
+        monster.setDef(170);
+        monster.setPetRate(0);
+        monster.setEggRate(50);
+        monster.setSilent(29);
+        monster.setHitRate(10);
+        monster.setSex(-1);
+        monster.setRank(3);
+        monster.setRace(Race.Eviler);
+        monster.setType("轻伊布");
+        monster.setDesc("亲密度也会影响伊布的体重，体重轻的时候就会进化了会飞的伊布了。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("pics/evee/evo_fei_1.png"));
+
+        monster = new Monster();
+        monster.setIndex(112);
+        monster.setAtk(128);
+        monster.setMaxHp(40);
+        monster.setHp(monster.getMaxHp());
+        monster.setDef(170);
+        monster.setPetRate(0);
+        monster.setEggRate(50);
+        monster.setSilent(39);
+        monster.setHitRate(10);
+        monster.setSex(-1);
+        monster.setRank(3);
+        monster.setRace(Race.Eviler);
+        monster.setType("羽伊布");
+        monster.setDesc("飞翔的周六，伊布也会和主人一起飞翔。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("pics/evee/evo_fei_2.png"));
+
+        monster = new Monster();
+        monster.setIndex(123);
+        monster.setAtk(28);
+        monster.setMaxHp(40);
+        monster.setHp(monster.getMaxHp());
+        monster.setDef(270);
+        monster.setPetRate(0);
+        monster.setEggRate(30);
+        monster.setSilent(19);
+        monster.setHitRate(40);
+        monster.setSex(-1);
+        monster.setRank(3);
+        monster.setRace(Race.Wizardsr);
+        monster.setType("钢伊布");
+        monster.setDesc("传说主人的五行属性为金的时候，伊布可以吸收金的能量进化成坚不可摧的钢精灵。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("pics/evee/evo_gan.png"));
+
+        monster = new Monster();
+        monster.setIndex(105);
+        monster.setAtk(228);
+        monster.setMaxHp(140);
+        monster.setHp(monster.getMaxHp());
+        monster.setDef(70);
+        monster.setPetRate(0);
+        monster.setEggRate(50);
+        monster.setSilent(49);
+        monster.setHitRate(10);
+        monster.setSex(-1);
+        monster.setRank(3);
+        monster.setRace(Race.Eviler);
+        monster.setType("武伊布");
+        monster.setDesc("为战斗而生的伊布进化型。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("pics/evee/evo_ge.png"));
+
+        monster = new Monster();
+        monster.setIndex(127);
+        monster.setAtk(228);
+        monster.setMaxHp(140);
+        monster.setHp(monster.getMaxHp());
+        monster.setDef(70);
+        monster.setPetRate(0);
+        monster.setEggRate(50);
+        monster.setSilent(9);
+        monster.setHitRate(40);
+        monster.setSex(-1);
+        monster.setRank(3);
+        monster.setRace(Race.Elyosr);
+        monster.setType("斗伊布");
+        monster.setDesc("夜晚才能进化出来的伊布进化型。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("pics/evee/evo_ge_1.png"));
+
+        monster = new Monster();
+        monster.setIndex(120);
+        monster.setAtk(228);
+        monster.setMaxHp(140);
+        monster.setHp(monster.getMaxHp());
+        monster.setDef(70);
+        monster.setPetRate(0);
+        monster.setEggRate(50);
+        monster.setSilent(9);
+        monster.setHitRate(20);
+        monster.setSex(-1);
+        monster.setRank(3);
+        monster.setRace(Race.Elyosr);
+        monster.setType("火伊布");
+        monster.setDesc("当然是需要主人的五行属性为火的时候才能看到这种进化型的。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("pics/evee/evo_huo.png"));
+
+        monster = new Monster();
+        monster.setIndex(126);
+        monster.setAtk(228);
+        monster.setMaxHp(140);
+        monster.setHp(monster.getMaxHp());
+        monster.setDef(70);
+        monster.setPetRate(0);
+        monster.setEggRate(30);
+        monster.setSilent(9);
+        monster.setHitRate(50);
+        monster.setSex(-1);
+        monster.setRank(3);
+        monster.setRace(Race.Wizardsr);
+        monster.setType("烈伊布");
+        monster.setDesc("当然是需要主人的五行属性为火的时候才能看到这种进化型的。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("pics/evee/evo_huo_1.png"));
+
+        monster = new Monster();
+        monster.setIndex(130);
+        monster.setAtk(228);
+        monster.setMaxHp(140);
+        monster.setHp(monster.getMaxHp());
+        monster.setDef(170);
+        monster.setPetRate(0);
+        monster.setEggRate(10);
+        monster.setSilent(9);
+        monster.setHitRate(20);
+        monster.setSex(-1);
+        monster.setRank(3);
+        monster.setRace(Race.Ghosr);
+        monster.setType("灵伊布");
+        monster.setDesc("伊布满亲密度的时候死亡，它会舍不得主人化身为鬼魂萦绕在主人的身边。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("pics/evee/evo_ling.png"));
+        dlc.setTitle("伊布伊布I");
+        dlc.setDesc("解锁伊布12种进化形态，毒、黑、飞、轻、羽、钢、武、斗、火、烈、灵。");
         dlc.setDebrisCost(200);
         System.out.println(table.save(dlc));
     }
