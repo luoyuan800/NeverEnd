@@ -27,7 +27,7 @@ public class Data {
     public static  int MAX_PET_COUNT = 100;//最多背包宠物个数
     public static  long FUSE_COST = 20000; //装备升级消耗的锻造
     public static  long BASE_PET_COUNT = 3;
-    public static float MONSTER_MEET_RATE = 99f;//遇怪的概率
+    public static float MONSTER_MEET_RATE = 95f;//遇怪的概率
     public static float PORTAL_RATE = 0.05f;//传送门的概率
     public static int LEVEL_BASE_POINT_REDUCE = 550;//爬楼奖励的点数基数分母（random（level/reduce））
     public static long REFRESH_SPEED = 500;//刷新间隔

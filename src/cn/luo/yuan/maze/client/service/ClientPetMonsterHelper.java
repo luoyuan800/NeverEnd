@@ -203,17 +203,13 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
                     clone.setSex(getRandom().nextInt(2));
                 }
                 int addPercent = Math.getExponent(level + control.getMaze().getStreaking());
-                long atkAddition = (getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT) + 1)
-                        * (getRandom().nextInt(addPercent) + control.getMaze().getLevel()/1000) +
-                        level * Data.MONSTER_ATK_RISE_PRE_LEVEL * (control.getHero().getReincarnate() * Data.GROW_INCRESE + 1);
+                long atkAddition = getAdditionValue(level, addPercent, Data.MONSTER_ATK_RISE_PRE_LEVEL);
                 clone.setAtk(clone.getAtk() + atkAddition);
                 clone.setAtkAddition(atkAddition);
-                long defAddition = level * Data.MONSTER_DEF_RISE_PRE_LEVEL * (control.getHero().getReincarnate() * Data.GROW_INCRESE + 1);
+                long defAddition = level * (Data.MONSTER_DEF_RISE_PRE_LEVEL + (control.getHero().getReincarnate() * Data.GROW_INCRESE + 1));
                 clone.setDef(clone.getDef() + defAddition);
                 clone.setDefAddition(defAddition);
-                long hpAddition = (getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT) + 1) *
-                        (getRandom().nextInt(addPercent)  + control.getMaze().getLevel()/1000)
-                        + level * Data.MONSTER_HP_RISE_PRE_LEVEL * (control.getHero().getReincarnate() * Data.GROW_INCRESE + 1) ;
+                long hpAddition = getAdditionValue(level, addPercent, Data.MONSTER_HP_RISE_PRE_LEVEL);
                 clone.setMaxHp(clone.getMaxHp() + hpAddition);
                 clone.setHpAddition(hpAddition);
                 clone.setHp(clone.getMaxHp());
@@ -231,6 +227,20 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
             }
         }
         return clone;
+    }
+
+    public long getAdditionValue(long level, int addPercent, long addPerLevel) {
+        long atkAddition = (getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT) + 1)
+                *(getRandom().nextInt(addPercent) + control.getMaze().getLevel() / 1000);
+        if(atkAddition >= 0 ) {
+                atkAddition += level * (addPerLevel + (control.getHero().getReincarnate() * Data.GROW_INCRESE + 1));
+        }else{
+            atkAddition = level * (Data.MONSTER_ATK_RISE_PRE_LEVEL + (control.getHero().getReincarnate() * Data.GROW_INCRESE + 1));
+        }
+        if(atkAddition < 0 ){
+            atkAddition = level * (Data.MONSTER_ATK_RISE_PRE_LEVEL + (control.getHero().getReincarnate() * Data.GROW_INCRESE + 1));
+        }
+        return atkAddition;
     }
 
     public String getDescription(int index, String type) {

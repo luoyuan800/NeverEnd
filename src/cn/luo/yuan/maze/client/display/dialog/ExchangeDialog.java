@@ -263,6 +263,9 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                     @Override
                     public void run() {
                         if (manager.requestExchange((Serializable) myItem, eo)) {
+                            if(eo.getExchange() instanceof Pet){
+                                ((Pet) eo.getExchange()).setIntimacy(0);
+                            }
                             context.getDataManager().add(eo.getExchange());
                             handler.post(new Runnable() {
                                 @Override
@@ -409,6 +412,9 @@ public class ExchangeDialog implements LoadMoreListView.OnItemClickListener {
                             context.getDataManager().delete((Serializable) eo.getExchange());
                         }
                         if (model != null) {
+                            if(model instanceof Pet){
+                                ((Pet) model).setIntimacy(0);
+                            }
                             context.getDataManager().add(model);
                         }
                         if (model instanceof NameObject) {
