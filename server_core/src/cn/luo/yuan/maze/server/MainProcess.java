@@ -1018,7 +1018,11 @@ public class MainProcess {
                 record.setGift(record.getGift() + us.getGift());
                 record.getCdkdys().add(cdId);
             } else {
-                return "至少进入战斗塔一次之后才能兑换";
+                if(record == null) {
+                    return "至少进入战斗塔一次之后才能兑换";
+                }else{
+                    return "该兑换码已经使用过了";
+                }
             }
             return us;
         }
