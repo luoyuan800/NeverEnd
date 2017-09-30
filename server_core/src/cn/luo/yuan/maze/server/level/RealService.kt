@@ -43,7 +43,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
                 val record: LevelRecord? = waiting.poolFirst(0)
                 if (record != null) {
                     if (System.currentTimeMillis() - record.heardBeat < 600000) {
-                        synchronized(record.lock) {
+                        synchronized(record.id) {
                             record.waitTrun++
                             findBattleTarget(record!!)
                         }
@@ -112,7 +112,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
     }
 
     fun inQueue(id: String, record: LevelRecord): RealState {
-        synchronized(record.lock) {
+        synchronized(record.id) {
             if (battling[record.id] == null) {
                 if (!waiting.isQueue(record)) {
                     val serverRecord = mainProcess.heroTable.getRecord(id)
@@ -135,7 +135,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
         executor.execute {
             val targetRecord = waiting.findTarget(record)
             if (targetRecord != null && targetRecord.id != record.id) {
-                synchronized(targetRecord.lock) {
+                synchronized(targetRecord.id) {
                     val serverRecord = mainProcess.heroTable.getRecord(record.id)
                     if (serverRecord != null) {
                         serverRecord.debris -= Data.PALACE_RANGE_COST
@@ -154,8 +154,7 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
                     LogHelper.info(record.hero?.name + " & " + targetRecord.hero?.name + " start range battle")
                 }
             } else {
-                val l = waitingTime[record.id]
-                if (l != null && l >= 45000) {
+                if (record.waitTrun >= 500) {
                     val npc = randomLegacyNPC(record.point)
                     if (npc != null) {
                         val serverRecord = mainProcess.heroTable.getRecord(record.id)
@@ -164,15 +163,14 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
                             mainProcess.heroTable.save(serverRecord)
                         }
                         val rtb = RealTimeBattle(record, npc, 2, 1000, 5, 2)
+                        record.waitTrun = 0
                         battling.put(record.id, rtb)
                         LogHelper.info(record.hero?.name + " & " + npc.hero?.name + " start range battle")
                     } else {
-                        waitingTime[record.id] = l + 1
-                        waiting.addQueue(record)
+                        inQueue(record.id, record)
                     }
                 } else {
-                    waitingTime[record.id] = l!! + 1
-                    waiting.addQueue(record)
+                    inQueue(record.id, record)
                 }
             }
         }

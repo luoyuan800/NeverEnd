@@ -226,20 +226,20 @@ class RealTimeBattle(val p1: HarmAble, val p2: HarmAble, var pointAward:Long, va
         winner = win
         loser = lost
         if(winner == p1){
-            if(p1Record!=null){
+            if(p1Record!=null && p1Record !is NPCLevelRecord){
                 p1Record!!.point += levelPointAward
                 p1Record!!.win ++
             }
-            if(p2Record!=null){
+            if(p2Record!=null && p2Record !is NPCLevelRecord){
                 p2Record!!.point -= levelPointReduce
                 p2Record!!.lost ++
             }
         }else{
-            if(p2Record!=null){
+            if(p2Record!=null && p2Record !is NPCLevelRecord){
                 p2Record!!.point += levelPointAward
                 p2Record!!.win ++
             }
-            if(p1Record!=null){
+            if(p1Record!=null && p1Record !is NPCLevelRecord){
                 p1Record!!.point -= levelPointReduce
                 p1Record!!.lost ++
             }

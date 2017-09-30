@@ -19,6 +19,7 @@ class NPCLevelRecord(hero:Hero):LevelRecord(hero) {
     companion object {
         private const val serialVersionUID: Long = Field.SERVER_VERSION
     }
+
     var sex = 0
     val message = mutableListOf<String>()
         get(){
