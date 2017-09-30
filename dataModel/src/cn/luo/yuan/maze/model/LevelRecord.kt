@@ -4,6 +4,7 @@ import cn.luo.yuan.maze.model.skill.EmptySkill
 import cn.luo.yuan.maze.model.skill.Skill
 import cn.luo.yuan.maze.service.AccessoryHelper
 import cn.luo.yuan.maze.utils.Field
+import cn.luo.yuan.maze.utils.StringUtils
 import java.io.Serializable
 import java.util.concurrent.locks.ReentrantReadWriteLock
 
@@ -75,6 +76,14 @@ open class LevelRecord(private var id:String):IDModel, Serializable, Cloneable {
 
     override fun clone(): LevelRecord {
         return super.clone() as LevelRecord
+    }
+
+    override fun toString(): String {
+        if(hero!=null) {
+            return hero!!.displayName + "<br>  " + StringUtils.formatRealLevel(point, hero!!.race)
+        }else{
+            return super.toString()
+        }
     }
 
 }

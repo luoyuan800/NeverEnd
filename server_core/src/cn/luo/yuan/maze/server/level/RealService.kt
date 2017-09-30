@@ -11,6 +11,7 @@ import cn.luo.yuan.maze.server.MainProcess
 import cn.luo.yuan.maze.service.AccessoryHelper
 import cn.luo.yuan.maze.service.real.RealTimeBattle
 import cn.luo.yuan.maze.utils.Random
+import cn.luo.yuan.maze.utils.StringUtils
 import java.io.File
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -71,14 +72,13 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
         }, 20, TimeUnit.HOURS)
     }
 
-    fun pollTopNRecord(n: Int): List<LevelRecord> {
+    fun pollTopNRecord(n: Int): String {
         val sortRecords = recordDb.loadAll().toMutableList()
         if (sortRecords.isEmpty()) {
-            return sortRecords
+            return StringUtils.EMPTY_STRING;
         }
         sortRecords.sortByDescending { it.point }
-
-        return sortRecords.subList(0, if (n <= sortRecords.size) n else sortRecords.size).toList()
+        return sortRecords.subList(0, if (n <= sortRecords.size) n else sortRecords.size).joinToString("<br>")
     }
 
     fun stop() {

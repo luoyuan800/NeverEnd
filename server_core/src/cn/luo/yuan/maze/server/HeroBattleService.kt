@@ -190,9 +190,11 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
         if(group!=null){
             val g = Group()
             for(hid in group.heroIds){
-                val hero = table.getHero(hid)
-                if(hero!=null){
-                    g.heroes.add(hero)
+                if(hid != "npc") {
+                    val hero = table.getHero(hid)
+                    if (hero != null) {
+                        g.heroes.add(hero)
+                    }
                 }
             }
             if(group.npc!=null){

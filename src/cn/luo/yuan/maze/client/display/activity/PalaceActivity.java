@@ -25,13 +25,17 @@ import cn.luo.yuan.maze.model.real.NoDebris;
 import cn.luo.yuan.maze.model.real.Quit;
 import cn.luo.yuan.maze.model.real.RealState;
 import cn.luo.yuan.maze.model.real.Waiting;
-import cn.luo.yuan.maze.model.real.level.*;
+import cn.luo.yuan.maze.model.real.level.ElyosrRealLevel;
+import cn.luo.yuan.maze.model.real.level.EvilerRealLevel;
+import cn.luo.yuan.maze.model.real.level.GhosrRealLevel;
+import cn.luo.yuan.maze.model.real.level.NonsrRealLevel;
+import cn.luo.yuan.maze.model.real.level.OrgerRealLevel;
+import cn.luo.yuan.maze.model.real.level.WizardsrRealLevel;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -216,21 +220,13 @@ public class PalaceActivity extends BaseActivity {
                 try {
                     HttpURLConnection con = server.getHttpURLConnection(Path.TOP_N_PALACE, RestConnection.POST);
                     con.addRequestProperty(Field.COUNT, String.valueOf(5));
-                    Object o = server.connect(con);
-                    if (o instanceof List) {
-                        final StringBuilder sb = new StringBuilder();
-                        for (LevelRecord record : (List<LevelRecord>) o) {
-                            if (record.getHero() != null)
-                                sb.append(record.getHero().getDisplayName()).append("<br>").append(" ")
-                                        .append(StringUtils.formatRealLevel(record.getPoint(), record.getHero().getRace())).append("<br>");
+                    final Object o = server.connect(con);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ViewHandler.setText((TextView) findViewById(R.id.online_palace_range), o.toString());
                         }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ViewHandler.setText((TextView) findViewById(R.id.online_palace_range), sb.toString());
-                            }
-                        });
-                    }
+                    });
                 } catch (IOException e) {
                     LogHelper.logException(e, "query top n palace");
                 }

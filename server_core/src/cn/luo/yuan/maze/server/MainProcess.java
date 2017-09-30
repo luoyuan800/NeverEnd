@@ -1070,7 +1070,7 @@ public class MainProcess {
         return null;
     }
 
-    public List<LevelRecord> pollTopNPalaceRecords(int n){
+    public String pollTopNPalaceRecords(int n){
         return realService.pollTopNRecord(n);
     }
 

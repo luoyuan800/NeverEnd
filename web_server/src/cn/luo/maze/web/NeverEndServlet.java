@@ -201,7 +201,7 @@ public class NeverEndServlet extends HttpServlet {
                     writeObject(response, process.pollRealBattleTurn(ownerId));
                     break;
                 case TOP_N_PALACE:
-                    writeObject(response, process.pollTopNPalaceRecords(request.getIntHeader(Field.COUNT)));
+                    writeMessage(response, process.pollTopNPalaceRecords(request.getIntHeader(Field.COUNT)));
                     break;
                 case REAL_BATTLE_QUIT:
                     RealState state = readObject(request);
