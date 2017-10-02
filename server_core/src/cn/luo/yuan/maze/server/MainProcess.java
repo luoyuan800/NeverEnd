@@ -1268,4 +1268,28 @@ public class MainProcess {
         hContext.setExecutor(executor);
         return hContext;
     }
+
+    public String changeDebris(int debris, String ownerId){
+        ServerRecord record = heroTable.getRecord(ownerId);
+        if(record!=null && record.getDebris() >= debris){
+            record.setDebris(record.getDebris() - debris);
+            String key = cdkeyTable.newCdKey(debris, 0, 0);
+            record.getMyKeys().add(key);
+            try {
+                heroTable.save(record);
+            } catch (IOException e) {
+                LogHelper.error(e);
+            }
+            return key;
+        }
+        return null;
+    }
+
+    public ArrayList<String> queryMyKeys(String id){
+        ServerRecord record = heroTable.getRecord(id);
+        if(record!=null){
+            return new ArrayList<>(record.getMyKeys());
+        }
+        return new ArrayList<>(0);
+    }
 }

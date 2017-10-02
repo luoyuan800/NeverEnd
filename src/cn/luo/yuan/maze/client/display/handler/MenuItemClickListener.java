@@ -17,6 +17,7 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
 import cn.luo.yuan.maze.client.display.activity.PalaceActivity;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
+import cn.luo.yuan.maze.client.display.adapter.StringAdapter;
 import cn.luo.yuan.maze.client.display.dialog.*;
 import cn.luo.yuan.maze.client.service.LocalRealTimeManager;
 import cn.luo.yuan.maze.client.service.NeverEnd;
@@ -32,6 +33,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.List;
 
 public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
     private Context context;
@@ -63,6 +65,9 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.debris:
+                debrisChangeDialog();
+                break;
             case R.id.palace:
                 Intent palaceIntent = new Intent(context, PalaceActivity.class);
                 context.startActivity(palaceIntent);
@@ -318,6 +323,104 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                 dialog_bak.show();
         }
         return false;
+    }
+
+    private void debrisChangeDialog() {
+        final ProgressDialog debrisPost = new ProgressDialog(context);
+        debrisPost.show();
+        control.getExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    final int debris = Integer.parseInt(control.getServerService().postDebrisCount(control));
+                    control.getViewHandler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            debrisPost.dismiss();
+                        }
+                    });
+                    showDerisChangeDialog(debris);
+                }catch (Exception e){
+                    LogHelper.logException(e, "change debris!");
+                }
+            }
+        });
+    }
+
+    private void showDerisChangeDialog(final int debris) {
+        if(debris > 0) {
+            control.getViewHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        LinearLayout derisLayout = new LinearLayout(context);
+                        derisLayout.setOrientation(LinearLayout.VERTICAL);
+                        final NumberPicker picker = new NumberPicker(context);
+                        picker.setMaxValue(debris);
+                        picker.setMinValue(1);
+                        derisLayout.addView(picker);
+                        TextView debrisTip = new TextView(context);
+                        debrisTip.setText(Resource.getString(R.string.debris_tip));
+                        derisLayout.addView(debrisTip);
+                        Button myKeys = new Button(context);
+                        myKeys.setText(R.string.MY_DEBRIS_KEY);
+                        myKeys.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                queryMyKeys();
+                            }
+                        });
+                        SimplerDialogBuilder.build(derisLayout, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                final ProgressDialog progressDialog = new ProgressDialog(context);
+                                progressDialog.show();
+                                control.getExecutor().execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        final String cd = control.getServerService().changeDebris(picker.getValue(), control);
+                                        control.getViewHandler().post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                progressDialog.dismiss();
+                                                SimplerDialogBuilder.build(Resource.getString(R.string.debris_change_result, cd), context, false);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }, context);
+                    } catch (Exception e) {
+                        LogHelper.logException(e, "Show change debria dialog");
+                    }
+                }
+            });
+        }
+    }
+
+    private void queryMyKeys() {
+        final ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.show();
+        control.getExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                final List<String> keys = control.getServerService().queryMyKeys(control);
+                control.getViewHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                        ListView listView = new ListView(context);
+                        listView.setAdapter(new StringAdapter<String>(keys));
+                        SimplerDialogBuilder.build(listView, Resource.getString(R.string.conform), context, control.getRandom());
+                    }
+                });
+            }
+        });
     }
 
     public void showReleaseNote(final String version, final RestConnection server, final String rn, final String cv) {

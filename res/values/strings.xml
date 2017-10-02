@@ -146,4 +146,7 @@
     <string name="weaking">你正处于虚弱状态</string>
     <string name="action_point">行动点：</string>
     <string name="dieHarm">%1$s临死反击对%2$s造成了%3$s的伤害</string>
+    <string name="debris_tip">点击确认后会获得一个兑换码。你可以通过过这个功能将你的碎片转换为兑换码送给其他人（或者其他账号）。</string>
+    <string name="debris_change_result">你的碎片已经转换为兑换码：%1$s</string>
+    <string name="MY_DEBRIS_KEY">查看兑换码</string>
 </resources>

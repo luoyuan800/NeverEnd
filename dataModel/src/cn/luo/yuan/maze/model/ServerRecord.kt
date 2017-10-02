@@ -52,7 +52,13 @@ class ServerRecord : IDModel, Serializable, MessageReceiver {
             }
         }
     var gift = 0
-
+    val myKeys = mutableListOf<String>()
+        get(){
+            if(field == null){
+                field = mutableListOf<String>()
+            }
+            return field
+        }
     val dlcs:Set<String>? = mutableSetOf<String>()
     get(){
         if(field == null){

@@ -4,7 +4,6 @@ import cn.luo.yuan.maze.model.KeyResult
 import cn.luo.yuan.maze.server.LogHelper
 import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection
 import cn.luo.yuan.maze.utils.Random
-import cn.luo.yuan.maze.utils.StringUtils
 import java.sql.Connection
 import java.sql.Statement
 
@@ -12,7 +11,7 @@ import java.sql.Statement
  * Copyright @Luo
  * Created by Gavin Luo on 8/15/2017.
  */
-class CDKEYTable(private val database:DatabaseConnection) {
+class CDKEYTable(private val database: DatabaseConnection) {
     init {
         var statement: Statement? = null
         var connection: Connection? = null
@@ -28,39 +27,39 @@ class CDKEYTable(private val database:DatabaseConnection) {
         }
     }
 
-    fun use(id:String):KeyResult{
+    fun use(id: String): KeyResult {
         val ur = KeyResult()
         val con = database.getConnection()
         var verify = false
-        try{
+        try {
             val stat = con.createStatement();
             val rs = stat.executeQuery("select * from cdkey where id = '$id'")
             var gift = 0
             var debris = 0
-            if(rs.next()){
+            if (rs.next()) {
                 gift = rs.getInt("gift")
                 debris = rs.getInt("debris")
-               ur.mate = rs.getLong("mate")
-                if(rs.getBoolean("single")){
+                ur.mate = rs.getLong("mate")
+                if (rs.getBoolean("single")) {
                     verify = rs.getInt("used") <= 0
-                }else{
+                } else {
                     verify = true
                 }
             }
             rs.close()
-            if(verify){
+            if (verify) {
                 stat.execute("update cdkey set used = used + 1 where id ='$id'")
-                if(verify){
+                if (verify) {
                     val r = Random(System.currentTimeMillis())
-                    if(gift > 0){
-                        ur.gift = r.nextInt(gift) + 1
+                    if (gift > 0) {
+                        ur.gift = if (ur.mate > 0) r.nextInt(gift) + 1 else gift
                     }
-                    if(debris > 0){
-                        ur.debris = r.nextInt(debris) + 1
+                    if (debris > 0) {
+                        ur.debris = if (ur.mate > 0) r.nextInt(debris) + 1 else debris
                     }
                 }
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             LogHelper.error(e)
         }
         con.close()
@@ -68,27 +67,31 @@ class CDKEYTable(private val database:DatabaseConnection) {
         return ur
     }
 
-    fun newCdKey():String{
+    fun newCdKey(): String {
+        return newCdKey(1, 0, 10000)
+    }
+
+    fun newCdKey(deris: Int, mate: Int, gift: Int): String {
 
         val con = database.getConnection()
-        try{
+        try {
             val random = Random(System.currentTimeMillis())
             val stat = con.createStatement()
             val id = buildId(random)
-            stat.execute("insert into cdkey(id, gift, debris, mate, used, single) values('$id',1, 0,10000,0,1)")
+            stat.execute("insert into cdkey(id, gift, debris, mate, used, single) values('$id',$gift, $deris,$mate,0,1)")
             stat.close();
             return id;
-        }finally {
+        } finally {
             con?.close()
         }
     }
 
-    private fun buildId(random:Random):String{
+    private fun buildId(random: Random): String {
         val sb = StringBuilder()
         while (sb.length < 5) {
             sb.append((random.nextInt(25) + 97).toChar())
         }
-       return sb.toString()
+        return sb.toString()
     }
 
 }

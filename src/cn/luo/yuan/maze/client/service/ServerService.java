@@ -441,4 +441,31 @@ public class ServerService {
         }
         return null;
     }
+
+    public String changeDebris(int value, NeverEnd context) {
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(DEBRIS_CHANGE_KEY, RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            connection.addRequestProperty(Field.COUNT,String.valueOf(value));
+            Object connect = server.connect(connection);
+            return connect.toString();
+        } catch (Exception e) {
+            LogHelper.logException(e, "ServiceService->changeDebris");
+        }
+        return null;
+    }
+
+    public List<String> queryMyKeys(NeverEnd control) {
+        try {
+            HttpURLConnection connection = server.getHttpURLConnection(QUERY_DEBRIS_CHANGE_KEY, RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, control.getHero().getId());
+            Object connect = server.connect(connection);
+            if(connect instanceof List){
+                return (List<String>) connect;
+            }
+        } catch (Exception e) {
+            LogHelper.logException(e, "ServiceService->changeDebris");
+        }
+        return Collections.emptyList();
+    }
 }
