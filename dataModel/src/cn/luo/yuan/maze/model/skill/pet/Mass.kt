@@ -58,11 +58,15 @@ class Mass : AtkSkill(), UpgradeAble {
         val target = parameter?.get<HarmAble>(Parameter.TARGET)
         if (hero is Hero && target != null && context != null) {
             for (pet in hero.pets) {
-                val harm = BattleServiceBase.getHarm(pet, target, 1, context.random, msg)
-                if (target is NameObject) {
-                    msg?.harm(pet, target, harm)
+                if(pet.intimacy > 15 && pet.currentHp > 0) {
+                    val harm = BattleServiceBase.getHarm(pet, target, 1, context.random, msg)
+                    if (target is NameObject) {
+                        msg?.harm(pet, target, harm)
+                    }
+                    target.hp -= harm
+                }else{
+                    msg?.rowMessage(pet.displayNameWithLevel + "不想听你的指挥")
                 }
-                target.hp -= harm
             }
         }
         return SkipThisTurn()

@@ -50,8 +50,8 @@ public class BuildDLC {
         buildSkillDlc(new Painkiller(), dlcTable);*/
         //buildEveoo(dlcTable);
         //buildNPC(dlcTable);
-        //buildSkillDlc(new Mass(), dlcTable);
-        buildGoodsDlc(new Invincible(), 50, dlcTable);
+        buildSkillDlc(new Mass(), dlcTable);
+        buildGoodsDlc(new Invincible(), 25, dlcTable);
         //buildEveoo(dlcTable);
         //buildEveooII(dlcTable);
     }
