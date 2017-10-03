@@ -23,6 +23,7 @@ import cn.luo.yuan.maze.model.real.RealState;
 import cn.luo.yuan.maze.model.real.action.RealTimeAction;
 import cn.luo.yuan.maze.model.task.Scene;
 import cn.luo.yuan.maze.model.task.Task;
+import cn.luo.yuan.maze.server.persistence.*;
 import cn.luo.yuan.serialize.FileObjectTable;
 import cn.luo.yuan.serialize.ObjectTable;
 import cn.luo.yuan.maze.server.bomb.BombRestConnection;
@@ -31,16 +32,6 @@ import cn.luo.yuan.maze.server.bomb.json.MyJSONValue;
 import cn.luo.yuan.maze.server.bomb.json.SimpleToken;
 import cn.luo.yuan.maze.server.level.RealService;
 import cn.luo.yuan.maze.server.model.User;
-import cn.luo.yuan.maze.server.persistence.CDKEYTable;
-import cn.luo.yuan.maze.server.persistence.CribberTable;
-import cn.luo.yuan.maze.server.persistence.DLCTable;
-import cn.luo.yuan.maze.server.persistence.ExchangeTable;
-import cn.luo.yuan.maze.server.persistence.HeroTable;
-import cn.luo.yuan.maze.server.persistence.MonsterTable;
-import cn.luo.yuan.maze.server.persistence.NPCTable;
-import cn.luo.yuan.maze.server.persistence.ReleaseManager;
-import cn.luo.yuan.maze.server.persistence.ShopTable;
-import cn.luo.yuan.maze.server.persistence.WarehouseTable;
 import cn.luo.yuan.maze.persistence.DatabaseConnection;
 import cn.luo.yuan.maze.server.servcie.ServerDataManager;
 import cn.luo.yuan.maze.server.servcie.ServerGameContext;
@@ -82,8 +73,8 @@ public class MainProcess {
     public ObjectTable<Task> taskTable;
     public ObjectTable<Scene> sceneTable;
     public MonsterTable monsterTable;
-    public Set<GroupHolder> groups = Collections.synchronizedSet(new HashSet<GroupHolder>());
     public HeroTable heroTable;
+    public GroupTable groups;
     public GameContext context = new GameContext();
     public File root;
     private String sign_match = StringUtils.EMPTY_STRING;
@@ -108,7 +99,6 @@ public class MainProcess {
         taskTable = new FileObjectTable<>(Task.class, this.root);
         sceneTable = new FileObjectTable<>(Scene.class, this.root);
         heroTable = new HeroTable(heroDir);
-        heroTable.process = this;
         userDb = new FileObjectTable<User>(User.class, this.root);
         monsterTable = new MonsterTable(this.root);
         process = this;
@@ -405,6 +395,7 @@ public class MainProcess {
 
     public void start() {
         if (database != null) {
+            groups = new GroupTable(database);
             shop = new ShopTable(database, root);
             cribber = new CribberTable(database);
             cdkeyTable = new CDKEYTable(database);
@@ -436,7 +427,7 @@ public class MainProcess {
             @Override
             public void run() {
                 LogHelper.info("Preparing battle info");
-                new HeroBattleService(heroTable, MainProcess.this).run();
+                new HeroBattleService(heroTable, groups, executor,user.getBattleInterval()).run();
                 LogHelper.info("updating range message");
                 heroRange = buildHeroRange();
                 LogHelper.info("updated range message");
@@ -512,19 +503,12 @@ public class MainProcess {
     }
 
     public GroupHolder addGroup(String h1, String h2) {
-        GroupHolder holder = new GroupHolder();
-        holder.getHeroIds().add(h1);
-        holder.getHeroIds().add(h2);
-        groups.add(holder);
-        return holder;
+
+        return groups.add(h1, h2);
     }
 
     public void removeGroup(String heroId) {
-        for (GroupHolder holder : new ArrayList<>(groups)) {
-            if (holder.isInGroup(heroId)) {
-                groups.remove(holder);
-            }
-        }
+        groups.remove(heroId);
     }
 
     public void submitBoss(String name, String element, String race, String atk, String def, String hp, String hpG, String atkG, String defG) {
@@ -541,7 +525,6 @@ public class MainProcess {
         hero.setAtkGrow(Integer.parseInt(atkG));
         try {
             NPCTable table = new NPCTable(new File("data/npc"));
-            table.process = this;
             table.save(hero);
         } catch (IOException e) {
             e.printStackTrace();
@@ -612,41 +595,7 @@ public class MainProcess {
     }
 
     public String getGroupMessage(String id) {
-        GroupHolder holder = null;
-        if (StringUtils.isNotEmpty(id)) {
-            for (GroupHolder holder1 : groups) {
-                if (holder1.isInGroup(id)) {
-                    holder = holder1;
-                    break;
-                }
-            }
-        }
-        StringBuilder builder = new StringBuilder();
-        ServerRecord record = queryRecord(id);
-        if (record != null && record.getData() != null && record.getData().getHero() != null) {
-            builder.append(record.getData().getHero().getDisplayName()).append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").
-                    append(record.winRate()).append("<br>&nbsp;&nbsp;&nbsp;&nbsp;剩余复活次数：").
-                    append(StringUtils.formatNumber(record.getRestoreLimit() - record.getDieCount(), false));
-        }
-        if (holder != null) {
-            for (String hid : holder.getHeroIds()) {
-                if (!hid.equals(id)) {
-                    if (hid.equals("npc")) {
-                        builder.append("<br>").append(holder.getNpc().getDisplayName());
-                    } else {
-                        ServerRecord orecord = queryRecord(hid);
-                        if (orecord != null && orecord.getData() != null && orecord.getData().getHero() != null) {
-                            builder.append("<br>").append(orecord.getData().getHero().getDisplayName())
-                                    .append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(orecord.winRate())
-                                    .append("<br>&nbsp;&nbsp;&nbsp;&nbsp;剩余复活次数：").
-                                    append(StringUtils.formatNumber(orecord.getRestoreLimit() - orecord.getDieCount(), false))
-                                    .append("<br>");
-                        }
-                    }
-                }
-            }
-        }
-        return builder.toString();
+       return groups.getGroupMessage(id, heroTable);
     }
 
     public ServerRecord queryRecord(String id) {
@@ -1264,7 +1213,7 @@ public class MainProcess {
         return realService.pollTargetRecord(myId);
     }
 
-    public ServerGameContext buildGameContext(ServerRecord record)  {
+    public static ServerGameContext buildGameContext(ServerRecord record, ScheduledExecutorService executor)  {
         NeverEndConfig heroConfig = new NeverEndConfig();
         heroConfig.setElementer(record.getData().isElementer());
         heroConfig.setLongKiller(record.getData().isLong());

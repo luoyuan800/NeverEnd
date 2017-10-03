@@ -64,13 +64,13 @@ public class TestHeroBattleService {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }*/
-        HeroBattleService hbs = new HeroBattleService(process.heroTable, process);
+       /* HeroBattleService hbs = new HeroBattleService(process.heroTable, process);
         hbs.run();
         for (String id : process.heroTable.getAllHeroIds()) {
             ServerRecord r = process.heroTable.getRecord(id);
             if (r.getData() != null) {
                 System.out.println(r.getMessages());
             }
-        }
+        }*/
     }
 }

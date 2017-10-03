@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 /**
  * Created by gluo on 5/22/2017.
@@ -29,7 +30,6 @@ public class HeroTable implements Runnable {
     private ObjectTable<ServerRecord> recordDb;
     private long maxLevel = 1;
     private File root;
-    public MainProcess process;
 
     public HeroTable(File root) throws IOException, ClassNotFoundException {
         this.root = root;
@@ -183,7 +183,7 @@ public class HeroTable implements Runnable {
                 if (data.getAccessories() != null && hero.getAccessories().isEmpty()) {
                     for (Accessory accessory : data.getAccessories()) {
                         try {
-                            AccessoryHelper.mountAccessory(accessory, hero, false, process.buildGameContext(record));
+                            AccessoryHelper.mountAccessory(accessory, hero, false, MainProcess.buildGameContext(record, Executors.newSingleThreadScheduledExecutor()));
                         } catch (MountLimitException e) {
                             LogHelper.error(e);
                         }

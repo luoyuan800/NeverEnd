@@ -2,6 +2,7 @@ package cn.luo.yuan.maze.server
 
 import cn.luo.yuan.maze.model.*
 import cn.luo.yuan.maze.model.Messager
+import cn.luo.yuan.maze.server.persistence.GroupTable
 import cn.luo.yuan.maze.server.persistence.HeroTable
 import cn.luo.yuan.maze.server.persistence.NPCTable
 import cn.luo.yuan.maze.server.servcie.ServerDataManager
@@ -13,26 +14,25 @@ import cn.luo.yuan.maze.utils.Random
 import cn.luo.yuan.maze.utils.StringUtils
 import java.io.File
 import java.util.*
+import java.util.concurrent.ScheduledExecutorService
 
 /**
  *
  * Created by gluo on 6/26/2017.
  */
-class HeroBattleService(private val table: HeroTable, val main: MainProcess) : Runnable, RunningServiceInterface {
+class HeroBattleService(private val table: HeroTable, val groups:GroupTable, val executor:ScheduledExecutorService, val battleInterval :Long) : Runnable, RunningServiceInterface {
     override fun getContext(): InfoControlInterface {
-        return main.context;
+        return GameContext();
     }
 
     override fun isPause(): Boolean {
         return false
     }
-
     val random = Random(System.currentTimeMillis())
     override fun run() {
         try {
             LogHelper.info("Start battle, number:" + table.size())
             val npc = NPCTable(File("npc"))
-            npc.process = main;
             loop@ for (id in table.allHeroIds) {
                 if (id == "npc") {
                     continue
@@ -66,7 +66,7 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
                                 registerMessageReceiver(messager, oid)
                             }
                             if (group == null && ogroup == null && random.nextInt(hero.displayName.length) > random.nextInt(ohero.displayName.length)) {
-                                val newgroup = main.addGroup(id, oid)
+                                val newgroup = groups.add(id, oid)
                                 if(oid == "npc"){
                                     newgroup.npc = ohero;
                                 }
@@ -118,7 +118,7 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
                             if(group!=null){
                                 messager.leaveGroup(hero.displayName)
                             }
-                            main.removeGroup(id)
+                            groups.remove(id)
                         } else {
                             val period = Data.RESTOREPERIOD - (System.currentTimeMillis() - record.dieTime)
                             if (period <= 0) {
@@ -134,7 +134,7 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
             range()
             table.allHeroIds
                     .mapNotNull { table.getRecord(it) }
-                    .forEach { if(it.data!=null && it.dieCount < it.restoreLimit) it.messages.add("下一场战斗 ${main.user.battleInterval} 分钟后开始") }
+                    .forEach { if(it.data!=null && it.dieCount < it.restoreLimit) it.messages.add("下一场战斗 ${battleInterval} 分钟后开始") }
             table.save()
             LogHelper.info("Finished battle!")
         } catch (exp: Exception) {
@@ -148,7 +148,7 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
         heroConfig.isLongKiller = record.data!!.isLong
         val hdm = ServerDataManager(record.data!!.hero, heroConfig);
         val hContext = ServerGameContext(record.data!!.hero, hdm, record.data!!.maze)
-        hContext.executor = main.executor
+        hContext.executor = executor
         return hContext
     }
 
@@ -184,7 +184,7 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
         if (id == "npc") {
             return null
         }
-        val group = main.groups.find {
+        val group = groups.groups.find {
             it.isInGroup(id)
         }
         if(group!=null){
@@ -203,7 +203,7 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
             if(g.heroes.size >= 2){
                 return g
             }else{
-                main.groups.remove(group)
+                groups.remove(group)
             }
         }
         return null
@@ -238,11 +238,6 @@ class HeroBattleService(private val table: HeroTable, val main: MainProcess) : R
     }
 
     private fun getGroupHolder(id: String): GroupHolder? {
-        for (holder in main.groups) {
-            if (holder.isInGroup(id)) {
-                return holder;
-            }
-        }
-        return null
+        return groups.find(id)
     }
 }
