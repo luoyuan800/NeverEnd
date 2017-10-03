@@ -4,7 +4,8 @@ import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Race;
 import cn.luo.yuan.maze.model.gift.Gift;
-import cn.luo.yuan.maze.serialize.ObjectTable;
+import cn.luo.yuan.serialize.FileObjectTable;
+import cn.luo.yuan.serialize.ObjectTable;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +16,7 @@ import java.io.IOException;
  */
 public class BuildNPC {
     public static void main(String...args){
-        ObjectTable<Hero> heroObjectTable = new ObjectTable<Hero>(Hero.class, new File("npc"));
+        ObjectTable<Hero> heroObjectTable = new FileObjectTable<Hero>(Hero.class, new File("npc"));
         build(heroObjectTable);
     }
 
@@ -35,6 +36,8 @@ public class BuildNPC {
         try {
             heroObjectTable.save(hero);
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

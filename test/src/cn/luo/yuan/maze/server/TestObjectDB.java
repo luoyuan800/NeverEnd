@@ -2,7 +2,8 @@ package cn.luo.yuan.maze.server;
 
 import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Hero;
-import cn.luo.yuan.maze.serialize.ObjectTable;
+import cn.luo.yuan.serialize.FileObjectTable;
+import cn.luo.yuan.serialize.ObjectTable;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -16,7 +17,7 @@ import static org.testng.Assert.assertNull;
  * Created by gluo on 5/26/2017.
  */
 public class TestObjectDB {
-    private ObjectTable<Hero> heroObjectDB = new ObjectTable<>(Hero.class, new File("data"));
+    private ObjectTable<Hero> heroObjectDB = new FileObjectTable<>(Hero.class, new File("data"));
 
     @Test
     public void testSave() throws IOException, ClassNotFoundException {
@@ -27,7 +28,11 @@ public class TestObjectDB {
         hero.setDef(5);
         hero.setElement(Element.EARTH);
         hero.setName("p1");
-        heroObjectDB.save(hero);
+        try {
+            heroObjectDB.save(hero);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Hero hero1 = heroObjectDB.loadObject(hero.getId());
         assertNotNull(hero1.getName().equals(hero.getName()));
         assertNotNull(hero1.getMaxHp() == hero.getMaxHp());
@@ -42,11 +47,23 @@ public class TestObjectDB {
         hero.setDef(5);
         hero.setElement(Element.EARTH);
         hero.setName("p1");
-        heroObjectDB.save(hero);
+        try {
+            heroObjectDB.save(hero);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         hero.setName("p2");
-        heroObjectDB.save(hero);
+        try {
+            heroObjectDB.save(hero);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         hero.setName("p3");
-        heroObjectDB.save(hero);
+        try {
+            heroObjectDB.save(hero);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         assertEquals(heroObjectDB.loadAll().size(), 3);
     }
     @Test
@@ -58,7 +75,11 @@ public class TestObjectDB {
         hero.setDef(5);
         hero.setElement(Element.EARTH);
         hero.setName("p1");
-        heroObjectDB.save(hero);
+        try {
+            heroObjectDB.save(hero);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         assertNotNull(heroObjectDB.loadObject(hero.getId()));
         heroObjectDB.delete(hero.getId());
         assertNull(heroObjectDB.loadObject(hero.getId()));

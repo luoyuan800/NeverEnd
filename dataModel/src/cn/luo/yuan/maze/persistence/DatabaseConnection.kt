@@ -1,4 +1,4 @@
-package cn.luo.yuan.maze.server.persistence.db
+package cn.luo.yuan.maze.persistence
 
 import java.sql.Connection
 

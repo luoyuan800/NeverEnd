@@ -2,7 +2,7 @@ package cn.luo.yuan.maze.server.persistence
 
 import cn.luo.yuan.maze.model.*
 import cn.luo.yuan.maze.model.goods.Goods
-import cn.luo.yuan.maze.serialize.ObjectTable
+import cn.luo.yuan.serialize.FileObjectTable
 import cn.luo.yuan.maze.utils.StringUtils
 import java.io.File
 import java.lang.ref.SoftReference
@@ -17,7 +17,7 @@ class ExchangeTable(root: File) {
         }
     }
 
-    val exchangeDb = ObjectTable(ExchangeObject::class.java, root)
+    val exchangeDb = FileObjectTable(ExchangeObject::class.java, root)
     val cache = mutableMapOf<key, SoftReference<ExchangeObject>>()
     fun addExchange(ex: Any?, ownerId: String, limit: String, expect: Int): Boolean {
         val exchange = ex as? ExchangeObject ?: ExchangeObject(ex as IDModel, ownerId)

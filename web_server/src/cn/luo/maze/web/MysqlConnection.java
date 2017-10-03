@@ -1,5 +1,6 @@
 package cn.luo.maze.web;
 
+import cn.luo.yuan.maze.persistence.DatabaseConnection;
 import cn.luo.yuan.maze.server.LogHelper;
 
 import javax.naming.Context;
@@ -10,7 +11,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class MysqlConnection implements cn.luo.yuan.maze.server.persistence.db.DatabaseConnection {
+public class MysqlConnection implements DatabaseConnection {
 
     Context IC_ictx = null;
 

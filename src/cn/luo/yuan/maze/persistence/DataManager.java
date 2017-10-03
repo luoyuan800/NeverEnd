@@ -13,7 +13,8 @@ import cn.luo.yuan.maze.model.skill.SpecialSkill;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
-import cn.luo.yuan.maze.serialize.ObjectTable;
+import cn.luo.yuan.serialize.FileObjectTable;
+import cn.luo.yuan.serialize.ObjectTable;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -68,9 +69,9 @@ public class DataManager implements DataManagerInterface {
         goodsLoader = new SerializeLoader<>(Goods.class, context, index);
         skillLoader = new SerializeLoader<>(Skill.class, context, index);
         clickSkillLoader = new SerializeLoader<>(ClickSkill.class, context, index);
-        configDB = new ObjectTable<>(NeverEndConfig.class, context.getDir(String.valueOf(index), Context.MODE_PRIVATE));
-        defenderDB = new ObjectTable<>(Hero.class, context.getDir("defend", Context.MODE_PRIVATE));
-        npcLevelRecordObjectTable = new ObjectTable<>(NPCLevelRecord.class, context.getDir("npc", Context.MODE_PRIVATE));
+        configDB = new FileObjectTable<>(NeverEndConfig.class, context.getDir(String.valueOf(index), Context.MODE_PRIVATE));
+        defenderDB = new FileObjectTable<>(Hero.class, context.getDir("defend", Context.MODE_PRIVATE));
+        npcLevelRecordObjectTable = new FileObjectTable<>(NPCLevelRecord.class, context.getDir("npc", Context.MODE_PRIVATE));
         this.context = context;
         registerTable(accessoryLoader.getDb());
         registerTable(petLoader.getDb());
@@ -462,6 +463,8 @@ public class DataManager implements DataManagerInterface {
                 configDB.save((NeverEndConfig) object, object.getId());
             } catch (IOException e1) {
                 LogHelper.logException(e1, "save config");
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
         }
     }
@@ -503,6 +506,8 @@ public class DataManager implements DataManagerInterface {
                 configDB.save(config);
             } catch (IOException e1) {
                 LogHelper.logException(e1, "Save Config while get");
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
         }
         try {
@@ -533,6 +538,8 @@ public class DataManager implements DataManagerInterface {
             defenderDB.save(hero, hero.getId());
         } catch (IOException e1) {
             LogHelper.logException(e1, "addDefender");
+        } catch (Exception e1) {
+            e1.printStackTrace();
         }
     }
 
@@ -546,9 +553,11 @@ public class DataManager implements DataManagerInterface {
         List<ObjectTable> tables = new ArrayList<>(this.tables);
         tables.remove(defenderDB);
         for (ObjectTable table : tables) {
-            List<File> listFile = table.listFile();
-            if (listFile != null) {
-                files.addAll(listFile);
+            if(table instanceof FileObjectTable) {
+                List<File> listFile = ((FileObjectTable)table).listFile();
+                if (listFile != null) {
+                    files.addAll(listFile);
+                }
             }
         }
         return files;

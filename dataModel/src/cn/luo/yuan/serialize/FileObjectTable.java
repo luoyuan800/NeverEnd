@@ -1,4 +1,4 @@
-package cn.luo.yuan.maze.serialize;
+package cn.luo.yuan.serialize;
 
 
 import cn.luo.yuan.maze.model.IDModel;
@@ -28,13 +28,13 @@ import java.util.UUID;
 /**
  * Created by gluo on 11/28/2016.
  */
-public class ObjectTable<T extends Serializable> implements Runnable {
+public class FileObjectTable<T extends Serializable> implements ObjectTable<T> {
     private String root;
     private Class<T> table;
     private HashMap<String, SoftReference<T>> cache;
     private ReferenceQueue<T> queue;
 
-    public ObjectTable(Class<T> table, File root) {
+    public FileObjectTable(Class<T> table, File root) {
         queue = new ReferenceQueue<T>();
         File file = new File(root, table.getName());
         if (!file.exists()) {
@@ -45,7 +45,8 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         cache = new HashMap<>();
     }
 
-    public synchronized String save(T object, String id) throws IOException {
+    @Override
+    public synchronized String save(T object, String id) throws Exception {
         File entry = buildFile(id);
         entry.setWritable(true);
         if (entry.exists()) {
@@ -60,7 +61,8 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         return id;
     }
 
-    public synchronized String update(T object, String id, boolean addToCache) throws IOException {
+    @Override
+    public synchronized String update(T object, String id, boolean addToCache) throws Exception {
         File file = buildFile(id);
         if (file.exists()) {
             file.delete();
@@ -72,7 +74,8 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         return id;
     }
 
-    public String save(T object) throws IOException {
+    @Override
+    public String save(T object) throws Exception {
         String id;
         if (object instanceof IDModel) {
             if (StringUtils.isEmpty(((IDModel) object).getId())) {
@@ -80,12 +83,21 @@ public class ObjectTable<T extends Serializable> implements Runnable {
             }else{
                 id = ((IDModel) object).getId();
             }
-            return save(object, id);
+            try {
+                return save(object, id);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
-            return save(object, UUID.randomUUID().toString());
+            try {
+                return save(object, UUID.randomUUID().toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
+    @Override
     public synchronized T loadObject(String id) {
         T object = null;
         if (id != null) {
@@ -104,6 +116,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         return object;
     }
 
+    @Override
     public synchronized List<T> loadAll() {
         List<T> list = new ArrayList<>();
         File file = new File(root);
@@ -121,6 +134,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         return list;
     }
 
+    @Override
     public synchronized void clear() {
         File file = new File(root);
         if (file.isDirectory()) {
@@ -132,6 +146,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         cache.clear();
     }
 
+    @Override
     public synchronized void delete(String id) {
         if(StringUtils.isNotEmpty(id)) {
             buildFile(id).delete();
@@ -139,19 +154,25 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         }
     }
 
+    @Override
     public void fuse() throws IOException {
         for (SoftReference<T> ref : new ArrayList<>(cache.values())) {
             if (ref != null) {
                 T t = ref.get();
                 if (t != null) {
                     if (t instanceof IDModel && !((IDModel) t).isDelete()) {
-                        update(t, ((IDModel) t).getId(), true);
+                        try {
+                            update(t, ((IDModel) t).getId(), true);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
         }
     }
 
+    @Override
     public void close() {
         cache.clear();
     }
@@ -174,11 +195,13 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         }
     }
 
+    @Override
     public int size() {
         File file = new File(root);
         return file.isDirectory() ? file.list().length : 0;
     }
 
+    @Override
     public List<T> loadLimit(int start, int row, Index<T> index, Comparator<T> comparator) throws IOException, ClassNotFoundException {
         int realStart = start;
         List<T> objects = loadAll();
@@ -204,6 +227,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         return ts;
     }
 
+    @Override
     public List<String> loadIds() {
         List<String> ids = new ArrayList<>();
         String[] list = new File(root).list();
@@ -222,6 +246,7 @@ public class ObjectTable<T extends Serializable> implements Runnable {
         return files;
     }
 
+    @Override
     public List<T> removeExpire(long deathTime) {
         List<T> deleted = new ArrayList<T>();
         try {

@@ -17,19 +17,13 @@ import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.pet.Mass;
-import cn.luo.yuan.maze.model.skill.race.Alayer;
-import cn.luo.yuan.maze.model.skill.race.Chaos;
-import cn.luo.yuan.maze.model.skill.race.Decide;
-import cn.luo.yuan.maze.model.skill.race.Exorcism;
-import cn.luo.yuan.maze.model.skill.race.Masimm;
-import cn.luo.yuan.maze.model.skill.race.Painkiller;
-import cn.luo.yuan.maze.serialize.ObjectTable;
+import cn.luo.yuan.serialize.FileObjectTable;
+import cn.luo.yuan.serialize.ObjectTable;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
  * Copyright @Luo
@@ -38,7 +32,7 @@ import java.util.UUID;
 public class BuildDLC {
     public static File root = new File("dlc");
     public static void main(String... args) throws IOException {
-        ObjectTable<DLC> dlcTable = new ObjectTable<DLC>(DLC.class, new File("dlc"));
+        ObjectTable<DLC> dlcTable = new FileObjectTable<DLC>(DLC.class, new File("dlc"));
         /*buildAngel(dlcTable);
         buildJiuwei(dlcTable);
         buildEmprtyAccessory(dlcTable);
@@ -70,7 +64,11 @@ public class BuildDLC {
         dlc.setDebrisCost(cost);
         dlc.setTitle(goods.getName());
         dlc.setDesc(goods.getDesc());
-        System.out.println(dlcObjectTable.save(dlc));
+        try {
+            System.out.println(dlcObjectTable.save(dlc));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void yuanxiaomei(ObjectTable<DLC> dlcObjectTable) throws IOException {
@@ -92,7 +90,11 @@ public class BuildDLC {
         npcdlc.setDesc("不需要钥匙你也可以敲开我的门哦……");
         npcdlc.setNpc(record);
         npcdlc.setTitle(hero.getName());
-        dlcObjectTable.save(npcdlc);
+        try {
+            dlcObjectTable.save(npcdlc);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void leierdan(ObjectTable<DLC> dlcObjectTable) throws IOException {
@@ -114,7 +116,11 @@ public class BuildDLC {
         npcdlc.setDesc("曾经，我很喜欢偷钥匙，但是你们这些混蛋在这个版本竟然都不再需要钥匙了，气死我了！！");
         npcdlc.setNpc(record);
         npcdlc.setTitle(hero.getName());
-        dlcObjectTable.save(npcdlc);
+        try {
+            dlcObjectTable.save(npcdlc);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     public static void chuyin(ObjectTable<DLC> dlcObjectTable) throws IOException {
         Hero hero = new Hero();
@@ -135,7 +141,11 @@ public class BuildDLC {
         npcdlc.setDesc("你想邂逅小姐姐吗？那就兑换这个攻击高达100W的小姐姐陪你玩哦！兑换后有一定机率在迷宫中遇见小姐姐。");
         npcdlc.setNpc(record);
         npcdlc.setTitle(hero.getName());
-        dlcObjectTable.save(npcdlc);
+        try {
+            dlcObjectTable.save(npcdlc);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     public static void yuanshuxion(ObjectTable<DLC> dlcObjectTable) throws IOException {
         Hero hero = new Hero();
@@ -156,7 +166,11 @@ public class BuildDLC {
         npcdlc.setDesc("这是迷失的朋友！我在这迷宫中晃荡多年，对各种怪异早已经见怪不怪了。或许你这个仿佛没有尽头的迷宫产生了绝望，但是外面的世界或许早已……<br>相信在这个世界里，你并不是孤独一人的。<br>继续往上爬吧，总有一天你会找到这个世界的真谛。<br>");
         npcdlc.setNpc(record);
         npcdlc.setTitle(hero.getName());
-        dlcObjectTable.save(npcdlc);
+        try {
+            dlcObjectTable.save(npcdlc);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void buildEmprtyAccessory(ObjectTable<DLC> dlcTable) throws IOException {
@@ -168,7 +182,11 @@ public class BuildDLC {
         dlc.setId(ea.getName());
         dlc.setDesc(ea.getDesc());
         dlc.setTitle(ea.getName());
-        System.out.println(dlcTable.save(dlc));
+        try {
+            System.out.println(dlcTable.save(dlc));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static byte[] readImage(String path) throws IOException {
@@ -252,7 +270,11 @@ public class BuildDLC {
         monster.setDesc("九尾狐，中华古代汉族神话传说中的生物--青丘之山，有兽焉，其状如狐而九尾。在迷宫创造者消失后才出现的生物。");
         dlc.getMonsters().add(monster);
         dlc.getImage().add(readImage("E:\\NeverEnd\\assets\\monster\\jiuweihu_red.png"));
-        System.out.println(table.save(dlc));
+        try {
+            System.out.println(table.save(dlc));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     public static void buildAngel(ObjectTable<DLC> table) throws IOException {
         MonsterDLC dlc = new MonsterDLC();
@@ -387,14 +409,22 @@ public class BuildDLC {
         monster.setDesc("世界战争的\"最终兵器\"。");
         dlc.getMonsters().add(monster);
         dlc.getImage().add(readImage("E:\\NeverEnd\\assets\\monster\\chisi.png"));
-        System.out.println(table.save(dlc));
+        try {
+            System.out.println(table.save(dlc));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void buildSkillDlc(Skill skill, ObjectTable<DLC> table) throws IOException {
         SkillDLC dlc = new SkillDLC();
         dlc.setSkill(skill);
         dlc.setDebrisCost(20);
-        System.out.println(table.save(dlc));
+        try {
+            System.out.println(table.save(dlc));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static void buildEveoo(ObjectTable<DLC> table) throws IOException {
@@ -600,7 +630,11 @@ public class BuildDLC {
         dlc.setTitle("伊布伊布I");
         dlc.setDesc("解锁伊布12种进化形态，电、鬼、魂、草、虫、月、绿、木、暗、冰、角。");
         dlc.setDebrisCost(100);
-        System.out.println(table.save(dlc));
+        try {
+            System.out.println(table.save(dlc));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static void buildEveooII(ObjectTable<DLC> table) throws IOException {
@@ -806,6 +840,10 @@ public class BuildDLC {
         dlc.setTitle("伊布伊布II");
         dlc.setDesc("解锁伊布12种进化形态，毒、黑、飞、轻、羽、钢、武、斗、火、烈、灵。");
         dlc.setDebrisCost(100);
-        System.out.println(table.save(dlc));
+        try {
+            System.out.println(table.save(dlc));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

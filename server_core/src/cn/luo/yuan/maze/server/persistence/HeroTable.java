@@ -5,16 +5,14 @@ import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
-import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.model.skill.Skill;
-import cn.luo.yuan.maze.serialize.ObjectTable;
+import cn.luo.yuan.serialize.FileObjectTable;
+import cn.luo.yuan.serialize.ObjectTable;
 import cn.luo.yuan.maze.server.LogHelper;
 import cn.luo.yuan.maze.server.MainProcess;
-import cn.luo.yuan.maze.server.servcie.ServerDataManager;
-import cn.luo.yuan.maze.server.servcie.ServerGameContext;
 import cn.luo.yuan.maze.service.AccessoryHelper;
 import cn.luo.yuan.maze.service.SkillHelper;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -35,7 +33,7 @@ public class HeroTable implements Runnable {
 
     public HeroTable(File root) throws IOException, ClassNotFoundException {
         this.root = root;
-        recordDb = new ObjectTable<>(ServerRecord.class, root);
+        recordDb = new FileObjectTable<>(ServerRecord.class, root);
     }
 
     public String queryBattleAward(String id) {
@@ -71,7 +69,11 @@ public class HeroTable implements Runnable {
 
     public void save(Object obj) throws IOException {
         if (obj instanceof ServerRecord) {
-            recordDb.save((ServerRecord) obj);
+            try {
+                recordDb.save((ServerRecord) obj);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }

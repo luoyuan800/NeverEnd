@@ -5,7 +5,7 @@ import cn.luo.yuan.maze.model.real.*
 import cn.luo.yuan.maze.model.real.action.RealTimeAction
 import cn.luo.yuan.maze.model.real.level.ElyosrRealLevel
 import cn.luo.yuan.maze.model.skill.Skill
-import cn.luo.yuan.maze.serialize.ObjectTable
+import cn.luo.yuan.serialize.FileObjectTable
 import cn.luo.yuan.maze.server.LogHelper
 import cn.luo.yuan.maze.server.MainProcess
 import cn.luo.yuan.maze.service.AccessoryHelper
@@ -34,9 +34,9 @@ class RealService(val mainProcess: MainProcess) : RealTimeBattle.RealBattleEndLi
     val waiting = WaitingQueue()
     val executor = Executors.newScheduledThreadPool(3)!!
     val battling = ConcurrentHashMap<String, RealTimeBattle>()
-    val recordDb = ObjectTable<LevelRecord>(LevelRecord::class.java, mainProcess.root)
-    val palaceDb = ObjectTable<LevelRecord>(LevelRecord::class.java, File(mainProcess.root, "palace"))
-    val legacyDb = ObjectTable<LevelRecord>(LevelRecord::class.java, File(mainProcess.root, "legacy"))
+    val recordDb = FileObjectTable<LevelRecord>(LevelRecord::class.java, mainProcess.root)
+    val palaceDb = FileObjectTable<LevelRecord>(LevelRecord::class.java, File(mainProcess.root, "palace"))
+    val legacyDb = FileObjectTable<LevelRecord>(LevelRecord::class.java, File(mainProcess.root, "legacy"))
     val waitingTime = mutableMapOf<String, Long>()
     fun run() {
         executor.scheduleAtFixedRate({

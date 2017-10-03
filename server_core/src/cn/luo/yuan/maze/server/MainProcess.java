@@ -23,7 +23,8 @@ import cn.luo.yuan.maze.model.real.RealState;
 import cn.luo.yuan.maze.model.real.action.RealTimeAction;
 import cn.luo.yuan.maze.model.task.Scene;
 import cn.luo.yuan.maze.model.task.Task;
-import cn.luo.yuan.maze.serialize.ObjectTable;
+import cn.luo.yuan.serialize.FileObjectTable;
+import cn.luo.yuan.serialize.ObjectTable;
 import cn.luo.yuan.maze.server.bomb.BombRestConnection;
 import cn.luo.yuan.maze.server.bomb.json.MyJSON;
 import cn.luo.yuan.maze.server.bomb.json.MyJSONValue;
@@ -40,7 +41,7 @@ import cn.luo.yuan.maze.server.persistence.NPCTable;
 import cn.luo.yuan.maze.server.persistence.ReleaseManager;
 import cn.luo.yuan.maze.server.persistence.ShopTable;
 import cn.luo.yuan.maze.server.persistence.WarehouseTable;
-import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection;
+import cn.luo.yuan.maze.persistence.DatabaseConnection;
 import cn.luo.yuan.maze.server.servcie.ServerDataManager;
 import cn.luo.yuan.maze.server.servcie.ServerGameContext;
 import cn.luo.yuan.maze.service.EffectHandler;
@@ -104,11 +105,11 @@ public class MainProcess {
         this.heroDir = new File(root, "hero");
         warehouseTable = new WarehouseTable(this.root);
         exchangeTable = new ExchangeTable(this.root);
-        taskTable = new ObjectTable<>(Task.class, this.root);
-        sceneTable = new ObjectTable<>(Scene.class, this.root);
+        taskTable = new FileObjectTable<>(Task.class, this.root);
+        sceneTable = new FileObjectTable<>(Scene.class, this.root);
         heroTable = new HeroTable(heroDir);
         heroTable.process = this;
-        userDb = new ObjectTable<User>(User.class, this.root);
+        userDb = new FileObjectTable<User>(User.class, this.root);
         monsterTable = new MonsterTable(this.root);
         process = this;
         user = userDb.loadObject("root");
@@ -120,6 +121,8 @@ public class MainProcess {
                 userDb.save(user, "root");
             } catch (IOException e) {
                 LogHelper.error(e);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         SaveService.setRoot(this.root);
@@ -557,6 +560,8 @@ public class MainProcess {
                 userDb.save(user);
             } catch (IOException e) {
                 LogHelper.error(e);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

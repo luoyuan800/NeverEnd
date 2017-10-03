@@ -4,9 +4,9 @@ import cn.luo.yuan.maze.model.Accessory
 import cn.luo.yuan.maze.model.Element
 import cn.luo.yuan.maze.model.SellItem
 import cn.luo.yuan.maze.model.goods.Goods
-import cn.luo.yuan.maze.serialize.ObjectTable
+import cn.luo.yuan.serialize.FileObjectTable
 import cn.luo.yuan.maze.server.LogHelper
-import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection
+import cn.luo.yuan.maze.persistence.DatabaseConnection
 import cn.luo.yuan.maze.utils.Random
 import java.io.File
 import java.sql.Connection
@@ -17,12 +17,12 @@ import java.sql.Statement
  * Created by Gavin Luo on 7/13/2017.
  */
 class ShopTable(private val database: DatabaseConnection, fileRoot: File) {
-    private var accessoryDb: ObjectTable<Accessory>? = null
+    private var accessoryDb: FileObjectTable<Accessory>? = null
     private val random = Random(System.currentTimeMillis())
 
     init {
         initIfNeed()
-        accessoryDb = ObjectTable(Accessory::class.java, fileRoot)
+        accessoryDb = FileObjectTable(Accessory::class.java, fileRoot)
     }
 
     private fun initIfNeed() {

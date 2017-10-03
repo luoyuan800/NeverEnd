@@ -4,7 +4,8 @@ import cn.luo.yuan.maze.model.ServerRecord;
 import cn.luo.yuan.maze.model.dlc.DLC;
 import cn.luo.yuan.maze.model.dlc.DLCKey;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
-import cn.luo.yuan.maze.serialize.ObjectTable;
+import cn.luo.yuan.serialize.FileObjectTable;
+import cn.luo.yuan.serialize.ObjectTable;
 import cn.luo.yuan.maze.server.MainProcess;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class DLCTable {
 
     public DLCTable(MainProcess process) {
         this.process = process;
-        this.dlcTable = new ObjectTable<>(DLC.class, process.root);
+        this.dlcTable = new FileObjectTable<>(DLC.class, process.root);
     }
 
     public ObjectTable<DLC> getDLCTable() {

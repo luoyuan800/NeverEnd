@@ -4,10 +4,10 @@ import android.content.Context;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.model.IDModel;
 import cn.luo.yuan.maze.model.Index;
-import cn.luo.yuan.maze.serialize.ObjectTable;
+import cn.luo.yuan.serialize.FileObjectTable;
+import cn.luo.yuan.serialize.ObjectTable;
 import cn.luo.yuan.maze.utils.StringUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class SerializeLoader<T extends Serializable> {
     private int index;
 
     public SerializeLoader(Class<T> type, Context context, int heroIndex) {
-        db = new ObjectTable<T>(type, context.getDir(String.valueOf(heroIndex), Context.MODE_PRIVATE));
+        db = new FileObjectTable<T>(type, context.getDir(String.valueOf(heroIndex), Context.MODE_PRIVATE));
         clazz = type;
         this.context = context;
         this.index = heroIndex;
@@ -71,6 +71,8 @@ public class SerializeLoader<T extends Serializable> {
             db.save(object, id);
         } catch (IOException e) {
             LogHelper.logException(e, "save : " + id);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

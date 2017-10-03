@@ -1,9 +1,8 @@
 package cn.luo.yuan.maze.server.persistence
 
 import cn.luo.yuan.maze.server.LogHelper
-import cn.luo.yuan.maze.server.persistence.db.DatabaseConnection
+import cn.luo.yuan.maze.persistence.DatabaseConnection
 import cn.luo.yuan.maze.utils.StringUtils
-import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream

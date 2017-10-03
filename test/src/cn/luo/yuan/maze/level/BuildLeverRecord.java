@@ -5,11 +5,10 @@ import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.NPCLevelRecord;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.Race;
-import cn.luo.yuan.maze.model.dlc.DLC;
-import cn.luo.yuan.maze.model.dlc.NPCDLC;
 import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
-import cn.luo.yuan.maze.serialize.ObjectTable;
+import cn.luo.yuan.serialize.FileObjectTable;
+import cn.luo.yuan.serialize.ObjectTable;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +20,7 @@ import java.io.IOException;
 public class BuildLeverRecord {
 
     public static void main(String...args) throws IOException {
-        ObjectTable<NPCLevelRecord> table = new ObjectTable<NPCLevelRecord>(NPCLevelRecord.class, new File("npc_record"));
+        ObjectTable<NPCLevelRecord> table = new FileObjectTable<NPCLevelRecord>(NPCLevelRecord.class, new File("npc_record"));
         leierdan(table);
     }
     public static void leierdan(ObjectTable<NPCLevelRecord> dlcObjectTable) throws IOException {
@@ -51,6 +50,10 @@ public class BuildLeverRecord {
         pet.setFirstName(FirstName.frailty);
         pet.setSecondName(SecondName.brave);
         record.getPets().add(pet);
-        dlcObjectTable.save(record);
+        try {
+            dlcObjectTable.save(record);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

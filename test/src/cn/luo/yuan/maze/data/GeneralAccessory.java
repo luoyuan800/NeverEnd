@@ -3,16 +3,15 @@ package cn.luo.yuan.maze.data;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Element;
-import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.original.AtkPercentEffect;
 import cn.luo.yuan.maze.model.effect.original.ClickMaterialEffect;
 import cn.luo.yuan.maze.model.effect.original.DefPercentEffect;
 import cn.luo.yuan.maze.model.effect.original.HPPercentEffect;
-import cn.luo.yuan.maze.serialize.ObjectTable;
+import cn.luo.yuan.serialize.FileObjectTable;
+import cn.luo.yuan.serialize.ObjectTable;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.testng.reporters.HtmlHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +22,7 @@ import java.io.IOException;
  */
 public class GeneralAccessory {
     public static void main(String...args){
-        ObjectTable<Accessory> table = new ObjectTable<Accessory>(Accessory.class, new File("data/self/accessory"));
+        ObjectTable<Accessory> table = new FileObjectTable<Accessory>(Accessory.class, new File("data/self/accessory"));
         /*Accessory accessory = getAccessory();
         addAccessory(table, accessory);*/
         System.out.println(table.loadAll());
@@ -33,6 +32,8 @@ public class GeneralAccessory {
         try {
             table.save(accessory);
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
