@@ -235,10 +235,10 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
         if(atkAddition >= 0 ) {
                 atkAddition += level * (addPerLevel + (control.getHero().getReincarnate() * Data.GROW_INCRESE + 1));
         }else{
-            atkAddition = level * (Data.MONSTER_ATK_RISE_PRE_LEVEL + (control.getHero().getReincarnate() * Data.GROW_INCRESE + 1));
+            atkAddition = level * (addPerLevel + (control.getHero().getReincarnate() * Data.GROW_INCRESE + 1));
         }
         if(atkAddition < 0 ){
-            atkAddition = level * (Data.MONSTER_ATK_RISE_PRE_LEVEL + (control.getHero().getReincarnate() * Data.GROW_INCRESE + 1));
+            atkAddition = level * (addPerLevel + (control.getHero().getReincarnate() * Data.GROW_INCRESE + 1));
         }
         return atkAddition;
     }

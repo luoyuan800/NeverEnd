@@ -47,13 +47,21 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
         pet.setDef(monster.getDef());
         pet.setSecondName(null);
         pet.setFirstName(null);
-        long atk_l = monster.getAtkAddition();
-        long def_l = monster.getDefAddition();
-        long hp_l = monster.getHpAddition();
-        pet.setAtk(pet.getAtk() - atk_l + getRandom().nextLong(getRandom().reduceToSpecialDigit(atk_l, 3)));
-        pet.setDef(pet.getDef() - def_l + getRandom().nextLong(getRandom().reduceToSpecialDigit(def_l, 3)));
-        pet.setMaxHp(pet.getMaxHp() - hp_l + getRandom().nextLong(getRandom().reduceToSpecialDigit(hp_l, 3)));
-        pet.setHp(pet.getMaxHp());
+        Monster original = loadMonsterByIndex(monster.getIndex());
+        if(original == null) {
+            long atk_l = monster.getAtkAddition();
+            long def_l = monster.getDefAddition();
+            long hp_l = monster.getHpAddition();
+            pet.setAtk(pet.getAtk() - atk_l + getRandom().nextLong(getRandom().reduceToSpecialDigit(atk_l, 3)));
+            pet.setDef(pet.getDef() - def_l + getRandom().nextLong(getRandom().reduceToSpecialDigit(def_l, 3)));
+            pet.setMaxHp(pet.getMaxHp() - hp_l + getRandom().nextLong(getRandom().reduceToSpecialDigit(hp_l, 3)));
+            pet.setHp(pet.getMaxHp());
+        }else{
+            pet.setAtk(original.getAtk() + level);
+            pet.setDef(original.getDef() + level);
+            pet.setMaxHp(original.getMaxHp() + level);
+            pet.setHp(pet.getMaxHp());
+        }
         pet.setFirstName(monster.getFirstName());
         pet.setSecondName(monster.getSecondName());
         pet.setOwnerId(hero.getId());
