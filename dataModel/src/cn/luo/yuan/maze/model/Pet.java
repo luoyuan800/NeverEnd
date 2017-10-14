@@ -135,7 +135,8 @@ public class Pet extends Monster implements IDModel, OwnedAble, MountAble {
     }
 
     public String getDisplayNameWithLevel() {
-        return (getHp() <= 0 ? "<font color='#b4a6b0'>" : "") + getDisplayName() + (getLevel() > 0 ? (" X" + getLevel()) : "") + (getHp() <= 0 ? "</font>" : "") + "[" + getRace() + "]";
+        return getDisplayName() + (getLevel() > 0 ? (" X" + getLevel()) : "") + "[" + getRace() + "]";
+//        return (getCurrentHp() <= 0 ? "<font color='#b4a6b0'>" : "") + getDisplayName() + (getLevel() > 0 ? (" X" + getLevel()) : "") + (getCurrentHp() <= 0 ? "</font>" : "") + "[" + getRace() + "]";
     }
 
 

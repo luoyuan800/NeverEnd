@@ -113,7 +113,24 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
             return true;
         }
         major.setIntimacy(major.getIntimacy() + 8);
+        colorUpgrade(major);
         return false;
+    }
+
+    private void colorUpgrade(Pet major) {
+        if (!major.getColor().equals(Data.DARKGOLD_COLOR) && random.nextInt(200) < random.nextLong(major.getLevel())) {
+            switch (major.getColor()) {
+                case Data.DEFAULT_QUALITY_COLOR:
+                    major.setColor(Data.BLUE_COLOR);
+                    break;
+                case Data.BLUE_COLOR:
+                    major.setColor(Data.RED_COLOR);
+                    break;
+                case Data.RED_COLOR:
+                    major.setColor(Data.ORANGE_COLOR);
+                    break;
+            }
+        }
     }
 
     public boolean evolution(Pet pet, Hero hero) {

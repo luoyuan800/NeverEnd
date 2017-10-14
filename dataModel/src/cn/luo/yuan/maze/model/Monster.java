@@ -33,7 +33,7 @@ public class Monster extends HarmObject implements IDModel, SilentAbleObject, Na
     private float petRate = 0;
     private int index;
     private EncodeLong def= new EncodeLong(0);
-    private String color;
+    private String color = Data.DEFAULT_QUALITY_COLOR;
     private int sex = -1;
     private Race race;
     private Skill skill;

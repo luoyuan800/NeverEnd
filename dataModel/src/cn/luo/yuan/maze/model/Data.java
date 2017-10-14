@@ -16,7 +16,7 @@ public class Data {
     public static final String BLUE_COLOR = "#0000FF";//蓝色（阶位）1
     public static final String RED_COLOR = "#FF0000";//红色（阶位）2
     public static final String DEFAULT_QUALITY_COLOR = "#556B2F";//绿色（默认阶位）0
-    public static  int ACCESSORY_FLUSE_LIMIT = 15;//装备升级的限制级数（从这个开始会有失败的情况发生）
+    public static  int ACCESSORY_FLUSE_LIMIT = 5;//装备升级的限制级数（从这个开始会有失败的情况发生）
     public static  int PET_UPGRADE_LIMIT = 5;//宠物升级的限制级数，作用同上
     public static final String ORANGE_COLOR = "#FFA500";//橙色色（阶位）3
     public static final String DARKGOLD_COLOR = "#B8860B";//暗金色（阶位）4
@@ -105,4 +105,5 @@ public class Data {
         }
         return rate.intValue() * level;
     }
+
 }
