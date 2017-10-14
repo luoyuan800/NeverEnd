@@ -95,6 +95,7 @@ public class FileObjectTable<T extends Serializable> implements ObjectTable<T> {
                 e.printStackTrace();
             }
         }
+        return null;
     }
 
     @Override

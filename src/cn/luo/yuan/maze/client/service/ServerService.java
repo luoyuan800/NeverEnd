@@ -11,6 +11,7 @@ import cn.luo.yuan.maze.model.dlc.DLCKey;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -155,9 +156,16 @@ public class ServerService {
     }
 
     public String postOnlineGiftCount(NeverEnd context) {
+        String connection = getCount(GET_GIFT_COUNT, context.getHero().getId());
+        if (connection != null) return connection;
+        return null;
+    }
+
+    @Nullable
+    private String getCount(String getGiftCount, String id) {
         try {
-            HttpURLConnection connection = server.getHttpURLConnection(GET_GIFT_COUNT, RestConnection.POST);
-            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            HttpURLConnection connection = server.getHttpURLConnection(getGiftCount, RestConnection.POST);
+            connection.addRequestProperty(Field.OWNER_ID_FIELD, id);
             return server.connect(connection).toString();
         } catch (Exception e) {
             LogHelper.logException(e, "ServiceService->postOnlineGiftCount");
@@ -348,13 +356,8 @@ public class ServerService {
     }
 
     public String postDebrisCount(NeverEnd gameContext) {
-        try {
-            HttpURLConnection connection = server.getHttpURLConnection(GET_DEBRIS_COUNT, RestConnection.POST);
-            connection.addRequestProperty(Field.OWNER_ID_FIELD, gameContext.getHero().getId());
-            return server.connect(connection).toString();
-        } catch (Exception e) {
-            LogHelper.logException(e, "ServiceService->postOnlineGiftCount");
-        }
+        String connection = getCount(GET_DEBRIS_COUNT, gameContext.getHero().getId());
+        if (connection != null) return connection;
         return null;
     }
 

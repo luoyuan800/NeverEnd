@@ -44,8 +44,8 @@ public class BuildDLC {
         buildSkillDlc(new Painkiller(), dlcTable);*/
         //buildEveoo(dlcTable);
         //buildNPC(dlcTable);
-        buildSkillDlc(new Mass(), dlcTable);
-        buildGoodsDlc(new Invincible(), 25, dlcTable);
+        //buildSkillDlc(new Mass(), dlcTable);
+        buildGoodsDlc(new Invincible(), 50, dlcTable);
         //buildEveoo(dlcTable);
         //buildEveooII(dlcTable);
     }
@@ -629,7 +629,7 @@ public class BuildDLC {
         dlc.getImage().add(readImage("pics/evee/evo_dian.png"));
         dlc.setTitle("伊布伊布I");
         dlc.setDesc("解锁伊布12种进化形态，电、鬼、魂、草、虫、月、绿、木、暗、冰、角。");
-        dlc.setDebrisCost(100);
+        dlc.setDebrisCost(200);
         try {
             System.out.println(table.save(dlc));
         } catch (Exception e) {
@@ -839,7 +839,7 @@ public class BuildDLC {
         dlc.getImage().add(readImage("pics/evee/evo_ling.png"));
         dlc.setTitle("伊布伊布II");
         dlc.setDesc("解锁伊布12种进化形态，毒、黑、飞、轻、羽、钢、武、斗、火、烈、灵。");
-        dlc.setDebrisCost(100);
+        dlc.setDebrisCost(200);
         try {
             System.out.println(table.save(dlc));
         } catch (Exception e) {

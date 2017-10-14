@@ -266,19 +266,14 @@ public class OnlineActivity extends Activity {
             public void run() {
                 postBattleMsg();
             }
-        }, 10, Data.REFRESH_SPEED * 5, TimeUnit.MILLISECONDS);
-        executor.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                postOnlineRange();
-            }
-        }, 10, Data.REFRESH_SPEED, TimeUnit.MILLISECONDS);
+        }, 10, Data.REFRESH_SPEED * 10, TimeUnit.MILLISECONDS);
+        postOnlineRange();
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 postAward();
             }
-        }, 15, Data.REFRESH_SPEED * 5, TimeUnit.MILLISECONDS);
+        }, 15, Data.REFRESH_SPEED * 10, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -286,12 +281,12 @@ public class OnlineActivity extends Activity {
             }
         }, 20, Data.REFRESH_SPEED * 10, TimeUnit.MILLISECONDS);
         postGiftCount();
-        executor.submit(new Runnable() {
+       /* executor.submit(new Runnable() {
             @Override
             public void run() {
                 postDefender();
             }
-        });
+        });*/
     }
 
     private void postDefender() {

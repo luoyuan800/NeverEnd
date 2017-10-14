@@ -739,6 +739,11 @@ public class MainProcess {
         if (record != null) {
             record.setGift(record.getGift() + count);
         }
+        try {
+            heroTable.save(record);
+        } catch (IOException e) {
+            LogHelper.error(e);
+        }
     }
 
     public String getOnlineHeroList() {

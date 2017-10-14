@@ -497,7 +497,6 @@ public class NeverEndServlet extends HttpServlet {
             }
         } catch (Exception e) {
             LogHelper.error(e);
-            response.sendError(403, e.getMessage());
         }
     }
 

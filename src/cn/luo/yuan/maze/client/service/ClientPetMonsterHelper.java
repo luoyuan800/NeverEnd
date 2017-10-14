@@ -202,7 +202,7 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
                 if (clone.getSex() < 0) {
                     clone.setSex(getRandom().nextInt(2));
                 }
-                int addPercent = Math.getExponent(level + control.getMaze().getStreaking());
+                int addPercent = Math.getExponent(control.getMaze().getStreaking());
                 long atkAddition = getAdditionValue(level, addPercent, Data.MONSTER_ATK_RISE_PRE_LEVEL);
                 clone.setAtk(clone.getAtk() + atkAddition);
                 clone.setAtkAddition(atkAddition);
@@ -231,7 +231,7 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
 
     public long getAdditionValue(long level, int addPercent, long addPerLevel) {
         long atkAddition = (getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT) + 1)
-                *(getRandom().nextInt(addPercent) + control.getMaze().getLevel() / 1000);
+                *((getRandom().nextInt(addPercent) + control.getMaze().getLevel() / 1000)/100);
         if(atkAddition >= 0 ) {
                 atkAddition += level * (addPerLevel + (control.getHero().getReincarnate() * Data.GROW_INCRESE + 1));
         }else{
