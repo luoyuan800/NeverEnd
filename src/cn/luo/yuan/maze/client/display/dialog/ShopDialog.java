@@ -12,6 +12,7 @@ import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.ServerService;
 import cn.luo.yuan.maze.model.Accessory;
 import cn.luo.yuan.maze.model.Data;
+import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.model.SellItem;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.utils.Random;
@@ -63,7 +64,8 @@ public class ShopDialog {
     }
 
     public void show(String title, List<SellItem> items, SellItemAdapter.AfterSell listener) {
-        if(context.getHero().getMaterial() > Data.MATERIAL_LIMIT) {
+        NeverEndConfig config = context.getDataManager().loadConfig();
+        if(context.getHero().getMaterial() > (config!=null ? config.getMATERIAL_LIMIT(): Data.MATERIAL_LIMIT)) {
             for (SellItem item : items) {
                 item.price *= 2;
             }

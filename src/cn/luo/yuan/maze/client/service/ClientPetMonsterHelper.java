@@ -230,7 +230,9 @@ public class ClientPetMonsterHelper extends PetMonsterHelper {
     }
 
     public long getAdditionValue(long level, int addPercent, long addPerLevel) {
-        long atkAddition = (getRandom().nextLong(control.getHero().getMaterial() - Data.MATERIAL_LIMIT) + 1)
+        NeverEndConfig config = control.getDataManager().loadConfig();
+        long materialLimit = config!=null? config.getMATERIAL_LIMIT() : Data.MATERIAL_LIMIT;
+        long atkAddition = (getRandom().nextLong(control.getHero().getMaterial() - materialLimit) + 1)
                 *((getRandom().nextInt(addPercent) + control.getMaze().getLevel() / 1000)/100);
         if(atkAddition >= 0 ) {
                 atkAddition += level * (addPerLevel + (control.getHero().getReincarnate() * Data.GROW_INCRESE + 1));
