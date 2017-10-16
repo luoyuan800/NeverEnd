@@ -92,7 +92,7 @@ public class FileObjectTable<T extends Serializable> implements ObjectTable<T> {
             try {
                 return save(object, UUID.randomUUID().toString());
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
         return null;
@@ -165,7 +165,7 @@ public class FileObjectTable<T extends Serializable> implements ObjectTable<T> {
                         try {
                             update(t, ((IDModel) t).getId(), true);
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            //e.printStackTrace();
                         }
                     }
                 }
@@ -192,7 +192,7 @@ public class FileObjectTable<T extends Serializable> implements ObjectTable<T> {
             }
         }catch (Exception e){
             //Do nothing
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -267,7 +267,7 @@ public class FileObjectTable<T extends Serializable> implements ObjectTable<T> {
             }
         } catch (Exception e) {
             //Do nothing
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return deleted;
     }
@@ -296,10 +296,10 @@ public class FileObjectTable<T extends Serializable> implements ObjectTable<T> {
             Object o = ois.readObject();
             return table.cast(o);
         } catch(InvalidClassException e){
-            e.printStackTrace();
+            //e.printStackTrace();
             entry.delete();
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return null;
 

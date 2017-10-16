@@ -130,12 +130,10 @@ public class MockContext extends Context {
         return null;
     }
 
-    @Override
     public boolean moveSharedPreferencesFrom(Context context, String s) {
         return false;
     }
 
-    @Override
     public boolean deleteSharedPreferences(String s) {
         return false;
     }
@@ -160,7 +158,6 @@ public class MockContext extends Context {
         return null;
     }
 
-    @Override
     public File getDataDir() {
         return null;
     }
@@ -240,7 +237,6 @@ public class MockContext extends Context {
         return null;
     }
 
-    @Override
     public boolean moveDatabaseFrom(Context context, String s) {
         return false;
     }
@@ -540,12 +536,10 @@ public class MockContext extends Context {
         return null;
     }
 
-    @Override
     public Context createDeviceProtectedStorageContext() {
         return null;
     }
 
-    @Override
     public boolean isDeviceProtectedStorage() {
         return false;
     }

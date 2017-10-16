@@ -13,9 +13,9 @@ import java.io.File
  */
 class WarehouseTable(root:File):Runnable{
     override fun run() {
-        petWH.removeExpire(Field.WAREHOUSE_EXPIRE_TIME)
-        accessoryWH.removeExpire(Field.WAREHOUSE_EXPIRE_TIME)
-        goodsWH.removeExpire(Field.WAREHOUSE_EXPIRE_TIME)
+        //petWH.removeExpire(Field.WAREHOUSE_EXPIRE_TIME)
+        //accessoryWH.removeExpire(Field.WAREHOUSE_EXPIRE_TIME)
+        //goodsWH.removeExpire(Field.WAREHOUSE_EXPIRE_TIME)
     }
 
     val warehouseRoot = File(root, "warehouse")

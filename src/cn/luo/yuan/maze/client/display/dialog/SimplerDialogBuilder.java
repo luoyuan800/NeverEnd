@@ -111,37 +111,10 @@ public class SimplerDialogBuilder {
         return dialogBuilder;
     }
 
-    public static Dialog build(String msg, String positiveStr, final DialogInterface.OnClickListener positive,
-                                    String negativeStr, final DialogInterface.OnClickListener negative, Context context) {
-        final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
-        dialogBuilder
-                .withMessage(msg)
-                .withDialogColor(Color.WHITE)
-                .withButton1Text(positiveStr)                                      //def gone
-                .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
-                .setButton1Click(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (positive != null) {
-                            positive.onClick(dialogBuilder, 1);
-                        } else {
-                            dialogBuilder.dismiss();
-                        }
-                    }
-                })
-                .withButton2Text(negativeStr)
-                .setButton2Click(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (negative != null) {
-                            negative.onClick(dialogBuilder, 2);
-                        } else {
-                            dialogBuilder.dismiss();
-                        }
-                    }
-                })
-                .show();
-        return dialogBuilder;
+    public static AlertDialog build(String msg, String positiveStr, DialogInterface.OnClickListener positive,
+                                    String negativeStr, DialogInterface.OnClickListener negative, Context context) {
+        return new AlertDialog.Builder(context).setMessage(Html.fromHtml(msg))
+                .setPositiveButton(positiveStr, positive).setNegativeButton(negativeStr, negative).show();
     }
 
     public static Dialog build(View view, String positiveStr, final DialogInterface.OnClickListener positive,

@@ -175,10 +175,10 @@ public class NeverEndServlet extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String path = getPathInfo(request);
         try {
             request.setCharacterEncoding("utf-8");
             response.setCharacterEncoding("utf-8");
-            String path = getPathInfo(request);
             String ownerId = request.getHeader(Field.OWNER_ID_FIELD);
             String version = request.getHeader(Field.VERSION_FIELD);
             String sign = request.getHeader(Field.SIGN_FIELD);
@@ -496,7 +496,7 @@ public class NeverEndServlet extends HttpServlet {
                 writer.close();
             }
         } catch (Exception e) {
-            LogHelper.error(e);
+            LogHelper.error(new Exception(path, e));
         }
     }
 
