@@ -156,6 +156,9 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
                 pet.setMaxHp(pet.getMaxHp() + random.nextLong(eveMonster.getMaxHp() / 3));
                 pet.setHitRate((pet.getHitRate() + eveMonster.getHitRate()) / 2);
                 pet.setEggRate((pet.getEggRate() + eveMonster.getEggRate()) / 2);
+                if(!eveMonster.getContainsEffects().isEmpty()){
+                    pet.getContainsEffects().addAll(eveMonster.getContainsEffects());
+                }
                 return true;
             }
             return false;
