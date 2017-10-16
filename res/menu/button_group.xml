@@ -65,7 +65,7 @@
             android:icon="@android:drawable/ic_menu_info_details"
             android:title="备份存档"/>
     <item
-            android:visible="true"
+            android:visible="false"
             android:id="@+id/debris"
             android:icon="@android:drawable/ic_menu_info_details"
             android:title="碎片转让"/>
