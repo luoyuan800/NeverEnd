@@ -362,7 +362,7 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                         TextView debrisTip = new TextView(context);
                         debrisTip.setText(Resource.getString(R.string.debris_tip));
                         derisLayout.addView(debrisTip);
-                        Button myKeys = new Button(context);
+                        final Button myKeys = new Button(context);
                         myKeys.setText(R.string.MY_DEBRIS_KEY);
                         myKeys.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -409,13 +409,13 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
         control.getExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                final List<String> keys = control.getServerService().queryMyKeys(control);
+                final List<CDKey> keys = control.getServerService().queryMyKeys(control);
                 control.getViewHandler().post(new Runnable() {
                     @Override
                     public void run() {
                         progressDialog.dismiss();
                         ListView listView = new ListView(context);
-                        listView.setAdapter(new StringAdapter<String>(keys));
+                        listView.setAdapter(new StringAdapter<CDKey>(keys));
                         SimplerDialogBuilder.build(listView, Resource.getString(R.string.conform), context, control.getRandom());
                     }
                 });

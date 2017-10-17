@@ -1244,11 +1244,12 @@ public class MainProcess {
         return null;
     }
 
-    public ArrayList<String> queryMyKeys(String id){
+    public ArrayList<CDKey> queryMyKeys(String id){
         ServerRecord record = heroTable.getRecord(id);
         if(record!=null){
-            return new ArrayList<>(record.getMyKeys());
+            return new ArrayList<>(cdkeyTable.queryMyCdKey(record.getMyKeys()));
         }
         return new ArrayList<>(0);
     }
+
 }

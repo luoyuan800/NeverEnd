@@ -1,10 +1,12 @@
 package cn.luo.yuan.maze.server.persistence
 
+import cn.luo.yuan.maze.model.CDKey
 import cn.luo.yuan.maze.model.KeyResult
 import cn.luo.yuan.maze.server.LogHelper
 import cn.luo.yuan.maze.persistence.DatabaseConnection
 import cn.luo.yuan.maze.utils.Random
 import java.sql.Connection
+import java.sql.PreparedStatement
 import java.sql.Statement
 
 /**
@@ -84,6 +86,31 @@ class CDKEYTable(private val database: DatabaseConnection) {
         } finally {
             con?.close()
         }
+    }
+
+    fun queryMyCdKey(ids:List<String>): List<CDKey>{
+        val cks = mutableListOf<CDKey>()
+        var con:Connection? = null
+        try{
+            con = database.getConnection()
+            val ps = con.prepareStatement("select * from `cdkey` where id in [?]")
+            ps.setString(1, ids.joinToString(","))
+            val rs = ps.executeQuery()
+            while(rs.next()){
+                if(rs.getLong("used") <= 0) {
+                    val ck = CDKey()
+                    ck.debris = rs.getLong("debris")
+                    ck.mate = rs.getLong("mate")
+                    ck.used = rs.getLong("used")
+                    ck.isSingle = rs.getBoolean("single")
+                    cks.add(ck)
+                }
+            }
+            ps.close()
+        }finally {
+            con?.close()
+        }
+        return cks;
     }
 
     private fun buildId(random: Random): String {
