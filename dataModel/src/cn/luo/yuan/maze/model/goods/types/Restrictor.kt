@@ -19,7 +19,7 @@ class Restrictor: UsableGoods(), InfoControlInterface.InputListener {
         val config = context.dataManager.loadConfig();
         if(StringUtils.isNotEmpty(input) && config!=null){
             config.catchRestrictor = input
-            config.catchFilter = StringUtils.EMPTY_STRING
+            config.catchRestrictor = StringUtils.EMPTY_STRING
             context.dataManager.save(config)
         }
     }
