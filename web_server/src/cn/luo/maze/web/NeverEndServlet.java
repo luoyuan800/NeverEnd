@@ -281,8 +281,7 @@ public class NeverEndServlet extends HttpServlet {
                     writeObject(response, process.warehouseList(ownerId, request.getIntHeader(Field.EXPECT_TYPE)));
                     break;
                 case STORE_WAREHOUSE:
-                    OwnedAble object = readObject(request);
-                    success = process.storeIntoWarehouse(object);
+                    success = process.storeIntoWarehouse(ownerId);
                     break;
                 case BUY_DLC:
                     success = process.buyDlc(ownerId, readEncodeHeader(request, Field.ITEM_ID_FIELD));

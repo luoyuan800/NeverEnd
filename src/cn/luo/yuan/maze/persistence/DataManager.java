@@ -13,6 +13,7 @@ import cn.luo.yuan.maze.model.skill.SpecialSkill;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
 import cn.luo.yuan.maze.persistence.database.Sqlite;
 import cn.luo.yuan.maze.persistence.serialize.SerializeLoader;
+import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.serialize.FileObjectTable;
 import cn.luo.yuan.serialize.ObjectTable;
 import cn.luo.yuan.maze.utils.StringUtils;
@@ -22,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -52,6 +54,7 @@ public class DataManager implements DataManagerInterface {
     private ObjectTable<NeverEndConfig> configDB;
     private ObjectTable<NPCLevelRecord> npcLevelRecordObjectTable;
     private ObjectTable<Hero> defenderDB;
+    private ObjectTable<Serializable> warehouseTable;
     private List<ObjectTable> tables = new ArrayList<>();
 
     private Sqlite database;
@@ -72,7 +75,9 @@ public class DataManager implements DataManagerInterface {
         configDB = new FileObjectTable<>(NeverEndConfig.class, context.getDir(String.valueOf(index), Context.MODE_PRIVATE));
         defenderDB = new FileObjectTable<>(Hero.class, context.getDir("defend", Context.MODE_PRIVATE));
         npcLevelRecordObjectTable = new FileObjectTable<>(NPCLevelRecord.class, context.getDir("npc", Context.MODE_PRIVATE));
+        warehouseTable = new FileObjectTable<>(Serializable.class, context.getDir("warehouse", Context.MODE_PRIVATE));
         this.context = context;
+        registerTable(warehouseTable);
         registerTable(accessoryLoader.getDb());
         registerTable(petLoader.getDb());
         registerTable(goodsLoader.getDb());
@@ -83,6 +88,8 @@ public class DataManager implements DataManagerInterface {
         tables.add(heroLoader.getDb());
         tables.add(mazeLoader.getDb());
     }
+
+
 
     public ObjectTable<NPCLevelRecord> getNPCTable(){
         return npcLevelRecordObjectTable;
@@ -578,6 +585,46 @@ public class DataManager implements DataManagerInterface {
                 heroLoader.delete(h);
             }
         }
+    }
+
+    public boolean storeWarehouse(Serializable object) {
+        try {
+            warehouseTable.save(object);
+            return true;
+        } catch (Exception e1) {
+            LogHelper.logException(e1, "storeWarehouse");
+        }
+        return false;
+    }
+
+    public List<OwnedAble> queryWarehouse(final int type) {
+        try {
+            ArrayList<OwnedAble> rs = new ArrayList<>();
+            for(Serializable ser : warehouseTable.loadLimit(0, -1, new Index<Serializable>() {
+                @Override
+                public boolean match(Serializable serializable) {
+                    return (type == Field.PET_TYPE) ? (serializable instanceof Pet) : ((type== Field.ACCESSORY_TYPE) ? (serializable instanceof Accessory) : (serializable instanceof Goods));
+                }
+            }, null)){
+                if(ser instanceof OwnedAble){
+                    rs.add((OwnedAble) ser);
+                }
+            }
+            return rs;
+        } catch (Exception e1) {
+            LogHelper.logException(e1, "queryWarehouse: " + type);
+        }
+        return Collections.emptyList();
+    }
+
+    public Serializable getBackWarehouse(String id, int type) {
+        Serializable serializable = warehouseTable.loadObject(id);
+        if((type == Field.PET_TYPE && serializable instanceof Pet) || (type == Field.ACCESSORY_TYPE && serializable instanceof Accessory) || (type == Field.GOODS_TYPE && serializable instanceof Goods) ){
+            warehouseTable.delete(id);
+            save((IDModel) serializable);
+            return serializable;
+        }
+        return null;
     }
 
     @NotNull

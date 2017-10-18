@@ -916,10 +916,9 @@ public class MainProcess {
         return false;
     }
 
-    public boolean storeIntoWarehouse(OwnedAble object) {
-        ServerRecord record = heroTable.getRecord(object.getKeeperId());
+    public boolean storeIntoWarehouse(String ownerId) {
+        ServerRecord record = heroTable.getRecord(ownerId);
         if (record != null && record.getDebris() > Data.WAREHOUSE_DEBRIS) {
-            warehouseTable.store(object);
             record.setDebris(record.getDebris() - Data.WAREHOUSE_DEBRIS);
             return true;
         }

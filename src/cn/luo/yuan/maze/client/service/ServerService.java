@@ -363,15 +363,16 @@ public class ServerService {
 
     public boolean storeWarehouse(Serializable object, NeverEnd context){
         try {
-            object = context.convertToServerObject(object);
             if(object instanceof OwnedAble){
                 ((OwnedAble) object).setKeeperId(context.getHero().getId());
                 ((OwnedAble) object).setKeeperName(context.getHero().getName());
             }
             HttpURLConnection connection = server.getHttpURLConnection(STORE_WAREHOUSE, RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
-            Object connect = server.connect(object, connection);
-            return Field.RESPONSE_RESULT_SUCCESS.equals(connect.toString());
+            Object connect = server.connect(connection);
+            if(Field.RESPONSE_RESULT_SUCCESS.equals(connect.toString())){
+                return context.getDataManager().storeWarehouse(object);
+            }
         } catch (Exception e) {
             LogHelper.logException(e, "ServiceService->storeWarehouse");
         }
@@ -379,13 +380,7 @@ public class ServerService {
     }
     public List<OwnedAble> queryWarehouse(int type, NeverEnd context){
         try {
-            HttpURLConnection connection = server.getHttpURLConnection(RETRIEVE_WAREHOUSE_LIST, RestConnection.POST);
-            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
-            connection.addRequestProperty(Field.EXPECT_TYPE, String.valueOf(type));
-            Object o  = server.connect(connection);
-            if(o instanceof List){
-                return (List<OwnedAble>) o;
-            }
+            return context.getDataManager().queryWarehouse(type);
         } catch (Exception e) {
             LogHelper.logException(e, "ServiceService->queryWarehouse");
         }
@@ -393,13 +388,10 @@ public class ServerService {
     }
     public boolean getBackWarehouse(String id, int type, NeverEnd context){
         try {
-            HttpURLConnection connection = server.getHttpURLConnection(RETRIEVE_BACK_WAREHOUSE, RestConnection.POST);
-            connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
-            connection.addRequestProperty(Field.ITEM_ID_FIELD, id);
-            connection.addRequestProperty(Field.EXPECT_TYPE, String.valueOf(type));
-            Object connect = server.connect(connection);
-            return Field.RESPONSE_RESULT_SUCCESS.equals(connect);
-
+            Serializable ser = context.getDataManager().getBackWarehouse(id, type);
+            if(ser!=null){
+                return true;
+            }
         } catch (Exception e) {
             LogHelper.logException(e, "ServiceService->queryWarehouse");
         }
