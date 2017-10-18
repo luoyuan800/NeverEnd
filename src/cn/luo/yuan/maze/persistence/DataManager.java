@@ -621,7 +621,6 @@ public class DataManager implements DataManagerInterface {
         Serializable serializable = warehouseTable.loadObject(id);
         if((type == Field.PET_TYPE && serializable instanceof Pet) || (type == Field.ACCESSORY_TYPE && serializable instanceof Accessory) || (type == Field.GOODS_TYPE && serializable instanceof Goods) ){
             warehouseTable.delete(id);
-            save((IDModel) serializable);
             return serializable;
         }
         return null;
