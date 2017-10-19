@@ -94,18 +94,18 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
         if (major.getIndex() != minor.getIndex()) {
             petUpgradeLimit /= 2;
         }
-        if (major != minor && random.nextLong(major.getLevel()) + random.nextLong(minor.getLevel() / 10) < petUpgradeLimit) {
+        if (major != minor && random.nextLong(major.getLevel()) + random.nextLong(minor.getLevel() / 3) < petUpgradeLimit) {
             major.setLevel(major.getLevel() + 1);
             float colorReduce = Data.getColorReduce(major.getColor());
-            long atk = major.getAtk() + random.nextLong(minor.getAtk() * (minor.getLevel() + 1)) + (long) (major.getAtk() * colorReduce);
+            long atk = major.getAtk() + (long)((random.nextLong(minor.getAtk() / (minor.getLevel() + 1)) + major.getAtk()) * colorReduce);
             if (atk > 0) {
                 major.setAtk(atk);
             }
-            long def = major.getDef() + random.nextLong(minor.getDef() * (minor.getLevel() + 1)) + (long) (major.getDef() * colorReduce);
+            long def = major.getDef() + (long)((random.nextLong(minor.getDef() / (minor.getLevel() + 1)) + major.getDef()) * colorReduce);
             if (def > 0) {
                 major.setDef(def);
             }
-            long maxHP = major.getMaxHp() + random.nextLong(minor.getMaxHp() * (minor.getLevel() + 1)) + (long) (major.getMaxHp() * colorReduce);
+            long maxHP = major.getMaxHp() + (long)((random.nextLong(minor.getMaxHp() / (minor.getLevel() + 1)) + major.getMaxHp()) * colorReduce);
             if (maxHP > 0) {
                 major.setMaxHp(maxHP);
             }
