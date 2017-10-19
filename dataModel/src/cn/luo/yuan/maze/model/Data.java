@@ -11,6 +11,7 @@ import cn.luo.yuan.maze.utils.Random;
  * Created by luoyuan on 2017/3/28.
  */
 public class Data {
+    public static final long STREAK_LIMIT = 40000;//连胜超过这个就会出现超级强力的怪物
     public static final long INTIMACY_REDUCE = 10;//宠物死亡衰减的亲密度
     public static  int MAX_SELL_COUNT = 5;//商店最大的商品数量
     public static final String BLUE_COLOR = "#0000FF";//蓝色（阶位）1

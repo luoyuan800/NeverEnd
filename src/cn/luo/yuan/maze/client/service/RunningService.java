@@ -18,6 +18,7 @@ import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.NameObject;
 import cn.luo.yuan.maze.model.NeverEndConfig;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.skill.MountAble;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.SkillFactory;
@@ -172,6 +173,29 @@ public class RunningService implements RunningServiceInterface {
                             }
                             this.target = monster;
                             if (monster != null) {
+                                if(!isInvincible() && monster instanceof Monster && random.nextLong(maze.getStreaking()) > Data.STREAK_LIMIT){
+                                    if(monster.getAtk() < hero.getUpperDef()){
+                                        ((Monster) monster).setFirstName(FirstName.tire);
+                                        ((Monster) monster).setAtk(hero.getUpperDef() + random.nextLong(monster.getUpperAtk()));
+                                        if(monster.getUpperAtk() <= 0){
+                                            ((Monster) monster).setAtk(hero.getUpperDef() + hero.getUpperHp()/10);
+                                        }
+                                        ((Monster) monster).setColor(Data.ORANGE_COLOR);
+                                        ((Monster) monster).setMaterial(((Monster) monster).getMaterial() * 10);
+                                    }
+                                    if(monster.getHp() < hero.getUpperAtk()){
+                                        ((Monster) monster).setFirstName(FirstName.tire);
+                                        monster.setMaxHp(hero.getUpperAtk() * random.randomRange(3, 10));
+                                        if(monster.getMaxHp() <= 0){
+                                            monster.setMaxHp(hero.getUpperAtk());
+                                        }
+                                        ((Monster) monster).setColor(Data.ORANGE_COLOR);
+                                        ((Monster) monster).setMaterial(((Monster) monster).getMaterial() * 10);
+                                    }
+                                    if(((Monster) monster).getFirstName() == FirstName.tire){
+                                        gameContext.addMessage("天劫怪物降临！");
+                                    }
+                                }
                                 monster.setHp(monster.getMaxHp());
                                 meet = true;
                                 gameContext.addMessage("遇见了 " + ((NameObject) monster).getDisplayName());
@@ -216,6 +240,10 @@ public class RunningService implements RunningServiceInterface {
                                     maze.setStreaking(0);
                                     for (LostListener lostListener : lostListeners.values()) {
                                         lostListener.lost(hero, monster, gameContext);
+                                    }
+                                    if(monster instanceof Monster && ((Monster) monster).getFirstName()==FirstName.tire){
+                                        hero.setMaterial(hero.getMaterial()-((Monster) monster).getMaterial()/5);
+                                        gameContext.addMessage("渡劫失败，损失锻造: " + ((Monster) monster).getMaterial()/5);
                                     }
                                     if (hero.getCurrentHp() <= 0) {
                                         gameContext.addMessage(String.format(gameContext.getContext().getString(R.string.lost), hero.getDisplayName()));
