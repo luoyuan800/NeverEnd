@@ -17,6 +17,7 @@ import cn.luo.yuan.maze.model.names.FirstName;
 import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.pet.Mass;
+import cn.luo.yuan.maze.model.skill.pet.Zoarium;
 import cn.luo.yuan.serialize.FileObjectTable;
 import cn.luo.yuan.serialize.ObjectTable;
 
@@ -44,8 +45,8 @@ public class BuildDLC {
         buildSkillDlc(new Painkiller(), dlcTable);*/
         //buildEveoo(dlcTable);
         //buildNPC(dlcTable);
-        //buildSkillDlc(new Mass(), dlcTable);
-        buildGoodsDlc(new Invincible(), 50, dlcTable);
+        buildSkillDlc(new Zoarium(), dlcTable);
+//        buildGoodsDlc(new Invincible(), 50, dlcTable);
         //buildEveoo(dlcTable);
         //buildEveooII(dlcTable);
     }

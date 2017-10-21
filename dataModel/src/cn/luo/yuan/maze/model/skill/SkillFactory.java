@@ -13,6 +13,7 @@ import cn.luo.yuan.maze.model.skill.pet.Foster;
 import cn.luo.yuan.maze.model.skill.pet.Mass;
 import cn.luo.yuan.maze.model.skill.pet.PetMaster;
 import cn.luo.yuan.maze.model.skill.pet.Trainer;
+import cn.luo.yuan.maze.model.skill.pet.Zoarium;
 import cn.luo.yuan.maze.model.skill.race.Alayer;
 import cn.luo.yuan.maze.model.skill.race.Chaos;
 import cn.luo.yuan.maze.model.skill.race.Decide;
@@ -32,6 +33,9 @@ public class SkillFactory {
         Skill skill = dm.loadSkill(name);
         if(skill == null){
             switch (name){
+                case "Zoarium":
+                    skill = new Zoarium();
+                    break;
                 case "Mass":
                     skill = new Mass();
                     break;
