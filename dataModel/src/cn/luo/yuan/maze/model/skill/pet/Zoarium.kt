@@ -9,6 +9,7 @@ import cn.luo.yuan.maze.model.skill.SkillParameter
 import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.model.skill.result.SkipThisTurn
 import cn.luo.yuan.maze.service.InfoControlInterface
+import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.Random
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -20,6 +21,9 @@ import java.util.concurrent.TimeUnit
 class Zoarium : AtkSkill() {
     override fun getName(): String {
         return "鬼宠附身"
+    }
+    companion object {
+        private const val serialVersionUID: Long = Field.SERVER_VERSION
     }
 
     override fun enable(parameter: SkillParameter?) {

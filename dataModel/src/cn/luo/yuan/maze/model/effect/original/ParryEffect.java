@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.model.effect.original;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.FloatValueEffect;
 import cn.luo.yuan.maze.utils.EncodeFloat;
+import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 /**
@@ -12,6 +13,7 @@ public class ParryEffect extends FloatValueEffect {
     private boolean enable;
     private String tag;
     private boolean elementControl;
+    private static final long serialVersionUID = Field.SERVER_VERSION;
 
     @Override
     public String toString() {

@@ -6,11 +6,15 @@ import cn.luo.yuan.maze.model.skill.SpecialSkill
 import cn.luo.yuan.maze.model.skill.result.DoNoThingResult
 import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.model.skill.result.SkipThisTurn
+import cn.luo.yuan.maze.utils.Field
 
 /**
  * Created by luoyuan on 2017/9/4.
  */
 class Alayer: AtkSkill(), SpecialSkill {
+    companion object {
+        private const val serialVersionUID: Long = Field.SERVER_VERSION
+    }
     private val model:RaceSkillModel = RaceSkillModel(this)
     init {
         rate = 3f

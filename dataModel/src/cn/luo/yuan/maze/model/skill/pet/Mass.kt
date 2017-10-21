@@ -9,6 +9,7 @@ import cn.luo.yuan.maze.model.skill.result.SkipThisTurn
 import cn.luo.yuan.maze.service.BattleMessage
 import cn.luo.yuan.maze.service.BattleServiceBase
 import cn.luo.yuan.maze.service.InfoControlInterface
+import cn.luo.yuan.maze.utils.Field
 import cn.luo.yuan.maze.utils.StringUtils
 
 /**
@@ -18,6 +19,9 @@ import cn.luo.yuan.maze.utils.StringUtils
 class Mass : AtkSkill(), UpgradeAble {
     init {
         rate = 1f
+    }
+    companion object {
+        private const val serialVersionUID: Long = Field.SERVER_VERSION
     }
 
     private var level: Long = 1
