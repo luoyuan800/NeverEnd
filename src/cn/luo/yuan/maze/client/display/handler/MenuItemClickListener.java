@@ -370,9 +370,10 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                                 queryMyKeys();
                             }
                         });
-                        SimplerDialogBuilder.build(derisLayout, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                        derisLayout.addView(myKeys);
+                        final Dialog dialog = SimplerDialogBuilder.build(derisLayout, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            public void onClick(final DialogInterface dialog, int which) {
                                 final ProgressDialog progressDialog = new ProgressDialog(context);
                                 progressDialog.show();
                                 control.getExecutor().execute(new Runnable() {
@@ -383,7 +384,12 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                                             @Override
                                             public void run() {
                                                 progressDialog.dismiss();
-                                                SimplerDialogBuilder.build(Resource.getString(R.string.debris_change_result, cd), context, false);
+                                                dialog.dismiss();
+                                                if(StringUtils.isNotEmpty(cd)){
+                                                    SimplerDialogBuilder.build(Resource.getString(R.string.debris_change_result, cd), context, false);
+                                                }else{
+                                                    control.showToast("碎片数量不足！");
+                                                }
                                             }
                                         });
                                     }
@@ -416,7 +422,12 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
                         progressDialog.dismiss();
                         ListView listView = new ListView(context);
                         listView.setAdapter(new StringAdapter<CDKey>(keys));
-                        SimplerDialogBuilder.build(listView, Resource.getString(R.string.conform), context, control.getRandom());
+                        SimplerDialogBuilder.build(listView, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }, context, false);
                     }
                 });
             }

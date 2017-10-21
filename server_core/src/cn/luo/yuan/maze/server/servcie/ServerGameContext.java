@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.server.servcie;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.NPCLevelRecord;
+import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.skill.SkillParameter;
 import cn.luo.yuan.maze.persistence.DataManagerInterface;
 import cn.luo.yuan.maze.service.InfoControlInterface;
@@ -120,6 +121,16 @@ public class ServerGameContext implements InfoControlInterface {
 
     @Override
     public void setRandomNPC(NPCLevelRecord npc) {
+
+    }
+
+    @Override
+    public void zoarium(@NotNull Pet pet) {
+
+    }
+
+    @Override
+    public void diszoarium() {
 
     }
 }

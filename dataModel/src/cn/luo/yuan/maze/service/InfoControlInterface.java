@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.service;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Maze;
 import cn.luo.yuan.maze.model.NPCLevelRecord;
+import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.skill.SkillParameter;
 import cn.luo.yuan.maze.persistence.DataManagerInterface;
 import cn.luo.yuan.maze.utils.Random;
@@ -47,6 +48,8 @@ public interface InfoControlInterface {
 
     void setRandomNPC(NPCLevelRecord npc);
 
+    void zoarium(@NotNull Pet pet);
+    void diszoarium();
     interface InputListener{
         void input(String input, InfoControlInterface context);
     }

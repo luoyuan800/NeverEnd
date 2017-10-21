@@ -97,6 +97,26 @@ public class GameActivityViewHandler extends Handler {
 
     }
 
+    public void showZoarium(final int index) {
+        post(new Runnable() {
+            @Override
+            public void run() {
+                ImageView zoarium = (ImageView) context.findViewById(R.id.show_zoaroum);
+                zoarium.setVisibility(View.VISIBLE);
+                zoarium.setImageDrawable(Resource.loadMonsterImage(index));
+            }
+        });
+    }
+
+    public void hideZoarium(){
+        post(new Runnable() {
+            @Override
+            public void run() {
+                ImageView zoarium = (ImageView) context.findViewById(R.id.show_zoaroum);
+                zoarium.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
 
 
     private void updateSkillButton(Button button, Skill skill){

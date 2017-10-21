@@ -33,6 +33,7 @@ import cn.luo.yuan.maze.service.SkillHelper;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.Random;
 import cn.luo.yuan.maze.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -136,6 +137,18 @@ public class NeverEnd extends Application implements InfoControlInterface {
     @Override
     public void setRandomNPC(NPCLevelRecord npc) {
         viewHandler.showNPCIcon(npc);
+    }
+
+    @Override
+    public void zoarium(Pet pet) {
+        if(pet!=null){
+            viewHandler.showZoarium(pet.getIndex());
+        }
+    }
+
+    @Override
+    public void diszoarium() {
+        viewHandler.hideZoarium();
     }
 
     public void setContext(Context context, DataManager dataManager) {

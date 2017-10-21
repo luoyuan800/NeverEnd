@@ -17,15 +17,17 @@
             android:background="@android:drawable/spinner_background"
             android:layout_below="@+id/skill_layout"/>
 
-    <include
-            layout="@layout/monster_book_view"
+    <ScrollView
             android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:id="@+id/monster_view"
             android:layout_marginStart="5dp"
-            android:layout_below="@+id/skill_layout"/>
+            android:layout_below="@+id/skill_layout">
+        <include layout="@layout/monster_book_view"
+        />
+    </ScrollView>
 
 
     <LinearLayout
@@ -281,7 +283,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/hero_point"
                     android:text="10000000W"
-                    />
+            />
 
             <ImageButton
                     android:layout_width="15dp"
@@ -314,12 +316,12 @@
                 android:id="@+id/nam_pic_layout">
 
             <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:layout_gravity="center_horizontal"
-                        android:id="@+id/hero_gift"
-                        android:text="宠物大师"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/hero_gift"
+                    android:text="宠物大师"/>
 
             <ImageView
                     android:layout_width="150dp"
@@ -328,7 +330,7 @@
                     android:onClick="onClick"
                     android:layout_gravity="center"
                     android:layout_height="250dp"
-                    />
+            />
 
             <TextView
                     android:gravity="center_horizontal"
@@ -397,7 +399,7 @@
                 android:enabled="true"
                 android:onClick="onClick"
                 android:background="@color/toumin"
-                />
+        />
 
         <Button
                 android:layout_width="70dp"
@@ -407,7 +409,7 @@
                 android:onClick="onClick"
                 android:background="@color/toumin"
                 android:layout_marginStart="10dp"
-                />
+        />
 
         <Button
                 android:layout_width="70dp"
@@ -417,7 +419,7 @@
                 android:onClick="onClick"
                 android:background="@color/toumin"
                 android:layout_marginStart="10dp"
-                />
+        />
 
         <LinearLayout
                 android:orientation="vertical"
@@ -443,7 +445,7 @@
                         android:textSize="12sp"
                         android:onClick="onClick"
                         android:layout_marginStart="10dp"
-                        />
+                />
 
                 <Button
                         android:id="@+id/secondary_skill"
@@ -454,7 +456,7 @@
                         android:onClick="onClick"
                         android:background="@color/toumin"
                         android:layout_marginStart="5dp"
-                        />
+                />
 
                 <Button
                         android:id="@+id/third_skill"
@@ -465,7 +467,7 @@
                         android:onClick="onClick"
                         android:background="@color/toumin"
                         android:layout_marginStart="5dp"
-                        />
+                />
             </LinearLayout>
 
             <LinearLayout
@@ -550,7 +552,7 @@
                 android:id="@+id/monster_next"
                 android:layout_weight="1"
                 android:onClick="onClick"
-                />
+        />
     </LinearLayout>
     <ImageButton
             android:layout_width="wrap_content"
@@ -563,7 +565,8 @@
             android:layout_height="wrap_content"
             android:onClick="npcImgClick"
             android:id="@+id/npc_button"
-            android:src="@android:drawable/ic_dialog_alert" android:background="@color/red" android:visibility="invisible"
+            android:src="@android:drawable/ic_dialog_alert" android:background="@color/red"
+            android:visibility="invisible"
             android:alpha="0.3"
             android:layout_above="@+id/die_msg_button" android:layout_alignParentEnd="true"
             android:layout_marginBottom="5dp"/>
@@ -605,6 +608,14 @@
             android:id="@+id/show_invicible"
             android:visibility="invisible"
             android:layout_alignParentTop="true"/>
+
+    <ImageView
+            android:src="@drawable/baizee"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/show_zoaroum"
+            android:visibility="invisible"
+            android:layout_alignBottom="@+id/show_invicible" android:layout_toStartOf="@+id/hero_inf_layout_2"/>
 
 
 </RelativeLayout>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
           package="cn.luo.yuan.maze"
-          android:versionCode="5222"
-          android:versionName="5.2.2.2">
+          android:versionCode="5231"
+          android:versionName="5.2.3.1">
     <uses-sdk
             android:minSdkVersion="19"
             android:targetSdkVersion="24" />\
@@ -129,19 +129,6 @@
                 android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <activity android:name="com.yumi.android.sdk.ads.mediation.activity.MediationTestActivity" />
-
-        <!-- DianJoy -->
-        <service
-                android:name="com.dianjoy.video.DianViewService"
-                android:process=":playgame" />
-        <activity
-                android:name="com.dianjoy.video.DianViewActivity"
-                android:launchMode="singleTask"
-                android:screenOrientation="landscape"
-                android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"/>
-        <activity
-                android:name="com.dianjoy.video.DianViewAdBrowser"
-                android:configChanges="orientation|screenSize"/>
 
     </application>
 </manifest>

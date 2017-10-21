@@ -93,12 +93,17 @@ class CDKEYTable(private val database: DatabaseConnection) {
         var con:Connection? = null
         try{
             con = database.getConnection()
-            val ps = con.prepareStatement("select * from `cdkey` where id in [?]")
-            ps.setString(1, ids.joinToString(","))
+            val builder = StringBuilder()
+            ids.forEach {
+                builder.append("'$it',")
+            }
+            val idss = builder.replaceFirst(Regex(",$"), "")
+            val ps = con.prepareStatement("select * from `cdkey` where id in ($idss)")
             val rs = ps.executeQuery()
             while(rs.next()){
                 if(rs.getLong("used") <= 0) {
                     val ck = CDKey()
+                    ck.id = rs.getString("id")
                     ck.debris = rs.getLong("debris")
                     ck.mate = rs.getLong("mate")
                     ck.used = rs.getLong("used")

@@ -121,7 +121,7 @@ public class AccessoryHelper extends cn.luo.yuan.maze.service.AccessoryHelper {
                     }
                 }
                 major.setLevel(major.getLevel() + 1);
-                if (!major.getColor().equals(Data.DARKGOLD_COLOR) && random.nextInt(100) < random.nextLong(major.getLevel())) {
+                if (!major.getColor().equals(Data.DARKGOLD_COLOR) && random.nextInt(300) < random.nextLong(major.getLevel())) {
                     switch (major.getColor()) {
                         case Data.DEFAULT_QUALITY_COLOR:
                             major.setColor(Data.BLUE_COLOR);

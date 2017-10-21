@@ -1240,7 +1240,7 @@ public class MainProcess {
             }
             return key;
         }
-        return null;
+        return StringUtils.EMPTY_STRING;
     }
 
     public ArrayList<CDKey> queryMyKeys(String id){

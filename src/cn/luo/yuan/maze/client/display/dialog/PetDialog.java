@@ -303,6 +303,9 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                                         }
                                     }).setMessage(Html.fromHtml(String.format(Resource.getString(R.string.upgrade_failed), currentPet.getDisplayName()))).show();
                                 }
+                                if(currentPet.getUpperAtk()/10 > control.getHero().getUpperAtk() || currentPet.getUpperHp()/10 > control.getHero().getUpperHp()){
+                                    currentPet.setIntimacy(currentPet.getIntimacy() - 5);
+                                }
                                 control.getDataManager().deletePet(minor);
                                 adapter.removePet(minor);
                                 adapter.notifyDataSetChanged();
