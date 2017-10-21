@@ -325,7 +325,7 @@
         <type value="帽子"/>
         <properties>
             <effect name="MeetRateEffect" min="10" max="20" rate="90" element="false"/>
-            <effect name="DogeRateEffect" min="200" max="2000" rate="100" element="false"/>
+            <effect name="DogeRateEffect" min="2" max="10" rate="100" element="false"/>
             <effect name="EggRateEffect" min="1" max="5" rate="50" element="true"/>
             <effect name="DefPercentEffect" min="1" max="9" rate="50" element="true"/>
         </properties>

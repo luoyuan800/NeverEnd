@@ -6,6 +6,7 @@ import cn.luo.yuan.maze.model.effect.DefEffect
 import cn.luo.yuan.maze.model.effect.HpEffect
 import cn.luo.yuan.maze.model.skill.AtkSkill
 import cn.luo.yuan.maze.model.skill.SkillParameter
+import cn.luo.yuan.maze.model.skill.SpecialSkill
 import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.model.skill.result.SkipThisTurn
 import cn.luo.yuan.maze.service.InfoControlInterface
@@ -18,7 +19,7 @@ import java.util.concurrent.TimeUnit
  * Copyright @Luo
  * Created by Gavin Luo on 10/21/2017.
  */
-class Zoarium : AtkSkill() {
+class Zoarium : AtkSkill(), SpecialSkill {
     override fun getName(): String {
         return "鬼宠附身"
     }

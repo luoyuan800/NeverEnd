@@ -3,6 +3,7 @@ package cn.luo.yuan.maze.model.skill.pet
 import cn.luo.yuan.maze.model.*
 import cn.luo.yuan.maze.model.skill.AtkSkill
 import cn.luo.yuan.maze.model.skill.SkillParameter
+import cn.luo.yuan.maze.model.skill.SpecialSkill
 import cn.luo.yuan.maze.model.skill.UpgradeAble
 import cn.luo.yuan.maze.model.skill.result.SkillResult
 import cn.luo.yuan.maze.model.skill.result.SkipThisTurn
@@ -16,7 +17,7 @@ import cn.luo.yuan.maze.utils.StringUtils
  * Copyright @Luo
  * Created by Gavin Luo on 9/30/2017.
  */
-class Mass : AtkSkill(), UpgradeAble {
+class Mass : AtkSkill(), UpgradeAble, SpecialSkill {
     init {
         rate = 1f
     }
