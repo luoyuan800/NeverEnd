@@ -944,8 +944,8 @@
         <hp>1</hp>
         <hit>5</hit>
         <silent>100</silent>
-        <egg_rate>1</egg_rate>
-        <pet_rate>5</pet_rate>
+        <egg_rate>5</egg_rate>
+        <pet_rate>15</pet_rate>
         <sex>0</sex>
         <race>Elyosr</race>
         <rank>4</rank>
@@ -1078,6 +1078,96 @@
         <sex>-1</sex>
         <race>Ghosr</race>
         <rank>5</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>76</index>
+        <meet meet_rate="10" min_level="2050"/>
+        <name>胜遇</name>
+        <desc>玉山，有鸟焉，其状如翟而赤，名曰胜遇，是食鱼，其音如鹿，见则其国大水。
+        </desc>
+        <atk>168</atk>
+        <def>190</def>
+        <hp>187</hp>
+        <hit>20</hit>
+        <silent>1</silent>
+        <egg_rate>10</egg_rate>
+        <pet_rate>15</pet_rate>
+        <sex>-1</sex>
+        <race>Eviler</race>
+        <rank>4</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>88</index>
+        <meet meet_rate="10" min_level="1000"/>
+        <name>鹿蜀</name>
+        <desc>杻阳之山，有兽焉，其状如马而白首，其文如虎而赤尾，其音如谣，其名曰鹿蜀，佩之宜子孙
+        </desc>
+        <atk>80</atk>
+        <def>199</def>
+        <hp>255</hp>
+        <hit>25</hit>
+        <silent>25</silent>
+        <egg_rate>10</egg_rate>
+        <pet_rate>15</pet_rate>
+        <sex>-1</sex>
+        <race>Wizardsr</race>
+        <rank>4</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>73</index>
+        <meet meet_rate="15" min_level="2000"/>
+        <name>鱼妇</name>
+        <desc>有鱼偏枯，名曰鱼妇。颛顼死即复苏。风道北来，天及大水泉，蛇乃化为鱼，是为鱼妇。
+        </desc>
+        <atk>66</atk>
+        <def>130</def>
+        <hp>200</hp>
+        <hit>5</hit>
+        <silent>5</silent>
+        <egg_rate>10</egg_rate>
+        <pet_rate>11</pet_rate>
+        <sex>-1</sex>
+        <race>Ghosr</race>
+        <rank>3</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>74</index>
+        <meet meet_rate="15" min_level="2100"/>
+        <name>鸾鸟</name>
+        <desc>女床之山，有鸟焉，其状如翟而五采文，名曰鸾鸟，见则天下安宁。
+        </desc>
+        <atk>168</atk>
+        <def>243</def>
+        <hp>50</hp>
+        <hit>15</hit>
+        <silent>1</silent>
+        <egg_rate>15</egg_rate>
+        <pet_rate>10</pet_rate>
+        <sex>-1</sex>
+        <race>Orger</race>
+        <rank>3</rank>
+        <evolution></evolution>
+    </monster>
+    <monster>
+        <index>90</index>
+        <meet meet_rate="10" min_level="1100"/>
+        <name>辟邪</name>
+        <desc>似鹿而长尾，有两角，也叫做貔貅。有镇宅辟邪的灵性，相传此灵物物嘴大无肛，能够招财纳福，极具灵力。
+        </desc>
+        <atk>130</atk>
+        <def>124</def>
+        <hp>85</hp>
+        <hit>3</hit>
+        <silent>3</silent>
+        <egg_rate>5</egg_rate>
+        <pet_rate>10</pet_rate>
+        <sex>-1</sex>
+        <race>Orger</race>
+        <rank>3</rank>
         <evolution></evolution>
     </monster>
 </monsters>

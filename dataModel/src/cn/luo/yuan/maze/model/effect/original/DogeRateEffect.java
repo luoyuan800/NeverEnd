@@ -47,4 +47,9 @@ public class DogeRateEffect extends FloatValueEffect {
     public String toString() {
         return "增加闪避: " + StringUtils.formatNumber(getValue());
     }
+
+    @Override
+    public boolean isReject(Class<? extends Effect> effectClass) {
+        return effectClass == MeetRateEffect.class || effectClass == cn.luo.yuan.maze.model.effect.MeetRateEffect.class || effectClass == ParryEffect.class;
+    }
 }

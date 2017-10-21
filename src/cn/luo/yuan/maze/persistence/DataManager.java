@@ -521,7 +521,7 @@ public class DataManager implements DataManagerInterface {
             if (StringUtils.isEmpty(config.getSign())) {
                 config.setSign(Resource.getSingInfo());
             }
-            if (StringUtils.isEmpty(config.getVersion())) {
+            if (StringUtils.isEmpty(config.getVersion()) || "0".equals(config.getVersion())) {
                 config.setVersion(Resource.getVersion());
             }
         } catch (Exception e) {

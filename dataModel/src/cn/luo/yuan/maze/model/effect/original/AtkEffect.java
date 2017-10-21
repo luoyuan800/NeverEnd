@@ -5,6 +5,8 @@ import cn.luo.yuan.maze.model.effect.LongValueEffect;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 
+import java.util.Arrays;
+
 /**
  * Created by luoyuan on 2017/3/18.
  */
@@ -53,5 +55,10 @@ public class AtkEffect extends LongValueEffect {
     @Override
     public String toString() {
         return "增加攻击：" + StringUtils.formatNumber(getValue());
+    }
+
+    @Override
+    public boolean isReject(Class<? extends Effect> effectClass) {
+        return Arrays.asList(cn.luo.yuan.maze.model.effect.original.AgiEffect.class, cn.luo.yuan.maze.model.effect.AgiEffect.class, cn.luo.yuan.maze.model.effect.HpEffect.class, cn.luo.yuan.maze.model.effect.original.HpEffect.class).contains(effectClass);
     }
 }

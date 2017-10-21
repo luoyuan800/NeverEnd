@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.model.effect.original;
 
+import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.effect.FloatValueEffect;
 import cn.luo.yuan.maze.utils.Field;
 
@@ -47,5 +48,10 @@ public class PetABEEffect extends FloatValueEffect {
     @Override
     public String toString() {
         return "增加宠物变异：" + getValue();
+    }
+
+    @Override
+    public boolean isReject(Class<? extends Effect> effectClass) {
+        return effectClass == PetRateEffect.class || effectClass == SkillRateEffect.class || effectClass == cn.luo.yuan.maze.model.effect.SkillRateEffect.class;
     }
 }

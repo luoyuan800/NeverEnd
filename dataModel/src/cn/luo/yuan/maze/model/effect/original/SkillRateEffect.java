@@ -57,4 +57,10 @@ public class SkillRateEffect extends FloatValueEffect {
     public String toString() {
         return "增加技能释放：" + StringUtils.formatPercentage(getValue());
     }
+
+
+    @Override
+    public boolean isReject(Class<? extends Effect> effectClass) {
+        return effectClass == PetRateEffect.class || effectClass == cn.luo.yuan.maze.model.effect.PetRateEffect.class || effectClass == PetABEEffect.class;
+    }
 }

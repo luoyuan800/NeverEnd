@@ -204,6 +204,111 @@ public class BuildDLC {
         return bytes;
     }
 
+    public static void buildLongerDLC(ObjectTable<DLC> table) throws IOException {
+        MonsterDLC dlc = new MonsterDLC();
+        dlc.setTitle("龙裔");
+        dlc.setDebrisCost(50);
+        dlc.setDesc("骚年，快来收集各种帅气的龙宠物和我签订契约成为骚贱的龙骑士吧！");
+        //---------//
+        Monster monster = new Monster();
+        monster.setIndex(30);
+        monster.setAtk(50);
+        monster.setDef(100);
+        monster.setHp(200);
+        monster.setMaxHp(200);
+        monster.setEggRate(39);
+        monster.setPetRate(19);
+        monster.setSilent(7);
+        monster.setHitRate(20);
+        monster.setSex(1);
+        monster.setRank(2);
+        monster.setNext(98);
+        monster.setRace(Race.Orger);
+        monster.setType("蓝龙");
+        monster.setDesc("西方神话传说中的一种生物，不知道为什么会出现在迷宫中。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("assets/monster/long_pet.png"));
+
+        monster = new Monster();
+        monster.setIndex(98);
+        monster.setAtk(108);
+        monster.setDef(240);
+        monster.setHp(237);
+        monster.setMaxHp(237);
+        monster.setEggRate(9);
+        monster.setPetRate(19);
+        monster.setSilent(7);
+        monster.setHitRate(20);
+        monster.setSex(-1);
+        monster.setRank(3);
+        monster.setRace(Race.Elyosr);
+        monster.setType("翼神龙");
+        monster.setDesc("太阳神的翼神龙。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("assets/monster/ysl.png"));
+
+        monster = new Monster();
+        monster.setIndex(91);
+        monster.setAtk(60);
+        monster.setDef(177);
+        monster.setHp(224);
+        monster.setMaxHp(224);
+        monster.setEggRate(1);
+        monster.setPetRate(9);
+        monster.setSilent(7);
+        monster.setHitRate(2);
+        monster.setNext(143);
+        monster.setSex(-1);
+        monster.setRank(2);
+        monster.setRace(Race.Wizardsr);
+        monster.setType("苍龙");
+        monster.setDesc("苍龙又称青龙，是古代汉族神话传说中的灵兽。属于汉族传统文化中是四象之一，身似长蛇、麒麟首、鲤鱼尾、面有长须、犄角似鹿、有五爪、相貌威武。二十八宿中东方七宿,即角、亢、氐、房、心、尾、箕这七宿的形状又极似龙形，合称苍龙。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("assets/monster/changlong.png"));
+        try {
+            System.out.println(table.save(dlc));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        monster = new Monster();
+        monster.setIndex(31);
+        monster.setAtk(50);
+        monster.setDef(100);
+        monster.setHp(200);
+        monster.setMaxHp(200);
+        monster.setEggRate(39);
+        monster.setPetRate(19);
+        monster.setSilent(7);
+        monster.setHitRate(20);
+        monster.setSex(-1);
+        monster.setRank(2);
+        monster.setNext(99);
+        monster.setRace(Race.Orger);
+        monster.setType("红龙");
+        monster.setDesc("西方神话传说中的一种生物，不知道为什么会出现在迷宫中。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("assets/monster/long_pet_red.png"));
+
+        monster = new Monster();
+        monster.setIndex(99);
+        monster.setAtk(208);
+        monster.setDef(240);
+        monster.setHp(131);
+        monster.setMaxHp(131);
+        monster.setEggRate(19);
+        monster.setPetRate(19);
+        monster.setSilent(7);
+        monster.setHitRate(25);
+        monster.setSex(-1);
+        monster.setRank(3);
+        monster.setRace(Race.Orger);
+        monster.setType("天空龙");
+        monster.setDesc("欧西里斯的天空龙。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("assets/monster/tkl.png"));
+    }
+
     public static void buildJiuwei(ObjectTable<DLC> table) throws IOException {
         MonsterDLC dlc = new MonsterDLC();
         dlc.setTitle("九尾的传奇");

@@ -10,7 +10,7 @@
         <type value="戒指"/>
         <properties>
             <effect name="AtkEffect" min="120" max="400" rate="100" element="true"/>
-            <effect name="HpEffect" min="300" max="600" rate="100" element="false"/>
+            <effect name="StrEffect" min="30" max="60" rate="100" element="false"/>
             <effect name="DefEffect" min="100" max="300" rate="50" element="false"/>
         </properties>
     </accessory>
@@ -24,7 +24,7 @@
         <properties>
             <effect name="StrEffect" min="20" max="50" rate="100" element="false"/>
             <effect name="AtkEffect" min="150" max="200" rate="100" element="false"/>
-            <effect name="HpEffect" min="1000" max="1600" rate="50" element="true"/>
+            <effect name="DefEffect" min="1000" max="1600" rate="50" element="true"/>
         </properties>
     </accessory>
     <accessory local="true">
@@ -63,7 +63,7 @@
         <properties>
             <effect name="StrEffect" min="15" max="25" rate="100" element="false"/>
             <effect name="AtkEffect" min="100" max="200" rate="80" element="false"/>
-            <effect name="AgiEffect" min="20" max="30" rate="60" element="true"/>
+            <effect name="EggRateEffect" min="2" max="5" rate="60" element="true"/>
         </properties>
     </accessory>
     <accessory local="true">
@@ -87,7 +87,7 @@
         <price value="15000"/>
         <type value="防具"/>
         <properties>
-            <effect name="DefEffect" min="65" max="195" rate="100" element="false"/>
+            <effect name="AtkEffect" min="65" max="195" rate="100" element="false"/>
             <effect name="StrEffect" min="10" max="60" rate="100" element="false"/>
             <effect name="HpEffect" min="300" max="1000" rate="50" element="true"/>
         </properties>
@@ -100,9 +100,9 @@
         <price value="55000"/>
         <type value="防具"/>
         <properties>
-            <effect name="DefEffect" min="165" max="3195" rate="100" element="false"/>
             <effect name="StrEffect" min="-10" max="-60" rate="100" element="false"/>
-            <effect name="HpEffect" min="300" max="3000" rate="50" element="true"/>
+            <effect name="HpEffect" min="300" max="3000" rate="100" element="false"/>
+            <effect name="SkillRateEffect" min="1" max="5" rate="50" element="true"/>
         </properties>
     </accessory>
     <accessory local="true">
@@ -127,8 +127,8 @@
         <type value="武器"/>
         <properties>
             <effect name="AtkEffect" min="70" max="175" rate="100" element="false"/>
-            <effect name="AgiEffect" min="10" max="75" rate="100" element="false"/>
-            <effect name="StrEffect" min="20" max="100" rate="50" element="true"/>
+            <effect name="HpEffect" min="20" max="100" rate="50" element="false"/>
+            <effect name="AgiEffect" min="10" max="75" rate="100" element="true"/>
         </properties>
     </accessory>
     <accessory local="true">
@@ -141,7 +141,7 @@
         <properties>
             <effect name="AtkEffect" min="50" max="105" rate="100" element="false"/>
             <effect name="AgiEffect" min="150" max="80" rate="100" element="false"/>
-            <effect name="StrEffect" min="10" max="200" rate="50" element="true"/>
+            <effect name="SkillRateEffect" min="1" max="10" rate="50" element="true"/>
         </properties>
     </accessory>
     <accessory local="true">
@@ -153,8 +153,8 @@
         <type value="武器"/>
         <properties>
             <effect name="AtkEffect" min="150" max="205" rate="100" element="false"/>
-            <effect name="StrEffect" min="10" max="80" rate="100" element="false"/>
-            <effect name="AgiEffect" min="20" max="200" rate="50" element="true"/>
+            <effect name="HpEffect" min="100" max="800" rate="100" element="false"/>
+            <effect name="StrEffect" min="20" max="200" rate="50" element="true"/>
         </properties>
     </accessory>
     <accessory local="true">
@@ -167,7 +167,7 @@
         <properties>
             <effect name="AtkEffect" min="550" max="1205" rate="100" element="false"/>
             <effect name="HpEffect" min="100" max="2000" rate="100" element="false"/>
-            <effect name="AgiEffect" min="20" max="300" rate="50" element="true"/>
+            <effect name="SkillRateEffect" min="2" max="13" rate="50" element="true"/>
         </properties>
     </accessory>
     <accessory local="true">
@@ -191,7 +191,7 @@
         <type value="戒指"/>
         <properties>
             <effect name="AgiEffect" min="20" max="30" rate="100" element="false"/>
-            <effect name="StrEffect" min="15" max="30" rate="50" element="false"/>
+            <effect name="HpEffect" min="150" max="300" rate="50" element="false"/>
             <effect name="AgiEffect" min="20" max="35" rate="50" element="true"/>
         </properties>
     </accessory>
@@ -204,7 +204,7 @@
         <type value="帽子"/>
         <properties>
             <effect name="AgiEffect" min="50" max="130" rate="100" element="false"/>
-            <effect name="DefEffect" min="1000" max="1300" rate="100" element="false"/>
+            <effect name="AtkEffect" min="1000" max="1300" rate="100" element="false"/>
             <effect name="StrEffect" min="60" max="175" rate="50" element="true"/>
         </properties>
     </accessory>
@@ -230,8 +230,8 @@
         <type value="帽子"/>
         <properties>
             <effect name="AtkEffect" min="100" max="1500" rate="100" element="false"/>
-            <effect name="HPEffect" min="100" max="2000" rate="100" element="false"/>
-            <effect name="AgiEffect" min="50" max="1000" rate="50" element="true"/>
+            <effect name="DefEffect" min="100" max="2000" rate="100" element="false"/>
+            <effect name="StrEffect" min="50" max="1000" rate="50" element="true"/>
         </properties>
     </accessory>
     <accessory local="true">
@@ -243,8 +243,8 @@
         <type value="项链"/>
         <properties>
             <effect name="DefEffect" min="500" max="1500" rate="100" element="false"/>
-            <effect name="HPEffect" min="500" max="4000" rate="50" element="false"/>
-            <effect name="AtkEffect" min="150" max="600" rate="50" element="true"/>
+            <effect name="HpEffect" min="500" max="4000" rate="50" element="false"/>
+            <effect name="AgiEffect" min="150" max="600" rate="50" element="true"/>
         </properties>
     </accessory>
     <accessory local="true">
@@ -256,8 +256,8 @@
         <type value="帽子"/>
         <properties>
             <effect name="StrEffect" min="50" max="1500" rate="100" element="false"/>
-            <effect name="AgiEffect" min="10" max="400" rate="50" element="false"/>
-            <effect name="AgiEffect" min="15" max="2000" rate="50" element="true"/>
+            <effect name="HpEffect" min="10" max="400" rate="50" element="false"/>
+            <effect name="DogeRateEffect" min="5" max="10" rate="50" element="true"/>
             <effect name="HpEffect" min="-3000" max="-20" rate="100" element="true"/>
         </properties>
     </accessory>
@@ -283,8 +283,8 @@
         <price value="157000"/>
         <type value="戒指"/>
         <properties>
-            <effect name="StrEffect" min="100" max="1000" rate="100" element="false"/>
             <effect name="AgiEffect" min="20" max="300" rate="50" element="false"/>
+            <effect name="PetRateEffect" min="1" max="10" rate="50" element="true"/>
             <effect name="HPPercentEffect" min="1" max="25" rate="100" element="true"/>
         </properties>
     </accessory>
@@ -299,7 +299,35 @@
             <effect name="DefEffect" min="-1000" max="-100" rate="40" element="false"/>
             <effect name="AtkEffect" min="-5000" max="-200" rate="30" element="false"/>
             <effect name="StrEffect" min="1" max="99" rate="100" element="true"/>
-            <effect name="AgiEffect" min="1" max="99" rate="100" element="true"/>
+            <effect name="SkillRateEffect" min="1" max="9" rate="100" element="true"/>
+        </properties>
+    </accessory>
+    <accessory local="true">
+        <name value = "余辉"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value="余辉"/>
+        <price value="500000"/>
+        <type value="项链"/>
+        <properties>
+            <effect name="AgiEffect" min="10" max="100" rate="90" element="false"/>
+            <effect name="DefEffect" min="200" max="2000" rate="100" element="false"/>
+            <effect name="ParryEffect" min="1" max="5" rate="100" element="true"/>
+            <effect name="HPPercentEffect" min="1" max="9" rate="50" element="true"/>
+        </properties>
+    </accessory>
+    <accessory local="true">
+        <name value = "左眼的漩涡"/>
+        <description value=""/>
+        <color value="#556B2F"/>
+        <author value=""/>
+        <price value="500000"/>
+        <type value="帽子"/>
+        <properties>
+            <effect name="MeetRateEffect" min="10" max="20" rate="90" element="false"/>
+            <effect name="DogeRateEffect" min="200" max="2000" rate="100" element="false"/>
+            <effect name="EggRateEffect" min="1" max="5" rate="50" element="true"/>
+            <effect name="DefPercentEffect" min="1" max="9" rate="50" element="true"/>
         </properties>
     </accessory>
 </accessories>

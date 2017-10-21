@@ -2,6 +2,8 @@ package cn.luo.yuan.maze.model.effect;
 
 import cn.luo.yuan.maze.utils.Field;
 
+import java.util.Arrays;
+
 /**
  * Created by luoyuan on 2017/3/18.
  */
@@ -21,4 +23,6 @@ public class AtkEffect extends cn.luo.yuan.maze.model.effect.original.AtkEffect 
         atkEffect.setAtk(getAtk());
         return atkEffect;
     }
+
+
 }

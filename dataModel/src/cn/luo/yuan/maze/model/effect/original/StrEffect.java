@@ -53,4 +53,10 @@ public class StrEffect extends LongValueEffect{
     public String toString() {
         return "增加力量：" + StringUtils.formatNumber(getValue());
     }
+
+
+    @Override
+    public boolean isReject(Class<? extends Effect> effectClass) {
+        return effectClass == DefPercentEffect.class || effectClass == cn.luo.yuan.maze.model.effect.AtkEffect.class || effectClass == cn.luo.yuan.maze.model.effect.DefEffect.class;
+    }
 }

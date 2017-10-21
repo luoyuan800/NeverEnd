@@ -46,4 +46,8 @@ public class ParryEffect extends FloatValueEffect {
         this.tag = tag;
     }
 
+    @Override
+    public boolean isReject(Class<? extends Effect> effectClass) {
+        return effectClass == MeetRateEffect.class || effectClass == cn.luo.yuan.maze.model.effect.MeetRateEffect.class || effectClass == DogeRateEffect.class;
+    }
 }

@@ -13,6 +13,9 @@ public abstract class Effect implements Serializable, NameObject,Cloneable {
     public abstract boolean isEnable();
     public abstract void setTag(String tag);
     public abstract String getTag();
+    public boolean isReject(Class<? extends Effect> effectClass){
+        return false;
+    }
 
     public abstract void setEnable(boolean enable);
 

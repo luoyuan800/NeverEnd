@@ -73,6 +73,15 @@ public class AccessoryHelper extends cn.luo.yuan.maze.service.AccessoryHelper {
                 for (Effect effect : minor.getEffects()) {
                     boolean append = true;
                     for (Effect me : majorEffect) {
+                        try {
+                            boolean reject = me.isReject(effect.getClass());
+                            if (reject) {
+                                append = false;
+                                break;
+                            }
+                        }catch (Exception e){
+                            LogHelper.logException(e, "accessory fuse");
+                        }
                         if (me.getName().equalsIgnoreCase(effect.getName())) {
                             append = false;
                             if (me instanceof LongValueEffect) {
