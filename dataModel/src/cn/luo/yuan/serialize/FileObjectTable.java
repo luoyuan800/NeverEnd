@@ -204,6 +204,9 @@ public class FileObjectTable<T extends Serializable> implements ObjectTable<T> {
 
     @Override
     public List<T> loadLimit(int start, int row, Index<T> index, Comparator<T> comparator) throws IOException, ClassNotFoundException {
+        if(row == -1){
+            row = size();
+        }
         int realStart = start;
         List<T> objects = loadAll();
         if (comparator != null) {
