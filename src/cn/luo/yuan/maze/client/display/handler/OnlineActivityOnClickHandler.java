@@ -35,9 +35,6 @@ public class OnlineActivityOnClickHandler {
             case R.id.debris_shop:
                 new DlcDialog(context).show();
                 break;
-            case R.id.ad_show:
-                activity.adHandler.showAd();
-                break;
             case R.id.online_shop:
                 Message message = new Message();
                 message.what = 3;

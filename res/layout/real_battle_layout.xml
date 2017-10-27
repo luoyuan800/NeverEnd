@@ -23,7 +23,7 @@
             android:gravity="center_horizontal">
 
         <ImageView
-                android:src="@drawable/jlh"
+                android:src="@drawable/jiahao_zi"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:id="@+id/real_battle_targer_img"

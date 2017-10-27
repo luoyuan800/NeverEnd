@@ -63,7 +63,7 @@
         <properties>
             <effect name="StrEffect" min="15" max="25" rate="100" element="false"/>
             <effect name="AtkEffect" min="100" max="200" rate="80" element="false"/>
-            <effect name="EggRateEffect" min="2" max="5" rate="60" element="true"/>
+            <effect name="EggRateEffect" min="2" max="3" rate="60" element="true"/>
         </properties>
     </accessory>
     <accessory local="true">
@@ -102,7 +102,7 @@
         <properties>
             <effect name="StrEffect" min="-10" max="-60" rate="100" element="false"/>
             <effect name="HpEffect" min="300" max="3000" rate="100" element="false"/>
-            <effect name="SkillRateEffect" min="1" max="5" rate="50" element="true"/>
+            <effect name="SkillRateEffect" min="1" max="2" rate="50" element="true"/>
         </properties>
     </accessory>
     <accessory local="true">
@@ -141,7 +141,7 @@
         <properties>
             <effect name="AtkEffect" min="50" max="105" rate="100" element="false"/>
             <effect name="AgiEffect" min="150" max="80" rate="100" element="false"/>
-            <effect name="SkillRateEffect" min="1" max="10" rate="50" element="true"/>
+            <effect name="SkillRateEffect" min="1" max="2" rate="50" element="true"/>
         </properties>
     </accessory>
     <accessory local="true">
@@ -285,7 +285,7 @@
         <properties>
             <effect name="AgiEffect" min="20" max="300" rate="50" element="false"/>
             <effect name="PetRateEffect" min="1" max="10" rate="50" element="true"/>
-            <effect name="HPPercentEffect" min="1" max="25" rate="100" element="true"/>
+            <effect name="HPPercentEffect" min="1" max="2" rate="100" element="true"/>
         </properties>
     </accessory>
     <accessory local="true">
@@ -313,7 +313,7 @@
             <effect name="AgiEffect" min="10" max="100" rate="90" element="false"/>
             <effect name="DefEffect" min="200" max="2000" rate="100" element="false"/>
             <effect name="ParryEffect" min="1" max="5" rate="100" element="true"/>
-            <effect name="HPPercentEffect" min="1" max="9" rate="50" element="true"/>
+            <effect name="HPPercentEffect" min="1" max="2" rate="50" element="true"/>
         </properties>
     </accessory>
     <accessory local="true">
@@ -325,9 +325,9 @@
         <type value="帽子"/>
         <properties>
             <effect name="MeetRateEffect" min="10" max="20" rate="90" element="false"/>
-            <effect name="DogeRateEffect" min="2" max="10" rate="100" element="false"/>
-            <effect name="EggRateEffect" min="1" max="5" rate="50" element="true"/>
-            <effect name="DefPercentEffect" min="1" max="9" rate="50" element="true"/>
+            <effect name="DogeRateEffect" min="2" max="3" rate="100" element="false"/>
+            <effect name="EggRateEffect" min="1" max="2" rate="50" element="true"/>
+            <effect name="DefPercentEffect" min="1" max="2" rate="50" element="true"/>
         </properties>
     </accessory>
 </accessories>

@@ -170,6 +170,7 @@ public class HeroTable implements Runnable {
         return recordDb.loadIds();
     }
 
+
     public void delete(String id) {
         recordDb.delete(id);
     }

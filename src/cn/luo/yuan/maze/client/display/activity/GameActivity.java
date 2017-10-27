@@ -43,6 +43,7 @@ public class GameActivity extends BaseActivity {
     private Thread updateMonsterThread;
     private boolean updateRandomMonster;
     private boolean birthDay;
+    private AdHandler adHandler;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +126,15 @@ public class GameActivity extends BaseActivity {
         } else {
             birthDay = false;
         }
+        adHandler = new AdHandler(control);
+        adHandler.setupAD();
+        control.setAdHandler(adHandler);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        adHandler.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
@@ -316,6 +326,7 @@ public class GameActivity extends BaseActivity {
         super.onResume();
         initResources();
         control.setContext(this);
+        adHandler.onResume();
     }
 
     private void randomMonsterBook() {
@@ -376,17 +387,29 @@ public class GameActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        adHandler.onDestroy();
         control.stopGame();
         super.onDestroy();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        adHandler.onPause();
+    }
 
     @Override
     protected void onStop() {
+        adHandler.onStop();
         super.onStop();
         control.save(false);
     }
 
+    @Override
+    protected void onActivityResult(int reqCode, int resCode, Intent data) {
+        super.onActivityResult(reqCode, resCode, data);
+        adHandler.onActivityResult(reqCode, resCode, data);
+    }
     /**
      * 弹出退出程序提示框
      */

@@ -750,18 +750,30 @@ public class MainProcess {
         List<String> allHeroIds = heroTable.getAllHeroIds();
         StringBuilder builder = new StringBuilder("{\"total\":").append(allHeroIds.size()).append(",\"rows\":[");
         List<String> sortedByDescending = heroTable.getAllHeroIds();
-        sortedByDescending.sort(new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                ServerRecord record1 = heroTable.getRecord(o1);
-                ServerRecord record2 = heroTable.getRecord(o2);
-                if (record1 != null && record2 != null) {
-                    return Integer.compare(record1.getRange(), record2.getRange());
+        try {
+            sortedByDescending.sort(new Comparator<String>() {
+                @Override
+                public int compare(String o1, String o2) {
+                    try {
+                        ServerRecord record1 = heroTable.getRecord(o1);
+                        ServerRecord record2 = heroTable.getRecord(o2);
+                        if (record1 != null && record2 != null) {
+                            return Integer.compare(record1.getRange(), record2.getRange());
+                        }
+                    } catch (Exception e) {
+                        LogHelper.error(e);
+                    }
+                    return 0;
                 }
-                return 0;
+            });
+        }catch (Exception e){
+            LogHelper.error(e);
+        }
+        for (int i = 0; i <sortedByDescending.size(); i++){
+            if(i > 10){
+                break;
             }
-        });
-        for (String id : sortedByDescending) {
+            String id = sortedByDescending.get(i);
             ServerRecord record = heroTable.getRecord(id);
             if (record != null && record.getData() != null) {
                 String string = formatJson(record);

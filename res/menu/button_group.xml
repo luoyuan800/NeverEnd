@@ -35,8 +35,9 @@
             android:enabled="true"
             android:id="@+id/local_shop"/>
     <item
-            android:enabled="false"
-            android:title="---联网功能---"/>
+            android:enabled="true"
+            android:id="@+id/ad_show"
+            android:title="广告碎片"/>
 
     <item
             android:id="@+id/online_battle"
@@ -75,9 +76,6 @@
             android:id="@+id/update"
             android:icon="@android:drawable/ic_menu_info_details"
             android:title="更新"/>
-    <item
-            android:enabled="false"
-            android:title="---其他---"/>
 
     <item
             android:id="@+id/theme"

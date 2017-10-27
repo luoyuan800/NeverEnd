@@ -10,6 +10,10 @@ import cn.luo.yuan.maze.model.dlc.GoodsDLC;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
 import cn.luo.yuan.maze.model.dlc.NPCDLC;
 import cn.luo.yuan.maze.model.dlc.SkillDLC;
+import cn.luo.yuan.maze.model.effect.original.AtkPercentEffect;
+import cn.luo.yuan.maze.model.effect.original.DefPercentEffect;
+import cn.luo.yuan.maze.model.effect.original.EggRateEffect;
+import cn.luo.yuan.maze.model.effect.original.HPPercentEffect;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.types.EmptyAccessory;
 import cn.luo.yuan.maze.model.goods.types.Invincible;
@@ -32,7 +36,7 @@ import java.util.ArrayList;
  */
 public class BuildDLC {
     public static File root = new File("dlc");
-    public static void main(String... args) throws IOException {
+    public static void main(String... args) throws Exception {
         ObjectTable<DLC> dlcTable = new FileObjectTable<DLC>(DLC.class, new File("dlc"));
         /*buildAngel(dlcTable);
         buildJiuwei(dlcTable);
@@ -45,10 +49,12 @@ public class BuildDLC {
         buildSkillDlc(new Painkiller(), dlcTable);*/
         //buildEveoo(dlcTable);
         //buildNPC(dlcTable);
-        buildSkillDlc(new Zoarium(), dlcTable);
+        //buildSkillDlc(new Zoarium(), dlcTable);
 //        buildGoodsDlc(new Invincible(), 50, dlcTable);
         //buildEveoo(dlcTable);
         //buildEveooII(dlcTable);
+        buildLongerDLC(dlcTable);
+        buildyugiohDLC(dlcTable);
     }
 
     public static void buildNPC(ObjectTable<DLC> dlcObjectTable) throws IOException{
@@ -849,11 +855,11 @@ public class BuildDLC {
     }
 
 
-    public static void buildLongerDLC(ObjectTable<DLC> table) throws IOException {
+    public static void buildLongerDLC(ObjectTable<DLC> table) throws Exception {
         MonsterDLC dlc = new MonsterDLC();
         dlc.setTitle("龙裔");
-        dlc.setDebrisCost(50);
-        dlc.setDesc("骚年，快来收集各种帅气的龙宠和我签订契约成为骚贱的龙骑士吧！");
+        dlc.setDebrisCost(130);
+        dlc.setDesc("骚年，快来收集各种帅气的龙宠和我签订契约成为骚贱的龙骑士吧！包含七种龙系的怪物（收集齐了也不会召唤神龙的）！");
         //---------//
         Monster monster = new Monster();
         monster.setIndex(30);
@@ -865,7 +871,7 @@ public class BuildDLC {
         monster.setPetRate(19);
         monster.setSilent(7);
         monster.setHitRate(20);
-        monster.setSex(1);
+        monster.setSex(-1);
         monster.setRank(2);
         monster.setNext(98);
         monster.setRace(Race.Orger);
@@ -910,11 +916,6 @@ public class BuildDLC {
         monster.setDesc("苍龙又称青龙，是古代汉族神话传说中的灵兽。属于汉族传统文化中是四象之一，身似长蛇、麒麟首、鲤鱼尾、面有长须、犄角似鹿、有五爪、相貌威武。二十八宿中东方七宿,即角、亢、氐、房、心、尾、箕这七宿的形状又极似龙形，合称苍龙。");
         dlc.getMonsters().add(monster);
         dlc.getImage().add(readImage("pics/long/changlong.png"));
-        try {
-            System.out.println(table.save(dlc));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         monster = new Monster();
         monster.setIndex(31);
@@ -988,5 +989,128 @@ public class BuildDLC {
         monster.setDesc("奇美拉（Chimera）希腊神话中狮头， 羊身， 蛇尾的吐火怪物。西方龙系的分支。");
         dlc.getMonsters().add(monster);
         dlc.getImage().add(readImage("pics/long/Chimera.png"));
+
+        System.out.println(table.save(dlc));
+    }
+    public static void buildyugiohDLC(ObjectTable<DLC> table) throws Exception {
+        MonsterDLC dlc = new MonsterDLC();
+        dlc.setTitle("YU-GI-OH!");
+        dlc.setDebrisCost(150);
+        dlc.setDesc("凑齐神的积木，开启你的黑暗游戏！包含五种怪物并且开启三幻神进化！");
+        //---------//
+        Monster monster = new Monster();
+        monster.setIndex(97);
+        monster.setAtk(228);
+        monster.setDef(140);
+        monster.setHp(207);
+        monster.setMaxHp(207);
+        monster.setEggRate(0);
+        monster.setPetRate(0);
+        monster.setSilent(17);
+        monster.setHitRate(30);
+        monster.setSex(-1);
+        monster.setRank(3);
+        monster.setRace(Race.Elyosr);
+        monster.setType("巨神兵");
+        monster.setDesc("欧贝利斯克的巨神兵。力量之神，战神，风暴之神，沙漠之神以及外陆之神。");
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("pics/yugiho/jsb.png"));
+
+        monster = new Monster();
+        monster.setIndex(137);
+        monster.setAtk(108);
+        monster.setDef(240);
+        monster.setHp(237);
+        monster.setMaxHp(237);
+        monster.setEggRate(0);
+        monster.setPetRate(0);
+        monster.setSilent(7);
+        monster.setHitRate(20);
+        monster.setSex(-1);
+        monster.setRank(4);
+        monster.setRace(Race.Orger);
+        monster.setType("降雷皇");
+        monster.setDesc("太阳神的翼神龙魔化形态。");
+        EggRateEffect eggRateEffect = new EggRateEffect();
+        eggRateEffect.setEnable(true);
+        eggRateEffect.setEggRate(1);
+        monster.getContainsEffects().add(eggRateEffect);
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("pics/yugiho/jlh.png"));
+
+        monster = new Monster();
+        monster.setIndex(91);
+        monster.setAtk(60);
+        monster.setDef(177);
+        monster.setHp(224);
+        monster.setMaxHp(224);
+        monster.setEggRate(1);
+        monster.setPetRate(9);
+        monster.setSilent(7);
+        monster.setHitRate(2);
+        monster.setNext(143);
+        monster.setSex(1);
+        monster.setRank(4);
+        monster.setRace(Race.Orger);
+        monster.setType("神炎皇");
+        monster.setDesc("欧西里斯的天空龙萌化形态。");
+        HPPercentEffect hpPercentEffect = new HPPercentEffect();
+        hpPercentEffect.setEnable(true);
+        hpPercentEffect.setValue(1);
+        monster.getContainsEffects().add(hpPercentEffect);
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("pics/yugiho/syh.png"));
+
+        monster = new Monster();
+        monster.setIndex(136);
+        monster.setAtk(228);
+        monster.setDef(140);
+        monster.setHp(207);
+        monster.setMaxHp(207);
+        monster.setEggRate(0);
+        monster.setPetRate(0);
+        monster.setSilent(17);
+        monster.setHitRate(20);
+        monster.setSex(-1);
+        monster.setRank(4);
+        monster.setRace(Race.Orger);
+        monster.setType("幻魔皇");
+        monster.setDesc("巨神兵的黑暗进化形。");
+        AtkPercentEffect atkPercentEffect = new AtkPercentEffect();
+        atkPercentEffect.setEnable(true);
+        atkPercentEffect.setValue(1);
+        monster.getContainsEffects().add(atkPercentEffect);
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("pics/yugiho/hmh.png"));
+
+        monster = new Monster();
+        monster.setIndex(100);
+        monster.setAtk(218);
+        monster.setDef(200);
+        monster.setHp(201);
+        monster.setMaxHp(201);
+        monster.setEggRate(0);
+        monster.setPetRate(0);
+        monster.setSilent(27);
+        monster.setHitRate(25);
+        monster.setSex(-1);
+        monster.setRank(4);
+        monster.setRace(Race.Elyosr);
+        monster.setType("光之创造神");
+        monster.setDesc("融合召唤，来自光明与希望！");
+        DefPercentEffect defPercentEffect = new DefPercentEffect();
+        defPercentEffect.setEnable(true);
+        defPercentEffect.setElementControl(false);
+        defPercentEffect.setValue(1.0f);
+        monster.getContainsEffects().add(defPercentEffect);
+        HPPercentEffect hpPercentEffect1 = new HPPercentEffect();
+        hpPercentEffect1.setEnable(true);
+        hpPercentEffect1.setElementControl(false);
+        hpPercentEffect1.setValue(1.0f);
+        monster.getContainsEffects().add(hpPercentEffect1);
+        dlc.getMonsters().add(monster);
+        dlc.getImage().add(readImage("pics/yugiho/czs.png"));
+
+        System.out.println(table.save(dlc));
     }
 }

@@ -43,7 +43,6 @@ public class OnlineActivity extends Activity {
     public NeverEnd gameContext;
     public ScheduledExecutorService executor;
     public OnlineActivityHandler handler = new OnlineActivityHandler(this);
-    public AdHandler adHandler;
     private OnlineActivityOnClickHandler onClickHandler;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -66,8 +65,7 @@ public class OnlineActivity extends Activity {
                 }
             }
         });
-        adHandler = new AdHandler(this);
-        adHandler.setupAD();
+
 
     }
 
@@ -160,14 +158,12 @@ public class OnlineActivity extends Activity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        adHandler.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
     protected void onDestroy() {
         executor.shutdownNow();
         super.onDestroy();
-        adHandler.onDestroy();
     }
 
     private void initView() {
@@ -362,33 +358,4 @@ public class OnlineActivity extends Activity {
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        adHandler.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adHandler.onStop();
-    }
-
-    @Override
-    protected void onActivityResult(int reqCode, int resCode, Intent data) {
-        super.onActivityResult(reqCode, resCode, data);
-        adHandler.onActivityResult(reqCode, resCode, data);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adHandler.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        adHandler.onResume();
-    }
 }

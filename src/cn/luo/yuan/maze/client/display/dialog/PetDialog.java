@@ -28,6 +28,8 @@ import cn.luo.yuan.maze.client.service.ClientPetMonsterHelper;
 import cn.luo.yuan.maze.client.utils.Resource;
 import cn.luo.yuan.maze.utils.StringUtils;
 
+import java.util.ArrayList;
+
 /**
  * Created by gluo on 5/15/2017.
  */
@@ -211,6 +213,12 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                 if (currentPet != null) {
                     if (helper.evolution(currentPet, control.getHero())) {
                         control.getDataManager().savePet(currentPet);
+                        for(Pet pet : new ArrayList<>(control.getHero().getPets())){
+                            if(pet.isDelete()){
+                                helper.unMountPet(pet, control.getHero());
+                                control.getDataManager().save(pet);
+                            }
+                        }
                         refreshDetailView(dialog.findViewById(R.id.pet_detail_view));
                         adapter.notifyDataSetChanged();
                         control.getViewHandler().refreshPets(control.getHero());

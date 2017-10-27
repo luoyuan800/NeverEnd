@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
+import cn.luo.yuan.maze.client.display.handler.AdHandler;
 import cn.luo.yuan.maze.client.display.handler.CrashHandler;
 import cn.luo.yuan.maze.client.display.handler.GameActivityViewHandler;
 import cn.luo.yuan.maze.client.display.view.RollTextView;
@@ -62,6 +63,7 @@ public class NeverEnd extends Application implements InfoControlInterface {
     private ServerService serverService;
     private TaskManager taskManager;
     private boolean started = false;
+    private AdHandler adHandler;
 
     @Override
     public void postTaskInUIThread(Runnable task) {
@@ -69,6 +71,12 @@ public class NeverEnd extends Application implements InfoControlInterface {
     }
 
     public NeverEnd() {
+    }
+
+    public void showAd(){
+        if(adHandler!=null){
+            adHandler.showAd();
+        }
     }
 
     @Override
@@ -219,6 +227,10 @@ public class NeverEnd extends Application implements InfoControlInterface {
 
     public Hero getHero() {
         return hero;
+    }
+
+    public void setAdHandler(AdHandler adHandler) {
+        this.adHandler = adHandler;
     }
 
     void setHero(Hero hero) {

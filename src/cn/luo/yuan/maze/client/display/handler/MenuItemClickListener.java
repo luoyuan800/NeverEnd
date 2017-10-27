@@ -65,6 +65,9 @@ public class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.ad_show:
+                control.showAd();
+                break;
             case R.id.debris:
                 debrisChangeDialog();
                 break;

@@ -10,89 +10,87 @@
 
     <LinearLayout
             android:layout_weight="1"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/online_range"
+        />
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2">
+                android:layout_height="wrap_content"
+        >
 
-            <TextView
-                    android:text=""
+            <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/online_range"
-                    />
-
-            <ImageView
-                    android:src="@drawable/huoyan"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imageView"/>
+                    android:layout_height="wrap_content">
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" android:layout_weight="1">
+                    <TextView
+                            android:text="队伍信息"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textView"
+                            android:textStyle="normal|bold" android:layout_weight="1"/>
+                    <TextView
+                            android:text="等待中……"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/group_message"
+                            android:background="@android:drawable/spinner_background" android:layout_weight="1"/>
+                </LinearLayout>
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" android:layout_weight="1">
+                    <TextView
+                            android:text="已经获得的奖励"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textView2"
+                            android:textStyle="normal|bold" android:layout_weight="1"/>
+                    <TextView
+                            android:text="加载中……"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/online_award"
+                            android:background="@android:drawable/spinner_background" android:layout_weight="1"/>
+                </LinearLayout>
+            </LinearLayout>
 
             <cn.luo.yuan.maze.client.display.view.RollTextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/online_battle_msg"
                     android:layout_weight="1"
-                    />
+            />
+
         </LinearLayout>
 
+    </LinearLayout>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <LinearLayout
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                >
-
-            <TextView
-                    android:text="队伍信息"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView"
-                    android:textStyle="normal|bold"/>
-
-            <TextView
-                    android:text="等待中……"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/group_message"
-                    android:background="@android:drawable/spinner_background"/>
-
-            <TextView
-                    android:text="已经获得的奖励"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView2"
-                    android:textStyle="normal|bold"/>
-
-            <TextView
-                    android:layout_weight="1"
-                    android:text="加载中……"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/online_award"
-                    android:background="@android:drawable/spinner_background"/>
-
-            <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/ad_show"
-                    android:onClick="onClick"
-                    android:text="观看广告，获取奖励"
-                    style="@android:style/Widget.Button.Inset"/>
-
+                android:layout_height="wrap_content">
             <Button
                     android:text="在线商店"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/online_shop"
                     android:onClick="onClick"
-                    style="@android:style/Widget.Button.Inset"/>
+                    style="@android:style/Widget.Button.Inset" android:layout_weight="1"/>
             <Button
                     android:text="碎片商店"
                     android:layout_width="match_parent"
@@ -100,23 +98,26 @@
                     android:id="@+id/debris_shop"
                     android:enabled="true"
                     android:onClick="onClick"
-                    style="@android:style/Widget.Button.Inset"/>
-
+                    style="@android:style/Widget.Button.Inset" android:layout_weight="1"/>
             <Button
                     android:text="在线礼包"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/online_gifts"
                     android:onClick="onClick"
-                    style="@android:style/Widget.Button.Inset"/>
+                    style="@android:style/Widget.Button.Inset" android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <Button
+                    android:text="取回"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/action_button"
+                    android:onClick="onClick"
+                    style="@android:style/Widget.Button.Inset" android:layout_weight="1"/>
         </LinearLayout>
     </LinearLayout>
-
-    <Button
-            android:text="取回"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/action_button"
-            android:onClick="onClick"
-            style="@android:style/Widget.Button.Inset"/>
 </LinearLayout>

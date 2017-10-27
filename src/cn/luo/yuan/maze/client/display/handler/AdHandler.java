@@ -1,8 +1,9 @@
 package cn.luo.yuan.maze.client.display.handler;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import cn.luo.yuan.maze.client.display.activity.OnlineActivity;
+import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.utils.LogHelper;
 import com.soulgame.sgsdk.tgsdklib.TGSDK;
 import com.soulgame.sgsdk.tgsdklib.TGSDKServiceResultCallBack;
@@ -22,14 +23,18 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     private final static String youmiappSecret = "338009391786dd1d";
     private final static String adcenseid = "c7ytLzE6IjZr5oo0KnJ";
     private int award = 1;
-    private OnlineActivity context;
+    private NeverEnd context;
     private boolean yomob = false;
     private boolean debug = false;
     private boolean isCPA = false;
     private boolean isAward = false;
 
-    public AdHandler(OnlineActivity a) {
+    public AdHandler(NeverEnd a) {
         this.context = a;
+    }
+
+    public static void onAppExit(Context context) {
+
     }
 
     public void setupAD() {
@@ -88,21 +93,19 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     @Override
     public void onADClose(String s) {
-        if(isAward){
-            award();
+        if (isAward) {
+            context.getExecutor().execute(new Runnable() {
+                @Override
+                public void run() {
+                    award();
+                }
+            });
         }
     }
 
     @Override
     public void onADAwardSuccess(String s) {
-       isAward = true;
-    }
-
-    private void award() {
-        context.handler.showToast("获得一个礼包和一个碎片");
-        context.handler.addOnlineGift(1);
-        context.handler.addDebris(1);
-        isAward = false;
+        isAward = true;
     }
 
     @Override
@@ -112,52 +115,52 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
 
     public void onStart() {
         if (yomob) {
-            TGSDK.onStart(context);
+            TGSDK.onStart((Activity) context.getContext());
         }
     }
 
     public void onStop() {
         if (yomob) {
-            TGSDK.onStop(context);
+            TGSDK.onStop((Activity) context.getContext());
         }
     }
 
     public void onPause() {
         if (yomob) {
-            TGSDK.onPause(context);
+            TGSDK.onPause((Activity) context.getContext());
         }
     }
 
     public void onResume() {
         try {
             if (yomob)
-                TGSDK.onResume(context);
+                TGSDK.onResume((Activity) context.getContext());
         } catch (Exception e) {
             LogHelper.logException(e, "ADHandler->onResume");
         }
     }
 
     public void onDestroy() {
-        TGSDK.onDestroy(context);
+        TGSDK.onDestroy((Activity) context.getContext());
     }
 
     public void showAd() {
         isAward = false;
-        context.runOnUiThread(new Runnable() {
+        ((Activity) context.getContext()).runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 try {
                     if (TGSDK.couldShowAd(adcenseid)) {
                         if (debug) {
-                            TGSDK.showTestView(context, adcenseid);
+                            TGSDK.showTestView((Activity) context.getContext(), adcenseid);
                         } else {
-                            TGSDK.showAd(context, adcenseid);
+                            TGSDK.showAd((Activity) context.getContext(), adcenseid);
                         }
                     } else {
-                        context.handler.showToast("网络连接不顺畅，请稍后...");
+                        context.showToast("网络连接不顺畅，请稍后...");
                         debug("Could not show!");
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     LogHelper.logException(e, "Show ad");
                 }
             }
@@ -166,29 +169,32 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     }
 
 
-
     public void onActivityResult(int reqCode, int resCode, Intent data) {
-        TGSDK.onActivityResult(context, reqCode, resCode, data);
+        TGSDK.onActivityResult((Activity) context.getContext(), reqCode, resCode, data);
     }
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        TGSDK.onRequestPermissionsResult(context, requestCode, permissions, grantResults);
-    }
-
-    public static void onAppExit(Context context) {
-
+        TGSDK.onRequestPermissionsResult((Activity) context.getContext(), requestCode, permissions, grantResults);
     }
 
     public void debug(String s, Object... objs) {
         if (debug) {
-            context.handler.showToast(s, objs);
+            context.showToast(s, objs);
         }
+    }
+
+    private void award() {
+        context.getServerService().addDebris(context, 1);
+        if (context.getServerService().addOnlineGift(context, 1)) {
+            context.showToast("获得一个礼包和一个碎片");
+        }
+        isAward = false;
     }
 
     private void setUpYomobAd() {
         try {
             TGSDK.setDebugModel(debug);
-            TGSDK.initialize(context, yomobappId, new TGSDKServiceResultCallBack() {
+            TGSDK.initialize((Activity) context.getContext(), yomobappId, new TGSDKServiceResultCallBack() {
 
                 @Override
                 public void onFailure(Object arg0, String arg1) {
@@ -200,7 +206,7 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
                     yomob = true;
                     debug("Init AD success");
 
-                    TGSDK.preloadAd(context, AdHandler.this);
+                    TGSDK.preloadAd((Activity) context.getContext(), AdHandler.this);
                 }
             });
             TGSDK.setADListener(this);

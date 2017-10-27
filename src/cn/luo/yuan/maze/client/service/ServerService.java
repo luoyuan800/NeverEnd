@@ -216,15 +216,17 @@ public class ServerService {
         }
     }
 
-    public void addOnlineGift(NeverEnd context, int count) {
+    public boolean addOnlineGift(NeverEnd context, int count) {
         try {
             HttpURLConnection connection = server.getHttpURLConnection(ADD_ONLINE_GIFT, RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
             connection.addRequestProperty(Field.COUNT, String.valueOf(count));
             server.connect(connection);
+            return true;
         } catch (Exception e) {
             LogHelper.logException(e, "ServiceService->addOnlineGift");
         }
+        return false;
     }
 
     public void addDebris(NeverEnd context, int count) {

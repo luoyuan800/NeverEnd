@@ -285,6 +285,9 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
         if (pet.getIndex() == 101) {
             return getEvoevoIndex(pet, hero);
         }
+        if(pet.getIndex() == 97 || pet.getIndex() == 98 || pet.getIndex() == 99){
+            return geThreeGodIndex(pet, hero);
+        }
         return getEvolutionIndex(pet.getIndex());
     }
 
