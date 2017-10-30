@@ -128,6 +128,8 @@ class HeroBattleService(private val table: HeroTable, val groups:GroupTable, val
                                 messager.waitingForRestore(hero.displayName, period)
                             }
                         }
+                        record.data!!.material += 10
+                        messager.materialGet(record.data!!.hero!!.displayName, 10)
                     }
                 }
             }
