@@ -25,6 +25,6 @@ class DLCKey:Serializable {
             GoodsDLC::class.java.simpleName -> "物品包"
             else -> ""
         }
-        return "($typeStr) $id - ${StringUtils.formatNumber(cost)}碎片 ${if(buy) "<已购买>" else ""}"
+        return "($typeStr) $id  ${if(buy) "<已购买>" else ""}"
     }
 }

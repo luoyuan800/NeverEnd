@@ -65,7 +65,7 @@ public class OnlineActivityHandler extends Handler {
         onlineActivity.executor.execute(new Runnable() {
             @Override
             public void run() {
-                onlineActivity.service.addOnlineGift(onlineActivity.gameContext, count);
+                onlineActivity.service.addOnlineGift(onlineActivity.gameContext, count, true);
                 onlineActivity.postGiftCount();
             }
         });
@@ -75,7 +75,7 @@ public class OnlineActivityHandler extends Handler {
         onlineActivity.executor.execute(new Runnable() {
             @Override
             public void run() {
-                onlineActivity.service.addDebris(onlineActivity.gameContext, count);
+                onlineActivity.service.addDebris(onlineActivity.gameContext, count, true);
                 onlineActivity.postGiftCount();
             }
         });

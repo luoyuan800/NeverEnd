@@ -1,5 +1,6 @@
 package cn.luo.yuan.maze.model;
 
+import cn.luo.yuan.maze.utils.EncodeLong;
 import cn.luo.yuan.maze.utils.Field;
 
 import java.io.Serializable;
@@ -10,10 +11,10 @@ import java.util.Set;
  * Created by gluo on 6/30/2017.
  */
 public class NeverEndConfig implements IDModel, Serializable {
+    private static final long serialVersionUID = Field.SERVER_VERSION;
     private String id;
     private boolean delete;
     private int theme = 0;
-    private static final long serialVersionUID = Field.SERVER_VERSION;
     private String version;
     private String currentVersion;
     private String head;
@@ -25,43 +26,71 @@ public class NeverEndConfig implements IDModel, Serializable {
     private boolean petGift;
     private String catchFilter;
     private String catchRestrictor;
+    private EncodeLong debris;
+    private EncodeLong gift;
+    private float PET_RATE_REDUCE = Data.PET_RATE_REDUCE; //宠物捕获率修正系数，越大率越低
+    private float EGG_RATE_REDUCE = Data.EGG_RATE_REDUCE; //宠物生蛋率修正系数，越大率越低
+    private long MATERIAL_LIMIT = Data.MATERIAL_LIMIT;//如果携带超过这个数量的锻造，就增加商店的价格和怪物的攻击
 
+    public long getDebris() {
+        if (debris == null) {
+            debris = new EncodeLong(0);
+        }
+        return debris.getValue();
+    }
 
-    public synchronized boolean isMonsterCatched(int index){
-        if(catchedMonsterIndex == null){
+    public void setDebris(long value) {
+        if (debris == null) {
+            debris = new EncodeLong(0);
+        }
+        debris.setValue(value);
+    }
+
+    public long getGift() {
+        if (gift == null) {
+            gift = new EncodeLong(0);
+        }
+        return gift.getValue();
+    }
+
+    public void setGift(long value) {
+        if (gift == null) {
+            gift = new EncodeLong(0);
+        }
+        gift.setValue(value);
+    }
+
+    public synchronized boolean isMonsterCatched(int index) {
+        if (catchedMonsterIndex == null) {
             catchedMonsterIndex = new HashSet<>();
         }
         return catchedMonsterIndex.contains(index);
     }
 
-    public synchronized  void addMonsterCatch(int index){
-        if(catchedMonsterIndex == null){
+    public synchronized void addMonsterCatch(int index) {
+        if (catchedMonsterIndex == null) {
             catchedMonsterIndex = new HashSet<>();
         }
         catchedMonsterIndex.add(index);
     }
 
-    public int getCatchedCount(){
-        if(catchedMonsterIndex == null){
+    public int getCatchedCount() {
+        if (catchedMonsterIndex == null) {
             catchedMonsterIndex = new HashSet<>();
         }
         return catchedMonsterIndex.size();
     }
 
-    private float PET_RATE_REDUCE = Data.PET_RATE_REDUCE; //宠物捕获率修正系数，越大率越低
-    private float EGG_RATE_REDUCE = Data.EGG_RATE_REDUCE; //宠物生蛋率修正系数，越大率越低
-
-    private  long MATERIAL_LIMIT = Data.MATERIAL_LIMIT;//如果携带超过这个数量的锻造，就增加商店的价格和怪物的攻击
-
-    public void setMATERIAL_LIMIT(long limit){
-        MATERIAL_LIMIT = limit;
-        Data.MATERIAL_LIMIT = limit;
-    }
-    public long getMATERIAL_LIMIT(){
+    public long getMATERIAL_LIMIT() {
         return MATERIAL_LIMIT;
     }
 
-    public void load(){
+    public void setMATERIAL_LIMIT(long limit) {
+        MATERIAL_LIMIT = limit;
+        Data.MATERIAL_LIMIT = limit;
+    }
+
+    public void load() {
         setMATERIAL_LIMIT(getMATERIAL_LIMIT());
         setEGG_RATE_REDUCE(this.getEGG_RATE_REDUCE());
         setPET_RATE_REDUCE(this.getPET_RATE_REDUCE());
@@ -120,12 +149,12 @@ public class NeverEndConfig implements IDModel, Serializable {
         this.sign = sign;
     }
 
-    public void setException(boolean exception) {
-        this.exception = exception;
-    }
-
     public boolean isException() {
         return exception;
+    }
+
+    public void setException(boolean exception) {
+        this.exception = exception;
     }
 
     public boolean isLongKiller() {

@@ -8,7 +8,6 @@ import cn.luo.yuan.maze.client.utils.RestConnection;
 import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.dlc.DLC;
 import cn.luo.yuan.maze.model.dlc.DLCKey;
-import cn.luo.yuan.maze.model.dlc.MonsterDLC;
 import cn.luo.yuan.maze.utils.Field;
 import cn.luo.yuan.maze.utils.StringUtils;
 import org.jetbrains.annotations.Nullable;
@@ -216,7 +215,7 @@ public class ServerService {
         }
     }
 
-    public boolean addOnlineGift(NeverEnd context, int count) {
+    public boolean addOnlineGift(NeverEnd context, int count, boolean cache) {
         try {
             HttpURLConnection connection = server.getHttpURLConnection(ADD_ONLINE_GIFT, RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
@@ -225,19 +224,52 @@ public class ServerService {
             return true;
         } catch (Exception e) {
             LogHelper.logException(e, "ServiceService->addOnlineGift");
+            if(cache) {
+                NeverEndConfig config = context.getDataManager().loadConfig();
+                if (config != null) {
+                    config.setGift(config.getGift() + count);
+                    context.getDataManager().save(config);
+                }
+            }
         }
         return false;
     }
 
-    public void addDebris(NeverEnd context, int count) {
+    public boolean addDebris(NeverEnd context, int count, boolean cache) {
         try {
             HttpURLConnection connection = server.getHttpURLConnection(ADD_DEBRIS, RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
             connection.addRequestProperty(Field.COUNT, String.valueOf(count));
             server.connect(connection);
+            return true;
         } catch (Exception e) {
             LogHelper.logException(e, "ServiceService->addDebris");
+            if(cache) {
+                NeverEndConfig config = context.getDataManager().loadConfig();
+                if (config != null) {
+                    config.setDebris(config.getDebris() + count);
+                    context.getDataManager().save(config);
+                }
+            }
         }
+        return false;
+    }
+
+    public void syncDebrisAndGift(NeverEnd context){
+        NeverEndConfig config = context.getDataManager().loadConfig();
+        int debris = (int) config.getDebris();
+        if(debris > 0){
+            if(addDebris(context, debris, false)){
+                config.setDebris(0);
+            }
+        }
+        int gift = (int) config.getGift();
+        if(gift > 0){
+            if(addOnlineGift(context, gift, false)){
+                config.setGift(0);
+            }
+        }
+        context.getDataManager().save(config);
     }
 
     public Boolean uploadLogFile(String fileName) {

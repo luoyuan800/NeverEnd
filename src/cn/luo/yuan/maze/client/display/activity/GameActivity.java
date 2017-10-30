@@ -129,6 +129,12 @@ public class GameActivity extends BaseActivity {
         adHandler = new AdHandler(control);
         adHandler.setupAD();
         control.setAdHandler(adHandler);
+        control.getExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                control.getServerService().syncDebrisAndGift(control);
+            }
+        });
     }
 
     @Override

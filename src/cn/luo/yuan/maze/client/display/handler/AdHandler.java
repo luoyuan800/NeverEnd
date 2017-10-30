@@ -184,8 +184,8 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
     }
 
     private void award() {
-        context.getServerService().addDebris(context, 1);
-        if (context.getServerService().addOnlineGift(context, 1)) {
+        context.getServerService().addDebris(context, 1, true);
+        if (context.getServerService().addOnlineGift(context, 1, true)) {
             context.showToast("获得一个礼包和一个碎片");
         }
         isAward = false;

@@ -205,9 +205,10 @@ public long round = 1;
 
 
     public void petActionOnAtk(PetOwner hero, HarmAble monster) {
+        int rankBase = 1;
         for (Pet pet : hero.getPets()) {
             if (isPetWork(pet, random, true)) {
-                if (monster instanceof Monster && ((Monster) monster).getRank() > pet.getRank() && random.nextInt(5) < 1) {
+                if (monster instanceof Monster && ((Monster) monster).getRank() > pet.getRank() && random.nextInt(6) < rankBase) {
                     battleMessage.petSuppress(pet, (NameObject) monster);
                 } else {
                     long harm = pet.getAtk() - monster.getDef();
@@ -217,8 +218,8 @@ public long round = 1;
                             battleMessage.harm(pet, (NameObject) monster, harm);
                         }
                     }
+                    rankBase ++;
                 }
-                break;
             }
         }
     }
