@@ -23,6 +23,7 @@ class ServerData : Serializable {
     var awardPets: List<Pet>? = null
     var skills: List<Skill>? = null
     var material: Long = 0
+    var head: String? = ""
     val helloMsg = mutableMapOf("meet" to StringUtils.EMPTY_STRING, "win" to StringUtils.EMPTY_STRING,
             "lost" to StringUtils.EMPTY_STRING, "risk" to StringUtils.EMPTY_STRING,
             "advantage" to StringUtils.EMPTY_STRING, "group" to StringUtils.EMPTY_STRING, "groupDie" to StringUtils.EMPTY_STRING)

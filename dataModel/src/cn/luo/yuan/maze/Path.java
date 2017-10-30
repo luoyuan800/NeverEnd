@@ -4,6 +4,7 @@ package cn.luo.yuan.maze;
  * Created by gluo on 7/6/2017.
  */
 public class Path {
+    public static final String GET_HERO_RANGE_OBJECT = "get_hero_range_object";
     public static final String QUERY_DEBRIS_CHANGE_KEY = "query_debris_change_key";
     public static final String DEBRIS_CHANGE_KEY = "debris_change_key";
     public static final String UPDATE_REAL_RECORD_PRIOR_POINT = "UPDATE_REAL_RECORD_PRIOR_POINT";

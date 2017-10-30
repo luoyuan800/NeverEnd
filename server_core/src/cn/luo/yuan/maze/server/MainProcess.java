@@ -90,6 +90,7 @@ public class MainProcess {
     private CDKEYTable cdkeyTable;
     private SaveService saveService;
     private RealService realService;
+    private List<RangeObject> heroRangeObject;
 
     public MainProcess(String root) throws IOException, ClassNotFoundException {
         this.root = new File(root);
@@ -151,6 +152,7 @@ public class MainProcess {
 
     public String buildHeroRange() {
         StringBuilder sb = new StringBuilder("<b>排行榜</b><br>");
+        heroRangeObject = new ArrayList<>(5);
         try {
             List<ServerRecord> records = new ArrayList<>();
             for (String heroId : heroTable.getAllHeroIds()) {
@@ -171,15 +173,23 @@ public class MainProcess {
             });
             for (int i = 0; i < records.size() && i < 5; i++) {
                 ServerData data = records.get(i).getData();
-                if (data != null && data.getHero() != null)
-                    sb.append(data.getHero().getDisplayName())
-                            .append(data.getMaze() != null ? ("&nbsp;" + StringUtils.formatNumber(data.getMaze().getMaxLevel(), false) + "层") : "")
-                            .append("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：").append(records.get(i).winRate()).append("<br>");
+                if (data != null && data.getHero() != null) {
+                    String single = data.getHero().getDisplayName() + (data.getMaze() != null ? ("&nbsp;" + StringUtils.formatNumber(data.getMaze().getMaxLevel(), false) + "层") : "") + ("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：") + (records.get(i).winRate()) + ("<br>");
+                    sb.append(single);
+                    RangeObject ro = new RangeObject();
+                    ro.setDetail(single);
+                    ro.setHead(data.getHead());
+                    heroRangeObject.add(ro);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return sb.toString();
+    }
+
+    public List<RangeObject> getHeroRange(){
+        return heroRangeObject!=null ? heroRangeObject : Collections.emptyList();
     }
 
     public boolean login(int pass) {
@@ -433,16 +443,16 @@ public class MainProcess {
                 LogHelper.info("updated range message");
             }
         }, 0, user.getBattleInterval(), TimeUnit.MINUTES);
-        executor.scheduleAtFixedRate(warehouseTable, 1, 1, TimeUnit.DAYS);
+        /*executor.scheduleAtFixedRate(warehouseTable, 1, 1, TimeUnit.DAYS);
         executor.scheduleAtFixedRate(warehouseTable.getAccessoryWH(), 100, 3000, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(warehouseTable.getPetWH(), 100, 3000, TimeUnit.MILLISECONDS);
-        executor.scheduleAtFixedRate(warehouseTable.getGoodsWH(), 100, 3000, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(warehouseTable.getGoodsWH(), 100, 3000, TimeUnit.MILLISECONDS);*/
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 save();
             }
-        }, 4, 4, TimeUnit.HOURS);
+        }, 2, 2, TimeUnit.HOURS);
         executor.scheduleAtFixedRate(taskTable, 100, 3000, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(sceneTable, 111, 3000, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(userDb, 111, 300, TimeUnit.MILLISECONDS);
@@ -465,7 +475,7 @@ public class MainProcess {
                     }
                 }
             }
-        }, 0, 1, TimeUnit.DAYS);
+        }, 0, 4, TimeUnit.HOURS);
     }
 
     public ServerData queryHeroData(String id) {

@@ -223,6 +223,7 @@ public class OnlineActivity extends Activity {
         NeverEndConfig config = gameContext.getDataManager().loadConfig();
         uploadData.setElementer(config.isElementer());
         uploadData.setLong(config.isLongKiller());
+        uploadData.setHead(config.getHead());
         final AlertDialog uploadDialog = new AlertDialog.Builder(OnlineActivity.this).setMessage("上传中……").setCancelable(true).setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {

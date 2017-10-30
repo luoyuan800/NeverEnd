@@ -22,6 +22,12 @@ import cn.luo.yuan.maze.model.names.SecondName;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.pet.Mass;
 import cn.luo.yuan.maze.model.skill.pet.Zoarium;
+import cn.luo.yuan.maze.model.skill.race.Alayer;
+import cn.luo.yuan.maze.model.skill.race.Chaos;
+import cn.luo.yuan.maze.model.skill.race.Decide;
+import cn.luo.yuan.maze.model.skill.race.Exorcism;
+import cn.luo.yuan.maze.model.skill.race.Masimm;
+import cn.luo.yuan.maze.model.skill.race.Painkiller;
 import cn.luo.yuan.serialize.FileObjectTable;
 import cn.luo.yuan.serialize.ObjectTable;
 
@@ -38,23 +44,24 @@ public class BuildDLC {
     public static File root = new File("dlc");
     public static void main(String... args) throws Exception {
         ObjectTable<DLC> dlcTable = new FileObjectTable<DLC>(DLC.class, new File("dlc"));
-        /*buildAngel(dlcTable);
-        buildJiuwei(dlcTable);
-        buildEmprtyAccessory(dlcTable);
+//        buildAngel(dlcTable);
+//        buildJiuwei(dlcTable);
+//        buildEmprtyAccessory(dlcTable);
         buildSkillDlc(new Alayer(), dlcTable);
         buildSkillDlc(new Chaos(), dlcTable);
         buildSkillDlc(new Decide(), dlcTable);
         buildSkillDlc(new Exorcism(), dlcTable);
         buildSkillDlc(new Masimm(), dlcTable);
-        buildSkillDlc(new Painkiller(), dlcTable);*/
+        buildSkillDlc(new Painkiller(), dlcTable);
+        buildSkillDlc(new Mass(), dlcTable);
         //buildEveoo(dlcTable);
         //buildNPC(dlcTable);
         //buildSkillDlc(new Zoarium(), dlcTable);
 //        buildGoodsDlc(new Invincible(), 50, dlcTable);
         //buildEveoo(dlcTable);
         //buildEveooII(dlcTable);
-        buildLongerDLC(dlcTable);
-        buildyugiohDLC(dlcTable);
+//        buildLongerDLC(dlcTable);
+//        buildyugiohDLC(dlcTable);
     }
 
     public static void buildNPC(ObjectTable<DLC> dlcObjectTable) throws IOException{
