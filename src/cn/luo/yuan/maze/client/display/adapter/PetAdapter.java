@@ -10,6 +10,7 @@ import android.widget.TextView;
 import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
 import cn.luo.yuan.maze.client.service.ClientPetMonsterHelper;
+import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.persistence.DataManager;
@@ -31,8 +32,13 @@ public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefres
     private final Comparator<Pet> indexCompare = new Comparator<Pet>() {
         @Override
         public int compare(Pet lhs, Pet rhs) {
-            if (lhs.getIndex() == rhs.getIndex()) return 0;
-            return sortOderRevert ? (lhs.getIndex() > rhs.getIndex() ? -1 : 1) : (lhs.getIndex() > rhs.getIndex() ? 1 : -1);
+            try {
+                if (lhs.getIndex() == rhs.getIndex()) return 0;
+                return sortOderRevert ? (lhs.getIndex() > rhs.getIndex() ? -1 : 1) : (lhs.getIndex() > rhs.getIndex() ? 1 : -1);
+            }catch (Exception e){
+                LogHelper.logException(e, "Index sort");
+                return 0;
+            }
         }
     };
     private final Comparator<Pet> nameComparator = new Comparator<Pet>() {
@@ -44,9 +50,14 @@ public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefres
     private final Comparator<Pet> intimacyComparator = new Comparator<Pet>() {
         @Override
         public int compare(Pet lhs, Pet rhs) {
-            if (lhs.getIntimacy() == rhs.getIntimacy())
+            try {
+                if (lhs.getIntimacy() == rhs.getIntimacy())
+                    return 0;
+                return sortOderRevert ? (lhs.getIntimacy() > rhs.getIntimacy() ? -1 : 1) : (lhs.getIntimacy() > rhs.getIntimacy() ? 1 : -1);
+            }catch (Exception e){
+                LogHelper.logException(e, "Intimacy Sort");
                 return 0;
-            return sortOderRevert ? (lhs.getIntimacy() > rhs.getIntimacy() ? -1 : 1) : (lhs.getIntimacy() > rhs.getIntimacy() ? 1 : -1);
+            }
         }
     };
     private final Comparator<Pet> colorComparator = new Comparator<Pet>() {
@@ -192,7 +203,11 @@ public class PetAdapter extends BaseAdapter implements LoadMoreListView.OnRefres
     }
 
     private void loadPetsData() {
-        pets = dataManager.loadPets(0, 20, limitKeyWord, getSort());
-        notifyDataSetChanged();
+        try {
+            pets = dataManager.loadPets(0, 20, limitKeyWord, getSort());
+            notifyDataSetChanged();
+        }catch (Exception e){
+            LogHelper.logException(e, "loadPetsData");
+        }
     }
 }

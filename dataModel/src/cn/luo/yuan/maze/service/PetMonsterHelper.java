@@ -7,6 +7,7 @@ import cn.luo.yuan.maze.model.Element;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.Monster;
 import cn.luo.yuan.maze.model.Pet;
+import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.utils.Random;
@@ -132,11 +133,16 @@ public abstract class PetMonsterHelper implements PetMonsterHelperInterface, Mon
         }
     }
 
-    public boolean evolution(Pet pet, Hero hero) {
-        if (pet.getIntimacy() > 100) {
+    public boolean evolution(Pet pet, Hero hero, Goods eveGoods) {
+        int original = pet.getIndex();
+        if (pet.getIntimacy() > 100 || (pet.getIndex() == 101 && eveGoods.getCount() > 0)) {
             int eveIndex = getEvolutionIndex(pet, hero);
             eveIndex = shiershengiaoDetect(eveIndex, hero);
-            return evolution(pet, eveIndex);
+            boolean rs =  evolution(pet, eveIndex);
+            if(rs && original == 101){
+                eveGoods.setCount(eveGoods.getCount() - 1);
+            }
+            return rs;
         } else {
             return false;
         }

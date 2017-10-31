@@ -19,6 +19,7 @@ import cn.luo.yuan.maze.model.Pet;
 import cn.luo.yuan.maze.model.gift.Epicure;
 import cn.luo.yuan.maze.model.gift.Gift;
 import cn.luo.yuan.maze.model.goods.Goods;
+import cn.luo.yuan.maze.model.goods.types.Evolution;
 import cn.luo.yuan.maze.model.goods.types.Grill;
 import cn.luo.yuan.maze.model.goods.types.Omelet;
 import cn.luo.yuan.maze.model.skill.Skill;
@@ -211,7 +212,9 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
                 break;
             case R.id.pet_evolution:
                 if (currentPet != null) {
-                    if (helper.evolution(currentPet, control.getHero())) {
+                    Goods evolution = control.getDataManager().loadGoods(Evolution.class.getSimpleName());
+                    if (helper.evolution(currentPet, control.getHero(), evolution)) {
+                        control.getDataManager().saveGoods(evolution);
                         control.getDataManager().savePet(currentPet);
                         for(Pet pet : new ArrayList<>(control.getHero().getPets())){
                             if(pet.isDelete()){

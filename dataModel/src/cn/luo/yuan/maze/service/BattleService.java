@@ -40,6 +40,9 @@ public long round = 1;
         battleMessage.startBattle(hero instanceof NameObject ? (((NameObject) hero).getDisplayName() + "(HP: " + StringUtils.formatNumber(hero.getCurrentHp()) + ")") : "",
                 monster instanceof NameObject ? (((NameObject) monster).getDisplayName() + "(HP: " + StringUtils.formatNumber(monster.getCurrentHp()) + ")") : "");
         while (hero.getCurrentHp() > 0 && monster.getCurrentHp() > 0) {
+            if(heroContext!=null && heroContext.isInvincible()){
+                monster.setHp(monster.getHp() - monster.getCurrentHp());
+            }
             if (runninfService != null && runninfService.isPause()) {
                 continue;
             }
