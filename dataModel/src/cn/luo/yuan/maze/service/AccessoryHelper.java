@@ -10,6 +10,7 @@ import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by gluo on 6/26/2017.
@@ -48,6 +49,10 @@ public class AccessoryHelper {
                         needEffectValue = value * 2;
                         break;
                     }
+                    if(effect instanceof HpEffect && value < 0 && Math.abs(value) > hero.getUpperHp() && Math.abs(value) > needEffectValue){
+                        needEffect = "生命";
+                        needEffectValue = Math.abs(value);
+                    }
                     value = count / hero.getDefGrow();
                     if (effect instanceof DefEffect && value > needEffectValue) {
                         needEffect = "敏捷";
@@ -77,6 +82,8 @@ public class AccessoryHelper {
                         throw new MountLimitException("需要" + needEffect + "大于" + StringUtils.formatNumber(needEffectValue, false));
                     }
                     break;
+               default:
+                    throw new MountLimitException("需要" + needEffect + "大于" + StringUtils.formatNumber(needEffectValue, false));
             }
         }
     }

@@ -5,6 +5,7 @@ import cn.luo.yuan.maze.model.*;
 import cn.luo.yuan.maze.model.dlc.DLC;
 import cn.luo.yuan.maze.model.dlc.DLCKey;
 import cn.luo.yuan.maze.model.dlc.MonsterDLC;
+import cn.luo.yuan.maze.model.dlc.SkillDLC;
 import cn.luo.yuan.maze.model.effect.Effect;
 import cn.luo.yuan.maze.model.goods.Goods;
 import cn.luo.yuan.maze.model.goods.types.ChangeHead;
@@ -51,7 +52,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -900,7 +900,7 @@ public class MainProcess {
     public List<DLCKey> queryDLCKeys(String ownerId) {
         ServerRecord record = heroTable.getRecord(ownerId);
         if (record != null) {
-            return dlcTable.queryKeys(record.getDlcs(), ownerId);
+            return dlcTable.queryKeys(ownerId);
         } else {
             return Collections.emptyList();
         }
@@ -911,7 +911,8 @@ public class MainProcess {
         if (dlc != null) {
             dlc = dlc.clone();
             ServerRecord record = heroTable.getRecord(ownerId);
-            if (dlc instanceof MonsterDLC && record.getDlcs().contains(id)) {
+            Set<String> dlcs = record.getDlcs();
+            if ((dlc instanceof SkillDLC || dlc instanceof MonsterDLC) && dlcs!=null && dlcs.contains(dlc.getId())) {
                 dlc.setDebrisCost(dlc.getDebrisCost() / 2);
             }
             return dlc;
@@ -922,8 +923,10 @@ public class MainProcess {
     public boolean buyDlc(String ownerId, String id) {
         DLC dlc = dlcTable.getDLC(id);
         if (dlc != null) {
+            dlc = dlc.clone();
             ServerRecord record = heroTable.getRecord(ownerId);
-            if (dlc instanceof MonsterDLC && record.getDlcs().contains(id)) {
+            Set<String> dlcs = record.getDlcs();
+            if ((dlc instanceof SkillDLC || dlc instanceof MonsterDLC) && dlcs!=null && dlcs.contains(dlc.getId())) {
                 dlc.setDebrisCost(dlc.getDebrisCost() / 2);
             }
             if (record.getDebris() >= dlc.getDebrisCost()) {

@@ -355,14 +355,7 @@ public class DataManager implements DataManagerInterface {
     }
 
     public List<Skill> loadAllSkill() {
-        List<Skill> skills = new ArrayList<>();
-        for (Skill skill : skillLoader.loadAll()) {
-            if (skill.getId().endsWith("@" + index)) {
-                skills.add(skill);
-            }
-        }
-        skills.addAll(loadSpecialSkills());
-        return skills;
+        return skillLoader.loadAll();
     }
 
     public List<Accessory> loadAccessories(int start, int row, final String key, Comparator<Accessory> order) {

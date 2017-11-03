@@ -329,7 +329,7 @@ public class GameActivityViewHandler extends Handler {
             }else{
                 drawable = petView.getDrawable();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if((pet.getCurrentHp() > 0 && drawable.getColorFilter() == null) || (pet.getCurrentHp() <= 0 && drawable.getColorFilter()!=null)){
+                    if((pet.getHp() > 0 && drawable.getColorFilter() == null) || (pet.getHp() <= 0 && drawable.getColorFilter()!=null)){
                         //宠物状态没有变化
                         notChange = true;
                     }
@@ -337,7 +337,7 @@ public class GameActivityViewHandler extends Handler {
             }
             if(!notChange) {
                 petView.setImageDrawable(drawable);
-                if (pet.getCurrentHp() > 0) {
+                if (pet.getHp() > 0) {
                     drawable.clearColorFilter();
                 } else {
                     drawable.setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);

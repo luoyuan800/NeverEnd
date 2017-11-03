@@ -30,21 +30,21 @@ public class Egg extends Pet {
 
     @Override
     public long getMaxHp() {
-        return step > 0 ? 0 : super.getMaxHp();
+        return step > 0 ? 1 : super.getMaxHp();
     }
 
     @Override
     public long getAtk() {
-        return step  > 0 ? 0 : super.getAtk();
+        return step  > 0 ? 1 : super.getAtk();
     }
 
     @Override
     public long getHp() {
-        return step > 0 ? 0 : super.getHp();
+        return step > 0 ? 1 : super.getHp();
     }
 
     @Override
     public long getDef() {
-        return step > 0 ? 0 : super.getDef();
+        return step > 0 ? 1 : super.getDef();
     }
 }
