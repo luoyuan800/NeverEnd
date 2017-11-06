@@ -13,6 +13,7 @@ import cn.luo.yuan.maze.R;
 import cn.luo.yuan.maze.client.display.adapter.PetAdapter;
 import cn.luo.yuan.maze.client.display.handler.ViewHandler;
 import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
+import cn.luo.yuan.maze.client.utils.LogHelper;
 import cn.luo.yuan.maze.model.Data;
 import cn.luo.yuan.maze.model.Egg;
 import cn.luo.yuan.maze.model.Pet;
@@ -152,185 +153,194 @@ public class PetDialog implements View.OnClickListener, CompoundButton.OnChecked
 
     @Override
     public void onClick(View v) {
-        final PetMonsterHelper helper = control.getPetMonsterHelper();
-        switch (v.getId()) {
-            case R.id.batch_drop:
-                final EditText text = new EditText(control.getContext());
-                text.setHint("在此输入关键字，点击确定后名字中包含的该关键字的宠物会被丢弃。出战中或者有备注的宠物不会被丢弃。");
-                SimplerDialogBuilder.build(text, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        int petCount = 0;
-                        int eggCount = 0;
-                        if(StringUtils.isNotEmpty(text.getText().toString())){
-                            for(Pet pet : control.getDataManager().loadPets(0, -1,text.getText().toString(), null)){
-                                if(!pet.isMounted() && StringUtils.isEmpty(pet.getTag())){
-                                    control.getDataManager().deletePet(pet);
-                                    adapter.removePet(pet);
-                                    if(pet instanceof Egg && ((Egg)pet).step > 0){
-                                        eggCount ++;
-                                    }else{
-                                        petCount ++;
+        try {
+            final PetMonsterHelper helper = control.getPetMonsterHelper();
+            switch (v.getId()) {
+                case R.id.batch_drop:
+                    final EditText text = new EditText(control.getContext());
+                    text.setHint("在此输入关键字，点击确定后名字中包含的该关键字的宠物会被丢弃。出战中或者有备注的宠物不会被丢弃。");
+                    SimplerDialogBuilder.build(text, Resource.getString(R.string.conform), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            int petCount = 0;
+                            int eggCount = 0;
+                            if (StringUtils.isNotEmpty(text.getText().toString())) {
+                                for (Pet pet : control.getDataManager().loadPets(0, -1, text.getText().toString(), null)) {
+                                    if (!pet.isMounted() && StringUtils.isEmpty(pet.getTag())) {
+                                        control.getDataManager().deletePet(pet);
+                                        adapter.removePet(pet);
+                                        if (pet instanceof Egg && ((Egg) pet).step > 0) {
+                                            eggCount++;
+                                        } else {
+                                            petCount++;
+                                        }
                                     }
                                 }
                             }
-                        }
-                        if(control.getHero().getGift() == Gift.Epicure){
-                            Goods grill = control.getDataManager().loadGoods(Grill.class.getSimpleName());
-                            grill.setCount(grill.getCount() + petCount);
-                            control.getDataManager().saveGoods(grill);
-                            Omelet omelet = new Omelet();
-                            omelet.setCount(eggCount);
-                            control.getDataManager().addGoods(omelet);
-                            Toast.makeText(control.getContext(), "获得了" + petCount+ "个烤肉和" + eggCount + "个煎蛋", Toast.LENGTH_SHORT).show();
-                        }else {
-                            Toast.makeText(control.getContext(), "丢弃了" + (petCount + eggCount) + "个宠物（蛋）", Toast.LENGTH_SHORT).show();
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-                }, Resource.getString(R.string.close), null, control.getContext());
-                break;
-            case R.id.sort_intimacy:
-                adapter.setSortType(PetAdapter.SORT_INTIMACY);
-                adapter.notifyDataSetChanged();
-                refreshSortButton();
-                break;
-            case R.id.sort_type:
-                adapter.setSortType(PetAdapter.SORT_INDEX);
-                adapter.notifyDataSetChanged();
-                refreshSortButton();
-                break;
-            case R.id.sort_name:
-                adapter.setSortType(PetAdapter.SORT_NAME);
-                adapter.notifyDataSetChanged();
-                refreshSortButton();
-                break;
-            case R.id.sort_color:
-                adapter.setSortType(PetAdapter.SORT_COLOR);
-                adapter.notifyDataSetChanged();
-                refreshSortButton();
-                break;
-            case R.id.pet_evolution:
-                if (currentPet != null) {
-                    Goods evolution = control.getDataManager().loadGoods(Evolution.class.getSimpleName());
-                    if (helper.evolution(currentPet, control.getHero(), evolution)) {
-                        control.getDataManager().saveGoods(evolution);
-                        control.getDataManager().savePet(currentPet);
-                        for(Pet pet : new ArrayList<>(control.getHero().getPets())){
-                            if(pet.isDelete()){
-                                helper.unMountPet(pet, control.getHero());
-                                control.getDataManager().save(pet);
+                            if (control.getHero().getGift() == Gift.Epicure) {
+                                if(petCount>0) {
+                                    Goods grill = new Grill();
+                                    grill.setCount(petCount);
+                                    control.getDataManager().addGoods(grill);
+                                }
+                                if(eggCount > 0) {
+                                    Omelet omelet = new Omelet();
+                                    omelet.setCount(eggCount);
+                                    control.getDataManager().addGoods(omelet);
+                                }
+                                Toast.makeText(control.getContext(), "获得了" + petCount + "个烤肉和" + eggCount + "个煎蛋", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(control.getContext(), "丢弃了" + (petCount + eggCount) + "个宠物（蛋）", Toast.LENGTH_SHORT).show();
                             }
+                            adapter.notifyDataSetChanged();
+                            dialog.dismiss();
                         }
-                        refreshDetailView(dialog.findViewById(R.id.pet_detail_view));
-                        adapter.notifyDataSetChanged();
-                        control.getViewHandler().refreshPets(control.getHero());
-                        new AlertDialog.Builder(control.getContext()).setMessage(Html.fromHtml(String.format(Resource.getString(R.string.evolution_successed), currentPet.getDisplayName()))).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
+                    }, Resource.getString(R.string.close), null, control.getContext());
+                    break;
+                case R.id.sort_intimacy:
+                    adapter.setSortType(PetAdapter.SORT_INTIMACY);
+                    adapter.notifyDataSetChanged();
+                    refreshSortButton();
+                    break;
+                case R.id.sort_type:
+                    adapter.setSortType(PetAdapter.SORT_INDEX);
+                    adapter.notifyDataSetChanged();
+                    refreshSortButton();
+                    break;
+                case R.id.sort_name:
+                    adapter.setSortType(PetAdapter.SORT_NAME);
+                    adapter.notifyDataSetChanged();
+                    refreshSortButton();
+                    break;
+                case R.id.sort_color:
+                    adapter.setSortType(PetAdapter.SORT_COLOR);
+                    adapter.notifyDataSetChanged();
+                    refreshSortButton();
+                    break;
+                case R.id.pet_evolution:
+                    if (currentPet != null) {
+                        Goods evolution = control.getDataManager().loadGoods(Evolution.class.getSimpleName());
+                        if (helper.evolution(currentPet, control.getHero(), evolution)) {
+                            control.getDataManager().saveGoods(evolution);
+                            control.getDataManager().savePet(currentPet);
+                            for (Pet pet : new ArrayList<>(control.getHero().getPets())) {
+                                if (pet.isDelete()) {
+                                    helper.unMountPet(pet, control.getHero());
+                                    control.getDataManager().save(pet);
+                                }
+                            }
+                            refreshDetailView(dialog.findViewById(R.id.pet_detail_view));
+                            adapter.notifyDataSetChanged();
+                            control.getViewHandler().refreshPets(control.getHero());
+                            new AlertDialog.Builder(control.getContext()).setMessage(Html.fromHtml(String.format(Resource.getString(R.string.evolution_successed), currentPet.getDisplayName()))).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                        } else {
+                            new AlertDialog.Builder(control.getContext()).setMessage(R.string.evolution_failed).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                        }
+                    }
+                    break;
+                case R.id.close:
+                    dialog.dismiss();
+                    break;
+                case R.id.pet_drop:
+                    if (currentPet.isMounted()) {
+                        new AlertDialog.Builder(control.getContext()).setMessage(R.string.mount_not_drop).setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
                         }).show();
                     } else {
-                        new AlertDialog.Builder(control.getContext()).setMessage(R.string.evolution_failed).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
+                        new AlertDialog.Builder(control.getContext()).setMessage(Html.fromHtml(String.format(Resource.getString(R.string.conform_drop), currentPet.getDisplayName()))).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                control.getDataManager().deletePet(currentPet);
+                                adapter.removePet(currentPet);
+                                adapter.notifyDataSetChanged();
+                                currentPet = null;
+                                refreshDetailView(PetDialog.this.dialog.findViewById(R.id.pet_detail_view));
+                            }
+                        }).setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
                         }).show();
+
                     }
-                }
-                break;
-            case R.id.close:
-                dialog.dismiss();
-                break;
-            case R.id.pet_drop:
-                if (currentPet.isMounted()) {
-                    new AlertDialog.Builder(control.getContext()).setMessage(R.string.mount_not_drop).setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).show();
-                } else {
-                    new AlertDialog.Builder(control.getContext()).setMessage(Html.fromHtml(String.format(Resource.getString(R.string.conform_drop), currentPet.getDisplayName()))).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            control.getDataManager().deletePet(currentPet);
-                            adapter.removePet(currentPet);
-                            adapter.notifyDataSetChanged();
-                            currentPet = null;
-                            refreshDetailView(PetDialog.this.dialog.findViewById(R.id.pet_detail_view));
-                        }
-                    }).setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).show();
+                    break;
+                case R.id.pet_upgrade:
+                    if (currentPet != null && Data.FUSE_COST * currentPet.getLevel() <= control.getHero().getMaterial()) {
+                        PetAdapter petAdapter = new PetAdapter(control.getContext(), control.getDataManager(), "");
+                        LoadMoreListView listView = new LoadMoreListView(control.getContext());
+                        listView.setAdapter(petAdapter);
 
-                }
-                break;
-            case R.id.pet_upgrade:
-                if (currentPet != null && Data.FUSE_COST * currentPet.getLevel() <= control.getHero().getMaterial()) {
-                    PetAdapter petAdapter = new PetAdapter(control.getContext(), control.getDataManager(), "");
-                    LoadMoreListView listView = new LoadMoreListView(control.getContext());
-                    listView.setAdapter(petAdapter);
-
-                    listView.setOnLoadListener(petAdapter);
-                    final AlertDialog select = new AlertDialog.Builder(control.getContext()).setTitle(R.string.select_pet).setView(listView).setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).show();
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Pet minor = (Pet) parent.getItemAtPosition(position);
-                            if (minor != null && !minor.isMounted() && !minor.getId().equals(currentPet.getId())) {
-                                control.getHero().setMaterial(control.getHero().getMaterial() - Data.FUSE_COST * currentPet.getLevel());
-                                select.dismiss();
-                                if (helper.upgrade(currentPet, minor)) {
-                                    control.getDataManager().save(currentPet);
-                                    new AlertDialog.Builder(control.getContext()).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dd, int which) {
-                                            dd.dismiss();
-                                            control.getDataManager().savePet(currentPet);
-                                            handler.post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    refreshDetailView(dialog.findViewById(R.id.pet_detail_view));
-                                                }
-                                            });
-                                        }
-                                    }).setMessage(Html.fromHtml(String.format(Resource.getString(R.string.upgrade_success), currentPet.getDisplayName()))).show();
-                                } else {
-                                    new AlertDialog.Builder(control.getContext()).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                        }
-                                    }).setMessage(Html.fromHtml(String.format(Resource.getString(R.string.upgrade_failed), currentPet.getDisplayName()))).show();
-                                }
-                                if(currentPet.getUpperAtk()/10 > control.getHero().getUpperAtk() || currentPet.getUpperHp()/10 > control.getHero().getUpperHp()){
-                                    currentPet.setIntimacy(currentPet.getIntimacy() - 5);
-                                }
-                                control.getDataManager().deletePet(minor);
-                                adapter.removePet(minor);
-                                adapter.notifyDataSetChanged();
-                                control.getViewHandler().refreshPets(control.getHero());
+                        listView.setOnLoadListener(petAdapter);
+                        final AlertDialog select = new AlertDialog.Builder(control.getContext()).setTitle(R.string.select_pet).setView(listView).setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
                             }
+                        }).show();
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Pet minor = (Pet) parent.getItemAtPosition(position);
+                                if (minor != null && !minor.isMounted() && !minor.getId().equals(currentPet.getId())) {
+                                    control.getHero().setMaterial(control.getHero().getMaterial() - Data.FUSE_COST * currentPet.getLevel());
+                                    select.dismiss();
+                                    if (helper.upgrade(currentPet, minor)) {
+                                        control.getDataManager().save(currentPet);
+                                        new AlertDialog.Builder(control.getContext()).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dd, int which) {
+                                                dd.dismiss();
+                                                control.getDataManager().savePet(currentPet);
+                                                handler.post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        refreshDetailView(dialog.findViewById(R.id.pet_detail_view));
+                                                    }
+                                                });
+                                            }
+                                        }).setMessage(Html.fromHtml(String.format(Resource.getString(R.string.upgrade_success), currentPet.getDisplayName()))).show();
+                                    } else {
+                                        new AlertDialog.Builder(control.getContext()).setPositiveButton(R.string.conform, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        }).setMessage(Html.fromHtml(String.format(Resource.getString(R.string.upgrade_failed), currentPet.getDisplayName()))).show();
+                                    }
+                                    if (currentPet.getUpperAtk() / 10 > control.getHero().getUpperAtk() || currentPet.getUpperHp() / 10 > control.getHero().getUpperHp()) {
+                                        currentPet.setIntimacy(currentPet.getIntimacy() - 5);
+                                    }
+                                    control.getDataManager().deletePet(minor);
+                                    adapter.removePet(minor);
+                                    adapter.notifyDataSetChanged();
+                                    control.getViewHandler().refreshPets(control.getHero());
+                                }
+                            }
+                        });
+                        control.getViewHandler().refreshProperties(control.getHero());
+                    } else {
+                        if (currentPet != null) {
+                            new AlertDialog.Builder(control.getContext()).setMessage("需要" + currentPet.getLevel() * Data.FUSE_COST + "点锻造来进行升级").setPositiveButton(R.string.conform, null).show();
                         }
-                    });
-                    control.getViewHandler().refreshProperties(control.getHero());
-                } else {
-                    if (currentPet != null) {
-                        new AlertDialog.Builder(control.getContext()).setMessage("需要" + currentPet.getLevel() * Data.FUSE_COST + "点锻造来进行升级").setPositiveButton(R.string.conform, null).show();
                     }
-                }
-                break;
+                    break;
+            }
+        }catch (Exception e){
+            LogHelper.logException(e, "PetDialog click");
         }
     }
 
