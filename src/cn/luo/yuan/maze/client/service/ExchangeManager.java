@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static cn.luo.yuan.maze.Path.ACKNOWLEDGE_MY_EXCHANGE;
@@ -80,7 +81,7 @@ public class ExchangeManager {
         } catch (Exception e) {
             LogHelper.logException(e, "ExchangeManager->querySubmittedExchangeOfMine");
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public <T> T unBox(ExchangeObject eo) {

@@ -11,6 +11,7 @@ import cn.luo.yuan.maze.model.effect.original.HpEffect;
 import cn.luo.yuan.maze.model.effect.original.MeetRateEffect;
 import cn.luo.yuan.maze.model.effect.original.PetRateEffect;
 import cn.luo.yuan.maze.model.effect.original.StrEffect;
+import sun.rmi.log.LogHandler;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,20 +29,24 @@ public class EffectHandler {
             DOGE="doge", PARRY="parry", RESTORE_RATE= "restore", ABE="abe_rate";
 
     public static long getEffectAdditionLongValue(String property, Collection<Effect> effects, Hero hero){
-        Collection<Effect> synEffects = new ArrayList<>(effects);
-        switch (property){
-            case CLICK_MATERIAL:
-                return getEffectAdditionMate(synEffects, hero);
-            case STR:
-                return getEffectAdditionStr(synEffects, hero);
-            case AGI:
-                return getEffectAdditionAgi(synEffects, hero);
-            case HP:
-                return getEffectAdditionHP(synEffects, hero);
-            case ATK:
-                return getEffectAdditionAtk(synEffects, hero);
-            case DEF:
-                return getEffectAdditionDef(synEffects, hero);
+        try {
+            Collection<Effect> synEffects = new ArrayList<>(effects);
+            switch (property) {
+                case CLICK_MATERIAL:
+                    return getEffectAdditionMate(synEffects, hero);
+                case STR:
+                    return getEffectAdditionStr(synEffects, hero);
+                case AGI:
+                    return getEffectAdditionAgi(synEffects, hero);
+                case HP:
+                    return getEffectAdditionHP(synEffects, hero);
+                case ATK:
+                    return getEffectAdditionAtk(synEffects, hero);
+                case DEF:
+                    return getEffectAdditionDef(synEffects, hero);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return 0;
     }

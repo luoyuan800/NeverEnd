@@ -50,7 +50,10 @@ public class AdHandler implements ITGPreloadListener, ITGADListener, ITGRewardVi
         debug("PreloadSuccess: %s", s);
         yomob = true;
         try {
-            award = Integer.parseInt(TGSDK.parameterFromAdScene(adcenseid, "base_award").toString());
+            Object baseAward = TGSDK.parameterFromAdScene(adcenseid, "base_award");
+            if(baseAward!=null) {
+                award = Integer.parseInt(baseAward.toString());
+            }
         } catch (Exception e) {
             LogHelper.logException(e, "Set Award count!");
         }
