@@ -6,7 +6,7 @@
 
     <ImageView
             android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_height="35dp"
             android:id="@+id/pet_image"
             android:scaleType="fitCenter"/>
 
