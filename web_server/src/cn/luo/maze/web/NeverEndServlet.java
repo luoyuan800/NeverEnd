@@ -3,7 +3,6 @@ package cn.luo.maze.web;
 import cn.luo.yuan.maze.model.ExchangeObject;
 import cn.luo.yuan.maze.model.Hero;
 import cn.luo.yuan.maze.model.LevelRecord;
-import cn.luo.yuan.maze.model.OwnedAble;
 import cn.luo.yuan.maze.model.RangeAward;
 import cn.luo.yuan.maze.model.ServerData;
 import cn.luo.yuan.maze.model.ServerRecord;
@@ -111,7 +110,10 @@ public class NeverEndServlet extends HttpServlet {
                         "</html>");
                 break;
             case "get_hero_list":
-                writer = writeMessage(response, process.getOnlineHeroList());
+                writer = writeMessage(response, process.getOnlineHeroList("rows"));
+                break;
+            case "get_hero_list_data_table":
+                writer = writeMessage(response, process.getOnlineHeroList("data"));
                 break;
             case "add_file":
                 String file = request.getParameter("file");

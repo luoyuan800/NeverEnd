@@ -756,9 +756,9 @@ public class MainProcess {
         }
     }
 
-    public String getOnlineHeroList() {
+    public String getOnlineHeroList(String rowsName) {
         List<String> allHeroIds = heroTable.getAllHeroIds();
-        StringBuilder builder = new StringBuilder("{\"total\":").append(allHeroIds.size()).append(",\"rows\":[");
+        StringBuilder builder = new StringBuilder("{\"total\":").append(allHeroIds.size()).append(",\"").append(rowsName).append("\":[");
         List<String> sortedByDescending = heroTable.getAllHeroIds();
         try {
             sortedByDescending.sort(new Comparator<String>() {
@@ -780,19 +780,18 @@ public class MainProcess {
             LogHelper.error(e);
         }
         for (int i = 0; i <sortedByDescending.size(); i++){
-            if(i > 10){
-                break;
-            }
             String id = sortedByDescending.get(i);
             ServerRecord record = heroTable.getRecord(id);
             if (record != null && record.getData() != null) {
                 String string = formatJson(record);
                 if (StringUtils.isNotEmpty(string)) {
-                    builder.append(string).append(",");
+                    builder.append(string);
+                    if(i < sortedByDescending.size() - 1){
+                        builder.append(",");
+                    }
                 }
             }
         }
-        builder.replace(builder.lastIndexOf(","), builder.length(), "");
         builder.append("]}");
         return builder.toString();
     }

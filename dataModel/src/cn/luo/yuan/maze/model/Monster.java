@@ -318,7 +318,7 @@ public class Monster extends HarmObject implements IDModel, SilentAbleObject, Na
     }
 
     public String getDesc() {
-        return desc;
+        return desc + (getContainsEffects()!=null && getContainsEffects().size() > 0 ? ("<br>出战附带增益效果<br>" + StringUtils.formatEffectsAsHtml(getContainsEffects())) : "");
     }
 
     public void setDesc(String desc) {
