@@ -91,6 +91,7 @@ public class MainProcess {
     private SaveService saveService;
     private RealService realService;
     private List<RangeObject> heroRangeObject;
+    private List<RangeObject> petRangeObject;
 
     public MainProcess(String root) throws IOException, ClassNotFoundException {
         this.root = new File(root);
@@ -153,6 +154,7 @@ public class MainProcess {
     public String buildHeroRange() {
         StringBuilder sb = new StringBuilder("<b>排行榜</b><br>");
         heroRangeObject = new ArrayList<>(5);
+        List<Pet> pets = new ArrayList<>();
         try {
             List<ServerRecord> records = new ArrayList<>();
             for (String heroId : heroTable.getAllHeroIds()) {
@@ -160,6 +162,13 @@ public class MainProcess {
                     ServerRecord record = heroTable.getRecord(heroId);
                     if (record != null && record.getData() != null && record.getData().getHero() != null) {
                         records.add(record);
+                        if(record.getData().getPets()!=null && record.getData().getPets().size() > 0){
+                            for(Pet pet : record.getData().getPets()){
+                                if(pet.getIntimacy() > 100){
+                                    pets.add(pet);
+                                }
+                            }
+                        }
                     }
                 } catch (Exception e) {
                     LogHelper.error(e);
@@ -174,7 +183,7 @@ public class MainProcess {
             for (int i = 0; i < records.size() && i < 5; i++) {
                 ServerData data = records.get(i).getData();
                 if (data != null && data.getHero() != null) {
-                    String single = data.getHero().getDisplayName() + (data.getMaze() != null ? ("&nbsp;" + StringUtils.formatNumber(data.getMaze().getMaxLevel(), false) + "层") : "") + ("<br>&nbsp;&nbsp;&nbsp;&nbsp;胜率：") + (records.get(i).winRate()) + ("<br>");
+                    String single = data.getHero().getDisplayName() + (data.getMaze() != null ? ("&nbsp;" + StringUtils.formatNumber(data.getMaze().getMaxLevel(), false) + "层") : "") + ("&nbsp;&nbsp;&nbsp;&nbsp;胜率：") + (records.get(i).winRate()) + ("<br>");
                     sb.append(single);
                     RangeObject ro = new RangeObject();
                     ro.setDetail(single);
@@ -182,10 +191,52 @@ public class MainProcess {
                     heroRangeObject.add(ro);
                 }
             }
+            buildPetRange(pets);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return sb.toString();
+    }
+
+    private void buildPetRange(List<Pet> pets){
+        pets.sort(new Comparator<Pet>() {
+
+            private double calculatePoint(long p1, long p2){
+                double p = p1 / p2;
+                if(p > 1) p = 1d - 1/p;
+                return 100 * p;
+            }
+
+            @Override
+            public int compare(Pet o1, Pet o2) {
+                double o1p = 0d;
+                double o2p = 0d;
+                double p = calculatePoint(o1.getUpperHp(), o2.getUpperHp());
+                o1p += p;
+                o2p += 100 - p;
+                p = calculatePoint(o1.getUpperAtk(), o2.getUpperAtk());
+                o1p += p;
+                o2p += 100 - p;
+                p = calculatePoint(o1.getUpperDef(), o2.getUpperDef());
+                o1p += p;
+                o2p += 100 - p;
+                return Double.compare(o1p, o2p);
+            }
+        });
+        petRangeObject = new ArrayList<>(5);
+        for(Pet pet : pets){
+            if(petRangeObject.size() == 5){
+                break;
+            }
+            RangeObject rangeObject = new RangeObject();
+            rangeObject.setHead(String.valueOf(pet.getIndex()));
+            rangeObject.setDetail(pet.getDisplayNameWithLevel());
+            petRangeObject.add(rangeObject);
+        }
+    }
+
+    public List<RangeObject> getPetRange(){
+        return petRangeObject!=null?petRangeObject : Collections.emptyList();
     }
 
     public List<RangeObject> getHeroRange(){

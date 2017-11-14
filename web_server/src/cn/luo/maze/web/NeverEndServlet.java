@@ -196,6 +196,9 @@ public class NeverEndServlet extends HttpServlet {
             PrintWriter writer = null;
             Boolean success = null;
             switch (path) {
+                case GET_PET_RANGE_OBJECT:
+                    writeObject(response, process.getPetRange());
+                    break;
                 case GET_HERO_RANGE_OBJECT:
                     writeObject(response, process.getHeroRange());
                     break;
