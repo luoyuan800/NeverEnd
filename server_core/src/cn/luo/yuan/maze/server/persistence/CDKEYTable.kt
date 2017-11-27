@@ -70,7 +70,7 @@ class CDKEYTable(private val database: DatabaseConnection) {
     }
 
     fun newCdKey(): String {
-        return newCdKey(1, 0, 10000)
+        return newCdKey(1, 100000, 5)
     }
 
     fun newCdKey(deris: Int, mate: Int, gift: Int): String {

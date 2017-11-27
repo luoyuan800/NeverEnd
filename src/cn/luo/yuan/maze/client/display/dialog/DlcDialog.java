@@ -28,6 +28,7 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
     private Handler handler = new Handler();
     private ProgressDialog progress;
     private DLCManager manager;
+    private LoadMoreListView currentShowingList;
 
     public DlcDialog(NeverEnd context) {
         this.context = context;
@@ -40,7 +41,7 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
         context.getExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                manager.queryMonsterDLCs(DlcDialog.this);
+                manager.queryDLCKeys(DlcDialog.this, 0, 10);
             }
         });
     }
@@ -148,16 +149,37 @@ public class DlcDialog implements DLCManager.DetailCallBack, DLCManager.BuyCallB
             public void run() {
                 if (progress != null && progress.isShowing()) {
                     progress.dismiss();
-                    StringAdapter<DLCKey> adapter = new StringAdapter<DLCKey>(keys);
-                    adapter.setOnClickListener(DlcDialog.this);
-                    LoadMoreListView list = new LoadMoreListView(context.getContext());
-                    list.setAdapter(adapter);
-                    SimplerDialogBuilder.build(list, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+                    if(currentShowingList == null) {
+                        final StringAdapter<DLCKey> adapter = new StringAdapter<DLCKey>(keys);
+                        adapter.setOnClickListener(DlcDialog.this);
+                        currentShowingList = new LoadMoreListView(context.getContext());
+                        currentShowingList.setAdapter(adapter);
+                        SimplerDialogBuilder.build(currentShowingList, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }, context.getContext(), true);
+                        currentShowingList.setOnLoadListener(new LoadMoreListView.OnRefreshLoadingMoreListener() {
+                            @Override
+                            public void onLoadMore(LoadMoreListView loadMoreListView) {
+                                context.getExecutor().execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        manager.queryDLCKeys(DlcDialog.this, adapter.getCount(), adapter.getCount());
+                                    }
+                                });
+                            }
+                        });
+                    }else{
+                        StringAdapter<DLCKey> adapter = (StringAdapter<DLCKey>) currentShowingList.getAdapter();
+                        if(!keys.isEmpty()) {
+                            adapter.addAll(keys);
+                            currentShowingList.onLoadMoreComplete(false);
+                        }else {
+                            currentShowingList.onLoadMoreComplete(true);
                         }
-                    }, context.getContext(), true);
+                    }
                 }
             }
         });

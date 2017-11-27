@@ -947,10 +947,10 @@ public class MainProcess {
         }
     }
 
-    public List<DLCKey> queryDLCKeys(String ownerId) {
+    public List<DLCKey> queryDLCKeys(String ownerId, int offset, int row) {
         ServerRecord record = heroTable.getRecord(ownerId);
         if (record != null) {
-            return dlcTable.queryKeys(ownerId);
+            return dlcTable.queryKeys(ownerId, offset, row);
         } else {
             return Collections.emptyList();
         }

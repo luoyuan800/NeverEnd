@@ -14,11 +14,13 @@ import java.util.List;
 public abstract class Task implements Serializable {
     private static final long serialVersionUID = Field.SERVER_VERSION;
 
+    private String name;
     private String desc;
     private boolean finished;
     private boolean start;
     private String id;
     private String preTaskId;
+    private long lastUpdate;
     public abstract void finished(InfoControlInterface context);
 
     public String getDesc() {
@@ -30,7 +32,7 @@ public abstract class Task implements Serializable {
     }
 
     public String toString(){
-        return desc + "<br>" + getAward();
+        return name + "<br> -gt; " + getDesc();
     }
 
     public abstract String getAward();
@@ -74,4 +76,19 @@ public abstract class Task implements Serializable {
         setFinished(false);
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public long getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(long lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
 }

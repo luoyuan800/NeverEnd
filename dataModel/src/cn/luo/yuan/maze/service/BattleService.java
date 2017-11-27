@@ -42,6 +42,7 @@ public long round = 1;
         while (hero.getCurrentHp() > 0 && monster.getCurrentHp() > 0) {
             if(heroContext!=null && heroContext.isInvincible()){
                 monster.setHp(monster.getHp() - monster.getCurrentHp());
+                return true;
             }
             if (runninfService != null && runninfService.isPause()) {
                 continue;

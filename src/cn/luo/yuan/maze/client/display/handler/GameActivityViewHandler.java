@@ -14,6 +14,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import cn.luo.yuan.maze.R;
@@ -24,6 +26,7 @@ import cn.luo.yuan.maze.client.display.dialog.GiftDialog;
 import cn.luo.yuan.maze.client.display.dialog.MessageDialog;
 import cn.luo.yuan.maze.client.display.dialog.RealBattleDialog;
 import cn.luo.yuan.maze.client.display.dialog.SimplerDialogBuilder;
+import cn.luo.yuan.maze.client.display.view.LoadMoreListView;
 import cn.luo.yuan.maze.client.service.LocalRealTimeManager;
 import cn.luo.yuan.maze.client.service.NeverEnd;
 import cn.luo.yuan.maze.client.service.ClientPetMonsterHelper;
@@ -39,6 +42,7 @@ import cn.luo.yuan.maze.model.skill.EmptySkill;
 import cn.luo.yuan.maze.model.skill.Skill;
 import cn.luo.yuan.maze.model.skill.UpgradeAble;
 import cn.luo.yuan.maze.model.skill.click.ClickSkill;
+import cn.luo.yuan.maze.model.task.Task;
 import cn.luo.yuan.maze.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -613,6 +617,78 @@ public class GameActivityViewHandler extends Handler {
             public void run() {
                 Intent gameIntent = new Intent(context, ImageActivity.class);
                 context.startActivity(gameIntent);
+            }
+        });
+    }
+
+    public void showTasks(){
+        LinearLayout linearLayout = new LinearLayout(context);
+        Button notStartTask= new Button(context);
+        linearLayout.addView(notStartTask);
+        Button startingTask = new Button(context);
+        linearLayout.addView(startingTask);
+        Button canStartTask = new Button(context);
+        linearLayout.addView(canStartTask);
+        Button finshedTask = new Button(context);
+        linearLayout.addView(finshedTask);
+        final Dialog dialog = SimplerDialogBuilder.build(linearLayout, Resource.getString(R.string.close), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }, context, false);
+        notStartTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Task> tasks = neverEnd.getTaskManager().queryCanStartTask(0, 50);
+                final LoadMoreListView list = new LoadMoreListView(context);
+                final StringAdapter<Task> adapter = new StringAdapter<Task>(tasks);
+                list.setAdapter(adapter);
+                list.setOnLoadListener(new LoadMoreListView.OnRefreshLoadingMoreListener() {
+                    @Override
+                    public void onLoadMore(LoadMoreListView loadMoreListView) {
+                        List<Task> tasks = neverEnd.getTaskManager().queryCanStartTask(adapter.getCount(), adapter.getCount());
+                        if(!tasks.isEmpty()){
+                            adapter.addAll(tasks);
+                        }
+                    }
+                });
+            }
+        });
+        startingTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Task> tasks = neverEnd.getTaskManager().queryProgressTask(0, 50);
+                final LoadMoreListView list = new LoadMoreListView(context);
+                final StringAdapter<Task> adapter = new StringAdapter<Task>(tasks);
+                list.setAdapter(adapter);
+                list.setOnLoadListener(new LoadMoreListView.OnRefreshLoadingMoreListener() {
+                    @Override
+                    public void onLoadMore(LoadMoreListView loadMoreListView) {
+                        List<Task> tasks = neverEnd.getTaskManager().queryProgressTask(adapter.getCount(), adapter.getCount());
+                        if(!tasks.isEmpty()){
+                            adapter.addAll(tasks);
+                        }
+                    }
+                });
+            }
+        });
+        finshedTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Task> tasks = neverEnd.getTaskManager().queryFinishedTask(0, 50);
+                final LoadMoreListView list = new LoadMoreListView(context);
+                final StringAdapter<Task> adapter = new StringAdapter<Task>(tasks);
+                list.setAdapter(adapter);
+                list.setOnLoadListener(new LoadMoreListView.OnRefreshLoadingMoreListener() {
+                    @Override
+                    public void onLoadMore(LoadMoreListView loadMoreListView) {
+                        List<Task> tasks = neverEnd.getTaskManager().queryFinishedTask(adapter.getCount(), adapter.getCount());
+                        if(!tasks.isEmpty()){
+                            adapter.addAll(tasks);
+                        }
+                    }
+                });
             }
         });
     }

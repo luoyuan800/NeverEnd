@@ -360,10 +360,12 @@ public class ServerService {
         return null;
     }
 
-    public List<DLCKey> getMonsterDlcKey(NeverEnd context){
+    public List<DLCKey> getDlcKeys(NeverEnd context, int offset, int row){
         try {
             HttpURLConnection connection = server.getHttpURLConnection(Path.QUERY_DLC, RestConnection.POST);
             connection.addRequestProperty(Field.OWNER_ID_FIELD, context.getHero().getId());
+            connection.addRequestProperty(Field.OFFSET, String.valueOf(offset));
+            connection.addRequestProperty(Field.ROW, String.valueOf(row));
             Object o = server.connect(connection);
             if(o instanceof List){
                 return (List<DLCKey>) o;

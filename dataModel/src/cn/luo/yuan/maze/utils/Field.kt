@@ -22,6 +22,8 @@ class Field {
         const val STATE_SUCCESS = "1"
         const val STATE_FAILED = "21"
         const val STATE_ACKNOWLEDGE = "11"
+        const val OFFSET = "offset"
+        const val ROW = "row"
         const val OWNER_ID_FIELD = "owner_id"
         const val VERSION_FIELD = "version"
         const val RESPONSE_TYPE = "type"

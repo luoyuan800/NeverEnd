@@ -102,6 +102,15 @@ public class TaskManager implements cn.luo.yuan.maze.service.TaskManager {
         taskLoader.save(task);
     }
 
+    public List<Task> queryCanStartTask(int offset, int row){
+        return taskLoader.loadLimit(offset, row, new Index<Task>() {
+            @Override
+            public boolean match(Task task) {
+                return !task.isStart() && !task.isFinished() && canStart(task);
+            }
+        }, null);
+    }
+
     public List<Task> queryFinishedTask(int start, int row) {
         return taskLoader.loadLimit(start, row, new Index<Task>() {
             @Override

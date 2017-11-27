@@ -60,11 +60,11 @@ public class DLCManager {
         });
     }
 
-    public void queryMonsterDLCs(final QueryCallBack callBack){
+    public void queryDLCKeys(final QueryCallBack callBack, final int offset, final int row){
         context.getExecutor().submit(new Runnable() {
             @Override
             public void run() {
-                List<DLCKey> keys =  service.getMonsterDlcKey(context);
+                List<DLCKey> keys =  service.getDlcKeys(context, offset, row);
                 callBack.onQuerySuccess(keys);
             }
         });

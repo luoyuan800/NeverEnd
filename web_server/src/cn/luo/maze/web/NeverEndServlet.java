@@ -298,7 +298,9 @@ public class NeverEndServlet extends HttpServlet {
                     writeObject(response, process.getDlc(ownerId, readEncodeHeader(request, Field.ITEM_ID_FIELD)));
                     break;
                 case QUERY_DLC:
-                    writeObject(response, process.queryDLCKeys(ownerId));
+                    int dlcOffset = request.getIntHeader(Field.OFFSET);
+                    int dlcRow = request.getIntHeader(Field.ROW);
+                    writeObject(response, process.queryDLCKeys(ownerId, dlcOffset, dlcRow));
                     break;
                 case ADD_DEBRIS:
                     process.addDebris(ownerId, request.getIntHeader(Field.COUNT));
