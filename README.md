@@ -38,3 +38,11 @@ cn.luo.yuan.maz.persistence包下的类是关于数据存储（存档）的类
 
  ## 取回自己上传的（或者被别人交换后的）
  ![](getbackmyobject.png)
+ 
+ # 第三方资源链接：
+ ## http://opengameart.org/
+ ## http://k-after.at.webry.info/
+ ## https://yande.re/
+ ## http://www.aj.undo.jp/
+ ## http://ichimedou.sakura.ne.jp/free/freemate.htm
+ ## http://commons.nicovideo.jp/search/material/image
